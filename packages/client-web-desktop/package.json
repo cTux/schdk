@@ -15,6 +15,7 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@schdk/common": "workspace:*",
     "react": "catalog:",
     "react-dom": "catalog:"
   },

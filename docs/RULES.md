@@ -7,7 +7,7 @@ This file is the canonical project guidance.
 - `packages/client-web` hosts a game by opening a saved game package.
 - `packages/client-web-desktop` creates, edits, and saves game packages on disk.
 - Keep the browser client independent of Electron APIs.
-- Do not define the game-package format until its requirements are documented.
+- Keep the game-package requirements documented in `docs/GAME_PACKAGE.md`.
 
 ## Engineering
 

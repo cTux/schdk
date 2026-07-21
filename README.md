@@ -19,7 +19,7 @@ pnpm dev:web
 pnpm dev:desktop
 ```
 
-`dev:desktop` currently builds and opens the Electron app. A hot-reload desktop workflow can be added when desktop implementation starts.
+`dev:desktop` builds and opens the Electron editor.
 
 ## Quality
 
@@ -31,4 +31,4 @@ pnpm test
 pnpm build
 ```
 
-Project behavior and file formats are intentionally not specified yet. See `docs/RULES.md` for the current boundaries.
+The game-package format is documented in `docs/GAME_PACKAGE.md`. See `docs/RULES.md` for the current boundaries.
