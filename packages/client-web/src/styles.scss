@@ -13,3 +13,14 @@ main {
   margin: 0 auto;
   padding: 4rem 2rem;
 }
+
+header {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.app-icon {
+  width: 4rem;
+  height: 4rem;
+}

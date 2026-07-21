@@ -134,9 +134,12 @@ export function App() {
   return (
     <main>
       <header className="app-header">
-        <div>
-          <p className="eyebrow">Редактор пакетів</p>
-          <h1>Що? Де? Коли?</h1>
+        <div className="brand">
+          <img className="app-icon" src="./owl.svg" alt="" />
+          <div>
+            <p className="eyebrow">Редактор пакетів</p>
+            <h1>Що? Де? Коли?</h1>
+          </div>
         </div>
         <div className="save-area">
           <button type="button" onClick={() => openFileInput.current?.click()}>

@@ -41,12 +41,14 @@
       "output": "release"
     },
     "files": [
+      "build/**/*",
       "dist/**/*",
       "dist-electron/**/*",
       "package.json"
     ],
     "win": {
-      "signAndEditExecutable": false,
+      "icon": "build/owl.png",
+      "signExecutable": false,
       "target": "nsis"
     }
   }

@@ -5,6 +5,7 @@ import { isReloadShortcut } from './shortcuts.js';
 
 function createWindow() {
   const window = new BrowserWindow({
+    icon: fileURLToPath(new URL('../build/owl.png', import.meta.url)),
     width: 1280,
     height: 800,
     minWidth: 960,

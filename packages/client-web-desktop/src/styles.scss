@@ -40,6 +40,7 @@ main {
 }
 
 .app-header,
+.brand,
 .question-heading,
 .question-actions,
 .save-area,
@@ -48,6 +49,15 @@ main {
 .handout-preview div {
   display: flex;
   align-items: center;
+}
+
+.brand {
+  gap: 12px;
+}
+
+.app-icon {
+  width: 52px;
+  height: 52px;
 }
 
 .app-header,
