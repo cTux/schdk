@@ -9,7 +9,7 @@ import {
   type GamePackage,
   type GameQuestion,
 } from '@schdk/common';
-import { useMemo, useState, type ChangeEvent } from 'react';
+import { useState, type ChangeEvent } from 'react';
 
 const kindLabels = {
   general: 'Звичайне питання',
@@ -25,14 +25,6 @@ export function App() {
   const [showValidation, setShowValidation] = useState(false);
   const [message, setMessage] = useState('');
   const question = gamePackage.questions[selectedIndex]!;
-  const completedCount = useMemo(
-    () =>
-      gamePackage.questions.filter(
-        (item) => item.question.trim() && item.answer.trim(),
-      ).length,
-    [gamePackage.questions],
-  );
-
   function updateQuestion(change: Partial<GameQuestion>) {
     setGamePackage((current) => ({
       ...current,
@@ -146,9 +138,6 @@ export function App() {
           <h1>Що? Де? Коли?</h1>
         </div>
         <div className="save-area">
-          <span>
-            {completedCount} / {QUESTION_COUNT} готово
-          </span>
           <button type="button" onClick={openPackage}>
             Відкрити
           </button>
