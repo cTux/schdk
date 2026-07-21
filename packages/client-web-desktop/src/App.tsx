@@ -93,6 +93,8 @@ export function App() {
   }
 
   async function savePackage(finished: boolean) {
+    setMessage('');
+
     if (finished) {
       setShowValidation(true);
       const errors = validateGamePackage(gamePackage);
@@ -109,14 +111,7 @@ export function App() {
     const filename = `${safeTitle}.${finished ? 'schdk' : 'schdk-draft'}`;
 
     if (window.desktop) {
-      const saved = await window.desktop.saveGamePackage(filename, content);
-      setMessage(
-        saved
-          ? finished
-            ? 'Пакет збережено.'
-            : 'Чернетку збережено.'
-          : 'Збереження скасовано.',
-      );
+      await window.desktop.saveGamePackage(filename, content);
       return;
     }
 
@@ -128,7 +123,6 @@ export function App() {
     link.download = filename;
     link.click();
     URL.revokeObjectURL(url);
-    setMessage(finished ? 'Пакет завантажено.' : 'Чернетку завантажено.');
   }
 
   return (
