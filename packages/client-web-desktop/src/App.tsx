@@ -129,12 +129,6 @@ export function App() {
         </div>
       </header>
 
-      <section className="rules" aria-label="Правила пакета">
-        <strong>3 раунди по 12 питань.</strong>
-        <span>№11 — футбольне.</span>
-        <span>№12, №24 і №36 — музичні.</span>
-      </section>
-
       <label className="package-title">
         Назва пакета
         <input
