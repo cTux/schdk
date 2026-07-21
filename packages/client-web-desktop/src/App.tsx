@@ -9,7 +9,7 @@ import {
   type GamePackage,
   type GameQuestion,
 } from '@schdk/common';
-import { useState, type ChangeEvent } from 'react';
+import { useRef, useState, type ChangeEvent } from 'react';
 
 const kindLabels = {
   general: 'Звичайне питання',
@@ -18,6 +18,7 @@ const kindLabels = {
 } as const;
 
 export function App() {
+  const openFileInput = useRef<HTMLInputElement>(null);
   const [gamePackage, setGamePackage] = useState<GamePackage>(
     createEmptyGamePackage,
   );
@@ -76,18 +77,18 @@ export function App() {
     event.target.value = '';
   }
 
-  async function openPackage() {
-    if (!window.desktop) return;
-
+  async function openPackage(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
     try {
-      const content = await window.desktop.openGamePackage();
-      if (!content) return;
-      setGamePackage(parseGamePackage(content));
+      setGamePackage(parseGamePackage(await file.text()));
       setSelectedIndex(0);
       setShowValidation(false);
       setMessage('Файл відкрито.');
     } catch {
       setMessage('Не вдалося відкрити файл: неправильний формат.');
+    } finally {
+      event.target.value = '';
     }
   }
 
@@ -138,9 +139,16 @@ export function App() {
           <h1>Що? Де? Коли?</h1>
         </div>
         <div className="save-area">
-          <button type="button" onClick={openPackage}>
+          <button type="button" onClick={() => openFileInput.current?.click()}>
             Відкрити
           </button>
+          <input
+            ref={openFileInput}
+            className="open-file-input"
+            type="file"
+            accept=".schdk,.schdk-draft"
+            onChange={openPackage}
+          />
           <button type="button" onClick={() => savePackage(false)}>
             Зберегти чернетку
           </button>

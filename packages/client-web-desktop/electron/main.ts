@@ -1,5 +1,5 @@
 import { app, BrowserWindow, dialog, ipcMain, Menu } from 'electron';
-import { readFile, writeFile } from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { isReloadShortcut } from './shortcuts.js';
 
@@ -41,21 +41,6 @@ ipcMain.handle('save-game-package', async (_event, filename, content) => {
 
   await writeFile(result.filePath, content, 'utf8');
   return true;
-});
-
-ipcMain.handle('open-game-package', async () => {
-  const result = await dialog.showOpenDialog({
-    properties: ['openFile'],
-    filters: [
-      {
-        name: 'Пакет або чернетка Що? Де? Коли?',
-        extensions: ['schdk', 'schdk-draft'],
-      },
-    ],
-  });
-  if (result.canceled || !result.filePaths[0]) return null;
-
-  return readFile(result.filePaths[0], 'utf8');
 });
 
 app.whenReady().then(() => {
