@@ -1,0 +1,52 @@
+{
+  "name": "@schdk/client-web-desktop",
+  "version": "0.1.0",
+  "description": "Electron editor for Що? Де? Коли? game packages.",
+  "private": true,
+  "type": "module",
+  "main": "./dist-electron/main.js",
+  "scripts": {
+    "dev": "pnpm build && electron .",
+    "dev:renderer": "vite",
+    "build": "vite build && tsc -p tsconfig.electron.json",
+    "dist": "pnpm build && electron-builder --win",
+    "lint": "oxlint -c ../../.oxlintrc.json src electron vite.config.ts && stylelint \"src/**/*.scss\"",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.node.json --noEmit && tsc -p tsconfig.electron.json --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "electron": "catalog:",
+    "electron-builder": "^26.0.12",
+    "oxlint": "^1.63.0",
+    "sass": "catalog:",
+    "stylelint": "catalog:",
+    "stylelint-config-standard-scss": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
+  },
+  "build": {
+    "appId": "com.ctux.schdk",
+    "productName": "Що Де Коли",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "package.json"
+    ],
+    "win": {
+      "signAndEditExecutable": false,
+      "target": "nsis"
+    }
+  }
+}

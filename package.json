@@ -1,0 +1,30 @@
+{
+  "name": "schdk",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Tools for creating and hosting Що? Де? Коли? game packages.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "packageManager": "pnpm@11.7.0",
+  "engines": {
+    "node": "25.x",
+    "pnpm": "11.x"
+  },
+  "scripts": {
+    "dev:web": "pnpm --filter @schdk/client-web dev",
+    "dev:desktop": "pnpm --filter @schdk/client-web-desktop dev",
+    "build": "turbo build",
+    "build:web": "pnpm --filter @schdk/client-web build",
+    "build:desktop": "pnpm --filter @schdk/client-web-desktop build",
+    "dist:desktop": "pnpm --filter @schdk/client-web-desktop dist",
+    "fmt": "oxfmt .",
+    "fmt:check": "oxfmt --check .",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "test": "turbo test"
+  },
+  "devDependencies": {
+    "oxfmt": "^0.55.0",
+    "turbo": "^2.9.18"
+  }
+}
