@@ -1,6 +1,7 @@
 import { app, BrowserWindow, dialog, ipcMain, Menu } from 'electron';
 import { writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
+import { isReloadShortcut } from './shortcuts.js';
 
 function createWindow() {
   const window = new BrowserWindow({
@@ -10,9 +11,16 @@ function createWindow() {
     minHeight: 680,
     webPreferences: {
       contextIsolation: true,
+      devTools: !app.isPackaged,
       preload: fileURLToPath(new URL('./preload.js', import.meta.url)),
     },
   });
+
+  window.webContents.on('before-input-event', (event, input) => {
+    if (isReloadShortcut(input)) event.preventDefault();
+  });
+  window.webContents.on('will-navigate', (event) => event.preventDefault());
+  window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
 
   void window.loadFile(
     fileURLToPath(new URL('../dist/index.html', import.meta.url)),
