@@ -2,6 +2,7 @@ import {
   QUESTION_COUNT,
   QUESTIONS_PER_ROUND,
   createEmptyGamePackage,
+  parseGamePackage,
   requiredQuestionKind,
   serializeGamePackage,
   validateGamePackage,
@@ -83,21 +84,46 @@ export function App() {
     event.target.value = '';
   }
 
-  async function savePackage() {
-    setShowValidation(true);
-    const errors = validateGamePackage(gamePackage);
-    if (errors.length) {
-      setMessage(`${errors[0]} Помилок: ${errors.length}.`);
-      return;
+  async function openPackage() {
+    if (!window.desktop) return;
+
+    try {
+      const content = await window.desktop.openGamePackage();
+      if (!content) return;
+      setGamePackage(parseGamePackage(content));
+      setSelectedIndex(0);
+      setShowValidation(false);
+      setMessage('Файл відкрито.');
+    } catch {
+      setMessage('Не вдалося відкрити файл: неправильний формат.');
+    }
+  }
+
+  async function savePackage(finished: boolean) {
+    if (finished) {
+      setShowValidation(true);
+      const errors = validateGamePackage(gamePackage);
+      if (errors.length) {
+        setMessage(`${errors[0]} Помилок: ${errors.length}.`);
+        return;
+      }
     }
 
     const content = serializeGamePackage(gamePackage);
-    const safeTitle = gamePackage.title.replace(/[\p{Cc}<>:"/\\|?*]/gu, '-');
-    const filename = `${safeTitle}.schdk`;
+    const safeTitle =
+      gamePackage.title.replace(/[\p{Cc}<>:"/\\|?*]/gu, '-').trim() ||
+      'Незавершена гра';
+    const filename = `${safeTitle}.${finished ? 'schdk' : 'schdk-draft'}`;
 
     if (window.desktop) {
       const saved = await window.desktop.saveGamePackage(filename, content);
-      setMessage(saved ? 'Пакет збережено.' : 'Збереження скасовано.');
+      setMessage(
+        saved
+          ? finished
+            ? 'Пакет збережено.'
+            : 'Чернетку збережено.'
+          : 'Збереження скасовано.',
+      );
       return;
     }
 
@@ -109,7 +135,7 @@ export function App() {
     link.download = filename;
     link.click();
     URL.revokeObjectURL(url);
-    setMessage('Пакет завантажено.');
+    setMessage(finished ? 'Пакет завантажено.' : 'Чернетку завантажено.');
   }
 
   return (
@@ -123,8 +149,18 @@ export function App() {
           <span>
             {completedCount} / {QUESTION_COUNT} готово
           </span>
-          <button className="primary" type="button" onClick={savePackage}>
-            Зберегти пакет
+          <button type="button" onClick={openPackage}>
+            Відкрити
+          </button>
+          <button type="button" onClick={() => savePackage(false)}>
+            Зберегти чернетку
+          </button>
+          <button
+            className="primary"
+            type="button"
+            onClick={() => savePackage(true)}
+          >
+            Зберегти готовий пакет
           </button>
         </div>
       </header>

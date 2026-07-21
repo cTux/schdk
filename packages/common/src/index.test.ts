@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
   createEmptyGamePackage,
+  parseGamePackage,
   requiredQuestionKind,
+  serializeGamePackage,
   validateGamePackage,
 } from './index';
 
@@ -26,5 +28,16 @@ describe('game package rules', () => {
     expect(validateGamePackage(gamePackage)).toContain(
       'Питання 11: неправильний тип.',
     );
+  });
+
+  it('round-trips unfinished packages and rejects malformed files', () => {
+    const unfinished = createEmptyGamePackage();
+    unfinished.title = 'Чернетка';
+    unfinished.questions[0]!.question = 'Незакінчене питання';
+
+    expect(parseGamePackage(serializeGamePackage(unfinished))).toEqual(
+      unfinished,
+    );
+    expect(() => parseGamePackage('{}')).toThrow('Invalid game package');
   });
 });

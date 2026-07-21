@@ -85,3 +85,72 @@ export function serializeGamePackage(gamePackage: GamePackage): string {
     2,
   );
 }
+
+export function parseGamePackage(content: string): GamePackage {
+  const value: unknown = JSON.parse(content);
+  if (
+    !value ||
+    typeof value !== 'object' ||
+    !('format' in value) ||
+    value.format !== 'schdk-game-package' ||
+    !('version' in value) ||
+    value.version !== 1 ||
+    !('title' in value) ||
+    typeof value.title !== 'string' ||
+    !('questions' in value) ||
+    !Array.isArray(value.questions) ||
+    value.questions.length !== QUESTION_COUNT
+  ) {
+    throw new Error('Invalid game package');
+  }
+
+  const questions = value.questions.map((question, index): GameQuestion => {
+    if (
+      !question ||
+      typeof question !== 'object' ||
+      !('kind' in question) ||
+      question.kind !== requiredQuestionKind(index) ||
+      !('question' in question) ||
+      typeof question.question !== 'string' ||
+      !('answer' in question) ||
+      typeof question.answer !== 'string' ||
+      !('alternativeAnswers' in question) ||
+      !Array.isArray(question.alternativeAnswers) ||
+      !question.alternativeAnswers.every(
+        (answer: unknown) => typeof answer === 'string',
+      )
+    ) {
+      throw new Error('Invalid game package');
+    }
+
+    const handout = 'handout' in question ? question.handout : undefined;
+    if (
+      handout !== undefined &&
+      (!handout ||
+        typeof handout !== 'object' ||
+        !('name' in handout) ||
+        typeof handout.name !== 'string' ||
+        !('mimeType' in handout) ||
+        typeof handout.mimeType !== 'string' ||
+        !('dataUrl' in handout) ||
+        typeof handout.dataUrl !== 'string')
+    ) {
+      throw new Error('Invalid game package');
+    }
+
+    return {
+      kind: question.kind,
+      question: question.question,
+      answer: question.answer,
+      alternativeAnswers: question.alternativeAnswers,
+      ...(handout ? { handout } : {}),
+    };
+  });
+
+  return {
+    format: value.format,
+    version: value.version,
+    title: value.title,
+    questions,
+  };
+}

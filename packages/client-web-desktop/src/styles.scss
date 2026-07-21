@@ -76,6 +76,8 @@ h1 {
 }
 
 .save-area {
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 16px;
   color: #b8bdc7;
 }
