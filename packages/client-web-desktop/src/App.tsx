@@ -21,6 +21,7 @@ export function App() {
     createEmptyGamePackage,
   );
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [showValidation, setShowValidation] = useState(false);
   const [message, setMessage] = useState('');
   const question = gamePackage.questions[selectedIndex]!;
   const completedCount = useMemo(
@@ -83,9 +84,10 @@ export function App() {
   }
 
   async function savePackage() {
+    setShowValidation(true);
     const errors = validateGamePackage(gamePackage);
     if (errors.length) {
-      setMessage(`${errors[0]} Ще помилок: ${errors.length}.`);
+      setMessage(`${errors[0]} Помилок: ${errors.length}.`);
       return;
     }
 
@@ -136,12 +138,16 @@ export function App() {
       <label className="package-title">
         Назва пакета
         <input
+          className={
+            showValidation && !gamePackage.title.trim() ? 'invalid' : ''
+          }
           value={gamePackage.title}
           onChange={(event) => {
             setGamePackage({ ...gamePackage, title: event.target.value });
             setMessage('');
           }}
           placeholder="Наприклад, Весняна гра 2026"
+          aria-invalid={showValidation && !gamePackage.title.trim()}
         />
       </label>
 
@@ -155,14 +161,19 @@ export function App() {
                   const index = round * QUESTIONS_PER_ROUND + offset;
                   const item = gamePackage.questions[index]!;
                   const special = requiredQuestionKind(index) !== 'general';
+                  const valid = Boolean(
+                    item.question.trim() &&
+                    item.answer.trim() &&
+                    item.kind === requiredQuestionKind(index),
+                  );
+                  const invalid = showValidation && !valid;
                   return (
                     <button
                       className={[
                         index === selectedIndex ? 'selected' : '',
-                        item.question.trim() && item.answer.trim()
-                          ? 'complete'
-                          : '',
+                        valid ? 'complete' : '',
                         special ? 'special' : '',
+                        invalid ? 'invalid' : '',
                       ]
                         .filter(Boolean)
                         .join(' ')}
@@ -170,6 +181,7 @@ export function App() {
                       type="button"
                       onClick={() => setSelectedIndex(index)}
                       aria-label={`Питання ${index + 1}: ${kindLabels[item.kind]}`}
+                      aria-invalid={invalid}
                     >
                       {index + 1}
                     </button>
@@ -194,22 +206,30 @@ export function App() {
           <label>
             Текст питання
             <textarea
+              className={
+                showValidation && !question.question.trim() ? 'invalid' : ''
+              }
               rows={7}
               value={question.question}
               onChange={(event) =>
                 updateQuestion({ question: event.target.value })
               }
+              aria-invalid={showValidation && !question.question.trim()}
             />
           </label>
 
           <label>
             Відповідь
             <textarea
+              className={
+                showValidation && !question.answer.trim() ? 'invalid' : ''
+              }
               rows={3}
               value={question.answer}
               onChange={(event) =>
                 updateQuestion({ answer: event.target.value })
               }
+              aria-invalid={showValidation && !question.answer.trim()}
             />
           </label>
 

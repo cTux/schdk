@@ -135,6 +135,12 @@ textarea:focus {
   border-color: $accent;
 }
 
+input.invalid,
+textarea.invalid {
+  border-color: #e35d5d;
+  box-shadow: 0 0 0 1px #e35d5d;
+}
+
 textarea {
   resize: vertical;
 }
@@ -189,13 +195,23 @@ textarea {
   box-shadow: 0 0 0 1px $accent;
 }
 
-.question-grid .complete {
-  background: #254638;
-}
-
 .question-grid .special {
   color: $accent;
   font-weight: 700;
+}
+
+.question-grid .complete {
+  border-color: #4dbb7a;
+  background: #254638;
+  box-shadow: 0 0 0 1px #4dbb7a;
+  color: #78dfa2;
+  font-weight: 700;
+}
+
+.question-grid .invalid {
+  border-color: #e35d5d;
+  box-shadow: 0 0 0 1px #e35d5d;
+  color: #ff8d8d;
 }
 
 .question-editor {
