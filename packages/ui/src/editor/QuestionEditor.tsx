@@ -88,25 +88,31 @@ export function QuestionEditor({
         </div>
       </div>
 
-      <label>
-        Відповідь
-        <textarea
-          className={showValidation && !question.answer.trim() ? 'invalid' : ''}
-          rows={3}
-          value={question.answer}
-          onChange={(event) => onChange({ answer: event.target.value })}
-          aria-invalid={showValidation && !question.answer.trim()}
-        />
-      </label>
+      <div className="question-pair">
+        <label>
+          Відповідь
+          <textarea
+            className={
+              showValidation && !question.answer.trim() ? 'invalid' : ''
+            }
+            rows={3}
+            value={question.answer}
+            onChange={(event) => onChange({ answer: event.target.value })}
+            aria-invalid={showValidation && !question.answer.trim()}
+          />
+        </label>
 
-      <label>
-        Коментар до відповіді (необов'язково)
-        <textarea
-          rows={3}
-          value={question.answerComment ?? ''}
-          onChange={(event) => onChange({ answerComment: event.target.value })}
-        />
-      </label>
+        <label>
+          Коментар до відповіді (необов'язково)
+          <textarea
+            rows={3}
+            value={question.answerComment ?? ''}
+            onChange={(event) =>
+              onChange({ answerComment: event.target.value })
+            }
+          />
+        </label>
+      </div>
 
       <fieldset>
         <legend>
