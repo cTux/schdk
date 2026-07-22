@@ -28,6 +28,8 @@ own state, persistence, routing, and platform integration.
   icons from the free SVG packages; keep product branding as separate assets.
 - Use the shared owl only for SCHDK branding and favicons. Keep decorative
   images and icons out of the accessibility tree.
+- Use `ЩДК Гра` as the user-facing name of the host application; keep `host` in
+  technical package names and code identifiers.
 - Keep save-state colors consistent: green for saved, amber for pending, blue
   for saving, and red for failure. Pair color with visible text and a live
   status role.

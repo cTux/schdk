@@ -25,7 +25,7 @@
   },
   "build": {
     "appId": "com.ctux.schdk.host",
-    "productName": "SCHDK Host",
+    "productName": "ЩДК Гра",
     "directories": {
       "output": "dist/release"
     },
