@@ -48,6 +48,8 @@ own state, persistence, routing, and platform integration.
   JSON and fully replacing the selected question.
 - Label optional editor fields explicitly. Question remarks are optional, but
   a non-empty unresolved remark keeps the question unfinished.
+- Keep the question, remark, answer, and answer-comment text areas at the same
+  default height.
 - Show handouts without filenames, with the remove action below the thumbnail.
   Clicking the thumbnail must open a full-size modal with 100–400% zoom and
   drag-to-pan while zoomed.

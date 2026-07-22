@@ -71,7 +71,7 @@ export function QuestionEditor({
         <TextAreaField
           label="Відповідь"
           invalid={showValidation && !question.answer.trim()}
-          rows={3}
+          rows={7}
           value={question.answer}
           onBlur={onAnswerBlur}
           onValueChange={(value) => onChange({ answer: value })}
@@ -79,7 +79,7 @@ export function QuestionEditor({
         <TextAreaField
           label="Коментар до відповіді"
           optional
-          rows={3}
+          rows={7}
           value={question.answerComment ?? ''}
           onBlur={onAnswerCommentBlur}
           onValueChange={(value) => onChange({ answerComment: value })}
