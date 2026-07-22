@@ -28,6 +28,9 @@
 - Remove the draft only after the latest package version is successfully saved.
 - Store up to five saved browser copies in IndexedDB, newest first. Browser
   recents reopen the stored copy, not an unrestricted disk path.
+- Browser package deep links identify an IndexedDB copy by its recent-package
+  ID. Restore that copy after reload when available; clear an unavailable deep
+  link without attempting unrestricted disk access.
 - IndexedDB recents are optional: their failure must not prevent opening or
   saving packages.
 

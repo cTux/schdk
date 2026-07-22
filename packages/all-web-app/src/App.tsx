@@ -1,3 +1,4 @@
+import { getDeepLinkedPackageName } from '@schdk/editor-web-app/deep-link';
 import { ShellView, type ShellViewName } from '@schdk/ui/shell';
 import { lazy, Suspense, useState } from 'react';
 
@@ -9,8 +10,13 @@ const EditorApp = lazy(() =>
 );
 
 export function App() {
-  const [view, setView] = useState<ShellViewName>('home');
-  const [loadedApps, setLoadedApps] = useState({ host: false, editor: false });
+  const [view, setView] = useState<ShellViewName>(() =>
+    getDeepLinkedPackageName(window.location.href) ? 'editor' : 'home',
+  );
+  const [loadedApps, setLoadedApps] = useState({
+    host: false,
+    editor: view === 'editor',
+  });
 
   function showView(nextView: ShellViewName) {
     if (nextView !== 'home') {

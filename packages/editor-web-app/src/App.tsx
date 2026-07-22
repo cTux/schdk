@@ -17,6 +17,7 @@ import {
   shouldScheduleAutosave,
 } from './autosave';
 import { saveWithPicker } from './browser-save';
+import { getDeepLinkedPackageName, getPackageDeepLink } from './deep-link';
 import { loadDraft, removeDraft, saveDraft } from './draft-storage';
 import { createPackageFilename } from './package-filename';
 import { getSelectedIndexAfterSwap, swapQuestions } from './question-order';
@@ -32,12 +33,24 @@ interface BrowserSaveResult {
   content: Uint8Array;
 }
 
+function replaceBrowserPackageDeepLink(packageName: string | null) {
+  if (window.desktop) return;
+  window.history.replaceState(
+    window.history.state,
+    '',
+    getPackageDeepLink(window.location.href, packageName),
+  );
+}
+
 export function App() {
   const [gamePackage, setGamePackage] = useState<GamePackage>(
     createEmptyGamePackage,
   );
   const currentPackage = useRef(gamePackage);
   const saveQueue = useRef(Promise.resolve());
+  const initialDeepLink = useRef(
+    window.desktop ? null : getDeepLinkedPackageName(window.location.href),
+  );
   const [hasPackage, setHasPackage] = useState(false);
   const [filePath, setFilePath] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
@@ -71,9 +84,74 @@ export function App() {
     }
   }, []);
 
+  const applyOpenedPackage = useCallback(
+    (
+      content: Uint8Array,
+      openedFilePath: string | null,
+      openedFileName: string,
+    ) => {
+      const parsedPackage = parseGamePackage(content);
+      let packageToEdit = parsedPackage;
+      let restored = false;
+      try {
+        const draft = loadDraft(localStorage, openedFileName);
+        if (draft) {
+          restored = window.confirm(
+            `Знайдено незбережену версію пакета «${openedFileName}». Відновити її?`,
+          );
+          if (restored) packageToEdit = draft;
+          else removeDraft(localStorage, openedFileName);
+        }
+      } catch {
+        setMessage('Не вдалося перевірити аварійну копію в браузері.');
+      }
+
+      setGamePackage(packageToEdit);
+      setFilePath(openedFilePath);
+      setFileName(openedFileName);
+      setSaveStatus(restored ? 'pending' : 'saved');
+      setHasPackage(true);
+      setSelectedIndex(0);
+      setShowValidation(false);
+    },
+    [],
+  );
+
+  const rememberBrowserPackage = useCallback(
+    async (name: string, content: Uint8Array) => {
+      try {
+        await rememberWebPackage(name, content);
+        await refreshRecentPackages();
+      } catch {
+        // IndexedDB is optional; opening and saving still work without recents.
+      }
+    },
+    [refreshRecentPackages],
+  );
+
   useEffect(() => {
     if (!hasPackage) void refreshRecentPackages();
   }, [hasPackage, refreshRecentPackages]);
+
+  useEffect(() => {
+    const packageName = initialDeepLink.current;
+    if (!packageName) return;
+    initialDeepLink.current = null;
+
+    void (async () => {
+      try {
+        const content = await loadRecentWebPackage(packageName);
+        if (!content) throw new Error('Deep-linked package is unavailable');
+        applyOpenedPackage(content, null, packageName);
+        await rememberBrowserPackage(packageName, content);
+      } catch {
+        replaceBrowserPackageDeepLink(null);
+        setMessage(
+          'Не вдалося відкрити пакет із посилання: локальна копія недоступна.',
+        );
+      }
+    })();
+  }, [applyOpenedPackage, rememberBrowserPackage]);
 
   const saveCurrentPackage = useCallback(async () => {
     const desktop = window.desktop;
@@ -180,45 +258,6 @@ export function App() {
     reader.readAsDataURL(file);
   }
 
-  function applyOpenedPackage(
-    content: Uint8Array,
-    openedFilePath: string | null,
-    openedFileName: string,
-  ) {
-    const parsedPackage = parseGamePackage(content);
-    let packageToEdit = parsedPackage;
-    let restored = false;
-    try {
-      const draft = loadDraft(localStorage, openedFileName);
-      if (draft) {
-        restored = window.confirm(
-          `Знайдено незбережену версію пакета «${openedFileName}». Відновити її?`,
-        );
-        if (restored) packageToEdit = draft;
-        else removeDraft(localStorage, openedFileName);
-      }
-    } catch {
-      setMessage('Не вдалося перевірити аварійну копію в браузері.');
-    }
-
-    setGamePackage(packageToEdit);
-    setFilePath(openedFilePath);
-    setFileName(openedFileName);
-    setSaveStatus(restored ? 'pending' : 'saved');
-    setHasPackage(true);
-    setSelectedIndex(0);
-    setShowValidation(false);
-  }
-
-  async function rememberBrowserPackage(name: string, content: Uint8Array) {
-    try {
-      await rememberWebPackage(name, content);
-      await refreshRecentPackages();
-    } catch {
-      // IndexedDB is optional; opening and saving still work without recents.
-    }
-  }
-
   async function openPackage(file: File) {
     setMessage('');
     try {
@@ -231,6 +270,7 @@ export function App() {
       applyOpenedPackage(opened.content, opened.filePath, file.name);
       if (!window.desktop) {
         await rememberBrowserPackage(file.name, opened.content);
+        replaceBrowserPackageDeepLink(file.name);
       }
     } catch {
       setMessage('Не вдалося відкрити файл: неправильний формат.');
@@ -248,6 +288,7 @@ export function App() {
         if (!content) throw new Error('Recent package is unavailable');
         applyOpenedPackage(content, null, recent.name);
         await rememberBrowserPackage(recent.name, content);
+        replaceBrowserPackageDeepLink(recent.name);
       }
       await refreshRecentPackages();
     } catch {
@@ -284,6 +325,7 @@ export function App() {
       setFileName(saved.name);
       setSaveStatus('saved');
       await rememberBrowserPackage(saved.name, saved.content);
+      replaceBrowserPackageDeepLink(saved.name);
       return true;
     } catch {
       setMessage('Не вдалося зберегти файл.');
@@ -349,6 +391,7 @@ export function App() {
       setSelectedIndex(0);
       setShowValidation(false);
       setMessage('');
+      replaceBrowserPackageDeepLink(null);
     } catch {
       setMessage('Не вдалося автоматично зберегти файл.');
     }

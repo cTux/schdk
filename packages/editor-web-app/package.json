@@ -5,7 +5,8 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./app": "./src/App.tsx"
+    "./app": "./src/App.tsx",
+    "./deep-link": "./src/deep-link.ts"
   },
   "scripts": {
     "dev": "vite",

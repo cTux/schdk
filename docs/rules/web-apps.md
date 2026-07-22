@@ -14,6 +14,9 @@
 - Keep HTML language metadata and user-visible copy Ukrainian. Use the shared
   owl asset from `@schdk/ui` as the favicon.
 - Keep Vite `base` relative so built apps work from Electron `file:` URLs.
+- Reflect an opened browser package in the `package` URL query parameter. A
+  unified-shell deep link with this parameter must open the editor view before
+  loading the referenced package.
 
 ## Unified shell
 
