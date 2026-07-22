@@ -1,15 +1,11 @@
-import { QUESTION_COUNT, type GameQuestion } from '@schdk/common';
-import {
-  faArrowLeft,
-  faArrowRight,
-  faCopy,
-  faPaste,
-  faPlus,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button } from '../atoms/Button';
-import { FileButton } from '../atoms/FileButton';
-import { HandoutPreview } from './HandoutPreview';
+import type { GameQuestion } from '@schdk/common';
+import { TextAreaField } from '../atoms/TextAreaField';
+import { AlternativeAnswersField } from './AlternativeAnswersField';
+import { HostNotesField } from './HostNotesField';
+import { QuestionEditorHeader } from './QuestionEditorHeader';
+import { QuestionHandoutField } from './QuestionHandoutField';
+import { QuestionNavigation } from './QuestionNavigation';
+import { QuestionRemarkField } from './QuestionRemarkField';
 
 interface QuestionEditorProps {
   question: GameQuestion;
@@ -32,185 +28,67 @@ export function QuestionEditor({
   onPaste,
   onSelectQuestion,
 }: QuestionEditorProps) {
-  function updateAlternative(index: number, value: string) {
-    onChange({
-      alternativeAnswers: question.alternativeAnswers.map(
-        (answer, answerIndex) => (answerIndex === index ? value : answer),
-      ),
-    });
-  }
-
-  function removeAlternative(index: number) {
-    onChange({
-      alternativeAnswers: question.alternativeAnswers.filter(
-        (_, answerIndex) => answerIndex !== index,
-      ),
-    });
-  }
-
   return (
     <section className="question-editor">
-      <div className="question-heading">
-        <h2>Питання {selectedIndex + 1}</h2>
-        <div className="question-clipboard-actions">
-          <Button variant="secondary" type="button" onClick={onCopy}>
-            <FontAwesomeIcon icon={faCopy} aria-hidden="true" /> Копіювати
-          </Button>
-          <Button variant="secondary" type="button" onClick={onPaste}>
-            <FontAwesomeIcon icon={faPaste} aria-hidden="true" /> Вставити
-          </Button>
-        </div>
-      </div>
+      <QuestionEditorHeader
+        questionNumber={selectedIndex + 1}
+        onCopy={onCopy}
+        onPaste={onPaste}
+      />
 
-      <fieldset>
-        <legend>
-          Роздатка <span>(необов'язково)</span>
-        </legend>
-        {question.handout ? (
-          <HandoutPreview
-            handout={question.handout}
-            onRemove={() => onChange({ handout: undefined })}
-          />
-        ) : (
-          <FileButton
-            accept="image/*"
-            onChange={(event) => {
-              const file = event.target.files?.[0];
-              if (file) onAddHandout(file);
-              event.target.value = '';
-            }}
-          >
-            Додати зображення
-          </FileButton>
-        )}
-      </fieldset>
+      <QuestionHandoutField
+        handout={question.handout}
+        onAdd={onAddHandout}
+        onRemove={() => onChange({ handout: undefined })}
+      />
 
       <div className="question-pair">
-        <label>
-          Текст питання
-          <textarea
-            className={
-              showValidation && !question.question.trim() ? 'invalid' : ''
-            }
-            rows={7}
-            value={question.question}
-            onChange={(event) => onChange({ question: event.target.value })}
-            aria-invalid={showValidation && !question.question.trim()}
-          />
-        </label>
-        <div className="question-remark">
-          <label>
-            Зауваження (необов'язково)
-            <textarea
-              className={
-                showValidation && question.comment?.trim() ? 'invalid' : ''
-              }
-              rows={7}
-              value={question.comment ?? ''}
-              onChange={(event) => onChange({ comment: event.target.value })}
-              aria-invalid={Boolean(showValidation && question.comment?.trim())}
-            />
-          </label>
-          {question.comment?.trim() && (
-            <>
-              <small>Питання не готове, доки зауваження не вирішено.</small>
-              <Button
-                variant="secondary"
-                type="button"
-                onClick={() => onChange({ comment: undefined })}
-              >
-                Вирішено
-              </Button>
-            </>
-          )}
-        </div>
+        <TextAreaField
+          label="Текст питання"
+          invalid={showValidation && !question.question.trim()}
+          rows={7}
+          value={question.question}
+          onValueChange={(value) => onChange({ question: value })}
+        />
+        <QuestionRemarkField
+          remark={question.comment ?? ''}
+          showValidation={showValidation}
+          onChange={(value) => onChange({ comment: value })}
+          onResolve={() => onChange({ comment: undefined })}
+        />
       </div>
 
       <div className="question-pair">
-        <label>
-          Відповідь
-          <textarea
-            className={
-              showValidation && !question.answer.trim() ? 'invalid' : ''
-            }
-            rows={3}
-            value={question.answer}
-            onChange={(event) => onChange({ answer: event.target.value })}
-            aria-invalid={showValidation && !question.answer.trim()}
-          />
-        </label>
-
-        <label>
-          Коментар до відповіді (необов'язково)
-          <textarea
-            rows={3}
-            value={question.answerComment ?? ''}
-            onChange={(event) =>
-              onChange({ answerComment: event.target.value })
-            }
-          />
-        </label>
+        <TextAreaField
+          label="Відповідь"
+          invalid={showValidation && !question.answer.trim()}
+          rows={3}
+          value={question.answer}
+          onValueChange={(value) => onChange({ answer: value })}
+        />
+        <TextAreaField
+          label="Коментар до відповіді"
+          optional
+          rows={3}
+          value={question.answerComment ?? ''}
+          onValueChange={(value) => onChange({ answerComment: value })}
+        />
       </div>
 
-      <fieldset>
-        <legend>
-          Альтернативні відповіді <span>(необов'язково)</span>
-        </legend>
-        {question.alternativeAnswers.map((answer, index) => (
-          <div className="alternative" key={index}>
-            <input
-              value={answer}
-              onChange={(event) => updateAlternative(index, event.target.value)}
-              aria-label={`Альтернативна відповідь ${index + 1}`}
-            />
-            <Button type="button" onClick={() => removeAlternative(index)}>
-              Видалити
-            </Button>
-          </div>
-        ))}
-        <Button
-          variant="secondary"
-          type="button"
-          onClick={() =>
-            onChange({
-              alternativeAnswers: [...question.alternativeAnswers, ''],
-            })
-          }
-        >
-          <FontAwesomeIcon icon={faPlus} aria-hidden="true" /> Додати відповідь
-        </Button>
-      </fieldset>
+      <AlternativeAnswersField
+        answers={question.alternativeAnswers}
+        onChange={(alternativeAnswers) => onChange({ alternativeAnswers })}
+      />
 
-      <fieldset>
-        <legend>
-          Примітки для ведучого <span>(необов'язково)</span>
-        </legend>
-        <label>
-          Host-примітки
-          <textarea
-            rows={3}
-            value={question.hostNotes ?? ''}
-            onChange={(event) => onChange({ hostNotes: event.target.value })}
-          />
-        </label>
-      </fieldset>
+      <HostNotesField
+        value={question.hostNotes ?? ''}
+        onChange={(value) => onChange({ hostNotes: value })}
+      />
 
-      <div className="question-actions">
-        <Button
-          type="button"
-          disabled={selectedIndex === 0}
-          onClick={() => onSelectQuestion(selectedIndex - 1)}
-        >
-          <FontAwesomeIcon icon={faArrowLeft} aria-hidden="true" /> Попереднє
-        </Button>
-        <Button
-          type="button"
-          disabled={selectedIndex === QUESTION_COUNT - 1}
-          onClick={() => onSelectQuestion(selectedIndex + 1)}
-        >
-          Наступне <FontAwesomeIcon icon={faArrowRight} aria-hidden="true" />
-        </Button>
-      </div>
+      <QuestionNavigation
+        selectedIndex={selectedIndex}
+        onSelect={onSelectQuestion}
+      />
     </section>
   );
 }

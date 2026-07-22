@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getQuestionListItem } from './QuestionList';
+import { getQuestionListItem } from './QuestionListButton';
 
 describe('question list items', () => {
   it('builds previews and remark states', () => {

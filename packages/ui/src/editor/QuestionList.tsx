@@ -1,31 +1,6 @@
-import {
-  QUESTIONS_PER_ROUND,
-  type GamePackage,
-  type GameQuestion,
-} from '@schdk/common';
+import { QUESTIONS_PER_ROUND, type GamePackage } from '@schdk/common';
 import { useState, type DragEvent } from 'react';
-import { Button } from '../atoms/Button';
-
-export function getQuestionListItem(
-  question: GameQuestion,
-  showValidation: boolean,
-) {
-  const questionText = question.question.trim();
-  const answer = question.answer.trim();
-  const remark = question.comment?.trim() ?? '';
-  const hasSummary = Boolean(questionText && answer);
-  const complete = hasSummary && !remark;
-
-  return {
-    answer,
-    complete,
-    hasPreview: hasSummary || Boolean(remark),
-    hasSummary,
-    invalid: showValidation && !complete,
-    questionText,
-    remark,
-  };
-}
+import { QuestionListButton } from './QuestionListButton';
 
 interface QuestionListProps {
   gamePackage: GamePackage;
@@ -67,25 +42,17 @@ export function QuestionList({
             {Array.from({ length: QUESTIONS_PER_ROUND }, (_, offset) => {
               const index = round * QUESTIONS_PER_ROUND + offset;
               const question = gamePackage.questions[index]!;
-              const item = getQuestionListItem(question, showValidation);
-              const tooltipId = `question-tooltip-${index}`;
-              const showTooltip = item.hasPreview && draggedIndex === null;
               return (
-                <Button
-                  className={[
-                    index === selectedIndex ? 'selected' : '',
-                    item.complete ? 'complete' : '',
-                    item.invalid ? 'invalid' : '',
-                    item.remark ? 'remark' : '',
-                    index === draggedIndex ? 'dragging' : '',
-                    index === dropIndex ? 'drop-target' : '',
-                  ]
-                    .filter(Boolean)
-                    .join(' ')}
+                <QuestionListButton
+                  dragging={index === draggedIndex}
+                  dropTarget={index === dropIndex}
                   key={index}
-                  type="button"
-                  draggable
-                  onClick={() => onSelectQuestion(index)}
+                  index={index}
+                  question={question}
+                  selected={index === selectedIndex}
+                  showTooltip={draggedIndex === null}
+                  showValidation={showValidation}
+                  onSelect={() => onSelectQuestion(index)}
                   onDragStart={(event) => {
                     event.dataTransfer.effectAllowed = 'move';
                     event.dataTransfer.setData('text/plain', String(index));
@@ -104,38 +71,7 @@ export function QuestionList({
                   }}
                   onDrop={(event) => dropQuestion(event, index)}
                   onDragEnd={finishDragging}
-                  aria-label={`Питання ${index + 1}`}
-                  aria-describedby={showTooltip ? tooltipId : undefined}
-                  aria-invalid={item.invalid}
-                >
-                  <span>{index + 1}</span>
-                  {showTooltip && (
-                    <span
-                      className="question-tooltip"
-                      id={tooltipId}
-                      role="tooltip"
-                    >
-                      {item.hasSummary && (
-                        <span className="question-tooltip-block">
-                          <strong>Питання</strong>
-                          <span>{item.questionText}</span>
-                        </span>
-                      )}
-                      {item.remark && (
-                        <span className="question-tooltip-block question-tooltip-remark">
-                          <strong>Зауваження</strong>
-                          <span>{item.remark}</span>
-                        </span>
-                      )}
-                      {item.hasSummary && (
-                        <span className="question-tooltip-block">
-                          <strong>Відповідь</strong>
-                          <span>{item.answer}</span>
-                        </span>
-                      )}
-                    </span>
-                  )}
-                </Button>
+                />
               );
             })}
           </div>

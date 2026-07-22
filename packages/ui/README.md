@@ -11,6 +11,10 @@ own state, persistence, routing, and platform integration.
   platform integration, not duplicate markup or styles.
 - Build screens from the smallest practical components; keep atoms independent
   of application state and platform APIs.
+- Maximize reusable dedicated components: extract every coherent control,
+  repeated structure, and stateful interaction behind a named component.
+  Keep one-off wrappers inline when they have no independent behavior,
+  semantics, or realistic reuse value.
 - Keep composed views controlled through typed data and callbacks. Do not read
   browser storage, Electron APIs, or the filesystem from UI components.
 - Reuse the package's color tokens, typography, spacing, radii, and interaction

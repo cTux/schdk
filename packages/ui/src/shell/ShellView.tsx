@@ -1,37 +1,10 @@
-import {
-  faArrowRight,
-  faHouse,
-  faPen,
-  faPlay,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { ReactNode } from 'react';
-import { AppIcon } from '../atoms/AppIcon';
-import { Button } from '../atoms/Button';
 import '../styles/shell.scss';
+import { ShellHome } from './ShellHome';
+import { ShellNavigation } from './ShellNavigation';
+import type { ShellViewName } from './shellItems';
 
-export type ShellViewName = 'home' | 'host' | 'editor';
-
-const ITEMS = [
-  {
-    id: 'home',
-    icon: faHouse,
-    label: 'Домашня',
-    description: 'Огляд інструментів для підготовки та проведення гри.',
-  },
-  {
-    id: 'host',
-    icon: faPlay,
-    label: 'ЩДК Гра',
-    description: 'Запускайте готовий пакет і проводьте гру для команд.',
-  },
-  {
-    id: 'editor',
-    icon: faPen,
-    label: 'ЩДК Редактор',
-    description: 'Створюйте та редагуйте пакети запитань у форматі .schdk.',
-  },
-] as const;
+export type { ShellViewName } from './shellItems';
 
 interface ShellViewProps {
   editorApp: ReactNode;
@@ -50,68 +23,9 @@ export function ShellView({
 }: ShellViewProps) {
   return (
     <main className="app-shell">
-      <aside className="sidebar">
-        <div className="brand">
-          <AppIcon />
-          <div>
-            <strong>Що? Де? Коли?</strong>
-            <span>Інструменти</span>
-          </div>
-        </div>
-
-        <nav aria-label="Інструменти">
-          {ITEMS.map((item) => (
-            <Button
-              variant="ghost"
-              className={item.id === view ? 'active' : ''}
-              type="button"
-              key={item.id}
-              onClick={() => onShowView(item.id)}
-              aria-current={item.id === view ? 'page' : undefined}
-            >
-              <span className="nav-icon" aria-hidden="true">
-                <FontAwesomeIcon icon={item.icon} />
-              </span>
-              {item.label}
-            </Button>
-          ))}
-        </nav>
-
-        <p className="sidebar-note">SCHDK</p>
-      </aside>
-
+      <ShellNavigation view={view} onSelect={onShowView} />
       <section className="workspace">
-        <div className="home" hidden={view !== 'home'}>
-          <header>
-            <p className="eyebrow">Домашня</p>
-            <h1>Усе для гри в одному місці</h1>
-            <p>
-              Створіть пакет запитань у редакторі, а потім відкрийте його через
-              «ЩДК Гра» для проведення гри.
-            </p>
-          </header>
-
-          <div className="tool-list">
-            {ITEMS.slice(1).map((item) => (
-              <Button
-                type="button"
-                key={item.id}
-                onClick={() => onShowView(item.id)}
-              >
-                <span className="tool-icon" aria-hidden="true">
-                  <FontAwesomeIcon icon={item.icon} />
-                </span>
-                <span>
-                  <strong>{item.label}</strong>
-                  <small>{item.description}</small>
-                </span>
-                <span className="arrow" aria-hidden="true">
-                  <FontAwesomeIcon icon={faArrowRight} />
-                </span>
-              </Button>
-            ))}
-          </div>
-        </div>
+        <ShellHome hidden={view !== 'home'} onOpen={onShowView} />
         {loadedApps.host && (
           <div className="embedded-app" hidden={view !== 'host'}>
             {hostApp}
