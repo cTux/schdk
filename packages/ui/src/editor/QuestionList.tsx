@@ -1,5 +1,30 @@
-import { QUESTIONS_PER_ROUND, type GamePackage } from '@schdk/common';
+import {
+  QUESTIONS_PER_ROUND,
+  type GamePackage,
+  type GameQuestion,
+} from '@schdk/common';
 import { Button } from '../atoms/Button';
+
+export function getQuestionListItem(
+  question: GameQuestion,
+  showValidation: boolean,
+) {
+  const questionText = question.question.trim();
+  const answer = question.answer.trim();
+  const remark = question.comment?.trim() ?? '';
+  const hasSummary = Boolean(questionText && answer);
+  const complete = hasSummary && !remark;
+
+  return {
+    answer,
+    complete,
+    hasPreview: hasSummary || Boolean(remark),
+    hasSummary,
+    invalid: showValidation && !complete,
+    questionText,
+    remark,
+  };
+}
 
 interface QuestionListProps {
   gamePackage: GamePackage;
@@ -23,18 +48,15 @@ export function QuestionList({
             {Array.from({ length: QUESTIONS_PER_ROUND }, (_, offset) => {
               const index = round * QUESTIONS_PER_ROUND + offset;
               const question = gamePackage.questions[index]!;
-              const valid = Boolean(
-                question.question.trim() &&
-                question.answer.trim() &&
-                !question.comment?.trim(),
-              );
-              const invalid = showValidation && !valid;
+              const item = getQuestionListItem(question, showValidation);
+              const tooltipId = `question-tooltip-${index}`;
               return (
                 <Button
                   className={[
                     index === selectedIndex ? 'selected' : '',
-                    valid ? 'complete' : '',
-                    invalid ? 'invalid' : '',
+                    item.complete ? 'complete' : '',
+                    item.invalid ? 'invalid' : '',
+                    item.remark ? 'remark' : '',
                   ]
                     .filter(Boolean)
                     .join(' ')}
@@ -42,9 +64,36 @@ export function QuestionList({
                   type="button"
                   onClick={() => onSelectQuestion(index)}
                   aria-label={`Питання ${index + 1}`}
-                  aria-invalid={invalid}
+                  aria-describedby={item.hasPreview ? tooltipId : undefined}
+                  aria-invalid={item.invalid}
                 >
-                  {index + 1}
+                  <span>{index + 1}</span>
+                  {item.hasPreview && (
+                    <span
+                      className="question-tooltip"
+                      id={tooltipId}
+                      role="tooltip"
+                    >
+                      {item.hasSummary && (
+                        <span className="question-tooltip-block">
+                          <strong>Питання</strong>
+                          <span>{item.questionText}</span>
+                        </span>
+                      )}
+                      {item.remark && (
+                        <span className="question-tooltip-block question-tooltip-remark">
+                          <strong>Зауваження</strong>
+                          <span>{item.remark}</span>
+                        </span>
+                      )}
+                      {item.hasSummary && (
+                        <span className="question-tooltip-block">
+                          <strong>Відповідь</strong>
+                          <span>{item.answer}</span>
+                        </span>
+                      )}
+                    </span>
+                  )}
                 </Button>
               );
             })}

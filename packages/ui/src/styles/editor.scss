@@ -320,6 +320,7 @@ body {
   }
 
   .question-grid button {
+    position: relative;
     flex: 0 0 calc((100% - 18px) / 4);
     min-width: 0;
     padding: 7px 0;
@@ -353,6 +354,83 @@ body {
     box-shadow: 0 4px 14px rgba($accent, 0.18);
     color: #1a1308;
     font-weight: 750;
+  }
+
+  .question-grid .remark,
+  .question-grid .remark:hover:not(:disabled) {
+    border-color: rgba($danger, 0.65);
+    background: rgba($danger, 0.16);
+    color: #faa;
+  }
+
+  .question-grid .remark.selected,
+  .question-grid .remark.selected:hover:not(:disabled) {
+    border-color: $danger;
+    background: rgba($danger, 0.22);
+    box-shadow:
+      0 0 0 2px $accent,
+      0 4px 14px rgba($danger, 0.2);
+    color: #ffd0d0;
+  }
+
+  .question-tooltip {
+    position: absolute;
+    z-index: 10;
+    top: calc(100% + 8px);
+    left: 0;
+    display: flex;
+    visibility: hidden;
+    width: min(280px, calc(100vw - 32px));
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid $border-strong;
+    border-radius: 9px;
+    background: #20242b;
+    padding: 11px 12px;
+    box-shadow: 0 12px 30px rgba(#000, 0.4);
+    color: $text;
+    font-size: 0.78rem;
+    font-weight: 400;
+    line-height: 1.4;
+    opacity: 0;
+    pointer-events: none;
+    text-align: left;
+    transform: translateY(-4px);
+    transition:
+      opacity 100ms ease,
+      transform 100ms ease,
+      visibility 100ms ease;
+  }
+
+  .question-grid button:nth-child(4n + 3) .question-tooltip,
+  .question-grid button:nth-child(4n + 4) .question-tooltip {
+    right: 0;
+    left: auto;
+  }
+
+  .question-grid button:hover .question-tooltip,
+  .question-grid button:focus-visible .question-tooltip {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .question-tooltip-block {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .question-tooltip-block strong {
+    color: $muted;
+    font-size: 0.66rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .question-tooltip-remark,
+  .question-tooltip-remark strong {
+    color: #ff8f8f;
   }
 
   .question-editor {
