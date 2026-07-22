@@ -33,7 +33,8 @@ own state, persistence, routing, and platform integration.
   status role.
 - Keep the package title and save state on the right side of the editor header.
   Do not restore the removed header completion counter.
-- Keep recent packages below the file-open drop zone, never inside it.
+- Keep the file-open drop zone compact: at most 250 px tall, shrinking further
+  on short viewports. Keep recent packages below it, never inside it.
 - On question-number hover or focus, show completed question-and-answer text in
   a custom tooltip. Show unresolved remarks below the question in red and mark
   their question number with a dark-red border and background. Keep tooltips

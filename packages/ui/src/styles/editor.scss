@@ -525,7 +525,7 @@ body {
 
   .package-drop-zone {
     display: flex;
-    min-height: min(500px, calc(100vh - 150px));
+    min-height: min(250px, calc(50vh - 75px));
     align-items: center;
     flex-direction: column;
     justify-content: center;
