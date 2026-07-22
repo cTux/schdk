@@ -86,7 +86,7 @@ export function QuestionEditor({
         </label>
         <div className="question-remark">
           <label>
-            Зауваження
+            Зауваження (необов'язково)
             <textarea
               className={
                 showValidation && question.comment?.trim() ? 'invalid' : ''

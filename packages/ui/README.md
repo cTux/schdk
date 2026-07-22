@@ -36,6 +36,8 @@ own state, persistence, routing, and platform integration.
 - Keep the package title and save state on the right side of the editor header.
   Do not restore the removed header completion counter.
 - Place the optional handout before the question text in the question editor.
+- Label optional editor fields explicitly. Question remarks are optional, but
+  a non-empty unresolved remark keeps the question unfinished.
 - Show handouts without filenames, with the remove action below the thumbnail.
   Clicking the thumbnail must open a full-size modal with 100–400% zoom and
   drag-to-pan while zoomed.
