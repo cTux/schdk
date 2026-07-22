@@ -10,7 +10,7 @@ import {
 
 const editableGamePackages = new Set<string>();
 const closeControllers = new Map<number, CloseController>();
-const RECENT_LIMIT = 5;
+const RECENT_LIMIT = 20;
 let recentGamePackages: string[] = [];
 
 function recentGamePackagesPath() {

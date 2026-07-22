@@ -1,7 +1,7 @@
 const DATABASE_NAME = 'schdk-editor';
 const DATABASE_VERSION = 1;
 const STORE_NAME = 'recent-packages';
-const RECENT_LIMIT = 5;
+const RECENT_LIMIT = 20;
 
 interface RecentPackageRecord {
   name: string;
