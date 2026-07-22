@@ -15,7 +15,11 @@ import {
   type ChangeEvent,
   type DragEvent,
 } from 'react';
-import { saveStatusAfterWrite, scheduleAutosave } from './autosave';
+import {
+  saveStatusAfterWrite,
+  scheduleAutosave,
+  shouldScheduleAutosave,
+} from './autosave';
 
 const SAVE_STATUS_LABELS = {
   saved: 'Файл збережено',
@@ -31,7 +35,6 @@ export function App() {
   const [gamePackage, setGamePackage] = useState<GamePackage>(
     createEmptyGamePackage,
   );
-  const savedPackage = useRef<GamePackage | null>(null);
   const currentPackage = useRef(gamePackage);
   const saveQueue = useRef(Promise.resolve());
   const [hasPackage, setHasPackage] = useState(false);
@@ -44,38 +47,31 @@ export function App() {
   const question = gamePackage.questions[selectedIndex]!;
   currentPackage.current = gamePackage;
 
-  const saveCurrentPackage = useCallback(
-    async (force = false) => {
-      const desktop = window.desktop;
-      if (
-        !filePath ||
-        !desktop ||
-        (!force && gamePackage === savedPackage.current)
-      )
-        return;
+  const saveCurrentPackage = useCallback(async () => {
+    const desktop = window.desktop;
+    if (!filePath || !desktop) return;
 
-      const content = serializeGamePackage(gamePackage);
-      setSaveStatus('saving');
-      const save = saveQueue.current
-        .catch(() => undefined)
-        .then(() => desktop.writeGamePackage(filePath, content));
-      saveQueue.current = save;
-      try {
-        await save;
-        savedPackage.current = gamePackage;
-        setSaveStatus(
-          saveStatusAfterWrite(gamePackage === currentPackage.current),
-        );
-      } catch (error) {
-        setSaveStatus('error');
-        throw error;
-      }
-    },
-    [filePath, gamePackage],
-  );
+    const content = serializeGamePackage(gamePackage);
+    setSaveStatus('saving');
+    const save = saveQueue.current
+      .catch(() => undefined)
+      .then(() => desktop.writeGamePackage(filePath, content));
+    saveQueue.current = save;
+    try {
+      await save;
+      setSaveStatus(
+        saveStatusAfterWrite(gamePackage === currentPackage.current),
+      );
+    } catch (error) {
+      setSaveStatus('error');
+      throw error;
+    }
+  }, [filePath, gamePackage]);
 
   useEffect(() => {
-    if (!filePath || !window.desktop || gamePackage === savedPackage.current)
+    if (
+      !shouldScheduleAutosave(saveStatus, Boolean(filePath && window.desktop))
+    )
       return;
 
     return scheduleAutosave(async () => {
@@ -85,13 +81,13 @@ export function App() {
         setMessage('Не вдалося автоматично зберегти файл.');
       }
     });
-  }, [filePath, gamePackage, saveCurrentPackage]);
+  }, [filePath, saveCurrentPackage, saveStatus]);
 
   useEffect(
     () =>
       window.desktop?.onCloseRequested(async (attempt) => {
         try {
-          await saveCurrentPackage(true);
+          await saveCurrentPackage();
           window.desktop!.finishCloseAttempt(attempt, true);
         } catch {
           setMessage('Не вдалося автоматично зберегти файл.');
@@ -170,7 +166,6 @@ export function App() {
             content: new Uint8Array(await file.arrayBuffer()),
           };
       const parsedPackage = parseGamePackage(opened.content);
-      savedPackage.current = parsedPackage;
       setGamePackage(parsedPackage);
       setFilePath(opened.filePath);
       setFileName(file.name);
@@ -214,7 +209,6 @@ export function App() {
           content,
         );
         if (!savedPath) return false;
-        savedPackage.current = packageToSave;
         setFilePath(savedPath);
         const pathParts = savedPath.split(/[\\/]/u);
         setFileName(pathParts[pathParts.length - 1] || filename);
@@ -251,8 +245,7 @@ export function App() {
 
   async function closePackage() {
     try {
-      await saveCurrentPackage(true);
-      savedPackage.current = null;
+      await saveCurrentPackage();
       setGamePackage(createEmptyGamePackage());
       setHasPackage(false);
       setFilePath(null);

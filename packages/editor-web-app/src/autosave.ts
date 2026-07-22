@@ -8,3 +8,7 @@ export function scheduleAutosave(save: () => void): () => void {
 export function saveStatusAfterWrite(isLatest: boolean): 'saved' | 'pending' {
   return isLatest ? 'saved' : 'pending';
 }
+
+export function shouldScheduleAutosave(status: string, canWrite: boolean) {
+  return status === 'pending' && canWrite;
+}

@@ -3,6 +3,7 @@ import {
   AUTOSAVE_DELAY_MS,
   saveStatusAfterWrite,
   scheduleAutosave,
+  shouldScheduleAutosave,
 } from './autosave';
 
 describe('scheduleAutosave', () => {
@@ -27,5 +28,11 @@ describe('scheduleAutosave', () => {
   it('keeps newer edits pending after an older save finishes', () => {
     expect(saveStatusAfterWrite(false)).toBe('pending');
     expect(saveStatusAfterWrite(true)).toBe('saved');
+  });
+
+  it('schedules every writable pending change', () => {
+    expect(shouldScheduleAutosave('pending', true)).toBe(true);
+    expect(shouldScheduleAutosave('saved', true)).toBe(false);
+    expect(shouldScheduleAutosave('pending', false)).toBe(false);
   });
 });
