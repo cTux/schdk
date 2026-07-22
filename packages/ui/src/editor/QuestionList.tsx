@@ -69,6 +69,7 @@ export function QuestionList({
               const question = gamePackage.questions[index]!;
               const item = getQuestionListItem(question, showValidation);
               const tooltipId = `question-tooltip-${index}`;
+              const showTooltip = item.hasPreview && draggedIndex === null;
               return (
                 <Button
                   className={[
@@ -104,11 +105,11 @@ export function QuestionList({
                   onDrop={(event) => dropQuestion(event, index)}
                   onDragEnd={finishDragging}
                   aria-label={`Питання ${index + 1}`}
-                  aria-describedby={item.hasPreview ? tooltipId : undefined}
+                  aria-describedby={showTooltip ? tooltipId : undefined}
                   aria-invalid={item.invalid}
                 >
                   <span>{index + 1}</span>
-                  {item.hasPreview && (
+                  {showTooltip && (
                     <span
                       className="question-tooltip"
                       id={tooltipId}

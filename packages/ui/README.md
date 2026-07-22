@@ -49,6 +49,7 @@ own state, persistence, routing, and platform integration.
   background. Use a 2 px border for every question number.
 - Let users drag one question number onto another to swap the complete question
   records while keeping the current selection attached to the same question.
+  Hide all question tooltips while a drag is active.
 - Put shared visual changes here instead of adding app-local components or
   styles.
 - Scope application-specific styles under each application's root class so
