@@ -13,6 +13,10 @@ $border: #3a3f48;
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 body {
   margin: 0;
 }
@@ -263,6 +267,30 @@ legend {
 
 .open-file-input {
   display: none;
+}
+
+.package-drop-zone {
+  display: grid;
+  min-height: 420px;
+  margin-top: 36px;
+  border: 2px dashed $border;
+  border-radius: 16px;
+  place-content: center;
+  justify-items: center;
+  gap: 18px;
+  background: $panel;
+  text-align: center;
+}
+
+.package-drop-zone p,
+.drop-actions span {
+  color: #8e949e;
+}
+
+.drop-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .handout-preview {

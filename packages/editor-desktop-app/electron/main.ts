@@ -1,8 +1,10 @@
 import { app, BrowserWindow, dialog, ipcMain, Menu } from 'electron';
-import { writeFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isReloadShortcut } from './shortcuts.js';
+
+const editableGamePackages = new Set<string>();
 
 function createWindow() {
   const window = new BrowserWindow({
@@ -45,10 +47,36 @@ ipcMain.handle('save-game-package', async (_event, filename, content) => {
     defaultPath: filename,
     filters: [{ name: 'Пакет Що? Де? Коли?', extensions: [extension] }],
   });
-  if (result.canceled || !result.filePath) return false;
+  if (result.canceled || !result.filePath) return null;
 
   await writeFile(result.filePath, content, 'utf8');
-  return true;
+  editableGamePackages.add(result.filePath);
+  return result.filePath;
+});
+
+ipcMain.handle('open-game-package', async (_event, filePath) => {
+  if (
+    typeof filePath !== 'string' ||
+    !/\.(?:schdk|schdk-draft)$/iu.test(filePath)
+  ) {
+    throw new TypeError('Invalid file path');
+  }
+
+  const content = await readFile(filePath, 'utf8');
+  editableGamePackages.add(filePath);
+  return { filePath, content };
+});
+
+ipcMain.handle('write-game-package', async (_event, filePath, content) => {
+  if (
+    typeof filePath !== 'string' ||
+    typeof content !== 'string' ||
+    !editableGamePackages.has(filePath)
+  ) {
+    throw new TypeError('Invalid game package');
+  }
+
+  await writeFile(filePath, content, 'utf8');
 });
 
 app.whenReady().then(() => {

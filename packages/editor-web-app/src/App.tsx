@@ -8,17 +8,38 @@ import {
   type GamePackage,
   type GameQuestion,
 } from '@schdk/common';
-import { useRef, useState, type ChangeEvent } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type DragEvent,
+} from 'react';
+import { scheduleAutosave } from './autosave';
 
 export function App() {
   const openFileInput = useRef<HTMLInputElement>(null);
   const [gamePackage, setGamePackage] = useState<GamePackage>(
     createEmptyGamePackage,
   );
+  const [hasPackage, setHasPackage] = useState(false);
+  const [filePath, setFilePath] = useState<string | null>(null);
+  const [dirty, setDirty] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showValidation, setShowValidation] = useState(false);
   const [message, setMessage] = useState('');
   const question = gamePackage.questions[selectedIndex]!;
+
+  useEffect(() => {
+    if (!dirty || !filePath || !window.desktop) return;
+
+    return scheduleAutosave(() => {
+      void window
+        .desktop!.writeGamePackage(filePath, serializeGamePackage(gamePackage))
+        .catch(() => setMessage('Не вдалося автоматично зберегти файл.'));
+    });
+  }, [dirty, filePath, gamePackage]);
+
   function updateQuestion(change: Partial<GameQuestion>) {
     setGamePackage((current) => ({
       ...current,
@@ -26,6 +47,7 @@ export function App() {
         index === selectedIndex ? { ...item, ...change } : item,
       ),
     }));
+    setDirty(true);
     setMessage('');
   }
 
@@ -70,52 +92,92 @@ export function App() {
     event.target.value = '';
   }
 
-  async function openPackage(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-    if (!file) return;
+  async function openPackage(file: File) {
+    setMessage('');
     try {
-      setGamePackage(parseGamePackage(await file.text()));
+      const opened = window.desktop
+        ? await window.desktop.openGamePackage(file)
+        : { filePath: null, content: await file.text() };
+      setGamePackage(parseGamePackage(opened.content));
+      setFilePath(opened.filePath);
+      setHasPackage(true);
+      setDirty(false);
       setSelectedIndex(0);
       setShowValidation(false);
-      setMessage('Файл відкрито.');
     } catch {
       setMessage('Не вдалося відкрити файл: неправильний формат.');
-    } finally {
-      event.target.value = '';
     }
   }
 
-  async function savePackage(finished: boolean) {
+  function selectPackage(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    void openPackage(file);
+    event.target.value = '';
+  }
+
+  function dropPackage(event: DragEvent<HTMLElement>) {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    if (file) void openPackage(file);
+  }
+
+  async function savePackage(
+    finished: boolean,
+    packageToSave = gamePackage,
+  ): Promise<boolean> {
     setMessage('');
 
     if (finished) {
       setShowValidation(true);
-      const errors = validateGamePackage(gamePackage);
+      const errors = validateGamePackage(packageToSave);
       if (errors.length) {
         setMessage(`${errors[0]} Помилок: ${errors.length}.`);
-        return;
+        return false;
       }
     }
 
-    const content = serializeGamePackage(gamePackage);
+    const content = serializeGamePackage(packageToSave);
     const safeTitle =
-      gamePackage.title.replace(/[\p{Cc}<>:"/\\|?*]/gu, '-').trim() ||
+      packageToSave.title.replace(/[\p{Cc}<>:"/\\|?*]/gu, '-').trim() ||
       'Незавершена гра';
     const filename = `${safeTitle}.${finished ? 'schdk' : 'schdk-draft'}`;
 
-    if (window.desktop) {
-      await window.desktop.saveGamePackage(filename, content);
-      return;
-    }
+    try {
+      if (window.desktop) {
+        const savedPath = await window.desktop.saveGamePackage(
+          filename,
+          content,
+        );
+        if (!savedPath) return false;
+        setFilePath(savedPath);
+        setDirty(false);
+        return true;
+      }
 
-    const url = URL.createObjectURL(
-      new Blob([content], { type: 'application/json;charset=utf-8' }),
-    );
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    link.click();
-    URL.revokeObjectURL(url);
+      const url = URL.createObjectURL(
+        new Blob([content], { type: 'application/json;charset=utf-8' }),
+      );
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      link.click();
+      URL.revokeObjectURL(url);
+      return true;
+    } catch {
+      setMessage('Не вдалося зберегти файл.');
+      return false;
+    }
+  }
+
+  async function createPackage() {
+    const emptyPackage = createEmptyGamePackage();
+    if (!(await savePackage(false, emptyPackage))) return;
+
+    setGamePackage(emptyPackage);
+    setHasPackage(true);
+    setSelectedIndex(0);
+    setShowValidation(false);
   }
 
   return (
@@ -128,31 +190,56 @@ export function App() {
             <h1>Що? Де? Коли?</h1>
           </div>
         </div>
-        <div className="save-area">
-          <button type="button" onClick={() => openFileInput.current?.click()}>
-            Відкрити
-          </button>
-          <input
-            ref={openFileInput}
-            className="open-file-input"
-            type="file"
-            accept=".schdk,.schdk-draft"
-            onChange={openPackage}
-          />
-          <button type="button" onClick={() => savePackage(false)}>
-            Зберегти чернетку
-          </button>
-          <button
-            className="primary"
-            type="button"
-            onClick={() => savePackage(true)}
-          >
-            Зберегти готовий пакет
-          </button>
-        </div>
+        {hasPackage && (
+          <div className="save-area">
+            <button
+              type="button"
+              onClick={() => openFileInput.current?.click()}
+            >
+              Відкрити
+            </button>
+            <button type="button" onClick={() => savePackage(false)}>
+              Зберегти чернетку
+            </button>
+            <button
+              className="primary"
+              type="button"
+              onClick={() => savePackage(true)}
+            >
+              Зберегти готовий пакет
+            </button>
+          </div>
+        )}
       </header>
 
-      <label className="package-title">
+      <section
+        className="package-drop-zone"
+        hidden={hasPackage}
+        onDragOver={(event) => event.preventDefault()}
+        onDrop={dropPackage}
+      >
+        <h2>Відкрийте пакет</h2>
+        <p>Перетягніть сюди файл .schdk або .schdk-draft</p>
+        <div className="drop-actions">
+          <button type="button" onClick={() => openFileInput.current?.click()}>
+            Вибрати файл
+          </button>
+          <span>або</span>
+          <button className="primary" type="button" onClick={createPackage}>
+            Новий пакет
+          </button>
+        </div>
+      </section>
+
+      <input
+        ref={openFileInput}
+        className="open-file-input"
+        type="file"
+        accept=".schdk,.schdk-draft"
+        onChange={selectPackage}
+      />
+
+      <label className="package-title" hidden={!hasPackage}>
         Назва пакета
         <input
           className={
@@ -161,6 +248,7 @@ export function App() {
           value={gamePackage.title}
           onChange={(event) => {
             setGamePackage({ ...gamePackage, title: event.target.value });
+            setDirty(true);
             setMessage('');
           }}
           placeholder="Наприклад, Весняна гра 2026"
@@ -168,7 +256,7 @@ export function App() {
         />
       </label>
 
-      <div className="editor-layout">
+      <div className="editor-layout" hidden={!hasPackage}>
         <nav className="question-list" aria-label="Питання пакета">
           {[0, 1, 2].map((round) => (
             <section key={round}>
