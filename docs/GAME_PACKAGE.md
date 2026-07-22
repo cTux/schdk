@@ -1,16 +1,23 @@
-# Формат пакета гри
+# Game package format
 
-Пакет «Що? Де? Коли?» зберігається як ZIP-архів із розширенням `.schdk`. Всередині архіву знаходиться UTF-8 JSON-файл `game.json`.
+A «Що? Де? Коли?» package is stored as a ZIP archive with the `.schdk`
+extension. The archive contains a UTF-8 JSON file named `game.json`.
 
-- Пакет має назву та рівно 36 питань: 3 раунди по 12.
-- Кожне питання містить обов'язкові текст питання й відповідь.
-- Альтернативні відповіді — необов'язковий список рядків.
-- Роздатка — необов'язкове зображення, вбудоване в той самий файл як data URL.
-- Коментар — необов'язковий рядок. Поки він не вирішений, питання вважається неготовим.
-- Примітки для ведучого — необов'язковий рядок, який не впливає на готовність питання.
+- A package has a title and exactly 36 questions: three rounds of 12.
+- Every question has required question text and an answer.
+- Alternative answers are an optional list of strings.
+- A handout is an optional image embedded in the same file as a data URL.
+- A comment is an optional string. A question remains unfinished while it has
+  an unresolved comment.
+- Host notes are an optional string and do not affect question readiness.
 
-Кореневий об'єкт має маркер `format: "schdk-game-package"`, версію `1`, `title` і масив `questions`. Порядок елементів масиву визначає номер питання. Спільні TypeScript-типи та правила знаходяться в `@schdk/common`.
+The root object has a `format: "schdk-game-package"` marker, version `1`, a
+`title`, and a `questions` array. Array order determines question numbers. The
+shared TypeScript types and rules live in `@schdk/common`.
 
-Редактор зберігає новий і незавершений пакет у тому самому файлі `.schdk`. Назва, питання та відповіді можуть бути порожніми під час редагування; готовність пакета перевіряється під час відкриття у вебклієнті.
+The editor saves new and unfinished packages to the same `.schdk` file. The
+title, questions, and answers may remain empty during editing; the browser
+client validates package readiness when opening it.
 
-Старі `.schdk` у вигляді звичайного JSON все ще відкриваються; після наступного збереження редактор перепише їх у ZIP-форматі.
+Legacy `.schdk` files containing plain JSON are still supported. The editor
+rewrites them in ZIP format on the next save.
