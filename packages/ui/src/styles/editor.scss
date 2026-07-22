@@ -62,7 +62,7 @@ body {
     cursor: pointer;
   }
 
-  button:hover:not(:disabled),
+  button:hover:not(:disabled, .question-grid button),
   .file-button:hover {
     border-color: $border-strong;
     background: $surface-hover;
@@ -332,8 +332,6 @@ body {
 
   .question-grid button:hover:not(:disabled) {
     border-color: $border-strong;
-    background: #292e37;
-    color: $text;
   }
 
   .question-grid .complete {
