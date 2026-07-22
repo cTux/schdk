@@ -36,6 +36,9 @@ own state, persistence, routing, and platform integration.
 - Keep the package title and save state on the right side of the editor header.
   Do not restore the removed header completion counter.
 - Place the optional handout before the question text in the question editor.
+- Show handouts without filenames, with the remove action below the thumbnail.
+  Clicking the thumbnail must open a full-size modal with 100–400% zoom and
+  drag-to-pan while zoomed.
 - Keep the file-open drop zone compact: at most 250 px tall, shrinking further
   on short viewports. Keep recent packages below it, never inside it.
 - On question-number hover or focus, show completed question-and-answer text in

@@ -7,6 +7,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '../atoms/Button';
 import { FileButton } from '../atoms/FileButton';
+import { HandoutPreview } from './HandoutPreview';
 
 interface QuestionEditorProps {
   question: GameQuestion;
@@ -52,18 +53,10 @@ export function QuestionEditor({
           Роздатка <span>(необов'язково)</span>
         </legend>
         {question.handout ? (
-          <div className="handout-preview">
-            <img src={question.handout.dataUrl} alt="Роздатка до питання" />
-            <div>
-              <span>{question.handout.name}</span>
-              <Button
-                type="button"
-                onClick={() => onChange({ handout: undefined })}
-              >
-                Видалити
-              </Button>
-            </div>
-          </div>
+          <HandoutPreview
+            handout={question.handout}
+            onRemove={() => onChange({ handout: undefined })}
+          />
         ) : (
           <FileButton
             accept="image/*"

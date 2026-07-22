@@ -90,7 +90,8 @@ body {
   .question-actions,
   .alternative,
   .handout-preview,
-  .handout-preview div,
+  .handout-dialog header,
+  .handout-dialog-actions,
   .save-status {
     display: flex;
     align-items: center;
@@ -486,14 +487,14 @@ body {
   }
 
   .alternative button,
-  .handout-preview button {
+  .handout-remove {
     border-color: transparent;
     background: transparent;
     color: #d98b8b;
   }
 
   .alternative button:hover:not(:disabled),
-  .handout-preview button:hover:not(:disabled) {
+  .handout-remove:hover:not(:disabled) {
     border-color: rgba($danger, 0.18);
     background: rgba($danger, 0.08);
     color: #f0a0a0;
@@ -614,21 +615,108 @@ body {
   }
 
   .handout-preview {
-    gap: 14px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
     margin-top: 10px;
   }
 
-  .handout-preview img {
+  .handout-thumbnail {
+    display: block;
+    overflow: hidden;
+    padding: 0;
+    border-color: $border;
+    background: transparent;
+    line-height: 0;
+  }
+
+  .handout-thumbnail:hover:not(:disabled) {
+    border-color: $border-strong;
+    background: transparent;
+  }
+
+  .handout-thumbnail img {
+    display: block;
     width: 112px;
     height: 74px;
-    border: 1px solid $border;
-    border-radius: 9px;
     object-fit: cover;
   }
 
-  .handout-preview div {
-    flex-wrap: wrap;
+  .handout-remove {
+    width: 112px;
+  }
+
+  .handout-dialog {
+    width: min(1100px, 92vw);
+    height: min(820px, 88vh);
+    max-width: none;
+    max-height: none;
+    overflow: hidden;
+    border: 1px solid $border-strong;
+    border-radius: 14px;
+    background: $surface;
+    padding: 0;
+    color: $text;
+  }
+
+  .handout-dialog[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .handout-dialog::backdrop {
+    background: rgba(#000, 0.78);
+    backdrop-filter: blur(2px);
+  }
+
+  .handout-dialog header {
+    justify-content: space-between;
+    gap: 16px;
+    border-bottom: 1px solid $border;
+    padding: 10px 12px 10px 16px;
+  }
+
+  .handout-dialog-actions {
     gap: 6px;
+  }
+
+  .handout-dialog-actions button {
+    width: 38px;
+    height: 38px;
+    padding: 0;
+  }
+
+  .handout-dialog-actions span {
+    min-width: 54px;
+    color: $muted;
+    font-size: 0.8rem;
+    text-align: center;
+  }
+
+  .handout-dialog-viewport {
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow: auto;
+    background: #0f1217;
+    padding: 16px;
+    overscroll-behavior: contain;
+  }
+
+  .handout-dialog-viewport.pannable {
+    cursor: grab;
+    touch-action: none;
+  }
+
+  .handout-dialog-viewport.pannable:active {
+    cursor: grabbing;
+  }
+
+  .handout-dialog-viewport img {
+    display: block;
+    max-width: none;
+    height: auto;
+    margin: auto;
+    user-select: none;
   }
 
   .question-actions {
