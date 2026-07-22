@@ -343,13 +343,11 @@ body {
   }
 
   .question-grid .invalid {
-    border-color: rgba($danger, 0.6);
     color: #ff9a9a;
   }
 
   .question-grid .remark,
   .question-grid .remark:hover:not(:disabled) {
-    border-color: rgba($danger, 0.65);
     background: rgba($danger, 0.16);
     color: #faa;
   }

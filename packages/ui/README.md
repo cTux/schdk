@@ -40,8 +40,8 @@ own state, persistence, routing, and platform integration.
   on short viewports. Keep recent packages below it, never inside it.
 - On question-number hover or focus, show completed question-and-answer text in
   a custom tooltip. Show unresolved remarks below the question in red and mark
-  their question number with a dark-red border and background. Keep tooltips
-  fully visible within the active layout instead of clipping their content.
+  their question number with a dark-red background, never a red border. Keep
+  tooltips fully visible within the active layout instead of clipping their content.
   Hovering or selecting a question number may change only its border, never its
   background. Use a 2 px border for every question number.
 - Let users drag one question number onto another to swap the complete question
