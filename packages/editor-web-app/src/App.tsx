@@ -22,6 +22,7 @@ import {
 } from './autosave';
 import { saveWithPicker } from './browser-save';
 import { loadDraft, removeDraft, saveDraft } from './draft-storage';
+import { createPackageFilename } from './package-filename';
 
 const SAVE_STATUS_LABELS = {
   saved: 'Файл збережено',
@@ -231,10 +232,7 @@ export function App() {
   ): Promise<boolean> {
     setMessage('');
 
-    const safeTitle =
-      packageToSave.title.replace(/[\p{Cc}<>:"/\\|?*]/gu, '-').trim() ||
-      'Незавершена гра';
-    const filename = `${safeTitle}.schdk`;
+    const filename = createPackageFilename(packageToSave.title);
 
     try {
       if (window.desktop) {
@@ -304,7 +302,7 @@ export function App() {
         const oldFileName = fileName;
         const savedName = await savePackageInBrowser(
           gamePackage,
-          fileName ?? 'Незавершена гра.schdk',
+          createPackageFilename(gamePackage.title),
         );
         if (!savedName) return;
         if (oldFileName) clearDraft(oldFileName);
