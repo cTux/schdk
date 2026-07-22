@@ -1,5 +1,8 @@
+import { strFromU8, strToU8, unzipSync, zipSync } from 'fflate';
+
 export const QUESTION_COUNT = 36;
 export const QUESTIONS_PER_ROUND = 12;
+const PACKAGE_ENTRY = 'game.json';
 
 export interface Handout {
   name: string;
@@ -58,7 +61,7 @@ export function validateGamePackage(gamePackage: GamePackage): string[] {
   return errors;
 }
 
-export function serializeGamePackage(gamePackage: GamePackage): string {
+function serializeGamePackageJson(gamePackage: GamePackage): string {
   return JSON.stringify(
     {
       ...gamePackage,
@@ -83,8 +86,24 @@ export function serializeGamePackage(gamePackage: GamePackage): string {
   );
 }
 
-export function parseGamePackage(content: string): GamePackage {
-  const value: unknown = JSON.parse(content);
+export function serializeGamePackage(gamePackage: GamePackage): Uint8Array {
+  return zipSync(
+    { [PACKAGE_ENTRY]: strToU8(serializeGamePackageJson(gamePackage)) },
+    { level: 9 },
+  );
+}
+
+function readGamePackageJson(content: string | Uint8Array): string {
+  if (typeof content === 'string') return content;
+  if (content[0] !== 0x50 || content[1] !== 0x4b) return strFromU8(content);
+
+  const gamePackage = unzipSync(content)[PACKAGE_ENTRY];
+  if (!gamePackage) throw new Error('Invalid game package');
+  return strFromU8(gamePackage);
+}
+
+export function parseGamePackage(content: string | Uint8Array): GamePackage {
+  const value: unknown = JSON.parse(readGamePackageJson(content));
   if (
     !value ||
     typeof value !== 'object' ||

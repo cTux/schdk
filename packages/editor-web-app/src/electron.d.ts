@@ -5,12 +5,12 @@ declare global {
     desktop?: {
       saveGamePackage(
         filename: string,
-        content: string,
+        content: Uint8Array,
       ): Promise<string | null>;
       openGamePackage(
         file: File,
-      ): Promise<{ filePath: string; content: string }>;
-      writeGamePackage(filePath: string, content: string): Promise<void>;
+      ): Promise<{ filePath: string; content: Uint8Array }>;
+      writeGamePackage(filePath: string, content: Uint8Array): Promise<void>;
       onCloseRequested(callback: () => void): () => void;
       closeWindow(): void;
     };

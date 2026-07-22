@@ -22,7 +22,7 @@ export function App() {
   const [gamePackage, setGamePackage] = useState<GamePackage>(
     createEmptyGamePackage,
   );
-  const savedContent = useRef<string | null>(null);
+  const savedPackage = useRef<GamePackage | null>(null);
   const saveQueue = useRef(Promise.resolve());
   const [hasPackage, setHasPackage] = useState(false);
   const [filePath, setFilePath] = useState<string | null>(null);
@@ -34,23 +34,26 @@ export function App() {
   const saveCurrentPackage = useCallback(
     async (force = false) => {
       const desktop = window.desktop;
-      const content = serializeGamePackage(gamePackage);
-      if (!filePath || !desktop || (!force && content === savedContent.current))
+      if (
+        !filePath ||
+        !desktop ||
+        (!force && gamePackage === savedPackage.current)
+      )
         return;
 
+      const content = serializeGamePackage(gamePackage);
       const save = saveQueue.current
         .catch(() => undefined)
         .then(() => desktop.writeGamePackage(filePath, content));
       saveQueue.current = save;
       await save;
-      savedContent.current = content;
+      savedPackage.current = gamePackage;
     },
     [filePath, gamePackage],
   );
 
   useEffect(() => {
-    const content = serializeGamePackage(gamePackage);
-    if (!filePath || !window.desktop || content === savedContent.current)
+    if (!filePath || !window.desktop || gamePackage === savedPackage.current)
       return;
 
     return scheduleAutosave(async () => {
@@ -131,9 +134,12 @@ export function App() {
     try {
       const opened = window.desktop
         ? await window.desktop.openGamePackage(file)
-        : { filePath: null, content: await file.text() };
+        : {
+            filePath: null,
+            content: new Uint8Array(await file.arrayBuffer()),
+          };
       const parsedPackage = parseGamePackage(opened.content);
-      savedContent.current = serializeGamePackage(parsedPackage);
+      savedPackage.current = parsedPackage;
       setGamePackage(parsedPackage);
       setFilePath(opened.filePath);
       setHasPackage(true);
@@ -175,13 +181,13 @@ export function App() {
           content,
         );
         if (!savedPath) return false;
-        savedContent.current = content;
+        savedPackage.current = packageToSave;
         setFilePath(savedPath);
         return true;
       }
 
       const url = URL.createObjectURL(
-        new Blob([content], { type: 'application/json;charset=utf-8' }),
+        new Blob([new Uint8Array(content)], { type: 'application/zip' }),
       );
       const link = document.createElement('a');
       link.href = url;
@@ -208,7 +214,7 @@ export function App() {
   async function closePackage() {
     try {
       await saveCurrentPackage(true);
-      savedContent.current = null;
+      savedPackage.current = null;
       setGamePackage(createEmptyGamePackage());
       setHasPackage(false);
       setFilePath(null);

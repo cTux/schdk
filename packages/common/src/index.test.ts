@@ -35,8 +35,9 @@ describe('game package rules', () => {
     unfinished.questions[0]!.hostNotes = 'Показати роздатку після сигналу';
 
     const content = serializeGamePackage(unfinished);
-    expect(content).not.toContain('"kind"');
+    expect(content.slice(0, 2)).toEqual(Uint8Array.from([0x50, 0x4b]));
     expect(parseGamePackage(content)).toEqual(unfinished);
+    expect(parseGamePackage(JSON.stringify(unfinished))).toEqual(unfinished);
     expect(() => parseGamePackage('{}')).toThrow('Invalid game package');
   });
 
@@ -45,14 +46,18 @@ describe('game package rules', () => {
     gamePackage.questions[0]!.handout = {
       name: 'handout.png',
       mimeType: 'image/png',
-      dataUrl: 'data:image/png;base64,dGVzdA==',
+      dataUrl: `data:image/png;base64,${'A'.repeat(10_000)}`,
     };
 
+    const uncompressedLength = JSON.stringify(gamePackage).length;
     const withHandout = serializeGamePackage(gamePackage);
     delete gamePackage.questions[0]!.handout;
     const withoutHandout = serializeGamePackage(gamePackage);
 
     expect(withoutHandout).not.toEqual(withHandout);
-    expect(withoutHandout).not.toContain('handout.png');
+    expect(
+      parseGamePackage(withoutHandout).questions[0]!.handout,
+    ).toBeUndefined();
+    expect(withHandout.byteLength).toBeLessThan(uncompressedLength);
   });
 });

@@ -40,7 +40,7 @@ function createWindow() {
 }
 
 ipcMain.handle('save-game-package', async (_event, filename, content) => {
-  if (typeof filename !== 'string' || typeof content !== 'string') {
+  if (typeof filename !== 'string' || !(content instanceof Uint8Array)) {
     throw new TypeError('Invalid game package');
   }
 
@@ -53,7 +53,7 @@ ipcMain.handle('save-game-package', async (_event, filename, content) => {
   const filePath = /\.schdk$/iu.test(result.filePath)
     ? result.filePath
     : `${result.filePath}.schdk`;
-  await writeFile(filePath, content, 'utf8');
+  await writeFile(filePath, content);
   editableGamePackages.add(filePath);
   return filePath;
 });
@@ -63,21 +63,21 @@ ipcMain.handle('open-game-package', async (_event, filePath) => {
     throw new TypeError('Invalid file path');
   }
 
-  const content = await readFile(filePath, 'utf8');
+  const content = await readFile(filePath);
   editableGamePackages.add(filePath);
-  return { filePath, content };
+  return { filePath, content: new Uint8Array(content) };
 });
 
 ipcMain.handle('write-game-package', async (_event, filePath, content) => {
   if (
     typeof filePath !== 'string' ||
-    typeof content !== 'string' ||
+    !(content instanceof Uint8Array) ||
     !editableGamePackages.has(filePath)
   ) {
     throw new TypeError('Invalid game package');
   }
 
-  await writeFile(filePath, content, 'utf8');
+  await writeFile(filePath, content);
 });
 
 ipcMain.on('close-window', (event) => {
