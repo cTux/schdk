@@ -11,6 +11,8 @@ declare global {
         file: File,
       ): Promise<{ filePath: string; content: string }>;
       writeGamePackage(filePath: string, content: string): Promise<void>;
+      onCloseRequested(callback: () => void): () => void;
+      closeWindow(): void;
     };
   }
 }

@@ -3,6 +3,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isReloadShortcut } from './shortcuts.js';
+import { requestSaveBeforeClose } from './window-close.js';
 
 const editableGamePackages = new Set<string>();
 
@@ -27,6 +28,7 @@ function createWindow() {
   });
   window.webContents.on('will-navigate', (event) => event.preventDefault());
   window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+  requestSaveBeforeClose(window);
 
   void window.loadFile(
     app.isPackaged
@@ -76,6 +78,10 @@ ipcMain.handle('write-game-package', async (_event, filePath, content) => {
   }
 
   await writeFile(filePath, content, 'utf8');
+});
+
+ipcMain.on('close-window', (event) => {
+  BrowserWindow.fromWebContents(event.sender)?.destroy();
 });
 
 app.whenReady().then(() => {

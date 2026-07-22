@@ -8,6 +8,7 @@ import {
   type GameQuestion,
 } from '@schdk/common';
 import {
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -22,12 +23,30 @@ export function App() {
     createEmptyGamePackage,
   );
   const savedContent = useRef<string | null>(null);
+  const saveQueue = useRef(Promise.resolve());
   const [hasPackage, setHasPackage] = useState(false);
   const [filePath, setFilePath] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showValidation, setShowValidation] = useState(false);
   const [message, setMessage] = useState('');
   const question = gamePackage.questions[selectedIndex]!;
+
+  const saveCurrentPackage = useCallback(
+    async (force = false) => {
+      const desktop = window.desktop;
+      const content = serializeGamePackage(gamePackage);
+      if (!filePath || !desktop || (!force && content === savedContent.current))
+        return;
+
+      const save = saveQueue.current
+        .catch(() => undefined)
+        .then(() => desktop.writeGamePackage(filePath, content));
+      saveQueue.current = save;
+      await save;
+      savedContent.current = content;
+    },
+    [filePath, gamePackage],
+  );
 
   useEffect(() => {
     const content = serializeGamePackage(gamePackage);
@@ -36,13 +55,25 @@ export function App() {
 
     return scheduleAutosave(async () => {
       try {
-        await window.desktop!.writeGamePackage(filePath, content);
-        savedContent.current = content;
+        await saveCurrentPackage();
       } catch {
         setMessage('Не вдалося автоматично зберегти файл.');
       }
     });
-  }, [filePath, gamePackage]);
+  }, [filePath, gamePackage, saveCurrentPackage]);
+
+  useEffect(
+    () =>
+      window.desktop?.onCloseRequested(async () => {
+        try {
+          await saveCurrentPackage(true);
+          window.desktop!.closeWindow();
+        } catch {
+          setMessage('Не вдалося автоматично зберегти файл.');
+        }
+      }),
+    [saveCurrentPackage],
+  );
 
   function updateQuestion(change: Partial<GameQuestion>) {
     setGamePackage((current) => ({
@@ -175,12 +206,8 @@ export function App() {
   }
 
   async function closePackage() {
-    const content = serializeGamePackage(gamePackage);
-
     try {
-      if (filePath && window.desktop && content !== savedContent.current) {
-        await window.desktop.writeGamePackage(filePath, content);
-      }
+      await saveCurrentPackage(true);
       savedContent.current = null;
       setGamePackage(createEmptyGamePackage());
       setHasPackage(false);
