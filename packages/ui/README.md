@@ -36,7 +36,8 @@ own state, persistence, routing, and platform integration.
 - Keep recent packages below the file-open drop zone, never inside it.
 - On question-number hover or focus, show completed question-and-answer text in
   a custom tooltip. Show unresolved remarks below the question in red and mark
-  their question number with a dark-red border and background.
+  their question number with a dark-red border and background. Keep tooltips
+  fully visible within the active layout instead of clipping their content.
 - Put shared visual changes here instead of adding app-local components or
   styles.
 - Scope application-specific styles under each application's root class so

@@ -402,12 +402,6 @@ body {
       visibility 100ms ease;
   }
 
-  .question-grid button:nth-child(4n + 3) .question-tooltip,
-  .question-grid button:nth-child(4n + 4) .question-tooltip {
-    right: 0;
-    left: auto;
-  }
-
   .question-grid button:hover .question-tooltip,
   .question-grid button:focus-visible .question-tooltip {
     visibility: visible;
@@ -704,6 +698,12 @@ body {
 
     .question-list section + section {
       margin-top: 0;
+    }
+
+    .question-grid button:nth-child(4n + 3) .question-tooltip,
+    .question-grid button:nth-child(4n + 4) .question-tooltip {
+      right: 0;
+      left: auto;
     }
   }
 
