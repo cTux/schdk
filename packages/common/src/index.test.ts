@@ -39,4 +39,20 @@ describe('game package rules', () => {
     expect(parseGamePackage(content)).toEqual(unfinished);
     expect(() => parseGamePackage('{}')).toThrow('Invalid game package');
   });
+
+  it('removes deleted handouts from serialized packages', () => {
+    const gamePackage = createEmptyGamePackage();
+    gamePackage.questions[0]!.handout = {
+      name: 'handout.png',
+      mimeType: 'image/png',
+      dataUrl: 'data:image/png;base64,dGVzdA==',
+    };
+
+    const withHandout = serializeGamePackage(gamePackage);
+    delete gamePackage.questions[0]!.handout;
+    const withoutHandout = serializeGamePackage(gamePackage);
+
+    expect(withoutHandout).not.toEqual(withHandout);
+    expect(withoutHandout).not.toContain('handout.png');
+  });
 });

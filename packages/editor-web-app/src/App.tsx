@@ -22,23 +22,28 @@ export function App() {
   const [gamePackage, setGamePackage] = useState<GamePackage>(
     createEmptyGamePackage,
   );
+  const savedContent = useRef<string | null>(null);
   const [hasPackage, setHasPackage] = useState(false);
   const [filePath, setFilePath] = useState<string | null>(null);
-  const [dirty, setDirty] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showValidation, setShowValidation] = useState(false);
   const [message, setMessage] = useState('');
   const question = gamePackage.questions[selectedIndex]!;
 
   useEffect(() => {
-    if (!dirty || !filePath || !window.desktop) return;
+    const content = serializeGamePackage(gamePackage);
+    if (!filePath || !window.desktop || content === savedContent.current)
+      return;
 
-    return scheduleAutosave(() => {
-      void window
-        .desktop!.writeGamePackage(filePath, serializeGamePackage(gamePackage))
-        .catch(() => setMessage('Не вдалося автоматично зберегти файл.'));
+    return scheduleAutosave(async () => {
+      try {
+        await window.desktop!.writeGamePackage(filePath, content);
+        savedContent.current = content;
+      } catch {
+        setMessage('Не вдалося автоматично зберегти файл.');
+      }
     });
-  }, [dirty, filePath, gamePackage]);
+  }, [filePath, gamePackage]);
 
   function updateQuestion(change: Partial<GameQuestion>) {
     setGamePackage((current) => ({
@@ -47,7 +52,6 @@ export function App() {
         index === selectedIndex ? { ...item, ...change } : item,
       ),
     }));
-    setDirty(true);
     setMessage('');
   }
 
@@ -98,10 +102,11 @@ export function App() {
       const opened = window.desktop
         ? await window.desktop.openGamePackage(file)
         : { filePath: null, content: await file.text() };
-      setGamePackage(parseGamePackage(opened.content));
+      const parsedPackage = parseGamePackage(opened.content);
+      savedContent.current = serializeGamePackage(parsedPackage);
+      setGamePackage(parsedPackage);
       setFilePath(opened.filePath);
       setHasPackage(true);
-      setDirty(false);
       setSelectedIndex(0);
       setShowValidation(false);
     } catch {
@@ -150,8 +155,8 @@ export function App() {
           content,
         );
         if (!savedPath) return false;
+        savedContent.current = content;
         setFilePath(savedPath);
-        setDirty(false);
         return true;
       }
 
@@ -248,7 +253,6 @@ export function App() {
           value={gamePackage.title}
           onChange={(event) => {
             setGamePackage({ ...gamePackage, title: event.target.value });
-            setDirty(true);
             setMessage('');
           }}
           placeholder="Наприклад, Весняна гра 2026"
