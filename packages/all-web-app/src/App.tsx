@@ -1,12 +1,12 @@
 import { ShellView, type ShellViewName } from '@schdk/ui/shell';
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 
-const APP_URLS = import.meta.env.DEV
-  ? {
-      host: 'http://127.0.0.1:5174',
-      editor: 'http://127.0.0.1:5175',
-    }
-  : { host: './apps/host/index.html', editor: './apps/editor/index.html' };
+const HostApp = lazy(() =>
+  import('@schdk/host-web-app/app').then(({ App }) => ({ default: App })),
+);
+const EditorApp = lazy(() =>
+  import('@schdk/editor-web-app/app').then(({ App }) => ({ default: App })),
+);
 
 export function App() {
   const [view, setView] = useState<ShellViewName>('home');
@@ -21,7 +21,16 @@ export function App() {
 
   return (
     <ShellView
-      appUrls={APP_URLS}
+      editorApp={
+        <Suspense fallback={null}>
+          <EditorApp />
+        </Suspense>
+      }
+      hostApp={
+        <Suspense fallback={null}>
+          <HostApp />
+        </Suspense>
+      }
       loadedApps={loadedApps}
       view={view}
       onShowView={showView}

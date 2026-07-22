@@ -4,6 +4,9 @@
   "description": "Browser host for Що? Де? Коли? game packages.",
   "private": true,
   "type": "module",
+  "exports": {
+    "./app": "./src/App.tsx"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",

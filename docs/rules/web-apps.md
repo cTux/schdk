@@ -18,13 +18,12 @@
 ## Unified shell
 
 - Root `pnpm dev` starts `@schdk/all-web-app`.
-- Unified development uses strict fixed addresses: shell `5173`, host `5174`,
-  and editor `5175`. Fail clearly instead of silently switching ports.
-- In production, copy built host and editor apps under
-  `all-web-app/dist/apps/<app>` and use relative iframe URLs.
-- Load an embedded app only after it is first selected, then keep it mounted so
-  switching shell views does not discard its state.
-- Before the editor frame exists, the shell may acknowledge a close request.
-  After it exists, the editor participates in the desktop save handshake.
-- Keep iframe titles descriptive and preserve keyboard-accessible shell
-  navigation.
+- Unified development uses the strict fixed shell address `127.0.0.1:5173`.
+  Fail clearly instead of silently switching ports.
+- Export the host and editor root components from their standalone packages and
+  load them with `React.lazy`; do not embed them with iframes or copy their
+  standalone builds into the unified output.
+- Load an application chunk only after it is first selected, then keep its
+  component mounted so switching shell views does not discard state.
+- Preserve keyboard-accessible shell navigation while composing application
+  components in the shared renderer.

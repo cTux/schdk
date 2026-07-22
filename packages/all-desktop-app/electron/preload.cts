@@ -5,8 +5,6 @@ import {
   webUtils,
 } from 'electron';
 
-declare const location: { href: string };
-
 const closeApi = {
   onCloseRequested: (callback: (attempt: number) => void): (() => void) => {
     const listener = (_event: IpcRendererEvent, attempt: unknown) => {
@@ -36,12 +34,4 @@ const editorApi = {
   ...closeApi,
 };
 
-const frameUrl = new URL(location.href);
-const isEditorFrame =
-  !process.isMainFrame &&
-  ((frameUrl.hostname === '127.0.0.1' && frameUrl.port === '5175') ||
-    /\/apps\/editor\/index\.html$/u.test(frameUrl.pathname));
-
-if (isEditorFrame) {
-  contextBridge.exposeInMainWorld('desktop', editorApi);
-}
+contextBridge.exposeInMainWorld('desktop', editorApi);

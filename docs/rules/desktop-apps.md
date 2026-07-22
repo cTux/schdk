@@ -4,9 +4,7 @@
 
 - All desktop applications open maximized, remove the application menu, and
   deny renderer-created windows.
-- Standalone applications block renderer navigation. The unified shell keeps
-  only its fixed host/editor iframe navigation and protects editor capabilities
-  with the preload URL allowlist.
+- Block renderer navigation in standalone and unified applications.
 - Use the same owl PNG from `editor-desktop-app/build/owl.png` for every
   desktop executable and development window.
 - Development launches build the corresponding web application before opening
@@ -31,17 +29,17 @@
 - On timeout or save failure, offer exactly three outcomes: retry saving, close
   without saving, or cancel closing. Never leave a window permanently
   uncloseable after a renderer or IPC failure.
-- In the unified app, send close requests only to loaded editor child frames.
-  When no editor frame is loaded, close immediately because the shell has no
-  package state to save; do not wait for a renderer timeout.
+- In the unified app, send close requests to the main renderer only after a
+  package path has been authorized. Otherwise close immediately because there
+  is no desktop package state to save.
 
 ## Preload and packaging
 
 - Keep preload files as self-contained `.cts` files with no local imports so
   TypeScript emits sandbox-compatible `.cjs`; reference `preload.cjs` from
   `BrowserWindow`.
-- The unified preload exposes the editor API only to the whitelisted editor
-  child-frame URL. Keep routing tests for development and packaged URLs.
+- The unified preload exposes the narrow editor API to its trusted main
+  renderer. Do not enable Node integration for renderer content or subframes.
 - Package Windows apps with electron-builder's unpacked `dir` target under
   `dist/release/win-unpacked`; the project does not currently build installers.
 - Keep `signExecutable: false` so executable resource editing can apply the

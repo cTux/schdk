@@ -3,7 +3,7 @@ import '../styles/host.scss';
 
 export function HostView() {
   return (
-    <main>
+    <main className="host-app">
       <header>
         <AppIcon />
         <h1>Що? Де? Коли?</h1>

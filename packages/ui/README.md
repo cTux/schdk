@@ -33,6 +33,8 @@ own state, persistence, routing, and platform integration.
 - Keep recent packages below the file-open drop zone, never inside it.
 - Put shared visual changes here instead of adding app-local components or
   styles.
+- Scope application-specific styles under each application's root class so
+  lazy components can share the unified document without CSS collisions.
 - Keep user-facing text in the composed view that owns its context; atoms must
   not hard-code product copy.
 - Keep user-facing copy Ukrainian. Do not add transient save, cancel, or

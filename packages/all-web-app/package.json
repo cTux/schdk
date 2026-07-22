@@ -5,10 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "pnpm --parallel run \"/^dev:(shell|host|editor)$/\"",
-    "dev:shell": "vite --host 127.0.0.1 --port 5173 --strictPort",
-    "dev:host": "pnpm --dir ../host-web-app exec vite --host 127.0.0.1 --port 5174 --strictPort",
-    "dev:editor": "pnpm --dir ../editor-web-app exec vite --host 127.0.0.1 --port 5175 --strictPort",
+    "dev": "vite --host 127.0.0.1 --port 5173 --strictPort",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "oxlint -c ../../.oxlintrc.json src vite.config.ts",

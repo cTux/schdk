@@ -24,6 +24,7 @@ import {
   loadRecentWebPackage,
   rememberWebPackage,
 } from './recent-packages';
+import type {} from './electron';
 
 interface BrowserSaveResult {
   name: string;

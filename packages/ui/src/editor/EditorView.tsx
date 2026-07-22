@@ -26,7 +26,7 @@ export function EditorView({
   onTitleChange,
 }: EditorViewProps) {
   return (
-    <main>
+    <main className="editor-app">
       <EditorHeader
         hasPackage={hasPackage}
         packageTitle={gamePackage.title}

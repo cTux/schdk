@@ -4,6 +4,9 @@
   "description": "Browser editor for game packages.",
   "private": true,
   "type": "module",
+  "exports": {
+    "./app": "./src/App.tsx"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",

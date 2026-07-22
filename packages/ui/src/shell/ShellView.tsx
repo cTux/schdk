@@ -5,6 +5,7 @@ import {
   faPlay,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { ReactNode } from 'react';
 import { AppIcon } from '../atoms/AppIcon';
 import { Button } from '../atoms/Button';
 import '../styles/shell.scss';
@@ -33,14 +34,16 @@ const ITEMS = [
 ] as const;
 
 interface ShellViewProps {
-  appUrls: { host: string; editor: string };
+  editorApp: ReactNode;
+  hostApp: ReactNode;
   loadedApps: { host: boolean; editor: boolean };
   view: ShellViewName;
   onShowView(view: ShellViewName): void;
 }
 
 export function ShellView({
-  appUrls,
+  editorApp,
+  hostApp,
   loadedApps,
   view,
   onShowView,
@@ -110,20 +113,14 @@ export function ShellView({
           </div>
         </div>
         {loadedApps.host && (
-          <iframe
-            className="embedded-app"
-            src={appUrls.host}
-            title={ITEMS[1].label}
-            hidden={view !== 'host'}
-          />
+          <div className="embedded-app" hidden={view !== 'host'}>
+            {hostApp}
+          </div>
         )}
         {loadedApps.editor && (
-          <iframe
-            className="embedded-app"
-            src={appUrls.editor}
-            title={ITEMS[2].label}
-            hidden={view !== 'editor'}
-          />
+          <div className="embedded-app" hidden={view !== 'editor'}>
+            {editorApp}
+          </div>
         )}
       </section>
     </main>

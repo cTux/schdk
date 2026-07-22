@@ -14,10 +14,9 @@
 - Allow recent-file opens only for paths already present in the persisted
   recent list.
 - Parse file content in `@schdk/common` before using it as a game package.
-- Deny new-window requests from desktop renderers. Block navigation in
-  standalone apps; constrain unified-shell iframe destinations to its fixed app
-  URLs and the preload frame allowlist.
-- In the unified app, expose editor capabilities only when both the frame role
-  and its development or packaged URL match the allowlist.
+- Deny new-window requests and block navigation from all desktop renderers.
+- The unified application bundles only trusted first-party host, editor, and
+  shell code in one renderer. Expose the same narrow, validated editor bridge
+  to that renderer; never expose Node or unrestricted IPC primitives.
 - Treat persistence failures as recoverable where data safety permits, but do
   not swallow package read, parse, or write failures that the user must act on.

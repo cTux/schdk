@@ -6,7 +6,7 @@
   "type": "module",
   "main": "./dist/electron/main.js",
   "scripts": {
-    "dev": "pnpm --filter @schdk/host-web-app build && pnpm --filter @schdk/editor-web-app build && pnpm --filter @schdk/all-web-app build && pnpm build && electron .",
+    "dev": "pnpm --filter @schdk/all-web-app build && pnpm build && electron .",
     "build": "tsc && electron-builder --dir",
     "lint": "oxlint -c ../../.oxlintrc.json electron",
     "typecheck": "tsc --noEmit",

@@ -6,7 +6,6 @@ import {
   requestSaveBeforeClose,
   type CloseController,
 } from './window-close.js';
-import { sendCloseRequestToEditorFrames } from './preload-routing.js';
 
 const editableGamePackages = new Set<string>();
 const closeControllers = new Map<number, CloseController>();
@@ -97,13 +96,13 @@ function createWindow() {
     webPreferences: {
       contextIsolation: true,
       devTools: !app.isPackaged,
-      nodeIntegrationInSubFrames: true,
       preload: fileURLToPath(new URL('./preload.cjs', import.meta.url)),
     },
   });
   window.maximize();
 
   window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+  window.webContents.on('will-navigate', (event) => event.preventDefault());
   const webContentsId = window.webContents.id;
   let closeController: CloseController;
   closeController = requestSaveBeforeClose(
@@ -111,8 +110,11 @@ function createWindow() {
       isDestroyed: () => window.isDestroyed(),
       destroy: () => window.destroy(),
       onClose: (listener) => window.on('close', listener),
-      sendCloseRequested: (attempt) =>
-        sendCloseRequestToEditorFrames(window.webContents.mainFrame, attempt),
+      sendCloseRequested: (attempt) => {
+        if (editableGamePackages.size === 0) return false;
+        window.webContents.send('close-requested', attempt);
+        return true;
+      },
     },
     () => void handleCloseFailure(window, closeController),
   );

@@ -3,7 +3,14 @@
 :root {
   color: $text;
   background: $background;
-  font-family: system-ui, sans-serif;
+  font-family:
+    Inter,
+    'Segoe UI',
+    system-ui,
+    -apple-system,
+    sans-serif;
+  color-scheme: dark;
+  font-synthesis: none;
 }
 
 body {
@@ -13,19 +20,19 @@ body {
   background: $background;
 }
 
-main {
+.host-app {
   max-width: 48rem;
   margin: 0 auto;
   padding: 4rem 2rem;
-}
 
-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
+  header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
 
-.app-icon {
-  width: 4rem;
-  height: 4rem;
+  .app-icon {
+    width: 4rem;
+    height: 4rem;
+  }
 }

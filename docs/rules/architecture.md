@@ -12,12 +12,12 @@
   views rather than defining an app-local visual layer.
 - `@schdk/host-web-app` owns host behavior. It currently renders only the host
   placeholder; do not claim that game hosting is implemented until it is.
-- `@schdk/all-web-app` owns shell navigation and embeds the host and editor web
-  builds.
+- `@schdk/all-web-app` owns shell navigation and lazily loads the host and
+  editor React application exports.
 - Each `*-desktop-app` owns only its Electron main/preload code and packaging
   configuration. Reuse the corresponding web application for renderer UI.
-- `@schdk/all-desktop-app` wraps `@schdk/all-web-app` and exposes editor file
-  capabilities only to the embedded editor frame.
+- `@schdk/all-desktop-app` wraps `@schdk/all-web-app` and exposes its narrow
+  editor file bridge to the trusted unified renderer.
 
 ## Dependency direction
 
@@ -26,8 +26,8 @@
 - Keep Electron imports and direct filesystem access inside desktop packages.
 - Consume workspace packages through their declared package exports and list
   every workspace dependency in the consuming package manifest.
-- Preserve workspace dependency edges used to order builds, including the
-  unified shell's dependencies on the host and editor builds it copies.
+- Preserve workspace dependency edges used to bundle lazy application imports,
+  including the unified shell's dependencies on the host and editor packages.
 - Prefer shared ownership over copied implementations: data contracts belong
   in `common`, visuals in `ui`, browser behavior in web apps, and operating
   system integration in desktop apps.
