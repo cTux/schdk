@@ -71,6 +71,15 @@ export function QuestionEditor({
         />
       </label>
 
+      <label>
+        Коментар до відповіді (необов'язково)
+        <textarea
+          rows={3}
+          value={question.answerComment ?? ''}
+          onChange={(event) => onChange({ answerComment: event.target.value })}
+        />
+      </label>
+
       <fieldset>
         <legend>
           Альтернативні відповіді <span>(необов'язково)</span>

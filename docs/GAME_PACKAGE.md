@@ -5,6 +5,8 @@ extension. The archive contains a UTF-8 JSON file named `game.json`.
 
 - A package has a title and exactly 36 questions: three rounds of 12.
 - Every question has required question text and an answer.
+- An answer comment is an optional string and does not affect question
+  readiness.
 - Alternative answers are an optional list of strings.
 - A handout is an optional image embedded in the same file as a data URL.
 - A comment is an optional string. A question remains unfinished while it has

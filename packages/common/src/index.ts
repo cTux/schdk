@@ -13,6 +13,7 @@ export interface Handout {
 export interface GameQuestion {
   question: string;
   answer: string;
+  answerComment?: string;
   alternativeAnswers: string[];
   handout?: Handout;
   comment?: string;
@@ -69,6 +70,9 @@ function serializeGamePackageJson(gamePackage: GamePackage): string {
       questions: gamePackage.questions.map((question) => ({
         question: question.question.trim(),
         answer: question.answer.trim(),
+        ...(question.answerComment?.trim()
+          ? { answerComment: question.answerComment.trim() }
+          : {}),
         alternativeAnswers: question.alternativeAnswers
           .map((answer) => answer.trim())
           .filter(Boolean),
@@ -138,6 +142,8 @@ export function parseGamePackage(content: string | Uint8Array): GamePackage {
     }
 
     const handout = 'handout' in question ? question.handout : undefined;
+    const answerComment =
+      'answerComment' in question ? question.answerComment : undefined;
     const comment = 'comment' in question ? question.comment : undefined;
     const hostNotes = 'hostNotes' in question ? question.hostNotes : undefined;
     if (
@@ -154,6 +160,7 @@ export function parseGamePackage(content: string | Uint8Array): GamePackage {
       throw new Error('Invalid game package');
     }
     if (
+      (answerComment !== undefined && typeof answerComment !== 'string') ||
       (comment !== undefined && typeof comment !== 'string') ||
       (hostNotes !== undefined && typeof hostNotes !== 'string')
     ) {
@@ -163,6 +170,7 @@ export function parseGamePackage(content: string | Uint8Array): GamePackage {
     return {
       question: question.question,
       answer: question.answer,
+      ...(answerComment !== undefined ? { answerComment } : {}),
       alternativeAnswers: question.alternativeAnswers,
       ...(handout ? { handout } : {}),
       ...(comment !== undefined ? { comment } : {}),

@@ -32,6 +32,7 @@ describe('game package rules', () => {
     const unfinished = createEmptyGamePackage();
     unfinished.title = 'Чернетка';
     unfinished.questions[0]!.question = 'Незакінчене питання';
+    unfinished.questions[0]!.answerComment = 'Пояснення після відповіді';
     unfinished.questions[0]!.comment = 'Перевірити джерело';
     unfinished.questions[0]!.hostNotes = 'Показати роздатку після сигналу';
 
@@ -40,6 +41,14 @@ describe('game package rules', () => {
     expect(parseGamePackage(content)).toEqual(unfinished);
     expect(parseGamePackage(JSON.stringify(unfinished))).toEqual(unfinished);
     expect(() => parseGamePackage('{}')).toThrow('Invalid game package');
+
+    const malformed = structuredClone(unfinished) as unknown as {
+      questions: Array<{ answerComment: unknown }>;
+    };
+    malformed.questions[0]!.answerComment = 42;
+    expect(() => parseGamePackage(JSON.stringify(malformed))).toThrow(
+      'Invalid game package',
+    );
   });
 
   it('removes deleted handouts from serialized packages', () => {
