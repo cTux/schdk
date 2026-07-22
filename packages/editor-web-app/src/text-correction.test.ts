@@ -3,8 +3,8 @@ import { capitalizeFirstWord, correctSentence } from './text-correction';
 
 describe('text correction', () => {
   it('capitalizes text and adds only missing ending punctuation', () => {
-    expect(capitalizeFirstWord('  відповідь')).toBe('  Відповідь');
-    expect(correctSentence('  текст питання  ')).toBe('  Текст питання.');
+    expect(capitalizeFirstWord('\n  відповідь \t')).toBe('Відповідь');
+    expect(correctSentence('\n  текст питання  \n')).toBe('Текст питання.');
     expect(correctSentence('що сталося?')).toBe('Що сталося?');
     expect(correctSentence('')).toBe('');
   });

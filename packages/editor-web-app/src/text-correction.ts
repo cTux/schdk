@@ -1,8 +1,10 @@
 export function capitalizeFirstWord(value: string) {
-  return value.replace(/\p{L}/u, (letter) => letter.toLocaleUpperCase('uk-UA'));
+  return value
+    .trim()
+    .replace(/\p{L}/u, (letter) => letter.toLocaleUpperCase('uk-UA'));
 }
 
 export function correctSentence(value: string) {
-  const corrected = capitalizeFirstWord(value).trimEnd();
+  const corrected = capitalizeFirstWord(value);
   return corrected && !/\p{P}$/u.test(corrected) ? `${corrected}.` : corrected;
 }

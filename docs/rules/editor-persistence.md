@@ -9,7 +9,8 @@
 - Apply enabled text-correction options only when the corresponding field loses
   focus. Capitalize question, answer, alternative-answer, and answer-comment
   text as configured; add ending punctuation to corrected questions and answer
-  comments only when it is missing.
+  comments only when it is missing. Trim surrounding spaces and line breaks
+  from every corrected value.
 - Preserve the four save states: `saved`, `pending`, `saving`, and `error`.
   Their visual treatment is defined in the UI rules.
 - Keep the visible status indicator, but do not add transient save, cancel, or
