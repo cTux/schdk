@@ -44,6 +44,8 @@ own state, persistence, routing, and platform integration.
   fully visible within the active layout instead of clipping their content.
   Hovering or selecting a question number may change only its border, never its
   background. Use a 2 px border for every question number.
+- Let users drag one question number onto another to swap the complete question
+  records while keeping the current selection attached to the same question.
 - Put shared visual changes here instead of adding app-local components or
   styles.
 - Scope application-specific styles under each application's root class so

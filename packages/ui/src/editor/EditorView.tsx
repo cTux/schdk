@@ -23,6 +23,7 @@ export function EditorView({
   onOpenRecentPackage,
   onQuestionChange,
   onSelectQuestion,
+  onSwapQuestions,
   onTitleChange,
 }: EditorViewProps) {
   return (
@@ -48,6 +49,7 @@ export function EditorView({
           selectedIndex={selectedIndex}
           showValidation={showValidation}
           onSelectQuestion={onSelectQuestion}
+          onSwapQuestions={onSwapQuestions}
         />
         <QuestionEditor
           question={gamePackage.questions[selectedIndex]!}

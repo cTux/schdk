@@ -329,6 +329,7 @@ body {
     background: #22262d;
     color: #aeb5c0;
     font-size: 1rem;
+    cursor: grab;
   }
 
   .question-grid button:hover:not(:disabled) {
@@ -355,6 +356,16 @@ body {
 
   .question-grid .selected,
   .question-grid .selected:hover:not(:disabled) {
+    border-color: $accent;
+  }
+
+  .question-grid .dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+  }
+
+  .question-grid .drop-target,
+  .question-grid .drop-target:hover:not(:disabled) {
     border-color: $accent;
   }
 

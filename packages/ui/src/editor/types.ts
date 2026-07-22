@@ -22,5 +22,6 @@ export interface EditorViewProps {
   onOpenRecentPackage(recent: RecentPackageItem): void;
   onQuestionChange(change: Partial<GameQuestion>): void;
   onSelectQuestion(index: number): void;
+  onSwapQuestions(sourceIndex: number, targetIndex: number): void;
   onTitleChange(value: string): void;
 }

@@ -19,6 +19,7 @@ import {
 import { saveWithPicker } from './browser-save';
 import { loadDraft, removeDraft, saveDraft } from './draft-storage';
 import { createPackageFilename } from './package-filename';
+import { getSelectedIndexAfterSwap, swapQuestions } from './question-order';
 import {
   listRecentWebPackages,
   loadRecentWebPackage,
@@ -148,6 +149,18 @@ export function App() {
         index === selectedIndex ? { ...item, ...change } : item,
       ),
     }));
+    setSaveStatus('pending');
+    setMessage('');
+  }
+
+  function swapQuestionPositions(sourceIndex: number, targetIndex: number) {
+    setGamePackage((current) => ({
+      ...current,
+      questions: swapQuestions(current.questions, sourceIndex, targetIndex),
+    }));
+    setSelectedIndex((current) =>
+      getSelectedIndexAfterSwap(current, sourceIndex, targetIndex),
+    );
     setSaveStatus('pending');
     setMessage('');
   }
@@ -357,6 +370,7 @@ export function App() {
       onOpenRecentPackage={(recent) => void openRecentPackage(recent)}
       onQuestionChange={updateQuestion}
       onSelectQuestion={setSelectedIndex}
+      onSwapQuestions={swapQuestionPositions}
       onTitleChange={(title) => {
         setGamePackage({ ...gamePackage, title });
         setSaveStatus('pending');
