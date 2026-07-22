@@ -463,35 +463,36 @@ export function App() {
             Новий пакет
           </button>
         </div>
-        {recentPackages.length > 0 && (
-          <div className="recent-packages">
-            <h3>Недавні пакети</h3>
-            <div className="recent-package-list">
-              {recentPackages.map((recent) => (
-                <button
-                  key={recent.id}
-                  type="button"
-                  onClick={() => void openRecentPackage(recent)}
-                  title={recent.name}
-                >
-                  <span className="recent-package-icon" aria-hidden="true">
-                    ◫
-                  </span>
-                  <span>{recent.name}</span>
-                  <span className="recent-package-arrow" aria-hidden="true">
-                    →
-                  </span>
-                </button>
-              ))}
-            </div>
-            {!window.desktop && (
-              <p className="recent-package-note">
-                Вебверсія відкриває останню збережену локальну копію.
-              </p>
-            )}
-          </div>
-        )}
       </section>
+
+      {recentPackages.length > 0 && (
+        <section className="recent-packages" hidden={hasPackage}>
+          <h3>Недавні пакети</h3>
+          <div className="recent-package-list">
+            {recentPackages.map((recent) => (
+              <button
+                key={recent.id}
+                type="button"
+                onClick={() => void openRecentPackage(recent)}
+                title={recent.name}
+              >
+                <span className="recent-package-icon" aria-hidden="true">
+                  ◫
+                </span>
+                <span>{recent.name}</span>
+                <span className="recent-package-arrow" aria-hidden="true">
+                  →
+                </span>
+              </button>
+            ))}
+          </div>
+          {!window.desktop && (
+            <p className="recent-package-note">
+              Вебверсія відкриває останню збережену локальну копію.
+            </p>
+          )}
+        </section>
+      )}
 
       <input
         ref={openFileInput}

@@ -459,10 +459,9 @@ legend {
 }
 
 .recent-packages {
-  width: min(520px, calc(100vw - 72px));
+  width: 100%;
   margin-top: 18px;
-  border-top: 1px solid $border;
-  padding-top: 18px;
+  padding: 0 16px;
   text-align: left;
 }
 
@@ -477,6 +476,7 @@ legend {
 .recent-package-list {
   display: grid;
   gap: 6px;
+  max-width: 520px;
 }
 
 .recent-package-list button {
@@ -520,8 +520,9 @@ legend {
   transform: translateX(2px);
 }
 
-.package-drop-zone .recent-package-note {
+.recent-package-note {
   margin-top: 10px;
+  color: $muted;
   font-size: 0.78rem;
 }
 
