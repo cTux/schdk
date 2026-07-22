@@ -84,6 +84,11 @@ async function handleCloseFailure(
 
 function createWindow() {
   const window = new BrowserWindow({
+    icon: app.isPackaged
+      ? undefined
+      : fileURLToPath(
+          new URL('../../editor-desktop-app/build/owl.png', import.meta.url),
+        ),
     width: 1360,
     height: 860,
     minWidth: 960,

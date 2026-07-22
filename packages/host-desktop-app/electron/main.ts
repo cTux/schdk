@@ -4,6 +4,11 @@ import { fileURLToPath } from 'node:url';
 
 function createWindow() {
   const window = new BrowserWindow({
+    icon: app.isPackaged
+      ? undefined
+      : fileURLToPath(
+          new URL('../../editor-desktop-app/build/owl.png', import.meta.url),
+        ),
     width: 1280,
     height: 800,
     minWidth: 960,
