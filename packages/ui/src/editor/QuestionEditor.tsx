@@ -47,18 +47,46 @@ export function QuestionEditor({
         <h2>Питання {selectedIndex + 1}</h2>
       </div>
 
-      <label>
-        Текст питання
-        <textarea
-          className={
-            showValidation && !question.question.trim() ? 'invalid' : ''
-          }
-          rows={7}
-          value={question.question}
-          onChange={(event) => onChange({ question: event.target.value })}
-          aria-invalid={showValidation && !question.question.trim()}
-        />
-      </label>
+      <div className="question-pair">
+        <label>
+          Текст питання
+          <textarea
+            className={
+              showValidation && !question.question.trim() ? 'invalid' : ''
+            }
+            rows={7}
+            value={question.question}
+            onChange={(event) => onChange({ question: event.target.value })}
+            aria-invalid={showValidation && !question.question.trim()}
+          />
+        </label>
+        <div className="question-remark">
+          <label>
+            Зауваження
+            <textarea
+              className={
+                showValidation && question.comment?.trim() ? 'invalid' : ''
+              }
+              rows={7}
+              value={question.comment ?? ''}
+              onChange={(event) => onChange({ comment: event.target.value })}
+              aria-invalid={Boolean(showValidation && question.comment?.trim())}
+            />
+          </label>
+          {question.comment?.trim() && (
+            <>
+              <small>Питання не готове, доки зауваження не вирішено.</small>
+              <Button
+                variant="secondary"
+                type="button"
+                onClick={() => onChange({ comment: undefined })}
+              >
+                Вирішено
+              </Button>
+            </>
+          )}
+        </div>
+      </div>
 
       <label>
         Відповідь
@@ -137,33 +165,6 @@ export function QuestionEditor({
           >
             Додати зображення
           </FileButton>
-        )}
-      </fieldset>
-
-      <fieldset>
-        <legend>
-          Коментар <span>(питання не готове, доки коментар не вирішено)</span>
-        </legend>
-        <label>
-          Коментар до питання
-          <textarea
-            className={
-              showValidation && question.comment?.trim() ? 'invalid' : ''
-            }
-            rows={3}
-            value={question.comment ?? ''}
-            onChange={(event) => onChange({ comment: event.target.value })}
-            aria-invalid={Boolean(showValidation && question.comment?.trim())}
-          />
-        </label>
-        {question.comment?.trim() && (
-          <Button
-            variant="secondary"
-            type="button"
-            onClick={() => onChange({ comment: undefined })}
-          >
-            Вирішено
-          </Button>
         )}
       </fieldset>
 

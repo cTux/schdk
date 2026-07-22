@@ -373,6 +373,31 @@ body {
     margin-bottom: 18px;
   }
 
+  .question-pair {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+
+  .question-pair > label,
+  .question-remark {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .question-remark > label,
+  .question-remark small {
+    display: block;
+  }
+
+  .question-remark small {
+    margin-top: 6px;
+    color: $muted;
+    font-size: 0.72rem;
+    line-height: 1.4;
+  }
+
   fieldset {
     margin: 0 0 18px;
     border: 0;
@@ -634,6 +659,15 @@ body {
     .alternative {
       align-items: stretch;
       flex-direction: column;
+    }
+
+    .question-pair {
+      flex-direction: column;
+    }
+
+    .question-pair > label,
+    .question-remark {
+      width: 100%;
     }
 
     .alternative button {
