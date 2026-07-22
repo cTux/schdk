@@ -3,8 +3,8 @@ import { Button } from '../atoms/Button';
 export type OptionsTab = 'editor' | 'game';
 
 const TABS: readonly { id: OptionsTab; label: string }[] = [
-  { id: 'editor', label: 'Редактор' },
-  { id: 'game', label: 'Гра' },
+  { id: 'game', label: 'ЩДК Гра' },
+  { id: 'editor', label: 'ЩДК Редактор' },
 ];
 
 interface OptionsTabsProps {
