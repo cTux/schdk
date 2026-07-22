@@ -38,7 +38,7 @@ import {
   rememberWebPackage,
 } from './recent-packages';
 import type {} from './electron';
-import { capitalizeFirstWord, correctSentence } from './text-correction';
+import { correctAnswer, correctSentence } from './text-correction';
 
 interface BrowserSaveResult {
   name: string;
@@ -314,17 +314,17 @@ export function App({
     if (corrected !== value) updateQuestion({ question: corrected });
   }
 
-  function correctAnswer() {
+  function correctMainAnswer() {
     if (!textOptions.correctAnswers) return;
     const value = gamePackage.questions[selectedIndex]!.answer;
-    const corrected = capitalizeFirstWord(value);
+    const corrected = correctAnswer(value);
     if (corrected !== value) updateQuestion({ answer: corrected });
   }
 
   function correctAlternativeAnswer(index: number) {
     if (!textOptions.correctAnswers) return;
     const answers = gamePackage.questions[selectedIndex]!.alternativeAnswers;
-    const corrected = capitalizeFirstWord(answers[index] ?? '');
+    const corrected = correctAnswer(answers[index] ?? '');
     if (corrected === answers[index]) return;
     updateQuestion({
       alternativeAnswers: answers.map((answer, answerIndex) =>
@@ -572,7 +572,7 @@ export function App({
       selectedIndex={selectedIndex}
       showValidation={showValidation}
       onAddHandout={addHandout}
-      onAnswerBlur={correctAnswer}
+      onAnswerBlur={correctMainAnswer}
       onAnswerCommentBlur={correctAnswerComment}
       onAlternativeAnswerBlur={correctAlternativeAnswer}
       onBack={() => void closePackage()}
