@@ -1,0 +1,4 @@
+interface:
+  display_name: 'SCHDK UI'
+  short_description: 'Build and verify shared SCHDK interfaces'
+  default_prompt: 'Use $schdk-ui to change and visually verify the SCHDK interface.'

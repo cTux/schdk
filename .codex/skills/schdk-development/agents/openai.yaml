@@ -1,0 +1,4 @@
+interface:
+  display_name: 'SCHDK Development'
+  short_description: 'Implement and review SCHDK repository changes'
+  default_prompt: 'Use $schdk-development to implement a SCHDK feature or bug fix.'

@@ -1,0 +1,4 @@
+interface:
+  display_name: 'SCHDK Game Packages'
+  short_description: 'Maintain the .schdk format and validation'
+  default_prompt: 'Use $schdk-game-packages to change or diagnose the .schdk package contract.'

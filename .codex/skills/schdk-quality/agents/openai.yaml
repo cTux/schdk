@@ -1,0 +1,4 @@
+interface:
+  display_name: 'SCHDK Quality'
+  short_description: 'Run SCHDK checks, builds, and artifact audits'
+  default_prompt: 'Use $schdk-quality to verify SCHDK changes or prepare build artifacts.'

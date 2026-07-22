@@ -18,6 +18,11 @@
   of duplicating the same rule in multiple files.
 - Rules describe current guarantees and accepted boundaries, not speculative
   future architecture.
+- Keep repository skills under `.codex/skills` synchronized with the workflows
+  they guide. Update the affected skill in the same change when a durable
+  workflow, command, ownership boundary, or verification requirement changes.
+- Add a project skill only for a distinct recurring workflow. Do not create
+  speculative skills for features or packages that do not exist yet.
 
 ## Documentation and language
 

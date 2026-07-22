@@ -1,0 +1,4 @@
+interface:
+  display_name: 'SCHDK Editor Persistence'
+  short_description: 'Maintain editor saving and restoration flows'
+  default_prompt: 'Use $schdk-editor-persistence to change editor saving, recents, drafts, or restoration.'
