@@ -43,6 +43,9 @@ own state, persistence, routing, and platform integration.
   drag-to-pan while zoomed.
 - Keep the file-open drop zone compact: at most 250 px tall, shrinking further
   on short viewports. Keep recent packages below it, never inside it.
+- Show the package title first and the filename second in each recent-package
+  item. Fall back to the filename alone for legacy entries without title
+  metadata.
 - On question-number hover or focus, show completed question-and-answer text in
   a custom tooltip. Show unresolved remarks below the question in red and mark
   their question number with a dark-red background, never a red border. Keep

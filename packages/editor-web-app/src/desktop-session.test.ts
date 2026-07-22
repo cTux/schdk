@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
+  loadDesktopRecentTitles,
   loadDesktopEditorSession,
+  saveDesktopRecentTitle,
   saveDesktopEditorSession,
 } from './desktop-session';
 
@@ -36,5 +38,20 @@ describe('desktop editor session', () => {
     );
 
     expect(loadDesktopEditorSession(storage, '/editor/index.html')).toBeNull();
+  });
+
+  it('stores recent package titles by scoped file path', () => {
+    const storage = createStorage();
+    saveDesktopRecentTitle(
+      storage,
+      '/editor/index.html',
+      'C:\\Games\\quiz.schdk',
+      'Кубок міста',
+    );
+
+    expect(loadDesktopRecentTitles(storage, '/editor/index.html')).toEqual({
+      'C:\\Games\\quiz.schdk': 'Кубок міста',
+    });
+    expect(loadDesktopRecentTitles(storage, '/all/index.html')).toEqual({});
   });
 });

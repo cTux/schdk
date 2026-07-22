@@ -5,6 +5,7 @@ export type EditorSaveStatus = 'saved' | 'pending' | 'saving' | 'error';
 export interface RecentPackageItem {
   id: string;
   name: string;
+  title?: string;
 }
 
 export interface EditorViewProps {

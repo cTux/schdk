@@ -60,19 +60,28 @@ export function PackageStart({
             <h2>Недавні пакети</h2>
           </div>
           <div className="recent-package-list">
-            {recentPackages.map((recent) => (
-              <Button
-                key={recent.id}
-                type="button"
-                onClick={() => onOpenRecentPackage(recent)}
-                title={recent.name}
-              >
-                <span>{recent.name}</span>
-                <span className="recent-package-arrow" aria-hidden="true">
-                  <FontAwesomeIcon icon={faArrowRight} />
-                </span>
-              </Button>
-            ))}
+            {recentPackages.map((recent) => {
+              const hasTitle = recent.title !== undefined;
+              const title = hasTitle
+                ? recent.title?.trim() || 'Без назви'
+                : recent.name;
+              return (
+                <Button
+                  key={recent.id}
+                  type="button"
+                  onClick={() => onOpenRecentPackage(recent)}
+                  title={hasTitle ? `${title} — ${recent.name}` : recent.name}
+                >
+                  <span className="recent-package-label">
+                    <strong>{title}</strong>
+                    {hasTitle && <small>{recent.name}</small>}
+                  </span>
+                  <span className="recent-package-arrow" aria-hidden="true">
+                    <FontAwesomeIcon icon={faArrowRight} />
+                  </span>
+                </Button>
+              );
+            })}
           </div>
         </section>
       )}

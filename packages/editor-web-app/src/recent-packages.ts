@@ -5,6 +5,7 @@ const RECENT_LIMIT = 20;
 
 interface RecentPackageRecord {
   name: string;
+  title?: string;
   content: Uint8Array;
   openedAt: number;
 }
@@ -12,6 +13,7 @@ interface RecentPackageRecord {
 export interface RecentPackage {
   id: string;
   name: string;
+  title?: string;
 }
 
 function requestResult<T>(request: IDBRequest<T>): Promise<T> {
@@ -55,9 +57,10 @@ export async function listRecentWebPackages(): Promise<RecentPackage[]> {
     const records = await requestResult<RecentPackageRecord[]>(
       transaction.objectStore(STORE_NAME).getAll(),
     );
-    return selectRecentPackages(records).map(({ name }) => ({
+    return selectRecentPackages(records).map(({ name, title }) => ({
       id: name,
       name,
+      ...(typeof title === 'string' ? { title } : {}),
     }));
   } finally {
     database.close();
@@ -66,6 +69,7 @@ export async function listRecentWebPackages(): Promise<RecentPackage[]> {
 
 export async function rememberWebPackage(
   name: string,
+  title: string,
   content: Uint8Array,
 ): Promise<void> {
   const database = await openDatabase();
@@ -73,7 +77,7 @@ export async function rememberWebPackage(
     const transaction = database.transaction(STORE_NAME, 'readwrite');
     const done = transactionDone(transaction);
     const store = transaction.objectStore(STORE_NAME);
-    store.put({ name, content, openedAt: Date.now() });
+    store.put({ name, title, content, openedAt: Date.now() });
     const records = await requestResult<RecentPackageRecord[]>(store.getAll());
     for (const recent of sortRecentPackages(records).slice(RECENT_LIMIT)) {
       store.delete(recent.name);

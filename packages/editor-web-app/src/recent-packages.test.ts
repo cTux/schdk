@@ -5,6 +5,7 @@ describe('selectRecentPackages', () => {
   it('keeps the 20 newest packages', () => {
     const records = Array.from({ length: 22 }, (_, index) => ({
       name: `game-${index}.schdk`,
+      title: `Game ${index}`,
       content: new Uint8Array(),
       openedAt: index,
     }));

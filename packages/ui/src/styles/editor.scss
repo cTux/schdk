@@ -601,12 +601,25 @@ body {
     background: $surface-hover;
   }
 
-  .recent-package-list button > span:first-child {
+  .recent-package-label {
+    display: flex;
     flex: 1 1 auto;
+    flex-direction: column;
+    gap: 2px;
     min-width: 0;
+  }
+
+  .recent-package-label strong,
+  .recent-package-label small {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .recent-package-label small {
+    color: $muted;
+    font-size: 0.72rem;
+    font-weight: 400;
   }
 
   .recent-package-arrow {

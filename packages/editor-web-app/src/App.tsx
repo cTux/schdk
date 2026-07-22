@@ -19,7 +19,9 @@ import {
 import { saveWithPicker } from './browser-save';
 import { getDeepLinkedPackageName, getPackageDeepLink } from './deep-link';
 import {
+  loadDesktopRecentTitles,
   loadDesktopEditorSession,
+  saveDesktopRecentTitle,
   saveDesktopEditorSession,
 } from './desktop-session';
 import { loadDraft, removeDraft, saveDraft } from './draft-storage';
@@ -85,8 +87,16 @@ export function App() {
     try {
       if (window.desktop) {
         const recent = await window.desktop.listRecentGamePackages();
+        const titles = loadDesktopRecentTitles(
+          localStorage,
+          window.location.pathname,
+        );
         setRecentPackages(
-          recent.map(({ filePath: id, fileName: name }) => ({ id, name })),
+          recent.map(({ filePath: id, fileName: name }) => ({
+            id,
+            name,
+            ...(typeof titles[id] === 'string' ? { title: titles[id] } : {}),
+          })),
         );
       } else {
         setRecentPackages(await listRecentWebPackages());
@@ -125,14 +135,15 @@ export function App() {
       setHasPackage(true);
       setSelectedIndex(0);
       setShowValidation(false);
+      return packageToEdit;
     },
     [],
   );
 
   const rememberBrowserPackage = useCallback(
-    async (name: string, content: Uint8Array) => {
+    async (name: string, title: string, content: Uint8Array) => {
       try {
-        await rememberWebPackage(name, content);
+        await rememberWebPackage(name, title, content);
         await refreshRecentPackages();
       } catch {
         // IndexedDB is optional; opening and saving still work without recents.
@@ -154,8 +165,8 @@ export function App() {
       try {
         const content = await loadRecentWebPackage(packageName);
         if (!content) throw new Error('Deep-linked package is unavailable');
-        applyOpenedPackage(content, null, packageName);
-        await rememberBrowserPackage(packageName, content);
+        const openedPackage = applyOpenedPackage(content, null, packageName);
+        await rememberBrowserPackage(packageName, openedPackage.title, content);
       } catch {
         replaceBrowserPackageDeepLink(null);
         setMessage(
@@ -195,6 +206,16 @@ export function App() {
       filePath ? { filePath, selectedIndex } : null,
     );
   }, [desktopSessionReady, filePath, selectedIndex]);
+
+  useEffect(() => {
+    if (!window.desktop || !filePath) return;
+    saveDesktopRecentTitle(
+      localStorage,
+      window.location.pathname,
+      filePath,
+      gamePackage.title,
+    );
+  }, [filePath, gamePackage.title]);
 
   const saveCurrentPackage = useCallback(async () => {
     const desktop = window.desktop;
@@ -310,9 +331,17 @@ export function App() {
             filePath: null,
             content: new Uint8Array(await file.arrayBuffer()),
           };
-      applyOpenedPackage(opened.content, opened.filePath, file.name);
+      const openedPackage = applyOpenedPackage(
+        opened.content,
+        opened.filePath,
+        file.name,
+      );
       if (!window.desktop) {
-        await rememberBrowserPackage(file.name, opened.content);
+        await rememberBrowserPackage(
+          file.name,
+          openedPackage.title,
+          opened.content,
+        );
         replaceBrowserPackageDeepLink(file.name);
       }
     } catch {
@@ -329,8 +358,8 @@ export function App() {
       } else {
         const content = await loadRecentWebPackage(recent.id);
         if (!content) throw new Error('Recent package is unavailable');
-        applyOpenedPackage(content, null, recent.name);
-        await rememberBrowserPackage(recent.name, content);
+        const openedPackage = applyOpenedPackage(content, null, recent.name);
+        await rememberBrowserPackage(recent.name, openedPackage.title, content);
         replaceBrowserPackageDeepLink(recent.name);
       }
       await refreshRecentPackages();
@@ -367,7 +396,11 @@ export function App() {
       if (!saved) return false;
       setFileName(saved.name);
       setSaveStatus('saved');
-      await rememberBrowserPackage(saved.name, saved.content);
+      await rememberBrowserPackage(
+        saved.name,
+        packageToSave.title,
+        saved.content,
+      );
       replaceBrowserPackageDeepLink(saved.name);
       return true;
     } catch {
@@ -422,7 +455,11 @@ export function App() {
           createPackageFilename(gamePackage.title),
         );
         if (!saved) return;
-        await rememberBrowserPackage(saved.name, saved.content);
+        await rememberBrowserPackage(
+          saved.name,
+          gamePackage.title,
+          saved.content,
+        );
         if (oldFileName) clearDraft(oldFileName);
         if (saved.name !== oldFileName) clearDraft(saved.name);
       }

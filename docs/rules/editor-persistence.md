@@ -27,7 +27,8 @@
   restore it. Remove a rejected or invalid draft.
 - Remove the draft only after the latest package version is successfully saved.
 - Store up to 20 saved browser copies in IndexedDB, newest first. Browser
-  recents reopen the stored copy, not an unrestricted disk path.
+  recents reopen the stored copy, not an unrestricted disk path. Store package
+  title metadata with each copy for the recent-package list.
 - Browser package deep links identify an IndexedDB copy by its recent-package
   ID. Restore that copy after reload when available; clear an unavailable deep
   link without attempting unrestricted disk access.
@@ -37,7 +38,9 @@
 ## Desktop persistence
 
 - Desktop recents contain up to 20 real `.schdk` paths and reopen current
-  disk contents. Remove a recent entry when its file can no longer be read.
+  disk contents. Keep best-effort renderer title metadata for display without
+  rereading every ZIP at startup. Remove a recent entry when its file can no
+  longer be read.
 - Persist the current desktop file path and selected question continuously,
   then restore them on the next launch through the recent-file bridge. Clear
   the session when the file is unavailable or the editor returns to its start
