@@ -1,5 +1,9 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { AUTOSAVE_DELAY_MS, scheduleAutosave } from './autosave';
+import {
+  AUTOSAVE_DELAY_MS,
+  saveStatusAfterWrite,
+  scheduleAutosave,
+} from './autosave';
 
 describe('scheduleAutosave', () => {
   afterEach(() => vi.useRealTimers());
@@ -18,5 +22,10 @@ describe('scheduleAutosave', () => {
     expect(save).not.toHaveBeenCalled();
     vi.advanceTimersByTime(1);
     expect(save).toHaveBeenCalledOnce();
+  });
+
+  it('keeps newer edits pending after an older save finishes', () => {
+    expect(saveStatusAfterWrite(false)).toBe('pending');
+    expect(saveStatusAfterWrite(true)).toBe('saved');
   });
 });

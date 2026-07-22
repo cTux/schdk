@@ -67,6 +67,10 @@ main {
   justify-content: space-between;
 }
 
+.app-header {
+  gap: 24px;
+}
+
 h1,
 h2,
 p {
@@ -149,8 +153,42 @@ textarea {
 
 .package-title {
   display: block;
-  max-width: 560px;
-  margin: 24px 0;
+}
+
+.package-header {
+  width: min(520px, 50%);
+  margin-left: auto;
+}
+
+.save-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 7px;
+  font-size: 0.82rem;
+}
+
+.save-status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: currentcolor;
+}
+
+.save-status.saved {
+  color: #62c987;
+}
+
+.save-status.pending {
+  color: $accent;
+}
+
+.save-status.saving {
+  color: #63a9ff;
+}
+
+.save-status.error {
+  color: #e35d5d;
 }
 
 .editor-layout {
@@ -319,6 +357,15 @@ legend {
 }
 
 @media (width <= 800px) {
+  .app-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .package-header {
+    width: 100%;
+  }
+
   .editor-layout {
     grid-template-columns: 1fr;
   }

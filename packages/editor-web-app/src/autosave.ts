@@ -4,3 +4,7 @@ export function scheduleAutosave(save: () => void): () => void {
   const timeout = globalThis.setTimeout(save, AUTOSAVE_DELAY_MS);
   return () => globalThis.clearTimeout(timeout);
 }
+
+export function saveStatusAfterWrite(isLatest: boolean): 'saved' | 'pending' {
+  return isLatest ? 'saved' : 'pending';
+}

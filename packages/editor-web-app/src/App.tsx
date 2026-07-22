@@ -15,7 +15,16 @@ import {
   type ChangeEvent,
   type DragEvent,
 } from 'react';
-import { scheduleAutosave } from './autosave';
+import { saveStatusAfterWrite, scheduleAutosave } from './autosave';
+
+const SAVE_STATUS_LABELS = {
+  saved: 'Файл збережено',
+  pending: 'Очікує збереження',
+  saving: 'Файл зберігається…',
+  error: 'Не вдалося зберегти файл',
+} as const;
+
+type SaveStatus = keyof typeof SAVE_STATUS_LABELS;
 
 export function App() {
   const openFileInput = useRef<HTMLInputElement>(null);
@@ -23,13 +32,17 @@ export function App() {
     createEmptyGamePackage,
   );
   const savedPackage = useRef<GamePackage | null>(null);
+  const currentPackage = useRef(gamePackage);
   const saveQueue = useRef(Promise.resolve());
   const [hasPackage, setHasPackage] = useState(false);
   const [filePath, setFilePath] = useState<string | null>(null);
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>('saved');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showValidation, setShowValidation] = useState(false);
   const [message, setMessage] = useState('');
   const question = gamePackage.questions[selectedIndex]!;
+  currentPackage.current = gamePackage;
 
   const saveCurrentPackage = useCallback(
     async (force = false) => {
@@ -42,12 +55,21 @@ export function App() {
         return;
 
       const content = serializeGamePackage(gamePackage);
+      setSaveStatus('saving');
       const save = saveQueue.current
         .catch(() => undefined)
         .then(() => desktop.writeGamePackage(filePath, content));
       saveQueue.current = save;
-      await save;
-      savedPackage.current = gamePackage;
+      try {
+        await save;
+        savedPackage.current = gamePackage;
+        setSaveStatus(
+          saveStatusAfterWrite(gamePackage === currentPackage.current),
+        );
+      } catch (error) {
+        setSaveStatus('error');
+        throw error;
+      }
     },
     [filePath, gamePackage],
   );
@@ -78,6 +100,13 @@ export function App() {
     [saveCurrentPackage],
   );
 
+  useEffect(() => {
+    if (!window.desktop) return;
+    document.title = fileName
+      ? `${fileName} — SCHDK Editor`
+      : 'Що? Де? Коли? — Редактор';
+  }, [fileName]);
+
   function updateQuestion(change: Partial<GameQuestion>) {
     setGamePackage((current) => ({
       ...current,
@@ -85,6 +114,7 @@ export function App() {
         index === selectedIndex ? { ...item, ...change } : item,
       ),
     }));
+    setSaveStatus('pending');
     setMessage('');
   }
 
@@ -142,6 +172,8 @@ export function App() {
       savedPackage.current = parsedPackage;
       setGamePackage(parsedPackage);
       setFilePath(opened.filePath);
+      setFileName(file.name);
+      setSaveStatus('saved');
       setHasPackage(true);
       setSelectedIndex(0);
       setShowValidation(false);
@@ -183,6 +215,9 @@ export function App() {
         if (!savedPath) return false;
         savedPackage.current = packageToSave;
         setFilePath(savedPath);
+        const pathParts = savedPath.split(/[\\/]/u);
+        setFileName(pathParts[pathParts.length - 1] || filename);
+        setSaveStatus('saved');
         return true;
       }
 
@@ -194,6 +229,8 @@ export function App() {
       link.download = filename;
       link.click();
       URL.revokeObjectURL(url);
+      setFileName(filename);
+      setSaveStatus('saved');
       return true;
     } catch {
       setMessage('Не вдалося зберегти файл.');
@@ -218,6 +255,8 @@ export function App() {
       setGamePackage(createEmptyGamePackage());
       setHasPackage(false);
       setFilePath(null);
+      setFileName(null);
+      setSaveStatus('saved');
       setSelectedIndex(0);
       setShowValidation(false);
       setMessage('');
@@ -247,6 +286,30 @@ export function App() {
             <h1>Що? Де? Коли?</h1>
           </div>
         </div>
+        {hasPackage && (
+          <div className="package-header">
+            <label className="package-title">
+              Назва пакета
+              <input
+                className={
+                  showValidation && !gamePackage.title.trim() ? 'invalid' : ''
+                }
+                value={gamePackage.title}
+                onChange={(event) => {
+                  setGamePackage({ ...gamePackage, title: event.target.value });
+                  setSaveStatus('pending');
+                  setMessage('');
+                }}
+                placeholder="Наприклад, Весняна гра 2026"
+                aria-invalid={showValidation && !gamePackage.title.trim()}
+              />
+            </label>
+            <p className={`save-status ${saveStatus}`} role="status">
+              <span className="save-status-dot" aria-hidden="true" />
+              {SAVE_STATUS_LABELS[saveStatus]}
+            </p>
+          </div>
+        )}
       </header>
 
       <section
@@ -275,22 +338,6 @@ export function App() {
         accept=".schdk"
         onChange={selectPackage}
       />
-
-      <label className="package-title" hidden={!hasPackage}>
-        Назва пакета
-        <input
-          className={
-            showValidation && !gamePackage.title.trim() ? 'invalid' : ''
-          }
-          value={gamePackage.title}
-          onChange={(event) => {
-            setGamePackage({ ...gamePackage, title: event.target.value });
-            setMessage('');
-          }}
-          placeholder="Наприклад, Весняна гра 2026"
-          aria-invalid={showValidation && !gamePackage.title.trim()}
-        />
-      </label>
 
       <div className="editor-layout" hidden={!hasPackage}>
         <nav className="question-list" aria-label="Питання пакета">
