@@ -344,7 +344,6 @@ export function App() {
     <EditorView
       gamePackage={gamePackage}
       hasPackage={hasPackage}
-      isDesktop={Boolean(window.desktop)}
       message={message}
       recentPackages={recentPackages}
       saveStatus={saveStatus}

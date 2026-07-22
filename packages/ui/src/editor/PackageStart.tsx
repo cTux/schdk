@@ -4,7 +4,6 @@ import type { RecentPackageItem } from './types';
 
 interface PackageStartProps {
   hidden: boolean;
-  isDesktop: boolean;
   recentPackages: RecentPackageItem[];
   onCreatePackage(): void;
   onOpenPackage(file: File): void;
@@ -13,7 +12,6 @@ interface PackageStartProps {
 
 export function PackageStart({
   hidden,
-  isDesktop,
   recentPackages,
   onCreatePackage,
   onOpenPackage,
@@ -58,7 +56,6 @@ export function PackageStart({
         <section className="recent-packages" hidden={hidden}>
           <div className="recent-packages-heading">
             <h2>Недавні пакети</h2>
-            {!isDesktop && <p>Збережені копії в цьому браузері</p>}
           </div>
           <div className="recent-package-list">
             {recentPackages.map((recent) => (

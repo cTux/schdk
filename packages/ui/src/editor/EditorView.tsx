@@ -11,7 +11,6 @@ export type { EditorSaveStatus, RecentPackageItem } from './types';
 export function EditorView({
   gamePackage,
   hasPackage,
-  isDesktop,
   message,
   recentPackages,
   saveStatus,
@@ -38,7 +37,6 @@ export function EditorView({
       />
       <PackageStart
         hidden={hasPackage}
-        isDesktop={isDesktop}
         recentPackages={recentPackages}
         onCreatePackage={onCreatePackage}
         onOpenPackage={onOpenPackage}

@@ -10,7 +10,6 @@ export interface RecentPackageItem {
 export interface EditorViewProps {
   gamePackage: GamePackage;
   hasPackage: boolean;
-  isDesktop: boolean;
   message: string;
   recentPackages: RecentPackageItem[];
   saveStatus: EditorSaveStatus;
