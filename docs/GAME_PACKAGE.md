@@ -16,8 +16,9 @@ The root object has a `format: "schdk-game-package"` marker, version `1`, a
 shared TypeScript types and rules live in `@schdk/common`.
 
 The editor saves new and unfinished packages to the same `.schdk` file. The
-title, questions, and answers may remain empty during editing; the browser
-client validates package readiness when opening it.
+title, questions, and answers may remain empty during editing. Structural
+parsing accepts unfinished packages; `validateGamePackage` performs the
+separate readiness check when a complete package is required.
 
 Legacy `.schdk` files containing plain JSON are still supported. The editor
 rewrites them in ZIP format on the next save.

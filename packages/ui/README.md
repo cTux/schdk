@@ -6,16 +6,36 @@ own state, persistence, routing, and platform integration.
 
 ## Rules
 
+- Keep all reusable UI components, composed views, SCSS, design tokens, and
+  visual assets in this package. Web application packages own state and
+  platform integration, not duplicate markup or styles.
 - Build screens from the smallest practical components; keep atoms independent
   of application state and platform APIs.
+- Keep composed views controlled through typed data and callbacks. Do not read
+  browser storage, Electron APIs, or the filesystem from UI components.
 - Reuse the package's color tokens, typography, spacing, radii, and interaction
   patterns before introducing a new visual treatment.
 - Prefer compact, readable layouts and omit decoration that carries no
   information.
-- Keep keyboard focus visible and preserve native control semantics.
+- Preserve semantic elements, labels, `aria-*` state, visible keyboard focus,
+  disabled states, and native control behavior.
+- Keep editor and shell layouts usable from 320 px upward, and honor
+  `prefers-reduced-motion`.
 - Use Font Awesome for icons inside controls and navigation. Import individual
   icons from the free SVG packages; keep product branding as separate assets.
+- Use the shared owl only for SCHDK branding and favicons. Keep decorative
+  images and icons out of the accessibility tree.
+- Keep save-state colors consistent: green for saved, amber for pending, blue
+  for saving, and red for failure. Pair color with visible text and a live
+  status role.
+- Keep the package title and save state on the right side of the editor header.
+  Do not restore the removed header completion counter.
+- Keep recent packages below the file-open drop zone, never inside it.
 - Put shared visual changes here instead of adding app-local components or
   styles.
 - Keep user-facing text in the composed view that owns its context; atoms must
   not hard-code product copy.
+- Keep user-facing copy Ukrainian. Do not add transient save, cancel, or
+  download success messages; preserve actionable validation and file errors.
+
+The project-wide rule index is [`docs/RULES.md`](../../docs/RULES.md).

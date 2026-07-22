@@ -1,25 +1,28 @@
 # Project Rules
 
-This file is the canonical project guidance.
+This file is the canonical index for project guidance. Read it before changing
+the repository, then read every linked area affected by the task.
 
-## Product boundaries
+## Rule areas
 
-- `packages/host-web-app` hosts a game in a browser.
-- `packages/editor-web-app` creates and edits game packages in a browser.
-- `packages/host-desktop-app` packages `host-web-app` with Electron.
-- `packages/editor-desktop-app` packages `editor-web-app` with Electron and saves game packages to disk.
-- `packages/all-web-app` provides the shared sidebar and embeds the host and editor web bundles.
-- `packages/all-desktop-app` packages `all-web-app` with Electron and provides the editor's disk bridge to its embedded frame.
-- `packages/ui` owns web UI components, styles, design tokens, assets, and the UI rules documented in its `README.md`.
-- Keep the browser client independent of Electron APIs.
-- Keep the game-package requirements documented in `docs/GAME_PACKAGE.md`.
+| Area                                                    | Rules                                                        |
+| ------------------------------------------------------- | ------------------------------------------------------------ |
+| Governance and documentation                            | [rules/governance.md](rules/governance.md)                   |
+| Package architecture and ownership                      | [rules/architecture.md](rules/architecture.md)               |
+| `.schdk` model, validation, and compatibility           | [rules/game-packages.md](rules/game-packages.md)             |
+| Editor lifecycle, saving, drafts, and recents           | [rules/editor-persistence.md](rules/editor-persistence.md)   |
+| Browser applications and the unified shell              | [rules/web-apps.md](rules/web-apps.md)                       |
+| Electron applications and packaging                     | [rules/desktop-apps.md](rules/desktop-apps.md)               |
+| Trust boundaries and Electron security                  | [rules/security.md](rules/security.md)                       |
+| Dependencies, builds, tests, and generated files        | [rules/tooling-and-quality.md](rules/tooling-and-quality.md) |
+| Components, styling, accessibility, and visual language | [../packages/ui/README.md](../packages/ui/README.md)         |
 
-## Engineering
+## Product contracts
 
-- Use pnpm workspace packages and Turbo tasks from the repository root.
-- Keep both clients on the same React, TypeScript, Vite, Sass, test, lint, and formatting stack.
-- Put Electron-only code in the desktop app packages.
-- Keep package-local build output cacheable; the root build collects it under `dist/<package>`.
-- Prefer platform APIs and existing dependencies over new abstractions or packages.
-- Add the smallest test that protects non-trivial behavior.
-- Update this file when recurring architecture or workflow decisions change.
+- [GAME_PACKAGE.md](GAME_PACKAGE.md) is the user-facing `.schdk` format
+  contract.
+- [../README.md](../README.md) is the Ukrainian project and launch guide.
+
+When a prompt contains a durable project convention or constraint, update the
+appropriate rule document in the same change as described in
+[governance.md](rules/governance.md).
