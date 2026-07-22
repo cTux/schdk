@@ -10,6 +10,7 @@ describe('game package rules', () => {
   it('treats questions with unresolved comments as unfinished', () => {
     const gamePackage = createEmptyGamePackage();
 
+    expect(gamePackage.title).toBe('Без назви');
     expect(gamePackage.questions).toHaveLength(36);
 
     gamePackage.title = 'Тестовий пакет';

@@ -30,7 +30,7 @@ export function createEmptyGamePackage(): GamePackage {
   return {
     format: 'schdk-game-package',
     version: 1,
-    title: '',
+    title: 'Без назви',
     questions: Array.from({ length: QUESTION_COUNT }, () => ({
       question: '',
       answer: '',
