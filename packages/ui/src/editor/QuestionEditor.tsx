@@ -47,6 +47,37 @@ export function QuestionEditor({
         <h2>Питання {selectedIndex + 1}</h2>
       </div>
 
+      <fieldset>
+        <legend>
+          Роздатка <span>(необов'язково)</span>
+        </legend>
+        {question.handout ? (
+          <div className="handout-preview">
+            <img src={question.handout.dataUrl} alt="Роздатка до питання" />
+            <div>
+              <span>{question.handout.name}</span>
+              <Button
+                type="button"
+                onClick={() => onChange({ handout: undefined })}
+              >
+                Видалити
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <FileButton
+            accept="image/*"
+            onChange={(event) => {
+              const file = event.target.files?.[0];
+              if (file) onAddHandout(file);
+              event.target.value = '';
+            }}
+          >
+            Додати зображення
+          </FileButton>
+        )}
+      </fieldset>
+
       <div className="question-pair">
         <label>
           Текст питання
@@ -141,37 +172,6 @@ export function QuestionEditor({
         >
           <FontAwesomeIcon icon={faPlus} aria-hidden="true" /> Додати відповідь
         </Button>
-      </fieldset>
-
-      <fieldset>
-        <legend>
-          Роздатка <span>(необов'язково)</span>
-        </legend>
-        {question.handout ? (
-          <div className="handout-preview">
-            <img src={question.handout.dataUrl} alt="Роздатка до питання" />
-            <div>
-              <span>{question.handout.name}</span>
-              <Button
-                type="button"
-                onClick={() => onChange({ handout: undefined })}
-              >
-                Видалити
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <FileButton
-            accept="image/*"
-            onChange={(event) => {
-              const file = event.target.files?.[0];
-              if (file) onAddHandout(file);
-              event.target.value = '';
-            }}
-          >
-            Додати зображення
-          </FileButton>
-        )}
       </fieldset>
 
       <fieldset>

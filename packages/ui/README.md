@@ -33,6 +33,7 @@ own state, persistence, routing, and platform integration.
   status role.
 - Keep the package title and save state on the right side of the editor header.
   Do not restore the removed header completion counter.
+- Place the optional handout before the question text in the question editor.
 - Keep the file-open drop zone compact: at most 250 px tall, shrinking further
   on short viewports. Keep recent packages below it, never inside it.
 - On question-number hover or focus, show completed question-and-answer text in
