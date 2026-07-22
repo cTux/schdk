@@ -37,8 +37,9 @@
 
 ## Preload and packaging
 
-- Keep preload files as `.cts` so TypeScript emits sandbox-compatible `.cjs`,
-  and reference `preload.cjs` from `BrowserWindow`.
+- Keep preload files as self-contained `.cts` files with no local imports so
+  TypeScript emits sandbox-compatible `.cjs`; reference `preload.cjs` from
+  `BrowserWindow`.
 - The unified preload exposes the editor API only to the whitelisted editor
   child-frame URL. Keep routing tests for development and packaged URLs.
 - Package Windows apps with electron-builder's unpacked `dir` target under

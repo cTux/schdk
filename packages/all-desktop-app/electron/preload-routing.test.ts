@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it, vi } from 'vitest';
 import {
   isEditorFrameUrl,
@@ -18,6 +21,15 @@ describe('isEditorFrameUrl', () => {
     expect(isEditorFrameUrl(new URL('http://127.0.0.1:5175'), true)).toBe(
       false,
     );
+  });
+});
+
+describe('sandboxed preload', () => {
+  it('does not import local modules', () => {
+    const electronDir = dirname(fileURLToPath(import.meta.url));
+    const source = readFileSync(join(electronDir, 'preload.cts'), 'utf8');
+
+    expect(source).not.toMatch(/from ['"]\.\//u);
   });
 });
 

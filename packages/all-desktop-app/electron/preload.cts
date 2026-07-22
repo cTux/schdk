@@ -4,7 +4,6 @@ import {
   type IpcRendererEvent,
   webUtils,
 } from 'electron';
-import { isEditorFrameUrl } from './preload-routing.js';
 
 declare const location: { href: string };
 
@@ -37,10 +36,11 @@ const editorApi = {
   ...closeApi,
 };
 
-const isEditorFrame = isEditorFrameUrl(
-  new URL(location.href),
-  process.isMainFrame,
-);
+const frameUrl = new URL(location.href);
+const isEditorFrame =
+  !process.isMainFrame &&
+  ((frameUrl.hostname === '127.0.0.1' && frameUrl.port === '5175') ||
+    /\/apps\/editor\/index\.html$/u.test(frameUrl.pathname));
 
 if (isEditorFrame) {
   contextBridge.exposeInMainWorld('desktop', editorApi);
