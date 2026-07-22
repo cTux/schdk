@@ -20,6 +20,8 @@ import {
   scheduleAutosave,
   shouldScheduleAutosave,
 } from './autosave';
+import { saveWithPicker } from './browser-save';
+import { loadDraft, removeDraft, saveDraft } from './draft-storage';
 
 const SAVE_STATUS_LABELS = {
   saved: 'Файл збережено',
@@ -47,6 +49,14 @@ export function App() {
   const question = gamePackage.questions[selectedIndex]!;
   currentPackage.current = gamePackage;
 
+  const clearDraft = useCallback((name: string) => {
+    try {
+      removeDraft(localStorage, name);
+    } catch {
+      setMessage('Файл збережено, але аварійну копію не вдалося видалити.');
+    }
+  }, []);
+
   const saveCurrentPackage = useCallback(async () => {
     const desktop = window.desktop;
     if (!filePath || !desktop) return;
@@ -59,14 +69,24 @@ export function App() {
     saveQueue.current = save;
     try {
       await save;
-      setSaveStatus(
-        saveStatusAfterWrite(gamePackage === currentPackage.current),
-      );
+      const isLatest = gamePackage === currentPackage.current;
+      setSaveStatus(saveStatusAfterWrite(isLatest));
+      if (isLatest && fileName) clearDraft(fileName);
     } catch (error) {
       setSaveStatus('error');
       throw error;
     }
-  }, [filePath, gamePackage]);
+  }, [clearDraft, fileName, filePath, gamePackage]);
+
+  useEffect(() => {
+    if (!hasPackage || !fileName || saveStatus !== 'pending') return;
+
+    try {
+      saveDraft(localStorage, fileName, gamePackage);
+    } catch {
+      setMessage('Не вдалося створити аварійну копію в браузері.');
+    }
+  }, [fileName, gamePackage, hasPackage, saveStatus]);
 
   useEffect(() => {
     if (
@@ -166,10 +186,25 @@ export function App() {
             content: new Uint8Array(await file.arrayBuffer()),
           };
       const parsedPackage = parseGamePackage(opened.content);
-      setGamePackage(parsedPackage);
+      let packageToEdit = parsedPackage;
+      let restored = false;
+      try {
+        const draft = loadDraft(localStorage, file.name);
+        if (draft) {
+          restored = window.confirm(
+            `Знайдено незбережену версію пакета «${file.name}». Відновити її?`,
+          );
+          if (restored) packageToEdit = draft;
+          else removeDraft(localStorage, file.name);
+        }
+      } catch {
+        setMessage('Не вдалося перевірити аварійну копію в браузері.');
+      }
+
+      setGamePackage(packageToEdit);
       setFilePath(opened.filePath);
       setFileName(file.name);
-      setSaveStatus('saved');
+      setSaveStatus(restored ? 'pending' : 'saved');
       setHasPackage(true);
       setSelectedIndex(0);
       setShowValidation(false);
@@ -196,7 +231,6 @@ export function App() {
   ): Promise<boolean> {
     setMessage('');
 
-    const content = serializeGamePackage(packageToSave);
     const safeTitle =
       packageToSave.title.replace(/[\p{Cc}<>:"/\\|?*]/gu, '-').trim() ||
       'Незавершена гра';
@@ -204,6 +238,7 @@ export function App() {
 
     try {
       if (window.desktop) {
+        const content = serializeGamePackage(packageToSave);
         const savedPath = await window.desktop.saveGamePackage(
           filename,
           content,
@@ -216,21 +251,39 @@ export function App() {
         return true;
       }
 
-      const url = URL.createObjectURL(
-        new Blob([new Uint8Array(content)], { type: 'application/zip' }),
-      );
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = filename;
-      link.click();
-      URL.revokeObjectURL(url);
-      setFileName(filename);
+      const savedName = await savePackageInBrowser(packageToSave, filename);
+      if (!savedName) return false;
+      setFileName(savedName);
       setSaveStatus('saved');
       return true;
     } catch {
       setMessage('Не вдалося зберегти файл.');
       return false;
     }
+  }
+
+  async function savePackageInBrowser(
+    packageToSave: GamePackage,
+    suggestedName: string,
+  ): Promise<string | null> {
+    const content = serializeGamePackage(packageToSave);
+    if (window.showSaveFilePicker) {
+      return saveWithPicker(
+        window.showSaveFilePicker.bind(window),
+        suggestedName,
+        content,
+      );
+    }
+
+    const url = URL.createObjectURL(
+      new Blob([new Uint8Array(content)], { type: 'application/zip' }),
+    );
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = suggestedName;
+    link.click();
+    URL.revokeObjectURL(url);
+    return suggestedName;
   }
 
   async function createPackage() {
@@ -245,7 +298,18 @@ export function App() {
 
   async function closePackage() {
     try {
-      await saveCurrentPackage();
+      if (window.desktop) {
+        await saveCurrentPackage();
+      } else if (saveStatus !== 'saved') {
+        const oldFileName = fileName;
+        const savedName = await savePackageInBrowser(
+          gamePackage,
+          fileName ?? 'Незавершена гра.schdk',
+        );
+        if (!savedName) return;
+        if (oldFileName) clearDraft(oldFileName);
+        if (savedName !== oldFileName) clearDraft(savedName);
+      }
       setGamePackage(createEmptyGamePackage());
       setHasPackage(false);
       setFilePath(null);

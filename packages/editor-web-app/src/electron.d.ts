@@ -1,7 +1,10 @@
+import type { SaveFilePicker } from './browser-save';
+
 export {};
 
 declare global {
   interface Window {
+    showSaveFilePicker?: SaveFilePicker;
     desktop?: {
       saveGamePackage(
         filename: string,
