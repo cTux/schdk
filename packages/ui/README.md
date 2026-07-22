@@ -40,7 +40,7 @@ own state, persistence, routing, and platform integration.
   their question number with a dark-red border and background. Keep tooltips
   fully visible within the active layout instead of clipping their content.
   Hovering or selecting a question number may change only its border, never its
-  background.
+  background. Use a 2 px border for every question number.
 - Put shared visual changes here instead of adding app-local components or
   styles.
 - Scope application-specific styles under each application's root class so
