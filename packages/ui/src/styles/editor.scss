@@ -274,8 +274,7 @@ body {
   }
 
   .editor-layout {
-    display: grid;
-    grid-template-columns: 220px minmax(0, 1fr);
+    display: flex;
     gap: 16px;
     align-items: start;
   }
@@ -291,7 +290,14 @@ body {
   .question-list {
     position: sticky;
     top: 16px;
+    width: 220px;
+    flex: 0 0 220px;
     padding: 15px;
+  }
+
+  .question-editor {
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   .question-list section + section {
@@ -307,12 +313,13 @@ body {
   }
 
   .question-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    flex-wrap: wrap;
     gap: 6px;
   }
 
   .question-grid button {
+    flex: 0 0 calc((100% - 18px) / 4);
     min-width: 0;
     padding: 7px 0;
     border-color: transparent;
@@ -419,12 +426,13 @@ body {
   }
 
   .package-drop-zone {
-    display: grid;
+    display: flex;
     min-height: min(500px, calc(100vh - 150px));
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
     border: 1px dashed $border-strong;
     border-radius: 16px;
-    place-content: center;
-    justify-items: center;
     gap: 14px;
     background: rgba($surface, 0.7);
     text-align: center;
@@ -470,7 +478,8 @@ body {
   }
 
   .recent-package-list {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
     border: 1px solid $border;
     border-radius: 11px;
@@ -478,8 +487,7 @@ body {
   }
 
   .recent-package-list button {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    display: flex;
     align-items: center;
     gap: 10px;
     width: 100%;
@@ -501,6 +509,8 @@ body {
   }
 
   .recent-package-list button > span:first-child {
+    flex: 1 1 auto;
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -571,14 +581,21 @@ body {
     }
 
     .editor-layout {
-      grid-template-columns: 1fr;
+      align-items: stretch;
+      flex-direction: column;
     }
 
     .question-list {
       position: static;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      display: flex;
+      width: 100%;
+      flex: none;
       gap: 12px;
+    }
+
+    .question-list section {
+      flex: 1 1 0;
+      min-width: 0;
     }
 
     .question-list section + section {
@@ -606,7 +623,7 @@ body {
     }
 
     .question-list {
-      grid-template-columns: 1fr;
+      flex-direction: column;
     }
 
     .question-list section + section {

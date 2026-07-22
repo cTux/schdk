@@ -23,6 +23,7 @@ own state, persistence, routing, and platform integration.
   `prefers-reduced-motion`.
 - Keep the shell sidebar fixed to the viewport while application content
   scrolls independently.
+- Use Flexbox for UI layout. Do not use CSS Grid.
 - Use Font Awesome for icons inside controls and navigation. Import individual
   icons from the free SVG packages; keep product branding as separate assets.
 - Use the shared owl only for SCHDK branding and favicons. Keep decorative

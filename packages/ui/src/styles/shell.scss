@@ -32,15 +32,16 @@ button {
 }
 
 .app-shell {
-  display: grid;
+  display: flex;
   height: 100vh;
-  grid-template-columns: 220px minmax(0, 1fr);
   overflow: hidden;
 }
 
 .sidebar {
   display: flex;
+  width: 220px;
   height: 100vh;
+  flex: 0 0 220px;
   flex-direction: column;
   border-right: 1px solid $border;
   background: $sidebar;
@@ -74,12 +75,13 @@ button {
   font-size: 0.72rem;
 }
 
-nav {
-  display: grid;
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
   gap: 5px;
 }
 
-nav button {
+.sidebar nav button {
   display: flex;
   width: 100%;
   align-items: center;
@@ -93,23 +95,24 @@ nav button {
   cursor: pointer;
 }
 
-nav button:hover {
+.sidebar nav button:hover {
   background: $surface-raised;
   color: $text;
 }
 
-nav button.active {
+.sidebar nav button.active {
   background: rgba($accent, 0.12);
   color: #f2c36f;
 }
 
 .nav-icon {
-  display: grid;
+  display: flex;
   width: 25px;
   height: 25px;
   flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
   border-radius: 7px;
-  place-items: center;
   background: rgba(#fff, 0.05);
   font-size: 0.85rem;
 }
@@ -124,6 +127,7 @@ nav button.active {
 
 .workspace {
   height: 100vh;
+  flex: 1 1 auto;
   min-width: 0;
   overflow-y: auto;
   background: $background;
@@ -164,14 +168,14 @@ h1 {
 }
 
 .tool-list {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
   margin-top: 44px;
 }
 
 .tool-list button {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  display: flex;
   align-items: center;
   gap: 14px;
   border: 1px solid $border;
@@ -187,6 +191,11 @@ h1 {
     transform 120ms ease;
 }
 
+.tool-list button > span:nth-child(2) {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 .tool-list button:hover {
   border-color: #454c58;
   background: $surface-raised;
@@ -194,11 +203,13 @@ h1 {
 }
 
 .tool-icon {
-  display: grid;
+  display: flex;
   width: 42px;
   height: 42px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
   border-radius: 10px;
-  place-items: center;
   background: rgba($accent, 0.12);
   color: $accent;
   font-size: 1.15rem;
@@ -239,11 +250,9 @@ button:focus-visible {
 }
 
 @media (width <= 700px) {
-  .app-shell {
-    grid-template-columns: 72px minmax(0, 1fr);
-  }
-
   .sidebar {
+    width: 72px;
+    flex-basis: 72px;
     padding-inline: 10px;
   }
 
@@ -252,17 +261,20 @@ button:focus-visible {
     padding-inline: 0;
   }
 
-  .brand div,
-  nav button:not(.active) {
+  .sidebar .brand div {
+    display: none;
+  }
+
+  .sidebar nav button:not(.active) {
     font-size: 0;
   }
 
-  nav button {
+  .sidebar nav button {
     justify-content: center;
     padding-inline: 0;
   }
 
-  nav button.active {
+  .sidebar nav button.active {
     font-size: 0;
   }
 
@@ -277,10 +289,6 @@ button:focus-visible {
   .home {
     width: min(100% - 28px, 560px);
     padding-top: 44px;
-  }
-
-  .tool-list button {
-    grid-template-columns: auto minmax(0, 1fr);
   }
 
   .arrow {
