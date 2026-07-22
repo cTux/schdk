@@ -4,7 +4,6 @@ import {
   createEmptyGamePackage,
   parseGamePackage,
   serializeGamePackage,
-  validateGamePackage,
   type GamePackage,
   type GameQuestion,
 } from '@schdk/common';
@@ -127,26 +126,16 @@ export function App() {
     if (file) void openPackage(file);
   }
 
-  async function savePackage(
-    finished: boolean,
-    packageToSave = gamePackage,
+  async function createPackageFile(
+    packageToSave: GamePackage,
   ): Promise<boolean> {
     setMessage('');
-
-    if (finished) {
-      setShowValidation(true);
-      const errors = validateGamePackage(packageToSave);
-      if (errors.length) {
-        setMessage(`${errors[0]} Помилок: ${errors.length}.`);
-        return false;
-      }
-    }
 
     const content = serializeGamePackage(packageToSave);
     const safeTitle =
       packageToSave.title.replace(/[\p{Cc}<>:"/\\|?*]/gu, '-').trim() ||
       'Незавершена гра';
-    const filename = `${safeTitle}.${finished ? 'schdk' : 'schdk-draft'}`;
+    const filename = `${safeTitle}.schdk`;
 
     try {
       if (window.desktop) {
@@ -177,7 +166,7 @@ export function App() {
 
   async function createPackage() {
     const emptyPackage = createEmptyGamePackage();
-    if (!(await savePackage(false, emptyPackage))) return;
+    if (!(await createPackageFile(emptyPackage))) return;
 
     setGamePackage(emptyPackage);
     setHasPackage(true);
@@ -185,36 +174,46 @@ export function App() {
     setShowValidation(false);
   }
 
+  async function closePackage() {
+    const content = serializeGamePackage(gamePackage);
+
+    try {
+      if (filePath && window.desktop && content !== savedContent.current) {
+        await window.desktop.writeGamePackage(filePath, content);
+      }
+      savedContent.current = null;
+      setGamePackage(createEmptyGamePackage());
+      setHasPackage(false);
+      setFilePath(null);
+      setSelectedIndex(0);
+      setShowValidation(false);
+      setMessage('');
+    } catch {
+      setMessage('Не вдалося автоматично зберегти файл.');
+    }
+  }
+
   return (
     <main>
       <header className="app-header">
         <div className="brand">
+          {hasPackage && (
+            <button
+              className="back-button"
+              type="button"
+              onClick={() => void closePackage()}
+              aria-label="Назад"
+              title="Назад"
+            >
+              ←
+            </button>
+          )}
           <img className="app-icon" src="./owl.svg" alt="" />
           <div>
             <p className="eyebrow">Редактор пакетів</p>
             <h1>Що? Де? Коли?</h1>
           </div>
         </div>
-        {hasPackage && (
-          <div className="save-area">
-            <button
-              type="button"
-              onClick={() => openFileInput.current?.click()}
-            >
-              Відкрити
-            </button>
-            <button type="button" onClick={() => savePackage(false)}>
-              Зберегти чернетку
-            </button>
-            <button
-              className="primary"
-              type="button"
-              onClick={() => savePackage(true)}
-            >
-              Зберегти готовий пакет
-            </button>
-          </div>
-        )}
       </header>
 
       <section
@@ -224,7 +223,7 @@ export function App() {
         onDrop={dropPackage}
       >
         <h2>Відкрийте пакет</h2>
-        <p>Перетягніть сюди файл .schdk або .schdk-draft</p>
+        <p>Перетягніть сюди файл .schdk</p>
         <div className="drop-actions">
           <button type="button" onClick={() => openFileInput.current?.click()}>
             Вибрати файл
@@ -240,7 +239,7 @@ export function App() {
         ref={openFileInput}
         className="open-file-input"
         type="file"
-        accept=".schdk,.schdk-draft"
+        accept=".schdk"
         onChange={selectPackage}
       />
 

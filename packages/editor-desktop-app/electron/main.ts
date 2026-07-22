@@ -42,23 +42,22 @@ ipcMain.handle('save-game-package', async (_event, filename, content) => {
     throw new TypeError('Invalid game package');
   }
 
-  const extension = filename.endsWith('.schdk-draft') ? 'schdk-draft' : 'schdk';
   const result = await dialog.showSaveDialog({
     defaultPath: filename,
-    filters: [{ name: 'Пакет Що? Де? Коли?', extensions: [extension] }],
+    filters: [{ name: 'Пакет Що? Де? Коли?', extensions: ['schdk'] }],
   });
   if (result.canceled || !result.filePath) return null;
 
-  await writeFile(result.filePath, content, 'utf8');
-  editableGamePackages.add(result.filePath);
-  return result.filePath;
+  const filePath = /\.schdk$/iu.test(result.filePath)
+    ? result.filePath
+    : `${result.filePath}.schdk`;
+  await writeFile(filePath, content, 'utf8');
+  editableGamePackages.add(filePath);
+  return filePath;
 });
 
 ipcMain.handle('open-game-package', async (_event, filePath) => {
-  if (
-    typeof filePath !== 'string' ||
-    !/\.(?:schdk|schdk-draft)$/iu.test(filePath)
-  ) {
+  if (typeof filePath !== 'string' || !/\.schdk$/iu.test(filePath)) {
     throw new TypeError('Invalid file path');
   }
 
