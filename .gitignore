@@ -4,5 +4,6 @@ dist-electron
 release
 coverage
 .turbo
+.playwright-cli/
 *.log
 *.tsbuildinfo
