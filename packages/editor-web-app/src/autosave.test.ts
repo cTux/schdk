@@ -9,10 +9,12 @@ import {
 describe('scheduleAutosave', () => {
   afterEach(() => vi.useRealTimers());
 
-  it('saves only after three quiet seconds', () => {
+  it('saves after one quiet second', () => {
     vi.useFakeTimers();
     const save = vi.fn();
     const cancel = scheduleAutosave(save);
+
+    expect(AUTOSAVE_DELAY_MS).toBe(1_000);
 
     vi.advanceTimersByTime(AUTOSAVE_DELAY_MS - 1);
     expect(save).not.toHaveBeenCalled();

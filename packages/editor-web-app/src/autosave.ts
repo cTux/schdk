@@ -1,4 +1,4 @@
-export const AUTOSAVE_DELAY_MS = 3_000;
+export const AUTOSAVE_DELAY_MS = 1_000;
 
 export function scheduleAutosave(save: () => void): () => void {
   const timeout = globalThis.setTimeout(save, AUTOSAVE_DELAY_MS);

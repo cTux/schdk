@@ -37,8 +37,9 @@
   disk contents. Remove a recent entry when its file can no longer be read.
 - Persisting the recent list is best-effort and must not fail a package
   operation.
-- Autosave only when a desktop bridge and an authorized file path exist. Wait
-  for three quiet seconds before writing.
+- Autosave only when a desktop bridge and an authorized file path exist. Write
+  after one quiet second so save feedback remains responsive while typing is
+  still debounced.
 - Serialize desktop writes through one queue. Completion of an older write must
   leave newer edits `pending` rather than marking them saved.
 - Returning to the start screen saves desktop changes before clearing state.
