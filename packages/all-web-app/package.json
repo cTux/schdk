@@ -1,0 +1,37 @@
+{
+  "name": "@schdk/all-web-app",
+  "version": "0.1.0",
+  "description": "Unified browser shell for SCHDK tools.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --parallel run \"/^dev:(shell|host|editor)$/\"",
+    "dev:shell": "vite --host 127.0.0.1 --port 5173 --strictPort",
+    "dev:host": "pnpm --dir ../host-web-app exec vite --host 127.0.0.1 --port 5174 --strictPort",
+    "dev:editor": "pnpm --dir ../editor-web-app exec vite --host 127.0.0.1 --port 5175 --strictPort",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "oxlint -c ../../.oxlintrc.json src vite.config.ts && stylelint \"src/**/*.scss\"",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.node.json --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@schdk/editor-web-app": "workspace:*",
+    "@schdk/host-web-app": "workspace:*",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "oxlint": "^1.63.0",
+    "sass": "catalog:",
+    "stylelint": "catalog:",
+    "stylelint-config-standard-scss": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
+  }
+}

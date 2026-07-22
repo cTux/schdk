@@ -11,6 +11,8 @@
     "pnpm": "11.x"
   },
   "scripts": {
+    "dev": "pnpm --filter @schdk/all-web-app dev",
+    "dev:all-desktop": "pnpm --filter @schdk/all-desktop-app dev",
     "dev:host-web": "pnpm --filter @schdk/host-web-app dev",
     "dev:editor-web": "pnpm --filter @schdk/editor-web-app dev",
     "dev:host-desktop": "pnpm --filter @schdk/host-desktop-app dev",

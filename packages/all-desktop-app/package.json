@@ -1,0 +1,47 @@
+{
+  "name": "@schdk/all-desktop-app",
+  "version": "0.1.0",
+  "description": "Unified desktop app for SCHDK tools.",
+  "private": true,
+  "type": "module",
+  "main": "./dist/electron/main.js",
+  "scripts": {
+    "dev": "pnpm --filter @schdk/host-web-app build && pnpm --filter @schdk/editor-web-app build && pnpm --filter @schdk/all-web-app build && pnpm build && electron .",
+    "build": "tsc && electron-builder --dir",
+    "lint": "oxlint -c ../../.oxlintrc.json electron",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@schdk/all-web-app": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "electron": "catalog:",
+    "electron-builder": "catalog:",
+    "oxlint": "^1.63.0",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "build": {
+    "appId": "com.ctux.schdk.all",
+    "productName": "SCHDK",
+    "directories": {
+      "output": "dist/release"
+    },
+    "files": [
+      "dist/electron/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "../all-web-app/dist",
+        "to": "web"
+      }
+    ],
+    "win": {
+      "signExecutable": false,
+      "target": "dir"
+    }
+  }
+}
