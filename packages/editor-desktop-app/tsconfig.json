@@ -11,6 +11,6 @@
     "sourceMap": true,
     "types": ["node"]
   },
-  "include": ["electron/**/*.ts"],
+  "include": ["electron/**/*.ts", "electron/**/*.cts"],
   "exclude": ["electron/**/*.test.ts"]
 }

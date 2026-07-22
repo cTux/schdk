@@ -49,7 +49,7 @@ function createWindow() {
     webPreferences: {
       contextIsolation: true,
       devTools: !app.isPackaged,
-      preload: fileURLToPath(new URL('./preload.js', import.meta.url)),
+      preload: fileURLToPath(new URL('./preload.cjs', import.meta.url)),
     },
   });
 
