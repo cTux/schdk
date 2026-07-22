@@ -467,7 +467,10 @@ export function App() {
 
       {recentPackages.length > 0 && (
         <section className="recent-packages" hidden={hasPackage}>
-          <h3>Недавні пакети</h3>
+          <div className="recent-packages-heading">
+            <h2>Недавні пакети</h2>
+            {!window.desktop && <p>Збережені копії в цьому браузері</p>}
+          </div>
           <div className="recent-package-list">
             {recentPackages.map((recent) => (
               <button
@@ -476,9 +479,6 @@ export function App() {
                 onClick={() => void openRecentPackage(recent)}
                 title={recent.name}
               >
-                <span className="recent-package-icon" aria-hidden="true">
-                  ◫
-                </span>
                 <span>{recent.name}</span>
                 <span className="recent-package-arrow" aria-hidden="true">
                   →
@@ -486,11 +486,6 @@ export function App() {
               </button>
             ))}
           </div>
-          {!window.desktop && (
-            <p className="recent-package-note">
-              Вебверсія відкриває останню збережену локальну копію.
-            </p>
-          )}
         </section>
       )}
 

@@ -21,4 +21,5 @@ This file is the canonical project guidance.
 - Keep package-local build output cacheable; the root build collects it under `dist/<package>`.
 - Prefer platform APIs and existing dependencies over new abstractions or packages.
 - Add the smallest test that protects non-trivial behavior.
+- New UI must reuse the surrounding app's color tokens, typography, spacing, radii, and interaction patterns; prefer compact readable layouts and omit decoration that carries no information.
 - Update this file when recurring architecture or workflow decisions change.

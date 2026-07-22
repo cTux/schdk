@@ -459,71 +459,67 @@ legend {
 }
 
 .recent-packages {
-  width: 100%;
+  width: min(640px, calc(100% - 32px));
   margin-top: 18px;
-  padding: 0 16px;
+  margin-inline: 16px 0;
   text-align: left;
 }
 
-.recent-packages h3 {
-  margin-bottom: 8px;
+.recent-packages-heading {
+  margin-bottom: 10px;
+}
+
+.recent-packages h2 {
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+}
+
+.recent-packages-heading p {
+  margin-top: 3px;
   color: $muted;
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 0.75rem;
 }
 
 .recent-package-list {
   display: grid;
-  gap: 6px;
-  max-width: 520px;
+  overflow: hidden;
+  border: 1px solid $border;
+  border-radius: 11px;
+  background: rgba($surface, 0.75);
 }
 
 .recent-package-list button {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 10px;
   width: 100%;
-  border-color: transparent;
-  padding: 10px 12px;
+  min-height: 44px;
+  border: 0;
+  border-radius: 0;
+  padding: 10px 14px;
   background: transparent;
+  font-size: 0.9rem;
   text-align: left;
 }
 
-.recent-package-list button:hover {
-  border-color: $border;
-  background: rgba($surface-raised, 0.8);
+.recent-package-list button + button {
+  border-top: 1px solid $border;
 }
 
-.recent-package-list button > span:nth-child(2) {
+.recent-package-list button:hover {
+  background: $surface-hover;
+}
+
+.recent-package-list button > span:first-child {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.recent-package-icon,
 .recent-package-arrow {
   color: $muted;
-}
-
-.recent-package-arrow {
-  opacity: 0;
-  transition:
-    opacity 120ms ease,
-    transform 120ms ease;
-}
-
-.recent-package-list button:hover .recent-package-arrow,
-.recent-package-list button:focus-visible .recent-package-arrow {
-  opacity: 1;
-  transform: translateX(2px);
-}
-
-.recent-package-note {
-  margin-top: 10px;
-  color: $muted;
-  font-size: 0.78rem;
+  font-size: 1rem;
 }
 
 .handout-preview {
