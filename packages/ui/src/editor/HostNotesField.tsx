@@ -12,7 +12,7 @@ export function HostNotesField({ value, onChange }: HostNotesFieldProps) {
         Примітки для ведучого <span>(необов'язково)</span>
       </legend>
       <TextAreaField
-        label="Host-примітки"
+        label="Примітки ведучого"
         rows={3}
         value={value}
         onValueChange={onChange}

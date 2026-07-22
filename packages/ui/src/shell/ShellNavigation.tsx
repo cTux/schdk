@@ -49,11 +49,11 @@ export function ShellNavigation({ view, onSelect }: ShellNavigationProps) {
           <span className="nav-icon" aria-hidden="true">
             <FontAwesomeIcon icon={faGear} />
           </span>
-          Options
+          Налаштування
         </Button>
       </nav>
 
-      <p className="sidebar-note">SCHDK</p>
+      <p className="sidebar-note">ЩДК</p>
     </aside>
   );
 }

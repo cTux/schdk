@@ -166,8 +166,8 @@ Electron-пакети наразі використовують розпаков
 а не створюють інсталятор. Виконувані файли Windows розташовані, зокрема, тут:
 
 ```text
-dist/all-desktop-app/release/win-unpacked/SCHDK.exe
-dist/editor-desktop-app/release/win-unpacked/SCHDK Editor.exe
+dist/all-desktop-app/release/win-unpacked/ЩДК.exe
+dist/editor-desktop-app/release/win-unpacked/ЩДК Редактор.exe
 dist/host-desktop-app/release/win-unpacked/ЩДК Гра.exe
 ```
 

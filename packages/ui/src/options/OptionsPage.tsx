@@ -19,7 +19,7 @@ export function OptionsPage({
   return (
     <div className="options-page" hidden={hidden}>
       <header>
-        <p className="eyebrow">Options</p>
+        <p className="eyebrow">Налаштування</p>
         <h1>Налаштування</h1>
       </header>
       <OptionsTabs selected={tab} onSelect={setTab} />
@@ -63,7 +63,7 @@ export function OptionsPage({
         aria-labelledby="options-tab-game"
         hidden={tab !== 'game'}
       >
-        <h2>Game</h2>
+        <h2>Гра</h2>
         <p className="options-empty">Налаштувань гри поки немає.</p>
       </section>
     </div>

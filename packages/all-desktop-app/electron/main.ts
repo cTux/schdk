@@ -63,7 +63,7 @@ async function handleCloseFailure(
   if (window.isDestroyed()) return;
   const { response } = await dialog.showMessageBox(window, {
     type: 'warning',
-    title: 'Не вдалося закрити SCHDK',
+    title: 'Не вдалося закрити ЩДК',
     message: 'Не вдалося зберегти файл пакета.',
     detail:
       'Можна повторити збереження або закрити застосунок із ризиком втратити останні зміни.',

@@ -292,7 +292,7 @@ export function App({
   useEffect(() => {
     if (!window.desktop) return;
     document.title = fileName
-      ? `${fileName} — SCHDK Editor`
+      ? `${fileName} — Редактор ЩДК`
       : 'Що? Де? Коли? — Редактор';
   }, [fileName]);
 
