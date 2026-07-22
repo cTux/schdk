@@ -10,4 +10,5 @@
   <circle cx="207" cy="208" r="10" fill="#fff"/>
   <circle cx="327" cy="208" r="10" fill="#fff"/>
   <path fill="#c96f38" d="m256 248 32 26-32 36-32-36 32-26Z"/>
+  <text x="256" y="480" fill="#f7ead0" stroke="#17191e" stroke-width="8" paint-order="stroke" font-family="Arial, sans-serif" font-size="112" font-weight="700" text-anchor="middle">ЩДК</text>
 </svg>
