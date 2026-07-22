@@ -2,20 +2,15 @@ import { describe, expect, it } from 'vitest';
 import {
   createEmptyGamePackage,
   parseGamePackage,
-  requiredQuestionKind,
   serializeGamePackage,
   validateGamePackage,
 } from './index';
 
 describe('game package rules', () => {
-  it('creates and validates the required special questions', () => {
+  it('treats questions with unresolved comments as unfinished', () => {
     const gamePackage = createEmptyGamePackage();
 
     expect(gamePackage.questions).toHaveLength(36);
-    expect(requiredQuestionKind(10)).toBe('football');
-    expect(
-      [11, 23, 35].map((index) => gamePackage.questions[index]?.kind),
-    ).toEqual(['music', 'music', 'music']);
 
     gamePackage.title = 'Тестовий пакет';
     gamePackage.questions.forEach((question) => {
@@ -24,20 +19,24 @@ describe('game package rules', () => {
     });
     expect(validateGamePackage(gamePackage)).toEqual([]);
 
-    gamePackage.questions[10]!.kind = 'general';
+    gamePackage.questions[10]!.comment = 'Уточнити формулювання';
     expect(validateGamePackage(gamePackage)).toContain(
-      'Питання 11: неправильний тип.',
+      'Питання 11: є невирішений коментар.',
     );
+    delete gamePackage.questions[10]!.comment;
+    expect(validateGamePackage(gamePackage)).toEqual([]);
   });
 
   it('round-trips unfinished packages and rejects malformed files', () => {
     const unfinished = createEmptyGamePackage();
     unfinished.title = 'Чернетка';
     unfinished.questions[0]!.question = 'Незакінчене питання';
+    unfinished.questions[0]!.comment = 'Перевірити джерело';
+    unfinished.questions[0]!.hostNotes = 'Показати роздатку після сигналу';
 
-    expect(parseGamePackage(serializeGamePackage(unfinished))).toEqual(
-      unfinished,
-    );
+    const content = serializeGamePackage(unfinished);
+    expect(content).not.toContain('"kind"');
+    expect(parseGamePackage(content)).toEqual(unfinished);
     expect(() => parseGamePackage('{}')).toThrow('Invalid game package');
   });
 });

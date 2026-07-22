@@ -3,19 +3,12 @@ import {
   QUESTIONS_PER_ROUND,
   createEmptyGamePackage,
   parseGamePackage,
-  requiredQuestionKind,
   serializeGamePackage,
   validateGamePackage,
   type GamePackage,
   type GameQuestion,
 } from '@schdk/common';
 import { useRef, useState, type ChangeEvent } from 'react';
-
-const kindLabels = {
-  general: 'Звичайне питання',
-  football: 'Футбольне питання',
-  music: 'Музичне питання',
-} as const;
 
 export function App() {
   const openFileInput = useRef<HTMLInputElement>(null);
@@ -184,11 +177,10 @@ export function App() {
                 {Array.from({ length: QUESTIONS_PER_ROUND }, (_, offset) => {
                   const index = round * QUESTIONS_PER_ROUND + offset;
                   const item = gamePackage.questions[index]!;
-                  const special = requiredQuestionKind(index) !== 'general';
                   const valid = Boolean(
                     item.question.trim() &&
                     item.answer.trim() &&
-                    item.kind === requiredQuestionKind(index),
+                    !item.comment?.trim(),
                   );
                   const invalid = showValidation && !valid;
                   return (
@@ -196,7 +188,6 @@ export function App() {
                       className={[
                         index === selectedIndex ? 'selected' : '',
                         valid ? 'complete' : '',
-                        special ? 'special' : '',
                         invalid ? 'invalid' : '',
                       ]
                         .filter(Boolean)
@@ -204,7 +195,7 @@ export function App() {
                       key={index}
                       type="button"
                       onClick={() => setSelectedIndex(index)}
-                      aria-label={`Питання ${index + 1}: ${kindLabels[item.kind]}`}
+                      aria-label={`Питання ${index + 1}`}
                       aria-invalid={invalid}
                     >
                       {index + 1}
@@ -218,13 +209,7 @@ export function App() {
 
         <section className="question-editor">
           <div className="question-heading">
-            <div>
-              <p className="eyebrow">Питання {selectedIndex + 1}</p>
-              <h2>{kindLabels[question.kind]}</h2>
-            </div>
-            {question.kind !== 'general' && (
-              <span className="badge">Обов'язковий тип</span>
-            )}
+            <h2>Питання {selectedIndex + 1}</h2>
           </div>
 
           <label>
@@ -307,6 +292,54 @@ export function App() {
                 <input type="file" accept="image/*" onChange={addHandout} />
               </label>
             )}
+          </fieldset>
+
+          <fieldset>
+            <legend>
+              Коментар{' '}
+              <span>(питання не готове, доки коментар не вирішено)</span>
+            </legend>
+            <label>
+              Коментар до питання
+              <textarea
+                className={
+                  showValidation && question.comment?.trim() ? 'invalid' : ''
+                }
+                rows={3}
+                value={question.comment ?? ''}
+                onChange={(event) =>
+                  updateQuestion({ comment: event.target.value })
+                }
+                aria-invalid={Boolean(
+                  showValidation && question.comment?.trim(),
+                )}
+              />
+            </label>
+            {question.comment?.trim() && (
+              <button
+                className="secondary"
+                type="button"
+                onClick={() => updateQuestion({ comment: undefined })}
+              >
+                Вирішено
+              </button>
+            )}
+          </fieldset>
+
+          <fieldset>
+            <legend>
+              Примітки для ведучого <span>(необов'язково)</span>
+            </legend>
+            <label>
+              Host-примітки
+              <textarea
+                rows={3}
+                value={question.hostNotes ?? ''}
+                onChange={(event) =>
+                  updateQuestion({ hostNotes: event.target.value })
+                }
+              />
+            </label>
           </fieldset>
 
           <div className="question-actions">

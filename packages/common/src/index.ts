@@ -1,8 +1,6 @@
 export const QUESTION_COUNT = 36;
 export const QUESTIONS_PER_ROUND = 12;
 
-export type QuestionKind = 'general' | 'football' | 'music';
-
 export interface Handout {
   name: string;
   mimeType: string;
@@ -10,11 +8,12 @@ export interface Handout {
 }
 
 export interface GameQuestion {
-  kind: QuestionKind;
   question: string;
   answer: string;
   alternativeAnswers: string[];
   handout?: Handout;
+  comment?: string;
+  hostNotes?: string;
 }
 
 export interface GamePackage {
@@ -24,19 +23,12 @@ export interface GamePackage {
   questions: GameQuestion[];
 }
 
-export function requiredQuestionKind(index: number): QuestionKind {
-  if ([11, 23, 35].includes(index)) return 'music';
-  if (index === 10) return 'football';
-  return 'general';
-}
-
 export function createEmptyGamePackage(): GamePackage {
   return {
     format: 'schdk-game-package',
     version: 1,
     title: '',
-    questions: Array.from({ length: QUESTION_COUNT }, (_, index) => ({
-      kind: requiredQuestionKind(index),
+    questions: Array.from({ length: QUESTION_COUNT }, () => ({
       question: '',
       answer: '',
       alternativeAnswers: [],
@@ -59,9 +51,8 @@ export function validateGamePackage(gamePackage: GamePackage): string[] {
       errors.push(`Питання ${number}: немає тексту.`);
     if (!question.answer.trim())
       errors.push(`Питання ${number}: немає відповіді.`);
-    if (question.kind !== requiredQuestionKind(index)) {
-      errors.push(`Питання ${number}: неправильний тип.`);
-    }
+    if (question.comment?.trim())
+      errors.push(`Питання ${number}: є невирішений коментар.`);
   });
 
   return errors;
@@ -73,12 +64,18 @@ export function serializeGamePackage(gamePackage: GamePackage): string {
       ...gamePackage,
       title: gamePackage.title.trim(),
       questions: gamePackage.questions.map((question) => ({
-        ...question,
         question: question.question.trim(),
         answer: question.answer.trim(),
         alternativeAnswers: question.alternativeAnswers
           .map((answer) => answer.trim())
           .filter(Boolean),
+        ...(question.handout ? { handout: question.handout } : {}),
+        ...(question.comment?.trim()
+          ? { comment: question.comment.trim() }
+          : {}),
+        ...(question.hostNotes?.trim()
+          ? { hostNotes: question.hostNotes.trim() }
+          : {}),
       })),
     },
     null,
@@ -104,12 +101,10 @@ export function parseGamePackage(content: string): GamePackage {
     throw new Error('Invalid game package');
   }
 
-  const questions = value.questions.map((question, index): GameQuestion => {
+  const questions = value.questions.map((question): GameQuestion => {
     if (
       !question ||
       typeof question !== 'object' ||
-      !('kind' in question) ||
-      question.kind !== requiredQuestionKind(index) ||
       !('question' in question) ||
       typeof question.question !== 'string' ||
       !('answer' in question) ||
@@ -124,6 +119,8 @@ export function parseGamePackage(content: string): GamePackage {
     }
 
     const handout = 'handout' in question ? question.handout : undefined;
+    const comment = 'comment' in question ? question.comment : undefined;
+    const hostNotes = 'hostNotes' in question ? question.hostNotes : undefined;
     if (
       handout !== undefined &&
       (!handout ||
@@ -137,13 +134,20 @@ export function parseGamePackage(content: string): GamePackage {
     ) {
       throw new Error('Invalid game package');
     }
+    if (
+      (comment !== undefined && typeof comment !== 'string') ||
+      (hostNotes !== undefined && typeof hostNotes !== 'string')
+    ) {
+      throw new Error('Invalid game package');
+    }
 
     return {
-      kind: question.kind,
       question: question.question,
       answer: question.answer,
       alternativeAnswers: question.alternativeAnswers,
       ...(handout ? { handout } : {}),
+      ...(comment !== undefined ? { comment } : {}),
+      ...(hostNotes !== undefined ? { hostNotes } : {}),
     };
   });
 

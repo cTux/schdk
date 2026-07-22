@@ -41,7 +41,6 @@ main {
 
 .app-header,
 .brand,
-.question-heading,
 .question-actions,
 .save-area,
 .alternative,
@@ -61,7 +60,6 @@ main {
 }
 
 .app-header,
-.question-heading,
 .question-actions {
   justify-content: space-between;
 }
@@ -196,11 +194,6 @@ textarea {
   box-shadow: 0 0 0 1px $accent;
 }
 
-.question-grid .special {
-  color: $accent;
-  font-weight: 700;
-}
-
 .question-grid .complete {
   border-color: #4dbb7a;
   background: #254638;
@@ -221,14 +214,6 @@ textarea {
 
 .question-heading {
   margin-bottom: 22px;
-}
-
-.badge {
-  border-radius: 999px;
-  background: #46391f;
-  padding: 6px 10px;
-  color: $accent;
-  font-size: 0.75rem;
 }
 
 .question-editor > label {
