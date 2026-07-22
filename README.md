@@ -4,10 +4,11 @@ Monorepo for preparing and hosting intellectual game packages.
 
 ## Packages
 
-- `client-web` — opens a saved game package and hosts the game in a browser.
-- `client-web-desktop` — Electron application for creating, editing, and saving game packages to disk.
-
-Both clients use React, TypeScript, Vite, Sass, Vitest, Oxlint, and Oxfmt. The desktop client also uses Electron and electron-builder.
+- `host-web-app` — opens a saved game package and hosts the game in a browser.
+- `editor-web-app` — creates and edits game packages in a browser.
+- `host-desktop-app` — Electron build of the host.
+- `editor-desktop-app` — Electron build of the editor with disk saving.
+- `common` — shared game-package types and validation.
 
 ## Development
 
@@ -15,11 +16,13 @@ Requirements: Node.js 25 and pnpm 11.
 
 ```sh
 pnpm install
-pnpm dev:web
-pnpm dev:desktop
+pnpm dev:host-web
+pnpm dev:editor-web
+pnpm dev:host-desktop
+pnpm dev:editor-desktop
 ```
 
-`dev:desktop` builds and opens the Electron editor.
+Desktop development commands build their web app before opening Electron.
 
 ## Quality
 
@@ -30,5 +33,7 @@ pnpm typecheck
 pnpm test
 pnpm build
 ```
+
+The root build uses Turbo's cache and collects every package artifact under `dist/<package>`.
 
 The game-package format is documented in `docs/GAME_PACKAGE.md`. See `docs/RULES.md` for the current boundaries.

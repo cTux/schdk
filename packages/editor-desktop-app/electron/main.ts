@@ -1,11 +1,14 @@
 import { app, BrowserWindow, dialog, ipcMain, Menu } from 'electron';
 import { writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isReloadShortcut } from './shortcuts.js';
 
 function createWindow() {
   const window = new BrowserWindow({
-    icon: fileURLToPath(new URL('../build/owl.png', import.meta.url)),
+    icon: app.isPackaged
+      ? undefined
+      : fileURLToPath(new URL('../../build/owl.png', import.meta.url)),
     width: 1280,
     height: 800,
     minWidth: 960,
@@ -24,7 +27,11 @@ function createWindow() {
   window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
 
   void window.loadFile(
-    fileURLToPath(new URL('../dist/index.html', import.meta.url)),
+    app.isPackaged
+      ? join(process.resourcesPath, 'web/index.html')
+      : fileURLToPath(
+          new URL('../../../editor-web-app/dist/index.html', import.meta.url),
+        ),
   );
 }
 

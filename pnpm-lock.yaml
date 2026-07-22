@@ -21,6 +21,9 @@ catalogs:
     electron:
       specifier: ^42.0.1
       version: 42.7.0
+    electron-builder:
+      specifier: ^26.0.12
+      version: 26.15.3
     react:
       specifier: ^19.2.6
       version: 19.2.7
@@ -57,50 +60,44 @@ importers:
         specifier: ^2.9.18
         version: 2.10.5
 
-  packages/client-web:
+  packages/common:
+    devDependencies:
+      oxlint:
+        specifier: ^1.63.0
+        version: 1.74.0
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.10(@types/node@26.1.1)(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0)(sass@1.101.0))
+
+  packages/editor-desktop-app:
     dependencies:
-      react:
-        specifier: 'catalog:'
-        version: 19.2.7
-      react-dom:
-        specifier: 'catalog:'
-        version: 19.2.7(react@19.2.7)
+      '@schdk/editor-web-app':
+        specifier: workspace:*
+        version: link:../editor-web-app
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
         version: 25.9.5
-      '@types/react':
+      electron:
         specifier: 'catalog:'
-        version: 19.2.17
-      '@types/react-dom':
+        version: 42.7.0
+      electron-builder:
         specifier: 'catalog:'
-        version: 19.2.3(@types/react@19.2.17)
-      '@vitejs/plugin-react':
-        specifier: 'catalog:'
-        version: 6.0.3(vite@8.1.5(@types/node@25.9.5)(jiti@2.7.0)(sass@1.101.0))
+        version: 26.15.3(electron-builder-squirrel-windows@26.15.3)
       oxlint:
         specifier: ^1.63.0
         version: 1.74.0
-      sass:
-        specifier: 'catalog:'
-        version: 1.101.0
-      stylelint:
-        specifier: 'catalog:'
-        version: 17.14.1(typescript@6.0.3)
-      stylelint-config-standard-scss:
-        specifier: 'catalog:'
-        version: 17.0.0(postcss@8.5.20)(stylelint@17.14.1(typescript@6.0.3))
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
-      vite:
-        specifier: 'catalog:'
-        version: 8.1.5(@types/node@25.9.5)(jiti@2.7.0)(sass@1.101.0)
       vitest:
         specifier: 'catalog:'
         version: 4.1.10(@types/node@25.9.5)(vite@8.1.5(@types/node@25.9.5)(jiti@2.7.0)(sass@1.101.0))
 
-  packages/client-web-desktop:
+  packages/editor-web-app:
     dependencies:
       '@schdk/common':
         specifier: workspace:*
@@ -124,12 +121,6 @@ importers:
       '@vitejs/plugin-react':
         specifier: 'catalog:'
         version: 6.0.3(vite@8.1.5(@types/node@25.9.5)(jiti@2.7.0)(sass@1.101.0))
-      electron:
-        specifier: 'catalog:'
-        version: 42.7.0
-      electron-builder:
-        specifier: ^26.0.12
-        version: 26.15.3(electron-builder-squirrel-windows@26.15.3)
       oxlint:
         specifier: ^1.63.0
         version: 1.74.0
@@ -152,8 +143,21 @@ importers:
         specifier: 'catalog:'
         version: 4.1.10(@types/node@25.9.5)(vite@8.1.5(@types/node@25.9.5)(jiti@2.7.0)(sass@1.101.0))
 
-  packages/common:
+  packages/host-desktop-app:
+    dependencies:
+      '@schdk/host-web-app':
+        specifier: workspace:*
+        version: link:../host-web-app
     devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 25.9.5
+      electron:
+        specifier: 'catalog:'
+        version: 42.7.0
+      electron-builder:
+        specifier: 'catalog:'
+        version: 26.15.3(electron-builder-squirrel-windows@26.15.3)
       oxlint:
         specifier: ^1.63.0
         version: 1.74.0
@@ -162,7 +166,50 @@ importers:
         version: 6.0.3
       vitest:
         specifier: 'catalog:'
-        version: 4.1.10(@types/node@26.1.1)(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0)(sass@1.101.0))
+        version: 4.1.10(@types/node@25.9.5)(vite@8.1.5(@types/node@25.9.5)(jiti@2.7.0)(sass@1.101.0))
+
+  packages/host-web-app:
+    dependencies:
+      react:
+        specifier: 'catalog:'
+        version: 19.2.7
+      react-dom:
+        specifier: 'catalog:'
+        version: 19.2.7(react@19.2.7)
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 25.9.5
+      '@types/react':
+        specifier: 'catalog:'
+        version: 19.2.17
+      '@types/react-dom':
+        specifier: 'catalog:'
+        version: 19.2.3(@types/react@19.2.17)
+      '@vitejs/plugin-react':
+        specifier: 'catalog:'
+        version: 6.0.3(vite@8.1.5(@types/node@25.9.5)(jiti@2.7.0)(sass@1.101.0))
+      oxlint:
+        specifier: ^1.63.0
+        version: 1.74.0
+      sass:
+        specifier: 'catalog:'
+        version: 1.101.0
+      stylelint:
+        specifier: 'catalog:'
+        version: 17.14.1(typescript@6.0.3)
+      stylelint-config-standard-scss:
+        specifier: 'catalog:'
+        version: 17.0.0(postcss@8.5.20)(stylelint@17.14.1(typescript@6.0.3))
+      typescript:
+        specifier: 'catalog:'
+        version: 6.0.3
+      vite:
+        specifier: 'catalog:'
+        version: 8.1.5(@types/node@25.9.5)(jiti@2.7.0)(sass@1.101.0)
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.10(@types/node@25.9.5)(vite@8.1.5(@types/node@25.9.5)(jiti@2.7.0)(sass@1.101.0))
 
 packages:
 

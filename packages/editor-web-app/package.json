@@ -1,7 +1,7 @@
 {
-  "name": "@schdk/client-web",
+  "name": "@schdk/editor-web-app",
   "version": "0.1.0",
-  "description": "Browser host for Що? Де? Коли? game packages.",
+  "description": "Browser editor for game packages.",
   "private": true,
   "type": "module",
   "scripts": {
@@ -13,6 +13,7 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@schdk/common": "workspace:*",
     "react": "catalog:",
     "react-dom": "catalog:"
   },
