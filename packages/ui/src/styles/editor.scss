@@ -1,16 +1,4 @@
-$accent: #e9ad45;
-$accent-hover: #f2bc5c;
-$background: #101216;
-$surface: #181b21;
-$surface-raised: #1d2128;
-$surface-hover: #252a33;
-$border: #2d323c;
-$border-strong: #3b424e;
-$text: #eef1f5;
-$muted: #929aa8;
-$success: #60c989;
-$danger: #ef7777;
-$saving: #69a9ff;
+@use 'tokens' as *;
 
 :root {
   color: $text;

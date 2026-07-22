@@ -1,10 +1,4 @@
-$background: #101216;
-$sidebar: #171a20;
-$surface: #1d2128;
-$border: #2d323c;
-$text: #eef1f5;
-$muted: #929aa8;
-$accent: #e9ad45;
+@use 'tokens' as *;
 
 :root {
   color: $text;
@@ -101,7 +95,7 @@ nav button {
 }
 
 nav button:hover {
-  background: $surface;
+  background: $surface-raised;
   color: $text;
 }
 
@@ -195,7 +189,7 @@ h1 {
 
 .tool-list button:hover {
   border-color: #454c58;
-  background: $surface;
+  background: $surface-raised;
   transform: translateY(-1px);
 }
 

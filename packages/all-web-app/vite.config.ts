@@ -28,6 +28,6 @@ function includeSchdkApps(): Plugin {
 
 export default defineConfig({
   base: './',
-  publicDir: '../../assets',
+  publicDir: '../ui/public',
   plugins: [react(), includeSchdkApps()],
 });

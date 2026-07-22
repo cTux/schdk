@@ -10,6 +10,7 @@ This file is the canonical project guidance.
 - `packages/editor-desktop-app` packages `editor-web-app` with Electron and saves game packages to disk.
 - `packages/all-web-app` provides the shared sidebar and embeds the host and editor web bundles.
 - `packages/all-desktop-app` packages `all-web-app` with Electron and provides the editor's disk bridge to its embedded frame.
+- `packages/ui` owns web UI components, styles, design tokens, assets, and the UI rules documented in its `README.md`.
 - Keep the browser client independent of Electron APIs.
 - Keep the game-package requirements documented in `docs/GAME_PACKAGE.md`.
 
@@ -21,5 +22,4 @@ This file is the canonical project guidance.
 - Keep package-local build output cacheable; the root build collects it under `dist/<package>`.
 - Prefer platform APIs and existing dependencies over new abstractions or packages.
 - Add the smallest test that protects non-trivial behavior.
-- New UI must reuse the surrounding app's color tokens, typography, spacing, radii, and interaction patterns; prefer compact readable layouts and omit decoration that carries no information.
 - Update this file when recurring architecture or workflow decisions change.

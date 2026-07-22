@@ -1,6 +1,4 @@
 import {
-  QUESTION_COUNT,
-  QUESTIONS_PER_ROUND,
   createEmptyGamePackage,
   parseGamePackage,
   serializeGamePackage,
@@ -8,13 +6,11 @@ import {
   type GameQuestion,
 } from '@schdk/common';
 import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type ChangeEvent,
-  type DragEvent,
-} from 'react';
+  EditorView,
+  type EditorSaveStatus,
+  type RecentPackageItem,
+} from '@schdk/ui/editor';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   saveStatusAfterWrite,
   scheduleAutosave,
@@ -27,17 +23,7 @@ import {
   listRecentWebPackages,
   loadRecentWebPackage,
   rememberWebPackage,
-  type RecentPackage,
 } from './recent-packages';
-
-const SAVE_STATUS_LABELS = {
-  saved: 'Файл збережено',
-  pending: 'Очікує збереження',
-  saving: 'Файл зберігається…',
-  error: 'Не вдалося зберегти файл',
-} as const;
-
-type SaveStatus = keyof typeof SAVE_STATUS_LABELS;
 
 interface BrowserSaveResult {
   name: string;
@@ -45,7 +31,6 @@ interface BrowserSaveResult {
 }
 
 export function App() {
-  const openFileInput = useRef<HTMLInputElement>(null);
   const [gamePackage, setGamePackage] = useState<GamePackage>(
     createEmptyGamePackage,
   );
@@ -54,12 +39,11 @@ export function App() {
   const [hasPackage, setHasPackage] = useState(false);
   const [filePath, setFilePath] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
-  const [saveStatus, setSaveStatus] = useState<SaveStatus>('saved');
+  const [saveStatus, setSaveStatus] = useState<EditorSaveStatus>('saved');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showValidation, setShowValidation] = useState(false);
   const [message, setMessage] = useState('');
-  const [recentPackages, setRecentPackages] = useState<RecentPackage[]>([]);
-  const question = gamePackage.questions[selectedIndex]!;
+  const [recentPackages, setRecentPackages] = useState<RecentPackageItem[]>([]);
   currentPackage.current = gamePackage;
 
   const clearDraft = useCallback((name: string) => {
@@ -75,10 +59,7 @@ export function App() {
       if (window.desktop) {
         const recent = await window.desktop.listRecentGamePackages();
         setRecentPackages(
-          recent.map(({ filePath, fileName }) => ({
-            id: filePath,
-            name: fileName,
-          })),
+          recent.map(({ filePath: id, fileName: name }) => ({ id, name })),
         );
       } else {
         setRecentPackages(await listRecentWebPackages());
@@ -170,32 +151,7 @@ export function App() {
     setMessage('');
   }
 
-  function updateAlternative(index: number, value: string) {
-    updateQuestion({
-      alternativeAnswers: question.alternativeAnswers.map(
-        (answer, answerIndex) => (answerIndex === index ? value : answer),
-      ),
-    });
-  }
-
-  function addAlternative() {
-    updateQuestion({
-      alternativeAnswers: [...question.alternativeAnswers, ''],
-    });
-  }
-
-  function removeAlternative(index: number) {
-    updateQuestion({
-      alternativeAnswers: question.alternativeAnswers.filter(
-        (_, answerIndex) => answerIndex !== index,
-      ),
-    });
-  }
-
-  function addHandout(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
+  function addHandout(file: File) {
     const reader = new FileReader();
     reader.addEventListener('load', () => {
       if (typeof reader.result !== 'string') return;
@@ -208,7 +164,6 @@ export function App() {
       });
     });
     reader.readAsDataURL(file);
-    event.target.value = '';
   }
 
   function applyOpenedPackage(
@@ -246,7 +201,7 @@ export function App() {
       await rememberWebPackage(name, content);
       await refreshRecentPackages();
     } catch {
-      // IndexedDB is an optional browser convenience; opening and saving still work.
+      // IndexedDB is optional; opening and saving still work without recents.
     }
   }
 
@@ -268,7 +223,7 @@ export function App() {
     }
   }
 
-  async function openRecentPackage(recent: RecentPackage) {
+  async function openRecentPackage(recent: RecentPackageItem) {
     setMessage('');
     try {
       if (window.desktop) {
@@ -289,24 +244,10 @@ export function App() {
     }
   }
 
-  function selectPackage(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    void openPackage(file);
-    event.target.value = '';
-  }
-
-  function dropPackage(event: DragEvent<HTMLElement>) {
-    event.preventDefault();
-    const file = event.dataTransfer.files[0];
-    if (file) void openPackage(file);
-  }
-
   async function createPackageFile(
     packageToSave: GamePackage,
   ): Promise<boolean> {
     setMessage('');
-
     const filename = createPackageFilename(packageToSave.title);
 
     try {
@@ -400,301 +341,27 @@ export function App() {
   }
 
   return (
-    <main>
-      <header className="app-header">
-        <div className="brand">
-          {hasPackage && (
-            <button
-              className="back-button"
-              type="button"
-              onClick={() => void closePackage()}
-              aria-label="Назад"
-              title="Назад"
-            >
-              ←
-            </button>
-          )}
-          <img className="app-icon" src="./owl.svg" alt="" />
-          <div>
-            <p className="eyebrow">Редактор пакетів</p>
-            <h1>Що? Де? Коли?</h1>
-          </div>
-        </div>
-        {hasPackage && (
-          <div className="package-header">
-            <label className="package-title">
-              Назва пакета
-              <input
-                className={
-                  showValidation && !gamePackage.title.trim() ? 'invalid' : ''
-                }
-                value={gamePackage.title}
-                onChange={(event) => {
-                  setGamePackage({ ...gamePackage, title: event.target.value });
-                  setSaveStatus('pending');
-                  setMessage('');
-                }}
-                placeholder="Наприклад, Весняна гра 2026"
-                aria-invalid={showValidation && !gamePackage.title.trim()}
-              />
-            </label>
-            <p className={`save-status ${saveStatus}`} role="status">
-              <span className="save-status-dot" aria-hidden="true" />
-              {SAVE_STATUS_LABELS[saveStatus]}
-            </p>
-          </div>
-        )}
-      </header>
-
-      <section
-        className="package-drop-zone"
-        hidden={hasPackage}
-        onDragOver={(event) => event.preventDefault()}
-        onDrop={dropPackage}
-      >
-        <h2>Відкрийте пакет</h2>
-        <p>Перетягніть сюди файл .schdk</p>
-        <div className="drop-actions">
-          <button type="button" onClick={() => openFileInput.current?.click()}>
-            Вибрати файл
-          </button>
-          <span>або</span>
-          <button className="primary" type="button" onClick={createPackage}>
-            Новий пакет
-          </button>
-        </div>
-      </section>
-
-      {recentPackages.length > 0 && (
-        <section className="recent-packages" hidden={hasPackage}>
-          <div className="recent-packages-heading">
-            <h2>Недавні пакети</h2>
-            {!window.desktop && <p>Збережені копії в цьому браузері</p>}
-          </div>
-          <div className="recent-package-list">
-            {recentPackages.map((recent) => (
-              <button
-                key={recent.id}
-                type="button"
-                onClick={() => void openRecentPackage(recent)}
-                title={recent.name}
-              >
-                <span>{recent.name}</span>
-                <span className="recent-package-arrow" aria-hidden="true">
-                  →
-                </span>
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
-
-      <input
-        ref={openFileInput}
-        className="open-file-input"
-        type="file"
-        accept=".schdk"
-        onChange={selectPackage}
-      />
-
-      <div className="editor-layout" hidden={!hasPackage}>
-        <nav className="question-list" aria-label="Питання пакета">
-          {[0, 1, 2].map((round) => (
-            <section key={round}>
-              <h2>Раунд {round + 1}</h2>
-              <div className="question-grid">
-                {Array.from({ length: QUESTIONS_PER_ROUND }, (_, offset) => {
-                  const index = round * QUESTIONS_PER_ROUND + offset;
-                  const item = gamePackage.questions[index]!;
-                  const valid = Boolean(
-                    item.question.trim() &&
-                    item.answer.trim() &&
-                    !item.comment?.trim(),
-                  );
-                  const invalid = showValidation && !valid;
-                  return (
-                    <button
-                      className={[
-                        index === selectedIndex ? 'selected' : '',
-                        valid ? 'complete' : '',
-                        invalid ? 'invalid' : '',
-                      ]
-                        .filter(Boolean)
-                        .join(' ')}
-                      key={index}
-                      type="button"
-                      onClick={() => setSelectedIndex(index)}
-                      aria-label={`Питання ${index + 1}`}
-                      aria-invalid={invalid}
-                    >
-                      {index + 1}
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
-          ))}
-        </nav>
-
-        <section className="question-editor">
-          <div className="question-heading">
-            <h2>Питання {selectedIndex + 1}</h2>
-          </div>
-
-          <label>
-            Текст питання
-            <textarea
-              className={
-                showValidation && !question.question.trim() ? 'invalid' : ''
-              }
-              rows={7}
-              value={question.question}
-              onChange={(event) =>
-                updateQuestion({ question: event.target.value })
-              }
-              aria-invalid={showValidation && !question.question.trim()}
-            />
-          </label>
-
-          <label>
-            Відповідь
-            <textarea
-              className={
-                showValidation && !question.answer.trim() ? 'invalid' : ''
-              }
-              rows={3}
-              value={question.answer}
-              onChange={(event) =>
-                updateQuestion({ answer: event.target.value })
-              }
-              aria-invalid={showValidation && !question.answer.trim()}
-            />
-          </label>
-
-          <fieldset>
-            <legend>
-              Альтернативні відповіді <span>(необов'язково)</span>
-            </legend>
-            {question.alternativeAnswers.map((answer, index) => (
-              <div className="alternative" key={index}>
-                <input
-                  value={answer}
-                  onChange={(event) =>
-                    updateAlternative(index, event.target.value)
-                  }
-                  aria-label={`Альтернативна відповідь ${index + 1}`}
-                />
-                <button type="button" onClick={() => removeAlternative(index)}>
-                  Видалити
-                </button>
-              </div>
-            ))}
-            <button
-              className="secondary"
-              type="button"
-              onClick={addAlternative}
-            >
-              + Додати відповідь
-            </button>
-          </fieldset>
-
-          <fieldset>
-            <legend>
-              Роздатка <span>(необов'язково)</span>
-            </legend>
-            {question.handout ? (
-              <div className="handout-preview">
-                <img src={question.handout.dataUrl} alt="Роздатка до питання" />
-                <div>
-                  <span>{question.handout.name}</span>
-                  <button
-                    type="button"
-                    onClick={() => updateQuestion({ handout: undefined })}
-                  >
-                    Видалити
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <label className="file-button">
-                Додати зображення
-                <input type="file" accept="image/*" onChange={addHandout} />
-              </label>
-            )}
-          </fieldset>
-
-          <fieldset>
-            <legend>
-              Коментар{' '}
-              <span>(питання не готове, доки коментар не вирішено)</span>
-            </legend>
-            <label>
-              Коментар до питання
-              <textarea
-                className={
-                  showValidation && question.comment?.trim() ? 'invalid' : ''
-                }
-                rows={3}
-                value={question.comment ?? ''}
-                onChange={(event) =>
-                  updateQuestion({ comment: event.target.value })
-                }
-                aria-invalid={Boolean(
-                  showValidation && question.comment?.trim(),
-                )}
-              />
-            </label>
-            {question.comment?.trim() && (
-              <button
-                className="secondary"
-                type="button"
-                onClick={() => updateQuestion({ comment: undefined })}
-              >
-                Вирішено
-              </button>
-            )}
-          </fieldset>
-
-          <fieldset>
-            <legend>
-              Примітки для ведучого <span>(необов'язково)</span>
-            </legend>
-            <label>
-              Host-примітки
-              <textarea
-                rows={3}
-                value={question.hostNotes ?? ''}
-                onChange={(event) =>
-                  updateQuestion({ hostNotes: event.target.value })
-                }
-              />
-            </label>
-          </fieldset>
-
-          <div className="question-actions">
-            <button
-              type="button"
-              disabled={selectedIndex === 0}
-              onClick={() => setSelectedIndex(selectedIndex - 1)}
-            >
-              ← Попереднє
-            </button>
-            <button
-              type="button"
-              disabled={selectedIndex === QUESTION_COUNT - 1}
-              onClick={() => setSelectedIndex(selectedIndex + 1)}
-            >
-              Наступне →
-            </button>
-          </div>
-        </section>
-      </div>
-
-      {message && (
-        <p className="status" role="status">
-          {message}
-        </p>
-      )}
-    </main>
+    <EditorView
+      gamePackage={gamePackage}
+      hasPackage={hasPackage}
+      isDesktop={Boolean(window.desktop)}
+      message={message}
+      recentPackages={recentPackages}
+      saveStatus={saveStatus}
+      selectedIndex={selectedIndex}
+      showValidation={showValidation}
+      onAddHandout={addHandout}
+      onBack={() => void closePackage()}
+      onCreatePackage={() => void createPackage()}
+      onOpenPackage={(file) => void openPackage(file)}
+      onOpenRecentPackage={(recent) => void openRecentPackage(recent)}
+      onQuestionChange={updateQuestion}
+      onSelectQuestion={setSelectedIndex}
+      onTitleChange={(title) => {
+        setGamePackage({ ...gamePackage, title });
+        setSaveStatus('pending');
+        setMessage('');
+      }}
+    />
   );
 }

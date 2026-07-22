@@ -1,0 +1,33 @@
+{
+  "name": "@schdk/ui",
+  "version": "0.1.0",
+  "description": "Shared SCHDK UI components, assets, and design rules.",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./editor": "./src/editor/EditorView.tsx",
+    "./host": "./src/host/HostView.tsx",
+    "./shell": "./src/shell/ShellView.tsx"
+  },
+  "scripts": {
+    "build": "vite build",
+    "lint": "oxlint -c ../../.oxlintrc.json src vite.config.ts && stylelint \"src/**/*.scss\"",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@schdk/common": "workspace:*",
+    "react": "catalog:"
+  },
+  "devDependencies": {
+    "@types/react": "catalog:",
+    "oxlint": "^1.63.0",
+    "sass": "catalog:",
+    "stylelint": "catalog:",
+    "stylelint-config-standard-scss": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
+  }
+}

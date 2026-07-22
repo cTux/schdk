@@ -8,11 +8,12 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "oxlint -c ../../.oxlintrc.json src vite.config.ts && stylelint \"src/**/*.scss\"",
+    "lint": "oxlint -c ../../.oxlintrc.json src vite.config.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.node.json --noEmit",
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@schdk/ui": "workspace:*",
     "react": "catalog:",
     "react-dom": "catalog:"
   },
@@ -23,8 +24,6 @@
     "@vitejs/plugin-react": "catalog:",
     "oxlint": "^1.63.0",
     "sass": "catalog:",
-    "stylelint": "catalog:",
-    "stylelint-config-standard-scss": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
     "vitest": "catalog:"
