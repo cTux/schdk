@@ -404,6 +404,10 @@ body {
     transform: translateY(0);
   }
 
+  .question-grid button:active .question-tooltip {
+    display: none;
+  }
+
   .question-tooltip-block {
     display: flex;
     flex-direction: column;
