@@ -89,12 +89,13 @@ export function App() {
 
   useEffect(
     () =>
-      window.desktop?.onCloseRequested(async () => {
+      window.desktop?.onCloseRequested(async (attempt) => {
         try {
           await saveCurrentPackage(true);
-          window.desktop!.closeWindow();
+          window.desktop!.finishCloseAttempt(attempt, true);
         } catch {
           setMessage('Не вдалося автоматично зберегти файл.');
+          window.desktop!.finishCloseAttempt(attempt, false);
         }
       }),
     [saveCurrentPackage],

@@ -3,9 +3,39 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isReloadShortcut } from './shortcuts.js';
-import { requestSaveBeforeClose } from './window-close.js';
+import {
+  requestSaveBeforeClose,
+  type CloseController,
+} from './window-close.js';
 
 const editableGamePackages = new Set<string>();
+const closeControllers = new Map<number, CloseController>();
+
+async function handleCloseFailure(
+  window: BrowserWindow,
+  controller: CloseController,
+) {
+  if (window.isDestroyed()) return;
+  const { response } = await dialog.showMessageBox(window, {
+    type: 'warning',
+    title: 'Не вдалося закрити редактор',
+    message: 'Не вдалося зберегти файл пакета.',
+    detail:
+      'Можна повторити збереження або закрити редактор з ризиком втратити останні зміни.',
+    buttons: [
+      'Повторити збереження',
+      'Закрити без збереження',
+      'Скасувати закриття',
+    ],
+    defaultId: 0,
+    cancelId: 2,
+    noLink: true,
+  });
+
+  if (response === 0) controller.retry();
+  else if (response === 1) controller.discard();
+  else controller.cancel();
+}
 
 function createWindow() {
   const window = new BrowserWindow({
@@ -28,7 +58,13 @@ function createWindow() {
   });
   window.webContents.on('will-navigate', (event) => event.preventDefault());
   window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
-  requestSaveBeforeClose(window);
+  const webContentsId = window.webContents.id;
+  let closeController: CloseController;
+  closeController = requestSaveBeforeClose(window, () => {
+    void handleCloseFailure(window, closeController);
+  });
+  closeControllers.set(webContentsId, closeController);
+  window.on('closed', () => closeControllers.delete(webContentsId));
 
   void window.loadFile(
     app.isPackaged
@@ -80,8 +116,15 @@ ipcMain.handle('write-game-package', async (_event, filePath, content) => {
   await writeFile(filePath, content);
 });
 
-ipcMain.on('close-window', (event) => {
-  BrowserWindow.fromWebContents(event.sender)?.destroy();
+ipcMain.on('close-attempt-finished', (event, attempt, succeeded) => {
+  if (
+    !Number.isSafeInteger(attempt) ||
+    attempt < 1 ||
+    typeof succeeded !== 'boolean'
+  )
+    return;
+  const controller = closeControllers.get(event.sender.id);
+  controller?.finished(attempt, succeeded);
 });
 
 app.whenReady().then(() => {
