@@ -9,6 +9,7 @@ function createWindow() {
     minWidth: 960,
     minHeight: 680,
   });
+  window.maximize();
 
   window.webContents.on('will-navigate', (event) => event.preventDefault());
   window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));

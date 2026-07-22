@@ -52,6 +52,7 @@ function createWindow() {
       preload: fileURLToPath(new URL('./preload.cjs', import.meta.url)),
     },
   });
+  window.maximize();
 
   window.webContents.on('before-input-event', (event, input) => {
     if (isReloadShortcut(input)) event.preventDefault();

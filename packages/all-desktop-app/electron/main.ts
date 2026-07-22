@@ -49,6 +49,7 @@ function createWindow() {
       preload: fileURLToPath(new URL('./preload.cjs', import.meta.url)),
     },
   });
+  window.maximize();
 
   window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
   const webContentsId = window.webContents.id;
