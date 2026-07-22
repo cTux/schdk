@@ -18,9 +18,11 @@ export interface EditorViewProps {
   showValidation: boolean;
   onAddHandout(file: File): void;
   onBack(): void;
+  onCopyQuestion(): void;
   onCreatePackage(): void;
   onOpenPackage(file: File): void;
   onOpenRecentPackage(recent: RecentPackageItem): void;
+  onPasteQuestion(): void;
   onQuestionChange(change: Partial<GameQuestion>): void;
   onSelectQuestion(index: number): void;
   onSwapQuestions(sourceIndex: number, targetIndex: number): void;

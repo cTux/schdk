@@ -1,5 +1,6 @@
 import {
   createEmptyGamePackage,
+  parseGameQuestion,
   parseGamePackage,
   serializeGamePackage,
   type GamePackage,
@@ -295,6 +296,46 @@ export function App() {
     setMessage('');
   }
 
+  async function copyQuestion() {
+    setMessage('');
+    try {
+      await navigator.clipboard.writeText(
+        JSON.stringify(gamePackage.questions[selectedIndex], null, 2),
+      );
+    } catch {
+      setMessage(
+        'Не вдалося скопіювати питання. Перевірте доступ до буфера обміну.',
+      );
+    }
+  }
+
+  async function pasteQuestion() {
+    if (
+      !window.confirm(
+        `Дійсно вставити питання з буфера обміну замість питання ${selectedIndex + 1}?`,
+      )
+    )
+      return;
+
+    setMessage('');
+    try {
+      const question = parseGameQuestion(
+        JSON.parse(await navigator.clipboard.readText()),
+      );
+      setGamePackage((current) => ({
+        ...current,
+        questions: current.questions.map((item, index) =>
+          index === selectedIndex ? question : item,
+        ),
+      }));
+      setSaveStatus('pending');
+    } catch {
+      setMessage(
+        'Не вдалося вставити питання. Перевірте доступ до буфера обміну та формат JSON.',
+      );
+    }
+  }
+
   function swapQuestionPositions(sourceIndex: number, targetIndex: number) {
     setGamePackage((current) => ({
       ...current,
@@ -488,9 +529,11 @@ export function App() {
       showValidation={showValidation}
       onAddHandout={addHandout}
       onBack={() => void closePackage()}
+      onCopyQuestion={() => void copyQuestion()}
       onCreatePackage={() => void createPackage()}
       onOpenPackage={(file) => void openPackage(file)}
       onOpenRecentPackage={(recent) => void openRecentPackage(recent)}
+      onPasteQuestion={() => void pasteQuestion()}
       onQuestionChange={updateQuestion}
       onSelectQuestion={setSelectedIndex}
       onSwapQuestions={swapQuestionPositions}

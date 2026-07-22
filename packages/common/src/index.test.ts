@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   createEmptyGamePackage,
+  parseGameQuestion,
   parseGamePackage,
   serializeGamePackage,
   validateGamePackage,
@@ -69,5 +70,28 @@ describe('game package rules', () => {
       parseGamePackage(withoutHandout).questions[0]!.handout,
     ).toBeUndefined();
     expect(withHandout.byteLength).toBeLessThan(uncompressedLength);
+  });
+
+  it('parses clipboard questions with every supported field', () => {
+    const question = {
+      question: 'Питання',
+      answer: 'Відповідь',
+      answerComment: 'Коментар до відповіді',
+      alternativeAnswers: ['Альтернатива'],
+      handout: {
+        name: 'handout.png',
+        mimeType: 'image/png',
+        dataUrl: 'data:image/png;base64,AA==',
+      },
+      comment: 'Зауваження',
+      hostNotes: 'Примітки для ведучого',
+    };
+
+    expect(parseGameQuestion(JSON.parse(JSON.stringify(question)))).toEqual(
+      question,
+    );
+    expect(() => parseGameQuestion({ ...question, hostNotes: 42 })).toThrow(
+      'Invalid game question',
+    );
   });
 });

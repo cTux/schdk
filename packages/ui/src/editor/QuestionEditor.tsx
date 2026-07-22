@@ -2,6 +2,8 @@ import { QUESTION_COUNT, type GameQuestion } from '@schdk/common';
 import {
   faArrowLeft,
   faArrowRight,
+  faCopy,
+  faPaste,
   faPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,6 +17,8 @@ interface QuestionEditorProps {
   showValidation: boolean;
   onAddHandout(file: File): void;
   onChange(change: Partial<GameQuestion>): void;
+  onCopy(): void;
+  onPaste(): void;
   onSelectQuestion(index: number): void;
 }
 
@@ -24,6 +28,8 @@ export function QuestionEditor({
   showValidation,
   onAddHandout,
   onChange,
+  onCopy,
+  onPaste,
   onSelectQuestion,
 }: QuestionEditorProps) {
   function updateAlternative(index: number, value: string) {
@@ -46,6 +52,14 @@ export function QuestionEditor({
     <section className="question-editor">
       <div className="question-heading">
         <h2>Питання {selectedIndex + 1}</h2>
+        <div className="question-clipboard-actions">
+          <Button variant="secondary" type="button" onClick={onCopy}>
+            <FontAwesomeIcon icon={faCopy} aria-hidden="true" /> Копіювати
+          </Button>
+          <Button variant="secondary" type="button" onClick={onPaste}>
+            <FontAwesomeIcon icon={faPaste} aria-hidden="true" /> Вставити
+          </Button>
+        </div>
       </div>
 
       <fieldset>

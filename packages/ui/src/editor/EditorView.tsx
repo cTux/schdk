@@ -18,9 +18,11 @@ export function EditorView({
   showValidation,
   onAddHandout,
   onBack,
+  onCopyQuestion,
   onCreatePackage,
   onOpenPackage,
   onOpenRecentPackage,
+  onPasteQuestion,
   onQuestionChange,
   onSelectQuestion,
   onSwapQuestions,
@@ -57,6 +59,8 @@ export function EditorView({
           showValidation={showValidation}
           onAddHandout={onAddHandout}
           onChange={onQuestionChange}
+          onCopy={onCopyQuestion}
+          onPaste={onPasteQuestion}
           onSelectQuestion={onSelectQuestion}
         />
       </div>

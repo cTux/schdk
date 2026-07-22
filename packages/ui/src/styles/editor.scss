@@ -87,6 +87,8 @@ body {
 
   .app-header,
   .brand,
+  .question-heading,
+  .question-clipboard-actions,
   .question-actions,
   .alternative,
   .handout-preview,
@@ -431,12 +433,19 @@ body {
   }
 
   .question-heading {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
     margin-bottom: 20px;
   }
 
   .question-heading h2 {
     font-size: 1.15rem;
     letter-spacing: -0.015em;
+  }
+
+  .question-clipboard-actions {
+    gap: 8px;
   }
 
   .question-editor > label {

@@ -11,6 +11,8 @@ compatibility contract. Do not duplicate its schema here.
   `serializeGamePackage`.
 - Parse every imported, restored, or recent package with `parseGamePackage`;
   never trust content based only on its file extension.
+- Parse question JSON from the clipboard with `parseGameQuestion` before
+  replacing the selected question. Clipboard input is an untrusted boundary.
 - Use `validateGamePackage` only when package readiness is required. A
   structurally valid unfinished package remains editable and saveable.
 - Any format, validation, serialization, or compatibility change must update

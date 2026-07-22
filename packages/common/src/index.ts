@@ -27,6 +27,19 @@ export interface GamePackage {
   questions: GameQuestion[];
 }
 
+function isHandout(value: unknown): value is Handout {
+  return Boolean(
+    value &&
+    typeof value === 'object' &&
+    'name' in value &&
+    typeof value.name === 'string' &&
+    'mimeType' in value &&
+    typeof value.mimeType === 'string' &&
+    'dataUrl' in value &&
+    typeof value.dataUrl === 'string',
+  );
+}
+
 export function createEmptyGamePackage(): GamePackage {
   return {
     format: 'schdk-game-package',
@@ -124,64 +137,61 @@ export function parseGamePackage(content: string | Uint8Array): GamePackage {
     throw new Error('Invalid game package');
   }
 
-  const questions = value.questions.map((question): GameQuestion => {
-    if (
-      !question ||
-      typeof question !== 'object' ||
-      !('question' in question) ||
-      typeof question.question !== 'string' ||
-      !('answer' in question) ||
-      typeof question.answer !== 'string' ||
-      !('alternativeAnswers' in question) ||
-      !Array.isArray(question.alternativeAnswers) ||
-      !question.alternativeAnswers.every(
-        (answer: unknown) => typeof answer === 'string',
-      )
-    ) {
-      throw new Error('Invalid game package');
-    }
-
-    const handout = 'handout' in question ? question.handout : undefined;
-    const answerComment =
-      'answerComment' in question ? question.answerComment : undefined;
-    const comment = 'comment' in question ? question.comment : undefined;
-    const hostNotes = 'hostNotes' in question ? question.hostNotes : undefined;
-    if (
-      handout !== undefined &&
-      (!handout ||
-        typeof handout !== 'object' ||
-        !('name' in handout) ||
-        typeof handout.name !== 'string' ||
-        !('mimeType' in handout) ||
-        typeof handout.mimeType !== 'string' ||
-        !('dataUrl' in handout) ||
-        typeof handout.dataUrl !== 'string')
-    ) {
-      throw new Error('Invalid game package');
-    }
-    if (
-      (answerComment !== undefined && typeof answerComment !== 'string') ||
-      (comment !== undefined && typeof comment !== 'string') ||
-      (hostNotes !== undefined && typeof hostNotes !== 'string')
-    ) {
-      throw new Error('Invalid game package');
-    }
-
-    return {
-      question: question.question,
-      answer: question.answer,
-      ...(answerComment !== undefined ? { answerComment } : {}),
-      alternativeAnswers: question.alternativeAnswers,
-      ...(handout ? { handout } : {}),
-      ...(comment !== undefined ? { comment } : {}),
-      ...(hostNotes !== undefined ? { hostNotes } : {}),
-    };
-  });
+  let questions: GameQuestion[];
+  try {
+    questions = value.questions.map(parseGameQuestion);
+  } catch {
+    throw new Error('Invalid game package');
+  }
 
   return {
     format: value.format,
     version: value.version,
     title: value.title,
     questions,
+  };
+}
+
+export function parseGameQuestion(value: unknown): GameQuestion {
+  if (
+    !value ||
+    typeof value !== 'object' ||
+    !('question' in value) ||
+    typeof value.question !== 'string' ||
+    !('answer' in value) ||
+    typeof value.answer !== 'string' ||
+    !('alternativeAnswers' in value) ||
+    !Array.isArray(value.alternativeAnswers) ||
+    !value.alternativeAnswers.every(
+      (answer: unknown) => typeof answer === 'string',
+    )
+  ) {
+    throw new Error('Invalid game question');
+  }
+
+  const handout = 'handout' in value ? value.handout : undefined;
+  const answerComment =
+    'answerComment' in value ? value.answerComment : undefined;
+  const comment = 'comment' in value ? value.comment : undefined;
+  const hostNotes = 'hostNotes' in value ? value.hostNotes : undefined;
+  if (handout !== undefined && !isHandout(handout)) {
+    throw new Error('Invalid game question');
+  }
+  if (
+    (answerComment !== undefined && typeof answerComment !== 'string') ||
+    (comment !== undefined && typeof comment !== 'string') ||
+    (hostNotes !== undefined && typeof hostNotes !== 'string')
+  ) {
+    throw new Error('Invalid game question');
+  }
+
+  return {
+    question: value.question,
+    answer: value.answer,
+    ...(answerComment !== undefined ? { answerComment } : {}),
+    alternativeAnswers: value.alternativeAnswers,
+    ...(handout ? { handout } : {}),
+    ...(comment !== undefined ? { comment } : {}),
+    ...(hostNotes !== undefined ? { hostNotes } : {}),
   };
 }

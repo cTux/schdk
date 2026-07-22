@@ -36,6 +36,9 @@ own state, persistence, routing, and platform integration.
 - Keep the package title and save state on the right side of the editor header.
   Do not restore the removed header completion counter.
 - Place the optional handout before the question text in the question editor.
+- Place Font Awesome copy and paste actions beside the question heading. Copy
+  every question field as JSON; require confirmation before parsing clipboard
+  JSON and fully replacing the selected question.
 - Label optional editor fields explicitly. Question remarks are optional, but
   a non-empty unresolved remark keeps the question unfinished.
 - Show handouts without filenames, with the remove action below the thumbnail.
