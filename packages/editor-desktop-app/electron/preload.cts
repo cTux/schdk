@@ -13,6 +13,9 @@ contextBridge.exposeInMainWorld('desktop', {
     ipcRenderer.invoke('save-game-package', filename, content),
   openGamePackage: (file: File) =>
     ipcRenderer.invoke('open-game-package', webUtils.getPathForFile(file)),
+  listRecentGamePackages: () => ipcRenderer.invoke('list-recent-game-packages'),
+  openRecentGamePackage: (filePath: string) =>
+    ipcRenderer.invoke('open-recent-game-package', filePath),
   writeGamePackage: (filePath: string, content: Uint8Array): Promise<void> =>
     ipcRenderer.invoke('write-game-package', filePath, content),
   onCloseRequested: (callback: (attempt: number) => void): (() => void) => {

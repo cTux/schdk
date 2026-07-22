@@ -1,6 +1,6 @@
 import { app, BrowserWindow, dialog, ipcMain, Menu } from 'electron';
 import { readFile, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { basename, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   requestSaveBeforeClose,
@@ -9,6 +9,52 @@ import {
 
 const editableGamePackages = new Set<string>();
 const closeControllers = new Map<number, CloseController>();
+const RECENT_LIMIT = 5;
+let recentGamePackages: string[] = [];
+
+function recentGamePackagesPath() {
+  return join(app.getPath('userData'), 'recent-game-packages.json');
+}
+
+async function loadRecentGamePackages() {
+  try {
+    const value: unknown = JSON.parse(
+      await readFile(recentGamePackagesPath(), 'utf8'),
+    );
+    return Array.isArray(value)
+      ? value.filter(
+          (path): path is string =>
+            typeof path === 'string' && /\.schdk$/iu.test(path),
+        )
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+async function rememberGamePackage(filePath: string) {
+  recentGamePackages = [
+    filePath,
+    ...recentGamePackages.filter((path) => path !== filePath),
+  ].slice(0, RECENT_LIMIT);
+  await persistRecentGamePackages();
+}
+
+async function forgetGamePackage(filePath: string) {
+  recentGamePackages = recentGamePackages.filter((path) => path !== filePath);
+  await persistRecentGamePackages();
+}
+
+async function persistRecentGamePackages() {
+  try {
+    await writeFile(
+      recentGamePackagesPath(),
+      JSON.stringify(recentGamePackages),
+    );
+  } catch {
+    // A package operation must not fail only because the recent list cannot persist.
+  }
+}
 
 async function handleCloseFailure(
   window: BrowserWindow,
@@ -95,6 +141,7 @@ ipcMain.handle('save-game-package', async (_event, filename, content) => {
     : `${result.filePath}.schdk`;
   await writeFile(filePath, content);
   editableGamePackages.add(filePath);
+  await rememberGamePackage(filePath);
   return filePath;
 });
 
@@ -105,7 +152,35 @@ ipcMain.handle('open-game-package', async (_event, filePath) => {
 
   const content = await readFile(filePath);
   editableGamePackages.add(filePath);
+  await rememberGamePackage(filePath);
   return { filePath, content: new Uint8Array(content) };
+});
+
+ipcMain.handle('list-recent-game-packages', () =>
+  recentGamePackages.map((filePath) => ({
+    filePath,
+    fileName: basename(filePath),
+  })),
+);
+
+ipcMain.handle('open-recent-game-package', async (_event, filePath) => {
+  if (typeof filePath !== 'string' || !recentGamePackages.includes(filePath)) {
+    throw new TypeError('Invalid recent game package');
+  }
+
+  try {
+    const content = await readFile(filePath);
+    editableGamePackages.add(filePath);
+    await rememberGamePackage(filePath);
+    return {
+      filePath,
+      fileName: basename(filePath),
+      content: new Uint8Array(content),
+    };
+  } catch (error) {
+    await forgetGamePackage(filePath);
+    throw error;
+  }
 });
 
 ipcMain.handle('write-game-package', async (_event, filePath, content) => {
@@ -130,7 +205,8 @@ ipcMain.on('close-attempt-finished', (event, attempt, succeeded) => {
   closeControllers.get(event.sender.id)?.finished(attempt, succeeded);
 });
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+  recentGamePackages = await loadRecentGamePackages();
   Menu.setApplicationMenu(null);
   createWindow();
 

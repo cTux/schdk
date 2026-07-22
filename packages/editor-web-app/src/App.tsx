@@ -23,6 +23,12 @@ import {
 import { saveWithPicker } from './browser-save';
 import { loadDraft, removeDraft, saveDraft } from './draft-storage';
 import { createPackageFilename } from './package-filename';
+import {
+  listRecentWebPackages,
+  loadRecentWebPackage,
+  rememberWebPackage,
+  type RecentPackage,
+} from './recent-packages';
 
 const SAVE_STATUS_LABELS = {
   saved: 'Файл збережено',
@@ -32,6 +38,11 @@ const SAVE_STATUS_LABELS = {
 } as const;
 
 type SaveStatus = keyof typeof SAVE_STATUS_LABELS;
+
+interface BrowserSaveResult {
+  name: string;
+  content: Uint8Array;
+}
 
 export function App() {
   const openFileInput = useRef<HTMLInputElement>(null);
@@ -47,6 +58,7 @@ export function App() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showValidation, setShowValidation] = useState(false);
   const [message, setMessage] = useState('');
+  const [recentPackages, setRecentPackages] = useState<RecentPackage[]>([]);
   const question = gamePackage.questions[selectedIndex]!;
   currentPackage.current = gamePackage;
 
@@ -57,6 +69,28 @@ export function App() {
       setMessage('Файл збережено, але аварійну копію не вдалося видалити.');
     }
   }, []);
+
+  const refreshRecentPackages = useCallback(async () => {
+    try {
+      if (window.desktop) {
+        const recent = await window.desktop.listRecentGamePackages();
+        setRecentPackages(
+          recent.map(({ filePath, fileName }) => ({
+            id: filePath,
+            name: fileName,
+          })),
+        );
+      } else {
+        setRecentPackages(await listRecentWebPackages());
+      }
+    } catch {
+      setRecentPackages([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!hasPackage) void refreshRecentPackages();
+  }, [hasPackage, refreshRecentPackages]);
 
   const saveCurrentPackage = useCallback(async () => {
     const desktop = window.desktop;
@@ -177,6 +211,45 @@ export function App() {
     event.target.value = '';
   }
 
+  function applyOpenedPackage(
+    content: Uint8Array,
+    openedFilePath: string | null,
+    openedFileName: string,
+  ) {
+    const parsedPackage = parseGamePackage(content);
+    let packageToEdit = parsedPackage;
+    let restored = false;
+    try {
+      const draft = loadDraft(localStorage, openedFileName);
+      if (draft) {
+        restored = window.confirm(
+          `Знайдено незбережену версію пакета «${openedFileName}». Відновити її?`,
+        );
+        if (restored) packageToEdit = draft;
+        else removeDraft(localStorage, openedFileName);
+      }
+    } catch {
+      setMessage('Не вдалося перевірити аварійну копію в браузері.');
+    }
+
+    setGamePackage(packageToEdit);
+    setFilePath(openedFilePath);
+    setFileName(openedFileName);
+    setSaveStatus(restored ? 'pending' : 'saved');
+    setHasPackage(true);
+    setSelectedIndex(0);
+    setShowValidation(false);
+  }
+
+  async function rememberBrowserPackage(name: string, content: Uint8Array) {
+    try {
+      await rememberWebPackage(name, content);
+      await refreshRecentPackages();
+    } catch {
+      // IndexedDB is an optional browser convenience; opening and saving still work.
+    }
+  }
+
   async function openPackage(file: File) {
     setMessage('');
     try {
@@ -186,31 +259,33 @@ export function App() {
             filePath: null,
             content: new Uint8Array(await file.arrayBuffer()),
           };
-      const parsedPackage = parseGamePackage(opened.content);
-      let packageToEdit = parsedPackage;
-      let restored = false;
-      try {
-        const draft = loadDraft(localStorage, file.name);
-        if (draft) {
-          restored = window.confirm(
-            `Знайдено незбережену версію пакета «${file.name}». Відновити її?`,
-          );
-          if (restored) packageToEdit = draft;
-          else removeDraft(localStorage, file.name);
-        }
-      } catch {
-        setMessage('Не вдалося перевірити аварійну копію в браузері.');
+      applyOpenedPackage(opened.content, opened.filePath, file.name);
+      if (!window.desktop) {
+        await rememberBrowserPackage(file.name, opened.content);
       }
-
-      setGamePackage(packageToEdit);
-      setFilePath(opened.filePath);
-      setFileName(file.name);
-      setSaveStatus(restored ? 'pending' : 'saved');
-      setHasPackage(true);
-      setSelectedIndex(0);
-      setShowValidation(false);
     } catch {
       setMessage('Не вдалося відкрити файл: неправильний формат.');
+    }
+  }
+
+  async function openRecentPackage(recent: RecentPackage) {
+    setMessage('');
+    try {
+      if (window.desktop) {
+        const opened = await window.desktop.openRecentGamePackage(recent.id);
+        applyOpenedPackage(opened.content, opened.filePath, opened.fileName);
+      } else {
+        const content = await loadRecentWebPackage(recent.id);
+        if (!content) throw new Error('Recent package is unavailable');
+        applyOpenedPackage(content, null, recent.name);
+        await rememberBrowserPackage(recent.name, content);
+      }
+      await refreshRecentPackages();
+    } catch {
+      setMessage(
+        'Не вдалося відкрити недавній файл. Можливо, його переміщено або видалено.',
+      );
+      await refreshRecentPackages();
     }
   }
 
@@ -249,10 +324,11 @@ export function App() {
         return true;
       }
 
-      const savedName = await savePackageInBrowser(packageToSave, filename);
-      if (!savedName) return false;
-      setFileName(savedName);
+      const saved = await savePackageInBrowser(packageToSave, filename);
+      if (!saved) return false;
+      setFileName(saved.name);
       setSaveStatus('saved');
+      await rememberBrowserPackage(saved.name, saved.content);
       return true;
     } catch {
       setMessage('Не вдалося зберегти файл.');
@@ -263,14 +339,15 @@ export function App() {
   async function savePackageInBrowser(
     packageToSave: GamePackage,
     suggestedName: string,
-  ): Promise<string | null> {
+  ): Promise<BrowserSaveResult | null> {
     const content = serializeGamePackage(packageToSave);
     if (window.showSaveFilePicker) {
-      return saveWithPicker(
+      const name = await saveWithPicker(
         window.showSaveFilePicker.bind(window),
         suggestedName,
         content,
       );
+      return name ? { name, content } : null;
     }
 
     const url = URL.createObjectURL(
@@ -281,7 +358,7 @@ export function App() {
     link.download = suggestedName;
     link.click();
     URL.revokeObjectURL(url);
-    return suggestedName;
+    return { name: suggestedName, content };
   }
 
   async function createPackage() {
@@ -300,13 +377,14 @@ export function App() {
         await saveCurrentPackage();
       } else if (saveStatus !== 'saved') {
         const oldFileName = fileName;
-        const savedName = await savePackageInBrowser(
+        const saved = await savePackageInBrowser(
           gamePackage,
           createPackageFilename(gamePackage.title),
         );
-        if (!savedName) return;
+        if (!saved) return;
+        await rememberBrowserPackage(saved.name, saved.content);
         if (oldFileName) clearDraft(oldFileName);
-        if (savedName !== oldFileName) clearDraft(savedName);
+        if (saved.name !== oldFileName) clearDraft(saved.name);
       }
       setGamePackage(createEmptyGamePackage());
       setHasPackage(false);
@@ -385,6 +463,34 @@ export function App() {
             Новий пакет
           </button>
         </div>
+        {recentPackages.length > 0 && (
+          <div className="recent-packages">
+            <h3>Недавні пакети</h3>
+            <div className="recent-package-list">
+              {recentPackages.map((recent) => (
+                <button
+                  key={recent.id}
+                  type="button"
+                  onClick={() => void openRecentPackage(recent)}
+                  title={recent.name}
+                >
+                  <span className="recent-package-icon" aria-hidden="true">
+                    ◫
+                  </span>
+                  <span>{recent.name}</span>
+                  <span className="recent-package-arrow" aria-hidden="true">
+                    →
+                  </span>
+                </button>
+              ))}
+            </div>
+            {!window.desktop && (
+              <p className="recent-package-note">
+                Вебверсія відкриває останню збережену локальну копію.
+              </p>
+            )}
+          </div>
+        )}
       </section>
 
       <input
