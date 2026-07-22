@@ -12,6 +12,8 @@ describe('desktop shell session', () => {
     saveDesktopShellView(storage, '/all/index.html', 'editor');
 
     expect(loadDesktopShellView(storage, '/all/index.html')).toBe('editor');
+    saveDesktopShellView(storage, '/all/index.html', 'options');
+    expect(loadDesktopShellView(storage, '/all/index.html')).toBe('options');
     expect(loadDesktopShellView(storage, '/other/index.html')).toBeNull();
   });
 });

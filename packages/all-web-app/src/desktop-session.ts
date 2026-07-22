@@ -10,7 +10,10 @@ export function loadDesktopShellView(
 ): ShellViewName | null {
   try {
     const view = storage.getItem(`${SESSION_KEY_PREFIX}${scope}`);
-    return view === 'home' || view === 'host' || view === 'editor'
+    return view === 'home' ||
+      view === 'host' ||
+      view === 'editor' ||
+      view === 'options'
       ? view
       : null;
   } catch {

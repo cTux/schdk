@@ -17,6 +17,9 @@ export function EditorView({
   selectedIndex,
   showValidation,
   onAddHandout,
+  onAnswerBlur,
+  onAnswerCommentBlur,
+  onAlternativeAnswerBlur,
   onBack,
   onCopyQuestion,
   onCreatePackage,
@@ -24,6 +27,7 @@ export function EditorView({
   onOpenRecentPackage,
   onPasteQuestion,
   onQuestionChange,
+  onQuestionTextBlur,
   onSelectQuestion,
   onSwapQuestions,
   onTitleChange,
@@ -59,9 +63,13 @@ export function EditorView({
           showValidation={showValidation}
           onAddHandout={onAddHandout}
           onChange={onQuestionChange}
+          onAnswerBlur={onAnswerBlur}
+          onAnswerCommentBlur={onAnswerCommentBlur}
+          onAlternativeAnswerBlur={onAlternativeAnswerBlur}
           onCopy={onCopyQuestion}
           onPaste={onPasteQuestion}
           onSelectQuestion={onSelectQuestion}
+          onQuestionTextBlur={onQuestionTextBlur}
         />
       </div>
       {message && <StatusMessage>{message}</StatusMessage>}

@@ -1,7 +1,7 @@
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faHouse, faPen, faPlay } from '@fortawesome/free-solid-svg-icons';
 
-export type ShellViewName = 'home' | 'host' | 'editor';
+export type ShellViewName = 'home' | 'host' | 'editor' | 'options';
 
 export interface ShellItem {
   id: ShellViewName;

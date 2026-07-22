@@ -12,10 +12,14 @@ interface QuestionEditorProps {
   selectedIndex: number;
   showValidation: boolean;
   onAddHandout(file: File): void;
+  onAnswerBlur(): void;
+  onAnswerCommentBlur(): void;
+  onAlternativeAnswerBlur(index: number): void;
   onChange(change: Partial<GameQuestion>): void;
   onCopy(): void;
   onPaste(): void;
   onSelectQuestion(index: number): void;
+  onQuestionTextBlur(): void;
 }
 
 export function QuestionEditor({
@@ -23,10 +27,14 @@ export function QuestionEditor({
   selectedIndex,
   showValidation,
   onAddHandout,
+  onAnswerBlur,
+  onAnswerCommentBlur,
+  onAlternativeAnswerBlur,
   onChange,
   onCopy,
   onPaste,
   onSelectQuestion,
+  onQuestionTextBlur,
 }: QuestionEditorProps) {
   return (
     <section className="question-editor">
@@ -48,6 +56,7 @@ export function QuestionEditor({
           invalid={showValidation && !question.question.trim()}
           rows={7}
           value={question.question}
+          onBlur={onQuestionTextBlur}
           onValueChange={(value) => onChange({ question: value })}
         />
         <QuestionRemarkField
@@ -64,6 +73,7 @@ export function QuestionEditor({
           invalid={showValidation && !question.answer.trim()}
           rows={3}
           value={question.answer}
+          onBlur={onAnswerBlur}
           onValueChange={(value) => onChange({ answer: value })}
         />
         <TextAreaField
@@ -71,12 +81,14 @@ export function QuestionEditor({
           optional
           rows={3}
           value={question.answerComment ?? ''}
+          onBlur={onAnswerCommentBlur}
           onValueChange={(value) => onChange({ answerComment: value })}
         />
       </div>
 
       <AlternativeAnswersField
         answers={question.alternativeAnswers}
+        onBlur={onAlternativeAnswerBlur}
         onChange={(alternativeAnswers) => onChange({ alternativeAnswers })}
       />
 

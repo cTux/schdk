@@ -27,6 +27,9 @@ own state, persistence, routing, and platform integration.
   `prefers-reduced-motion`.
 - Keep the shell sidebar fixed to the viewport while application content
   scrolls independently.
+- Keep Options in a separate navigation group fixed at the bottom of the shell
+  sidebar. Organize the Options page with accessible area tabs such as Editor
+  and Game.
 - Use Flexbox for UI layout. Do not use CSS Grid.
 - Use Font Awesome for icons inside controls and navigation. Import individual
   icons from the free SVG packages; keep product branding as separate assets.

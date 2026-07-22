@@ -11,6 +11,10 @@ import {
   type EditorSaveStatus,
   type RecentPackageItem,
 } from '@schdk/ui/editor';
+import {
+  DEFAULT_EDITOR_TEXT_OPTIONS,
+  type EditorTextOptions,
+} from '@schdk/ui/options';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   saveStatusAfterWrite,
@@ -34,6 +38,7 @@ import {
   rememberWebPackage,
 } from './recent-packages';
 import type {} from './electron';
+import { capitalizeFirstWord, correctSentence } from './text-correction';
 
 interface BrowserSaveResult {
   name: string;
@@ -49,7 +54,13 @@ function replaceBrowserPackageDeepLink(packageName: string | null) {
   );
 }
 
-export function App() {
+interface AppProps {
+  textOptions?: EditorTextOptions;
+}
+
+export function App({
+  textOptions = DEFAULT_EDITOR_TEXT_OPTIONS,
+}: AppProps = {}) {
   const [gamePackage, setGamePackage] = useState<GamePackage>(
     createEmptyGamePackage,
   );
@@ -296,6 +307,39 @@ export function App() {
     setMessage('');
   }
 
+  function correctQuestionText() {
+    if (!textOptions.correctQuestionText) return;
+    const value = gamePackage.questions[selectedIndex]!.question;
+    const corrected = correctSentence(value);
+    if (corrected !== value) updateQuestion({ question: corrected });
+  }
+
+  function correctAnswer() {
+    if (!textOptions.correctAnswers) return;
+    const value = gamePackage.questions[selectedIndex]!.answer;
+    const corrected = capitalizeFirstWord(value);
+    if (corrected !== value) updateQuestion({ answer: corrected });
+  }
+
+  function correctAlternativeAnswer(index: number) {
+    if (!textOptions.correctAnswers) return;
+    const answers = gamePackage.questions[selectedIndex]!.alternativeAnswers;
+    const corrected = capitalizeFirstWord(answers[index] ?? '');
+    if (corrected === answers[index]) return;
+    updateQuestion({
+      alternativeAnswers: answers.map((answer, answerIndex) =>
+        answerIndex === index ? corrected : answer,
+      ),
+    });
+  }
+
+  function correctAnswerComment() {
+    if (!textOptions.correctAnswerComment) return;
+    const value = gamePackage.questions[selectedIndex]!.answerComment ?? '';
+    const corrected = correctSentence(value);
+    if (corrected !== value) updateQuestion({ answerComment: corrected });
+  }
+
   async function copyQuestion() {
     setMessage('');
     try {
@@ -528,6 +572,9 @@ export function App() {
       selectedIndex={selectedIndex}
       showValidation={showValidation}
       onAddHandout={addHandout}
+      onAnswerBlur={correctAnswer}
+      onAnswerCommentBlur={correctAnswerComment}
+      onAlternativeAnswerBlur={correctAlternativeAnswer}
       onBack={() => void closePackage()}
       onCopyQuestion={() => void copyQuestion()}
       onCreatePackage={() => void createPackage()}
@@ -535,6 +582,7 @@ export function App() {
       onOpenRecentPackage={(recent) => void openRecentPackage(recent)}
       onPasteQuestion={() => void pasteQuestion()}
       onQuestionChange={updateQuestion}
+      onQuestionTextBlur={correctQuestionText}
       onSelectQuestion={setSelectedIndex}
       onSwapQuestions={swapQuestionPositions}
       onTitleChange={(title) => {

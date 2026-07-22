@@ -1,7 +1,12 @@
 import { getDeepLinkedPackageName } from '@schdk/editor-web-app/deep-link';
+import type { EditorTextOptions } from '@schdk/ui/options';
 import { ShellView, type ShellViewName } from '@schdk/ui/shell';
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { loadDesktopShellView, saveDesktopShellView } from './desktop-session';
+import {
+  loadEditorTextOptions,
+  saveEditorTextOptions,
+} from './options-storage';
 
 const HostApp = lazy(() =>
   import('@schdk/host-web-app/app').then(({ App }) => ({ default: App })),
@@ -23,13 +28,20 @@ export function App() {
     host: false,
     editor: view === 'editor',
   });
+  const [editorOptions, setEditorOptions] = useState<EditorTextOptions>(() =>
+    loadEditorTextOptions(localStorage),
+  );
 
   useEffect(() => {
     if (isDesktop) saveDesktopShellView(localStorage, sessionScope, view);
   }, [isDesktop, sessionScope, view]);
 
+  useEffect(() => {
+    saveEditorTextOptions(localStorage, editorOptions);
+  }, [editorOptions]);
+
   function showView(nextView: ShellViewName) {
-    if (nextView !== 'home') {
+    if (nextView === 'host' || nextView === 'editor') {
       setLoadedApps((current) => ({ ...current, [nextView]: true }));
     }
     setView(nextView);
@@ -39,7 +51,7 @@ export function App() {
     <ShellView
       editorApp={
         <Suspense fallback={null}>
-          <EditorApp />
+          <EditorApp textOptions={editorOptions} />
         </Suspense>
       }
       hostApp={
@@ -48,7 +60,9 @@ export function App() {
         </Suspense>
       }
       loadedApps={loadedApps}
+      editorOptions={editorOptions}
       view={view}
+      onEditorOptionsChange={setEditorOptions}
       onShowView={showView}
     />
   );

@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { AppIcon } from '../atoms/AppIcon';
 import { Button } from '../atoms/Button';
 import { SHELL_ITEMS, type ShellViewName } from './shellItems';
@@ -35,6 +36,21 @@ export function ShellNavigation({ view, onSelect }: ShellNavigationProps) {
             {item.label}
           </Button>
         ))}
+      </nav>
+
+      <nav className="sidebar-options" aria-label="Налаштування">
+        <Button
+          variant="ghost"
+          className={view === 'options' ? 'active' : ''}
+          type="button"
+          onClick={() => onSelect('options')}
+          aria-current={view === 'options' ? 'page' : undefined}
+        >
+          <span className="nav-icon" aria-hidden="true">
+            <FontAwesomeIcon icon={faGear} />
+          </span>
+          Options
+        </Button>
       </nav>
 
       <p className="sidebar-note">SCHDK</p>

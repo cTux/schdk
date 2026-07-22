@@ -17,6 +17,9 @@ export interface EditorViewProps {
   selectedIndex: number;
   showValidation: boolean;
   onAddHandout(file: File): void;
+  onAnswerBlur(): void;
+  onAnswerCommentBlur(): void;
+  onAlternativeAnswerBlur(index: number): void;
   onBack(): void;
   onCopyQuestion(): void;
   onCreatePackage(): void;
@@ -24,6 +27,7 @@ export interface EditorViewProps {
   onOpenRecentPackage(recent: RecentPackageItem): void;
   onPasteQuestion(): void;
   onQuestionChange(change: Partial<GameQuestion>): void;
+  onQuestionTextBlur(): void;
   onSelectQuestion(index: number): void;
   onSwapQuestions(sourceIndex: number, targetIndex: number): void;
   onTitleChange(value: string): void;

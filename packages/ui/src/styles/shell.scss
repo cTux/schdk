@@ -118,11 +118,15 @@ button {
 }
 
 .sidebar-note {
-  margin: auto 10px 0;
+  margin: 16px 10px 0;
   color: #626a77;
   font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.16em;
+}
+
+.sidebar-options {
+  margin-top: auto;
 }
 
 .workspace {
@@ -137,6 +141,82 @@ button {
   width: min(760px, calc(100% - 48px));
   margin: 0 auto;
   padding: clamp(64px, 10vh, 110px) 0 48px;
+}
+
+.options-page {
+  width: min(760px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: clamp(48px, 8vh, 80px) 0;
+}
+
+.options-page h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.options-tabs {
+  display: flex;
+  gap: 6px;
+  margin: 32px 0 24px;
+  border-bottom: 1px solid $border;
+}
+
+.options-tabs button {
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  padding: 10px 14px;
+  color: $muted;
+  cursor: pointer;
+}
+
+.options-tabs button.active {
+  border-bottom-color: $accent;
+  color: $text;
+}
+
+.options-page section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.options-page section h2 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.option-toggle {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  border: 1px solid $border;
+  border-radius: 12px;
+  background: $sidebar;
+  padding: 15px 16px;
+  cursor: pointer;
+}
+
+.option-toggle > span {
+  flex: 1 1 auto;
+}
+
+.option-toggle strong,
+.option-toggle small {
+  display: block;
+}
+
+.option-toggle small,
+.options-empty {
+  margin-top: 4px;
+  color: $muted;
+  line-height: 1.45;
+}
+
+.option-toggle input {
+  width: 18px;
+  height: 18px;
+  accent-color: $accent;
 }
 
 .home header {
@@ -289,6 +369,11 @@ button:focus-visible {
   .home {
     width: min(100% - 28px, 560px);
     padding-top: 44px;
+  }
+
+  .options-page {
+    width: min(100% - 28px, 560px);
+    padding-top: 36px;
   }
 
   .arrow {

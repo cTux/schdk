@@ -6,6 +6,10 @@
   callbacks and must not persist files itself.
 - Every package mutation sets the save status to `pending` and clears stale
   errors.
+- Apply enabled text-correction options only when the corresponding field loses
+  focus. Capitalize question, answer, alternative-answer, and answer-comment
+  text as configured; add ending punctuation to corrected questions and answer
+  comments only when it is missing.
 - Preserve the four save states: `saved`, `pending`, `saving`, and `error`.
   Their visual treatment is defined in the UI rules.
 - Keep the visible status indicator, but do not add transient save, cancel, or

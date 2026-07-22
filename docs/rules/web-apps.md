@@ -30,3 +30,6 @@
   component mounted so switching shell views does not discard state.
 - Preserve keyboard-accessible shell navigation while composing application
   components in the shared renderer.
+- Keep the Options entry at the bottom of the fixed shell sidebar. Group
+  settings into area tabs such as Editor and Game, and persist editor text
+  options in localStorage for both browser and unified desktop runs.

@@ -5,11 +5,13 @@ import { Button } from '../atoms/Button';
 interface AlternativeAnswersFieldProps {
   answers: string[];
   onChange(answers: string[]): void;
+  onBlur(index: number): void;
 }
 
 export function AlternativeAnswersField({
   answers,
   onChange,
+  onBlur,
 }: AlternativeAnswersFieldProps) {
   return (
     <fieldset>
@@ -27,6 +29,7 @@ export function AlternativeAnswersField({
                 ),
               )
             }
+            onBlur={() => onBlur(index)}
             aria-label={`Альтернативна відповідь ${index + 1}`}
           />
           <Button

@@ -8,6 +8,7 @@
     ".": "./src/index.ts",
     "./editor": "./src/editor/EditorView.tsx",
     "./host": "./src/host/HostView.tsx",
+    "./options": "./src/options/types.ts",
     "./shell": "./src/shell/ShellView.tsx"
   },
   "scripts": {
