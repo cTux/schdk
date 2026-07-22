@@ -6,6 +6,7 @@ export interface RecentPackageItem {
   id: string;
   name: string;
   title?: string;
+  ready?: boolean;
 }
 
 export interface EditorViewProps {

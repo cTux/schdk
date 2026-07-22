@@ -57,7 +57,8 @@ own state, persistence, routing, and platform integration.
   on short viewports. Keep recent packages below it, never inside it.
 - Show the package title first and the filename second in each recent-package
   item. Fall back to the filename alone for legacy entries without title
-  metadata.
+  metadata. Show a `Готовий` tag beside the title only when shared package
+  validation reports no missing required fields or unresolved remarks.
 - On question-number hover or focus, show completed question-and-answer text in
   a custom tooltip. Show unresolved remarks below the question in red and mark
   their question number with a dark-red background, never a red border. Keep

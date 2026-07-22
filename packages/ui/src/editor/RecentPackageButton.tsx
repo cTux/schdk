@@ -22,7 +22,12 @@ export function RecentPackageButton({
       title={hasTitle ? `${title} — ${recent.name}` : recent.name}
     >
       <span className="recent-package-label">
-        <strong>{title}</strong>
+        <span className="recent-package-title">
+          <strong>{title}</strong>
+          {recent.ready && (
+            <span className="recent-package-ready">Готовий</span>
+          )}
+        </span>
         {hasTitle && <small>{recent.name}</small>}
       </span>
       <span className="recent-package-arrow" aria-hidden="true">

@@ -1,3 +1,5 @@
+import { parseGamePackage, validateGamePackage } from '@schdk/common';
+
 const DATABASE_NAME = 'schdk-editor';
 const DATABASE_VERSION = 1;
 const STORE_NAME = 'recent-packages';
@@ -14,6 +16,15 @@ export interface RecentPackage {
   id: string;
   name: string;
   title?: string;
+  ready: boolean;
+}
+
+export function isRecentPackageReady(content: Uint8Array): boolean {
+  try {
+    return validateGamePackage(parseGamePackage(content)).length === 0;
+  } catch {
+    return false;
+  }
 }
 
 function requestResult<T>(request: IDBRequest<T>): Promise<T> {
@@ -57,10 +68,11 @@ export async function listRecentWebPackages(): Promise<RecentPackage[]> {
     const records = await requestResult<RecentPackageRecord[]>(
       transaction.objectStore(STORE_NAME).getAll(),
     );
-    return selectRecentPackages(records).map(({ name, title }) => ({
+    return selectRecentPackages(records).map(({ name, title, content }) => ({
       id: name,
       name,
       ...(typeof title === 'string' ? { title } : {}),
+      ready: isRecentPackageReady(content),
     }));
   } finally {
     database.close();

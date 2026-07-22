@@ -635,6 +635,24 @@ body {
     font-weight: 400;
   }
 
+  .recent-package-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .recent-package-ready {
+    flex: 0 0 auto;
+    border: 1px solid rgba($success, 0.45);
+    border-radius: 999px;
+    padding: 2px 7px;
+    background: rgba($success, 0.12);
+    color: $success;
+    font-size: 0.65rem;
+    font-weight: 700;
+  }
+
   .recent-package-arrow {
     color: $muted;
     font-size: 1rem;

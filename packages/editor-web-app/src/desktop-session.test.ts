@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
-  loadDesktopRecentTitles,
+  loadDesktopRecentMetadata,
   loadDesktopEditorSession,
-  saveDesktopRecentTitle,
+  saveDesktopRecentMetadata,
   saveDesktopEditorSession,
 } from './desktop-session';
 
@@ -40,18 +40,30 @@ describe('desktop editor session', () => {
     expect(loadDesktopEditorSession(storage, '/editor/index.html')).toBeNull();
   });
 
-  it('stores recent package titles by scoped file path', () => {
+  it('stores recent package metadata by scoped file path', () => {
     const storage = createStorage();
-    saveDesktopRecentTitle(
+    saveDesktopRecentMetadata(
       storage,
       '/editor/index.html',
       'C:\\Games\\quiz.schdk',
-      'Кубок міста',
+      { title: 'Кубок міста', ready: true },
     );
 
-    expect(loadDesktopRecentTitles(storage, '/editor/index.html')).toEqual({
-      'C:\\Games\\quiz.schdk': 'Кубок міста',
+    expect(loadDesktopRecentMetadata(storage, '/editor/index.html')).toEqual({
+      'C:\\Games\\quiz.schdk': { title: 'Кубок міста', ready: true },
     });
-    expect(loadDesktopRecentTitles(storage, '/all/index.html')).toEqual({});
+    expect(loadDesktopRecentMetadata(storage, '/all/index.html')).toEqual({});
+  });
+
+  it('keeps legacy recent titles', () => {
+    const storage = createStorage();
+    storage.setItem(
+      'schdk.desktop.recent-titles:/editor/index.html',
+      JSON.stringify({ 'C:\\Games\\quiz.schdk': 'Кубок міста' }),
+    );
+
+    expect(loadDesktopRecentMetadata(storage, '/editor/index.html')).toEqual({
+      'C:\\Games\\quiz.schdk': { title: 'Кубок міста' },
+    });
   });
 });

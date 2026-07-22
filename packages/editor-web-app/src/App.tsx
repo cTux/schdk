@@ -3,6 +3,7 @@ import {
   parseGameQuestion,
   parseGamePackage,
   serializeGamePackage,
+  validateGamePackage,
   type GamePackage,
   type GameQuestion,
 } from '@schdk/common';
@@ -24,9 +25,9 @@ import {
 import { saveWithPicker } from './browser-save';
 import { getDeepLinkedPackageName, getPackageDeepLink } from './deep-link';
 import {
-  loadDesktopRecentTitles,
+  loadDesktopRecentMetadata,
   loadDesktopEditorSession,
-  saveDesktopRecentTitle,
+  saveDesktopRecentMetadata,
   saveDesktopEditorSession,
 } from './desktop-session';
 import { loadDraft, removeDraft, saveDraft } from './draft-storage';
@@ -99,16 +100,26 @@ export function App({
     try {
       if (window.desktop) {
         const recent = await window.desktop.listRecentGamePackages();
-        const titles = loadDesktopRecentTitles(
+        const metadata = loadDesktopRecentMetadata(
           localStorage,
           window.location.pathname,
         );
         setRecentPackages(
-          recent.map(({ filePath: id, fileName: name }) => ({
-            id,
-            name,
-            ...(typeof titles[id] === 'string' ? { title: titles[id] } : {}),
-          })),
+          recent.map(({ filePath: id, fileName: name }) => {
+            const recentMetadata = metadata[id];
+            return {
+              id,
+              name,
+              ...(recentMetadata
+                ? {
+                    title: recentMetadata.title,
+                    ...(recentMetadata.ready !== undefined
+                      ? { ready: recentMetadata.ready }
+                      : {}),
+                  }
+                : {}),
+            };
+          }),
         );
       } else {
         setRecentPackages(await listRecentWebPackages());
@@ -221,13 +232,16 @@ export function App({
 
   useEffect(() => {
     if (!window.desktop || !filePath) return;
-    saveDesktopRecentTitle(
+    saveDesktopRecentMetadata(
       localStorage,
       window.location.pathname,
       filePath,
-      gamePackage.title,
+      {
+        title: gamePackage.title,
+        ready: validateGamePackage(gamePackage).length === 0,
+      },
     );
-  }, [filePath, gamePackage.title]);
+  }, [filePath, gamePackage]);
 
   const saveCurrentPackage = useCallback(async () => {
     const desktop = window.desktop;

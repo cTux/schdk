@@ -1,7 +1,7 @@
 import { QUESTION_COUNT } from '@schdk/common';
 
 const SESSION_KEY_PREFIX = 'schdk.desktop.editor-session:';
-const RECENT_TITLES_KEY_PREFIX = 'schdk.desktop.recent-titles:';
+const RECENT_METADATA_KEY_PREFIX = 'schdk.desktop.recent-titles:';
 
 type SessionStorage = Pick<Storage, 'getItem' | 'removeItem' | 'setItem'>;
 
@@ -14,46 +14,70 @@ function sessionKey(scope: string) {
   return `${SESSION_KEY_PREFIX}${scope}`;
 }
 
-function recentTitlesKey(scope: string) {
-  return `${RECENT_TITLES_KEY_PREFIX}${scope}`;
+export interface DesktopRecentMetadata {
+  title: string;
+  ready?: boolean;
 }
 
-export function loadDesktopRecentTitles(
+function recentMetadataKey(scope: string) {
+  return `${RECENT_METADATA_KEY_PREFIX}${scope}`;
+}
+
+export function loadDesktopRecentMetadata(
   storage: SessionStorage,
   scope: string,
-): Record<string, string> {
+): Record<string, DesktopRecentMetadata> {
   try {
     const value: unknown = JSON.parse(
-      storage.getItem(recentTitlesKey(scope)) ?? 'null',
+      storage.getItem(recentMetadataKey(scope)) ?? 'null',
     );
     if (!value || typeof value !== 'object') return {};
     return Object.fromEntries(
-      Object.entries(value).filter(
-        ([filePath, title]) =>
-          /\.schdk$/iu.test(filePath) && typeof title === 'string',
-      ),
+      Object.entries(value).flatMap(([filePath, metadata]) => {
+        if (!/\.schdk$/iu.test(filePath)) return [];
+        if (typeof metadata === 'string')
+          return [[filePath, { title: metadata }]];
+        if (
+          !metadata ||
+          typeof metadata !== 'object' ||
+          !('title' in metadata) ||
+          typeof metadata.title !== 'string'
+        )
+          return [];
+        return [
+          [
+            filePath,
+            {
+              title: metadata.title,
+              ...('ready' in metadata && typeof metadata.ready === 'boolean'
+                ? { ready: metadata.ready }
+                : {}),
+            },
+          ],
+        ];
+      }),
     );
   } catch {
     return {};
   }
 }
 
-export function saveDesktopRecentTitle(
+export function saveDesktopRecentMetadata(
   storage: SessionStorage,
   scope: string,
   filePath: string,
-  title: string,
+  metadata: DesktopRecentMetadata,
 ) {
   try {
     storage.setItem(
-      recentTitlesKey(scope),
+      recentMetadataKey(scope),
       JSON.stringify({
-        ...loadDesktopRecentTitles(storage, scope),
-        [filePath]: title,
+        ...loadDesktopRecentMetadata(storage, scope),
+        [filePath]: metadata,
       }),
     );
   } catch {
-    // Recent title metadata is best-effort.
+    // Recent package metadata is best-effort.
   }
 }
 
