@@ -7,7 +7,7 @@ describe('requestSaveBeforeClose', () => {
   function setup() {
     let close: (event: { preventDefault(): void }) => void = () => undefined;
     const preventDefault = vi.fn();
-    const sendCloseRequested = vi.fn();
+    const sendCloseRequested = vi.fn(() => true);
     const destroy = vi.fn();
     const onFailure = vi.fn();
     const controller = requestSaveBeforeClose(
@@ -61,5 +61,17 @@ describe('requestSaveBeforeClose', () => {
 
     expect(onFailure).toHaveBeenCalledOnce();
     expect(destroy).not.toHaveBeenCalled();
+  });
+
+  it('closes immediately when no editor frame needs to save', () => {
+    const { close, destroy, onFailure, preventDefault, sendCloseRequested } =
+      setup();
+    sendCloseRequested.mockReturnValue(false);
+
+    close({ preventDefault });
+
+    expect(preventDefault).toHaveBeenCalledOnce();
+    expect(destroy).toHaveBeenCalledOnce();
+    expect(onFailure).not.toHaveBeenCalled();
   });
 });

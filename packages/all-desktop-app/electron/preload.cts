@@ -42,8 +42,6 @@ const isEditorFrame = isEditorFrameUrl(
   process.isMainFrame,
 );
 
-if (process.isMainFrame) {
-  contextBridge.exposeInMainWorld('desktop', closeApi);
-} else if (isEditorFrame) {
+if (isEditorFrame) {
   contextBridge.exposeInMainWorld('desktop', editorApi);
 }

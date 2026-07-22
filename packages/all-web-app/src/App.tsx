@@ -1,5 +1,5 @@
 import { ShellView, type ShellViewName } from '@schdk/ui/shell';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const APP_URLS = import.meta.env.DEV
   ? {
@@ -11,13 +11,6 @@ const APP_URLS = import.meta.env.DEV
 export function App() {
   const [view, setView] = useState<ShellViewName>('home');
   const [loadedApps, setLoadedApps] = useState({ host: false, editor: false });
-
-  useEffect(() => {
-    if (loadedApps.editor) return;
-    return window.desktop?.onCloseRequested((attempt) => {
-      window.desktop!.finishCloseAttempt(attempt, true);
-    });
-  }, [loadedApps.editor]);
 
   function showView(nextView: ShellViewName) {
     if (nextView !== 'home') {

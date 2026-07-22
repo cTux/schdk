@@ -31,16 +31,16 @@
 - On timeout or save failure, offer exactly three outcomes: retry saving, close
   without saving, or cancel closing. Never leave a window permanently
   uncloseable after a renderer or IPC failure.
-- In the unified app, send the close request to frames in the window subtree so
-  the embedded editor can respond.
+- In the unified app, send close requests only to loaded editor child frames.
+  When no editor frame is loaded, close immediately because the shell has no
+  package state to save; do not wait for a renderer timeout.
 
 ## Preload and packaging
 
 - Keep preload files as `.cts` so TypeScript emits sandbox-compatible `.cjs`,
   and reference `preload.cjs` from `BrowserWindow`.
-- The unified preload exposes only the close API to the main shell and the
-  editor API only to the whitelisted editor child-frame URL. Keep routing tests
-  for development and packaged URLs.
+- The unified preload exposes the editor API only to the whitelisted editor
+  child-frame URL. Keep routing tests for development and packaged URLs.
 - Package Windows apps with electron-builder's unpacked `dir` target under
   `dist/release/win-unpacked`; the project does not currently build installers.
 - Keep `signExecutable: false` so executable resource editing can apply the

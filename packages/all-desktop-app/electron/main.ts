@@ -6,6 +6,7 @@ import {
   requestSaveBeforeClose,
   type CloseController,
 } from './window-close.js';
+import { sendCloseRequestToEditorFrames } from './preload-routing.js';
 
 const editableGamePackages = new Set<string>();
 const closeControllers = new Map<number, CloseController>();
@@ -110,11 +111,8 @@ function createWindow() {
       isDestroyed: () => window.isDestroyed(),
       destroy: () => window.destroy(),
       onClose: (listener) => window.on('close', listener),
-      sendCloseRequested: (attempt) => {
-        for (const frame of window.webContents.mainFrame.framesInSubtree) {
-          frame.send('close-requested', attempt);
-        }
-      },
+      sendCloseRequested: (attempt) =>
+        sendCloseRequestToEditorFrames(window.webContents.mainFrame, attempt),
     },
     () => void handleCloseFailure(window, closeController),
   );

@@ -11,7 +11,7 @@ export interface ClosableWindow {
   isDestroyed(): boolean;
   destroy(): void;
   onClose(listener: (event: { preventDefault(): void }) => void): void;
-  sendCloseRequested(attempt: number): void;
+  sendCloseRequested(attempt: number): boolean;
 }
 
 export function requestSaveBeforeClose(
@@ -38,7 +38,10 @@ export function requestSaveBeforeClose(
     if (waiting || window.isDestroyed()) return;
     waiting = true;
     const attempt = ++currentAttempt;
-    window.sendCloseRequested(attempt);
+    if (!window.sendCloseRequested(attempt)) {
+      discard();
+      return;
+    }
     timeout = setTimeout(() => failed(attempt), CLOSE_TIMEOUT_MS);
   }
 
