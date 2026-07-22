@@ -38,6 +38,10 @@
 
 - Desktop recents contain up to five real `.schdk` paths and reopen current
   disk contents. Remove a recent entry when its file can no longer be read.
+- Persist the current desktop file path and selected question continuously,
+  then restore them on the next launch through the recent-file bridge. Clear
+  the session when the file is unavailable or the editor returns to its start
+  screen.
 - Persisting the recent list is best-effort and must not fail a package
   operation.
 - Autosave only when a desktop bridge and an authorized file path exist. Write

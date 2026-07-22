@@ -18,6 +18,10 @@ import {
 } from './autosave';
 import { saveWithPicker } from './browser-save';
 import { getDeepLinkedPackageName, getPackageDeepLink } from './deep-link';
+import {
+  loadDesktopEditorSession,
+  saveDesktopEditorSession,
+} from './desktop-session';
 import { loadDraft, removeDraft, saveDraft } from './draft-storage';
 import { createPackageFilename } from './package-filename';
 import { getSelectedIndexAfterSwap, swapQuestions } from './question-order';
@@ -50,6 +54,14 @@ export function App() {
   const saveQueue = useRef(Promise.resolve());
   const initialDeepLink = useRef(
     window.desktop ? null : getDeepLinkedPackageName(window.location.href),
+  );
+  const initialDesktopSession = useRef(
+    window.desktop
+      ? loadDesktopEditorSession(localStorage, window.location.pathname)
+      : null,
+  );
+  const [desktopSessionReady, setDesktopSessionReady] = useState(
+    !initialDesktopSession.current,
   );
   const [hasPackage, setHasPackage] = useState(false);
   const [filePath, setFilePath] = useState<string | null>(null);
@@ -152,6 +164,37 @@ export function App() {
       }
     })();
   }, [applyOpenedPackage, rememberBrowserPackage]);
+
+  useEffect(() => {
+    const desktop = window.desktop;
+    const session = initialDesktopSession.current;
+    if (!desktop || !session) return;
+    initialDesktopSession.current = null;
+
+    void (async () => {
+      try {
+        const opened = await desktop.openRecentGamePackage(session.filePath);
+        applyOpenedPackage(opened.content, opened.filePath, opened.fileName);
+        setSelectedIndex(session.selectedIndex);
+      } catch {
+        saveDesktopEditorSession(localStorage, window.location.pathname, null);
+        setMessage(
+          'Не вдалося відновити попередній файл. Можливо, його переміщено або видалено.',
+        );
+      } finally {
+        setDesktopSessionReady(true);
+      }
+    })();
+  }, [applyOpenedPackage]);
+
+  useEffect(() => {
+    if (!window.desktop || !desktopSessionReady) return;
+    saveDesktopEditorSession(
+      localStorage,
+      window.location.pathname,
+      filePath ? { filePath, selectedIndex } : null,
+    );
+  }, [desktopSessionReady, filePath, selectedIndex]);
 
   const saveCurrentPackage = useCallback(async () => {
     const desktop = window.desktop;

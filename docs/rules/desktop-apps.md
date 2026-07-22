@@ -16,6 +16,18 @@
 - Block reload shortcuts in the standalone editor because reload can discard
   renderer state outside the save handshake.
 
+## Session restoration
+
+- Persist restorable desktop renderer state continuously so normal and
+  unexpected shutdowns can resume the last location.
+- The unified application restores its active section. Editor-capable
+  applications restore the opened `.schdk` path and selected question.
+- Restore files only through the authorized recent-file desktop bridge. Clear
+  stale session state and show an actionable error when a remembered file is
+  unavailable.
+- Keep browser URL deep links and desktop session restoration separate. A
+  desktop application resumes local state without encoding disk paths in URLs.
+
 ## Save-before-close protocol
 
 - Keep standalone-editor and unified-editor file, recent, autosave, and close
