@@ -1,4 +1,10 @@
 import { QUESTION_COUNT, type GameQuestion } from '@schdk/common';
+import {
+  faArrowLeft,
+  faArrowRight,
+  faPlus,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '../atoms/Button';
 import { FileButton } from '../atoms/FileButton';
 
@@ -90,7 +96,7 @@ export function QuestionEditor({
             })
           }
         >
-          + Додати відповідь
+          <FontAwesomeIcon icon={faPlus} aria-hidden="true" /> Додати відповідь
         </Button>
       </fieldset>
 
@@ -172,14 +178,14 @@ export function QuestionEditor({
           disabled={selectedIndex === 0}
           onClick={() => onSelectQuestion(selectedIndex - 1)}
         >
-          ← Попереднє
+          <FontAwesomeIcon icon={faArrowLeft} aria-hidden="true" /> Попереднє
         </Button>
         <Button
           type="button"
           disabled={selectedIndex === QUESTION_COUNT - 1}
           onClick={() => onSelectQuestion(selectedIndex + 1)}
         >
-          Наступне →
+          Наступне <FontAwesomeIcon icon={faArrowRight} aria-hidden="true" />
         </Button>
       </div>
     </section>

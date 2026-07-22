@@ -1,3 +1,5 @@
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AppIcon } from '../atoms/AppIcon';
 import { Button } from '../atoms/Button';
 import type { EditorSaveStatus } from './types';
@@ -40,7 +42,7 @@ export function EditorHeader({
             aria-label="Назад"
             title="Назад"
           >
-            ←
+            <FontAwesomeIcon icon={faArrowLeft} aria-hidden="true" />
           </Button>
         )}
         <AppIcon />

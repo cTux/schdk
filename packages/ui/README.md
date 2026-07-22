@@ -13,6 +13,8 @@ own state, persistence, routing, and platform integration.
 - Prefer compact, readable layouts and omit decoration that carries no
   information.
 - Keep keyboard focus visible and preserve native control semantics.
+- Use Font Awesome for icons inside controls and navigation. Import individual
+  icons from the free SVG packages; keep product branding as separate assets.
 - Put shared visual changes here instead of adding app-local components or
   styles.
 - Keep user-facing text in the composed view that owns its context; atoms must

@@ -1,3 +1,5 @@
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRef, type ChangeEvent, type DragEvent } from 'react';
 import { Button } from '../atoms/Button';
 import type { RecentPackageItem } from './types';
@@ -67,7 +69,7 @@ export function PackageStart({
               >
                 <span>{recent.name}</span>
                 <span className="recent-package-arrow" aria-hidden="true">
-                  →
+                  <FontAwesomeIcon icon={faArrowRight} />
                 </span>
               </Button>
             ))}

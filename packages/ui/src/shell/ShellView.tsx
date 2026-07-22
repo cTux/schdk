@@ -1,3 +1,10 @@
+import {
+  faArrowRight,
+  faHouse,
+  faPen,
+  faPlay,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AppIcon } from '../atoms/AppIcon';
 import { Button } from '../atoms/Button';
 import '../styles/shell.scss';
@@ -7,19 +14,19 @@ export type ShellViewName = 'home' | 'host' | 'editor';
 const ITEMS = [
   {
     id: 'home',
-    icon: '⌂',
+    icon: faHouse,
     label: 'Домашня',
     description: 'Огляд інструментів для підготовки та проведення гри.',
   },
   {
     id: 'host',
-    icon: '▶',
+    icon: faPlay,
     label: 'ЩДК Хост',
     description: 'Запускайте готовий пакет і проводьте гру для команд.',
   },
   {
     id: 'editor',
-    icon: '✎',
+    icon: faPen,
     label: 'ЩДК Редактор',
     description: 'Створюйте та редагуйте пакети запитань у форматі .schdk.',
   },
@@ -60,7 +67,7 @@ export function ShellView({
               aria-current={item.id === view ? 'page' : undefined}
             >
               <span className="nav-icon" aria-hidden="true">
-                {item.icon}
+                <FontAwesomeIcon icon={item.icon} />
               </span>
               {item.label}
             </Button>
@@ -89,14 +96,14 @@ export function ShellView({
                 onClick={() => onShowView(item.id)}
               >
                 <span className="tool-icon" aria-hidden="true">
-                  {item.icon}
+                  <FontAwesomeIcon icon={item.icon} />
                 </span>
                 <span>
                   <strong>{item.label}</strong>
                   <small>{item.description}</small>
                 </span>
                 <span className="arrow" aria-hidden="true">
-                  →
+                  <FontAwesomeIcon icon={faArrowRight} />
                 </span>
               </Button>
             ))}
