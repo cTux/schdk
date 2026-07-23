@@ -4,9 +4,17 @@ import { PackageStart } from '../editor/PackageStart';
 import type { RecentPackageItem } from '../editor/types';
 import '../styles/editor.scss';
 import '../styles/host.scss';
+import { GameFinished } from './GameFinished';
 import { GamePackageDetails } from './GamePackageDetails';
+import { GameWizard } from './GameWizard';
+import type { HostGameView } from './types';
 
 export type { RecentPackageItem } from '../editor/types';
+export type {
+  HostGameTransition,
+  HostGameView,
+  HostQuestionStage,
+} from './types';
 
 export interface HostPackageDetails {
   fileName: string;
@@ -17,29 +25,41 @@ export interface HostPackageDetails {
 }
 
 interface HostViewProps {
-  gameStarted: boolean;
+  finished: boolean;
+  game: HostGameView | null;
   message: string;
   packageDetails: HostPackageDetails | null;
   recentPackages: RecentPackageItem[];
   onBack(): void;
+  onGameBack(): void;
+  onGameNext(): void;
   onOpenPackage(file: File): void;
   onOpenRecentPackage(recent: RecentPackageItem): void;
+  onReturnToGames(): void;
   onStartGame(): void;
 }
 
 export function HostView({
-  gameStarted,
+  finished,
+  game,
   message,
   packageDetails,
   recentPackages,
   onBack,
+  onGameBack,
+  onGameNext,
   onOpenPackage,
   onOpenRecentPackage,
+  onReturnToGames,
   onStartGame,
 }: HostViewProps) {
+  const playing = game !== null || finished;
   return (
-    <main className="editor-app host-app">
-      <header className="app-header">
+    <main
+      id="schdk-host-app"
+      className={`editor-app host-app${playing ? ' is-playing' : ''}`}
+    >
+      <header className="app-header" hidden={playing}>
         <div className="brand">
           <AppIcon />
           <div>
@@ -49,19 +69,22 @@ export function HostView({
         </div>
       </header>
       <PackageStart
-        hidden={packageDetails !== null}
+        hidden={packageDetails !== null || playing}
         recentPackages={recentPackages}
         onOpenPackage={onOpenPackage}
         onOpenRecentPackage={onOpenRecentPackage}
       />
-      {packageDetails && (
+      {packageDetails && !playing && (
         <GamePackageDetails
           details={packageDetails}
-          gameStarted={gameStarted}
           onBack={onBack}
           onStart={onStartGame}
         />
       )}
+      {game && (
+        <GameWizard game={game} onBack={onGameBack} onNext={onGameNext} />
+      )}
+      {finished && <GameFinished onReturn={onReturnToGames} />}
       {message && <StatusMessage>{message}</StatusMessage>}
     </main>
   );

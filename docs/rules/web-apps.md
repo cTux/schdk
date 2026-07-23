@@ -18,6 +18,20 @@
   gameplay. Limit it to the package title, filename, aggregate counts, and
   start/back actions; do not render question, answer, comment, or host-note
   text there.
+- Starting a game requests fullscreen on the host root so the unified shell is
+  excluded. Keep a fixed full-viewport fallback when fullscreen is denied.
+- Advance each question through intro, optional handout, question, timer,
+  optional answer comment, and answer stages. Revealed question content remains
+  visible until the next question begins.
+- Lock mouse and keyboard navigation through every exit/enter animation.
+  `Space`, `PageDown`, and `ArrowRight` advance; `Backspace`, `PageUp`, and
+  `ArrowLeft` go back.
+- The question timer runs for 60 wall-clock seconds. Play the main signal on
+  start and expiry and the pre-alarm when 10 seconds remain.
+- Keep game signal volume in the shell's Game options, persist it in
+  localStorage, and default it to 40%.
+- After the final answer, show `Дякуємо за гру!`; returning to games exits
+  fullscreen and restores the package chooser and recents.
 - Keep HTML language metadata and user-visible copy Ukrainian. Use the shared
   owl asset from `@schdk/ui` as the favicon.
 - Keep Vite `base` relative so built apps work from Electron `file:` URLs.

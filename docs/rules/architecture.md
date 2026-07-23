@@ -10,9 +10,9 @@
 - `@schdk/editor-web-app` owns editor state, browser persistence, save
   orchestration, and the optional desktop bridge. It renders `@schdk/ui`
   views rather than defining an app-local visual layer.
-- `@schdk/host-web-app` owns host behavior. It currently owns the package-open
-  start screen and recent-package storage; do not claim that the gameplay flow
-  is implemented until it is.
+- `@schdk/host-web-app` owns host behavior: package opening and recents,
+  spoiler-free pre-game details, fullscreen gameplay state, keyboard
+  navigation, timer/audio orchestration, and completion.
 - `@schdk/all-web-app` owns shell navigation and lazily loads the host and
   editor React application exports.
 - Each `*-desktop-app` owns only its Electron main/preload code and packaging

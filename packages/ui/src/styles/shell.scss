@@ -186,7 +186,8 @@ button {
   font-size: 1rem;
 }
 
-.option-toggle {
+.option-toggle,
+.option-slider {
   display: flex;
   align-items: center;
   gap: 24px;
@@ -197,16 +198,20 @@ button {
   cursor: pointer;
 }
 
-.option-toggle > span {
+.option-toggle > span,
+.option-slider > span {
   flex: 1 1 auto;
 }
 
 .option-toggle strong,
-.option-toggle small {
+.option-toggle small,
+.option-slider strong,
+.option-slider small {
   display: block;
 }
 
 .option-toggle small,
+.option-slider small,
 .options-empty {
   margin-top: 4px;
   color: $muted;
@@ -217,6 +222,19 @@ button {
   width: 18px;
   height: 18px;
   accent-color: $accent;
+}
+
+.option-slider input {
+  width: min(220px, 32vw);
+  accent-color: $accent;
+  cursor: pointer;
+}
+
+.option-slider output {
+  min-width: 3ch;
+  color: $text;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
 }
 
 .home header {
@@ -374,6 +392,19 @@ button:focus-visible {
   .options-page {
     width: min(100% - 28px, 560px);
     padding-top: 36px;
+  }
+
+  .option-slider {
+    flex-wrap: wrap;
+  }
+
+  .option-slider > span {
+    flex-basis: 100%;
+  }
+
+  .option-slider input {
+    width: auto;
+    flex: 1 1 auto;
   }
 
   .arrow {

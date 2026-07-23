@@ -1,9 +1,12 @@
 import {
   DEFAULT_EDITOR_TEXT_OPTIONS,
+  DEFAULT_GAME_OPTIONS,
   type EditorTextOptions,
+  type GameOptions,
 } from '@schdk/ui/options';
 
 const OPTIONS_KEY = 'schdk:editor-text-options';
+const GAME_OPTIONS_KEY = 'schdk:game-options';
 
 type OptionsStorage = Pick<Storage, 'getItem' | 'setItem'>;
 
@@ -31,6 +34,32 @@ export function saveEditorTextOptions(
 ) {
   try {
     storage.setItem(OPTIONS_KEY, JSON.stringify(options));
+  } catch {
+    // Preferences are optional and must not prevent the shell from loading.
+  }
+}
+
+export function loadGameOptions(storage: OptionsStorage): GameOptions {
+  try {
+    const value = JSON.parse(
+      storage.getItem(GAME_OPTIONS_KEY) ?? 'null',
+    ) as Partial<GameOptions> | null;
+    if (
+      typeof value?.soundVolume !== 'number' ||
+      value.soundVolume < 0 ||
+      value.soundVolume > 1
+    ) {
+      return DEFAULT_GAME_OPTIONS;
+    }
+    return { soundVolume: value.soundVolume };
+  } catch {
+    return DEFAULT_GAME_OPTIONS;
+  }
+}
+
+export function saveGameOptions(storage: OptionsStorage, options: GameOptions) {
+  try {
+    storage.setItem(GAME_OPTIONS_KEY, JSON.stringify(options));
   } catch {
     // Preferences are optional and must not prevent the shell from loading.
   }

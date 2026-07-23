@@ -1,11 +1,13 @@
 import { getDeepLinkedPackageName } from '@schdk/editor-web-app/deep-link';
-import type { EditorTextOptions } from '@schdk/ui/options';
+import type { EditorTextOptions, GameOptions } from '@schdk/ui/options';
 import { ShellView, type ShellViewName } from '@schdk/ui/shell';
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { loadDesktopShellView, saveDesktopShellView } from './desktop-session';
 import {
   loadEditorTextOptions,
+  loadGameOptions,
   saveEditorTextOptions,
+  saveGameOptions,
 } from './options-storage';
 
 const HostApp = lazy(() =>
@@ -31,6 +33,9 @@ export function App() {
   const [editorOptions, setEditorOptions] = useState<EditorTextOptions>(() =>
     loadEditorTextOptions(localStorage),
   );
+  const [gameOptions, setGameOptions] = useState<GameOptions>(() =>
+    loadGameOptions(localStorage),
+  );
 
   useEffect(() => {
     if (isDesktop) saveDesktopShellView(localStorage, sessionScope, view);
@@ -39,6 +44,10 @@ export function App() {
   useEffect(() => {
     saveEditorTextOptions(localStorage, editorOptions);
   }, [editorOptions]);
+
+  useEffect(() => {
+    saveGameOptions(localStorage, gameOptions);
+  }, [gameOptions]);
 
   function showView(nextView: ShellViewName) {
     if (nextView === 'host' || nextView === 'editor') {
@@ -56,13 +65,15 @@ export function App() {
       }
       hostApp={
         <Suspense fallback={null}>
-          <HostApp />
+          <HostApp soundVolume={gameOptions.soundVolume} />
         </Suspense>
       }
       loadedApps={loadedApps}
       editorOptions={editorOptions}
+      gameOptions={gameOptions}
       view={view}
       onEditorOptionsChange={setEditorOptions}
+      onGameOptionsChange={setGameOptions}
       onShowView={showView}
     />
   );

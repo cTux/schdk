@@ -1,4 +1,8 @@
-import { parseGamePackage, validateGamePackage } from '@schdk/common';
+import {
+  parseGamePackage,
+  validateGamePackage,
+  type GamePackage,
+} from '@schdk/common';
 import {
   HostView,
   type HostPackageDetails,
@@ -11,14 +15,24 @@ import {
   rememberWebPackage,
 } from './recent-packages';
 import type {} from './electron';
+import { setGameAudioVolume, unlockGameAudio } from './game-audio';
 import { summarizeGamePackage } from './game-package-summary';
+import { useGameWizard } from './use-game-wizard';
 
-export function App() {
-  const [gameStarted, setGameStarted] = useState(false);
+interface AppProps {
+  soundVolume?: number;
+}
+
+export function App({ soundVolume = 0.4 }: AppProps) {
+  const [gameActive, setGameActive] = useState(false);
   const [message, setMessage] = useState('');
   const [packageDetails, setPackageDetails] =
     useState<HostPackageDetails | null>(null);
   const [recentPackages, setRecentPackages] = useState<RecentPackageItem[]>([]);
+  const [selectedPackage, setSelectedPackage] = useState<GamePackage | null>(
+    null,
+  );
+  const wizard = useGameWizard(selectedPackage, gameActive);
 
   const refreshRecentPackages = useCallback(async () => {
     try {
@@ -38,6 +52,10 @@ export function App() {
     void refreshRecentPackages();
   }, [refreshRecentPackages]);
 
+  useEffect(() => {
+    setGameAudioVolume(soundVolume);
+  }, [soundVolume]);
+
   async function acceptPackage(
     content: Uint8Array,
     fileName: string,
@@ -49,7 +67,8 @@ export function App() {
     if (!window.desktop) {
       await rememberWebPackage(fileName, gamePackage.title, content);
     }
-    setGameStarted(false);
+    setGameActive(false);
+    setSelectedPackage(gamePackage);
     setPackageDetails({
       fileName,
       ...summarizeGamePackage(gamePackage),
@@ -90,20 +109,64 @@ export function App() {
     }
   }
 
+  function startGame() {
+    unlockGameAudio();
+    const host = document.getElementById('schdk-host-app');
+    if (host && !document.fullscreenElement) {
+      void host.requestFullscreen().catch(() => {
+        // The fixed game surface remains usable when fullscreen is denied.
+      });
+    }
+    setGameActive(true);
+  }
+
+  function returnToGames() {
+    setGameActive(false);
+    setSelectedPackage(null);
+    setPackageDetails(null);
+    setMessage('');
+    if (document.fullscreenElement) {
+      void document.exitFullscreen().catch(() => {
+        // Leaving the game must not depend on fullscreen support.
+      });
+    }
+  }
+
+  const game =
+    gameActive && !wizard.finished && selectedPackage && wizard.question
+      ? {
+          title: selectedPackage.title,
+          question: wizard.question,
+          questionNumber: wizard.position.questionIndex + 1,
+          questionCount: selectedPackage.questions.length,
+          currentStage: wizard.position.stage,
+          visibleStages: wizard.visibleStages,
+          remainingSeconds: wizard.remainingSeconds,
+          transition: wizard.transition,
+          controlsDisabled: wizard.controlsDisabled,
+          canGoBack: wizard.canGoBack,
+        }
+      : null;
+
   return (
     <HostView
-      gameStarted={gameStarted}
+      finished={gameActive && wizard.finished}
+      game={game}
       message={message}
       packageDetails={packageDetails}
       recentPackages={recentPackages}
       onBack={() => {
-        setGameStarted(false);
+        setGameActive(false);
+        setSelectedPackage(null);
         setPackageDetails(null);
         setMessage('');
       }}
+      onGameBack={wizard.goBack}
+      onGameNext={wizard.goNext}
       onOpenPackage={(file) => void openPackage(file)}
       onOpenRecentPackage={(recent) => void openRecentPackage(recent)}
-      onStartGame={() => setGameStarted(true)}
+      onReturnToGames={returnToGames}
+      onStartGame={startGame}
     />
   );
 }

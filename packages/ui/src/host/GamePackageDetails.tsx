@@ -3,14 +3,12 @@ import type { HostPackageDetails } from './HostView';
 
 interface GamePackageDetailsProps {
   details: HostPackageDetails;
-  gameStarted: boolean;
   onBack(): void;
   onStart(): void;
 }
 
 export function GamePackageDetails({
   details,
-  gameStarted,
   onBack,
   onStart,
 }: GamePackageDetailsProps) {
@@ -42,13 +40,8 @@ export function GamePackageDetails({
         <Button type="button" onClick={onBack}>
           Повернутися назад
         </Button>
-        <Button
-          type="button"
-          variant="primary"
-          disabled={gameStarted}
-          onClick={onStart}
-        >
-          {gameStarted ? 'Гру розпочато' : 'Почати гру'}
+        <Button type="button" variant="primary" onClick={onStart}>
+          Почати гру
         </Button>
       </div>
     </section>

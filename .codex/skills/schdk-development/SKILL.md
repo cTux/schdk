@@ -21,6 +21,11 @@ description: Implement, debug, refactor, review, or document changes anywhere in
 - Show only spoiler-free aggregate package details before gameplay.
 - Keep browser host recents in IndexedDB and desktop host recents behind a
   read-only Electron bridge.
+- Keep the question wizard ordered as intro, optional handout, question,
+  60-second timer, optional answer comment, and answer. Preserve cumulative
+  reveals, animation locks, keyboard navigation, fullscreen, audio thresholds,
+  the persisted game-volume option with a 40% default, and the final
+  return-to-games screen.
 
 ## Route Specialized Work
 

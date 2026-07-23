@@ -1,18 +1,22 @@
 import { useState } from 'react';
 import { OptionToggle } from './OptionToggle';
 import { OptionsTabs, type OptionsTab } from './OptionsTabs';
-import type { EditorTextOptions } from './types';
+import type { EditorTextOptions, GameOptions } from './types';
 
 interface OptionsPageProps {
   editor: EditorTextOptions;
+  game: GameOptions;
   hidden: boolean;
   onEditorChange(options: EditorTextOptions): void;
+  onGameChange(options: GameOptions): void;
 }
 
 export function OptionsPage({
   editor,
+  game,
   hidden,
   onEditorChange,
+  onGameChange,
 }: OptionsPageProps) {
   const [tab, setTab] = useState<OptionsTab>('editor');
 
@@ -64,7 +68,24 @@ export function OptionsPage({
         hidden={tab !== 'game'}
       >
         <h2>Гра</h2>
-        <p className="options-empty">Налаштувань гри поки немає.</p>
+        <label className="option-slider">
+          <span>
+            <strong>Гучність звукових сигналів</strong>
+            <small>Головний сигнал і попередження таймера.</small>
+          </span>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={Math.round(game.soundVolume * 100)}
+            onChange={(event) =>
+              onGameChange({
+                soundVolume: Number(event.target.value) / 100,
+              })
+            }
+          />
+          <output>{Math.round(game.soundVolume * 100)}%</output>
+        </label>
       </section>
     </div>
   );
