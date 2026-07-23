@@ -176,6 +176,7 @@
 
   .answer-slot {
     align-items: flex-start;
+    justify-content: flex-end;
   }
 
   .game-handout {
@@ -239,7 +240,11 @@
 
     width: min(100%, 620px);
     border-radius: 12px;
-    background: rgba($surface-raised, 0.88);
+    background: linear-gradient(
+      to right,
+      rgba($surface-raised, 0.88),
+      rgba($surface-raised, 0)
+    );
     padding: 16px 18px;
     color: #d8dce3;
     font-size: clamp(1rem, 1.7vw, 1.5rem);
@@ -251,10 +256,18 @@
     --enter-y: 24px;
 
     display: flex;
-    width: 100%;
-    align-items: flex-start;
+    width: min(100%, 620px);
+    align-items: flex-end;
     flex-direction: column;
+    border-radius: 12px;
+    background: linear-gradient(
+      to left,
+      rgba($surface-raised, 0.88),
+      rgba($surface-raised, 0)
+    );
     gap: 7px;
+    padding: 16px 18px;
+    text-align: right;
   }
 
   .game-answer > strong {
