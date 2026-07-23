@@ -3,7 +3,7 @@ import { Button } from '../atoms/Button';
 
 interface PackageDropZoneProps {
   hidden: boolean;
-  onCreate(): void;
+  onCreate?(): void;
   onOpen(file: File): void;
 }
 
@@ -40,10 +40,14 @@ export function PackageDropZone({
           <Button type="button" onClick={() => openFileInput.current?.click()}>
             Вибрати файл
           </Button>
-          <span>або</span>
-          <Button variant="primary" type="button" onClick={onCreate}>
-            Новий пакет
-          </Button>
+          {onCreate && (
+            <>
+              <span>або</span>
+              <Button variant="primary" type="button" onClick={onCreate}>
+                Новий пакет
+              </Button>
+            </>
+          )}
         </div>
       </section>
       <input

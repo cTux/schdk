@@ -1,38 +1,83 @@
 @use 'tokens' as *;
 
-:root {
-  color: $text;
-  background: $background;
-  font-family:
-    Inter,
-    'Segoe UI',
-    system-ui,
-    -apple-system,
-    sans-serif;
-  color-scheme: dark;
-  font-synthesis: none;
-}
-
-body {
-  min-width: 320px;
-  min-height: 100vh;
-  margin: 0;
-  background: $background;
-}
-
 .host-app {
-  max-width: 48rem;
-  margin: 0 auto;
-  padding: 4rem 2rem;
-
-  header {
+  .game-package-details {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    flex-direction: column;
+    border: 1px solid $border;
+    border-radius: 16px;
+    gap: 24px;
+    background: rgba($surface, 0.82);
+    padding: clamp(24px, 5vw, 52px);
+    text-align: center;
   }
 
-  .app-icon {
-    width: 4rem;
-    height: 4rem;
+  .game-package-heading {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .game-package-heading h2 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+  }
+
+  .game-package-heading > p:last-child,
+  .game-package-note {
+    color: $muted;
+  }
+
+  .game-package-stats {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    width: min(680px, 100%);
+    margin: 0;
+  }
+
+  .game-package-stats div {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 0;
+    flex-direction: column-reverse;
+    border: 1px solid $border;
+    border-radius: 12px;
+    gap: 6px;
+    background: $surface-raised;
+    padding: 16px;
+  }
+
+  .game-package-stats dt {
+    color: $muted;
+    font-size: 0.78rem;
+  }
+
+  .game-package-stats dd {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 750;
+  }
+
+  .game-package-note {
+    font-size: 0.85rem;
+  }
+
+  .game-package-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  @media (width <= 520px) {
+    .game-package-stats,
+    .game-package-actions {
+      flex-direction: column;
+    }
+
+    .game-package-actions {
+      width: 100%;
+    }
   }
 }

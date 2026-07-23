@@ -14,6 +14,9 @@ description: Verify SCHDK changes and produce local build artifacts. Use for pre
 5. Run root `pnpm build` only when packaged executables are closed; otherwise report the lock and use targeted builds.
 6. Confirm `git diff --check` and ensure generated output remains ignored before committing.
 
+On Windows icon-tool exit `3221225477` during parallel root packaging, rerun
+the failed desktop package build alone, then run `node scripts/collect-dist.mjs`.
+
 ## Full Checks
 
 ```powershell

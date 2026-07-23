@@ -5,7 +5,7 @@ import type { RecentPackageItem } from './types';
 interface PackageStartProps {
   hidden: boolean;
   recentPackages: RecentPackageItem[];
-  onCreatePackage(): void;
+  onCreatePackage?(): void;
   onOpenPackage(file: File): void;
   onOpenRecentPackage(recent: RecentPackageItem): void;
 }

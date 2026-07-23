@@ -55,6 +55,9 @@ own state, persistence, routing, and platform integration.
   drag-to-pan while zoomed.
 - Keep the file-open drop zone compact: at most 250 px tall, shrinking further
   on short viewports. Keep recent packages below it, never inside it.
+- Keep the host pre-game summary spoiler-free. Show only the package title,
+  filename, aggregate round/question/handout counts, and start/back actions;
+  never show question, answer, comment, or host-note text before the game.
 - Show the package title first and the filename second in each recent-package
   item. Fall back to the filename alone for legacy entries without title
   metadata. Show a `Готовий` tag beside the title only when shared package

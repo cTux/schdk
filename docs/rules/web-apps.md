@@ -11,6 +11,13 @@
 - File-open controls must always invoke a visible native chooser. Use the
   renderer's hidden `<input type="file" accept=".schdk">`, clear its value
   after handling, and also support drag-and-drop.
+- Reuse the shared package start view for editor and host. The host omits
+  package creation, accepts only structurally valid and complete packages, and
+  keeps up to 20 browser recent copies in its own IndexedDB database.
+- After a host package opens, show a spoiler-free pre-game summary before
+  gameplay. Limit it to the package title, filename, aggregate counts, and
+  start/back actions; do not render question, answer, comment, or host-note
+  text there.
 - Keep HTML language metadata and user-visible copy Ukrainian. Use the shared
   owl asset from `@schdk/ui` as the favicon.
 - Keep Vite `base` relative so built apps work from Electron `file:` URLs.

@@ -242,6 +242,9 @@ importers:
 
   packages/host-web-app:
     dependencies:
+      '@schdk/common':
+        specifier: workspace:*
+        version: link:../common
       '@schdk/ui':
         specifier: workspace:*
         version: link:../ui
