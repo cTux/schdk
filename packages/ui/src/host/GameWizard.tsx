@@ -37,6 +37,7 @@ function stageMotionClass(
 export function GameWizard({ game, onBack, onNext }: GameWizardProps) {
   const visible = new Set(game.visibleStages);
   const isIntro = game.currentStage === 'intro';
+  const isHandoutFocus = game.currentStage === 'handout';
   const questionChangingClass = game.transition.questionChanging
     ? ` is-${game.transition.phase}-${game.transition.direction}`
     : '';
@@ -44,12 +45,13 @@ export function GameWizard({ game, onBack, onNext }: GameWizardProps) {
   return (
     <section className="game-wizard" aria-label="Проведення гри">
       <div className="game-progress" aria-label="Прогрес гри">
-        <strong>{game.title}</strong>
         <span>
           {game.questionNumber} / {game.questionCount}
         </span>
       </div>
-      <div className="game-wizard-canvas">
+      <div
+        className={`game-wizard-canvas${isHandoutFocus ? ' is-handout-focus' : ''}`}
+      >
         {isIntro ? (
           <div
             className={`question-intro${stageMotionClass(
@@ -128,14 +130,14 @@ export function GameWizard({ game, onBack, onNext }: GameWizardProps) {
                       game.transition,
                     )}`}
                   >
-                    <span>Відповідь</span>
-                    <strong>{game.question.answer}</strong>
                     {game.question.alternativeAnswers.length > 0 && (
                       <div className="game-alternative-answers">
                         <span>Також зараховується:</span>
                         <p>{game.question.alternativeAnswers.join(' · ')}</p>
                       </div>
                     )}
+                    <span>Відповідь</span>
+                    <strong>{game.question.answer}</strong>
                   </div>
                 )}
               </div>
@@ -146,20 +148,21 @@ export function GameWizard({ game, onBack, onNext }: GameWizardProps) {
       <nav className="game-controls" aria-label="Керування станами питання">
         <Button
           type="button"
+          variant="ghost"
+          aria-label="Попередній стан"
           disabled={game.controlsDisabled || !game.canGoBack}
           onClick={onBack}
         >
           <FontAwesomeIcon icon={faArrowLeft} aria-hidden="true" />
-          <span>Попередній стан</span>
           <kbd>← · PgUp · Backspace</kbd>
         </Button>
         <Button
           type="button"
-          variant="primary"
+          variant="ghost"
+          aria-label="Наступний стан"
           disabled={game.controlsDisabled}
           onClick={onNext}
         >
-          <span>Наступний стан</span>
           <kbd>Space · PgDn · →</kbd>
           <FontAwesomeIcon icon={faArrowRight} aria-hidden="true" />
         </Button>

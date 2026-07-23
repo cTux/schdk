@@ -59,14 +59,14 @@ own state, persistence, routing, and platform integration.
   filename, aggregate round/question/handout counts, and start/back actions;
   never show question, answer, comment, or host-note text before the game.
 - Keep gameplay projector-first and fullscreen: animated centered question
-  intro; handout/question in the upper row; timer/comment and answer in the
-  lower row; fixed previous/next controls at the bottom.
+  intro; full-screen handout reveal that shrinks to the upper right; gradient
+  question above the timer; comment and answer aligned along the bottom.
 - Preserve cumulative question stages and disable controls during every
   transition. Show the configured hotkeys inside the controls.
 - Put the game signal volume slider in the Game options tab and show its
   current percentage.
 - Give handouts a white border and soft black shadow. Render the main answer
-  prominently with smaller alternative answers below it.
+  prominently with smaller alternative answers above it.
 - Show the package title first and the filename second in each recent-package
   item. Fall back to the filename alone for legacy entries without title
   metadata. Show a `Готовий` tag beside the title only when shared package

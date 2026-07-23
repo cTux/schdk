@@ -15,7 +15,6 @@ export interface HostGameTransition {
 }
 
 export interface HostGameView {
-  title: string;
   question: GameQuestion;
   questionNumber: number;
   questionCount: number;

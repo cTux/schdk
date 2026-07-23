@@ -101,17 +101,10 @@
     left: 24px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     color: rgba($text, 0.72);
     font-size: 0.82rem;
     letter-spacing: 0.04em;
-  }
-
-  .game-progress strong {
-    overflow: hidden;
-    max-width: 70%;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   .game-wizard-canvas {
@@ -149,6 +142,14 @@
     gap: clamp(24px, 5vw, 72px);
   }
 
+  .question-board-top {
+    flex-direction: row-reverse;
+  }
+
+  .question-board-bottom {
+    align-items: flex-end;
+  }
+
   .handout-slot,
   .question-slot,
   .question-bottom-left,
@@ -159,7 +160,7 @@
   }
 
   .handout-slot {
-    align-items: flex-end;
+    align-items: flex-start;
     justify-content: flex-end;
   }
 
@@ -170,33 +171,73 @@
   .question-bottom-left {
     align-items: flex-end;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: flex-end;
     gap: clamp(14px, 2vh, 24px);
   }
 
   .answer-slot {
-    align-items: flex-start;
+    align-items: flex-end;
     justify-content: flex-end;
   }
 
   .game-handout {
-    --enter-x: -44px;
+    --enter-x: 44px;
     --enter-y: -24px;
 
     display: block;
     max-width: 100%;
-    max-height: min(38dvh, 420px);
+    max-height: min(30dvh, 320px);
     border: 6px solid #fff;
     border-radius: 4px;
     object-fit: contain;
     box-shadow: 0 24px 54px rgba(#000, 0.58);
+    transition:
+      max-width 680ms cubic-bezier(0.12, 0.82, 0.18, 1),
+      max-height 680ms cubic-bezier(0.12, 0.82, 0.18, 1);
+  }
+
+  .game-wizard-canvas.is-handout-focus {
+    padding: 32px;
+  }
+
+  .is-handout-focus .question-board {
+    width: 100%;
+    max-width: none;
+  }
+
+  .is-handout-focus .question-board-top,
+  .is-handout-focus .handout-slot {
+    flex: 1 1 auto;
+  }
+
+  .is-handout-focus .handout-slot {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .is-handout-focus .question-slot,
+  .is-handout-focus .question-board-bottom {
+    display: none;
+  }
+
+  .is-handout-focus .game-handout {
+    width: min(100%, 1400px);
+    max-width: 100%;
+    max-height: calc(100dvh - 64px);
   }
 
   .game-question {
-    --enter-x: 44px;
+    --enter-x: -44px;
     --enter-y: -24px;
 
-    width: 100%;
+    width: min(100%, 620px);
+    border-radius: 12px;
+    background: linear-gradient(
+      to right,
+      rgba($surface-raised, 0.88),
+      rgba($surface-raised, 0)
+    );
+    padding: 16px 18px;
     color: $text;
     font-size: clamp(1.6rem, 3.2vw, 3.4rem);
     font-weight: 650;
@@ -283,7 +324,7 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
-    margin-top: 8px;
+    margin-bottom: 8px;
   }
 
   .game-alternative-answers p {
@@ -299,33 +340,41 @@
     left: 0;
     display: flex;
     justify-content: center;
-    gap: 12px;
-    background: linear-gradient(transparent, rgba(#090b0f, 0.96) 38%);
-    padding: 30px 24px 20px;
+    gap: 8px;
+    padding: 12px;
+    pointer-events: none;
   }
 
   .game-controls button {
     display: flex;
-    min-width: min(360px, 42vw);
+    min-width: 0;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 7px;
+    border-color: rgba($border-strong, 0.28);
+    background: rgba($surface-raised, 0.24);
+    padding: 7px 10px;
+    color: rgba($text, 0.48);
+    opacity: 0.5;
+    pointer-events: auto;
+  }
+
+  .game-controls button:hover,
+  .game-controls button:focus-visible {
+    background: rgba($surface-raised, 0.72);
+    color: $text;
+    opacity: 1;
   }
 
   .game-controls kbd {
-    border: 1px solid rgba($border-strong, 0.7);
+    border: 0;
     border-radius: 5px;
-    background: rgba(#000, 0.18);
-    padding: 3px 6px;
-    color: rgba($text, 0.68);
+    background: transparent;
+    padding: 0;
+    color: inherit;
     font-family: inherit;
     font-size: 0.68rem;
     font-weight: 500;
-  }
-
-  .game-controls .primary kbd {
-    border-color: rgba(#1a1308, 0.3);
-    color: rgba(#1a1308, 0.76);
   }
 
   .game-finished {
@@ -410,7 +459,7 @@
     .game-wizard-canvas {
       overflow: auto;
       align-items: flex-start;
-      padding: 48px 16px 128px;
+      padding: 48px 16px 80px;
     }
 
     .question-board {
@@ -438,12 +487,11 @@
 
     .game-controls {
       gap: 8px;
-      padding: 28px 10px 10px;
+      padding: 8px;
     }
 
     .game-controls button {
       min-width: 0;
-      flex: 1 1 0;
       padding-inline: 10px;
     }
 

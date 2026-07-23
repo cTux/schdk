@@ -135,7 +135,6 @@ export function App({ soundVolume = 0.4 }: AppProps) {
   const game =
     gameActive && !wizard.finished && selectedPackage && wizard.question
       ? {
-          title: selectedPackage.title,
           question: wizard.question,
           questionNumber: wizard.position.questionIndex + 1,
           questionCount: selectedPackage.questions.length,
