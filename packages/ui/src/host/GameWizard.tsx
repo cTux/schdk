@@ -6,6 +6,7 @@ import {
   GameAlternativeAnswer,
   GameControls,
   GameHandout,
+  GameLogo,
   GameProgress,
   GameQuestion,
   GameQuestionIntro,
@@ -39,7 +40,12 @@ function GameLayoutItem({ children, id, layout }: GameLayoutItemProps) {
       } as CSSProperties)
     : undefined;
   return (
-    <div className={`game-layout-item game-layout-${id}`} style={style}>
+    <div
+      className={`game-layout-item game-layout-${id}${
+        position ? ' has-position' : ''
+      }`}
+      style={style}
+    >
       {children}
     </div>
   );
@@ -75,6 +81,9 @@ export function GameWizard({ game, layout, onBack, onNext }: GameWizardProps) {
       className={`game-wizard${customLayoutClass}`}
       aria-label="Проведення гри"
     >
+      <GameLayoutItem id="logo" layout={layout}>
+        <GameLogo />
+      </GameLayoutItem>
       <GameLayoutItem id="progress" layout={layout}>
         <GameProgress
           questionNumber={game.questionNumber}

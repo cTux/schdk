@@ -231,6 +231,11 @@ button {
   height: 22%;
 }
 
+.visual-layout-logo {
+  width: max-content;
+  max-width: none;
+}
+
 .visual-layout-question,
 .visual-layout-answer-comment,
 .visual-layout-alternative-answer,
@@ -265,9 +270,21 @@ button {
   pointer-events: none;
 }
 
+.visual-editor .visual-layout-logo .game-logo {
+  position: static;
+}
+
 .visual-layout-item.is-selected {
   z-index: 2;
   border-color: $saving;
+}
+
+.visual-layout-item.visual-layout-alternative-answer {
+  z-index: 3;
+}
+
+.visual-layout-item.visual-layout-alternative-answer.is-selected {
+  z-index: 4;
 }
 
 .options-page h1 {

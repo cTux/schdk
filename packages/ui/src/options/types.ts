@@ -5,6 +5,7 @@ export interface EditorTextOptions {
 }
 
 export const GAME_LAYOUT_ELEMENT_IDS = [
+  'logo',
   'intro',
   'handout',
   'question',
@@ -42,6 +43,7 @@ export const DEFAULT_GAME_OPTIONS: GameOptions = {
 };
 
 export const DEFAULT_GAME_LAYOUT: GameLayout = {
+  logo: { x: 5, y: 6 },
   intro: { x: 50, y: 50 },
   handout: { x: 76, y: 31 },
   question: { x: 24, y: 36 },

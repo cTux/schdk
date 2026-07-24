@@ -55,9 +55,12 @@ describe('game options', () => {
     ).toEqual(DEFAULT_GAME_OPTIONS);
   });
 
-  it('adds a separate alternative-answer position to legacy layouts', () => {
-    const { ['alternative-answer']: _omitted, ...legacyLayout } =
-      DEFAULT_GAME_LAYOUT;
+  it('adds new element positions to legacy layouts', () => {
+    const {
+      logo: _logo,
+      ['alternative-answer']: _alternativeAnswer,
+      ...legacyLayout
+    } = DEFAULT_GAME_LAYOUT;
     expect(
       loadGameOptions(
         createStorage(
@@ -66,9 +69,10 @@ describe('game options', () => {
       ).layout,
     ).toEqual({
       ...legacyLayout,
+      logo: DEFAULT_GAME_LAYOUT.logo,
       'alternative-answer': {
         x: legacyLayout.answer.x,
-        y: legacyLayout.answer.y - 10,
+        y: legacyLayout.answer.y - 18,
       },
     });
   });

@@ -97,6 +97,15 @@
     display: contents;
   }
 
+  .game-logo {
+    position: absolute;
+    z-index: 3;
+    top: 18px;
+    left: 24px;
+    width: clamp(44px, 5vw, 72px);
+    height: auto;
+  }
+
   .game-progress {
     position: absolute;
     z-index: 3;
@@ -549,6 +558,19 @@
     left: var(--game-layout-x);
     display: block;
     transform: translate(-50%, -50%);
+  }
+
+  .game-layout-logo.has-position {
+    position: absolute;
+    z-index: 3;
+    top: var(--game-layout-y);
+    left: var(--game-layout-x);
+    display: block;
+    transform: translate(-50%, -50%);
+  }
+
+  .game-layout-logo.has-position .game-logo {
+    position: static;
   }
 
   .has-custom-layout .game-layout-handout {

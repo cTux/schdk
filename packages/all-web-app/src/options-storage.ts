@@ -1,5 +1,6 @@
 import {
   DEFAULT_EDITOR_TEXT_OPTIONS,
+  DEFAULT_GAME_LAYOUT,
   DEFAULT_GAME_OPTIONS,
   GAME_LAYOUT_ELEMENT_IDS,
   type EditorTextOptions,
@@ -70,13 +71,16 @@ function normalizeGameLayout(value: unknown): GameLayout | null {
   if (value === undefined || value === null) return null;
   if (!value || typeof value !== 'object') return null;
   const positions = { ...(value as Record<string, unknown>) };
+  if (positions.logo === undefined) {
+    positions.logo = DEFAULT_GAME_LAYOUT.logo;
+  }
   if (
     positions['alternative-answer'] === undefined &&
     isGameLayoutPosition(positions.answer)
   ) {
     positions['alternative-answer'] = {
       x: positions.answer.x,
-      y: Math.max(0, positions.answer.y - 10),
+      y: Math.max(0, positions.answer.y - 18),
     };
   }
   return isGameLayout(positions) ? positions : null;

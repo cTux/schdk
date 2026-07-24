@@ -12,6 +12,7 @@ import {
   GameAlternativeAnswer,
   GameControls,
   GameHandout,
+  GameLogo,
   GameProgress,
   GameQuestion,
   GameQuestionIntro,
@@ -27,6 +28,7 @@ import {
 import '../styles/host.scss';
 
 const LABELS: Record<GameLayoutElementId, string> = {
+  logo: 'Лого гри',
   intro: 'Питання №5',
   handout: 'Роздатка',
   question: 'Текст питання',
@@ -39,6 +41,7 @@ const LABELS: Record<GameLayoutElementId, string> = {
 };
 
 const PREVIEWS: Record<GameLayoutElementId, ReactNode> = {
+  logo: <GameLogo />,
   intro: <GameQuestionIntro questionNumber={5} />,
   handout: <GameHandout />,
   question: <GameQuestion>Текст питання</GameQuestion>,

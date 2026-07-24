@@ -75,7 +75,8 @@ own state, persistence, routing, and platform integration.
   and styles used by the host. Keep the answer and alternative answer as
   separate draggable layout elements. Put the 16:9 game container on a
   full-size light workspace; pan it with right-button drag and zoom it with the
-  mouse wheel.
+  mouse wheel. Keep the draggable game logo visible through every question
+  stage, with its default position in the upper-left corner.
 - Preserve cumulative question stages and disable controls during every
   transition. Show the configured hotkeys inside the controls.
 - Put the game signal volume slider in the Game options tab and show its

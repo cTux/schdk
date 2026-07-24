@@ -5,6 +5,10 @@ interface ElementProps {
 
 const classes = (base: string, className = '') => `${base}${className}`;
 
+export function GameLogo() {
+  return <AppIcon className="game-logo" />;
+}
+
 export function GameProgress({
   questionNumber,
   questionCount,
@@ -146,4 +150,5 @@ export function GameControls({
 }
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { AppIcon } from '../atoms/AppIcon';
 import { Button } from '../atoms/Button';
