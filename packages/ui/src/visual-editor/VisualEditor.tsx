@@ -1,4 +1,5 @@
 import {
+  useEffect,
   useRef,
   useState,
   type KeyboardEvent,
@@ -63,6 +64,11 @@ const PREVIEWS: Record<GameLayoutElementId, ReactNode> = {
 };
 
 const clamp = (value: number) => Math.min(100, Math.max(0, value));
+const clampZoom = (value: number) => Math.min(2.5, Math.max(0.5, value));
+
+export function getNextZoom(current: number, deltaY: number) {
+  return clampZoom(current * (deltaY < 0 ? 1.1 : 0.9));
+}
 
 export function getDraggedPosition(
   startPosition: GameLayoutPosition,
@@ -83,6 +89,12 @@ interface VisualEditorProps {
 
 export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
+  const workspaceRef = useRef<HTMLDivElement>(null);
+  const panRef = useRef<{
+    pointerId: number;
+    start: { x: number; y: number };
+    offset: { x: number; y: number };
+  } | null>(null);
   const dragRef = useRef<{
     id: GameLayoutElementId;
     pointerId: number;
@@ -90,8 +102,22 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
     startPosition: GameLayoutPosition;
   } | null>(null);
   const [dragging, setDragging] = useState<GameLayoutElementId | null>(null);
+  const [panning, setPanning] = useState(false);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
   const [selected, setSelected] = useState<GameLayoutElementId | null>(null);
   const positions = layout ?? DEFAULT_GAME_LAYOUT;
+
+  useEffect(() => {
+    const workspace = workspaceRef.current;
+    if (!workspace) return;
+    const handleWheel = (event: WheelEvent) => {
+      event.preventDefault();
+      setZoom((current) => getNextZoom(current, event.deltaY));
+    };
+    workspace.addEventListener('wheel', handleWheel, { passive: false });
+    return () => workspace.removeEventListener('wheel', handleWheel);
+  }, []);
 
   function pointerPosition(event: PointerEvent<HTMLDivElement>) {
     const bounds = canvasRef.current?.getBoundingClientRect();
@@ -146,7 +172,8 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
           <h1>Візуальний редактор</h1>
           <p>
             Перетягуйте елементи або пересувайте їх стрілками. Макет автоматично
-            застосовується під час гри.
+            застосовується під час гри. Права кнопка миші рухає екран, колесо
+            змінює масштаб.
           </p>
         </div>
         <Button
@@ -160,62 +187,102 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
       </header>
 
       <div
-        ref={canvasRef}
-        className="visual-editor-canvas host-app"
-        aria-label="Макет екрана гри"
+        ref={workspaceRef}
+        className={`visual-editor-workspace${panning ? ' is-panning' : ''}`}
+        onContextMenu={(event) => event.preventDefault()}
+        onPointerDown={(event) => {
+          if (event.button !== 2) return;
+          event.preventDefault();
+          event.currentTarget.setPointerCapture(event.pointerId);
+          panRef.current = {
+            pointerId: event.pointerId,
+            start: { x: event.clientX, y: event.clientY },
+            offset: pan,
+          };
+          setPanning(true);
+        }}
+        onPointerMove={(event) => {
+          const activePan = panRef.current;
+          if (!activePan || activePan.pointerId !== event.pointerId) return;
+          setPan({
+            x: activePan.offset.x + event.clientX - activePan.start.x,
+            y: activePan.offset.y + event.clientY - activePan.start.y,
+          });
+        }}
+        onPointerUp={(event) => {
+          if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+            event.currentTarget.releasePointerCapture(event.pointerId);
+          }
+          panRef.current = null;
+          setPanning(false);
+        }}
+        onPointerCancel={() => {
+          panRef.current = null;
+          setPanning(false);
+        }}
       >
-        {GAME_LAYOUT_ELEMENT_IDS.map((id) => (
-          <div
-            key={id}
-            role="button"
-            tabIndex={0}
-            className={`visual-layout-item visual-layout-${id}${
-              dragging === id ? ' is-dragging' : ''
-            }${selected === id ? ' is-selected' : ''}`}
-            style={{
-              left: `${positions[id].x}%`,
-              top: `${positions[id].y}%`,
-            }}
-            aria-label={`${LABELS[id]}. Перетягніть, щоб змінити позицію`}
-            aria-pressed={selected === id}
-            onClick={() => setSelected(id)}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
+        <div
+          ref={canvasRef}
+          className="visual-editor-canvas host-app"
+          style={{
+            transform: `translate(-50%, -50%) translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+          }}
+          aria-label="Макет екрана гри"
+        >
+          {GAME_LAYOUT_ELEMENT_IDS.map((id) => (
+            <div
+              key={id}
+              role="button"
+              tabIndex={0}
+              className={`visual-layout-item visual-layout-${id}${
+                dragging === id ? ' is-dragging' : ''
+              }${selected === id ? ' is-selected' : ''}`}
+              style={{
+                left: `${positions[id].x}%`,
+                top: `${positions[id].y}%`,
+              }}
+              aria-label={`${LABELS[id]}. Перетягніть, щоб змінити позицію`}
+              aria-pressed={selected === id}
+              onClick={() => setSelected(id)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  setSelected(id);
+                  return;
+                }
+                moveFromKeyboard(id, event);
+              }}
+              onPointerDown={(event) => {
+                if (event.button !== 0) return;
+                const startPointer = pointerPosition(event);
+                if (!startPointer) return;
+                event.currentTarget.setPointerCapture(event.pointerId);
+                dragRef.current = {
+                  id,
+                  pointerId: event.pointerId,
+                  startPointer,
+                  startPosition: positions[id],
+                };
+                setDragging(id);
                 setSelected(id);
-                return;
-              }
-              moveFromKeyboard(id, event);
-            }}
-            onPointerDown={(event) => {
-              const startPointer = pointerPosition(event);
-              if (!startPointer) return;
-              event.currentTarget.setPointerCapture(event.pointerId);
-              dragRef.current = {
-                id,
-                pointerId: event.pointerId,
-                startPointer,
-                startPosition: positions[id],
-              };
-              setDragging(id);
-              setSelected(id);
-            }}
-            onPointerMove={moveFromPointer}
-            onPointerUp={(event) => {
-              if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-                event.currentTarget.releasePointerCapture(event.pointerId);
-              }
-              dragRef.current = null;
-              setDragging(null);
-            }}
-            onPointerCancel={() => {
-              dragRef.current = null;
-              setDragging(null);
-            }}
-          >
-            {PREVIEWS[id]}
-          </div>
-        ))}
+              }}
+              onPointerMove={moveFromPointer}
+              onPointerUp={(event) => {
+                if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+                  event.currentTarget.releasePointerCapture(event.pointerId);
+                }
+                dragRef.current = null;
+                setDragging(null);
+              }}
+              onPointerCancel={() => {
+                dragRef.current = null;
+                setDragging(null);
+              }}
+            >
+              {PREVIEWS[id]}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

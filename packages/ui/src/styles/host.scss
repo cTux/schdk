@@ -102,10 +102,16 @@
     z-index: 3;
     top: 18px;
     right: 24px;
-    left: 24px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    border-radius: 12px;
+    background: linear-gradient(
+      to left,
+      rgba($surface-raised, 0.88),
+      rgba($surface-raised, 0)
+    );
+    padding: 10px 14px 10px 42px;
     color: rgba($text, 0.72);
     font-size: 0.82rem;
     letter-spacing: 0.04em;
@@ -197,9 +203,15 @@
     height: min(36dvh, 380px);
     max-width: 100%;
     max-height: min(36dvh, 380px);
-    border: 6px solid #fff;
-    border-radius: 4px;
+    border: 0;
+    border-radius: 12px;
+    background: linear-gradient(
+      to left,
+      rgba($surface-raised, 0.88),
+      rgba($surface-raised, 0)
+    );
     object-fit: contain;
+    object-position: right bottom;
     box-shadow: 0 24px 54px rgba(#000, 0.58);
     transition:
       width 680ms cubic-bezier(0.12, 0.82, 0.18, 1),
@@ -457,7 +469,6 @@
     .game-progress {
       top: 10px;
       right: 12px;
-      left: 12px;
     }
 
     .game-wizard-canvas {

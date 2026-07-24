@@ -157,17 +157,23 @@ button {
 }
 
 .visual-editor {
-  width: min(1180px, calc(100% - 48px));
-  margin: 0 auto;
-  padding: clamp(36px, 6vh, 64px) 0;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  flex-direction: column;
+  background: #fff;
+  color: #111827;
 }
 
 .visual-editor-header {
   display: flex;
+  flex: 0 0 auto;
   align-items: flex-end;
   justify-content: space-between;
   gap: 24px;
-  margin-bottom: 28px;
+  border-bottom: 1px solid #d8dce3;
+  padding: 20px 28px;
 }
 
 .visual-editor-header > div {
@@ -176,20 +182,35 @@ button {
 
 .visual-editor-header p:last-child {
   margin: 14px 0 0;
-  color: $muted;
+  color: #596273;
   line-height: 1.55;
 }
 
-.visual-editor-canvas {
+.visual-editor-workspace {
   position: relative;
   overflow: hidden;
-  width: 100%;
+  min-height: 0;
+  flex: 1 1 auto;
+  background: #fff;
+  touch-action: none;
+}
+
+.visual-editor-workspace.is-panning {
+  cursor: grabbing;
+}
+
+.visual-editor-canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(1280px, calc(100% - 64px));
   aspect-ratio: 16 / 9;
   border: 1px solid $border-strong;
   border-radius: 16px;
   background:
     radial-gradient(circle at 50% 35%, #202733 0, transparent 32rem), #0d1015;
   box-shadow: 0 20px 60px rgba(#000, 0.28);
+  transform-origin: center;
 }
 
 .visual-layout-item {
@@ -247,7 +268,6 @@ button {
 .visual-layout-controls {
   width: max-content;
   max-width: none;
-  background: rgba($surface-raised, 0.38);
   color: $muted;
   font-size: 0.72rem;
   white-space: nowrap;
@@ -521,18 +541,17 @@ button:focus-visible {
   }
 
   .visual-editor {
-    width: min(100% - 28px, 760px);
-    padding-top: 28px;
+    width: 100%;
   }
 
   .visual-editor-header {
     align-items: flex-start;
     flex-direction: column;
+    padding: 18px;
   }
 
   .visual-editor-canvas {
-    min-height: 420px;
-    aspect-ratio: auto;
+    width: calc(100% - 32px);
   }
 
   .option-slider {

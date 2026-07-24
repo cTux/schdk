@@ -16,6 +16,8 @@ description: Build, refactor, or review SCHDK React UI components and SCSS in @s
 
 Keep the main answer and alternative answer as separate draggable layout
 elements while rendering both through the shared host components.
+Keep the visual editor on a light full-size workspace with a pannable,
+wheel-zoomable 16:9 game container.
 
 ## Checks
 

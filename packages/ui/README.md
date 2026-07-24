@@ -73,12 +73,16 @@ own state, persistence, routing, and platform integration.
   selected so preview content never shifts.
   Render visual-editor previews with the same shared game-element components
   and styles used by the host. Keep the answer and alternative answer as
-  separate draggable layout elements.
+  separate draggable layout elements. Put the 16:9 game container on a
+  full-size light workspace; pan it with right-button drag and zoom it with the
+  mouse wheel.
 - Preserve cumulative question stages and disable controls during every
   transition. Show the configured hotkeys inside the controls.
 - Put the game signal volume slider in the Game options tab and show its
   current percentage.
-- Give handouts a white border and soft black shadow. Render the main answer
+- Give handouts the answer gradient and a soft black shadow without a border.
+  Align contained images to the bottom right so landscape images sit at the
+  bottom and portrait images sit at the right. Render the main answer
   prominently with smaller alternative answers above it.
 - Show the package title first and the filename second in each recent-package
   item. Fall back to the filename alone for legacy entries without title
