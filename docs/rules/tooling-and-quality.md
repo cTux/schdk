@@ -57,6 +57,9 @@
 - Before committing, run `pnpm fmt:check`, `pnpm lint`, `pnpm typecheck`,
   `pnpm test`, and the builds affected by the change. Run root `pnpm build`
   when no running packaged executable blocks artifact collection.
+- End every prompt that changes repository files by committing all verified
+  task changes as one clear commit. Preserve unrelated user changes and confirm
+  the worktree is clean.
 - Visually smoke-test changed UI in a real browser. Build the affected Electron
   package when changing preload, main-process, packaging, icon, or web-resource
   integration.

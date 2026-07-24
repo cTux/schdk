@@ -13,6 +13,7 @@ description: Implement, debug, refactor, review, or document changes anywhere in
 4. Make the smallest complete change. Do not add tests unless the prompt explicitly says `add missing tests`; then use `$schdk-add-missing-tests`.
 5. Update the matching rule and project skill when the task creates or changes a durable workflow.
 6. Run the checks required by `docs/rules/tooling-and-quality.md` before committing.
+7. After every prompt that changes repository files, stage and commit all task changes with one clear commit, then confirm the worktree is clean. Preserve unrelated user changes.
 
 ## Host Start Flow
 
