@@ -40,6 +40,10 @@ function GameLayoutItem({ children, id, layout }: GameLayoutItemProps) {
         '--game-layout-y': `${position.y}%`,
         '--game-layout-width': `${position.width}%`,
         '--game-layout-height': `${position.height}%`,
+        '--game-background-image': position.backgroundImage
+          ? `url(${JSON.stringify(position.backgroundImage)})`
+          : 'none',
+        '--game-background-opacity': position.backgroundOpacity,
         '--game-font-scale': position.fontScale,
         '--game-text-color': position.textColor,
         '--game-grow-align':

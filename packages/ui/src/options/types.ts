@@ -39,6 +39,8 @@ export interface GameLayoutPosition {
   y: number;
   width: number;
   height: number;
+  backgroundImage: string | null;
+  backgroundOpacity: number;
   fontScale: number;
   fitTextToHeight: boolean;
   textColor: string;
@@ -89,6 +91,8 @@ function layout(
     y,
     width,
     height,
+    backgroundImage: null,
+    backgroundOpacity: 1,
     fontScale: 1,
     fitTextToHeight: false,
     textColor,

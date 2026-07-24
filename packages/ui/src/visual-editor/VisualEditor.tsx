@@ -216,6 +216,11 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
     });
   }
 
+  function selectWorkspace() {
+    setSelected(null);
+    canvasRef.current?.focus();
+  }
+
   function moveFromPointer(event: PointerEvent<HTMLDivElement>) {
     const drag = dragRef.current;
     const pointer = pointerPosition(event);
@@ -250,6 +255,12 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
       <div
         ref={workspaceRef}
         className={`visual-editor-workspace${panning ? ' is-panning' : ''}`}
+        onKeyDown={(event) => {
+          if (event.key !== 'Escape' || !selected) return;
+          event.preventDefault();
+          event.stopPropagation();
+          selectWorkspace();
+        }}
         onContextMenu={(event) => event.preventDefault()}
         onPointerDown={(event) => {
           if (event.button !== 2) return;
@@ -386,15 +397,79 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
                 </label>
               </>
             )}
+            <label className="visual-editor-background-image">
+              Фонове зображення
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(event) => {
+                  const file = event.currentTarget.files?.[0];
+                  event.currentTarget.value = '';
+                  if (!file || !file.type.startsWith('image/')) return;
+                  const reader = new FileReader();
+                  reader.addEventListener(
+                    'load',
+                    () => {
+                      if (typeof reader.result === 'string') {
+                        updateElement(selected, {
+                          backgroundImage: reader.result,
+                        });
+                      }
+                    },
+                    { once: true },
+                  );
+                  reader.readAsDataURL(file);
+                }}
+              />
+            </label>
+            {selectedPosition.backgroundImage && (
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() =>
+                  updateElement(selected, { backgroundImage: null })
+                }
+              >
+                Видалити фон
+              </Button>
+            )}
+            <label className="visual-editor-background-opacity">
+              Прозорість фону
+              <input
+                type="range"
+                min="0"
+                max="100"
+                disabled={!selectedPosition.backgroundImage}
+                value={Math.round(
+                  (1 - selectedPosition.backgroundOpacity) * 100,
+                )}
+                onChange={(event) =>
+                  updateElement(selected, {
+                    backgroundOpacity: 1 - Number(event.target.value) / 100,
+                  })
+                }
+              />
+              <output>
+                {Math.round((1 - selectedPosition.backgroundOpacity) * 100)}%
+              </output>
+            </label>
           </aside>
         )}
         <div
           ref={canvasRef}
-          className="visual-editor-canvas host-app"
+          className={`visual-editor-canvas host-app${
+            selected ? '' : ' is-selected'
+          }`}
+          tabIndex={0}
           style={{
             transform: `translate(-50%, -50%) translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
           }}
           aria-label="Макет екрана гри"
+          aria-current={selected ? undefined : 'true'}
+          role="region"
+          onClick={(event) => {
+            if (event.target === event.currentTarget) selectWorkspace();
+          }}
         >
           {GAME_LAYOUT_ELEMENT_IDS.map((id) => (
             <div
@@ -412,6 +487,10 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
                   top: `${positions[id].y}%`,
                   width: `${positions[id].width}%`,
                   height: `${positions[id].height}%`,
+                  '--game-background-image': positions[id].backgroundImage
+                    ? `url(${JSON.stringify(positions[id].backgroundImage)})`
+                    : 'none',
+                  '--game-background-opacity': positions[id].backgroundOpacity,
                   '--game-font-scale': positions[id].fontScale,
                   '--game-text-color': positions[id].textColor,
                   '--game-grow-align':

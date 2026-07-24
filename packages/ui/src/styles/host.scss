@@ -611,9 +611,25 @@
       .visual-layout-item
     )
     > :not(.visual-layout-resize-edge, .game-fit-observer) {
+    position: relative;
+    z-index: 1;
     max-width: 100%;
     max-height: 100%;
     overflow: hidden;
+  }
+
+  :is(
+    .has-custom-layout .game-layout-item,
+    .game-layout-logo.has-position,
+    .visual-layout-item
+  )::before {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    background: var(--game-background-image) center / cover no-repeat;
+    content: '';
+    opacity: var(--game-background-opacity);
+    pointer-events: none;
   }
 
   :is(

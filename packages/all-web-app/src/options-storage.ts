@@ -124,6 +124,13 @@ function isGameLayoutElement(value: unknown): value is GameLayoutPosition {
   return (
     isPercentage(position.width) &&
     isPercentage(position.height) &&
+    (position.backgroundImage === null ||
+      (typeof position.backgroundImage === 'string' &&
+        position.backgroundImage.startsWith('data:image/'))) &&
+    typeof position.backgroundOpacity === 'number' &&
+    Number.isFinite(position.backgroundOpacity) &&
+    position.backgroundOpacity >= 0 &&
+    position.backgroundOpacity <= 1 &&
     typeof position.fontScale === 'number' &&
     Number.isFinite(position.fontScale) &&
     position.fontScale >= 0.5 &&

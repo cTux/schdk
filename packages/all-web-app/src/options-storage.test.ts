@@ -80,4 +80,23 @@ describe('game options', () => {
       },
     });
   });
+
+  it('rejects unsafe background images', () => {
+    expect(
+      loadGameOptions(
+        createStorage(
+          JSON.stringify({
+            soundVolume: 0.4,
+            layout: {
+              ...DEFAULT_GAME_LAYOUT,
+              question: {
+                ...DEFAULT_GAME_LAYOUT.question,
+                backgroundImage: 'https://example.com/image.png',
+              },
+            },
+          }),
+        ),
+      ),
+    ).toEqual(DEFAULT_GAME_OPTIONS);
+  });
 });
