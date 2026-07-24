@@ -54,4 +54,22 @@ describe('game options', () => {
       ),
     ).toEqual(DEFAULT_GAME_OPTIONS);
   });
+
+  it('adds a separate alternative-answer position to legacy layouts', () => {
+    const { ['alternative-answer']: _omitted, ...legacyLayout } =
+      DEFAULT_GAME_LAYOUT;
+    expect(
+      loadGameOptions(
+        createStorage(
+          JSON.stringify({ soundVolume: 0.4, layout: legacyLayout }),
+        ),
+      ).layout,
+    ).toEqual({
+      ...legacyLayout,
+      'alternative-answer': {
+        x: legacyLayout.answer.x,
+        y: legacyLayout.answer.y - 10,
+      },
+    });
+  });
 });

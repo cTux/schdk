@@ -14,6 +14,9 @@ description: Build, refactor, or review SCHDK React UI components and SCSS in @s
 5. Add the smallest focused test for non-trivial interaction or extracted logic.
 6. Visually smoke-test the affected flow in a real browser at narrow and normal widths.
 
+Keep the main answer and alternative answer as separate draggable layout
+elements while rendering both through the shared host components.
+
 ## Checks
 
 ```powershell

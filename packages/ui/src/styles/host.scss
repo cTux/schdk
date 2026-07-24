@@ -183,7 +183,9 @@
 
   .answer-slot {
     align-items: flex-end;
+    flex-direction: column;
     justify-content: flex-end;
+    gap: clamp(10px, 1.5vh, 18px);
   }
 
   .game-handout {
@@ -203,6 +205,13 @@
       width 680ms cubic-bezier(0.12, 0.82, 0.18, 1),
       max-width 680ms cubic-bezier(0.12, 0.82, 0.18, 1),
       max-height 680ms cubic-bezier(0.12, 0.82, 0.18, 1);
+  }
+
+  .game-handout-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text;
   }
 
   .game-wizard-canvas.is-handout-focus {
@@ -241,6 +250,7 @@
     --enter-y: -24px;
 
     width: min(100%, 620px);
+    margin: 0;
     border-radius: 12px;
     background: linear-gradient(
       to right,
@@ -263,20 +273,6 @@
     display: flex;
     align-items: flex-start;
     align-self: flex-start;
-    flex-direction: column;
-    border-left: 4px solid $accent;
-    gap: 2px;
-    padding-left: 16px;
-  }
-
-  .game-timer span,
-  .game-answer > span,
-  .game-alternative-answers span {
-    color: $muted;
-    font-size: 0.7rem;
-    font-weight: 750;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
   }
 
   .game-timer strong {
@@ -291,7 +287,7 @@
     --enter-y: 24px;
 
     width: min(100%, 620px);
-    margin-top: auto;
+    margin: auto 0 0;
     border-radius: 12px;
     background: linear-gradient(
       to right,
@@ -304,7 +300,8 @@
     line-height: 1.35;
   }
 
-  .game-answer {
+  .game-answer,
+  .game-alternative-answer {
     --enter-x: 44px;
     --enter-y: 24px;
 
@@ -332,16 +329,11 @@
     text-transform: uppercase;
   }
 
-  .game-alternative-answers {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    margin-bottom: 8px;
-  }
-
-  .game-alternative-answers p {
+  .game-alternative-answer {
+    margin: 0;
     color: #d4d8df;
     font-size: clamp(0.9rem, 1.5vw, 1.25rem);
+    line-height: 1.35;
   }
 
   .game-controls {
@@ -555,6 +547,7 @@
 
   .has-custom-layout .game-layout-question,
   .has-custom-layout .game-layout-answer-comment,
+  .has-custom-layout .game-layout-alternative-answer,
   .has-custom-layout .game-layout-answer {
     width: min(38vw, 620px);
   }

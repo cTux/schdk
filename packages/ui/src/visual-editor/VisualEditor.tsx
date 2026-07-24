@@ -1,5 +1,22 @@
-import { useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
+import {
+  useRef,
+  useState,
+  type KeyboardEvent,
+  type PointerEvent,
+  type ReactNode,
+} from 'react';
 import { Button } from '../atoms/Button';
+import {
+  GameAnswer,
+  GameAnswerComment,
+  GameAlternativeAnswer,
+  GameControls,
+  GameHandout,
+  GameProgress,
+  GameQuestion,
+  GameQuestionIntro,
+  GameTimer,
+} from '../host/GameElements';
 import {
   DEFAULT_GAME_LAYOUT,
   GAME_LAYOUT_ELEMENT_IDS,
@@ -7,6 +24,7 @@ import {
   type GameLayoutElementId,
   type GameLayoutPosition,
 } from '../options/types';
+import '../styles/host.scss';
 
 const LABELS: Record<GameLayoutElementId, string> = {
   intro: 'Питання №5',
@@ -14,9 +32,34 @@ const LABELS: Record<GameLayoutElementId, string> = {
   question: 'Текст питання',
   timer: '00:42',
   'answer-comment': 'Коментар до відповіді',
+  'alternative-answer': 'Альтернативна відповідь',
   answer: 'ВІДПОВІДЬ',
   progress: '5 / 36',
-  controls: '←  Space  →',
+  controls: 'Кнопки керування',
+};
+
+const PREVIEWS: Record<GameLayoutElementId, ReactNode> = {
+  intro: <GameQuestionIntro questionNumber={5} />,
+  handout: <GameHandout />,
+  question: <GameQuestion>Текст питання</GameQuestion>,
+  timer: <GameTimer seconds={42} />,
+  'answer-comment': (
+    <GameAnswerComment>Коментар до відповіді</GameAnswerComment>
+  ),
+  'alternative-answer': (
+    <GameAlternativeAnswer>Альтернативна відповідь</GameAlternativeAnswer>
+  ),
+  answer: <GameAnswer answer="Відповідь" />,
+  progress: <GameProgress questionNumber={5} questionCount={36} />,
+  controls: (
+    <GameControls
+      canGoBack
+      controlsDisabled={false}
+      preview
+      onBack={() => undefined}
+      onNext={() => undefined}
+    />
+  ),
 };
 
 const clamp = (value: number) => Math.min(100, Math.max(0, value));
@@ -50,7 +93,7 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
   const [selected, setSelected] = useState<GameLayoutElementId | null>(null);
   const positions = layout ?? DEFAULT_GAME_LAYOUT;
 
-  function pointerPosition(event: PointerEvent<HTMLButtonElement>) {
+  function pointerPosition(event: PointerEvent<HTMLDivElement>) {
     const bounds = canvasRef.current?.getBoundingClientRect();
     if (!bounds) return null;
     return {
@@ -59,7 +102,7 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
     };
   }
 
-  function moveFromPointer(event: PointerEvent<HTMLButtonElement>) {
+  function moveFromPointer(event: PointerEvent<HTMLDivElement>) {
     const drag = dragRef.current;
     const pointer = pointerPosition(event);
     if (!drag || drag.pointerId !== event.pointerId || !pointer) return;
@@ -75,7 +118,7 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
 
   function moveFromKeyboard(
     id: GameLayoutElementId,
-    event: KeyboardEvent<HTMLButtonElement>,
+    event: KeyboardEvent<HTMLDivElement>,
   ) {
     const delta = event.shiftKey ? 5 : 1;
     const movement = {
@@ -118,13 +161,14 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
 
       <div
         ref={canvasRef}
-        className="visual-editor-canvas"
+        className="visual-editor-canvas host-app"
         aria-label="Макет екрана гри"
       >
         {GAME_LAYOUT_ELEMENT_IDS.map((id) => (
-          <Button
+          <div
             key={id}
-            type="button"
+            role="button"
+            tabIndex={0}
             className={`visual-layout-item visual-layout-${id}${
               dragging === id ? ' is-dragging' : ''
             }${selected === id ? ' is-selected' : ''}`}
@@ -135,7 +179,14 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
             aria-label={`${LABELS[id]}. Перетягніть, щоб змінити позицію`}
             aria-pressed={selected === id}
             onClick={() => setSelected(id)}
-            onKeyDown={(event) => moveFromKeyboard(id, event)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                setSelected(id);
+                return;
+              }
+              moveFromKeyboard(id, event);
+            }}
             onPointerDown={(event) => {
               const startPointer = pointerPosition(event);
               if (!startPointer) return;
@@ -162,8 +213,8 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
               setDragging(null);
             }}
           >
-            {LABELS[id]}
-          </Button>
+            {PREVIEWS[id]}
+          </div>
         ))}
       </div>
     </div>

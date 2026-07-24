@@ -1,8 +1,16 @@
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { CSSProperties, ReactNode } from 'react';
-import { Button } from '../atoms/Button';
 import type { GameLayout, GameLayoutElementId } from '../options/types';
+import {
+  GameAnswer,
+  GameAnswerComment,
+  GameAlternativeAnswer,
+  GameControls,
+  GameHandout,
+  GameProgress,
+  GameQuestion,
+  GameQuestionIntro,
+  GameTimer,
+} from './GameElements';
 import type {
   HostGameTransition,
   HostGameView,
@@ -37,12 +45,6 @@ function GameLayoutItem({ children, id, layout }: GameLayoutItemProps) {
   );
 }
 
-function timerText(seconds: number) {
-  return `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(
-    seconds % 60,
-  ).padStart(2, '0')}`;
-}
-
 function stageMotionClass(
   stage: HostQuestionStage,
   currentStage: HostQuestionStage,
@@ -74,26 +76,24 @@ export function GameWizard({ game, layout, onBack, onNext }: GameWizardProps) {
       aria-label="Проведення гри"
     >
       <GameLayoutItem id="progress" layout={layout}>
-        <div className="game-progress" aria-label="Прогрес гри">
-          <span>
-            {game.questionNumber} / {game.questionCount}
-          </span>
-        </div>
+        <GameProgress
+          questionNumber={game.questionNumber}
+          questionCount={game.questionCount}
+        />
       </GameLayoutItem>
       <div
         className={`game-wizard-canvas${isHandoutFocus ? ' is-handout-focus' : ''}`}
       >
         {isIntro ? (
           <GameLayoutItem id="intro" layout={layout}>
-            <div
-              className={`question-intro${stageMotionClass(
+            <GameQuestionIntro
+              questionNumber={game.questionNumber}
+              className={`${stageMotionClass(
                 'intro',
                 game.currentStage,
                 game.transition,
               )}${questionChangingClass}`}
-            >
-              Питання №{game.questionNumber}
-            </div>
+            />
           </GameLayoutItem>
         ) : (
           <div className={`question-board${questionChangingClass}`}>
@@ -101,14 +101,13 @@ export function GameWizard({ game, layout, onBack, onNext }: GameWizardProps) {
               <div className="handout-slot">
                 {visible.has('handout') && game.question.handout && (
                   <GameLayoutItem id="handout" layout={layout}>
-                    <img
-                      className={`game-handout${stageMotionClass(
+                    <GameHandout
+                      src={game.question.handout.dataUrl}
+                      className={stageMotionClass(
                         'handout',
                         game.currentStage,
                         game.transition,
-                      )}`}
-                      src={game.question.handout.dataUrl}
-                      alt="Роздатковий матеріал"
+                      )}
                     />
                   </GameLayoutItem>
                 )}
@@ -116,15 +115,15 @@ export function GameWizard({ game, layout, onBack, onNext }: GameWizardProps) {
               <div className="question-slot">
                 {visible.has('question') && (
                   <GameLayoutItem id="question" layout={layout}>
-                    <p
-                      className={`game-question${stageMotionClass(
+                    <GameQuestion
+                      className={stageMotionClass(
                         'question',
                         game.currentStage,
                         game.transition,
-                      )}`}
+                      )}
                     >
                       {game.question.question}
-                    </p>
+                    </GameQuestion>
                   </GameLayoutItem>
                 )}
               </div>
@@ -133,55 +132,58 @@ export function GameWizard({ game, layout, onBack, onNext }: GameWizardProps) {
               <div className="question-bottom-left">
                 {visible.has('timer') && (
                   <GameLayoutItem id="timer" layout={layout}>
-                    <div
-                      className={`game-timer${stageMotionClass(
+                    <GameTimer
+                      seconds={game.remainingSeconds}
+                      className={stageMotionClass(
                         'timer',
                         game.currentStage,
                         game.transition,
-                      )}`}
-                      role="timer"
-                      aria-live="off"
-                    >
-                      <span>Час на обговорення</span>
-                      <strong>{timerText(game.remainingSeconds)}</strong>
-                    </div>
+                      )}
+                    />
                   </GameLayoutItem>
                 )}
                 {visible.has('answerComment') &&
                   game.question.answerComment && (
                     <GameLayoutItem id="answer-comment" layout={layout}>
-                      <p
-                        className={`game-answer-comment${stageMotionClass(
+                      <GameAnswerComment
+                        className={stageMotionClass(
                           'answerComment',
                           game.currentStage,
                           game.transition,
-                        )}`}
+                        )}
                       >
                         {game.question.answerComment}
-                      </p>
+                      </GameAnswerComment>
                     </GameLayoutItem>
                   )}
               </div>
               <div className="answer-slot">
                 {visible.has('answer') && (
-                  <GameLayoutItem id="answer" layout={layout}>
-                    <div
-                      className={`game-answer${stageMotionClass(
-                        'answer',
-                        game.currentStage,
-                        game.transition,
-                      )}`}
-                    >
-                      {game.question.alternativeAnswers.length > 0 && (
-                        <div className="game-alternative-answers">
-                          <span>Також зараховується:</span>
-                          <p>{game.question.alternativeAnswers.join(' · ')}</p>
-                        </div>
-                      )}
-                      <span>Відповідь</span>
-                      <strong>{game.question.answer}</strong>
-                    </div>
-                  </GameLayoutItem>
+                  <>
+                    {game.question.alternativeAnswers.length > 0 && (
+                      <GameLayoutItem id="alternative-answer" layout={layout}>
+                        <GameAlternativeAnswer
+                          className={stageMotionClass(
+                            'answer',
+                            game.currentStage,
+                            game.transition,
+                          )}
+                        >
+                          {game.question.alternativeAnswers.join(' · ')}
+                        </GameAlternativeAnswer>
+                      </GameLayoutItem>
+                    )}
+                    <GameLayoutItem id="answer" layout={layout}>
+                      <GameAnswer
+                        answer={game.question.answer}
+                        className={stageMotionClass(
+                          'answer',
+                          game.currentStage,
+                          game.transition,
+                        )}
+                      />
+                    </GameLayoutItem>
+                  </>
                 )}
               </div>
             </div>
@@ -189,28 +191,12 @@ export function GameWizard({ game, layout, onBack, onNext }: GameWizardProps) {
         )}
       </div>
       <GameLayoutItem id="controls" layout={layout}>
-        <nav className="game-controls" aria-label="Керування станами питання">
-          <Button
-            type="button"
-            variant="ghost"
-            aria-label="Попередній стан"
-            disabled={game.controlsDisabled || !game.canGoBack}
-            onClick={onBack}
-          >
-            <FontAwesomeIcon icon={faArrowLeft} aria-hidden="true" />
-            <kbd>← · PgUp · Backspace</kbd>
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            aria-label="Наступний стан"
-            disabled={game.controlsDisabled}
-            onClick={onNext}
-          >
-            <kbd>Space · PgDn · →</kbd>
-            <FontAwesomeIcon icon={faArrowRight} aria-hidden="true" />
-          </Button>
-        </nav>
+        <GameControls
+          canGoBack={game.canGoBack}
+          controlsDisabled={game.controlsDisabled}
+          onBack={onBack}
+          onNext={onNext}
+        />
       </GameLayoutItem>
     </section>
   );

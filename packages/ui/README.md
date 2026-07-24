@@ -68,7 +68,12 @@ own state, persistence, routing, and platform integration.
 - Let users reposition every gameplay element in the visual editor by pointer
   drag or keyboard arrows. Apply saved percentage coordinates during gameplay
   and preserve the standard layout until the user changes it. Keep the grabbed
-  point under the pointer and show the selected element with a blue border.
+  point under the pointer. Wrap previews in a click-blocking drag target with a
+  permanent transparent 2 px border; change only its color to blue when
+  selected so preview content never shifts.
+  Render visual-editor previews with the same shared game-element components
+  and styles used by the host. Keep the answer and alternative answer as
+  separate draggable layout elements.
 - Preserve cumulative question stages and disable controls during every
   transition. Show the configured hotkeys inside the controls.
 - Put the game signal volume slider in the Game options tab and show its
