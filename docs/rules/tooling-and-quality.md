@@ -35,6 +35,8 @@
   uses NodeNext; `@schdk/common` emits its build and declarations.
 - Format with Oxfmt, lint TypeScript/React with Oxlint, and lint UI SCSS with
   Stylelint.
+- Keep the versioned hooks under `.githooks`. Root `pnpm install` configures
+  `core.hooksPath`; pre-commit must run `pnpm fmt:check` and `pnpm lint`.
 - Add the smallest runnable Vitest test for every non-trivial branch, parser,
   persistence rule, timer, IPC routing rule, or data-loss prevention path.
 - Keep pure logic outside React/Electron objects when that makes it directly
