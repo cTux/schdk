@@ -65,12 +65,14 @@ own state, persistence, routing, and platform integration.
   the comment below it and the answer aligned along the bottom.
 - Scale long question text against viewport height and contain it inside its
   slot; question text must never paint outside the gameplay viewport.
-- Let users reposition every gameplay element in the visual editor by pointer
-  drag or keyboard arrows. Apply saved percentage coordinates during gameplay
-  and preserve the standard layout until the user changes it. Keep the grabbed
-  point under the pointer. Wrap previews in a click-blocking drag target with a
-  permanent transparent 2 px border; change only its color to blue when
-  selected so preview content never shifts.
+- Let users reposition and resize every gameplay element in the visual editor.
+  Apply the same saved percentage bounds and presentation settings during
+  gameplay, and preserve the standard layout until the user changes it. Keep
+  the grabbed point under the pointer. Wrap previews in a click-blocking drag
+  target with a permanent transparent 2 px border; change only its color to
+  blue when selected so preview content never shifts. Keep overflowing content
+  clipped and show the selected element's text or image controls in a fixed
+  workspace toolbar.
   Render visual-editor previews with the same shared game-element components
   and styles used by the host. Keep the answer and alternative answer as
   separate draggable layout elements. Put the 16:9 game container on a

@@ -557,7 +557,11 @@
     top: var(--game-layout-y);
     left: var(--game-layout-x);
     display: block;
+    width: var(--game-layout-width);
+    height: var(--game-layout-height);
+    overflow: hidden;
     transform: translate(-50%, -50%);
+    container-type: inline-size;
   }
 
   .game-layout-logo.has-position {
@@ -566,23 +570,15 @@
     top: var(--game-layout-y);
     left: var(--game-layout-x);
     display: block;
+    width: var(--game-layout-width);
+    height: var(--game-layout-height);
+    overflow: hidden;
     transform: translate(-50%, -50%);
+    container-type: inline-size;
   }
 
   .game-layout-logo.has-position .game-logo {
     position: static;
-  }
-
-  .has-custom-layout .game-layout-handout {
-    width: min(38vw, 600px);
-    height: min(36dvh, 380px);
-  }
-
-  .has-custom-layout .game-layout-question,
-  .has-custom-layout .game-layout-answer-comment,
-  .has-custom-layout .game-layout-alternative-answer,
-  .has-custom-layout .game-layout-answer {
-    width: min(38vw, 620px);
   }
 
   .has-custom-layout .game-layout-handout .game-handout {
@@ -603,6 +599,130 @@
   .has-custom-layout .game-controls {
     position: static;
     padding: 0;
+  }
+
+  :is(
+      .has-custom-layout .game-layout-item,
+      .game-layout-logo.has-position,
+      .visual-layout-item
+    )
+    > :not(.visual-layout-resize-handle) {
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+  }
+
+  :is(
+      .has-custom-layout .game-layout-logo,
+      .game-layout-logo.has-position,
+      .visual-layout-logo
+    )
+    .game-logo,
+  :is(.has-custom-layout .game-layout-handout, .visual-layout-handout)
+    .game-handout {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: var(--game-image-position);
+  }
+
+  :is(.has-custom-layout .game-layout-intro, .visual-layout-intro)
+    .question-intro,
+  :is(.has-custom-layout .game-layout-question, .visual-layout-question)
+    .game-question,
+  :is(.has-custom-layout .game-layout-timer, .visual-layout-timer) .game-timer,
+  :is(
+      .has-custom-layout .game-layout-answer-comment,
+      .visual-layout-answer-comment
+    )
+    .game-answer-comment,
+  :is(
+      .has-custom-layout .game-layout-alternative-answer,
+      .visual-layout-alternative-answer
+    )
+    .game-alternative-answer,
+  :is(.has-custom-layout .game-layout-answer, .visual-layout-answer)
+    .game-answer {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: var(--game-grow-align);
+    color: var(--game-text-color);
+  }
+
+  :is(.has-custom-layout .game-layout-intro, .visual-layout-intro)
+    .question-intro {
+    font-size: calc(14cqw * var(--game-font-scale));
+  }
+
+  :is(.has-custom-layout .game-layout-question, .visual-layout-question)
+    .game-question {
+    padding: 4cqw;
+    font-size: calc(8cqw * var(--game-font-scale));
+  }
+
+  :is(.has-custom-layout .game-layout-timer, .visual-layout-timer) .game-timer {
+    font-size: calc(30cqw * var(--game-font-scale));
+  }
+
+  :is(.has-custom-layout .game-layout-timer, .visual-layout-timer)
+    .game-timer
+    strong {
+    color: var(--game-text-color);
+    font-size: 1em;
+  }
+
+  :is(
+      .has-custom-layout .game-layout-answer-comment,
+      .visual-layout-answer-comment
+    )
+    .game-answer-comment {
+    padding: 4cqw;
+    font-size: calc(6cqw * var(--game-font-scale));
+  }
+
+  :is(
+      .has-custom-layout .game-layout-alternative-answer,
+      .visual-layout-alternative-answer
+    )
+    .game-alternative-answer {
+    padding: 4cqw;
+    font-size: calc(6cqw * var(--game-font-scale));
+  }
+
+  :is(.has-custom-layout .game-layout-answer, .visual-layout-answer)
+    .game-answer {
+    padding: 4cqw;
+  }
+
+  :is(.has-custom-layout .game-layout-answer, .visual-layout-answer)
+    .game-answer
+    strong {
+    color: var(--game-text-color);
+    font-size: calc(13cqw * var(--game-font-scale));
+  }
+
+  :is(.has-custom-layout .game-layout-progress, .visual-layout-progress)
+    .game-progress {
+    width: 100%;
+    height: 100%;
+    padding: 2cqw 4cqw;
+    color: var(--game-text-color);
+    font-size: calc(14cqw * var(--game-font-scale));
+  }
+
+  :is(.has-custom-layout .game-layout-controls, .visual-layout-controls)
+    .game-controls {
+    width: 100%;
+    height: 100%;
+  }
+
+  :is(.has-custom-layout .game-layout-controls, .visual-layout-controls)
+    .game-controls
+    button {
+    color: var(--game-text-color);
+    font-size: calc(5cqw * var(--game-font-scale));
   }
 }
 

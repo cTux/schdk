@@ -2,9 +2,11 @@ import {
   DEFAULT_EDITOR_TEXT_OPTIONS,
   DEFAULT_GAME_LAYOUT,
   DEFAULT_GAME_OPTIONS,
+  GAME_IMAGE_POSITIONS,
   GAME_LAYOUT_ELEMENT_IDS,
   type EditorTextOptions,
   type GameLayout,
+  type GameLayoutPosition,
   type GameOptions,
 } from '@schdk/ui/options';
 
@@ -79,19 +81,24 @@ function normalizeGameLayout(value: unknown): GameLayout | null {
     isGameLayoutPosition(positions.answer)
   ) {
     positions['alternative-answer'] = {
+      ...DEFAULT_GAME_LAYOUT['alternative-answer'],
       x: positions.answer.x,
       y: Math.max(0, positions.answer.y - 18),
     };
   }
-  return isGameLayout(positions) ? positions : null;
-}
-
-function isGameLayout(value: unknown): value is GameLayout {
-  if (!value || typeof value !== 'object') return false;
-  const positions = value as Record<string, unknown>;
-  return GAME_LAYOUT_ELEMENT_IDS.every((id) =>
-    isGameLayoutPosition(positions[id]),
-  );
+  const normalized = {} as GameLayout;
+  for (const id of GAME_LAYOUT_ELEMENT_IDS) {
+    const position = positions[id];
+    if (!isGameLayoutPosition(position)) return null;
+    const defaults = DEFAULT_GAME_LAYOUT[id];
+    const candidate = {
+      ...defaults,
+      ...(position as Partial<(typeof DEFAULT_GAME_LAYOUT)[typeof id]>),
+    };
+    if (!isGameLayoutElement(candidate)) return null;
+    normalized[id] = candidate;
+  }
+  return normalized;
 }
 
 function isGameLayoutPosition(
@@ -108,6 +115,36 @@ function isGameLayoutPosition(
     Number.isFinite(y) &&
     y >= 0 &&
     y <= 100
+  );
+}
+
+function isGameLayoutElement(value: unknown): value is GameLayoutPosition {
+  if (!isGameLayoutPosition(value)) return false;
+  const position = value as Record<string, unknown>;
+  return (
+    isPercentage(position.width) &&
+    isPercentage(position.height) &&
+    typeof position.fontScale === 'number' &&
+    Number.isFinite(position.fontScale) &&
+    position.fontScale >= 0.5 &&
+    position.fontScale <= 2 &&
+    typeof position.textColor === 'string' &&
+    /^#[\da-f]{6}$/i.test(position.textColor) &&
+    (position.textGrowDirection === 'up' ||
+      position.textGrowDirection === 'down') &&
+    typeof position.imagePosition === 'string' &&
+    GAME_IMAGE_POSITIONS.includes(
+      position.imagePosition as (typeof GAME_IMAGE_POSITIONS)[number],
+    )
+  );
+}
+
+function isPercentage(value: unknown) {
+  return (
+    typeof value === 'number' &&
+    Number.isFinite(value) &&
+    value >= 2 &&
+    value <= 100
   );
 }
 

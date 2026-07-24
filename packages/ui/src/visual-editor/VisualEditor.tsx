@@ -2,10 +2,12 @@ import {
   useEffect,
   useRef,
   useState,
+  type CSSProperties,
   type KeyboardEvent,
   type PointerEvent,
   type ReactNode,
 } from 'react';
+import { Button } from '../atoms/Button';
 import {
   GameAnswer,
   GameAnswerComment,
@@ -20,10 +22,12 @@ import {
 } from '../host/GameElements';
 import {
   DEFAULT_GAME_LAYOUT,
+  GAME_IMAGE_POSITIONS,
   GAME_LAYOUT_ELEMENT_IDS,
   type GameLayout,
   type GameLayoutElementId,
   type GameLayoutPosition,
+  type GameTextGrowDirection,
 } from '../options/types';
 import '../styles/host.scss';
 
@@ -65,21 +69,54 @@ const PREVIEWS: Record<GameLayoutElementId, ReactNode> = {
   ),
 };
 
+const GRAPHIC_ELEMENTS = new Set<GameLayoutElementId>(['logo', 'handout']);
+const IMAGE_POSITION_LABELS: Record<
+  (typeof GAME_IMAGE_POSITIONS)[number],
+  string
+> = {
+  'left top': 'Ліворуч угорі',
+  'center top': 'По центру вгорі',
+  'right top': 'Праворуч угорі',
+  'left center': 'Ліворуч по центру',
+  'center center': 'По центру',
+  'right center': 'Праворуч по центру',
+  'left bottom': 'Ліворуч унизу',
+  'center bottom': 'По центру внизу',
+  'right bottom': 'Праворуч унизу',
+};
+
 const clamp = (value: number) => Math.min(100, Math.max(0, value));
 const clampZoom = (value: number) => Math.min(2.5, Math.max(0.5, value));
+const clampSize = (value: number) => Math.min(100, Math.max(2, value));
+type GamePoint = Pick<GameLayoutPosition, 'x' | 'y'>;
 
 export function getNextZoom(current: number, deltaY: number) {
   return clampZoom(current * (deltaY < 0 ? 1.1 : 0.9));
 }
 
 export function getDraggedPosition(
-  startPosition: GameLayoutPosition,
-  startPointer: GameLayoutPosition,
-  pointer: GameLayoutPosition,
-): GameLayoutPosition {
+  startPosition: GamePoint,
+  startPointer: GamePoint,
+  pointer: GamePoint,
+): GamePoint {
   return {
     x: clamp(startPosition.x + pointer.x - startPointer.x),
     y: clamp(startPosition.y + pointer.y - startPointer.y),
+  };
+}
+
+export function getResizedPosition(
+  start: GameLayoutPosition,
+  startPointer: GamePoint,
+  pointer: GamePoint,
+): Pick<GameLayoutPosition, 'x' | 'y' | 'width' | 'height'> {
+  const width = clampSize(start.width + pointer.x - startPointer.x);
+  const height = clampSize(start.height + pointer.y - startPointer.y);
+  return {
+    x: clamp(start.x + (width - start.width) / 2),
+    y: clamp(start.y + (height - start.height) / 2),
+    width,
+    height,
   };
 }
 
@@ -100,15 +137,23 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
   const dragRef = useRef<{
     id: GameLayoutElementId;
     pointerId: number;
-    startPointer: GameLayoutPosition;
+    startPointer: GamePoint;
+    startPosition: GamePoint;
+  } | null>(null);
+  const resizeRef = useRef<{
+    id: GameLayoutElementId;
+    pointerId: number;
+    startPointer: GamePoint;
     startPosition: GameLayoutPosition;
   } | null>(null);
   const [dragging, setDragging] = useState<GameLayoutElementId | null>(null);
+  const [resizing, setResizing] = useState<GameLayoutElementId | null>(null);
   const [panning, setPanning] = useState(false);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [selected, setSelected] = useState<GameLayoutElementId | null>(null);
   const positions = layout ?? DEFAULT_GAME_LAYOUT;
+  const selectedPosition = selected ? positions[selected] : null;
 
   useEffect(() => {
     const workspace = workspaceRef.current;
@@ -121,7 +166,7 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
     return () => workspace.removeEventListener('wheel', handleWheel);
   }, []);
 
-  function pointerPosition(event: PointerEvent<HTMLDivElement>) {
+  function pointerPosition(event: PointerEvent<HTMLElement>) {
     const bounds = canvasRef.current?.getBoundingClientRect();
     if (!bounds) return null;
     return {
@@ -130,18 +175,24 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
     };
   }
 
+  function updateElement(
+    id: GameLayoutElementId,
+    patch: Partial<GameLayoutPosition>,
+  ) {
+    onChange({
+      ...positions,
+      [id]: { ...positions[id], ...patch },
+    });
+  }
+
   function moveFromPointer(event: PointerEvent<HTMLDivElement>) {
     const drag = dragRef.current;
     const pointer = pointerPosition(event);
     if (!drag || drag.pointerId !== event.pointerId || !pointer) return;
-    onChange({
-      ...positions,
-      [drag.id]: getDraggedPosition(
-        drag.startPosition,
-        drag.startPointer,
-        pointer,
-      ),
-    });
+    updateElement(
+      drag.id,
+      getDraggedPosition(drag.startPosition, drag.startPointer, pointer),
+    );
   }
 
   function moveFromKeyboard(
@@ -157,12 +208,9 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
     }[event.key];
     if (!movement) return;
     event.preventDefault();
-    onChange({
-      ...positions,
-      [id]: {
-        x: clamp(positions[id].x + movement.x),
-        y: clamp(positions[id].y + movement.y),
-      },
+    updateElement(id, {
+      x: clamp(positions[id].x + movement.x),
+      y: clamp(positions[id].y + movement.y),
     });
   }
 
@@ -203,6 +251,100 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
           setPanning(false);
         }}
       >
+        {selected && selectedPosition && (
+          <aside
+            className="visual-editor-toolbar"
+            aria-label={`Властивості: ${LABELS[selected]}`}
+          >
+            <strong>{LABELS[selected]}</strong>
+            {GRAPHIC_ELEMENTS.has(selected) ? (
+              <label>
+                Позиція зображення
+                <select
+                  value={selectedPosition.imagePosition}
+                  onChange={(event) =>
+                    updateElement(selected, {
+                      imagePosition: event.target
+                        .value as GameLayoutPosition['imagePosition'],
+                    })
+                  }
+                >
+                  {GAME_IMAGE_POSITIONS.map((position) => (
+                    <option key={position} value={position}>
+                      {IMAGE_POSITION_LABELS[position]}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            ) : (
+              <>
+                <div className="visual-editor-font-size">
+                  <span>Розмір тексту</span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    aria-label="Зменшити текст"
+                    onClick={() =>
+                      updateElement(selected, {
+                        fontScale: Math.max(
+                          0.5,
+                          selectedPosition.fontScale - 0.1,
+                        ),
+                      })
+                    }
+                  >
+                    −
+                  </Button>
+                  <output>
+                    {Math.round(selectedPosition.fontScale * 100)}%
+                  </output>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    aria-label="Збільшити текст"
+                    onClick={() =>
+                      updateElement(selected, {
+                        fontScale: Math.min(
+                          2,
+                          selectedPosition.fontScale + 0.1,
+                        ),
+                      })
+                    }
+                  >
+                    +
+                  </Button>
+                </div>
+                <label>
+                  Колір тексту
+                  <input
+                    type="color"
+                    value={selectedPosition.textColor}
+                    onChange={(event) =>
+                      updateElement(selected, {
+                        textColor: event.target.value,
+                      })
+                    }
+                  />
+                </label>
+                <label>
+                  Ріст тексту
+                  <select
+                    value={selectedPosition.textGrowDirection}
+                    onChange={(event) =>
+                      updateElement(selected, {
+                        textGrowDirection: event.target
+                          .value as GameTextGrowDirection,
+                      })
+                    }
+                  >
+                    <option value="up">Вгору</option>
+                    <option value="down">Вниз</option>
+                  </select>
+                </label>
+              </>
+            )}
+          </aside>
+        )}
         <div
           ref={canvasRef}
           className="visual-editor-canvas host-app"
@@ -218,11 +360,24 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
               tabIndex={0}
               className={`visual-layout-item visual-layout-${id}${
                 dragging === id ? ' is-dragging' : ''
-              }${selected === id ? ' is-selected' : ''}`}
-              style={{
-                left: `${positions[id].x}%`,
-                top: `${positions[id].y}%`,
-              }}
+              }${resizing === id ? ' is-resizing' : ''}${
+                selected === id ? ' is-selected' : ''
+              }`}
+              style={
+                {
+                  left: `${positions[id].x}%`,
+                  top: `${positions[id].y}%`,
+                  width: `${positions[id].width}%`,
+                  height: `${positions[id].height}%`,
+                  '--game-font-scale': positions[id].fontScale,
+                  '--game-text-color': positions[id].textColor,
+                  '--game-grow-align':
+                    positions[id].textGrowDirection === 'up'
+                      ? 'flex-end'
+                      : 'flex-start',
+                  '--game-image-position': positions[id].imagePosition,
+                } as CSSProperties
+              }
               aria-label={`${LABELS[id]}. Перетягніть, щоб змінити позицію`}
               aria-pressed={selected === id}
               onClick={() => setSelected(id)}
@@ -262,6 +417,56 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
               }}
             >
               {PREVIEWS[id]}
+              <span
+                className="visual-layout-resize-handle"
+                aria-hidden="true"
+                onPointerDown={(event) => {
+                  if (event.button !== 0) return;
+                  event.preventDefault();
+                  event.stopPropagation();
+                  const startPointer = pointerPosition(event);
+                  if (!startPointer) return;
+                  event.currentTarget.setPointerCapture(event.pointerId);
+                  resizeRef.current = {
+                    id,
+                    pointerId: event.pointerId,
+                    startPointer,
+                    startPosition: positions[id],
+                  };
+                  setResizing(id);
+                  setSelected(id);
+                }}
+                onPointerMove={(event) => {
+                  const resize = resizeRef.current;
+                  const pointer = pointerPosition(event);
+                  if (
+                    !resize ||
+                    resize.pointerId !== event.pointerId ||
+                    !pointer
+                  ) {
+                    return;
+                  }
+                  updateElement(
+                    resize.id,
+                    getResizedPosition(
+                      resize.startPosition,
+                      resize.startPointer,
+                      pointer,
+                    ),
+                  );
+                }}
+                onPointerUp={(event) => {
+                  if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+                    event.currentTarget.releasePointerCapture(event.pointerId);
+                  }
+                  resizeRef.current = null;
+                  setResizing(null);
+                }}
+                onPointerCancel={() => {
+                  resizeRef.current = null;
+                  setResizing(null);
+                }}
+              />
             </div>
           ))}
         </div>

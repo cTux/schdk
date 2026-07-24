@@ -59,8 +59,11 @@ describe('game options', () => {
     const {
       logo: _logo,
       ['alternative-answer']: _alternativeAnswer,
-      ...legacyLayout
+      ...previousLayout
     } = DEFAULT_GAME_LAYOUT;
+    const legacyLayout = Object.fromEntries(
+      Object.entries(previousLayout).map(([id, { x, y }]) => [id, { x, y }]),
+    );
     expect(
       loadGameOptions(
         createStorage(
@@ -68,9 +71,10 @@ describe('game options', () => {
         ),
       ).layout,
     ).toEqual({
-      ...legacyLayout,
+      ...DEFAULT_GAME_LAYOUT,
       logo: DEFAULT_GAME_LAYOUT.logo,
       'alternative-answer': {
+        ...DEFAULT_GAME_LAYOUT['alternative-answer'],
         x: legacyLayout.answer.x,
         y: legacyLayout.answer.y - 18,
       },

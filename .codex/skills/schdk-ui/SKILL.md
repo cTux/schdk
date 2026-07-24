@@ -18,6 +18,9 @@ Keep the main answer and alternative answer as separate draggable layout
 elements while rendering both through the shared host components.
 Keep the visual editor on a light full-size workspace with a pannable,
 wheel-zoomable 16:9 game container.
+Persist element bounds as percentages and apply the same bounds and
+presentation settings in gameplay. Keep resize and element-property controls
+outside the transformed game container.
 Keep the draggable game logo visible through every gameplay question stage.
 
 ## Checks

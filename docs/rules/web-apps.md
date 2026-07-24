@@ -30,9 +30,10 @@
   start and expiry and the pre-alarm when 10 seconds remain.
 - Keep game signal volume in the shell's Game options, persist it in
   localStorage, and default it to 40%.
-- Persist visual-editor positions as validated viewport percentages in the
-  shell options. Keep the standard host layout until the user moves an element
-  and apply custom positions to the game without changing question stages.
+- Persist visual-editor positions, sizes, and presentation settings as
+  validated viewport percentages and values in the shell options. Keep the
+  standard host layout until the user changes an element and apply the same
+  bounds and settings to the game without changing question stages.
 - After the final answer, show `Дякуємо за гру!`; returning to games exits
   fullscreen and restores the package chooser and recents.
 - Keep HTML language metadata and user-visible copy Ukrainian. Use the shared
