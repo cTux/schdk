@@ -8,7 +8,8 @@ the repository, then read every linked area affected by the task.
 Read only the areas touched by the task:
 
 - Core: [governance](rules/governance.md), [architecture](rules/architecture.md),
-  and [game packages](rules/game-packages.md).
+  [project structure](rules/project-structure.md), and
+  [game packages](rules/game-packages.md).
 - Editor: [state](rules/editor-state.md),
   [browser persistence](rules/browser-persistence.md), and
   [desktop persistence](rules/desktop-editor-persistence.md).

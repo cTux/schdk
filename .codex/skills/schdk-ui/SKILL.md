@@ -8,9 +8,10 @@ description: Build, refactor, or review SCHDK React UI components and SCSS in @s
 ## Workflow
 
 1. Follow `$schdk-development`, then read `packages/ui/README.md` and only its rule areas touched by the task.
-2. Read `docs/rules/architecture.md` when ownership changes.
-3. Reuse existing components and tokens before adding UI surface.
-4. Visually smoke-test the affected flow at narrow and normal widths.
+2. Use `$schdk-project-structure` for new or structurally changed components.
+3. Read `docs/rules/architecture.md` when ownership changes.
+4. Reuse existing components and tokens before adding UI surface.
+5. Visually smoke-test the affected flow at narrow and normal widths.
 
 ## Checks
 

@@ -20,6 +20,7 @@ description: Implement, debug, refactor, review, or document changes anywhere in
 - Use `$schdk-start-session` when initializing a new implementation worktree.
 - Use `$schdk-update-dependencies` for pnpm, dependency, lockfile, or audit updates.
 - Use `$schdk-add-missing-tests` only for an explicit `add missing tests` prompt.
+- Use `$schdk-project-structure` for package, component, file-layout, or public-export changes.
 - Read `docs/rules/host-app.md` for host gameplay behavior without a narrower skill.
 - Use `$schdk-ui` for components, styles, accessibility, or visual changes.
 - Use `$schdk-game-packages` for `.schdk` schema, parsing, serialization, or readiness.
