@@ -40,6 +40,7 @@ export interface GameLayoutPosition {
   width: number;
   height: number;
   fontScale: number;
+  fitTextToHeight: boolean;
   textColor: string;
   textGrowDirection: GameTextGrowDirection;
   imagePosition: GameImagePosition;
@@ -89,6 +90,7 @@ function layout(
     width,
     height,
     fontScale: 1,
+    fitTextToHeight: false,
     textColor,
     textGrowDirection: 'down',
     imagePosition: 'right bottom',

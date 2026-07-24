@@ -1,6 +1,10 @@
 @use 'tokens' as *;
 
 .host-app {
+  .game-fit-observer {
+    display: none;
+  }
+
   &.is-playing {
     position: fixed;
     z-index: 1000;
@@ -606,7 +610,7 @@
       .game-layout-logo.has-position,
       .visual-layout-item
     )
-    > :not(.visual-layout-resize-edge) {
+    > :not(.visual-layout-resize-edge, .game-fit-observer) {
     max-width: 100%;
     max-height: 100%;
     overflow: hidden;
@@ -653,17 +657,17 @@
 
   :is(.has-custom-layout .game-layout-intro, .visual-layout-intro)
     .question-intro {
-    font-size: calc(14cqw * var(--game-font-scale));
+    font-size: calc(14cqw * var(--game-font-scale) * var(--game-fit-scale, 1));
   }
 
   :is(.has-custom-layout .game-layout-question, .visual-layout-question)
     .game-question {
     padding: 4cqw;
-    font-size: calc(8cqw * var(--game-font-scale));
+    font-size: calc(8cqw * var(--game-font-scale) * var(--game-fit-scale, 1));
   }
 
   :is(.has-custom-layout .game-layout-timer, .visual-layout-timer) .game-timer {
-    font-size: calc(30cqw * var(--game-font-scale));
+    font-size: calc(30cqw * var(--game-font-scale) * var(--game-fit-scale, 1));
   }
 
   :is(.has-custom-layout .game-layout-timer, .visual-layout-timer)
@@ -679,7 +683,7 @@
     )
     .game-answer-comment {
     padding: 4cqw;
-    font-size: calc(6cqw * var(--game-font-scale));
+    font-size: calc(6cqw * var(--game-font-scale) * var(--game-fit-scale, 1));
   }
 
   :is(
@@ -688,7 +692,7 @@
     )
     .game-alternative-answer {
     padding: 4cqw;
-    font-size: calc(6cqw * var(--game-font-scale));
+    font-size: calc(6cqw * var(--game-font-scale) * var(--game-fit-scale, 1));
   }
 
   :is(.has-custom-layout .game-layout-answer, .visual-layout-answer)
@@ -700,7 +704,7 @@
     .game-answer
     strong {
     color: var(--game-text-color);
-    font-size: calc(13cqw * var(--game-font-scale));
+    font-size: calc(13cqw * var(--game-font-scale) * var(--game-fit-scale, 1));
   }
 
   :is(.has-custom-layout .game-layout-progress, .visual-layout-progress)
@@ -709,7 +713,7 @@
     height: 100%;
     padding: 2cqw 4cqw;
     color: var(--game-text-color);
-    font-size: calc(14cqw * var(--game-font-scale));
+    font-size: calc(14cqw * var(--game-font-scale) * var(--game-fit-scale, 1));
   }
 
   :is(.has-custom-layout .game-layout-controls, .visual-layout-controls)
@@ -722,7 +726,7 @@
     .game-controls
     button {
     color: var(--game-text-color);
-    font-size: calc(5cqw * var(--game-font-scale));
+    font-size: calc(5cqw * var(--game-font-scale) * var(--game-fit-scale, 1));
   }
 }
 

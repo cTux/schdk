@@ -21,7 +21,8 @@ wheel-zoomable 16:9 game container.
 Persist element bounds as percentages and apply the same bounds and
 presentation settings in gameplay. Keep resize and element-property controls
 outside the transformed game container. Resize from invisible border zones and
-keep the selected wrapper above every other preview.
+keep the selected wrapper above every other preview. Share measured text
+height fitting between the visual editor and gameplay.
 Keep the draggable game logo visible through every gameplay question stage.
 
 ## Checks

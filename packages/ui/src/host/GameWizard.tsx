@@ -17,6 +17,7 @@ import type {
   HostGameView,
   HostQuestionStage,
 } from './types';
+import { FitTextObserver } from './FitTextObserver';
 
 interface GameWizardProps {
   game: HostGameView;
@@ -54,6 +55,7 @@ function GameLayoutItem({ children, id, layout }: GameLayoutItemProps) {
       style={style}
     >
       {children}
+      <FitTextObserver enabled={position?.fitTextToHeight ?? false} />
     </div>
   );
 }

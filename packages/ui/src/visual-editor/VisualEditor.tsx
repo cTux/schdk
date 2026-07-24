@@ -20,6 +20,7 @@ import {
   GameQuestionIntro,
   GameTimer,
 } from '../host/GameElements';
+import { FitTextObserver } from '../host/FitTextObserver';
 import {
   DEFAULT_GAME_LAYOUT,
   GAME_IMAGE_POSITIONS,
@@ -345,6 +346,18 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
                   </Button>
                 </div>
                 <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedPosition.fitTextToHeight}
+                    onChange={(event) =>
+                      updateElement(selected, {
+                        fitTextToHeight: event.target.checked,
+                      })
+                    }
+                  />
+                  Підлаштувати до висоти
+                </label>
+                <label>
                   Колір тексту
                   <input
                     type="color"
@@ -447,6 +460,7 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
               }}
             >
               {PREVIEWS[id]}
+              <FitTextObserver enabled={positions[id].fitTextToHeight} />
               {RESIZE_SIDES.map((side) => (
                 <span
                   key={side}

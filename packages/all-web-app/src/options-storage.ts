@@ -128,6 +128,7 @@ function isGameLayoutElement(value: unknown): value is GameLayoutPosition {
     Number.isFinite(position.fontScale) &&
     position.fontScale >= 0.5 &&
     position.fontScale <= 2 &&
+    typeof position.fitTextToHeight === 'boolean' &&
     typeof position.textColor === 'string' &&
     /^#[\da-f]{6}$/i.test(position.textColor) &&
     (position.textGrowDirection === 'up' ||
