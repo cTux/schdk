@@ -7,7 +7,7 @@ description: Initialize a new SCHDK implementation session or newly created Git 
 
 ## Workflow
 
-1. Read `AGENTS.md` and `docs/RULES.md`.
+1. Read `AGENTS.md`, `docs/RULES.md`, and `docs/rules/dependencies.md`.
 2. Inspect `git status --short --branch` and preserve any existing user changes.
 3. Derive a short kebab-case branch slug from the prompt and create `codex/<prompt-slug>` from the current HEAD with `git switch -c`.
 4. If that branch name already exists, choose another prompt-based name; do not reuse an unrelated branch.

@@ -7,7 +7,7 @@ description: Backfill automated tests for all SCHDK changes since the previous t
 
 ## Find the coverage window
 
-1. Read `docs/rules/tooling-and-quality.md` and inspect `git status`.
+1. Read `docs/rules/verification.md` and inspect `git status`.
 2. Find the latest commit that added or changed tests:
 
 ```powershell

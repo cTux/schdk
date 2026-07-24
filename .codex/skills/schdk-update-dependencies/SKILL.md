@@ -7,9 +7,9 @@ description: Update pnpm and dependencies in the SCHDK monorepo, regenerate the 
 
 ## Workflow
 
-1. Read `AGENTS.md`, `docs/RULES.md`, and `docs/rules/tooling-and-quality.md`.
+1. Read `AGENTS.md`, `docs/RULES.md`, `docs/rules/dependencies.md`, `docs/rules/builds.md`, and `docs/rules/verification.md`.
 2. Inspect `git status --short --branch`. Create a new `codex/<prompt-slug>` branch from the current HEAD before changing files; do not remain detached.
-3. Run `pnpm self-update`, then confirm `pnpm --version`. Update the pinned pnpm references in `package.json`, `README.md`, and `docs/rules/tooling-and-quality.md` when the version changes.
+3. Run `pnpm self-update`, then confirm `pnpm --version`. Update the pinned pnpm references in `package.json`, `README.md`, and `docs/rules/dependencies.md` when the version changes.
 4. Run `pnpm ncu --workspaces --packageManager pnpm` to review updates, then run `pnpm ncu --workspaces --packageManager pnpm -u`.
 5. Run `pnpm install` to regenerate `pnpm-lock.yaml`.
 6. Run `pnpm audit`.

@@ -7,13 +7,10 @@ description: Maintain SCHDK browser applications and the unified @schdk/all-web-
 
 ## Workflow
 
-1. Read `docs/rules/web-apps.md`, `docs/rules/architecture.md`, and `packages/ui/README.md`.
-2. Keep browser packages free of Electron and Node imports; use the optional typed desktop adapter only where already defined.
-3. Render visuals through `@schdk/ui`. Do not copy components or styles into web apps.
-4. Lazy-load host and editor exports without iframes, then keep mounted applications alive while switching views.
-5. Preserve relative Vite bases, Ukrainian metadata, shell deep links, keyboard navigation, and the strict `127.0.0.1:5173` development URL.
-6. Persist visual-editor layout and presentation settings with shell game options and pass them to the host without coupling UI components to storage.
-7. Visually smoke-test changed navigation. Add tests only through `$schdk-add-missing-tests` when explicitly prompted.
+1. Follow `$schdk-development`, then read `docs/rules/web-apps.md` and `docs/rules/web-shell.md`.
+2. Read `docs/rules/architecture.md` for ownership changes and `docs/rules/ui-shell.md` for visual changes.
+3. Trace standalone and unified renderer paths separately.
+4. Visually smoke-test changed navigation.
 
 ## Checks
 

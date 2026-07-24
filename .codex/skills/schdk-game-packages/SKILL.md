@@ -7,12 +7,10 @@ description: Maintain or diagnose the SCHDK .schdk file contract in @schdk/commo
 
 ## Workflow
 
-1. Read `docs/GAME_PACKAGE.md` and `docs/rules/game-packages.md` before changing the contract.
+1. Follow `$schdk-development`, then read `docs/GAME_PACKAGE.md` and `docs/rules/game-packages.md`.
 2. Treat `packages/common/src/index.ts` as the executable source of truth; do not duplicate schema or validation logic in consumers.
-3. Keep parsing structural and strict at trust boundaries while allowing unfinished packages to remain editable.
-4. Use `validateGamePackage` only for readiness. Preserve optional fields and legacy compatibility unless a breaking change is explicit.
-5. Update implementation and `docs/GAME_PACKAGE.md` together for every contract change. Add malformed-input and round-trip tests only through `$schdk-add-missing-tests`.
-6. Rebuild and test consumers when exported types or behavior change.
+3. Update implementation and `docs/GAME_PACKAGE.md` together for contract changes.
+4. Rebuild affected consumers when exported types or behavior change.
 
 ## Checks
 
