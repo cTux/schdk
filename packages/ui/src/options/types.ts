@@ -39,8 +39,6 @@ export interface GameLayoutPosition {
   y: number;
   width: number;
   height: number;
-  backgroundImage: string | null;
-  backgroundOpacity: number;
   fontScale: number;
   fitTextToHeight: boolean;
   textColor: string;
@@ -53,6 +51,8 @@ export type GameLayout = Record<GameLayoutElementId, GameLayoutPosition>;
 export interface GameOptions {
   soundVolume: number;
   layout: GameLayout | null;
+  backgroundImage: string | null;
+  backgroundOpacity: number;
 }
 
 export const DEFAULT_EDITOR_TEXT_OPTIONS: EditorTextOptions = {
@@ -64,6 +64,8 @@ export const DEFAULT_EDITOR_TEXT_OPTIONS: EditorTextOptions = {
 export const DEFAULT_GAME_OPTIONS: GameOptions = {
   soundVolume: 0.4,
   layout: null,
+  backgroundImage: null,
+  backgroundOpacity: 1,
 };
 
 export const DEFAULT_GAME_LAYOUT: GameLayout = {
@@ -91,8 +93,6 @@ function layout(
     y,
     width,
     height,
-    backgroundImage: null,
-    backgroundOpacity: 1,
     fontScale: 1,
     fitTextToHeight: false,
     textColor,

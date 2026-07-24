@@ -60,9 +60,16 @@ export function loadGameOptions(storage: OptionsStorage): GameOptions {
     if (value.layout !== undefined && value.layout !== null && !layout) {
       return DEFAULT_GAME_OPTIONS;
     }
+    const backgroundImage = value.backgroundImage ?? null;
+    const backgroundOpacity = value.backgroundOpacity ?? 1;
+    if (!isBackgroundImage(backgroundImage) || !isOpacity(backgroundOpacity)) {
+      return DEFAULT_GAME_OPTIONS;
+    }
     return {
       soundVolume: value.soundVolume,
       layout,
+      backgroundImage,
+      backgroundOpacity,
     };
   } catch {
     return DEFAULT_GAME_OPTIONS;
@@ -95,6 +102,8 @@ function normalizeGameLayout(value: unknown): GameLayout | null {
       ...defaults,
       ...(position as Partial<(typeof DEFAULT_GAME_LAYOUT)[typeof id]>),
     };
+    delete (candidate as Record<string, unknown>).backgroundImage;
+    delete (candidate as Record<string, unknown>).backgroundOpacity;
     if (!isGameLayoutElement(candidate)) return null;
     normalized[id] = candidate;
   }
@@ -124,13 +133,6 @@ function isGameLayoutElement(value: unknown): value is GameLayoutPosition {
   return (
     isPercentage(position.width) &&
     isPercentage(position.height) &&
-    (position.backgroundImage === null ||
-      (typeof position.backgroundImage === 'string' &&
-        position.backgroundImage.startsWith('data:image/'))) &&
-    typeof position.backgroundOpacity === 'number' &&
-    Number.isFinite(position.backgroundOpacity) &&
-    position.backgroundOpacity >= 0 &&
-    position.backgroundOpacity <= 1 &&
     typeof position.fontScale === 'number' &&
     Number.isFinite(position.fontScale) &&
     position.fontScale >= 0.5 &&
@@ -144,6 +146,22 @@ function isGameLayoutElement(value: unknown): value is GameLayoutPosition {
     GAME_IMAGE_POSITIONS.includes(
       position.imagePosition as (typeof GAME_IMAGE_POSITIONS)[number],
     )
+  );
+}
+
+function isBackgroundImage(value: unknown): value is string | null {
+  return (
+    value === null ||
+    (typeof value === 'string' && value.startsWith('data:image/'))
+  );
+}
+
+function isOpacity(value: unknown): value is number {
+  return (
+    typeof value === 'number' &&
+    Number.isFinite(value) &&
+    value >= 0 &&
+    value <= 1
   );
 }
 

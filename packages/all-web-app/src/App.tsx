@@ -66,6 +66,8 @@ export function App() {
       hostApp={
         <Suspense fallback={null}>
           <HostApp
+            backgroundImage={gameOptions.backgroundImage}
+            backgroundOpacity={gameOptions.backgroundOpacity}
             layout={gameOptions.layout}
             soundVolume={gameOptions.soundVolume}
           />

@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { AppIcon } from '../atoms/AppIcon';
 import { StatusMessage } from '../atoms/StatusMessage';
 import { PackageStart } from '../editor/PackageStart';
@@ -26,6 +27,8 @@ export interface HostPackageDetails {
 }
 
 interface HostViewProps {
+  backgroundImage: string | null;
+  backgroundOpacity: number;
   finished: boolean;
   game: HostGameView | null;
   layout: GameLayout | null;
@@ -42,6 +45,8 @@ interface HostViewProps {
 }
 
 export function HostView({
+  backgroundImage,
+  backgroundOpacity,
   finished,
   game,
   layout,
@@ -61,6 +66,14 @@ export function HostView({
     <main
       id="schdk-host-app"
       className={`editor-app host-app${playing ? ' is-playing' : ''}`}
+      style={
+        {
+          '--game-surface-background-image': backgroundImage
+            ? `url(${JSON.stringify(backgroundImage)})`
+            : 'none',
+          '--game-surface-background-opacity': backgroundOpacity,
+        } as CSSProperties
+      }
     >
       <header className="app-header" hidden={playing}>
         <div className="brand">

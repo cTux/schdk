@@ -46,8 +46,8 @@ export function ShellView({
         />
         <VisualEditor
           hidden={view !== 'visualEditor'}
-          layout={gameOptions.layout}
-          onChange={(layout) => onGameOptionsChange({ ...gameOptions, layout })}
+          game={gameOptions}
+          onChange={onGameOptionsChange}
         />
         {loadedApps.host && (
           <div className="embedded-app" hidden={view !== 'host'}>

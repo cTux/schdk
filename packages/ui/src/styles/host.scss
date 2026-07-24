@@ -19,6 +19,16 @@
     padding: 0;
   }
 
+  &.is-playing::before {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    background: var(--game-surface-background-image) center / cover no-repeat;
+    content: '';
+    opacity: var(--game-surface-background-opacity);
+    pointer-events: none;
+  }
+
   .game-package-details {
     display: flex;
     align-items: center;
@@ -90,6 +100,8 @@
 
   .game-wizard,
   .game-finished {
+    position: relative;
+    z-index: 1;
     display: flex;
     width: 100%;
     height: 100%;
@@ -616,20 +628,6 @@
     max-width: 100%;
     max-height: 100%;
     overflow: hidden;
-  }
-
-  :is(
-    .has-custom-layout .game-layout-item,
-    .game-layout-logo.has-position,
-    .visual-layout-item
-  )::before {
-    position: absolute;
-    z-index: 0;
-    inset: 0;
-    background: var(--game-background-image) center / cover no-repeat;
-    content: '';
-    opacity: var(--game-background-opacity);
-    pointer-events: none;
   }
 
   :is(

@@ -256,12 +256,24 @@ button {
   left: 50%;
   width: min(1280px, calc(100% - 64px));
   aspect-ratio: 16 / 9;
+  overflow: hidden;
   border: 1px solid $border-strong;
   border-radius: 16px;
   background:
     radial-gradient(circle at 50% 35%, #202733 0, transparent 32rem), #0d1015;
   box-shadow: 0 20px 60px rgba(#000, 0.28);
   transform-origin: center;
+}
+
+.visual-editor-canvas::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--game-surface-background-image) center / cover no-repeat;
+  content: '';
+  opacity: var(--game-surface-background-opacity);
+  pointer-events: none;
 }
 
 .visual-editor-canvas.is-selected {

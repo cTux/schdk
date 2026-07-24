@@ -21,11 +21,18 @@ import { summarizeGamePackage } from './game-package-summary';
 import { useGameWizard } from './use-game-wizard';
 
 interface AppProps {
+  backgroundImage?: string | null;
+  backgroundOpacity?: number;
   layout?: GameLayout | null;
   soundVolume?: number;
 }
 
-export function App({ layout = null, soundVolume = 0.4 }: AppProps) {
+export function App({
+  backgroundImage = null,
+  backgroundOpacity = 1,
+  layout = null,
+  soundVolume = 0.4,
+}: AppProps) {
   const [gameActive, setGameActive] = useState(false);
   const [message, setMessage] = useState('');
   const [packageDetails, setPackageDetails] =
@@ -151,6 +158,8 @@ export function App({ layout = null, soundVolume = 0.4 }: AppProps) {
 
   return (
     <HostView
+      backgroundImage={backgroundImage}
+      backgroundOpacity={backgroundOpacity}
       finished={gameActive && wizard.finished}
       game={game}
       layout={layout}

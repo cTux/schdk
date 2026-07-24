@@ -77,8 +77,9 @@ own state, persistence, routing, and platform integration.
   a visible resize indicator. Let text elements
   optionally shrink their text to fit the wrapper height, using the same
   measured scale in the editor and gameplay. Select the game canvas by default
-  and return selection to it with Escape. Render each optional persisted
-  element background image and its opacity identically in the editor and game.
+  and return selection to it with Escape. Its toolbar owns the optional
+  persisted game-screen background image and opacity; render them identically
+  in the editor and game.
   Render visual-editor previews with the same shared game-element components
   and styles used by the host. Keep the answer and alternative answer as
   separate draggable layout elements. Put the 16:9 game container on a

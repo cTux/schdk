@@ -25,9 +25,9 @@ import {
   DEFAULT_GAME_LAYOUT,
   GAME_IMAGE_POSITIONS,
   GAME_LAYOUT_ELEMENT_IDS,
-  type GameLayout,
   type GameLayoutElementId,
   type GameLayoutPosition,
+  type GameOptions,
   type GameTextGrowDirection,
 } from '../options/types';
 import '../styles/host.scss';
@@ -152,11 +152,11 @@ export function getResizedPosition(
 
 interface VisualEditorProps {
   hidden: boolean;
-  layout: GameLayout | null;
-  onChange(layout: GameLayout | null): void;
+  game: GameOptions;
+  onChange(game: GameOptions): void;
 }
 
-export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
+export function VisualEditor({ hidden, game, onChange }: VisualEditorProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const workspaceRef = useRef<HTMLDivElement>(null);
   const panRef = useRef<{
@@ -183,7 +183,7 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [selected, setSelected] = useState<GameLayoutElementId | null>(null);
-  const positions = layout ?? DEFAULT_GAME_LAYOUT;
+  const positions = game.layout ?? DEFAULT_GAME_LAYOUT;
   const selectedPosition = selected ? positions[selected] : null;
 
   useEffect(() => {
@@ -211,8 +211,11 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
     patch: Partial<GameLayoutPosition>,
   ) {
     onChange({
-      ...positions,
-      [id]: { ...positions[id], ...patch },
+      ...game,
+      layout: {
+        ...positions,
+        [id]: { ...positions[id], ...patch },
+      },
     });
   }
 
@@ -397,6 +400,14 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
                 </label>
               </>
             )}
+          </aside>
+        )}
+        {!selected && (
+          <aside
+            className="visual-editor-toolbar"
+            aria-label="Властивості: Робоча область"
+          >
+            <strong>Робоча область</strong>
             <label className="visual-editor-background-image">
               Фонове зображення
               <input
@@ -411,9 +422,7 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
                     'load',
                     () => {
                       if (typeof reader.result === 'string') {
-                        updateElement(selected, {
-                          backgroundImage: reader.result,
-                        });
+                        onChange({ ...game, backgroundImage: reader.result });
                       }
                     },
                     { once: true },
@@ -422,13 +431,11 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
                 }}
               />
             </label>
-            {selectedPosition.backgroundImage && (
+            {game.backgroundImage && (
               <Button
                 type="button"
                 variant="ghost"
-                onClick={() =>
-                  updateElement(selected, { backgroundImage: null })
-                }
+                onClick={() => onChange({ ...game, backgroundImage: null })}
               >
                 Видалити фон
               </Button>
@@ -439,19 +446,16 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
                 type="range"
                 min="0"
                 max="100"
-                disabled={!selectedPosition.backgroundImage}
-                value={Math.round(
-                  (1 - selectedPosition.backgroundOpacity) * 100,
-                )}
+                disabled={!game.backgroundImage}
+                value={Math.round((1 - game.backgroundOpacity) * 100)}
                 onChange={(event) =>
-                  updateElement(selected, {
+                  onChange({
+                    ...game,
                     backgroundOpacity: 1 - Number(event.target.value) / 100,
                   })
                 }
               />
-              <output>
-                {Math.round((1 - selectedPosition.backgroundOpacity) * 100)}%
-              </output>
+              <output>{Math.round((1 - game.backgroundOpacity) * 100)}%</output>
             </label>
           </aside>
         )}
@@ -461,9 +465,15 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
             selected ? '' : ' is-selected'
           }`}
           tabIndex={0}
-          style={{
-            transform: `translate(-50%, -50%) translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
-          }}
+          style={
+            {
+              transform: `translate(-50%, -50%) translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+              '--game-surface-background-image': game.backgroundImage
+                ? `url(${JSON.stringify(game.backgroundImage)})`
+                : 'none',
+              '--game-surface-background-opacity': game.backgroundOpacity,
+            } as CSSProperties
+          }
           aria-label="Макет екрана гри"
           aria-current={selected ? undefined : 'true'}
           role="region"
@@ -487,10 +497,6 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
                   top: `${positions[id].y}%`,
                   width: `${positions[id].width}%`,
                   height: `${positions[id].height}%`,
-                  '--game-background-image': positions[id].backgroundImage
-                    ? `url(${JSON.stringify(positions[id].backgroundImage)})`
-                    : 'none',
-                  '--game-background-opacity': positions[id].backgroundOpacity,
                   '--game-font-scale': positions[id].fontScale,
                   '--game-text-color': positions[id].textColor,
                   '--game-grow-align':

@@ -30,8 +30,8 @@
   start and expiry and the pre-alarm when 10 seconds remain.
 - Keep game signal volume in the shell's Game options, persist it in
   localStorage, and default it to 40%.
-- Persist visual-editor positions, sizes, element background images, and
-  presentation settings as
+- Persist visual-editor positions, sizes, presentation settings, and the
+  game-screen background image as
   validated viewport percentages and values in the shell options. Keep the
   standard host layout until the user changes an element and apply the same
   bounds and settings to the game without changing question stages.

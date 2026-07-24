@@ -37,14 +37,13 @@ describe('game options', () => {
   it('defaults to 40% and persists only a valid volume', () => {
     const storage = createStorage();
     expect(loadGameOptions(storage)).toEqual(DEFAULT_GAME_OPTIONS);
-    saveGameOptions(storage, {
+    const options = {
+      ...DEFAULT_GAME_OPTIONS,
       soundVolume: 0.65,
       layout: DEFAULT_GAME_LAYOUT,
-    });
-    expect(loadGameOptions(storage)).toEqual({
-      soundVolume: 0.65,
-      layout: DEFAULT_GAME_LAYOUT,
-    });
+    };
+    saveGameOptions(storage, options);
+    expect(loadGameOptions(storage)).toEqual(options);
     expect(loadGameOptions(createStorage('{"soundVolume":2}'))).toEqual(
       DEFAULT_GAME_OPTIONS,
     );
@@ -62,7 +61,15 @@ describe('game options', () => {
       ...previousLayout
     } = DEFAULT_GAME_LAYOUT;
     const legacyLayout = Object.fromEntries(
-      Object.entries(previousLayout).map(([id, { x, y }]) => [id, { x, y }]),
+      Object.entries(previousLayout).map(([id, { x, y }]) => [
+        id,
+        {
+          x,
+          y,
+          backgroundImage: 'data:image/png;base64,obsolete',
+          backgroundOpacity: 0.5,
+        },
+      ]),
     );
     expect(
       loadGameOptions(
@@ -87,13 +94,9 @@ describe('game options', () => {
         createStorage(
           JSON.stringify({
             soundVolume: 0.4,
-            layout: {
-              ...DEFAULT_GAME_LAYOUT,
-              question: {
-                ...DEFAULT_GAME_LAYOUT.question,
-                backgroundImage: 'https://example.com/image.png',
-              },
-            },
+            layout: DEFAULT_GAME_LAYOUT,
+            backgroundImage: 'https://example.com/image.png',
+            backgroundOpacity: 1,
           }),
         ),
       ),
