@@ -69,11 +69,12 @@ own state, persistence, routing, and platform integration.
   Apply the same saved percentage bounds and presentation settings during
   gameplay, and preserve the standard layout until the user changes it. Keep
   the grabbed point under the pointer. Wrap previews in a click-blocking drag
-  target with a permanent transparent 2 px border; change only its color to
-  blue when selected so preview content never shifts. Keep overflowing content
-  clipped and show the selected element's text or image controls in a fixed
-  workspace toolbar. Keep the selected wrapper above every other element and
-  resize from any border without a visible resize indicator. Let text elements
+  target with a permanent transparent 2 px inset border that does not consume
+  layout space; change only its color to blue when selected so preview content
+  never shifts. Keep overflowing content clipped and show the selected
+  element's text or image controls in a fixed workspace toolbar. Keep the
+  selected wrapper above every other element and resize from any border without
+  a visible resize indicator. Let text elements
   optionally shrink their text to fit the wrapper height, using the same
   measured scale in the editor and gameplay.
   Render visual-editor previews with the same shared game-element components
