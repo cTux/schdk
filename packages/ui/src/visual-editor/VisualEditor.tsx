@@ -6,7 +6,6 @@ import {
   type PointerEvent,
   type ReactNode,
 } from 'react';
-import { Button } from '../atoms/Button';
 import {
   GameAnswer,
   GameAnswerComment,
@@ -166,26 +165,6 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
 
   return (
     <div className="visual-editor" hidden={hidden}>
-      <header className="visual-editor-header">
-        <div>
-          <p className="eyebrow">ЩДК</p>
-          <h1>Візуальний редактор</h1>
-          <p>
-            Перетягуйте елементи або пересувайте їх стрілками. Макет автоматично
-            застосовується під час гри. Права кнопка миші рухає екран, колесо
-            змінює масштаб.
-          </p>
-        </div>
-        <Button
-          type="button"
-          variant="secondary"
-          disabled={layout === null}
-          onClick={() => onChange(null)}
-        >
-          Відновити стандартний макет
-        </Button>
-      </header>
-
       <div
         ref={workspaceRef}
         className={`visual-editor-workspace${panning ? ' is-panning' : ''}`}

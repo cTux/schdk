@@ -166,26 +166,6 @@ button {
   color: #111827;
 }
 
-.visual-editor-header {
-  display: flex;
-  flex: 0 0 auto;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
-  border-bottom: 1px solid #d8dce3;
-  padding: 20px 28px;
-}
-
-.visual-editor-header > div {
-  max-width: 680px;
-}
-
-.visual-editor-header p:last-child {
-  margin: 14px 0 0;
-  color: #596273;
-  line-height: 1.55;
-}
-
 .visual-editor-workspace {
   position: relative;
   overflow: hidden;
@@ -542,12 +522,6 @@ button:focus-visible {
 
   .visual-editor {
     width: 100%;
-  }
-
-  .visual-editor-header {
-    align-items: flex-start;
-    flex-direction: column;
-    padding: 18px;
   }
 
   .visual-editor-canvas {
