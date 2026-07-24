@@ -21,7 +21,7 @@
     "fmt:check": "oxfmt --check .",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
-    "test": "turbo test"
+    "test": "turbo test && node --test scripts/repository-workflows.test.mjs"
   },
   "devDependencies": {
     "npm-check-updates": "^22.2.9",
