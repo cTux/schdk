@@ -53,7 +53,9 @@
 - Keep pure logic outside React/Electron objects when that makes it directly
   testable, as with autosave, preload routing, shortcuts, and close control.
 - Run all tests in the dedicated `tests` GitHub Actions job for every pull
-  request. Treat that check as required and do not merge until it is green.
+  request. Treat that check as required project policy, configure branch
+  protection when repository settings support it, and do not merge until it is
+  green.
 - Before committing, run `pnpm fmt:check`, `pnpm lint`, `pnpm typecheck`,
   `pnpm test`, and the builds affected by the change. Run root `pnpm build`
   when no running packaged executable blocks artifact collection.

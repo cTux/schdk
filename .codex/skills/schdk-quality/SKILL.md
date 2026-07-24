@@ -13,7 +13,7 @@ description: Verify SCHDK changes and produce local build artifacts. Use for pre
 4. Use a real browser for changed UI. Build affected Electron apps for main, preload, packaging, icon, or bundled-resource changes.
 5. Run root `pnpm build` only when packaged executables are closed; otherwise report the lock and use targeted builds.
 6. Confirm `git diff --check` and ensure generated output remains ignored before committing.
-7. Keep `.githooks/pre-commit` aligned with the required formatting and lint checks; root `pnpm install` activates it.
+7. Keep `.githooks/pre-commit` limited to `pnpm fmt:check` and `pnpm lint`; root `pnpm install` activates it. Run typechecks, tests, and builds outside the hook.
 8. Keep Turbo caching disabled for `@schdk/all-desktop-app#build`; Electron binaries must not accumulate in the shared worktree cache.
 
 On Windows icon-tool exit `3221225477` during parallel root packaging, rerun

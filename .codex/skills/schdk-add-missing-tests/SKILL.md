@@ -37,5 +37,5 @@ git diff --name-status
 
 1. Run focused tests while iterating.
 2. Review snapshot updates; never accept them blindly.
-3. Run `pnpm test`, then the remaining checks required by `$schdk-quality`.
+3. Confirm every added test is reached by root `pnpm test`, then run the remaining checks required by `$schdk-quality`.
 4. Confirm the PR `tests` check is green before merge.
