@@ -72,7 +72,7 @@ pnpm --version
 Якщо pnpm відсутній, установити потрібну версію:
 
 ```powershell
-npm install --global pnpm@11.7.0
+npm install --global pnpm@11.17.0
 ```
 
 ## Встановлення залежностей

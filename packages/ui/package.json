@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "@types/react": "catalog:",
-    "oxlint": "^1.63.0",
+    "oxlint": "^1.75.0",
     "sass": "catalog:",
     "stylelint": "catalog:",
     "stylelint-config-standard-scss": "catalog:",
