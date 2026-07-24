@@ -22,17 +22,57 @@ describe('visual editor drag position', () => {
     expect(getNextZoom(0.5, 1)).toBe(0.5);
   });
 
-  it('resizes from the bottom right without moving the opposite corner', () => {
+  it('resizes from every side without moving the opposite edge', () => {
     expect(
       getResizedPosition(
         DEFAULT_GAME_LAYOUT.question,
         { x: 50, y: 50 },
-        { x: 60, y: 55 },
+        { x: 60, y: 50 },
+        'right',
       ),
     ).toEqual({
       x: DEFAULT_GAME_LAYOUT.question.x + 5,
-      y: DEFAULT_GAME_LAYOUT.question.y + 2.5,
+      y: DEFAULT_GAME_LAYOUT.question.y,
       width: DEFAULT_GAME_LAYOUT.question.width + 10,
+      height: DEFAULT_GAME_LAYOUT.question.height,
+    });
+    expect(
+      getResizedPosition(
+        DEFAULT_GAME_LAYOUT.question,
+        { x: 50, y: 50 },
+        { x: 50, y: 55 },
+        'top',
+      ),
+    ).toEqual({
+      x: DEFAULT_GAME_LAYOUT.question.x,
+      y: DEFAULT_GAME_LAYOUT.question.y + 2.5,
+      width: DEFAULT_GAME_LAYOUT.question.width,
+      height: DEFAULT_GAME_LAYOUT.question.height - 5,
+    });
+    expect(
+      getResizedPosition(
+        DEFAULT_GAME_LAYOUT.question,
+        { x: 50, y: 50 },
+        { x: 45, y: 50 },
+        'left',
+      ),
+    ).toEqual({
+      x: DEFAULT_GAME_LAYOUT.question.x - 2.5,
+      y: DEFAULT_GAME_LAYOUT.question.y,
+      width: DEFAULT_GAME_LAYOUT.question.width + 5,
+      height: DEFAULT_GAME_LAYOUT.question.height,
+    });
+    expect(
+      getResizedPosition(
+        DEFAULT_GAME_LAYOUT.question,
+        { x: 50, y: 50 },
+        { x: 50, y: 55 },
+        'bottom',
+      ),
+    ).toEqual({
+      x: DEFAULT_GAME_LAYOUT.question.x,
+      y: DEFAULT_GAME_LAYOUT.question.y + 2.5,
+      width: DEFAULT_GAME_LAYOUT.question.width,
       height: DEFAULT_GAME_LAYOUT.question.height + 5,
     });
   });

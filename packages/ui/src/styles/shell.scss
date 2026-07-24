@@ -318,36 +318,51 @@ button {
   position: static;
 }
 
-.visual-layout-resize-handle {
+.visual-layout-resize-edge {
   position: absolute;
   z-index: 6;
-  right: 0;
-  bottom: 0;
-  width: 14px;
-  height: 14px;
-  border-top: 2px solid $saving;
-  border-left: 2px solid $saving;
-  background: rgba($saving, 0.24);
-  cursor: nwse-resize;
-  opacity: 0;
   pointer-events: auto;
 }
 
-.visual-layout-item.is-selected {
-  z-index: 2;
-  border-color: $saving;
+.visual-layout-resize-edge.is-top,
+.visual-layout-resize-edge.is-bottom {
+  right: 6px;
+  left: 6px;
+  height: 8px;
+  cursor: ns-resize;
 }
 
-.visual-layout-item.is-selected .visual-layout-resize-handle {
-  opacity: 1;
+.visual-layout-resize-edge.is-top {
+  top: 0;
+}
+
+.visual-layout-resize-edge.is-bottom {
+  bottom: 0;
+}
+
+.visual-layout-resize-edge.is-right,
+.visual-layout-resize-edge.is-left {
+  top: 6px;
+  bottom: 6px;
+  width: 8px;
+  cursor: ew-resize;
+}
+
+.visual-layout-resize-edge.is-right {
+  right: 0;
+}
+
+.visual-layout-resize-edge.is-left {
+  left: 0;
 }
 
 .visual-layout-item.visual-layout-alternative-answer {
   z-index: 3;
 }
 
-.visual-layout-item.visual-layout-alternative-answer.is-selected {
-  z-index: 4;
+.visual-layout-item.is-selected {
+  z-index: 100;
+  border-color: $saving;
 }
 
 .options-page h1 {

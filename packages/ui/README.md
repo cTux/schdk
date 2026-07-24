@@ -72,7 +72,8 @@ own state, persistence, routing, and platform integration.
   target with a permanent transparent 2 px border; change only its color to
   blue when selected so preview content never shifts. Keep overflowing content
   clipped and show the selected element's text or image controls in a fixed
-  workspace toolbar.
+  workspace toolbar. Keep the selected wrapper above every other element and
+  resize from any border without a visible resize indicator.
   Render visual-editor previews with the same shared game-element components
   and styles used by the host. Keep the answer and alternative answer as
   separate draggable layout elements. Put the 16:9 game container on a

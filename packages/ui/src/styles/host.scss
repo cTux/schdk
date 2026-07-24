@@ -606,7 +606,7 @@
       .game-layout-logo.has-position,
       .visual-layout-item
     )
-    > :not(.visual-layout-resize-handle) {
+    > :not(.visual-layout-resize-edge) {
     max-width: 100%;
     max-height: 100%;
     overflow: hidden;

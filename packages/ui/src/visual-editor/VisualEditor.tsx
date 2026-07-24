@@ -89,6 +89,8 @@ const clamp = (value: number) => Math.min(100, Math.max(0, value));
 const clampZoom = (value: number) => Math.min(2.5, Math.max(0.5, value));
 const clampSize = (value: number) => Math.min(100, Math.max(2, value));
 type GamePoint = Pick<GameLayoutPosition, 'x' | 'y'>;
+const RESIZE_SIDES = ['top', 'right', 'bottom', 'left'] as const;
+type ResizeSide = (typeof RESIZE_SIDES)[number];
 
 export function getNextZoom(current: number, deltaY: number) {
   return clampZoom(current * (deltaY < 0 ? 1.1 : 0.9));
@@ -109,12 +111,39 @@ export function getResizedPosition(
   start: GameLayoutPosition,
   startPointer: GamePoint,
   pointer: GamePoint,
+  side: ResizeSide,
 ): Pick<GameLayoutPosition, 'x' | 'y' | 'width' | 'height'> {
-  const width = clampSize(start.width + pointer.x - startPointer.x);
-  const height = clampSize(start.height + pointer.y - startPointer.y);
+  const horizontalDelta = pointer.x - startPointer.x;
+  const verticalDelta = pointer.y - startPointer.y;
+  const width =
+    side === 'left'
+      ? clampSize(start.width - horizontalDelta)
+      : side === 'right'
+        ? clampSize(start.width + horizontalDelta)
+        : start.width;
+  const height =
+    side === 'top'
+      ? clampSize(start.height - verticalDelta)
+      : side === 'bottom'
+        ? clampSize(start.height + verticalDelta)
+        : start.height;
   return {
-    x: clamp(start.x + (width - start.width) / 2),
-    y: clamp(start.y + (height - start.height) / 2),
+    x: clamp(
+      start.x +
+        (side === 'left'
+          ? (start.width - width) / 2
+          : side === 'right'
+            ? (width - start.width) / 2
+            : 0),
+    ),
+    y: clamp(
+      start.y +
+        (side === 'top'
+          ? (start.height - height) / 2
+          : side === 'bottom'
+            ? (height - start.height) / 2
+            : 0),
+    ),
     width,
     height,
   };
@@ -145,6 +174,7 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
     pointerId: number;
     startPointer: GamePoint;
     startPosition: GameLayoutPosition;
+    side: ResizeSide;
   } | null>(null);
   const [dragging, setDragging] = useState<GameLayoutElementId | null>(null);
   const [resizing, setResizing] = useState<GameLayoutElementId | null>(null);
@@ -417,56 +447,65 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
               }}
             >
               {PREVIEWS[id]}
-              <span
-                className="visual-layout-resize-handle"
-                aria-hidden="true"
-                onPointerDown={(event) => {
-                  if (event.button !== 0) return;
-                  event.preventDefault();
-                  event.stopPropagation();
-                  const startPointer = pointerPosition(event);
-                  if (!startPointer) return;
-                  event.currentTarget.setPointerCapture(event.pointerId);
-                  resizeRef.current = {
-                    id,
-                    pointerId: event.pointerId,
-                    startPointer,
-                    startPosition: positions[id],
-                  };
-                  setResizing(id);
-                  setSelected(id);
-                }}
-                onPointerMove={(event) => {
-                  const resize = resizeRef.current;
-                  const pointer = pointerPosition(event);
-                  if (
-                    !resize ||
-                    resize.pointerId !== event.pointerId ||
-                    !pointer
-                  ) {
-                    return;
-                  }
-                  updateElement(
-                    resize.id,
-                    getResizedPosition(
-                      resize.startPosition,
-                      resize.startPointer,
-                      pointer,
-                    ),
-                  );
-                }}
-                onPointerUp={(event) => {
-                  if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-                    event.currentTarget.releasePointerCapture(event.pointerId);
-                  }
-                  resizeRef.current = null;
-                  setResizing(null);
-                }}
-                onPointerCancel={() => {
-                  resizeRef.current = null;
-                  setResizing(null);
-                }}
-              />
+              {RESIZE_SIDES.map((side) => (
+                <span
+                  key={side}
+                  className={`visual-layout-resize-edge is-${side}`}
+                  aria-hidden="true"
+                  onPointerDown={(event) => {
+                    if (event.button !== 0) return;
+                    event.preventDefault();
+                    event.stopPropagation();
+                    const startPointer = pointerPosition(event);
+                    if (!startPointer) return;
+                    event.currentTarget.setPointerCapture(event.pointerId);
+                    resizeRef.current = {
+                      id,
+                      pointerId: event.pointerId,
+                      startPointer,
+                      startPosition: positions[id],
+                      side,
+                    };
+                    setResizing(id);
+                    setSelected(id);
+                  }}
+                  onPointerMove={(event) => {
+                    const resize = resizeRef.current;
+                    const pointer = pointerPosition(event);
+                    if (
+                      !resize ||
+                      resize.pointerId !== event.pointerId ||
+                      !pointer
+                    ) {
+                      return;
+                    }
+                    updateElement(
+                      resize.id,
+                      getResizedPosition(
+                        resize.startPosition,
+                        resize.startPointer,
+                        pointer,
+                        resize.side,
+                      ),
+                    );
+                  }}
+                  onPointerUp={(event) => {
+                    if (
+                      event.currentTarget.hasPointerCapture(event.pointerId)
+                    ) {
+                      event.currentTarget.releasePointerCapture(
+                        event.pointerId,
+                      );
+                    }
+                    resizeRef.current = null;
+                    setResizing(null);
+                  }}
+                  onPointerCancel={() => {
+                    resizeRef.current = null;
+                    setResizing(null);
+                  }}
+                />
+              ))}
             </div>
           ))}
         </div>
