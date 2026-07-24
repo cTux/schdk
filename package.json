@@ -24,6 +24,7 @@
     "test": "turbo test"
   },
   "devDependencies": {
+    "npm-check-updates": "^22.2.9",
     "oxfmt": "^0.60.0",
     "turbo": "^2.10.6"
   }

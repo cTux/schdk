@@ -29,6 +29,8 @@ description: Implement, debug, refactor, review, or document changes anywhere in
 
 ## Route Specialized Work
 
+- Use `$schdk-start-session` when initializing a new implementation worktree.
+- Use `$schdk-update-dependencies` for pnpm, dependency, lockfile, or audit updates.
 - Use `$schdk-ui` for components, styles, accessibility, or visual changes.
 - Use `$schdk-game-packages` for `.schdk` schema, parsing, serialization, or readiness.
 - Use `$schdk-editor-persistence` for editor saves, drafts, recents, or restoration.

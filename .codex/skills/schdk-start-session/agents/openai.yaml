@@ -1,0 +1,4 @@
+interface:
+  display_name: 'SCHDK Session Setup'
+  short_description: 'Initialize a new SCHDK worktree session'
+  default_prompt: 'Use $schdk-start-session to prepare a new SCHDK worktree for development.'

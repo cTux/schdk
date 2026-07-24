@@ -10,6 +10,10 @@
   dependencies.
 - Put shared tool versions in the pnpm catalog. Add dependencies with pnpm and
   commit `pnpm-lock.yaml` with manifest changes.
+- Keep `npm-check-updates` as a root dev dependency and use
+  `$schdk-update-dependencies` for pnpm, dependency, lockfile, and audit updates.
+- Start implementation in a new worktree with `$schdk-start-session`: create a
+  prompt-based `codex/` branch, then run `pnpm install`.
 - Prefer platform APIs and installed dependencies before adding new packages.
   Import only the Font Awesome icons used by the UI.
 

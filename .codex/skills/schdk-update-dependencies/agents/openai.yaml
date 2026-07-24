@@ -1,0 +1,4 @@
+interface:
+  display_name: 'SCHDK Dependency Updates'
+  short_description: 'Update and audit SCHDK workspace dependencies'
+  default_prompt: 'Use $schdk-update-dependencies to update pnpm and workspace dependencies safely.'
