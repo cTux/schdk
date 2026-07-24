@@ -17,6 +17,8 @@
 
 - Use Turbo for `build`, `lint`, `typecheck`, and `test`; package builds must
   declare cacheable output under `dist/**`.
+- Do not cache the `@schdk/all-desktop-app` build in Turbo; packaged Electron
+  binaries make each cache entry disproportionately large.
 - Root `pnpm build` builds packages in dependency order, deletes the root
   `dist`, and collects each package's `dist` under `dist/<package>`.
 - Close applications launched from root `dist` before collection; Windows will
