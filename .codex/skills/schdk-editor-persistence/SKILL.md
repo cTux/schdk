@@ -12,7 +12,7 @@ description: Change or debug SCHDK editor state and persistence in @schdk/editor
 3. Keep `window.desktop` optional. Never make browser editing depend on Electron.
 4. Preserve pending data through save queues, drafts, autosave, navigation, and close failures. Do not mark stale writes saved.
 5. Keep persisted data backward-compatible and best-effort where rules allow; validate every restored package through `@schdk/common`.
-6. Add focused tests for queues, timers, migrations, failures, and restoration branches.
+6. Add tests only through `$schdk-add-missing-tests` when explicitly prompted.
 
 ## Checks
 

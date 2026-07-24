@@ -11,7 +11,7 @@ description: Build, refactor, or review SCHDK React UI components and SCSS in @s
 2. Keep reusable markup, components, assets, tokens, and SCSS in `@schdk/ui`; keep application state and platform APIs outside it.
 3. Reuse existing atoms and patterns. Add a dedicated component only for coherent behavior or realistic reuse.
 4. Use Flexbox, shared tokens, Font Awesome control icons, Ukrainian copy, semantic controls, keyboard focus, and `aria-*` state.
-5. Add the smallest focused test for non-trivial interaction or extracted logic.
+5. Add tests only through `$schdk-add-missing-tests` when explicitly prompted.
 6. Visually smoke-test the affected flow in a real browser at narrow and normal widths.
 
 Keep the main answer and alternative answer as separate draggable layout

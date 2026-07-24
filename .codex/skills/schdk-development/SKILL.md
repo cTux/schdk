@@ -10,7 +10,7 @@ description: Implement, debug, refactor, review, or document changes anywhere in
 1. Read `AGENTS.md`, `docs/RULES.md`, and every linked rule area touched by the task.
 2. Trace the current flow and all callers before editing. Respect ownership: data in `common`, visuals in `ui`, browser behavior in web apps, and OS integration in desktop apps.
 3. Reuse existing helpers and native APIs before adding code, dependencies, abstractions, or packages.
-4. Make the smallest complete change and add one focused test for non-trivial logic.
+4. Make the smallest complete change. Do not add tests unless the prompt explicitly says `add missing tests`; then use `$schdk-add-missing-tests`.
 5. Update the matching rule and project skill when the task creates or changes a durable workflow.
 6. Run the checks required by `docs/rules/tooling-and-quality.md` before committing.
 
@@ -31,6 +31,7 @@ description: Implement, debug, refactor, review, or document changes anywhere in
 
 - Use `$schdk-start-session` when initializing a new implementation worktree.
 - Use `$schdk-update-dependencies` for pnpm, dependency, lockfile, or audit updates.
+- Use `$schdk-add-missing-tests` only for an explicit `add missing tests` prompt.
 - Use `$schdk-ui` for components, styles, accessibility, or visual changes.
 - Use `$schdk-game-packages` for `.schdk` schema, parsing, serialization, or readiness.
 - Use `$schdk-editor-persistence` for editor saves, drafts, recents, or restoration.

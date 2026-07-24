@@ -11,7 +11,7 @@ description: Build, debug, secure, or package SCHDK Electron applications. Use f
 2. Keep filesystem and Electron APIs in `@schdk/all-desktop-app`. Expose only narrow validated methods through its self-contained `.cts` preload.
 3. Preserve context isolation, navigation blocking, file-path authorization, recent-path allowlists, and IPC argument validation.
 4. Preserve the bounded close handshake and three recovery choices. Never trade shutdown reliability for shorter code.
-5. Add focused tests for IPC routing, preload shape, close attempts, timeouts, and failures.
+5. Add tests only through `$schdk-add-missing-tests` when explicitly prompted.
 
 ## Checks
 
