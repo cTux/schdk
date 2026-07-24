@@ -59,8 +59,11 @@ own state, persistence, routing, and platform integration.
   filename, aggregate round/question/handout counts, and start/back actions;
   never show question, answer, comment, or host-note text before the game.
 - Keep gameplay projector-first and fullscreen: animated centered question
-  intro; full-screen handout reveal that shrinks to the upper right; gradient
-  question above the timer; comment and answer aligned along the bottom.
+  intro; full-screen handout reveal that shrinks to the upper right with its
+  bottom aligned to the question; gradient question above a stable timer, with
+  the comment below it and the answer aligned along the bottom.
+- Scale long question text against viewport height and contain it inside its
+  slot; question text must never paint outside the gameplay viewport.
 - Preserve cumulative question stages and disable controls during every
   transition. Show the configured hotkeys inside the controls.
 - Put the game signal volume slider in the Game options tab and show its

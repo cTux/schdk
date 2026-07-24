@@ -160,18 +160,20 @@
   }
 
   .handout-slot {
-    align-items: flex-start;
+    align-items: flex-end;
     justify-content: flex-end;
   }
 
   .question-slot {
-    align-items: flex-end;
+    min-height: 0;
+    align-items: safe flex-end;
+    overflow-y: auto;
   }
 
   .question-bottom-left {
-    align-items: flex-end;
+    align-items: flex-start;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: flex-start;
     gap: clamp(14px, 2vh, 24px);
   }
 
@@ -185,13 +187,16 @@
     --enter-y: -24px;
 
     display: block;
+    width: min(38vw, 600px);
+    height: min(36dvh, 380px);
     max-width: 100%;
-    max-height: min(30dvh, 320px);
+    max-height: min(36dvh, 380px);
     border: 6px solid #fff;
     border-radius: 4px;
     object-fit: contain;
     box-shadow: 0 24px 54px rgba(#000, 0.58);
     transition:
+      width 680ms cubic-bezier(0.12, 0.82, 0.18, 1),
       max-width 680ms cubic-bezier(0.12, 0.82, 0.18, 1),
       max-height 680ms cubic-bezier(0.12, 0.82, 0.18, 1);
   }
@@ -222,6 +227,7 @@
 
   .is-handout-focus .game-handout {
     width: min(100%, 1400px);
+    height: auto;
     max-width: 100%;
     max-height: calc(100dvh - 64px);
   }
@@ -239,10 +245,11 @@
     );
     padding: 16px 18px;
     color: $text;
-    font-size: clamp(1.6rem, 3.2vw, 3.4rem);
+    font-size: clamp(1rem, min(3.2vw, 2.5vh), 3.4rem);
     font-weight: 650;
     letter-spacing: -0.025em;
     line-height: 1.18;
+    overflow-wrap: anywhere;
   }
 
   .game-timer {
@@ -280,6 +287,7 @@
     --enter-y: 24px;
 
     width: min(100%, 620px);
+    margin-top: auto;
     border-radius: 12px;
     background: linear-gradient(
       to right,
@@ -482,6 +490,8 @@
     }
 
     .game-handout {
+      width: min(100%, 600px);
+      height: auto;
       max-height: 30dvh;
     }
 
