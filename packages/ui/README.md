@@ -67,7 +67,8 @@ own state, persistence, routing, and platform integration.
   slot; question text must never paint outside the gameplay viewport.
 - Let users reposition every gameplay element in the visual editor by pointer
   drag or keyboard arrows. Apply saved percentage coordinates during gameplay
-  and preserve the standard layout until the user changes it.
+  and preserve the standard layout until the user changes it. Keep the grabbed
+  point under the pointer and show the selected element with a blue border.
 - Preserve cumulative question stages and disable controls during every
   transition. Show the configured hotkeys inside the controls.
 - Put the game signal volume slider in the Game options tab and show its

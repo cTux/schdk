@@ -5,6 +5,7 @@ import {
   GAME_LAYOUT_ELEMENT_IDS,
   type GameLayout,
   type GameLayoutElementId,
+  type GameLayoutPosition,
 } from '../options/types';
 
 const LABELS: Record<GameLayoutElementId, string> = {
@@ -20,6 +21,17 @@ const LABELS: Record<GameLayoutElementId, string> = {
 
 const clamp = (value: number) => Math.min(100, Math.max(0, value));
 
+export function getDraggedPosition(
+  startPosition: GameLayoutPosition,
+  startPointer: GameLayoutPosition,
+  pointer: GameLayoutPosition,
+): GameLayoutPosition {
+  return {
+    x: clamp(startPosition.x + pointer.x - startPointer.x),
+    y: clamp(startPosition.y + pointer.y - startPointer.y),
+  };
+}
+
 interface VisualEditorProps {
   hidden: boolean;
   layout: GameLayout | null;
@@ -28,21 +40,36 @@ interface VisualEditorProps {
 
 export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<{
+    id: GameLayoutElementId;
+    pointerId: number;
+    startPointer: GameLayoutPosition;
+    startPosition: GameLayoutPosition;
+  } | null>(null);
   const [dragging, setDragging] = useState<GameLayoutElementId | null>(null);
+  const [selected, setSelected] = useState<GameLayoutElementId | null>(null);
   const positions = layout ?? DEFAULT_GAME_LAYOUT;
 
-  function moveFromPointer(
-    id: GameLayoutElementId,
-    event: PointerEvent<HTMLButtonElement>,
-  ) {
+  function pointerPosition(event: PointerEvent<HTMLButtonElement>) {
     const bounds = canvasRef.current?.getBoundingClientRect();
-    if (!bounds) return;
+    if (!bounds) return null;
+    return {
+      x: ((event.clientX - bounds.left) / bounds.width) * 100,
+      y: ((event.clientY - bounds.top) / bounds.height) * 100,
+    };
+  }
+
+  function moveFromPointer(event: PointerEvent<HTMLButtonElement>) {
+    const drag = dragRef.current;
+    const pointer = pointerPosition(event);
+    if (!drag || drag.pointerId !== event.pointerId || !pointer) return;
     onChange({
       ...positions,
-      [id]: {
-        x: clamp(((event.clientX - bounds.left) / bounds.width) * 100),
-        y: clamp(((event.clientY - bounds.top) / bounds.height) * 100),
-      },
+      [drag.id]: getDraggedPosition(
+        drag.startPosition,
+        drag.startPointer,
+        pointer,
+      ),
     });
   }
 
@@ -100,26 +127,40 @@ export function VisualEditor({ hidden, layout, onChange }: VisualEditorProps) {
             type="button"
             className={`visual-layout-item visual-layout-${id}${
               dragging === id ? ' is-dragging' : ''
-            }`}
+            }${selected === id ? ' is-selected' : ''}`}
             style={{
               left: `${positions[id].x}%`,
               top: `${positions[id].y}%`,
             }}
             aria-label={`${LABELS[id]}. Перетягніть, щоб змінити позицію`}
+            aria-pressed={selected === id}
+            onClick={() => setSelected(id)}
             onKeyDown={(event) => moveFromKeyboard(id, event)}
             onPointerDown={(event) => {
+              const startPointer = pointerPosition(event);
+              if (!startPointer) return;
               event.currentTarget.setPointerCapture(event.pointerId);
+              dragRef.current = {
+                id,
+                pointerId: event.pointerId,
+                startPointer,
+                startPosition: positions[id],
+              };
               setDragging(id);
-              moveFromPointer(id, event);
+              setSelected(id);
             }}
-            onPointerMove={(event) => {
-              if (dragging === id) moveFromPointer(id, event);
-            }}
+            onPointerMove={moveFromPointer}
             onPointerUp={(event) => {
-              event.currentTarget.releasePointerCapture(event.pointerId);
+              if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+                event.currentTarget.releasePointerCapture(event.pointerId);
+              }
+              dragRef.current = null;
               setDragging(null);
             }}
-            onPointerCancel={() => setDragging(null)}
+            onPointerCancel={() => {
+              dragRef.current = null;
+              setDragging(null);
+            }}
           >
             {LABELS[id]}
           </Button>

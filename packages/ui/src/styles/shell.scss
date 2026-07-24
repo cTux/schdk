@@ -277,6 +277,11 @@ button {
   font-size: 0.72rem;
 }
 
+.visual-layout-item.is-selected {
+  z-index: 2;
+  border: 2px solid $saving;
+}
+
 .options-page h1 {
   font-size: clamp(2rem, 4vw, 3rem);
 }
