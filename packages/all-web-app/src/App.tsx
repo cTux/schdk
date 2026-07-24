@@ -65,7 +65,10 @@ export function App() {
       }
       hostApp={
         <Suspense fallback={null}>
-          <HostApp soundVolume={gameOptions.soundVolume} />
+          <HostApp
+            layout={gameOptions.layout}
+            soundVolume={gameOptions.soundVolume}
+          />
         </Suspense>
       }
       loadedApps={loadedApps}

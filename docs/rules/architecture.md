@@ -15,21 +15,16 @@
   navigation, timer/audio orchestration, and completion.
 - `@schdk/all-web-app` owns shell navigation and lazily loads the host and
   editor React application exports.
-- Each `*-desktop-app` owns only its Electron main/preload code and packaging
-  configuration. Reuse the corresponding web application for renderer UI.
-- The host desktop app exposes only read-only package open and recent-file
-  operations. Do not expose editor write operations to the standalone host.
-- Global desktop API declarations imported by the unified renderer must use a
-  compatible superset shape across host and editor packages. A standalone
-  preload may expose only the subset its application uses.
-- `@schdk/all-desktop-app` wraps `@schdk/all-web-app` and exposes its narrow
-  editor file bridge to the trusted unified renderer.
+- `@schdk/all-desktop-app` is the only desktop application. It wraps
+  `@schdk/all-web-app` and owns Electron main/preload code, packaging, and the
+  narrow file bridge exposed to the trusted unified renderer.
 
 ## Dependency direction
 
 - Keep browser applications usable without Electron. Treat `window.desktop`
   as an optional adapter, never as a prerequisite for the renderer.
-- Keep Electron imports and direct filesystem access inside desktop packages.
+- Keep Electron imports and direct filesystem access inside
+  `@schdk/all-desktop-app`.
 - Consume workspace packages through their declared package exports and list
   every workspace dependency in the consuming package manifest.
 - Preserve workspace dependency edges used to bundle lazy application imports,

@@ -8,19 +8,16 @@ description: Build, debug, secure, or package SCHDK Electron applications. Use f
 ## Workflow
 
 1. Read `docs/rules/desktop-apps.md`, `docs/rules/security.md`, `docs/rules/architecture.md`, and `docs/rules/tooling-and-quality.md`.
-2. Keep filesystem and Electron APIs in desktop packages. Expose only narrow validated methods through self-contained `.cts` preloads.
+2. Keep filesystem and Electron APIs in `@schdk/all-desktop-app`. Expose only narrow validated methods through its self-contained `.cts` preload.
 3. Preserve context isolation, navigation blocking, file-path authorization, recent-path allowlists, and IPC argument validation.
-4. Keep standalone and unified editor save, recent, restoration, and close behavior aligned; extract only shared pure logic that prevents drift.
-5. Preserve the bounded close handshake and three recovery choices. Never trade shutdown reliability for shorter code.
-6. Add focused tests for IPC routing, preload shape, shortcuts, close attempts, timeouts, and failures.
+4. Preserve the bounded close handshake and three recovery choices. Never trade shutdown reliability for shorter code.
+5. Add focused tests for IPC routing, preload shape, close attempts, timeouts, and failures.
 
 ## Checks
 
-Run tests and build every affected desktop package, for example:
+Run tests and build the unified desktop package:
 
 ```powershell
-pnpm --filter @schdk/editor-desktop-app test
-pnpm --filter @schdk/editor-desktop-app build
 pnpm --filter @schdk/all-desktop-app test
 pnpm --filter @schdk/all-desktop-app build
 ```

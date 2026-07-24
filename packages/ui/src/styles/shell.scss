@@ -156,6 +156,127 @@ button {
   padding: clamp(48px, 8vh, 80px) 0;
 }
 
+.visual-editor {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: clamp(36px, 6vh, 64px) 0;
+}
+
+.visual-editor-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.visual-editor-header > div {
+  max-width: 680px;
+}
+
+.visual-editor-header p:last-child {
+  margin: 14px 0 0;
+  color: $muted;
+  line-height: 1.55;
+}
+
+.visual-editor-canvas {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid $border-strong;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 50% 35%, #202733 0, transparent 32rem), #0d1015;
+  box-shadow: 0 20px 60px rgba(#000, 0.28);
+}
+
+.visual-layout-item {
+  position: absolute;
+  z-index: 1;
+  max-width: 38%;
+  border: 1px solid rgba($accent, 0.46);
+  background: rgba($surface-raised, 0.9);
+  padding: 8px 12px;
+  color: $text;
+  cursor: grab;
+  touch-action: none;
+  transform: translate(-50%, -50%);
+  user-select: none;
+}
+
+.visual-layout-item:hover,
+.visual-layout-item:focus-visible,
+.visual-layout-item.is-dragging {
+  z-index: 2;
+  border-color: $accent;
+  background: $surface-raised;
+}
+
+.visual-layout-item.is-dragging {
+  cursor: grabbing;
+}
+
+.visual-layout-intro {
+  font-size: clamp(1rem, 3vw, 2rem);
+  font-weight: 800;
+}
+
+.visual-layout-handout {
+  width: 26%;
+  height: 22%;
+  border: 4px solid #fff;
+  border-radius: 3px;
+  background: #171b22;
+}
+
+.visual-layout-question,
+.visual-layout-answer-comment,
+.visual-layout-answer {
+  width: 34%;
+}
+
+.visual-layout-question,
+.visual-layout-answer-comment {
+  background: linear-gradient(
+    to right,
+    rgba($surface-raised, 0.94),
+    rgba($surface-raised, 0.2)
+  );
+  text-align: left;
+}
+
+.visual-layout-timer {
+  border-width: 0 0 0 4px;
+  border-radius: 0;
+  border-left-color: $accent;
+  background: transparent;
+  color: $text;
+  font-size: clamp(1.2rem, 4vw, 2.8rem);
+  font-weight: 800;
+}
+
+.visual-layout-answer {
+  background: linear-gradient(
+    to left,
+    rgba($surface-raised, 0.94),
+    rgba($surface-raised, 0.2)
+  );
+  color: $accent;
+  font-size: clamp(1rem, 3vw, 2rem);
+  font-weight: 800;
+  text-align: right;
+}
+
+.visual-layout-progress,
+.visual-layout-controls {
+  border-color: rgba($border-strong, 0.5);
+  background: rgba($surface-raised, 0.38);
+  color: $muted;
+  font-size: 0.72rem;
+}
+
 .options-page h1 {
   font-size: clamp(2rem, 4vw, 3rem);
 }
@@ -404,6 +525,21 @@ button:focus-visible {
   .options-page {
     width: min(100% - 28px, 560px);
     padding-top: 36px;
+  }
+
+  .visual-editor {
+    width: min(100% - 28px, 760px);
+    padding-top: 28px;
+  }
+
+  .visual-editor-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .visual-editor-canvas {
+    min-height: 420px;
+    aspect-ratio: auto;
   }
 
   .option-slider {

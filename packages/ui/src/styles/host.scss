@@ -93,6 +93,10 @@
     flex-direction: column;
   }
 
+  .game-layout-item {
+    display: contents;
+  }
+
   .game-progress {
     position: absolute;
     z-index: 3;
@@ -508,6 +512,71 @@
     .game-controls kbd {
       display: none;
     }
+  }
+
+  .game-wizard.has-custom-layout {
+    position: relative;
+  }
+
+  .has-custom-layout .game-wizard-canvas {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  .has-custom-layout .question-board {
+    position: relative;
+    width: 100%;
+    max-width: none;
+  }
+
+  .has-custom-layout .question-board-top,
+  .has-custom-layout .question-board-bottom,
+  .has-custom-layout .handout-slot,
+  .has-custom-layout .question-slot,
+  .has-custom-layout .question-bottom-left,
+  .has-custom-layout .answer-slot {
+    display: contents;
+  }
+
+  .has-custom-layout .game-layout-item {
+    position: absolute;
+    z-index: 2;
+    top: var(--game-layout-y);
+    left: var(--game-layout-x);
+    display: block;
+    transform: translate(-50%, -50%);
+  }
+
+  .has-custom-layout .game-layout-handout {
+    width: min(38vw, 600px);
+    height: min(36dvh, 380px);
+  }
+
+  .has-custom-layout .game-layout-question,
+  .has-custom-layout .game-layout-answer-comment,
+  .has-custom-layout .game-layout-answer {
+    width: min(38vw, 620px);
+  }
+
+  .has-custom-layout .game-layout-handout .game-handout {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+  }
+
+  .has-custom-layout .game-layout-progress {
+    z-index: 3;
+  }
+
+  .has-custom-layout .game-layout-controls {
+    z-index: 4;
+  }
+
+  .has-custom-layout .game-progress,
+  .has-custom-layout .game-controls {
+    position: static;
+    padding: 0;
   }
 }
 

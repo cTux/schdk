@@ -7,6 +7,7 @@ import {
 } from './options-storage';
 import {
   DEFAULT_EDITOR_TEXT_OPTIONS,
+  DEFAULT_GAME_LAYOUT,
   DEFAULT_GAME_OPTIONS,
 } from '@schdk/ui/options';
 
@@ -36,10 +37,21 @@ describe('game options', () => {
   it('defaults to 40% and persists only a valid volume', () => {
     const storage = createStorage();
     expect(loadGameOptions(storage)).toEqual(DEFAULT_GAME_OPTIONS);
-    saveGameOptions(storage, { soundVolume: 0.65 });
-    expect(loadGameOptions(storage)).toEqual({ soundVolume: 0.65 });
+    saveGameOptions(storage, {
+      soundVolume: 0.65,
+      layout: DEFAULT_GAME_LAYOUT,
+    });
+    expect(loadGameOptions(storage)).toEqual({
+      soundVolume: 0.65,
+      layout: DEFAULT_GAME_LAYOUT,
+    });
     expect(loadGameOptions(createStorage('{"soundVolume":2}'))).toEqual(
       DEFAULT_GAME_OPTIONS,
     );
+    expect(
+      loadGameOptions(
+        createStorage('{"soundVolume":0.4,"layout":{"timer":{"x":101,"y":0}}}'),
+      ),
+    ).toEqual(DEFAULT_GAME_OPTIONS);
   });
 });

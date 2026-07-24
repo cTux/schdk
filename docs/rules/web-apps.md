@@ -30,6 +30,9 @@
   start and expiry and the pre-alarm when 10 seconds remain.
 - Keep game signal volume in the shell's Game options, persist it in
   localStorage, and default it to 40%.
+- Persist visual-editor positions as validated viewport percentages in the
+  shell options. Keep the standard host layout until the user moves an element
+  and apply custom positions to the game without changing question stages.
 - After the final answer, show `Дякуємо за гру!`; returning to games exits
   fullscreen and restores the package chooser and recents.
 - Keep HTML language metadata and user-visible copy Ukrainian. Use the shared
@@ -52,7 +55,7 @@
 - Preserve keyboard-accessible shell navigation while composing application
   components in the shared renderer.
 - Group the host and editor pages under `ЩДК` in the fixed shell sidebar, using
-  `Провести гру` and `Редагувати питання`. Keep the Options entry at the
+  `Провести гру`, `Редагувати питання`, and `Візуальний редактор`. Keep the Options entry at the
   bottom. Nest `Проведення гри` and `Редагування питань` settings beneath the
   primary `ЩДК` tab, and persist editor text options in localStorage for both
   browser and unified desktop runs.

@@ -1,7 +1,9 @@
 import {
   DEFAULT_EDITOR_TEXT_OPTIONS,
   DEFAULT_GAME_OPTIONS,
+  GAME_LAYOUT_ELEMENT_IDS,
   type EditorTextOptions,
+  type GameLayout,
   type GameOptions,
 } from '@schdk/ui/options';
 
@@ -51,10 +53,40 @@ export function loadGameOptions(storage: OptionsStorage): GameOptions {
     ) {
       return DEFAULT_GAME_OPTIONS;
     }
-    return { soundVolume: value.soundVolume };
+    if (
+      value.layout !== undefined &&
+      value.layout !== null &&
+      !isGameLayout(value.layout)
+    ) {
+      return DEFAULT_GAME_OPTIONS;
+    }
+    return {
+      soundVolume: value.soundVolume,
+      layout: value.layout ?? null,
+    };
   } catch {
     return DEFAULT_GAME_OPTIONS;
   }
+}
+
+function isGameLayout(value: unknown): value is GameLayout {
+  if (!value || typeof value !== 'object') return false;
+  const positions = value as Record<string, unknown>;
+  return GAME_LAYOUT_ELEMENT_IDS.every((id) => {
+    const position = positions[id];
+    if (!position || typeof position !== 'object') return false;
+    const { x, y } = position as Record<string, unknown>;
+    return (
+      typeof x === 'number' &&
+      Number.isFinite(x) &&
+      x >= 0 &&
+      x <= 100 &&
+      typeof y === 'number' &&
+      Number.isFinite(y) &&
+      y >= 0 &&
+      y <= 100
+    );
+  });
 }
 
 export function saveGameOptions(storage: OptionsStorage, options: GameOptions) {

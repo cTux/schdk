@@ -8,6 +8,7 @@ import {
   type HostPackageDetails,
   type RecentPackageItem,
 } from '@schdk/ui/host';
+import type { GameLayout } from '@schdk/ui/options';
 import { useCallback, useEffect, useState } from 'react';
 import {
   listRecentWebPackages,
@@ -20,10 +21,11 @@ import { summarizeGamePackage } from './game-package-summary';
 import { useGameWizard } from './use-game-wizard';
 
 interface AppProps {
+  layout?: GameLayout | null;
   soundVolume?: number;
 }
 
-export function App({ soundVolume = 0.4 }: AppProps) {
+export function App({ layout = null, soundVolume = 0.4 }: AppProps) {
   const [gameActive, setGameActive] = useState(false);
   const [message, setMessage] = useState('');
   const [packageDetails, setPackageDetails] =
@@ -151,6 +153,7 @@ export function App({ soundVolume = 0.4 }: AppProps) {
     <HostView
       finished={gameActive && wizard.finished}
       game={game}
+      layout={layout}
       message={message}
       packageDetails={packageDetails}
       recentPackages={recentPackages}

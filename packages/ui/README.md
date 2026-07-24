@@ -27,7 +27,7 @@ own state, persistence, routing, and platform integration.
   `prefers-reduced-motion`.
 - Keep the shell sidebar fixed to the viewport while application content
   scrolls independently.
-- Group `Провести гру` and `Редагувати питання` under `ЩДК` in the shell
+- Group `Провести гру`, `Редагувати питання`, and `Візуальний редактор` under `ЩДК` in the shell
   sidebar. Keep `Налаштування` in a separate navigation group fixed at the
   bottom. Organize settings with an accessible primary `ЩДК` tab and secondary
   `Проведення гри` and `Редагування питань` tabs.
@@ -65,6 +65,9 @@ own state, persistence, routing, and platform integration.
   the comment below it and the answer aligned along the bottom.
 - Scale long question text against viewport height and contain it inside its
   slot; question text must never paint outside the gameplay viewport.
+- Let users reposition every gameplay element in the visual editor by pointer
+  drag or keyboard arrows. Apply saved percentage coordinates during gameplay
+  and preserve the standard layout until the user changes it.
 - Preserve cumulative question stages and disable controls during every
   transition. Show the configured hotkeys inside the controls.
 - Put the game signal volume slider in the Game options tab and show its

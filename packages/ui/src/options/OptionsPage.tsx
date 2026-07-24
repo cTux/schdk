@@ -103,6 +103,7 @@ export function OptionsPage({
               value={Math.round(game.soundVolume * 100)}
               onChange={(event) =>
                 onGameChange({
+                  ...game,
                   soundVolume: Number(event.target.value) / 100,
                 })
               }

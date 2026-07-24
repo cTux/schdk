@@ -5,6 +5,7 @@ import { ShellNavigation } from './ShellNavigation';
 import type { ShellViewName } from './shellItems';
 import { OptionsPage } from '../options/OptionsPage';
 import type { EditorTextOptions, GameOptions } from '../options/types';
+import { VisualEditor } from '../visual-editor/VisualEditor';
 
 export type { ShellViewName } from './shellItems';
 
@@ -42,6 +43,11 @@ export function ShellView({
           game={gameOptions}
           onEditorChange={onEditorOptionsChange}
           onGameChange={onGameOptionsChange}
+        />
+        <VisualEditor
+          hidden={view !== 'visualEditor'}
+          layout={gameOptions.layout}
+          onChange={(layout) => onGameOptionsChange({ ...gameOptions, layout })}
         />
         {loadedApps.host && (
           <div className="embedded-app" hidden={view !== 'host'}>

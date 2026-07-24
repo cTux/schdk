@@ -15,8 +15,6 @@
     "dev:all-desktop": "pnpm --filter @schdk/all-desktop-app dev",
     "dev:host-web": "pnpm --filter @schdk/host-web-app dev",
     "dev:editor-web": "pnpm --filter @schdk/editor-web-app dev",
-    "dev:host-desktop": "pnpm --filter @schdk/host-desktop-app dev",
-    "dev:editor-desktop": "pnpm --filter @schdk/editor-desktop-app dev",
     "build": "turbo build && node scripts/collect-dist.mjs",
     "fmt": "oxfmt .",
     "fmt:check": "oxfmt --check .",

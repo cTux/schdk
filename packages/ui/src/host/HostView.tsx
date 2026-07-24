@@ -8,6 +8,7 @@ import { GameFinished } from './GameFinished';
 import { GamePackageDetails } from './GamePackageDetails';
 import { GameWizard } from './GameWizard';
 import type { HostGameView } from './types';
+import type { GameLayout } from '../options/types';
 
 export type { RecentPackageItem } from '../editor/types';
 export type {
@@ -27,6 +28,7 @@ export interface HostPackageDetails {
 interface HostViewProps {
   finished: boolean;
   game: HostGameView | null;
+  layout: GameLayout | null;
   message: string;
   packageDetails: HostPackageDetails | null;
   recentPackages: RecentPackageItem[];
@@ -42,6 +44,7 @@ interface HostViewProps {
 export function HostView({
   finished,
   game,
+  layout,
   message,
   packageDetails,
   recentPackages,
@@ -82,7 +85,12 @@ export function HostView({
         />
       )}
       {game && (
-        <GameWizard game={game} onBack={onGameBack} onNext={onGameNext} />
+        <GameWizard
+          game={game}
+          layout={layout}
+          onBack={onGameBack}
+          onNext={onGameNext}
+        />
       )}
       {finished && <GameFinished onReturn={onReturnToGames} />}
       {message && <StatusMessage>{message}</StatusMessage>}

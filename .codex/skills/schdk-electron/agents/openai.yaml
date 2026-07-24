@@ -1,4 +1,4 @@
 interface:
   display_name: 'SCHDK Electron'
-  short_description: 'Maintain secure SCHDK desktop applications'
+  short_description: 'Maintain the secure SCHDK desktop application'
   default_prompt: 'Use $schdk-electron to change SCHDK desktop behavior, IPC, or packaging.'

@@ -1,7 +1,17 @@
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { faHouse, faPen, faPlay } from '@fortawesome/free-solid-svg-icons';
+import {
+  faHouse,
+  faObjectGroup,
+  faPen,
+  faPlay,
+} from '@fortawesome/free-solid-svg-icons';
 
-export type ShellViewName = 'home' | 'host' | 'editor' | 'options';
+export type ShellViewName =
+  | 'home'
+  | 'host'
+  | 'editor'
+  | 'visualEditor'
+  | 'options';
 
 export interface ShellItem {
   id: ShellViewName;
@@ -29,5 +39,11 @@ export const SCHDK_ITEMS: readonly ShellItem[] = [
     icon: faPen,
     label: 'Редагувати питання',
     description: 'Створюйте та редагуйте пакети запитань у форматі .schdk.',
+  },
+  {
+    id: 'visualEditor',
+    icon: faObjectGroup,
+    label: 'Візуальний редактор',
+    description: 'Створюйте власний макет екрана проведення гри.',
   },
 ];
