@@ -6,10 +6,10 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./editor": "./src/editor/EditorView.tsx",
-    "./host": "./src/host/HostView.tsx",
+    "./editor": "./src/editor/EditorView/index.ts",
+    "./host": "./src/host/HostView/index.ts",
     "./options": "./src/options/types.ts",
-    "./shell": "./src/shell/ShellView.tsx"
+    "./shell": "./src/shell/ShellView/index.ts"
   },
   "scripts": {
     "build": "vite build",
@@ -22,6 +22,7 @@
     "@fortawesome/free-solid-svg-icons": "^7.3.1",
     "@fortawesome/react-fontawesome": "^3.5.0",
     "@schdk/common": "workspace:*",
+    "classnames": "^2.5.1",
     "react": "catalog:"
   },
   "devDependencies": {
