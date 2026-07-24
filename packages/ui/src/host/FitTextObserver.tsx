@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from 'react';
 
-const MIN_FIT_SCALE = 0.05;
+const MIN_FIT_SCALE = 0.01;
 
 export function getFitScale(fits: (scale: number) => boolean) {
   if (fits(1)) return 1;
@@ -31,13 +31,23 @@ export function FitTextObserver({ enabled }: { enabled: boolean }) {
     const fit = () => {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
+        const { height, maxHeight, overflow } = content.style;
+        content.style.height = 'auto';
+        content.style.maxHeight = 'none';
+        content.style.overflow = 'visible';
         const scale = getFitScale((candidate) => {
           wrapper.style.setProperty('--game-fit-scale', String(candidate));
-          return content.scrollHeight <= content.clientHeight + 1;
+          return (
+            content.scrollHeight <= wrapper.clientHeight + 1 &&
+            content.scrollWidth <= wrapper.clientWidth + 1
+          );
         });
         const safeScale =
-          scale === 1 ? 1 : Math.max(MIN_FIT_SCALE, scale - 0.01);
+          scale === 1 ? 1 : Math.max(MIN_FIT_SCALE, scale - 0.002);
         wrapper.style.setProperty('--game-fit-scale', safeScale.toFixed(3));
+        content.style.height = height;
+        content.style.maxHeight = maxHeight;
+        content.style.overflow = overflow;
       });
     };
     const resizeObserver = new ResizeObserver(fit);
