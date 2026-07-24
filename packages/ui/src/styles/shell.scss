@@ -81,6 +81,21 @@ button {
   gap: 5px;
 }
 
+.sidebar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sidebar-group-label {
+  margin: 14px 10px 2px;
+  color: $muted;
+  font-size: 0.65rem;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
 .sidebar nav button {
   display: flex;
   width: 100%;
@@ -115,14 +130,6 @@ button {
   border-radius: 7px;
   background: rgba(#fff, 0.05);
   font-size: 0.85rem;
-}
-
-.sidebar-note {
-  margin: 16px 10px 0;
-  color: #626a77;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
 }
 
 .sidebar-options {
@@ -173,6 +180,15 @@ button {
 .options-tabs button.active {
   border-bottom-color: $accent;
   color: $text;
+}
+
+.options-primary-tabs {
+  margin-bottom: 0;
+}
+
+.options-secondary-tabs {
+  margin-top: 0;
+  padding-left: 12px;
 }
 
 .options-page section {
@@ -378,10 +394,6 @@ button:focus-visible {
 
   .nav-icon {
     font-size: 0.85rem;
-  }
-
-  .sidebar-note {
-    display: none;
   }
 
   .home {

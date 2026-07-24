@@ -10,23 +10,24 @@ export interface ShellItem {
   description: string;
 }
 
-export const SHELL_ITEMS: readonly ShellItem[] = [
-  {
-    id: 'home',
-    icon: faHouse,
-    label: 'Домашня',
-    description: 'Огляд інструментів для підготовки та проведення гри.',
-  },
+export const HOME_ITEM: ShellItem = {
+  id: 'home',
+  icon: faHouse,
+  label: 'Домашня',
+  description: 'Огляд інструментів для підготовки та проведення гри.',
+};
+
+export const SCHDK_ITEMS: readonly ShellItem[] = [
   {
     id: 'host',
     icon: faPlay,
-    label: 'ЩДК Гра',
+    label: 'Провести гру',
     description: 'Запускайте готовий пакет і проводьте гру для команд.',
   },
   {
     id: 'editor',
     icon: faPen,
-    label: 'ЩДК Редактор',
+    label: 'Редагувати питання',
     description: 'Створюйте та редагуйте пакети запитань у форматі .schdk.',
   },
 ];

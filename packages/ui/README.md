@@ -27,9 +27,10 @@ own state, persistence, routing, and platform integration.
   `prefers-reduced-motion`.
 - Keep the shell sidebar fixed to the viewport while application content
   scrolls independently.
-- Keep `Налаштування` in a separate navigation group fixed at the bottom of the
-  shell sidebar. Organize the page with accessible area tabs such as `Редактор`
-  and `Гра`.
+- Group `Провести гру` and `Редагувати питання` under `ЩДК` in the shell
+  sidebar. Keep `Налаштування` in a separate navigation group fixed at the
+  bottom. Organize settings with an accessible primary `ЩДК` tab and secondary
+  `Проведення гри` and `Редагування питань` tabs.
 - Use Flexbox for UI layout. Do not use CSS Grid.
 - Use Font Awesome for icons inside controls and navigation. Import individual
   icons from the free SVG packages; keep product branding as separate assets.

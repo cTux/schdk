@@ -1,4 +1,4 @@
-import { SHELL_ITEMS, type ShellViewName } from './shellItems';
+import { SCHDK_ITEMS, type ShellViewName } from './shellItems';
 import { ToolCard } from './ToolCard';
 
 interface ShellHomeProps {
@@ -19,7 +19,7 @@ export function ShellHome({ hidden, onOpen }: ShellHomeProps) {
       </header>
 
       <div className="tool-list">
-        {SHELL_ITEMS.slice(1).map((item) => (
+        {SCHDK_ITEMS.map((item) => (
           <ToolCard key={item.id} item={item} onOpen={() => onOpen(item.id)} />
         ))}
       </div>
