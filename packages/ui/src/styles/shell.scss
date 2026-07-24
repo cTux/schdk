@@ -81,6 +81,21 @@ button {
   gap: 5px;
 }
 
+.sidebar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sidebar-group-label {
+  margin: 14px 10px 2px;
+  color: $muted;
+  font-size: 0.65rem;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
 .sidebar nav button {
   display: flex;
   width: 100%;
@@ -117,14 +132,6 @@ button {
   font-size: 0.85rem;
 }
 
-.sidebar-note {
-  margin: 16px 10px 0;
-  color: #626a77;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-}
-
 .sidebar-options {
   margin-top: auto;
 }
@@ -147,6 +154,260 @@ button {
   width: min(760px, calc(100% - 48px));
   margin: 0 auto;
   padding: clamp(48px, 8vh, 80px) 0;
+}
+
+.visual-editor {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  flex-direction: column;
+  background: #fff;
+  color: #111827;
+}
+
+.visual-editor-workspace {
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+  flex: 1 1 auto;
+  background: #fff;
+  touch-action: none;
+}
+
+.visual-editor-workspace.is-panning {
+  cursor: grabbing;
+}
+
+.visual-editor-toolbar {
+  position: absolute;
+  z-index: 10;
+  top: 12px;
+  left: 50%;
+  display: flex;
+  max-width: calc(100% - 24px);
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  border: 1px solid #c9ced8;
+  border-radius: 10px;
+  background: rgba(#fff, 0.96);
+  padding: 8px 10px;
+  color: #111827;
+  box-shadow: 0 10px 30px rgba(#111827, 0.16);
+  transform: translateX(-50%);
+}
+
+.visual-editor-toolbar strong {
+  white-space: nowrap;
+}
+
+.visual-editor-toolbar label,
+.visual-editor-font-size {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #4b5565;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.visual-editor-toolbar select {
+  border: 1px solid #c9ced8;
+  border-radius: 6px;
+  background: #fff;
+  padding: 6px 8px;
+  color: #111827;
+}
+
+.visual-editor-toolbar input[type='color'] {
+  width: 32px;
+  height: 28px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+}
+
+.visual-editor-toolbar button {
+  min-width: 28px;
+  min-height: 28px;
+  padding: 2px 8px;
+  color: #111827;
+}
+
+.visual-editor-font-size output {
+  min-width: 38px;
+  color: #111827;
+  text-align: center;
+}
+
+.visual-editor-background-image input {
+  max-width: 190px;
+}
+
+.visual-editor-background-opacity input {
+  width: 120px;
+}
+
+.visual-editor-canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(1280px, calc(100% - 64px));
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 1px solid $border-strong;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 50% 35%, #202733 0, transparent 32rem), #0d1015;
+  box-shadow: 0 20px 60px rgba(#000, 0.28);
+  transform-origin: center;
+}
+
+.visual-editor-canvas::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--game-surface-background-image) center / cover no-repeat;
+  content: '';
+  opacity: var(--game-surface-background-opacity);
+  pointer-events: none;
+}
+
+.visual-editor-canvas.is-selected {
+  border-color: $saving;
+  box-shadow:
+    inset 0 0 0 1px $saving,
+    0 20px 60px rgba(#000, 0.28);
+}
+
+.visual-editor-canvas:focus-visible {
+  outline: 2px solid rgba($saving, 0.72);
+  outline-offset: 3px;
+}
+
+.visual-layout-item {
+  position: absolute;
+  z-index: 1;
+  max-width: none;
+  overflow: hidden;
+  background: transparent;
+  padding: 0;
+  color: $text;
+  cursor: grab;
+  touch-action: none;
+  transform: translate(-50%, -50%);
+  user-select: none;
+  container-type: inline-size;
+}
+
+.visual-layout-item::after {
+  position: absolute;
+  z-index: 20;
+  inset: 0;
+  box-shadow: inset 0 0 0 2px transparent;
+  content: '';
+  pointer-events: none;
+}
+
+.visual-layout-item:hover,
+.visual-layout-item.is-dragging {
+  z-index: 2;
+}
+
+.visual-layout-item:focus-visible {
+  z-index: 2;
+  outline: 2px solid rgba($saving, 0.72);
+  outline-offset: 2px;
+}
+
+.visual-layout-item > * {
+  pointer-events: none;
+}
+
+.visual-layout-item.is-dragging {
+  cursor: grabbing;
+}
+
+.visual-editor .visual-layout-handout .game-handout {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+}
+
+.visual-layout-progress,
+.visual-layout-controls {
+  max-width: none;
+  color: $muted;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.visual-editor .visual-layout-progress .game-progress {
+  position: static;
+}
+
+.visual-editor .visual-layout-controls .game-controls {
+  position: static;
+  width: max-content;
+  padding: 0;
+  pointer-events: none;
+}
+
+.visual-editor .visual-layout-logo .game-logo {
+  position: static;
+}
+
+.visual-layout-resize-edge {
+  position: absolute;
+  z-index: 6;
+  pointer-events: auto;
+}
+
+.visual-layout-resize-edge.is-top,
+.visual-layout-resize-edge.is-bottom {
+  right: 6px;
+  left: 6px;
+  height: 8px;
+  cursor: ns-resize;
+}
+
+.visual-layout-resize-edge.is-top {
+  top: 0;
+}
+
+.visual-layout-resize-edge.is-bottom {
+  bottom: 0;
+}
+
+.visual-layout-resize-edge.is-right,
+.visual-layout-resize-edge.is-left {
+  top: 6px;
+  bottom: 6px;
+  width: 8px;
+  cursor: ew-resize;
+}
+
+.visual-layout-resize-edge.is-right {
+  right: 0;
+}
+
+.visual-layout-resize-edge.is-left {
+  left: 0;
+}
+
+.visual-layout-item.visual-layout-alternative-answer {
+  z-index: 3;
+}
+
+.visual-layout-item.is-selected {
+  z-index: 100;
+}
+
+.visual-layout-item.is-selected::after {
+  box-shadow: inset 0 0 0 2px $saving;
 }
 
 .options-page h1 {
@@ -175,6 +436,15 @@ button {
   color: $text;
 }
 
+.options-primary-tabs {
+  margin-bottom: 0;
+}
+
+.options-secondary-tabs {
+  margin-top: 0;
+  padding-left: 12px;
+}
+
 .options-page section {
   display: flex;
   flex-direction: column;
@@ -186,7 +456,8 @@ button {
   font-size: 1rem;
 }
 
-.option-toggle {
+.option-toggle,
+.option-slider {
   display: flex;
   align-items: center;
   gap: 24px;
@@ -197,16 +468,20 @@ button {
   cursor: pointer;
 }
 
-.option-toggle > span {
+.option-toggle > span,
+.option-slider > span {
   flex: 1 1 auto;
 }
 
 .option-toggle strong,
-.option-toggle small {
+.option-toggle small,
+.option-slider strong,
+.option-slider small {
   display: block;
 }
 
 .option-toggle small,
+.option-slider small,
 .options-empty {
   margin-top: 4px;
   color: $muted;
@@ -217,6 +492,19 @@ button {
   width: 18px;
   height: 18px;
   accent-color: $accent;
+}
+
+.option-slider input {
+  width: min(220px, 32vw);
+  accent-color: $accent;
+  cursor: pointer;
+}
+
+.option-slider output {
+  min-width: 3ch;
+  color: $text;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
 }
 
 .home header {
@@ -362,10 +650,6 @@ button:focus-visible {
     font-size: 0.85rem;
   }
 
-  .sidebar-note {
-    display: none;
-  }
-
   .home {
     width: min(100% - 28px, 560px);
     padding-top: 44px;
@@ -374,6 +658,27 @@ button:focus-visible {
   .options-page {
     width: min(100% - 28px, 560px);
     padding-top: 36px;
+  }
+
+  .visual-editor {
+    width: 100%;
+  }
+
+  .visual-editor-canvas {
+    width: calc(100% - 32px);
+  }
+
+  .option-slider {
+    flex-wrap: wrap;
+  }
+
+  .option-slider > span {
+    flex-basis: 100%;
+  }
+
+  .option-slider input {
+    width: auto;
+    flex: 1 1 auto;
   }
 
   .arrow {

@@ -10,20 +10,21 @@
 - `@schdk/editor-web-app` owns editor state, browser persistence, save
   orchestration, and the optional desktop bridge. It renders `@schdk/ui`
   views rather than defining an app-local visual layer.
-- `@schdk/host-web-app` owns host behavior. It currently renders only the host
-  placeholder; do not claim that game hosting is implemented until it is.
+- `@schdk/host-web-app` owns host behavior: package opening and recents,
+  spoiler-free pre-game details, fullscreen gameplay state, keyboard
+  navigation, timer/audio orchestration, and completion.
 - `@schdk/all-web-app` owns shell navigation and lazily loads the host and
   editor React application exports.
-- Each `*-desktop-app` owns only its Electron main/preload code and packaging
-  configuration. Reuse the corresponding web application for renderer UI.
-- `@schdk/all-desktop-app` wraps `@schdk/all-web-app` and exposes its narrow
-  editor file bridge to the trusted unified renderer.
+- `@schdk/all-desktop-app` is the only desktop application. It wraps
+  `@schdk/all-web-app` and owns Electron main/preload code, packaging, and the
+  narrow file bridge exposed to the trusted unified renderer.
 
 ## Dependency direction
 
 - Keep browser applications usable without Electron. Treat `window.desktop`
   as an optional adapter, never as a prerequisite for the renderer.
-- Keep Electron imports and direct filesystem access inside desktop packages.
+- Keep Electron imports and direct filesystem access inside
+  `@schdk/all-desktop-app`.
 - Consume workspace packages through their declared package exports and list
   every workspace dependency in the consuming package manifest.
 - Preserve workspace dependency edges used to bundle lazy application imports,

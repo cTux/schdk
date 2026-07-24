@@ -12,7 +12,8 @@ description: Maintain SCHDK browser applications and the unified @schdk/all-web-
 3. Render visuals through `@schdk/ui`. Do not copy components or styles into web apps.
 4. Lazy-load host and editor exports without iframes, then keep mounted applications alive while switching views.
 5. Preserve relative Vite bases, Ukrainian metadata, shell deep links, keyboard navigation, and the strict `127.0.0.1:5173` development URL.
-6. Add focused tests for routing, storage, or state-restoration logic and visually smoke-test changed navigation.
+6. Persist visual-editor layout and presentation settings with shell game options and pass them to the host without coupling UI components to storage.
+7. Add focused tests for routing, storage, or state-restoration logic and visually smoke-test changed navigation.
 
 ## Checks
 

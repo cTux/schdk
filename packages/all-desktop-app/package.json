@@ -40,7 +40,7 @@
       }
     ],
     "win": {
-      "icon": "../editor-desktop-app/build/owl.png",
+      "icon": "build/owl.png",
       "signExecutable": false,
       "target": "dir"
     }

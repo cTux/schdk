@@ -4,7 +4,8 @@ import { ShellHome } from './ShellHome';
 import { ShellNavigation } from './ShellNavigation';
 import type { ShellViewName } from './shellItems';
 import { OptionsPage } from '../options/OptionsPage';
-import type { EditorTextOptions } from '../options/types';
+import type { EditorTextOptions, GameOptions } from '../options/types';
+import { VisualEditor } from '../visual-editor/VisualEditor';
 
 export type { ShellViewName } from './shellItems';
 
@@ -13,8 +14,10 @@ interface ShellViewProps {
   hostApp: ReactNode;
   loadedApps: { host: boolean; editor: boolean };
   editorOptions: EditorTextOptions;
+  gameOptions: GameOptions;
   view: ShellViewName;
   onEditorOptionsChange(options: EditorTextOptions): void;
+  onGameOptionsChange(options: GameOptions): void;
   onShowView(view: ShellViewName): void;
 }
 
@@ -23,8 +26,10 @@ export function ShellView({
   hostApp,
   loadedApps,
   editorOptions,
+  gameOptions,
   view,
   onEditorOptionsChange,
+  onGameOptionsChange,
   onShowView,
 }: ShellViewProps) {
   return (
@@ -35,7 +40,14 @@ export function ShellView({
         <OptionsPage
           hidden={view !== 'options'}
           editor={editorOptions}
+          game={gameOptions}
           onEditorChange={onEditorOptionsChange}
+          onGameChange={onGameOptionsChange}
+        />
+        <VisualEditor
+          hidden={view !== 'visualEditor'}
+          game={gameOptions}
+          onChange={onGameOptionsChange}
         />
         {loadedApps.host && (
           <div className="embedded-app" hidden={view !== 'host'}>

@@ -1,7 +1,17 @@
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { faHouse, faPen, faPlay } from '@fortawesome/free-solid-svg-icons';
+import {
+  faHouse,
+  faObjectGroup,
+  faPen,
+  faPlay,
+} from '@fortawesome/free-solid-svg-icons';
 
-export type ShellViewName = 'home' | 'host' | 'editor' | 'options';
+export type ShellViewName =
+  | 'home'
+  | 'host'
+  | 'editor'
+  | 'visualEditor'
+  | 'options';
 
 export interface ShellItem {
   id: ShellViewName;
@@ -10,23 +20,30 @@ export interface ShellItem {
   description: string;
 }
 
-export const SHELL_ITEMS: readonly ShellItem[] = [
-  {
-    id: 'home',
-    icon: faHouse,
-    label: 'Домашня',
-    description: 'Огляд інструментів для підготовки та проведення гри.',
-  },
+export const HOME_ITEM: ShellItem = {
+  id: 'home',
+  icon: faHouse,
+  label: 'Домашня',
+  description: 'Огляд інструментів для підготовки та проведення гри.',
+};
+
+export const SCHDK_ITEMS: readonly ShellItem[] = [
   {
     id: 'host',
     icon: faPlay,
-    label: 'ЩДК Гра',
+    label: 'Провести гру',
     description: 'Запускайте готовий пакет і проводьте гру для команд.',
   },
   {
     id: 'editor',
     icon: faPen,
-    label: 'ЩДК Редактор',
+    label: 'Редагувати питання',
     description: 'Створюйте та редагуйте пакети запитань у форматі .schdk.',
+  },
+  {
+    id: 'visualEditor',
+    icon: faObjectGroup,
+    label: 'Візуальний редактор',
+    description: 'Створюйте власний макет екрана проведення гри.',
   },
 ];

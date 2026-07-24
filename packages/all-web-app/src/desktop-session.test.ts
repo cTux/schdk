@@ -14,6 +14,10 @@ describe('desktop shell session', () => {
     expect(loadDesktopShellView(storage, '/all/index.html')).toBe('editor');
     saveDesktopShellView(storage, '/all/index.html', 'options');
     expect(loadDesktopShellView(storage, '/all/index.html')).toBe('options');
+    saveDesktopShellView(storage, '/all/index.html', 'visualEditor');
+    expect(loadDesktopShellView(storage, '/all/index.html')).toBe(
+      'visualEditor',
+    );
     expect(loadDesktopShellView(storage, '/other/index.html')).toBeNull();
   });
 });

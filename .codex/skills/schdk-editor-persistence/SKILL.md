@@ -1,6 +1,6 @@
 ---
 name: schdk-editor-persistence
-description: Change or debug SCHDK editor state and persistence in @schdk/editor-web-app and editor-capable desktop apps. Use for open/save flows, autosave, save states, drafts, recents, readiness metadata, browser downloads, File System Access, deep links, desktop sessions, back navigation, or save-before-close behavior.
+description: Change or debug SCHDK editor state and persistence in @schdk/editor-web-app and the unified desktop app. Use for open/save flows, autosave, save states, drafts, recents, readiness metadata, browser downloads, File System Access, deep links, desktop sessions, back navigation, or save-before-close behavior.
 ---
 
 # SCHDK Editor Persistence
@@ -23,4 +23,4 @@ pnpm --filter @schdk/editor-web-app test
 pnpm --filter @schdk/editor-web-app build
 ```
 
-Build both editor-capable desktop packages when the bridge or close flow changes.
+Build `@schdk/all-desktop-app` when the bridge or close flow changes.

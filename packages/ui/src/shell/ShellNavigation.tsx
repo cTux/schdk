@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { AppIcon } from '../atoms/AppIcon';
 import { Button } from '../atoms/Button';
-import { SHELL_ITEMS, type ShellViewName } from './shellItems';
+import { HOME_ITEM, SCHDK_ITEMS, type ShellViewName } from './shellItems';
 
 interface ShellNavigationProps {
   view: ShellViewName;
@@ -21,21 +21,43 @@ export function ShellNavigation({ view, onSelect }: ShellNavigationProps) {
       </div>
 
       <nav aria-label="Інструменти">
-        {SHELL_ITEMS.map((item) => (
-          <Button
-            variant="ghost"
-            className={item.id === view ? 'active' : ''}
-            type="button"
-            key={item.id}
-            onClick={() => onSelect(item.id)}
-            aria-current={item.id === view ? 'page' : undefined}
-          >
-            <span className="nav-icon" aria-hidden="true">
-              <FontAwesomeIcon icon={item.icon} />
-            </span>
-            {item.label}
-          </Button>
-        ))}
+        <Button
+          variant="ghost"
+          className={HOME_ITEM.id === view ? 'active' : ''}
+          type="button"
+          onClick={() => onSelect(HOME_ITEM.id)}
+          aria-current={HOME_ITEM.id === view ? 'page' : undefined}
+        >
+          <span className="nav-icon" aria-hidden="true">
+            <FontAwesomeIcon icon={HOME_ITEM.icon} />
+          </span>
+          {HOME_ITEM.label}
+        </Button>
+
+        <div
+          className="sidebar-group"
+          role="group"
+          aria-labelledby="sidebar-schdk-group"
+        >
+          <span id="sidebar-schdk-group" className="sidebar-group-label">
+            ЩДК
+          </span>
+          {SCHDK_ITEMS.map((item) => (
+            <Button
+              variant="ghost"
+              className={item.id === view ? 'active' : ''}
+              type="button"
+              key={item.id}
+              onClick={() => onSelect(item.id)}
+              aria-current={item.id === view ? 'page' : undefined}
+            >
+              <span className="nav-icon" aria-hidden="true">
+                <FontAwesomeIcon icon={item.icon} />
+              </span>
+              {item.label}
+            </Button>
+          ))}
+        </div>
       </nav>
 
       <nav className="sidebar-options" aria-label="Налаштування">
@@ -52,8 +74,6 @@ export function ShellNavigation({ view, onSelect }: ShellNavigationProps) {
           Налаштування
         </Button>
       </nav>
-
-      <p className="sidebar-note">ЩДК</p>
     </aside>
   );
 }

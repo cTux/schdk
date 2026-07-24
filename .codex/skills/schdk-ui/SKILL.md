@@ -14,6 +14,19 @@ description: Build, refactor, or review SCHDK React UI components and SCSS in @s
 5. Add the smallest focused test for non-trivial interaction or extracted logic.
 6. Visually smoke-test the affected flow in a real browser at narrow and normal widths.
 
+Keep the main answer and alternative answer as separate draggable layout
+elements while rendering both through the shared host components.
+Keep the visual editor on a light full-size workspace with a pannable,
+wheel-zoomable 16:9 game container.
+Persist element bounds as percentages and apply the same bounds and
+presentation settings in gameplay. Keep resize and element-property controls
+outside the transformed game container. Resize from invisible border zones and
+keep the selected wrapper and its border above every other preview. Select the
+game canvas by default and restore its selection with Escape. Its toolbar owns
+the optional persisted game-screen background image and opacity. Share
+measured text height fitting between the visual editor and gameplay.
+Keep the draggable game logo visible through every gameplay question stage.
+
 ## Checks
 
 ```powershell

@@ -1,9 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import {
   loadEditorTextOptions,
+  loadGameOptions,
   saveEditorTextOptions,
+  saveGameOptions,
 } from './options-storage';
-import { DEFAULT_EDITOR_TEXT_OPTIONS } from '@schdk/ui/options';
+import {
+  DEFAULT_EDITOR_TEXT_OPTIONS,
+  DEFAULT_GAME_LAYOUT,
+  DEFAULT_GAME_OPTIONS,
+} from '@schdk/ui/options';
 
 function createStorage(initial: string | null = null) {
   let value = initial;
@@ -24,5 +30,76 @@ describe('editor text options', () => {
     expect(loadEditorTextOptions(createStorage('{'))).toEqual(
       DEFAULT_EDITOR_TEXT_OPTIONS,
     );
+  });
+});
+
+describe('game options', () => {
+  it('defaults to 40% and persists only a valid volume', () => {
+    const storage = createStorage();
+    expect(loadGameOptions(storage)).toEqual(DEFAULT_GAME_OPTIONS);
+    const options = {
+      ...DEFAULT_GAME_OPTIONS,
+      soundVolume: 0.65,
+      layout: DEFAULT_GAME_LAYOUT,
+    };
+    saveGameOptions(storage, options);
+    expect(loadGameOptions(storage)).toEqual(options);
+    expect(loadGameOptions(createStorage('{"soundVolume":2}'))).toEqual(
+      DEFAULT_GAME_OPTIONS,
+    );
+    expect(
+      loadGameOptions(
+        createStorage('{"soundVolume":0.4,"layout":{"timer":{"x":101,"y":0}}}'),
+      ),
+    ).toEqual(DEFAULT_GAME_OPTIONS);
+  });
+
+  it('adds new element positions to legacy layouts', () => {
+    const {
+      logo: _logo,
+      ['alternative-answer']: _alternativeAnswer,
+      ...previousLayout
+    } = DEFAULT_GAME_LAYOUT;
+    const legacyLayout = Object.fromEntries(
+      Object.entries(previousLayout).map(([id, { x, y }]) => [
+        id,
+        {
+          x,
+          y,
+          backgroundImage: 'data:image/png;base64,obsolete',
+          backgroundOpacity: 0.5,
+        },
+      ]),
+    );
+    expect(
+      loadGameOptions(
+        createStorage(
+          JSON.stringify({ soundVolume: 0.4, layout: legacyLayout }),
+        ),
+      ).layout,
+    ).toEqual({
+      ...DEFAULT_GAME_LAYOUT,
+      logo: DEFAULT_GAME_LAYOUT.logo,
+      'alternative-answer': {
+        ...DEFAULT_GAME_LAYOUT['alternative-answer'],
+        x: legacyLayout.answer.x,
+        y: legacyLayout.answer.y - 18,
+      },
+    });
+  });
+
+  it('rejects unsafe background images', () => {
+    expect(
+      loadGameOptions(
+        createStorage(
+          JSON.stringify({
+            soundVolume: 0.4,
+            layout: DEFAULT_GAME_LAYOUT,
+            backgroundImage: 'https://example.com/image.png',
+            backgroundOpacity: 1,
+          }),
+        ),
+      ),
+    ).toEqual(DEFAULT_GAME_OPTIONS);
   });
 });

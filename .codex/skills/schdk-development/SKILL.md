@@ -14,6 +14,19 @@ description: Implement, debug, refactor, review, or document changes anywhere in
 5. Update the matching rule and project skill when the task creates or changes a durable workflow.
 6. Run the checks required by `docs/rules/tooling-and-quality.md` before committing.
 
+## Host Start Flow
+
+- Reuse the shared package start view; the host does not create packages.
+- Parse and readiness-check a package before handing it to gameplay.
+- Show only spoiler-free aggregate package details before gameplay.
+- Keep browser host recents in IndexedDB and desktop host recents behind a
+  read-only Electron bridge.
+- Keep the question wizard ordered as intro, optional handout, question,
+  60-second timer, optional answer comment, and answer. Preserve cumulative
+  reveals, animation locks, keyboard navigation, fullscreen, audio thresholds,
+  the persisted game-volume option with a 40% default, and the final
+  return-to-games screen.
+
 ## Route Specialized Work
 
 - Use `$schdk-ui` for components, styles, accessibility, or visual changes.

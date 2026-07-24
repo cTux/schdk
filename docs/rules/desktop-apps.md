@@ -2,26 +2,19 @@
 
 ## Window behavior
 
-- All desktop applications open maximized, remove the application menu, and
-  deny renderer-created windows.
-- Block renderer navigation in standalone and unified applications.
-- Use the same owl PNG from `editor-desktop-app/build/owl.png` for every
-  desktop executable and development window.
-- Development launches build the corresponding web application before opening
+- The unified desktop application opens maximized, removes the application
+  menu, denies renderer-created windows, and blocks renderer navigation.
+- Use `all-desktop-app/build/owl.png` for the desktop executable and
+  development window.
+- Development launches build the unified web application before opening
   Electron. Packaged applications load web assets from `process.resourcesPath`.
-- Editor-capable windows enable developer tools only outside packaged
-  applications.
-- The standalone editor window title includes the opened filename and returns
-  to the editor title when no file is open.
-- Block reload shortcuts in the standalone editor because reload can discard
-  renderer state outside the save handshake.
+- Enable developer tools only outside packaged applications.
 
 ## Session restoration
 
 - Persist restorable desktop renderer state continuously so normal and
   unexpected shutdowns can resume the last location.
-- The unified application restores its active section. Editor-capable
-  applications restore the opened `.schdk` path and selected question.
+- Restore the active section, opened `.schdk` path, and selected question.
 - Restore files only through the authorized recent-file desktop bridge. Clear
   stale session state and show an actionable error when a remembered file is
   unavailable.
@@ -30,9 +23,6 @@
 
 ## Save-before-close protocol
 
-- Keep standalone-editor and unified-editor file, recent, autosave, and close
-  behavior aligned. When a change would duplicate substantial logic, extract a
-  shared pure helper rather than letting the two implementations drift.
 - Intercept ordinary window close and ask the renderer to save before calling
   `destroy()`.
 - Identify close attempts with increasing integers and ignore late results from
@@ -41,7 +31,7 @@
 - On timeout or save failure, offer exactly three outcomes: retry saving, close
   without saving, or cancel closing. Never leave a window permanently
   uncloseable after a renderer or IPC failure.
-- In the unified app, send close requests to the main renderer only after a
+- Send close requests to the main renderer only after a
   package path has been authorized. Otherwise close immediately because there
   is no desktop package state to save.
 
@@ -50,9 +40,9 @@
 - Keep preload files as self-contained `.cts` files with no local imports so
   TypeScript emits sandbox-compatible `.cjs`; reference `preload.cjs` from
   `BrowserWindow`.
-- The unified preload exposes the narrow editor API to its trusted main
-  renderer. Do not enable Node integration for renderer content or subframes.
-- Package Windows apps with electron-builder's unpacked `dir` target under
+- The preload exposes the narrow editor API to its trusted main renderer. Do
+  not enable Node integration for renderer content or subframes.
+- Package the Windows app with electron-builder's unpacked `dir` target under
   `dist/release/win-unpacked`; the project does not currently build installers.
 - Keep `signExecutable: false` so executable resource editing can apply the
   shared icon without requiring signing.

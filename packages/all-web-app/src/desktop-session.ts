@@ -13,6 +13,7 @@ export function loadDesktopShellView(
     return view === 'home' ||
       view === 'host' ||
       view === 'editor' ||
+      view === 'visualEditor' ||
       view === 'options'
       ? view
       : null;

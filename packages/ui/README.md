@@ -27,9 +27,10 @@ own state, persistence, routing, and platform integration.
   `prefers-reduced-motion`.
 - Keep the shell sidebar fixed to the viewport while application content
   scrolls independently.
-- Keep `Налаштування` in a separate navigation group fixed at the bottom of the
-  shell sidebar. Organize the page with accessible area tabs such as `Редактор`
-  and `Гра`.
+- Group `Провести гру`, `Редагувати питання`, and `Візуальний редактор` under `ЩДК` in the shell
+  sidebar. Keep `Налаштування` in a separate navigation group fixed at the
+  bottom. Organize settings with an accessible primary `ЩДК` tab and secondary
+  `Проведення гри` and `Редагування питань` tabs.
 - Use Flexbox for UI layout. Do not use CSS Grid.
 - Use Font Awesome for icons inside controls and navigation. Import individual
   icons from the free SVG packages; keep product branding as separate assets.
@@ -55,6 +56,44 @@ own state, persistence, routing, and platform integration.
   drag-to-pan while zoomed.
 - Keep the file-open drop zone compact: at most 250 px tall, shrinking further
   on short viewports. Keep recent packages below it, never inside it.
+- Keep the host pre-game summary spoiler-free. Show only the package title,
+  filename, aggregate round/question/handout counts, and start/back actions;
+  never show question, answer, comment, or host-note text before the game.
+- Keep gameplay projector-first and fullscreen: animated centered question
+  intro; full-screen handout reveal that shrinks to the upper right with its
+  bottom aligned to the question; gradient question above a stable timer, with
+  the comment below it and the answer aligned along the bottom.
+- Scale long question text against viewport height and contain it inside its
+  slot; question text must never paint outside the gameplay viewport.
+- Let users reposition and resize every gameplay element in the visual editor.
+  Apply the same saved percentage bounds and presentation settings during
+  gameplay, and preserve the standard layout until the user changes it. Keep
+  the grabbed point under the pointer. Wrap previews in a click-blocking drag
+  target with a permanent transparent 2 px inset border that does not consume
+  layout space; change only its color to blue when selected so preview content
+  never shifts. Keep overflowing content clipped and show the selected
+  element's text or image controls in a fixed workspace toolbar. Keep the
+  selected wrapper above every other element and resize from any border without
+  a visible resize indicator. Let text elements
+  optionally shrink their text to fit the wrapper height, using the same
+  measured scale in the editor and gameplay. Select the game canvas by default
+  and return selection to it with Escape. Its toolbar owns the optional
+  persisted game-screen background image and opacity; render them identically
+  in the editor and game.
+  Render visual-editor previews with the same shared game-element components
+  and styles used by the host. Keep the answer and alternative answer as
+  separate draggable layout elements. Put the 16:9 game container on a
+  full-size light workspace; pan it with right-button drag and zoom it with the
+  mouse wheel. Keep the draggable game logo visible through every question
+  stage, with its default position in the upper-left corner.
+- Preserve cumulative question stages and disable controls during every
+  transition. Show the configured hotkeys inside the controls.
+- Put the game signal volume slider in the Game options tab and show its
+  current percentage.
+- Give handouts the answer gradient and a soft black shadow without a border.
+  Align contained images to the bottom right so landscape images sit at the
+  bottom and portrait images sit at the right. Render the main answer
+  prominently with smaller alternative answers above it.
 - Show the package title first and the filename second in each recent-package
   item. Fall back to the filename alone for legacy entries without title
   metadata. Show a `Готовий` tag beside the title only when shared package

@@ -31,7 +31,6 @@
 
 - Build desktop apps for MacOS (.app/.pkg?) and Linux (.deb?)
 - Automate changelog and releases
-- Add pre-commit hook with linters checks
 - Add GitHub Action for PR: Running tests and build
 - Write AI skills for this project
 
