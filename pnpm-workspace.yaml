@@ -17,8 +17,14 @@ catalog:
   vite: ^8.1.5
   vitest: ^4.1.10
 
+overrides:
+  tar: 7.5.22
+
 allowBuilds:
   '@parcel/watcher': true
   electron: true
   electron-winstaller: true
   esbuild: true
+
+minimumReleaseAgeExclude:
+  - tar@7.5.22
