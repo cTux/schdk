@@ -18,8 +18,10 @@
 - Expose only status, connect, disconnect, settings load, and settings save
   through Electron IPC. Tokens and generic authenticated requests never cross
   into the renderer.
-- Configure the public client IDs through `VITE_GOOGLE_WEB_CLIENT_ID` and
-  `GOOGLE_DESKTOP_CLIENT_ID`. Missing IDs disable connection without affecting
-  local operation.
+- Configure the browser's public client ID through
+  `VITE_GOOGLE_WEB_CLIENT_ID`; a missing ID disables browser connection without
+  affecting local operation.
+- Bundle the production Desktop application client ID in the Electron main
+  process. Allow `GOOGLE_DESKTOP_CLIENT_ID` to override it for development.
 - Real OAuth smoke tests use development credentials and test accounts. Never
   put production credentials or OAuth tokens in repository files or logs.

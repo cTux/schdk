@@ -14,7 +14,10 @@ const AUTHORIZATION_ENDPOINT = 'https://accounts.google.com/o/oauth2/v2/auth';
 const TOKEN_ENDPOINT = 'https://oauth2.googleapis.com/token';
 const REVOCATION_ENDPOINT = 'https://oauth2.googleapis.com/revoke';
 const CALLBACK_PATH = '/oauth2/callback';
-const clientId = process.env.GOOGLE_DESKTOP_CLIENT_ID?.trim();
+const DEFAULT_CLIENT_ID =
+  '177890331671-ocg76dk71d5bd9kurbns07c4gauuh8vl.apps.googleusercontent.com';
+const clientId =
+  process.env.GOOGLE_DESKTOP_CLIENT_ID?.trim() || DEFAULT_CLIENT_ID;
 
 interface OAuthTokens {
   accessToken: string;

@@ -96,14 +96,16 @@ Google Диск необов'язково синхронізує налашту�
 гри між веб- і десктопним застосунками. Локальне збереження продовжує працювати
 без підключення. Файли `.schdk` поки що не синхронізуються.
 
-Створіть Web application і Desktop application OAuth client ID в одному
-Google Cloud-проєкті з увімкненим Drive API та дозволами `drive.file` і
-`drive.appdata`. Перед запуском задайте потрібні публічні client ID:
+Створіть Web application OAuth client ID у Google Cloud-проєкті з увімкненим
+Drive API та дозволами `drive.file` і `drive.appdata`. Перед запуском
+вебзастосунку задайте його публічний client ID:
 
 ```powershell
 $env:VITE_GOOGLE_WEB_CLIENT_ID='web-client-id'
-$env:GOOGLE_DESKTOP_CLIENT_ID='desktop-client-id'
 ```
+
+Десктопний застосунок уже містить свій публічний client ID.
+`GOOGLE_DESKTOP_CLIENT_ID` потрібен лише для його заміни під час розробки.
 
 Вебзастосунок зберігає access token лише в пам'яті й після завершення його дії
 просить підключитися знову. Десктопний застосунок відкриває системний браузер і
