@@ -42,7 +42,6 @@ export function OptionsPage({
   return (
     <div className="options-page" hidden={hidden}>
       <header>
-        <p className="eyebrow">{copy.settings.title}</p>
         <h1>{copy.settings.title}</h1>
       </header>
       <div
@@ -80,7 +79,6 @@ export function OptionsPage({
         aria-labelledby="options-group-tab-app"
         hidden={group !== 'app'}
       >
-        <h2>{copy.settings.languageHeading}</h2>
         <label className="option-select">
           <span>
             <strong>{copy.settings.languageLabel}</strong>
@@ -162,7 +160,6 @@ export function OptionsPage({
           aria-labelledby="options-tab-editor"
           hidden={tab !== 'editor'}
         >
-          <h2>{copy.settings.textCorrection}</h2>
           <OptionToggle
             checked={editor.correctQuestionText}
             label={copy.settings.questionText}
@@ -195,7 +192,6 @@ export function OptionsPage({
           aria-labelledby="options-tab-game"
           hidden={tab !== 'game'}
         >
-          <h2>{copy.settings.game}</h2>
           <label className="option-slider">
             <span>
               <strong>{copy.settings.signalVolume}</strong>

@@ -3,17 +3,17 @@
 .options-page {
   width: min(860px, calc(100% - 56px));
   margin: 0 auto;
-  padding: clamp(48px, 8vh, 80px) 0;
+  padding: clamp(28px, 5vh, 48px) 0;
 }
 
 .options-page h1 {
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(2rem, 4vw, 2.5rem);
 }
 
 .options-tabs {
   display: flex;
   gap: 6px;
-  margin: 32px 0 24px;
+  margin: 20px 0 14px;
   width: fit-content;
   border: 1px solid $border;
   border-radius: $radius-panel;
@@ -26,7 +26,7 @@
   border: 0;
   border-radius: $radius-control;
   background: transparent;
-  padding: 10px 14px;
+  padding: 8px 12px;
   color: $muted;
   cursor: pointer;
 }
@@ -38,7 +38,6 @@
 }
 
 .options-primary-tabs {
-  margin-bottom: 24px;
   border: 0;
   background: transparent;
   padding: 0;
@@ -52,18 +51,13 @@
 }
 
 .options-secondary-tabs {
-  margin-top: 10px;
+  margin-top: 0;
 }
 
 .options-page section {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-
-.options-page section h2 {
-  margin: 0;
-  font-size: 1rem;
+  gap: 8px;
 }
 
 .option-toggle,
@@ -71,13 +65,13 @@
 .option-slider {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 16px;
   border: 1px solid $border;
   border-radius: $radius-panel;
   background:
     linear-gradient(135deg, rgba($highlight-rgb, 0.035), transparent 50%),
     rgba($surface-rgb, 0.84);
-  padding: 18px;
+  padding: 12px 14px;
   box-shadow: $shadow-raised;
   cursor: pointer;
   transition:

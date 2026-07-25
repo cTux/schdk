@@ -3,7 +3,6 @@ export const ukrainianSettings = {
   groupsLabel: 'Групи налаштувань',
   appTab: 'Застосунок',
   schdkTab: 'ЩДК',
-  languageHeading: 'Мова застосунку',
   languageLabel: 'Мова',
   ukrainian: 'Українська',
   english: 'English',
@@ -25,7 +24,6 @@ export const ukrainianSettings = {
   schdkTabsLabel: 'Налаштування ЩДК',
   gameTab: 'Проведення гри',
   editorTab: 'Редагування питань',
-  textCorrection: 'Автоматичне коригування тексту',
   questionText: 'Текст питання',
   sentenceCorrection:
     'Капіталізувати перше слово та додавати крапку, якщо наприкінці немає розділового знака.',
@@ -33,7 +31,6 @@ export const ukrainianSettings = {
   answersCorrection:
     'Капіталізувати перше слово основної, альтернативних і неправильних відповідей.',
   answerComment: 'Коментар до відповіді',
-  game: 'Гра',
   signalVolume: 'Гучність звукових сигналів',
   signalVolumeDescription: 'Головний сигнал і попередження таймера.',
 };
