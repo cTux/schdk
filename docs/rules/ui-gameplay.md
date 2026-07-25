@@ -9,6 +9,6 @@
 - Preserve cumulative stages, disable controls during transitions, and show
   configured hotkeys in the controls.
 - Keep the game volume slider and current percentage in Game options.
-- Give handouts the answer gradient and a soft black shadow without a border.
-  Align images bottom-right.
+- Give image and text handouts the answer gradient and a soft black shadow
+  without a border. Align images bottom-right and center text.
 - Render the main answer prominently with smaller alternative answers above it.

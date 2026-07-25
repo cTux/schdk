@@ -137,7 +137,7 @@ export function GameWizard({
                 {visible.has('handout') && game.question.handout && (
                   <GameLayoutItem id="handout" layout={layout}>
                     <GameHandout
-                      src={game.question.handout.dataUrl}
+                      handout={game.question.handout}
                       className={stageMotionClass(
                         'handout',
                         game.currentStage,

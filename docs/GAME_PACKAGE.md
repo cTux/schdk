@@ -8,7 +8,10 @@ extension. The archive contains a UTF-8 JSON file named `game.json`.
 - An answer comment is an optional string and does not affect question
   readiness.
 - Alternative answers are an optional list of strings.
-- A handout is an optional image embedded in the same file as a data URL.
+- A handout is optional. It can be text or an image embedded in the same file
+  as a data URL. Image handouts without a `kind` field remain supported;
+  current image handouts use `kind: "image"` and text handouts use
+  `kind: "text"` with a `text` string.
 - A comment is an optional string. A question remains unfinished while it has
   an unresolved comment.
 - Host notes are an optional string and do not affect question readiness.

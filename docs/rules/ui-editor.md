@@ -7,9 +7,9 @@
   header's right. Do not restore the completion counter or add transient save,
   cancel, or download success messages; keep actionable validation and file
   errors.
-- Place the optional handout before question text. Show no filename, put remove
-  below its thumbnail, and open a 100–400% zoomable, pannable full-size modal
-  from the thumbnail.
+- Place the optional image-or-text handout before question text. Show no image
+  filename, put remove below the image thumbnail or text field, and open a
+  100–400% zoomable, pannable full-size modal from the thumbnail.
 - Put Font Awesome copy and paste actions beside the question heading. Copy all
   question fields as JSON; confirm before parsing clipboard JSON and replacing
   the selected question.

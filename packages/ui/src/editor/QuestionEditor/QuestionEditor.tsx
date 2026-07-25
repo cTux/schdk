@@ -50,6 +50,11 @@ export function QuestionEditor({
         handout={question.handout}
         onAdd={onAddHandout}
         onRemove={() => onChange({ handout: undefined })}
+        onTextChange={(text) =>
+          onChange({
+            handout: text ? { kind: 'text', text } : undefined,
+          })
+        }
       />
 
       <div className="question-pair">

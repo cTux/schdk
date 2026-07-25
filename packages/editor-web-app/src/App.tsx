@@ -430,6 +430,7 @@ export function App({
       if (typeof reader.result !== 'string') return;
       updateQuestion({
         handout: {
+          kind: 'image',
           name: file.name,
           mimeType: file.type,
           dataUrl: reader.result,
