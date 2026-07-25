@@ -1,0 +1,126 @@
+@use './tokens' as *;
+
+.host-app {
+  .game-fit-observer {
+    display: none;
+  }
+
+  &.is-playing {
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    min-height: 100dvh;
+    overflow: hidden;
+    background:
+      radial-gradient(
+        circle at 50% 35%,
+        $game-surface-glow 0,
+        transparent 48rem
+      ),
+      $game-surface;
+    padding: 0;
+  }
+
+  &.is-playing::before {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    background: var(--game-surface-background-image) center / cover no-repeat;
+    content: '';
+    opacity: var(--game-surface-background-opacity);
+    pointer-events: none;
+  }
+
+  .game-package-details {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border: 1px solid $border;
+    border-radius: $radius-surface;
+    gap: 24px;
+    background:
+      radial-gradient(
+        circle at 50% 0%,
+        rgba($accent-rgb, 0.12),
+        transparent 26rem
+      ),
+      linear-gradient(145deg, rgba($highlight-rgb, 0.045), transparent 42%),
+      rgba($surface-rgb, 0.86);
+    padding: clamp(24px, 5vw, 52px);
+    text-align: center;
+    box-shadow: $shadow-overlay;
+    backdrop-filter: blur(22px) saturate(130%);
+    animation: package-details-in 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  .game-package-heading {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .game-package-heading h2 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+  }
+
+  .game-package-heading > p:last-child,
+  .game-package-note {
+    color: $muted;
+  }
+
+  .game-package-stats {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    width: min(680px, 100%);
+    margin: 0;
+  }
+
+  .game-package-stats div {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 0;
+    flex-direction: column-reverse;
+    border: 1px solid $border;
+    border-radius: $radius-panel;
+    gap: 6px;
+    background:
+      linear-gradient(145deg, rgba($highlight-rgb, 0.045), transparent 48%),
+      $surface-raised;
+    padding: 18px;
+    box-shadow: inset 0 1px rgba($highlight-rgb, 0.04);
+  }
+
+  .game-package-stats dt {
+    color: $muted;
+    font-size: 0.78rem;
+  }
+
+  .game-package-stats dd {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 750;
+    color: $accent-hover;
+  }
+
+  .game-package-note {
+    font-size: 0.85rem;
+  }
+
+  .game-package-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  @keyframes package-details-in {
+    from {
+      opacity: 0;
+      transform: translateY(18px) scale(0.985);
+    }
+  }
+}

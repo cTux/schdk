@@ -1,0 +1,156 @@
+@use './tokens' as *;
+
+.visual-editor {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  background: $background;
+  color: $text;
+}
+
+.visual-editor-add-panel {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  width: 84px;
+  min-width: 84px;
+  flex-direction: column;
+  gap: $space-3;
+  border-right: 1px solid $border;
+  background:
+    linear-gradient(180deg, rgba($highlight-rgb, 0.035), transparent 28%),
+    rgba($sidebar-rgb, 0.96);
+  padding: 20px 14px;
+  box-shadow: 10px 0 34px rgba($shadow-rgb, 0.24);
+}
+
+.visual-editor-add-button {
+  display: flex;
+  width: 100%;
+  height: 54px;
+  min-height: 54px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid $border;
+  border-radius: $radius-control;
+  background:
+    linear-gradient(145deg, rgba($highlight-rgb, 0.035), transparent 52%),
+    $surface-raised;
+  padding: 0;
+  color: $text;
+  cursor: pointer;
+  font: inherit;
+  transition:
+    border-color $motion-fast ease,
+    box-shadow $motion-fast ease,
+    transform $motion-fast ease;
+}
+
+.visual-editor-import-button {
+  margin-top: auto;
+}
+
+.visual-editor-add-button svg {
+  width: 20px;
+  color: $saving;
+}
+
+.visual-editor-add-button:hover {
+  border-color: rgba($saving-rgb, 0.72);
+  background: $surface-hover;
+  box-shadow: 0 10px 24px rgba($shadow-rgb, 0.2);
+  transform: translateY(-1px);
+}
+
+.visual-editor-workspace {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  min-height: 0;
+  flex: 1 1 auto;
+  background:
+    radial-gradient(
+      circle at 62% 38%,
+      rgba($accent-rgb, 0.08),
+      transparent 30rem
+    ),
+    radial-gradient(
+      circle at 28% 78%,
+      rgba($saving-rgb, 0.08),
+      transparent 34rem
+    ),
+    $background;
+  touch-action: none;
+}
+
+.visual-editor-workspace.is-panning {
+  cursor: grabbing;
+}
+
+.visual-editor-toolbar {
+  position: absolute;
+  z-index: 120;
+  top: 12px;
+  left: 50%;
+  max-width: calc(100% - 24px);
+  transform: translateX(-50%);
+}
+
+.visual-editor-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.visual-editor-message {
+  position: absolute;
+  z-index: 120;
+  right: $space-4;
+  bottom: $space-4;
+  max-width: min(420px, calc(100% - 32px));
+  margin: 0;
+  border: 1px solid rgba($danger-rgb, 0.36);
+  border-radius: $radius-control;
+  background: rgba($danger-surface-rgb, 0.94);
+  padding: 10px 12px;
+  color: $danger-text;
+  box-shadow: $shadow-raised;
+  font-size: $font-size-sm;
+}
+
+.visual-editor-canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(1280px, calc(100% - 72px));
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 1px solid $border-strong;
+  border-radius: $radius-surface;
+  background:
+    radial-gradient(circle at 50% 35%, $game-surface-glow 0, transparent 32rem),
+    $game-surface;
+  box-shadow: 0 22px 60px rgba($shadow-rgb, 0.26);
+  transform-origin: center;
+}
+
+.visual-editor-canvas::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--game-surface-background-image) center / cover no-repeat;
+  content: '';
+  opacity: var(--game-surface-background-opacity);
+  pointer-events: none;
+}
+
+.visual-editor-canvas.is-selected {
+  border-color: $saving;
+  box-shadow:
+    inset 0 0 0 1px $saving,
+    0 20px 60px rgba($shadow-rgb, 0.28);
+}

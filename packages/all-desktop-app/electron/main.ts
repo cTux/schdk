@@ -1,199 +1,22 @@
-import { app, BrowserWindow, dialog, ipcMain, Menu, screen } from 'electron';
-import { readFile, writeFile } from 'node:fs/promises';
-import { basename, join } from 'node:path';
+import { app, BrowserWindow, dialog, ipcMain, Menu } from 'electron';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import {
+  hasEditableGamePackages,
+  loadRecentGamePackages,
+  registerGamePackageIpc,
+} from './game-package-ipc.js';
+import {
+  closePresenterNotes,
+  registerPresenterNotesIpc,
+} from './presenter-notes.js';
 import {
   requestSaveBeforeClose,
   type CloseController,
 } from './window-close.js';
 
-const editableGamePackages = new Set<string>();
 const closeControllers = new Map<number, CloseController>();
-const RECENT_LIMIT = 20;
-const PRESENTER_NOTES_HTML = `<!doctype html>
-<html lang="uk">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'none'; style-src 'unsafe-inline'"
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Примітки ведучого</title>
-    <style>
-      :root {
-        color: #f8fafc;
-        background: #111827;
-        font-family: Inter, system-ui, sans-serif;
-      }
-      body {
-        box-sizing: border-box;
-        min-height: 100vh;
-        margin: 0;
-        padding: 24px;
-      }
-      p {
-        margin: 0;
-      }
-      #position {
-        color: #94a3b8;
-        font-size: 14px;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-      #notes {
-        margin-top: 18px;
-        font-size: 20px;
-        line-height: 1.5;
-        white-space: pre-wrap;
-      }
-      #notes:empty::before {
-        color: #64748b;
-        content: 'Приміток немає';
-      }
-    </style>
-  </head>
-  <body>
-    <p id="position"></p>
-    <p id="notes"></p>
-  </body>
-</html>`;
-
-interface PresenterNotes {
-  questionNumber: number;
-  questionCount: number;
-  notes: string;
-}
-
 let mainWindow: BrowserWindow | null = null;
-let presenterNotes: PresenterNotes | null = null;
-let presenterNotesDismissed = false;
-let presenterWindow: BrowserWindow | null = null;
-let recentGamePackages: string[] = [];
-
-function isPresenterNotes(value: unknown): value is PresenterNotes {
-  if (!value || typeof value !== 'object') return false;
-  const notes = value as Record<string, unknown>;
-  return (
-    Number.isSafeInteger(notes.questionNumber) &&
-    Number(notes.questionNumber) > 0 &&
-    Number.isSafeInteger(notes.questionCount) &&
-    Number(notes.questionCount) >= Number(notes.questionNumber) &&
-    typeof notes.notes === 'string'
-  );
-}
-
-function closePresenterNotes() {
-  presenterNotes = null;
-  presenterNotesDismissed = false;
-  const window = presenterWindow;
-  presenterWindow = null;
-  if (window && !window.isDestroyed()) window.destroy();
-}
-
-async function showPresenterNotes() {
-  if (presenterWindow || presenterNotesDismissed || !presenterNotes) return;
-
-  const mainDisplay = mainWindow
-    ? screen.getDisplayMatching(mainWindow.getBounds())
-    : screen.getPrimaryDisplay();
-  const display =
-    screen.getAllDisplays().find(({ id }) => id !== mainDisplay.id) ??
-    mainDisplay;
-  const width = 440;
-  const height = 320;
-  const window = new BrowserWindow({
-    alwaysOnTop: true,
-    autoHideMenuBar: true,
-    width,
-    height,
-    minWidth: 320,
-    minHeight: 220,
-    show: false,
-    x: display.workArea.x + display.workArea.width - width - 24,
-    y: display.workArea.y + 24,
-    webPreferences: {
-      contextIsolation: true,
-      devTools: !app.isPackaged,
-      preload: fileURLToPath(
-        new URL('./presenter-preload.cjs', import.meta.url),
-      ),
-    },
-  });
-  presenterWindow = window;
-  window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
-  window.webContents.on('will-navigate', (event) => event.preventDefault());
-  window.on('closed', () => {
-    if (presenterWindow !== window) return;
-    presenterWindow = null;
-    presenterNotesDismissed = true;
-  });
-
-  await window.loadURL(
-    `data:text/html;charset=UTF-8,${encodeURIComponent(PRESENTER_NOTES_HTML)}`,
-  );
-  if (presenterWindow !== window || window.isDestroyed()) return;
-  if (presenterNotes) {
-    window.webContents.send('presenter-notes-updated', presenterNotes);
-  }
-  window.showInactive();
-}
-
-function recentGamePackagesPath() {
-  return join(app.getPath('userData'), 'recent-game-packages.json');
-}
-
-async function loadRecentGamePackages() {
-  try {
-    const value: unknown = JSON.parse(
-      await readFile(recentGamePackagesPath(), 'utf8'),
-    );
-    return Array.isArray(value)
-      ? value.filter(
-          (path): path is string =>
-            typeof path === 'string' && /\.schdk$/iu.test(path),
-        )
-      : [];
-  } catch {
-    return [];
-  }
-}
-
-async function rememberGamePackage(filePath: string) {
-  recentGamePackages = [
-    filePath,
-    ...recentGamePackages.filter((path) => path !== filePath),
-  ].slice(0, RECENT_LIMIT);
-  await persistRecentGamePackages();
-}
-
-async function forgetGamePackage(filePath: string) {
-  recentGamePackages = recentGamePackages.filter((path) => path !== filePath);
-  await persistRecentGamePackages();
-}
-
-async function persistRecentGamePackages() {
-  try {
-    await writeFile(
-      recentGamePackagesPath(),
-      JSON.stringify(recentGamePackages),
-    );
-  } catch {
-    // A package operation must not fail only because the recent list cannot persist.
-  }
-}
-
-async function readGamePackage(filePath: string, editable: boolean) {
-  const content = await readFile(filePath);
-  if (editable) editableGamePackages.add(filePath);
-  await rememberGamePackage(filePath);
-  return {
-    filePath,
-    fileName: basename(filePath),
-    content: new Uint8Array(content),
-  };
-}
 
 async function handleCloseFailure(
   window: BrowserWindow,
@@ -249,7 +72,7 @@ function createWindow() {
       destroy: () => window.destroy(),
       onClose: (listener) => window.on('close', listener),
       sendCloseRequested: (attempt) => {
-        if (editableGamePackages.size === 0) return false;
+        if (!hasEditableGamePackages()) return false;
         window.webContents.send('close-requested', attempt);
         return true;
       },
@@ -272,102 +95,6 @@ function createWindow() {
   );
 }
 
-ipcMain.handle('save-game-package', async (_event, filename, content) => {
-  if (typeof filename !== 'string' || !(content instanceof Uint8Array)) {
-    throw new TypeError('Invalid game package');
-  }
-
-  const result = await dialog.showSaveDialog({
-    defaultPath: filename,
-    filters: [{ name: 'Пакет Що? Де? Коли?', extensions: ['schdk'] }],
-  });
-  if (result.canceled || !result.filePath) return null;
-
-  const filePath = /\.schdk$/iu.test(result.filePath)
-    ? result.filePath
-    : `${result.filePath}.schdk`;
-  await writeFile(filePath, content);
-  editableGamePackages.add(filePath);
-  await rememberGamePackage(filePath);
-  return filePath;
-});
-
-ipcMain.handle('open-game-package', async (_event, filePath) => {
-  if (typeof filePath !== 'string' || !/\.schdk$/iu.test(filePath)) {
-    throw new TypeError('Invalid file path');
-  }
-
-  return readGamePackage(filePath, true);
-});
-
-ipcMain.handle('open-host-game-package', async (_event, filePath) => {
-  if (typeof filePath !== 'string' || !/\.schdk$/iu.test(filePath)) {
-    throw new TypeError('Invalid file path');
-  }
-  return readGamePackage(filePath, false);
-});
-
-ipcMain.handle('list-recent-game-packages', async () => {
-  const packages = await Promise.all(
-    recentGamePackages.map(async (filePath) => {
-      try {
-        return {
-          filePath,
-          fileName: basename(filePath),
-          content: new Uint8Array(await readFile(filePath)),
-        };
-      } catch {
-        return null;
-      }
-    }),
-  );
-  const availablePackages = packages.filter(
-    (gamePackage) => gamePackage !== null,
-  );
-  if (availablePackages.length !== recentGamePackages.length) {
-    recentGamePackages = availablePackages.map(({ filePath }) => filePath);
-    await persistRecentGamePackages();
-  }
-  return availablePackages;
-});
-
-ipcMain.handle('open-recent-game-package', async (_event, filePath) => {
-  if (typeof filePath !== 'string' || !recentGamePackages.includes(filePath)) {
-    throw new TypeError('Invalid recent game package');
-  }
-
-  try {
-    return await readGamePackage(filePath, true);
-  } catch (error) {
-    await forgetGamePackage(filePath);
-    throw error;
-  }
-});
-
-ipcMain.handle('open-recent-host-game-package', async (_event, filePath) => {
-  if (typeof filePath !== 'string' || !recentGamePackages.includes(filePath)) {
-    throw new TypeError('Invalid recent game package');
-  }
-  try {
-    return await readGamePackage(filePath, false);
-  } catch (error) {
-    await forgetGamePackage(filePath);
-    throw error;
-  }
-});
-
-ipcMain.handle('write-game-package', async (_event, filePath, content) => {
-  if (
-    typeof filePath !== 'string' ||
-    !(content instanceof Uint8Array) ||
-    !editableGamePackages.has(filePath)
-  ) {
-    throw new TypeError('Invalid game package');
-  }
-
-  await writeFile(filePath, content);
-});
-
 ipcMain.on('close-attempt-finished', (event, attempt, succeeded) => {
   if (
     !Number.isSafeInteger(attempt) ||
@@ -378,24 +105,11 @@ ipcMain.on('close-attempt-finished', (event, attempt, succeeded) => {
   closeControllers.get(event.sender.id)?.finished(attempt, succeeded);
 });
 
-ipcMain.on('set-presenter-notes', (event, value: unknown) => {
-  if (event.sender !== mainWindow?.webContents) return;
-  if (value === null) {
-    closePresenterNotes();
-    return;
-  }
-  if (!isPresenterNotes(value)) return;
-
-  presenterNotes = value;
-  if (presenterWindow && !presenterWindow.isDestroyed()) {
-    presenterWindow.webContents.send('presenter-notes-updated', value);
-  } else {
-    void showPresenterNotes();
-  }
-});
+registerGamePackageIpc();
+registerPresenterNotesIpc(() => mainWindow);
 
 app.whenReady().then(async () => {
-  recentGamePackages = await loadRecentGamePackages();
+  await loadRecentGamePackages();
   Menu.setApplicationMenu(null);
   createWindow();
 

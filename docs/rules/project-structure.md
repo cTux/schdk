@@ -3,6 +3,19 @@
 Keep packages under `packages/*` and preserve the ownership and dependency
 directions in [architecture.md](architecture.md).
 
+## File size
+
+- Keep every tracked source-code file at 256 physical lines or fewer, including
+  blank lines and comments. This applies to `.cjs`, `.css`, `.html`, `.js`,
+  `.jsx`, `.mjs`, `.scss`, `.ts`, and `.tsx` files.
+- When a source file would exceed the limit, split it by cohesive
+  responsibility into smaller modules, components, hooks, or stylesheet
+  partials. Preserve ownership boundaries and public entry points; do not
+  compress formatting or combine unrelated statements merely to satisfy the
+  limit.
+- Generated output, lockfiles, binary assets, and prose documentation are not
+  source-code files and are outside this limit.
+
 ## UI components
 
 - Put each new or structurally changed component in its own

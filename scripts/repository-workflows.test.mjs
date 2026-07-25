@@ -1,9 +1,23 @@
 import assert from 'node:assert/strict';
+import { execFile } from 'node:child_process';
 import { access, readFile, readdir } from 'node:fs/promises';
 import test from 'node:test';
+import { promisify } from 'node:util';
 
 const repositoryRoot = new URL('../', import.meta.url);
 const read = (path) => readFile(new URL(path, repositoryRoot), 'utf8');
+const execFileAsync = promisify(execFile);
+const sourceExtensions = new Set([
+  '.cjs',
+  '.css',
+  '.html',
+  '.js',
+  '.jsx',
+  '.mjs',
+  '.scss',
+  '.ts',
+  '.tsx',
+]);
 
 const listFiles = async (directory) => {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -69,6 +83,31 @@ test('development prompts end with a clean commit', async () => {
   assert.match(skill, /After every prompt that changes repository files/);
   assert.match(skill, /stage and commit all task changes/);
   assert.match(skill, /confirm the worktree is clean/);
+});
+
+test('tracked source files stay within 256 physical lines', async () => {
+  const { stdout } = await execFileAsync(
+    'git',
+    ['ls-files', '--cached', '--others', '--exclude-standard', '-z'],
+    { cwd: repositoryRoot, encoding: 'utf8' },
+  );
+  const sourceFiles = stdout
+    .split('\0')
+    .filter(Boolean)
+    .filter((path) =>
+      sourceExtensions.has(path.slice(path.lastIndexOf('.')).toLowerCase()),
+    );
+  const violations = [];
+
+  for (const path of sourceFiles) {
+    const content = await read(path);
+    const lineCount = content
+      .replace(/(?:\r\n|\r|\n)$/u, '')
+      .split(/\r\n|\r|\n/u).length;
+    if (lineCount > 256) violations.push(`${path}: ${lineCount}`);
+  }
+
+  assert.deepEqual(violations, []);
 });
 
 test('UI components follow the directory and class composition contracts', async () => {

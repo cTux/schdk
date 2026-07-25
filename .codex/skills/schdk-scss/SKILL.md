@@ -35,8 +35,9 @@ description: Write, refactor, review, or audit SCSS in SCHDK. Use for any change
 - Add a mixin, function, or variable only after a repeated semantic pattern
   exists. Do not abstract a one-off value or replace clear CSS with Sass math.
 - Put genuinely component-specific rules in the component's `styles.scss`.
-  Keep shared area rules in `styles/{editor,host,shell}.scss`. Do not create or
-  import an empty placeholder stylesheet.
+  Keep shared area entry points in `styles/{editor,host,shell}.scss` and split
+  them into cohesive area-prefixed partials when needed. Do not create or import
+  an empty placeholder stylesheet.
 - Explain non-obvious constraints, not syntax. Delete commented-out code.
 
 ## Audit
