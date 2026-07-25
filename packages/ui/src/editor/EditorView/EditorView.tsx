@@ -21,6 +21,7 @@ export function EditorView({
   selectedIndex,
   showValidation,
   onAddHandout,
+  onMusicBreakChange,
   onAnswerBlur,
   onAnswerCommentBlur,
   onAlternativeAnswerBlur,
@@ -68,6 +69,7 @@ export function EditorView({
             showValidation={showValidation}
             onSelectQuestion={onSelectQuestion}
             onSwapQuestions={onSwapQuestions}
+            onMusicBreakChange={onMusicBreakChange}
           />
           <QuestionEditor
             question={gamePackage.questions[selectedIndex]!}

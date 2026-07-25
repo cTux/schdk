@@ -59,4 +59,6 @@ export const englishSettings: typeof ukrainianSettings = {
   autoFullscreenDescription: 'Enter fullscreen when the game starts.',
   signalVolume: 'Signal volume',
   signalVolumeDescription: 'Main signal and timer warning.',
+  musicVolume: 'Music volume',
+  musicVolumeDescription: 'Music during breaks between rounds.',
 };

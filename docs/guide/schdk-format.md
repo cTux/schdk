@@ -1,11 +1,13 @@
 # Коротко про формат `.schdk`
 
-Сучасний файл `.schdk` — це ZIP-архів з одним UTF-8-файлом `game.json`.
+Сучасний файл `.schdk` — це ZIP-архів із UTF-8-файлом `game.json` та
+необов'язковими аудіофайлами `audio/break-1` і `audio/break-2`.
 Кореневий об'єкт містить:
 
 - `format: "schdk-game-package"`;
-- `version: 2`;
+- `version: 3`;
 - назву пакета `title`;
+- два записи музичних пауз `musicBreaks`;
 - рівно 36 упорядкованих елементів `questions`.
 
 Кожне питання має тип `standard`, `blitz-2x30` або `blitz-3x20`, масив

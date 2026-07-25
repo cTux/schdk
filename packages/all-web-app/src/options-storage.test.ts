@@ -38,6 +38,9 @@ describe('game options', () => {
   it('defaults to 5% and persists only a valid volume', () => {
     const storage = createStorage();
     expect(loadGameOptions(storage)).toEqual(DEFAULT_GAME_OPTIONS);
+    expect(
+      loadGameOptions(createStorage('{"soundVolume":0.4}')).musicVolume,
+    ).toBe(0.05);
     const options = {
       ...DEFAULT_GAME_OPTIONS,
       soundVolume: 0.65,

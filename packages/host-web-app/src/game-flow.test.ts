@@ -78,4 +78,43 @@ describe('game question flow', () => {
       }),
     ).toBeNull();
   });
+
+  it('inserts configured music breaks between rounds', () => {
+    const gamePackage = createEmptyGamePackage();
+    gamePackage.musicBreaks[0] = {
+      name: 'pause.mp3',
+      mimeType: 'audio/mpeg',
+      data: Uint8Array.from([1]),
+    };
+
+    expect(
+      getNextPosition(gamePackage, {
+        questionIndex: 11,
+        questionPartIndex: 0,
+        stage: 'answer',
+      }),
+    ).toEqual({
+      questionIndex: 11,
+      questionPartIndex: 0,
+      stage: 'musicBreak',
+    });
+    expect(
+      getNextPosition(gamePackage, {
+        questionIndex: 11,
+        questionPartIndex: 0,
+        stage: 'musicBreak',
+      }),
+    ).toEqual({ questionIndex: 12, questionPartIndex: 0, stage: 'intro' });
+    expect(
+      getPreviousPosition(gamePackage, {
+        questionIndex: 12,
+        questionPartIndex: 0,
+        stage: 'intro',
+      }),
+    ).toEqual({
+      questionIndex: 11,
+      questionPartIndex: 0,
+      stage: 'musicBreak',
+    });
+  });
 });

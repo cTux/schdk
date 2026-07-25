@@ -24,6 +24,8 @@ const game: HostGameView = {
   },
   controlsDisabled: false,
   canGoBack: false,
+  musicBreak: null,
+  musicVolume: 0.05,
 };
 
 describe('GameWizard', () => {

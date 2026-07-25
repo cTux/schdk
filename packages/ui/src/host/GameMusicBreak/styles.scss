@@ -1,0 +1,23 @@
+@use '../../styles/tokens' as *;
+
+.host-app .game-music-break {
+  display: flex;
+  width: min(680px, calc(100% - 48px));
+  height: 100%;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 32px;
+  margin: auto;
+  text-align: center;
+}
+
+.host-app .game-music-break h2 {
+  color: $accent;
+  font-size: clamp(2.5rem, 7vw, 7rem);
+  letter-spacing: -0.04em;
+}
+
+.host-app .game-music-break audio {
+  width: min(100%, 520px);
+}

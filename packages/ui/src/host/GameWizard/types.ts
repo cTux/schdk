@@ -1,1 +1,1 @@
-export type { GameLayoutItemProps, GameWizardProps } from './GameWizard';
+export type { GameWizardProps } from './GameWizard';

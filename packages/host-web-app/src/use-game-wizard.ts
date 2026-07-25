@@ -72,10 +72,7 @@ export function useGameWizard(
     const restoredPosition =
       restoredState &&
       gamePackage?.questions[restoredState.position.questionIndex] &&
-      isValidGamePosition(
-        gamePackage.questions[restoredState.position.questionIndex],
-        restoredState.position,
-      )
+      isValidGamePosition(gamePackage, restoredState.position)
         ? restoredState.position
         : INITIAL_POSITION;
     setFinished(restoredState?.finished ?? false);
@@ -126,7 +123,10 @@ export function useGameWizard(
 
       transitionLocked.current = true;
       const questionChanging =
-        !target || target.questionIndex !== position.questionIndex;
+        !target ||
+        target.questionIndex !== position.questionIndex ||
+        target.stage === 'musicBreak' ||
+        position.stage === 'musicBreak';
       setTransition({
         phase: 'exit',
         direction,
@@ -168,7 +168,7 @@ export function useGameWizard(
   useEffect(() => {
     if (!active || finished) return;
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.repeat) return;
+      if (event.repeat || event.target instanceof HTMLMediaElement) return;
       if (
         event.code === 'Space' ||
         event.code === 'PageDown' ||

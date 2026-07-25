@@ -1,4 +1,5 @@
 import {
+  DEFAULT_GAME_OPTIONS,
   DEFAULT_GAME_LAYOUT,
   GAME_IMAGE_POSITIONS,
   GAME_LAYOUT_ELEMENT_IDS,
@@ -14,11 +15,15 @@ export function normalizeGameOptions(value: unknown): GameOptions | null {
   if (!value || typeof value !== 'object') return null;
   const candidate = value as Partial<GameOptions>;
   const autoFullscreen = candidate.autoFullscreen ?? true;
+  const musicVolume = candidate.musicVolume ?? DEFAULT_GAME_OPTIONS.musicVolume;
   if (
     typeof autoFullscreen !== 'boolean' ||
     typeof candidate.soundVolume !== 'number' ||
     candidate.soundVolume < 0 ||
-    candidate.soundVolume > 1
+    candidate.soundVolume > 1 ||
+    typeof musicVolume !== 'number' ||
+    musicVolume < 0 ||
+    musicVolume > 1
   ) {
     return null;
   }
@@ -39,6 +44,7 @@ export function normalizeGameOptions(value: unknown): GameOptions | null {
   return {
     autoFullscreen,
     soundVolume: candidate.soundVolume,
+    musicVolume,
     layout,
     customElements,
     backgroundImage,

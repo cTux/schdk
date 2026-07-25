@@ -56,4 +56,6 @@ export const ukrainianSettings = {
   autoFullscreenDescription: 'Переходити в повноекранний режим на початку гри.',
   signalVolume: 'Гучність звукових сигналів',
   signalVolumeDescription: 'Головний сигнал і попередження таймера.',
+  musicVolume: 'Гучність музики',
+  musicVolumeDescription: 'Музика під час пауз між раундами.',
 };

@@ -160,6 +160,45 @@ export function App({
       selectedIndex={selectedIndex}
       showValidation={showValidation}
       onAddHandout={questions.addHandout}
+      onMusicBreakChange={(index, file) => {
+        if (!file) {
+          setGamePackage((current) => ({
+            ...current,
+            musicBreaks: current.musicBreaks.map((musicBreak, breakIndex) =>
+              breakIndex === index ? null : musicBreak,
+            ) as GamePackage['musicBreaks'],
+          }));
+          setSaveStatus('pending');
+          setMessage('');
+          return;
+        }
+        if (
+          !file.type.startsWith('audio/') ||
+          !new Audio().canPlayType(file.type)
+        ) {
+          setMessage(copy.editor.invalidMusic);
+          return;
+        }
+        void file
+          .arrayBuffer()
+          .then((buffer) => {
+            setGamePackage((current) => ({
+              ...current,
+              musicBreaks: current.musicBreaks.map((musicBreak, breakIndex) =>
+                breakIndex === index
+                  ? {
+                      name: file.name,
+                      mimeType: file.type,
+                      data: new Uint8Array(buffer),
+                    }
+                  : musicBreak,
+              ) as GamePackage['musicBreaks'],
+            }));
+            setSaveStatus('pending');
+            setMessage('');
+          })
+          .catch(() => setMessage(copy.editor.invalidMusic));
+      }}
       onAnswerBlur={questions.correctMainAnswer}
       onAnswerCommentBlur={questions.correctAnswerComment}
       onAlternativeAnswerBlur={questions.correctAlternativeAnswer}

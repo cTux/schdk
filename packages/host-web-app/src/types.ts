@@ -7,6 +7,7 @@ export interface AppProps {
   backgroundOpacity?: number;
   customElements?: CustomGameElement[];
   layout?: GameLayout | null;
+  musicVolume?: number;
   soundVolume?: number;
   drive?: DrivePackageStorage;
   driveActive?: boolean;
