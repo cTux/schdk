@@ -3,7 +3,7 @@
 - Reuse the host's game-element components and styles for previews.
 - Keep main and alternative answers as separate draggable elements. Keep the
   game logo visible through every question stage with an upper-left default.
-- Use a full-size light workspace with a pannable, wheel-zoomable 16:9 game
+- Use a full-size dark workspace with a pannable, wheel-zoomable 16:9 game
   container.
 - Persist bounds as percentages and apply identical bounds and presentation
   settings in gameplay. Keep the standard layout until changed.

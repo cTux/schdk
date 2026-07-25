@@ -205,8 +205,8 @@ button {
   width: 100%;
   height: 100%;
   min-height: 0;
-  background: $canvas;
-  color: $canvas-text;
+  background: $background;
+  color: $text;
 }
 
 .visual-editor-add-panel {
@@ -217,10 +217,12 @@ button {
   min-width: 176px;
   flex-direction: column;
   gap: $space-3;
-  border-right: 1px solid $canvas-border;
-  background: rgba($canvas-raised, 0.96);
+  border-right: 1px solid $border;
+  background:
+    linear-gradient(180deg, rgba(#fff, 0.035), transparent 28%),
+    rgba($sidebar, 0.96);
   padding: $space-4;
-  box-shadow: 8px 0 24px rgba(#26303d, 0.06);
+  box-shadow: 10px 0 34px rgba(#070609, 0.24);
   transition:
     width $motion-standard ease,
     min-width $motion-standard ease;
@@ -247,18 +249,18 @@ button {
 
 .visual-editor-add-heading span {
   margin-top: 2px;
-  color: $canvas-muted;
+  color: $muted;
   font-size: 0.68rem;
 }
 
 .visual-editor-add-heading .icon-button {
   flex: 0 0 auto;
-  color: $canvas-muted;
+  color: $muted;
 }
 
 .visual-editor-add-heading .icon-button:hover {
-  background: rgba($saving, 0.1);
-  color: #285fb8;
+  background: rgba($saving, 0.12);
+  color: $saving;
 }
 
 .visual-editor-add-button {
@@ -267,11 +269,12 @@ button {
   min-height: 58px;
   align-items: center;
   gap: $space-3;
-  border: 1px solid $canvas-border;
+  border: 1px solid $border;
   border-radius: $radius-control;
-  background: #fff;
+  background:
+    linear-gradient(145deg, rgba(#fff, 0.035), transparent 52%), $surface-raised;
   padding: $space-3;
-  color: $canvas-text;
+  color: $text;
   cursor: pointer;
   font: inherit;
   font-size: 0.82rem;
@@ -285,12 +288,13 @@ button {
 
 .visual-editor-add-button svg {
   width: 18px;
-  color: #285fb8;
+  color: $saving;
 }
 
 .visual-editor-add-button:hover {
   border-color: rgba($saving, 0.72);
-  box-shadow: 0 8px 18px rgba(#26303d, 0.08);
+  background: $surface-hover;
+  box-shadow: 0 10px 24px rgba(#070609, 0.2);
   transform: translateY(-1px);
 }
 
@@ -318,9 +322,9 @@ button {
   min-height: 0;
   flex: 1 1 auto;
   background:
-    radial-gradient(circle at 62% 38%, rgba($accent, 0.14), transparent 30rem),
-    radial-gradient(circle at 28% 78%, rgba($saving, 0.11), transparent 34rem),
-    $canvas;
+    radial-gradient(circle at 62% 38%, rgba($accent, 0.08), transparent 30rem),
+    radial-gradient(circle at 28% 78%, rgba($saving, 0.08), transparent 34rem),
+    #121117;
   touch-action: none;
 }
 
@@ -354,9 +358,9 @@ button {
   margin: 0;
   border: 1px solid rgba($danger, 0.36);
   border-radius: $radius-control;
-  background: rgba(#fff, 0.96);
+  background: rgba(#2b2028, 0.94);
   padding: 10px 12px;
-  color: #a52f35;
+  color: #ffc2c6;
   box-shadow: $shadow-raised;
   font-size: 0.78rem;
 }

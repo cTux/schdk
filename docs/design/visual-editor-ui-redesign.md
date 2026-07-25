@@ -57,9 +57,9 @@ The visual editor fills its shell workspace:
 - **Action bar:** floating above the canvas and centered independently of the
   add panel.
 
-The add panel uses a warm raised surface and a quiet boundary. The workspace
-uses a light warm-gray background with a subtle amber/blue radial wash. The
-canvas remains the highest-contrast object.
+The add panel uses a dark raised surface and a quiet boundary. The workspace
+uses a deep ink background with a subtle amber/blue radial wash. The canvas
+remains the highest-contrast object.
 
 At narrow widths, the add panel collapses to a 56 px icon rail. Its two item
 buttons retain custom tooltips. A single chevron action expands or collapses
