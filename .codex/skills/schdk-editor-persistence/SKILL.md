@@ -7,12 +7,11 @@ description: Change or debug SCHDK editor state and persistence in @schdk/editor
 
 ## Workflow
 
-1. Read `docs/rules/editor-persistence.md`, `docs/rules/game-packages.md`, and `docs/rules/security.md`; also read `docs/rules/desktop-apps.md` for bridge or close changes.
+1. Follow `$schdk-development`, then read `docs/rules/editor-state.md` and `docs/rules/game-packages.md`.
 2. Trace browser and desktop paths separately from `packages/editor-web-app/src/App.tsx` through storage or `window.desktop`.
-3. Keep `window.desktop` optional. Never make browser editing depend on Electron.
-4. Preserve pending data through save queues, drafts, autosave, navigation, and close failures. Do not mark stale writes saved.
-5. Keep persisted data backward-compatible and best-effort where rules allow; validate every restored package through `@schdk/common`.
-6. Add focused tests for queues, timers, migrations, failures, and restoration branches.
+3. Read `docs/rules/browser-persistence.md` or `docs/rules/desktop-editor-persistence.md` only for the affected platform.
+4. Read `docs/rules/security.md` and `docs/rules/desktop-apps.md` only for bridge or close changes; read `docs/rules/ui-editor.md` only for visual changes.
+5. Validate restored packages through `@schdk/common` and preserve pending data across every changed path.
 
 ## Checks
 

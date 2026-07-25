@@ -1,0 +1,4 @@
+interface:
+  display_name: 'SCHDK Missing Tests'
+  short_description: 'Backfill tests for changes since the last test batch'
+  default_prompt: 'Use $schdk-add-missing-tests to add missing tests for changes since the previous test update.'

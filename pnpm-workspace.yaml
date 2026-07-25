@@ -2,23 +2,29 @@ packages:
   - 'packages/*'
 
 catalog:
-  electron: ^42.0.1
-  electron-builder: ^26.0.12
-  '@types/node': ^25.6.0
-  '@types/react': ^19.2.14
+  electron: ^43.2.0
+  electron-builder: ^26.15.3
+  '@types/node': ^26.1.1
+  '@types/react': ^19.2.17
   '@types/react-dom': ^19.2.3
-  '@vitejs/plugin-react': ^6.0.1
-  react: ^19.2.6
-  react-dom: ^19.2.6
-  sass: ^1.99.0
-  stylelint: ^17.11.0
+  '@vitejs/plugin-react': ^6.0.4
+  react: ^19.2.8
+  react-dom: ^19.2.8
+  sass: ^1.101.7
+  stylelint: ^17.14.1
   stylelint-config-standard-scss: ^17.0.0
-  typescript: ^6.0.3
-  vite: ^8.0.16
-  vitest: ^4.1.5
+  typescript: ^7.0.2
+  vite: ^8.1.5
+  vitest: ^4.1.10
+
+overrides:
+  tar: 7.5.22
 
 allowBuilds:
   '@parcel/watcher': true
   electron: true
   electron-winstaller: true
   esbuild: true
+
+minimumReleaseAgeExclude:
+  - tar@7.5.22

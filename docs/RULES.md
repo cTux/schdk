@@ -5,17 +5,20 @@ the repository, then read every linked area affected by the task.
 
 ## Rule areas
 
-| Area                                                    | Rules                                                        |
-| ------------------------------------------------------- | ------------------------------------------------------------ |
-| Governance and documentation                            | [rules/governance.md](rules/governance.md)                   |
-| Package architecture and ownership                      | [rules/architecture.md](rules/architecture.md)               |
-| `.schdk` model, validation, and compatibility           | [rules/game-packages.md](rules/game-packages.md)             |
-| Editor lifecycle, saving, drafts, and recents           | [rules/editor-persistence.md](rules/editor-persistence.md)   |
-| Browser applications and the unified shell              | [rules/web-apps.md](rules/web-apps.md)                       |
-| Electron applications and packaging                     | [rules/desktop-apps.md](rules/desktop-apps.md)               |
-| Trust boundaries and Electron security                  | [rules/security.md](rules/security.md)                       |
-| Dependencies, builds, tests, and generated files        | [rules/tooling-and-quality.md](rules/tooling-and-quality.md) |
-| Components, styling, accessibility, and visual language | [../packages/ui/README.md](../packages/ui/README.md)         |
+Read only the areas touched by the task:
+
+- Core: [governance](rules/governance.md), [architecture](rules/architecture.md),
+  [project structure](rules/project-structure.md), and
+  [game packages](rules/game-packages.md).
+- Editor: [state](rules/editor-state.md),
+  [browser persistence](rules/browser-persistence.md), and
+  [desktop persistence](rules/desktop-editor-persistence.md).
+- Applications: [shared web](rules/web-apps.md), [host](rules/host-app.md),
+  [web shell](rules/web-shell.md), [desktop](rules/desktop-apps.md), and
+  [security](rules/security.md).
+- UI: [area index](../packages/ui/README.md).
+- Workflow: [dependencies](rules/dependencies.md), [builds](rules/builds.md),
+  and [verification](rules/verification.md).
 
 ## Product contracts
 

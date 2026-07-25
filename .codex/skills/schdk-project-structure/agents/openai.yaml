@@ -1,0 +1,4 @@
+interface:
+  display_name: 'SCHDK Project Structure'
+  short_description: 'Maintain SCHDK package and component structure'
+  default_prompt: 'Use $schdk-project-structure to organize SCHDK packages or UI components.'

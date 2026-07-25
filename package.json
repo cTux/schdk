@@ -5,7 +5,7 @@
   "description": "Tools for creating and hosting Що? Де? Коли? game packages.",
   "license": "UNLICENSED",
   "type": "module",
-  "packageManager": "pnpm@11.7.0",
+  "packageManager": "pnpm@11.17.0",
   "engines": {
     "node": "25.x",
     "pnpm": "11.x"
@@ -21,10 +21,11 @@
     "fmt:check": "oxfmt --check .",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
-    "test": "turbo test"
+    "test": "turbo test && node --test scripts/repository-workflows.test.mjs"
   },
   "devDependencies": {
-    "oxfmt": "^0.55.0",
-    "turbo": "^2.9.18"
+    "npm-check-updates": "^22.2.9",
+    "oxfmt": "^0.60.0",
+    "turbo": "^2.10.6"
   }
 }

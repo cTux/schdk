@@ -16,6 +16,8 @@
   the stale rule instead of leaving contradictory guidance.
 - Add new rule areas to the index in `docs/RULES.md`. Link across areas instead
   of duplicating the same rule in multiple files.
+- Keep rule files single-purpose and skills procedural. Route to the smallest
+  relevant rule set instead of copying product contracts into skill bodies.
 - Rules describe current guarantees and accepted boundaries, not speculative
   future architecture.
 - Keep repository skills under `.codex/skills` synchronized with the workflows

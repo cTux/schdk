@@ -16,5 +16,5 @@ compatibility contract. Do not duplicate its schema here.
 - Use `validateGamePackage` only when package readiness is required. A
   structurally valid unfinished package remains editable and saveable.
 - Any format, validation, serialization, or compatibility change must update
-  `@schdk/common`, its round-trip and malformed-input tests, and
-  `docs/GAME_PACKAGE.md` together.
+  `@schdk/common` and `docs/GAME_PACKAGE.md` together. Add related round-trip
+  and malformed-input tests only through `$schdk-add-missing-tests`.

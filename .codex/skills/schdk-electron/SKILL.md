@@ -7,11 +7,9 @@ description: Build, debug, secure, or package SCHDK Electron applications. Use f
 
 ## Workflow
 
-1. Read `docs/rules/desktop-apps.md`, `docs/rules/security.md`, `docs/rules/architecture.md`, and `docs/rules/tooling-and-quality.md`.
-2. Keep filesystem and Electron APIs in `@schdk/all-desktop-app`. Expose only narrow validated methods through its self-contained `.cts` preload.
-3. Preserve context isolation, navigation blocking, file-path authorization, recent-path allowlists, and IPC argument validation.
-4. Preserve the bounded close handshake and three recovery choices. Never trade shutdown reliability for shorter code.
-5. Add focused tests for IPC routing, preload shape, close attempts, timeouts, and failures.
+1. Follow `$schdk-development`, then read `docs/rules/desktop-apps.md`, `docs/rules/security.md`, and `docs/rules/builds.md`.
+2. Trace main, preload, renderer, and packaging paths affected by the change.
+3. Keep Electron and filesystem access inside `@schdk/all-desktop-app`; preserve every trust boundary in the rules.
 
 ## Checks
 

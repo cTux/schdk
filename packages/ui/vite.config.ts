@@ -7,13 +7,13 @@ export default defineConfig({
       entry: {
         index: fileURLToPath(new URL('./src/index.ts', import.meta.url)),
         editor: fileURLToPath(
-          new URL('./src/editor/EditorView.tsx', import.meta.url),
+          new URL('./src/editor/EditorView/index.ts', import.meta.url),
         ),
         host: fileURLToPath(
-          new URL('./src/host/HostView.tsx', import.meta.url),
+          new URL('./src/host/HostView/index.ts', import.meta.url),
         ),
         shell: fileURLToPath(
-          new URL('./src/shell/ShellView.tsx', import.meta.url),
+          new URL('./src/shell/ShellView/index.ts', import.meta.url),
         ),
       },
       formats: ['es'],
