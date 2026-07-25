@@ -21,5 +21,8 @@
 - Default the unified application to Ukrainian when no locale was selected.
   Persist an explicit Ukrainian or English selection in browser storage and
   apply it to every unified application surface.
+- Default the unified application theme to the operating-system preference.
+  Persist explicit system, light, or dark selections in browser storage and
+  apply them to every unified application surface.
 - Keep locale selection in the first `App` settings group, before the `WWW`
   group; do not place it in the sidebar.

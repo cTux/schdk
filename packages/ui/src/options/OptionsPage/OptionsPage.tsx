@@ -6,22 +6,26 @@ import { Button } from '../../atoms/Button';
 import { useLocalization } from '../../localization';
 import { OptionToggle } from '../OptionToggle';
 import { OptionsTabs, type OptionsTab } from '../OptionsTabs';
-import type { EditorTextOptions, GameOptions } from '../types';
+import type { AppTheme, EditorTextOptions, GameOptions } from '../types';
 
 export interface OptionsPageProps {
   editor: EditorTextOptions;
   game: GameOptions;
   hidden: boolean;
+  theme: AppTheme;
   onEditorChange(options: EditorTextOptions): void;
   onGameChange(options: GameOptions): void;
+  onThemeChange(theme: AppTheme): void;
 }
 
 export function OptionsPage({
   editor,
   game,
   hidden,
+  theme,
   onEditorChange,
   onGameChange,
+  onThemeChange,
 }: OptionsPageProps) {
   const { copy, locale, onLocaleChange } = useLocalization();
   const [group, setGroup] = useState<'app' | 'schdk'>('app');
@@ -81,6 +85,19 @@ export function OptionsPage({
           >
             <option value="uk">{copy.settings.ukrainian}</option>
             <option value="en">{copy.settings.english}</option>
+          </select>
+        </label>
+        <label className="option-select">
+          <span>
+            <strong>{copy.settings.themeLabel}</strong>
+          </span>
+          <select
+            value={theme}
+            onChange={(event) => onThemeChange(event.target.value as AppTheme)}
+          >
+            <option value="system">{copy.settings.systemTheme}</option>
+            <option value="light">{copy.settings.lightTheme}</option>
+            <option value="dark">{copy.settings.darkTheme}</option>
           </select>
         </label>
       </section>

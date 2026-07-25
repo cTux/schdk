@@ -4,6 +4,8 @@ export interface EditorTextOptions {
   correctAnswerComment: boolean;
 }
 
+export type AppTheme = 'system' | 'light' | 'dark';
+
 export const GAME_LAYOUT_ELEMENT_IDS = [
   'logo',
   'intro',

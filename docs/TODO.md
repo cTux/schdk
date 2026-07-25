@@ -2,7 +2,6 @@
 
 ## Potential features
 
-- Themes
 - Implement hosting the game based on a questions package
   - Branded logo
   - Branded background image
