@@ -13,7 +13,12 @@ Inspect the sources below in order. As soon as one candidate is confirmed action
 
 1. Read `TODO.md` from top to bottom.
    - Keep `TODO.md` tracked even when it has no entries; never remove the file.
-   - Validate the first candidate against current code and documentation. Stop when it is still actionable.
+   - Validate each entry against current code and documentation. Remove entries
+     that are already implemented or no longer relevant, then continue from the
+     updated list.
+   - Stop when the first remaining candidate is actionable.
+   - After implementing a task selected from `TODO.md`, remove that item from
+     `TODO.md` as part of the same change.
 2. Inspect `docs/research` and `docs/tech-design` in path order.
    - Never open files ending in `-implemented.md`.
    - Treat an unsuffixed document's first unimplemented outcome as the candidate.

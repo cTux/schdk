@@ -26,6 +26,9 @@
 - Add a project skill only for a distinct recurring workflow. Do not create
   speculative skills for features or packages that do not exist yet.
 - Keep the root `TODO.md` tracked even when it is empty.
+- Remove `TODO.md` entries that are already implemented or no longer relevant
+  when task discovery confirms they are stale.
+- Remove a `TODO.md` item in the same change that resolves it.
 - Rename completed task documents under `docs/research` and `docs/tech-design`
   with an `-implemented.md` suffix so task discovery can skip them.
 
