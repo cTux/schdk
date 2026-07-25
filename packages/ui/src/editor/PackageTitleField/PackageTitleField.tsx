@@ -1,5 +1,7 @@
 import './styles.scss';
 
+import { useLocalization } from '../../localization';
+
 export interface PackageTitleFieldProps {
   invalid: boolean;
   value: string;
@@ -11,14 +13,16 @@ export function PackageTitleField({
   value,
   onChange,
 }: PackageTitleFieldProps) {
+  const { copy } = useLocalization();
+
   return (
     <label className="package-title">
-      Назва пакета
+      {copy.editor.packageTitle}
       <input
         className={invalid ? 'invalid' : undefined}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        placeholder="Наприклад, Весняна гра 2026"
+        placeholder={copy.editor.packageTitlePlaceholder}
         aria-invalid={invalid}
       />
     </label>

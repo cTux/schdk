@@ -1,20 +1,17 @@
 import './styles.scss';
 
-import {
-  getShellContent,
-  type ShellLocale,
-  type ShellViewName,
-} from '../shellItems';
+import { useLocalization } from '../../localization';
+import { getShellContent, type ShellViewName } from '../shellItems';
 import { ToolCard } from '../ToolCard';
 
 export interface ShellHomeProps {
   hidden: boolean;
-  locale: ShellLocale;
   onOpen(view: ShellViewName): void;
 }
 
-export function ShellHome({ hidden, locale, onOpen }: ShellHomeProps) {
-  const content = getShellContent(locale);
+export function ShellHome({ hidden, onOpen }: ShellHomeProps) {
+  const { copy } = useLocalization();
+  const content = getShellContent(copy);
 
   return (
     <div className="home" hidden={hidden}>

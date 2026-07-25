@@ -3,6 +3,7 @@ import './styles.scss';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '../../atoms/Button';
+import { useLocalization } from '../../localization';
 
 export interface AlternativeAnswersFieldProps {
   answers: string[];
@@ -15,10 +16,12 @@ export function AlternativeAnswersField({
   onChange,
   onBlur,
 }: AlternativeAnswersFieldProps) {
+  const { copy } = useLocalization();
+
   return (
     <fieldset>
       <legend>
-        Альтернативні відповіді <span>(необов'язково)</span>
+        {copy.editor.alternativeAnswers} <span>{copy.shared.optional}</span>
       </legend>
       {answers.map((answer, index) => (
         <div className="alternative" key={index}>
@@ -32,7 +35,7 @@ export function AlternativeAnswersField({
               )
             }
             onBlur={() => onBlur(index)}
-            aria-label={`Альтернативна відповідь ${index + 1}`}
+            aria-label={copy.editor.alternativeAnswer(index + 1)}
           />
           <Button
             type="button"
@@ -42,7 +45,7 @@ export function AlternativeAnswersField({
               )
             }
           >
-            Видалити
+            {copy.shared.remove}
           </Button>
         </div>
       ))}
@@ -51,7 +54,8 @@ export function AlternativeAnswersField({
         type="button"
         onClick={() => onChange([...answers, ''])}
       >
-        <FontAwesomeIcon icon={faPlus} aria-hidden="true" /> Додати відповідь
+        <FontAwesomeIcon icon={faPlus} aria-hidden="true" />{' '}
+        {copy.editor.addAnswer}
       </Button>
     </fieldset>
   );

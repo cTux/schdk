@@ -168,33 +168,8 @@ button {
   font-size: $font-size-md;
 }
 
-.sidebar-language {
-  display: grid;
-  gap: $space-1;
+.sidebar-options {
   margin-top: auto;
-  padding: 0 10px $space-3;
-  color: $muted;
-  font-size: $font-size-xs;
-}
-
-.sidebar-language select {
-  width: 100%;
-  min-width: 0;
-  min-height: $control-compact;
-  border: 1px solid $border;
-  border-radius: $radius-control;
-  outline: none;
-  background: $surface-raised;
-  padding: 0 $space-2;
-  color: $text;
-  font: inherit;
-  text-overflow: ellipsis;
-  cursor: pointer;
-}
-
-.sidebar-language select:focus-visible {
-  outline: 2px solid rgba($accent, 0.8);
-  outline-offset: 2px;
 }
 
 .workspace {
@@ -429,7 +404,7 @@ button {
   background: rgba($background, 0.88);
   padding: 2px 6px;
   color: #cbd3ff;
-  content: 'Приховано';
+  content: attr(data-hidden-label);
   font-size: 0.58rem;
   line-height: 1.2;
   pointer-events: none;
@@ -617,6 +592,7 @@ button {
 }
 
 .option-toggle,
+.option-select,
 .option-slider {
   display: flex;
   align-items: center;
@@ -636,6 +612,7 @@ button {
 }
 
 .option-toggle:hover,
+.option-select:hover,
 .option-slider:hover {
   border-color: $border-strong;
   box-shadow: $shadow-overlay;
@@ -643,18 +620,22 @@ button {
 }
 
 .option-toggle > span,
+.option-select > span,
 .option-slider > span {
   flex: 1 1 auto;
 }
 
 .option-toggle strong,
+.option-select strong,
 .option-toggle small,
+.option-select small,
 .option-slider strong,
 .option-slider small {
   display: block;
 }
 
 .option-toggle small,
+.option-select small,
 .option-slider small,
 .options-empty {
   margin-top: 4px;
@@ -704,6 +685,24 @@ button {
 }
 
 .option-toggle input:focus-visible {
+  outline: 2px solid rgba($accent, 0.8);
+  outline-offset: 3px;
+}
+
+.option-select select {
+  min-width: min(240px, 40vw);
+  min-height: $control-normal;
+  border: 1px solid $border-strong;
+  border-radius: $radius-control;
+  outline: none;
+  background: $surface-raised;
+  padding: 0 $space-3;
+  color: $text;
+  font: inherit;
+  cursor: pointer;
+}
+
+.option-select select:focus-visible {
   outline: 2px solid rgba($accent, 0.8);
   outline-offset: 3px;
 }
@@ -928,23 +927,6 @@ button:focus-visible {
     font-size: 0;
   }
 
-  .sidebar-language {
-    padding-inline: 0;
-  }
-
-  .sidebar-language > span {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-  }
-
-  .sidebar-language select {
-    padding-inline: 2px;
-    font-size: 0.68rem;
-  }
-
   .nav-icon {
     font-size: $font-size-md;
   }
@@ -971,10 +953,16 @@ button:focus-visible {
     flex-wrap: wrap;
   }
 
+  .option-select {
+    flex-wrap: wrap;
+  }
+
+  .option-select > span,
   .option-slider > span {
     flex-basis: 100%;
   }
 
+  .option-select select,
   .option-slider input {
     width: auto;
     flex: 1 1 auto;

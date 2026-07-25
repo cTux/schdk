@@ -18,13 +18,14 @@ export async function saveWithPicker(
   picker: SaveFilePicker,
   filename: string,
   content: Uint8Array,
+  description = 'Пакет Що? Де? Коли?',
 ): Promise<string | null> {
   try {
     const handle = await picker({
       suggestedName: filename,
       types: [
         {
-          description: 'Пакет Що? Де? Коли?',
+          description,
           accept: { 'application/zip': ['.schdk'] },
         },
       ],

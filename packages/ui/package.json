@@ -8,6 +8,7 @@
     ".": "./src/index.ts",
     "./editor": "./src/editor/EditorView/index.ts",
     "./host": "./src/host/HostView/index.ts",
+    "./localization": "./src/localization/index.ts",
     "./options": "./src/options/types.ts",
     "./shell": "./src/shell/ShellView/index.ts"
   },

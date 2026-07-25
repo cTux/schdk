@@ -2,6 +2,7 @@ import './styles.scss';
 
 import type { GameQuestion } from '@schdk/common';
 import { TextAreaField } from '../../atoms/TextAreaField';
+import { useLocalization } from '../../localization';
 import { AlternativeAnswersField } from '../AlternativeAnswersField';
 import { HostNotesField } from '../HostNotesField';
 import { QuestionEditorHeader } from '../QuestionEditorHeader';
@@ -38,6 +39,8 @@ export function QuestionEditor({
   onSelectQuestion,
   onQuestionTextBlur,
 }: QuestionEditorProps) {
+  const { copy } = useLocalization();
+
   return (
     <section className="question-editor">
       <QuestionEditorHeader
@@ -59,7 +62,7 @@ export function QuestionEditor({
 
       <div className="question-pair">
         <TextAreaField
-          label="Текст питання"
+          label={copy.editor.questionText}
           invalid={showValidation && !question.question.trim()}
           rows={7}
           value={question.question}
@@ -76,7 +79,7 @@ export function QuestionEditor({
 
       <div className="question-pair">
         <TextAreaField
-          label="Відповідь"
+          label={copy.shared.answer}
           invalid={showValidation && !question.answer.trim()}
           rows={7}
           value={question.answer}
@@ -84,8 +87,9 @@ export function QuestionEditor({
           onValueChange={(value) => onChange({ answer: value })}
         />
         <TextAreaField
-          label="Коментар до відповіді"
+          label={copy.shared.answerComment}
           optional
+          optionalLabel={copy.shared.optional}
           rows={7}
           value={question.answerComment ?? ''}
           onBlur={onAnswerCommentBlur}

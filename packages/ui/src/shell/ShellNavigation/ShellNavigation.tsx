@@ -4,26 +4,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { AppIcon } from '../../atoms/AppIcon';
 import { Button } from '../../atoms/Button';
-import {
-  getShellContent,
-  type ShellLocale,
-  type ShellViewName,
-} from '../shellItems';
+import { useLocalization } from '../../localization';
+import { getShellContent, type ShellViewName } from '../shellItems';
 
 export interface ShellNavigationProps {
-  locale: ShellLocale;
   view: ShellViewName;
-  onLocaleChange(locale: ShellLocale): void;
   onSelect(view: ShellViewName): void;
 }
 
-export function ShellNavigation({
-  locale,
-  view,
-  onLocaleChange,
-  onSelect,
-}: ShellNavigationProps) {
-  const content = getShellContent(locale);
+export function ShellNavigation({ view, onSelect }: ShellNavigationProps) {
+  const { copy } = useLocalization();
+  const content = getShellContent(copy);
 
   return (
     <aside className="sidebar">
@@ -74,20 +65,6 @@ export function ShellNavigation({
           ))}
         </div>
       </nav>
-
-      <label className="sidebar-language">
-        <span>{content.languageLabel}</span>
-        <select
-          value={locale}
-          aria-label={content.languageLabel}
-          onChange={(event) =>
-            onLocaleChange(event.target.value as ShellLocale)
-          }
-        >
-          <option value="uk">Українська</option>
-          <option value="en">English</option>
-        </select>
-      </label>
 
       <nav className="sidebar-options" aria-label={content.settingsLabel}>
         <Button

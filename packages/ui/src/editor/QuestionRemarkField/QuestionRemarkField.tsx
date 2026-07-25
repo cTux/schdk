@@ -2,6 +2,7 @@ import './styles.scss';
 
 import { Button } from '../../atoms/Button';
 import { TextAreaField } from '../../atoms/TextAreaField';
+import { useLocalization } from '../../localization';
 
 export interface QuestionRemarkFieldProps {
   remark: string;
@@ -16,13 +17,15 @@ export function QuestionRemarkField({
   onChange,
   onResolve,
 }: QuestionRemarkFieldProps) {
+  const { copy } = useLocalization();
   const hasRemark = Boolean(remark.trim());
 
   return (
     <div className="question-remark">
       <TextAreaField
-        label="Зауваження"
+        label={copy.editor.remark}
         optional
+        optionalLabel={copy.shared.optional}
         invalid={showValidation && hasRemark}
         rows={7}
         value={remark}
@@ -30,9 +33,9 @@ export function QuestionRemarkField({
       />
       {hasRemark && (
         <>
-          <small>Питання не готове, доки зауваження не вирішено.</small>
+          <small>{copy.editor.unresolvedRemark}</small>
           <Button variant="secondary" type="button" onClick={onResolve}>
-            Вирішено
+            {copy.editor.resolved}
           </Button>
         </>
       )}

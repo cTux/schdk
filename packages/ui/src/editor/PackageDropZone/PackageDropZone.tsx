@@ -2,6 +2,7 @@ import './styles.scss';
 
 import { useRef, type ChangeEvent, type DragEvent } from 'react';
 import { Button } from '../../atoms/Button';
+import { useLocalization } from '../../localization';
 
 export interface PackageDropZoneProps {
   hidden: boolean;
@@ -14,6 +15,7 @@ export function PackageDropZone({
   onCreate,
   onOpen,
 }: PackageDropZoneProps) {
+  const { copy } = useLocalization();
   const openFileInput = useRef<HTMLInputElement>(null);
 
   function selectPackage(event: ChangeEvent<HTMLInputElement>) {
@@ -36,17 +38,17 @@ export function PackageDropZone({
         onDragOver={(event) => event.preventDefault()}
         onDrop={dropPackage}
       >
-        <h2>Відкрийте пакет</h2>
-        <p>Перетягніть сюди файл .schdk</p>
+        <h2>{copy.editor.openPackage}</h2>
+        <p>{copy.editor.dropPackage}</p>
         <div className="drop-actions">
           <Button type="button" onClick={() => openFileInput.current?.click()}>
-            Вибрати файл
+            {copy.shared.chooseFile}
           </Button>
           {onCreate && (
             <>
-              <span>або</span>
+              <span>{copy.shared.or}</span>
               <Button variant="primary" type="button" onClick={onCreate}>
-                Новий пакет
+                {copy.editor.newPackage}
               </Button>
             </>
           )}

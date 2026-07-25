@@ -2,6 +2,7 @@ import './styles.scss';
 
 import { QUESTIONS_PER_ROUND, type GamePackage } from '@schdk/common';
 import { useState, type DragEvent } from 'react';
+import { useLocalization } from '../../localization';
 import { QuestionListButton } from '../QuestionListButton';
 
 export interface QuestionListProps {
@@ -19,6 +20,7 @@ export function QuestionList({
   onSelectQuestion,
   onSwapQuestions,
 }: QuestionListProps) {
+  const { copy } = useLocalization();
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dropIndex, setDropIndex] = useState<number | null>(null);
 
@@ -36,16 +38,17 @@ export function QuestionList({
   }
 
   return (
-    <nav className="question-list" aria-label="Питання пакета">
+    <nav className="question-list" aria-label={copy.editor.packageQuestions}>
       {[0, 1, 2].map((round) => (
         <section key={round}>
-          <h2>Раунд {round + 1}</h2>
+          <h2>{copy.editor.round(round + 1)}</h2>
           <div className="question-grid">
             {Array.from({ length: QUESTIONS_PER_ROUND }, (_, offset) => {
               const index = round * QUESTIONS_PER_ROUND + offset;
               const question = gamePackage.questions[index]!;
               return (
                 <QuestionListButton
+                  copy={copy}
                   dragging={index === draggedIndex}
                   dropTarget={index === dropIndex}
                   key={index}

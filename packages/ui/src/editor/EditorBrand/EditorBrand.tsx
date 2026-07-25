@@ -3,6 +3,7 @@ import './styles.scss';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { AppIcon } from '../../atoms/AppIcon';
 import { IconButton } from '../../atoms/IconButton';
+import { useLocalization } from '../../localization';
 
 export interface EditorBrandProps {
   showBackButton: boolean;
@@ -10,6 +11,8 @@ export interface EditorBrandProps {
 }
 
 export function EditorBrand({ showBackButton, onBack }: EditorBrandProps) {
+  const { copy } = useLocalization();
+
   return (
     <div className="brand">
       {showBackButton && (
@@ -17,14 +20,14 @@ export function EditorBrand({ showBackButton, onBack }: EditorBrandProps) {
           className="back-button"
           variant="ghost"
           icon={faArrowLeft}
-          label="Назад"
+          label={copy.shared.back}
           onClick={onBack}
         />
       )}
       <AppIcon />
       <div>
-        <p className="eyebrow">Редактор пакетів</p>
-        <h1>Що? Де? Коли?</h1>
+        <p className="eyebrow">{copy.editor.brandEyebrow}</p>
+        <h1>{copy.editor.brandTitle}</h1>
       </div>
     </div>
   );
