@@ -21,10 +21,14 @@ interface SyncedSettings {
   setGameOptions(options: GameOptions): void;
 }
 
+const DEFAULT_WEB_CLIENT_ID =
+  '177890331671-3huqgkgv5b54ieiasbs93vg346otkubc.apps.googleusercontent.com';
+
 function createBridge(): GoogleDriveBridge | null {
   if (window.desktop?.googleDrive) return window.desktop.googleDrive;
-  const clientId = import.meta.env.VITE_GOOGLE_WEB_CLIENT_ID?.trim();
-  return clientId ? new BrowserGoogleDriveBridge(clientId) : null;
+  const clientId =
+    import.meta.env.VITE_GOOGLE_WEB_CLIENT_ID?.trim() || DEFAULT_WEB_CLIENT_ID;
+  return new BrowserGoogleDriveBridge(clientId);
 }
 
 export function useGoogleDriveSettings({
