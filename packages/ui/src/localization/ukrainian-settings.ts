@@ -52,6 +52,8 @@ export const ukrainianSettings = {
   answersCorrection:
     'Капіталізувати перше слово основної, альтернативних і неправильних відповідей.',
   answerComment: 'Коментар до відповіді',
+  autoFullscreen: 'Автоматично вмикати повноекранний режим',
+  autoFullscreenDescription: 'Переходити в повноекранний режим на початку гри.',
   signalVolume: 'Гучність звукових сигналів',
   signalVolumeDescription: 'Головний сигнал і попередження таймера.',
 };

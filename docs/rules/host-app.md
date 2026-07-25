@@ -5,8 +5,9 @@
 - Show only the package title, filename, aggregate counts, and start/back
   actions before gameplay; never expose question, answer, comment, or host-note
   text.
-- Request fullscreen on the host root so the unified shell is excluded. Keep a
-  fixed full-viewport fallback when fullscreen is denied.
+- Request fullscreen on the host root when the enabled-by-default automatic
+  fullscreen option is enabled. Keep a fixed full-viewport fallback when
+  fullscreen is disabled or denied.
 - Advance standard questions through intro, optional handout, question,
   60-second timer, optional answer comment, and answer. For blitz questions,
   show the first part with its timer, then reveal each next part below the

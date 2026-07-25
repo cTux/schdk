@@ -55,6 +55,8 @@ export const englishSettings: typeof ukrainianSettings = {
   answersCorrection:
     'Capitalize the first word of the main, alternative, and wrong answers.',
   answerComment: 'Answer comment',
+  autoFullscreen: 'Enter fullscreen automatically',
+  autoFullscreenDescription: 'Enter fullscreen when the game starts.',
   signalVolume: 'Signal volume',
   signalVolumeDescription: 'Main signal and timer warning.',
 };

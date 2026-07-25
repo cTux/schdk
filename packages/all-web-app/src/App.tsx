@@ -164,7 +164,7 @@ export function App() {
     try {
       const imported = parseVisualEditorTemplate(
         new Uint8Array(await file.arrayBuffer()),
-        gameOptions.soundVolume,
+        gameOptions,
       );
       if (imported) {
         googleDrive.setGameOptions(imported);
@@ -218,6 +218,7 @@ export function App() {
             hostApp={
               <Suspense fallback={null}>
                 <HostApp
+                  autoFullscreen={gameOptions.autoFullscreen}
                   backgroundImage={gameOptions.backgroundImage}
                   backgroundOpacity={gameOptions.backgroundOpacity}
                   customElements={gameOptions.customElements}

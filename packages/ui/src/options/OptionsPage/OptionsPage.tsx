@@ -213,6 +213,14 @@ export function OptionsPage({
           aria-labelledby="options-tab-game"
           hidden={tab !== 'game'}
         >
+          <OptionToggle
+            checked={game.autoFullscreen}
+            label={copy.settings.autoFullscreen}
+            description={copy.settings.autoFullscreenDescription}
+            onChange={(autoFullscreen) =>
+              onGameChange({ ...game, autoFullscreen })
+            }
+          />
           <label className="option-slider">
             <span>
               <strong>{copy.settings.signalVolume}</strong>
