@@ -36,8 +36,11 @@
 
 ## Documentation and language
 
-- Keep the root `README.md` in Ukrainian. It is the user-facing project,
-  setup, launch, build, and troubleshooting guide.
+- Keep the root `README.md` in Ukrainian and limited to the short project
+  description, the benefits section, and links to detailed sections in
+  `docs/README.md`.
+- Keep `docs/README.md` as the detailed Ukrainian setup, launch, build, and
+  troubleshooting guide.
 - Keep code identifiers, code comments, package metadata, developer documents,
   and rule documents in English.
 - Keep user-visible application copy in Ukrainian unless a feature explicitly

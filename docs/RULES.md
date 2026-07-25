@@ -24,7 +24,10 @@ Read only the areas touched by the task:
 
 - [GAME_PACKAGE.md](GAME_PACKAGE.md) is the user-facing `.schdk` format
   contract.
-- [../README.md](../README.md) is the Ukrainian project and launch guide.
+- [../README.md](../README.md) is the short Ukrainian project overview and
+  benefits page.
+- [README.md](README.md) is the detailed Ukrainian setup, launch, build, and
+  troubleshooting guide linked from the root README.
 
 When a prompt contains a durable project convention or constraint, update the
 appropriate rule document in the same change as described in
