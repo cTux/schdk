@@ -26,8 +26,8 @@ Read only the areas touched by the task:
   contract.
 - [../README.md](../README.md) is the short Ukrainian project overview and
   benefits page.
-- [README.md](README.md) is the detailed Ukrainian setup, launch, build, and
-  troubleshooting guide linked from the root README.
+- [README.md](README.md) indexes the detailed Ukrainian topic guides under
+  [`guide/`](guide/).
 
 When a prompt contains a durable project convention or constraint, update the
 appropriate rule document in the same change as described in
