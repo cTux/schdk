@@ -5,7 +5,7 @@ import { normalizeGameOptions } from './game-options-validation';
 const GAME_OPTIONS_KEY = 'schdk:game-options';
 const VISUAL_TEMPLATE_ENTRY = 'template.json';
 type OptionsStorage = Pick<Storage, 'getItem' | 'setItem'>;
-type VisualEditorTemplate = Omit<GameOptions, 'soundVolume'>;
+type VisualEditorTemplate = Omit<GameOptions, 'autoFullscreen' | 'soundVolume'>;
 
 export function loadGameOptions(storage: OptionsStorage): GameOptions {
   try {
@@ -21,7 +21,7 @@ export function loadGameOptions(storage: OptionsStorage): GameOptions {
 
 export function parseVisualEditorTemplate(
   content: string | Uint8Array,
-  soundVolume: number,
+  options: Pick<GameOptions, 'autoFullscreen' | 'soundVolume'>,
 ): GameOptions | null {
   try {
     const templateJson =
@@ -32,7 +32,7 @@ export function parseVisualEditorTemplate(
           : strFromU8(content);
     const value = JSON.parse(templateJson) as Record<string, unknown> | null;
     if (!value || value.version !== 1) return null;
-    return normalizeGameOptions({ ...value, soundVolume });
+    return normalizeGameOptions({ ...value, ...options });
   } catch {
     return null;
   }

@@ -5,8 +5,9 @@
 - Show only the package title, filename, aggregate counts, and start/back
   actions before gameplay; never expose question, answer, comment, or host-note
   text.
-- Request fullscreen on the host root so the unified shell is excluded. Keep a
-  fixed full-viewport fallback when fullscreen is denied.
+- Request fullscreen on the host root when the enabled-by-default automatic
+  fullscreen option is enabled. Keep a fixed full-viewport fallback when
+  fullscreen is disabled or denied.
 - Advance standard questions through intro, optional handout, question,
   60-second timer, optional answer comment, and answer. For blitz questions,
   show the first part with its timer, then reveal each next part below the
@@ -14,7 +15,7 @@
   content visible until the next question.
 - Lock mouse and keyboard navigation during transitions. `Space`, `PageDown`,
   and `ArrowRight` advance; `Backspace`, `PageUp`, and `ArrowLeft` go back.
-- Exit an active game with `Ctrl+Shift+Q` after explicit confirmation.
+- Exit an active game with `Alt+Q` after explicit confirmation.
 - Play the main signal when the timer starts and expires and the pre-alarm with
   10 seconds remaining.
 - In the desktop application, publish the current question number and host notes

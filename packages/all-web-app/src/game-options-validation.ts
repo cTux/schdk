@@ -13,7 +13,9 @@ import {
 export function normalizeGameOptions(value: unknown): GameOptions | null {
   if (!value || typeof value !== 'object') return null;
   const candidate = value as Partial<GameOptions>;
+  const autoFullscreen = candidate.autoFullscreen ?? true;
   if (
+    typeof autoFullscreen !== 'boolean' ||
     typeof candidate.soundVolume !== 'number' ||
     candidate.soundVolume < 0 ||
     candidate.soundVolume > 1
@@ -35,6 +37,7 @@ export function normalizeGameOptions(value: unknown): GameOptions | null {
     return null;
   }
   return {
+    autoFullscreen,
     soundVolume: candidate.soundVolume,
     layout,
     customElements,

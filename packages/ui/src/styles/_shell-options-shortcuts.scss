@@ -1,0 +1,46 @@
+@use './tokens' as *;
+
+.options-shortcuts {
+  margin-top: 12px;
+  border: 1px solid $border;
+  border-radius: $radius-panel;
+  background: rgba($surface-rgb, 0.84);
+  padding: 14px;
+  box-shadow: $shadow-raised;
+}
+
+.options-shortcuts h2,
+.options-shortcuts h3,
+.options-shortcuts dl {
+  margin: 0;
+}
+
+.options-shortcuts h2 {
+  font-size: 1.1rem;
+}
+
+.options-shortcuts h3 {
+  margin-top: 14px;
+  color: $muted;
+  font-size: 0.9rem;
+}
+
+.options-shortcuts dl > div {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 8px;
+}
+
+.options-shortcuts dd {
+  margin: 0;
+  text-align: right;
+}
+
+.options-shortcuts kbd {
+  color: $text;
+  font: inherit;
+  font-weight: 600;
+}

@@ -18,6 +18,7 @@ import type { AppProps } from './types';
 export type { AppProps } from './types';
 
 export function App({
+  autoFullscreen = true,
   backgroundImage = null,
   backgroundOpacity = 1,
   customElements = [],
@@ -163,7 +164,7 @@ export function App({
     unlockGameAudio();
     setWizardRestore(null);
     const host = document.getElementById('schdk-host-app');
-    if (host && !document.fullscreenElement) {
+    if (autoFullscreen && host && !document.fullscreenElement) {
       void host.requestFullscreen().catch(() => {
         // The fixed game surface remains usable when fullscreen is denied.
       });
@@ -185,9 +186,9 @@ export function App({
     function handleKeyDown(event: KeyboardEvent) {
       if (
         event.code !== 'KeyQ' ||
-        !event.ctrlKey ||
-        !event.shiftKey ||
-        event.altKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        !event.altKey ||
         event.metaKey ||
         event.repeat
       ) {

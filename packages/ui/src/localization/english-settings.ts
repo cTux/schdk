@@ -24,6 +24,27 @@ export const englishSettings: typeof ukrainianSettings = {
   googleDriveConnect: 'Connect',
   googleDriveReconnectAction: 'Reconnect',
   googleDriveDisconnect: 'Disconnect',
+  shortcutsTitle: 'Keyboard shortcuts',
+  shortcutGroups: [
+    {
+      heading: 'Game hosting',
+      items: [
+        { label: 'Next stage', keys: 'Space · PgDn · →' },
+        { label: 'Previous stage', keys: 'Backspace · PgUp · ←' },
+        { label: 'Exit game', keys: 'Alt + Q' },
+      ],
+    },
+    {
+      heading: 'Visual editor',
+      items: [
+        { label: 'Select element', keys: 'Enter · Space' },
+        { label: 'Move element by 1%', keys: 'Arrow keys' },
+        { label: 'Move element by 5%', keys: 'Shift + arrow keys' },
+        { label: 'Delete custom element', keys: 'Delete' },
+        { label: 'Select canvas', keys: 'Escape' },
+      ],
+    },
+  ],
   schdkTabsLabel: 'WWW settings',
   gameTab: 'Hosting',
   editorTab: 'Question editing',
@@ -34,6 +55,8 @@ export const englishSettings: typeof ukrainianSettings = {
   answersCorrection:
     'Capitalize the first word of the main, alternative, and wrong answers.',
   answerComment: 'Answer comment',
+  autoFullscreen: 'Enter fullscreen automatically',
+  autoFullscreenDescription: 'Enter fullscreen when the game starts.',
   signalVolume: 'Signal volume',
   signalVolumeDescription: 'Main signal and timer warning.',
 };

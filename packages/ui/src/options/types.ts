@@ -71,6 +71,7 @@ export const MAX_CUSTOM_GAME_ELEMENTS = 20;
 export const MAX_CUSTOM_IMAGE_DATA_LENGTH = 3 * 1024 * 1024;
 
 export interface GameOptions {
+  autoFullscreen: boolean;
   soundVolume: number;
   layout: GameLayout | null;
   customElements: CustomGameElement[];
@@ -85,6 +86,7 @@ export const DEFAULT_EDITOR_TEXT_OPTIONS: EditorTextOptions = {
 };
 
 export const DEFAULT_GAME_OPTIONS: GameOptions = {
+  autoFullscreen: true,
   soundVolume: 0.05,
   layout: null,
   customElements: [],
