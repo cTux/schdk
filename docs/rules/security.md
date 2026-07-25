@@ -22,7 +22,8 @@
   to that renderer; never expose Node or unrestricted IPC primitives.
 - Treat persistence failures as recoverable where data safety permits, but do
   not swallow package read, parse, or write failures that the user must act on.
-- Keep Google browser access tokens in memory. Keep desktop OAuth and refresh
-  tokens in the main process, encrypt persisted refresh tokens with
-  `safeStorage`, and never expose tokens or generic authenticated requests
-  through IPC.
+- Keep Google browser access tokens in per-tab session storage only, validate
+  their client ID and expiry before use, and clear them on expiry or disconnect.
+  Keep desktop OAuth and refresh tokens in the main process, encrypt persisted
+  refresh tokens with `safeStorage`, and never expose tokens or generic
+  authenticated requests through IPC.

@@ -20,9 +20,11 @@
   failed write. Keep its recovery draft, retry after reconnection, and offer a
   local save flow when the user leaves or closes while unsynchronized.
 - Browser authorization uses Google Identity Services only from an explicit
-  Connect action. Keep its access token in memory and never call the popup-based
-  token flow during startup, refresh, autosave, or other background work. After
-  a refresh or token expiry, require explicit reconnection.
+  Connect action. Keep its short-lived access token in per-tab session storage
+  so a refresh can restore the connection; validate its client ID and expiry
+  before use, and clear invalid, expired, or disconnected sessions. Never call
+  the popup-based token flow during startup, refresh, autosave, or other
+  background work. After token expiry, require explicit reconnection.
 - Desktop authorization uses the system browser, PKCE S256, a random-state
   loopback callback on `127.0.0.1`, and refresh tokens encrypted with Electron
   `safeStorage`. Never persist a refresh token through Linux `basic_text`.

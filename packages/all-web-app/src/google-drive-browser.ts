@@ -14,6 +14,12 @@ interface TokenResponse {
   scope?: string;
 }
 
+interface StoredToken {
+  accessToken: string;
+  clientId: string;
+  expiresAt: number;
+}
+
 interface TokenClient {
   requestAccessToken(): void;
 }
@@ -29,6 +35,47 @@ interface GoogleOauth {
 }
 
 let googleScript: Promise<GoogleOauth> | undefined;
+const TOKEN_KEY = 'schdk:google-drive-token';
+
+function clearStoredToken() {
+  try {
+    sessionStorage.removeItem(TOKEN_KEY);
+  } catch {
+    // The in-memory token still works when session storage is unavailable.
+  }
+}
+
+function loadStoredToken(clientId: string): StoredToken | null {
+  try {
+    const value = JSON.parse(
+      sessionStorage.getItem(TOKEN_KEY) ?? 'null',
+    ) as Partial<StoredToken> | null;
+    if (
+      value &&
+      typeof value.accessToken === 'string' &&
+      value.accessToken.length > 0 &&
+      value.accessToken.length <= 4096 &&
+      value.clientId === clientId &&
+      typeof value.expiresAt === 'number' &&
+      Number.isFinite(value.expiresAt) &&
+      value.expiresAt > Date.now()
+    ) {
+      return value as StoredToken;
+    }
+  } catch {
+    // Invalid or unavailable storage behaves like a signed-out session.
+  }
+  clearStoredToken();
+  return null;
+}
+
+function storeToken(token: StoredToken) {
+  try {
+    sessionStorage.setItem(TOKEN_KEY, JSON.stringify(token));
+  } catch {
+    // The access token remains usable in memory for the current page.
+  }
+}
 
 function loadGoogleOauth(): Promise<GoogleOauth> {
   googleScript ??= new Promise((resolve, reject) => {
@@ -66,13 +113,31 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
   private expiresAt = 0;
   private tokenRequest?: Promise<void>;
   private readonly client = new GoogleDriveClient(async () => {
-    if (!this.accessToken || Date.now() >= this.expiresAt) {
+    if (!this.hasValidToken()) {
       throw new GoogleDriveAuthorizationError('Google Drive access expired');
     }
     return this.accessToken;
   });
 
-  constructor(private readonly clientId: string) {}
+  constructor(private readonly clientId: string) {
+    const token = loadStoredToken(clientId);
+    if (!token) return;
+    this.accessToken = token.accessToken;
+    this.expiresAt = token.expiresAt;
+  }
+
+  private clearToken() {
+    this.accessToken = '';
+    this.expiresAt = 0;
+    this.account = undefined;
+    clearStoredToken();
+  }
+
+  private hasValidToken() {
+    if (this.accessToken && Date.now() < this.expiresAt) return true;
+    this.clearToken();
+    return false;
+  }
 
   private requestToken() {
     this.tokenRequest ??= this.fetchToken().finally(() => {
@@ -104,10 +169,15 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
     }
     this.accessToken = response.access_token;
     this.expiresAt = Date.now() + (response.expires_in ?? 3600) * 1000;
+    storeToken({
+      accessToken: this.accessToken,
+      clientId: this.clientId,
+      expiresAt: this.expiresAt,
+    });
   }
 
   async status() {
-    if (!this.accessToken || Date.now() >= this.expiresAt) {
+    if (!this.hasValidToken()) {
       return { state: 'disconnected' } as const;
     }
     this.account ??= await this.client.getAccount();
@@ -122,9 +192,7 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
 
   async disconnect() {
     const token = this.accessToken;
-    this.accessToken = '';
-    this.expiresAt = 0;
-    this.account = undefined;
+    this.clearToken();
     if (!token) return;
     const oauth = await loadGoogleOauth();
     await new Promise<void>((resolve) => oauth.revoke(token, resolve));

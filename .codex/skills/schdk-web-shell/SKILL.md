@@ -14,7 +14,8 @@ description: Maintain SCHDK browser applications and the unified @schdk/all-web-
 4. Keep unified locale state and persistence in `@schdk/all-web-app`; keep
    translated copy and the locale context in `@schdk/ui`.
 5. Start Google browser token requests only from an explicit user action;
-   never open OAuth from startup, refresh, or background synchronization.
+   restore valid short-lived tokens only from per-tab session storage, and never
+   open OAuth from startup, refresh, or background synchronization.
 6. Visually smoke-test changed navigation.
 
 ## Checks
