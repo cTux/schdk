@@ -15,7 +15,7 @@ Read only the areas touched by the task:
   [desktop persistence](rules/desktop-editor-persistence.md).
 - Applications: [shared web](rules/web-apps.md), [host](rules/host-app.md),
   [web shell](rules/web-shell.md), [desktop](rules/desktop-apps.md), and
-  [security](rules/security.md).
+  [Google Drive](rules/google-drive.md), and [security](rules/security.md).
 - UI: [area index](../packages/ui/README.md).
 - Workflow: [dependencies](rules/dependencies.md), [builds](rules/builds.md),
   and [verification](rules/verification.md).

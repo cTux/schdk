@@ -1,5 +1,7 @@
 export type AppLocale = 'uk' | 'en';
 
+import { ukrainianSettings } from './ukrainian-settings';
+
 export const ukrainian = {
   shared: {
     optional: '(необов’язково)',
@@ -51,34 +53,7 @@ export const ukrainian = {
       description: 'Створюйте власний макет екрана проведення гри.',
     },
   },
-  settings: {
-    title: 'Налаштування',
-    groupsLabel: 'Групи налаштувань',
-    appTab: 'Застосунок',
-    schdkTab: 'ЩДК',
-    languageHeading: 'Мова застосунку',
-    languageLabel: 'Мова',
-    ukrainian: 'Українська',
-    english: 'English',
-    themeLabel: 'Тема',
-    systemTheme: 'Системна',
-    lightTheme: 'Світла',
-    darkTheme: 'Темна',
-    schdkTabsLabel: 'Налаштування ЩДК',
-    gameTab: 'Проведення гри',
-    editorTab: 'Редагування питань',
-    textCorrection: 'Автоматичне коригування тексту',
-    questionText: 'Текст питання',
-    sentenceCorrection:
-      'Капіталізувати перше слово та додавати крапку, якщо наприкінці немає розділового знака.',
-    answers: 'Відповіді',
-    answersCorrection:
-      'Капіталізувати перше слово основної, альтернативних і неправильних відповідей.',
-    answerComment: 'Коментар до відповіді',
-    game: 'Гра',
-    signalVolume: 'Гучність звукових сигналів',
-    signalVolumeDescription: 'Головний сигнал і попередження таймера.',
-  },
+  settings: ukrainianSettings,
   editor: {
     brandEyebrow: 'Редактор пакетів',
     brandTitle: 'Що? Де? Коли?',

@@ -10,6 +10,7 @@ import {
   closePresenterNotes,
   registerPresenterNotesIpc,
 } from './presenter-notes.js';
+import { registerGoogleDriveIpc } from './google-drive-ipc.js';
 import {
   requestSaveBeforeClose,
   type CloseController,
@@ -106,6 +107,7 @@ ipcMain.on('close-attempt-finished', (event, attempt, succeeded) => {
 });
 
 registerGamePackageIpc();
+registerGoogleDriveIpc();
 registerPresenterNotesIpc(() => mainWindow);
 
 app.whenReady().then(async () => {

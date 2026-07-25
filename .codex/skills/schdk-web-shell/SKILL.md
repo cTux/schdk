@@ -9,6 +9,7 @@ description: Maintain SCHDK browser applications and the unified @schdk/all-web-
 
 1. Follow `$schdk-development`, then read `docs/rules/web-apps.md` and `docs/rules/web-shell.md`.
 2. Read `docs/rules/architecture.md` for ownership changes and `docs/rules/ui-shell.md` for visual changes.
+   Read `docs/rules/google-drive.md` for settings authorization or synchronization.
 3. Trace standalone and unified renderer paths separately.
 4. Keep unified locale state and persistence in `@schdk/all-web-app`; keep
    translated copy and the locale context in `@schdk/ui`.

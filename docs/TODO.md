@@ -1,10 +1,5 @@
 # TODO
 
-## Potential features
-
-- Logging in with Google account
-  - Saving to Google Drive
-
 ## Technical features
 
 - Build desktop apps for macOS (.app/.pkg) and Linux (.deb)

@@ -5,6 +5,7 @@ import { ShellHome } from '../ShellHome';
 import { ShellNavigation } from '../ShellNavigation';
 import type { ShellViewName } from '../shellItems';
 import { OptionsPage } from '../../options/OptionsPage';
+import type { GoogleDriveState } from '../../options/OptionsPage';
 import type {
   AppTheme,
   EditorTextOptions,
@@ -22,10 +23,14 @@ export interface ShellViewProps {
   editorOptions: EditorTextOptions;
   gameOptions: GameOptions;
   gameOptionsError: string;
+  googleDriveAccount?: string;
+  googleDriveState: GoogleDriveState;
   theme: AppTheme;
   view: ShellViewName;
   onEditorOptionsChange(options: EditorTextOptions): void;
   onGameOptionsChange(options: GameOptions): void;
+  onGoogleDriveConnect(): void;
+  onGoogleDriveDisconnect(): void;
   onImportVisualEditorTemplate(file: File): void;
   onExportVisualEditorTemplate(): void;
   onShowView(view: ShellViewName): void;
@@ -39,10 +44,14 @@ export function ShellView({
   editorOptions,
   gameOptions,
   gameOptionsError,
+  googleDriveAccount,
+  googleDriveState,
   theme,
   view,
   onEditorOptionsChange,
   onGameOptionsChange,
+  onGoogleDriveConnect,
+  onGoogleDriveDisconnect,
   onImportVisualEditorTemplate,
   onExportVisualEditorTemplate,
   onShowView,
@@ -58,9 +67,13 @@ export function ShellView({
             hidden={view !== 'options'}
             editor={editorOptions}
             game={gameOptions}
+            googleDriveAccount={googleDriveAccount}
+            googleDriveState={googleDriveState}
             theme={theme}
             onEditorChange={onEditorOptionsChange}
             onGameChange={onGameOptionsChange}
+            onGoogleDriveConnect={onGoogleDriveConnect}
+            onGoogleDriveDisconnect={onGoogleDriveDisconnect}
             onThemeChange={onThemeChange}
           />
           <VisualEditor

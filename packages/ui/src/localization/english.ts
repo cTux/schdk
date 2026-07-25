@@ -1,4 +1,5 @@
 import { ukrainian } from './ukrainian';
+import { englishSettings } from './english-settings';
 
 export const english: typeof ukrainian = {
   shared: {
@@ -51,34 +52,7 @@ export const english: typeof ukrainian = {
       description: 'Create a custom layout for the game screen.',
     },
   },
-  settings: {
-    title: 'Settings',
-    groupsLabel: 'Settings groups',
-    appTab: 'App',
-    schdkTab: 'WWW',
-    languageHeading: 'App language',
-    languageLabel: 'Language',
-    ukrainian: 'Українська',
-    english: 'English',
-    themeLabel: 'Theme',
-    systemTheme: 'System',
-    lightTheme: 'Light',
-    darkTheme: 'Dark',
-    schdkTabsLabel: 'WWW settings',
-    gameTab: 'Hosting',
-    editorTab: 'Question editing',
-    textCorrection: 'Automatic text correction',
-    questionText: 'Question text',
-    sentenceCorrection:
-      'Capitalize the first word and add a period when no punctuation ends the text.',
-    answers: 'Answers',
-    answersCorrection:
-      'Capitalize the first word of the main, alternative, and wrong answers.',
-    answerComment: 'Answer comment',
-    game: 'Game',
-    signalVolume: 'Signal volume',
-    signalVolumeDescription: 'Main signal and timer warning.',
-  },
+  settings: englishSettings,
   editor: {
     brandEyebrow: 'Package editor',
     brandTitle: 'What? Where? When?',

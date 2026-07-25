@@ -26,3 +26,6 @@
   apply them to every unified application surface.
 - Keep locale selection in the first `App` settings group, before the `WWW`
   group; do not place it in the sidebar.
+- Keep the optional Google Drive connection in the `App` settings group.
+  Synchronize editor and game options through [google-drive.md](google-drive.md)
+  while preserving immediate local storage.

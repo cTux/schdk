@@ -19,6 +19,10 @@
 - `@schdk/all-desktop-app` is the only desktop application. It wraps
   `@schdk/all-web-app` and owns Electron main/preload code, packaging, and the
   narrow file bridge exposed to the trusted unified renderer.
+- `@schdk/google-drive` owns the platform-neutral Drive REST client and opaque
+  settings envelope. Browser authorization stays in `@schdk/all-web-app`;
+  installed-app authorization and credential storage stay in
+  `@schdk/all-desktop-app`.
 
 ## Dependency direction
 

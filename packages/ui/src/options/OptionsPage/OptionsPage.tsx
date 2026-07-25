@@ -4,25 +4,35 @@ import { Button } from '../../atoms/Button';
 import { useLocalization } from '../../localization';
 import { OptionToggle } from '../OptionToggle';
 import { OptionsTabs, type OptionsTab } from '../OptionsTabs';
-import type { AppTheme, EditorTextOptions, GameOptions } from '../types';
+import type { AppTheme } from '../types';
+import type { GoogleDriveState, OptionsPageProps } from './types';
 
-export interface OptionsPageProps {
-  editor: EditorTextOptions;
-  game: GameOptions;
-  hidden: boolean;
-  theme: AppTheme;
-  onEditorChange(options: EditorTextOptions): void;
-  onGameChange(options: GameOptions): void;
-  onThemeChange(theme: AppTheme): void;
+function getGoogleDriveMessage(
+  state: GoogleDriveState,
+  account: string | undefined,
+  copy: ReturnType<typeof useLocalization>['copy'],
+) {
+  if (state === 'unavailable') return copy.settings.googleDriveUnavailable;
+  if (state === 'connecting') return copy.settings.googleDriveConnecting;
+  if (state === 'connected')
+    return copy.settings.googleDriveConnected(account ?? '');
+  if (state === 'reauthorization-required')
+    return copy.settings.googleDriveReconnect;
+  if (state === 'error') return copy.settings.googleDriveError;
+  return copy.settings.googleDriveDisconnected;
 }
 
 export function OptionsPage({
   editor,
   game,
+  googleDriveAccount,
+  googleDriveState,
   hidden,
   theme,
   onEditorChange,
   onGameChange,
+  onGoogleDriveConnect,
+  onGoogleDriveDisconnect,
   onThemeChange,
 }: OptionsPageProps) {
   const { copy, locale, onLocaleChange } = useLocalization();
@@ -98,6 +108,36 @@ export function OptionsPage({
             <option value="dark">{copy.settings.darkTheme}</option>
           </select>
         </label>
+        <div className="option-select">
+          <span>
+            <strong>{copy.settings.googleDriveHeading}</strong>
+            <small aria-live="polite">
+              {getGoogleDriveMessage(
+                googleDriveState,
+                googleDriveAccount,
+                copy,
+              )}
+            </small>
+          </span>
+          {googleDriveState === 'connected' ? (
+            <Button type="button" onClick={onGoogleDriveDisconnect}>
+              {copy.settings.googleDriveDisconnect}
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              disabled={
+                googleDriveState === 'unavailable' ||
+                googleDriveState === 'connecting'
+              }
+              onClick={onGoogleDriveConnect}
+            >
+              {googleDriveState === 'reauthorization-required'
+                ? copy.settings.googleDriveReconnectAction
+                : copy.settings.googleDriveConnect}
+            </Button>
+          )}
+        </div>
       </section>
 
       <div

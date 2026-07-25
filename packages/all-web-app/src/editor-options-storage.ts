@@ -10,18 +10,33 @@ export function loadEditorTextOptions(
   storage: OptionsStorage,
 ): EditorTextOptions {
   try {
-    const value = JSON.parse(
-      storage.getItem(OPTIONS_KEY) ?? 'null',
-    ) as Partial<EditorTextOptions> | null;
-    if (!value) return DEFAULT_EDITOR_TEXT_OPTIONS;
-    return {
-      correctQuestionText: value.correctQuestionText === true,
-      correctAnswers: value.correctAnswers === true,
-      correctAnswerComment: value.correctAnswerComment === true,
-    };
+    return (
+      normalizeEditorTextOptions(
+        JSON.parse(storage.getItem(OPTIONS_KEY) ?? 'null'),
+      ) ?? DEFAULT_EDITOR_TEXT_OPTIONS
+    );
   } catch {
     return DEFAULT_EDITOR_TEXT_OPTIONS;
   }
+}
+
+export function normalizeEditorTextOptions(
+  value: unknown,
+): EditorTextOptions | null {
+  if (!value || typeof value !== 'object') return null;
+  const candidate = value as Partial<EditorTextOptions>;
+  if (
+    typeof candidate.correctQuestionText !== 'boolean' ||
+    typeof candidate.correctAnswers !== 'boolean' ||
+    typeof candidate.correctAnswerComment !== 'boolean'
+  ) {
+    return null;
+  }
+  return {
+    correctQuestionText: candidate.correctQuestionText,
+    correctAnswers: candidate.correctAnswers,
+    correctAnswerComment: candidate.correctAnswerComment,
+  };
 }
 
 export function saveEditorTextOptions(

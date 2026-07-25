@@ -25,6 +25,7 @@ import {
   saveGameOptions,
   serializeVisualEditorTemplate,
 } from './options-storage';
+import { useGoogleDriveSettings } from './use-google-drive-settings';
 
 const SHELL_LOCALE_STORAGE_KEY = 'schdk.shell.locale';
 const SHELL_THEME_STORAGE_KEY = 'schdk.shell.theme';
@@ -73,13 +74,19 @@ export function App() {
     host: view === 'host',
     editor: view === 'editor',
   });
-  const [editorOptions, setEditorOptions] = useState<EditorTextOptions>(() =>
-    loadEditorTextOptions(localStorage),
+  const [editorOptions, setEditorOptionsState] = useState<EditorTextOptions>(
+    () => loadEditorTextOptions(localStorage),
   );
-  const [gameOptions, setGameOptions] = useState<GameOptions>(() =>
+  const [gameOptions, setGameOptionsState] = useState<GameOptions>(() =>
     loadGameOptions(localStorage),
   );
   const [gameOptionsError, setGameOptionsError] = useState('');
+  const googleDrive = useGoogleDriveSettings({
+    editorTextOptions: editorOptions,
+    gameOptions,
+    setEditorTextOptions: setEditorOptionsState,
+    setGameOptions: setGameOptionsState,
+  });
 
   useEffect(() => {
     localStorage.setItem(SHELL_LOCALE_STORAGE_KEY, locale);
@@ -154,7 +161,7 @@ export function App() {
         gameOptions.soundVolume,
       );
       if (imported) {
-        setGameOptions(imported);
+        googleDrive.setGameOptions(imported);
         return;
       }
     } catch {
@@ -206,10 +213,18 @@ export function App() {
         editorOptions={editorOptions}
         gameOptions={gameOptions}
         gameOptionsError={gameOptionsError}
+        googleDriveAccount={
+          'account' in googleDrive.connection
+            ? googleDrive.connection.account?.emailAddress
+            : undefined
+        }
+        googleDriveState={googleDrive.connection.state}
         theme={theme}
         view={view}
-        onEditorOptionsChange={setEditorOptions}
-        onGameOptionsChange={setGameOptions}
+        onEditorOptionsChange={googleDrive.setEditorTextOptions}
+        onGameOptionsChange={googleDrive.setGameOptions}
+        onGoogleDriveConnect={() => void googleDrive.connect()}
+        onGoogleDriveDisconnect={() => void googleDrive.disconnect()}
         onImportVisualEditorTemplate={importVisualEditorTemplate}
         onExportVisualEditorTemplate={exportVisualEditorTemplate}
         onShowView={(nextView) => showView(nextView)}

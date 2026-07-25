@@ -1,9 +1,19 @@
 # Google Drive persistence
 
-Status: proposed
+Status: settings synchronization implemented; package storage proposed
 
 Related research:
 [Backendless Google Drive persistence](../research/google-drive-persistence.md)
+
+Implemented in the web and desktop applications:
+
+- shared Drive REST settings client and `settings-v1.json` envelope;
+- browser GIS authorization with in-memory access tokens;
+- desktop system-browser PKCE authorization with encrypted refresh tokens;
+- per-section editor/game settings merge with local fallback.
+
+Visible Drive package storage, Drive recents, package autosave, conflicts, and
+production OAuth setup remain proposed below.
 
 ## Product contract
 

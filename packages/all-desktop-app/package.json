@@ -14,7 +14,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@schdk/all-web-app": "workspace:*"
+    "@schdk/all-web-app": "workspace:*",
+    "@schdk/google-drive": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:",

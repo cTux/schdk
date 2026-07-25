@@ -8,3 +8,5 @@
 - Keep the native Ukrainian/English language control in the first `App`
   settings tab. Keep `WWW` as the second primary tab with its host/editor
   secondary tabs.
+- Keep the localized Google Drive connection and sync status in the first
+  `App` settings tab, using the existing settings-row and button patterns.
