@@ -45,6 +45,7 @@
   }
 
   .handout-dialog {
+    display: flex;
     width: min(1100px, 92vw);
     height: min(820px, 88vh);
     max-width: none;
@@ -55,16 +56,24 @@
     background: $surface;
     padding: 0;
     color: $text;
-  }
-
-  .handout-dialog[open] {
-    display: flex;
     flex-direction: column;
   }
 
-  .handout-dialog::backdrop {
+  .handout-dialog-backdrop {
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
     background: rgba($shadow-rgb, 0.78);
     backdrop-filter: blur(2px);
+  }
+
+  .handout-dialog-shell {
+    position: fixed;
+    z-index: 1001;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .handout-dialog header {
@@ -72,6 +81,10 @@
     gap: 16px;
     border-bottom: 1px solid $border;
     padding: 10px 12px 10px 16px;
+  }
+
+  .handout-dialog h2 {
+    font-size: 1rem;
   }
 
   .handout-dialog-actions {

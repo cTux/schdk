@@ -3,6 +3,7 @@ import {
   faMagnifyingGlassPlus,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
+import { Dialog } from '@base-ui/react/dialog';
 import classNames from 'classnames';
 import { useRef, useState, type PointerEvent } from 'react';
 import { Button } from '../../atoms/Button';
@@ -28,7 +29,6 @@ export function ZoomableImage({
   title,
 }: ZoomableImageProps) {
   const { copy } = useLocalization();
-  const dialog = useRef<HTMLDialogElement>(null);
   const viewport = useRef<HTMLDivElement>(null);
   const drag = useRef<{
     pointerId: number;
@@ -37,16 +37,13 @@ export function ZoomableImage({
     scrollLeft: number;
     scrollTop: number;
   } | null>(null);
+  const [open, setOpen] = useState(false);
   const [zoom, setZoom] = useState(MIN_ZOOM);
 
-  function open() {
+  function openDialog() {
     setZoom(MIN_ZOOM);
     viewport.current?.scrollTo(0, 0);
-    dialog.current?.showModal();
-  }
-
-  function close() {
-    dialog.current?.close();
+    setOpen(true);
   }
 
   function startPanning(event: PointerEvent<HTMLDivElement>) {
@@ -82,64 +79,66 @@ export function ZoomableImage({
       <Button
         className="handout-thumbnail"
         type="button"
-        onClick={open}
+        onClick={openDialog}
         aria-label={openLabel}
       >
         <img src={src} alt={alt} />
       </Button>
-      <dialog
-        className="handout-dialog"
-        ref={dialog}
-        aria-label={title}
-        onClick={(event) => {
-          if (event.target === event.currentTarget) close();
-        }}
-      >
-        <header>
-          <strong>{title}</strong>
-          <div className="handout-dialog-actions">
-            <IconButton
-              icon={faMagnifyingGlassMinus}
-              label={copy.shared.zoomOut}
-              disabled={zoom === MIN_ZOOM}
-              onClick={() =>
-                setZoom((current) => clampImageZoom(current - ZOOM_STEP))
-              }
-            />
-            <span aria-live="polite">{zoom * 100}%</span>
-            <IconButton
-              icon={faMagnifyingGlassPlus}
-              label={copy.shared.zoomIn}
-              disabled={zoom === MAX_ZOOM}
-              onClick={() =>
-                setZoom((current) => clampImageZoom(current + ZOOM_STEP))
-              }
-            />
-            <IconButton
-              icon={faXmark}
-              label={copy.shared.close}
-              onClick={close}
-            />
-          </div>
-        </header>
-        <div
-          className={classNames('handout-dialog-viewport', {
-            pannable: zoom > MIN_ZOOM,
-          })}
-          ref={viewport}
-          onPointerDown={startPanning}
-          onPointerMove={pan}
-          onPointerUp={stopPanning}
-          onPointerCancel={stopPanning}
+      <Dialog.Root open={open} onOpenChange={setOpen}>
+        <Dialog.Portal
+          container={document.querySelector<HTMLElement>('.editor-app')}
         >
-          <img
-            src={src}
-            alt={alt}
-            draggable={false}
-            style={{ width: `${zoom * 100}%` }}
-          />
-        </div>
-      </dialog>
+          <Dialog.Backdrop className="handout-dialog-backdrop" />
+          <Dialog.Viewport className="handout-dialog-shell">
+            <Dialog.Popup className="handout-dialog">
+              <header>
+                <Dialog.Title>{title}</Dialog.Title>
+                <div className="handout-dialog-actions">
+                  <IconButton
+                    icon={faMagnifyingGlassMinus}
+                    label={copy.shared.zoomOut}
+                    disabled={zoom === MIN_ZOOM}
+                    onClick={() =>
+                      setZoom((current) => clampImageZoom(current - ZOOM_STEP))
+                    }
+                  />
+                  <span aria-live="polite">{zoom * 100}%</span>
+                  <IconButton
+                    icon={faMagnifyingGlassPlus}
+                    label={copy.shared.zoomIn}
+                    disabled={zoom === MAX_ZOOM}
+                    onClick={() =>
+                      setZoom((current) => clampImageZoom(current + ZOOM_STEP))
+                    }
+                  />
+                  <Dialog.Close
+                    render={
+                      <IconButton icon={faXmark} label={copy.shared.close} />
+                    }
+                  />
+                </div>
+              </header>
+              <div
+                className={classNames('handout-dialog-viewport', {
+                  pannable: zoom > MIN_ZOOM,
+                })}
+                ref={viewport}
+                onPointerDown={startPanning}
+                onPointerMove={pan}
+                onPointerUp={stopPanning}
+                onPointerCancel={stopPanning}
+              >
+                <img
+                  src={src}
+                  alt={alt}
+                  draggable={false}
+                  style={{ width: `${zoom * 100}%` }}
+                />
+              </div>
+            </Dialog.Popup>
+          </Dialog.Viewport>
+        </Dialog.Portal>
+      </Dialog.Root>
     </>
   );
 }

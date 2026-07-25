@@ -15,6 +15,7 @@ import { useRef, useState } from 'react';
 import { replaceBrowserPackageDeepLink } from './browser-deep-link';
 
 interface PackageOpeningOptions {
+  confirm(message: string): Promise<boolean>;
   copy: LocalizationCopy;
   drive?: DrivePackageStorage;
   applyOpenedPackage(
@@ -39,6 +40,7 @@ function downloadPackage(name: string, content: Uint8Array) {
 }
 
 export function usePackageOpeningActions({
+  confirm,
   copy,
   drive,
   applyOpenedPackage,
@@ -128,9 +130,9 @@ export function usePackageOpeningActions({
   async function deleteRecentPackage(recent: RecentPackageItem) {
     if (
       openingRecentPackage.current ||
-      !window.confirm(
+      !(await confirm(
         copy.shared.deletePackageConfirmation(recent.title || recent.name),
-      )
+      ))
     ) {
       return;
     }

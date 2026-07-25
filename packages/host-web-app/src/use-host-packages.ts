@@ -24,11 +24,13 @@ import { downloadPackage, toRecentPackage } from './package-files';
 import type { GameWizardSnapshot } from './use-game-wizard';
 
 export function useHostPackages({
+  confirm,
   copy,
   drive,
   onDriveFailure,
   setGameActive,
 }: {
+  confirm(message: string): Promise<boolean>;
   copy: LocalizationCopy;
   drive?: DrivePackageStorage;
   onDriveFailure?(): void;
@@ -183,9 +185,9 @@ export function useHostPackages({
   async function deleteRecentPackage(recent: RecentPackageItem) {
     if (
       openingRecentPackage.current ||
-      !window.confirm(
+      !(await confirm(
         copy.shared.deletePackageConfirmation(recent.title || recent.name),
-      )
+      ))
     ) {
       return;
     }

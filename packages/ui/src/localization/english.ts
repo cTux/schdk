@@ -3,6 +3,9 @@ import { englishSettings } from './english-settings';
 
 export const english: typeof ukrainian = {
   shared: {
+    confirmation: 'Confirm action',
+    confirm: 'Confirm',
+    cancel: 'Cancel',
     optional: '(optional)',
     remove: 'Remove',
     chooseFile: 'Choose file',
@@ -75,6 +78,7 @@ export const english: typeof ukrainian = {
     packageQuestions: 'Package questions',
     round: (number) => `Round ${number}`,
     musicBreak: 'Music break',
+    noMusic: 'No music added',
     addMusic: 'Add music',
     replaceMusic: 'Replace music',
     invalidMusic: 'The built-in player does not support this audio file.',

@@ -15,6 +15,7 @@ import { replaceBrowserPackageDeepLink } from './browser-deep-link';
 import { usePackageOpeningActions } from './use-package-opening-actions';
 
 interface PackageActionsOptions {
+  confirm(message: string): Promise<boolean>;
   copy: LocalizationCopy;
   drive?: DrivePackageStorage;
   driveFileId: string | null;
@@ -40,6 +41,7 @@ interface PackageActionsOptions {
 
 export function usePackageActions(options: PackageActionsOptions) {
   const {
+    confirm,
     copy,
     drive,
     driveFileId,
@@ -59,6 +61,7 @@ export function usePackageActions(options: PackageActionsOptions) {
     setShowValidation,
   } = options;
   const opening = usePackageOpeningActions({
+    confirm,
     copy,
     drive,
     applyOpenedPackage,

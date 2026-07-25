@@ -1,0 +1,53 @@
+@use '../../styles/tokens' as *;
+
+.confirmation-dialog-backdrop {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  background: rgba($shadow-rgb, 0.72);
+  backdrop-filter: blur(3px);
+}
+
+.confirmation-dialog-viewport {
+  position: fixed;
+  z-index: 1001;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $space-4;
+}
+
+.confirmation-dialog-popup {
+  width: min(430px, 100%);
+  border: 1px solid $border-strong;
+  border-radius: $radius-panel;
+  background: $surface-raised;
+  padding: $space-6;
+  box-shadow: $shadow-overlay;
+  color: $text;
+}
+
+.confirmation-dialog-title {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.confirmation-dialog-message {
+  margin: $space-3 0 $space-6;
+  color: $muted;
+  line-height: 1.5;
+}
+
+.confirmation-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $space-2;
+}
+
+@media (width <= 420px) {
+  .confirmation-dialog-actions {
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+}

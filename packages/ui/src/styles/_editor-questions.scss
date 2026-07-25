@@ -21,6 +21,7 @@
 
   .question-list {
     position: sticky;
+    z-index: 1;
     top: 16px;
     width: 220px;
     flex: 0 0 220px;

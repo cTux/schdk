@@ -11,6 +11,7 @@ import { getSelectedIndexAfterSwap, swapQuestions } from './question-order';
 import { correctAnswer, correctSentence } from './text-correction';
 
 interface QuestionActionsOptions {
+  confirm(message: string): Promise<boolean>;
   copy: LocalizationCopy;
   gamePackage: GamePackage;
   selectedIndex: number;
@@ -22,6 +23,7 @@ interface QuestionActionsOptions {
 }
 
 export function useQuestionActions({
+  confirm,
   copy,
   gamePackage,
   selectedIndex,
@@ -92,7 +94,7 @@ export function useQuestionActions({
   }
 
   async function pasteQuestion() {
-    if (!window.confirm(copy.editor.confirmPaste(selectedIndex + 1))) return;
+    if (!(await confirm(copy.editor.confirmPaste(selectedIndex + 1)))) return;
     setMessage('');
     try {
       const question = parseGameQuestion(
