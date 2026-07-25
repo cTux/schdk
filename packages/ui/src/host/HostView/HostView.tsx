@@ -85,7 +85,7 @@ export function HostView({
           <AppIcon />
           <div>
             <p className="eyebrow">Проведення гри</p>
-            <h1>ЩДК Гра</h1>
+            <h1>Провести гру</h1>
           </div>
         </div>
       </header>
