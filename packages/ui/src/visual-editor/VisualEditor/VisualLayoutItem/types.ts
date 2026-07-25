@@ -4,6 +4,7 @@ import type { ElementSelection, GamePoint } from '../types';
 
 export interface VisualLayoutItemProps {
   content: ReactNode;
+  fitWarningLabel: string;
   hiddenLabel: string;
   hiddenSuffix: string;
   dragInstruction: string;

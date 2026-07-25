@@ -26,6 +26,7 @@
   and optional image elements, persist their bounds and presentation, and
   render them in gameplay.
 - Share measured text-height fitting between the visual editor and gameplay.
+- Warn when fitted text cannot fit at the readable minimum size.
 - Apply the question element's saved bounds to the complete stack of revealed
   blitz parts rather than positioning each part independently.
 - Import and export versioned `.schdk-template` ZIP archives containing

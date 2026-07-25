@@ -195,6 +195,7 @@ export const english: typeof ukrainian = {
     up: 'Up',
     down: 'Down',
     fitHeight: 'Fit to height',
+    fitWarning: 'Enlarge the element or shorten the text',
     imagePosition: 'Image position',
     alignment: 'Alignment',
     workspaceActions: 'Workspace actions',

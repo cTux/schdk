@@ -136,7 +136,7 @@
 
   :is(.has-custom-layout .game-layout-question, .visual-layout-question)
     .game-question {
-    padding: 4cqw;
+    padding: calc(4cqw * var(--game-fit-scale, 1));
     font-size: calc(8cqw * var(--game-font-scale) * var(--game-fit-scale, 1));
   }
 
@@ -156,7 +156,7 @@
       .visual-layout-answer-comment
     )
     .game-answer-comment {
-    padding: 4cqw;
+    padding: calc(4cqw * var(--game-fit-scale, 1));
     font-size: calc(6cqw * var(--game-font-scale) * var(--game-fit-scale, 1));
   }
 
@@ -165,13 +165,13 @@
       .visual-layout-alternative-answer
     )
     .game-alternative-answer {
-    padding: 4cqw;
+    padding: calc(4cqw * var(--game-fit-scale, 1));
     font-size: calc(6cqw * var(--game-font-scale) * var(--game-fit-scale, 1));
   }
 
   :is(.has-custom-layout .game-layout-answer, .visual-layout-answer)
     .game-answer {
-    padding: 4cqw;
+    padding: calc(4cqw * var(--game-fit-scale, 1));
   }
 
   :is(.has-custom-layout .game-layout-answer, .visual-layout-answer)
