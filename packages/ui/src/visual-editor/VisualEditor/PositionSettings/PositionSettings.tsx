@@ -3,6 +3,7 @@ import {
   faPalette,
 } from '@fortawesome/free-solid-svg-icons';
 import { ActionToolbarPopover } from '../../../atoms/ActionToolbar';
+import { Dropdown } from '../../../atoms/Dropdown';
 import {
   GAME_IMAGE_POSITIONS,
   type GameLayoutPosition,
@@ -49,7 +50,7 @@ export function TextSettings({
       </label>
       <label>
         {copy.visualEditor.direction}
-        <select
+        <Dropdown
           value={position.textGrowDirection}
           onChange={(event) =>
             onUpdate(selection, {
@@ -59,7 +60,7 @@ export function TextSettings({
         >
           <option value="up">{copy.visualEditor.up}</option>
           <option value="down">{copy.visualEditor.down}</option>
-        </select>
+        </Dropdown>
       </label>
       <label>
         {copy.visualEditor.fitHeight}
@@ -100,7 +101,7 @@ export function ImagePositionSettings({
       <h2>{copy.visualEditor.imagePosition}</h2>
       <label>
         {copy.visualEditor.alignment}
-        <select
+        <Dropdown
           value={position.imagePosition}
           onChange={(event) =>
             onUpdate(selection, {
@@ -114,7 +115,7 @@ export function ImagePositionSettings({
               {labels[name]}
             </option>
           ))}
-        </select>
+        </Dropdown>
       </label>
     </ActionToolbarPopover>
   );

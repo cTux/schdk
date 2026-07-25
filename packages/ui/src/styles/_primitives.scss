@@ -126,7 +126,6 @@
 }
 
 .ui-popover input,
-.ui-popover select,
 .ui-popover textarea {
   border: 1px solid $border-strong;
   border-radius: 8px;
@@ -141,11 +140,6 @@
   margin-top: $space-2;
   padding: $space-2;
   resize: vertical;
-}
-
-.ui-popover select {
-  min-height: $control-compact;
-  padding: 0 $space-2;
 }
 
 .action-toolbar {

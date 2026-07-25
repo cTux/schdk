@@ -3,6 +3,7 @@ import {
   type GameQuestion,
   type GameQuestionType,
 } from '@schdk/common';
+import { Dropdown } from '../../atoms/Dropdown';
 import { TextAreaField } from '../../atoms/TextAreaField';
 import { useLocalization } from '../../localization';
 import { AnswerListField } from '../AnswerListField';
@@ -66,7 +67,7 @@ export function QuestionEditor({
 
       <label className="question-type">
         {copy.editor.questionType}
-        <select
+        <Dropdown
           value={question.type}
           onChange={(event) =>
             changeQuestionType(event.target.value as GameQuestionType)
@@ -79,7 +80,7 @@ export function QuestionEditor({
           <option value="blitz-3x20">
             {copy.editor.questionTypes.blitz3x20}
           </option>
-        </select>
+        </Dropdown>
       </label>
 
       <QuestionHandoutField
