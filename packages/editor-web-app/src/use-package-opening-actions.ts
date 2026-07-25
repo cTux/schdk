@@ -10,6 +10,7 @@ import {
 } from '@schdk/google-drive';
 import type { RecentPackageItem } from '@schdk/ui/editor';
 import type { LocalizationCopy } from '@schdk/ui/localization';
+import { useRef, useState } from 'react';
 import { replaceBrowserPackageDeepLink } from './browser-deep-link';
 
 interface PackageOpeningOptions {
@@ -44,7 +45,13 @@ export function usePackageOpeningActions({
   onDriveFailure,
   setMessage,
 }: PackageOpeningOptions) {
+  const openingRecentPackage = useRef<string | null>(null);
+  const [openingRecentPackageId, setOpeningRecentPackageId] = useState<
+    string | null
+  >(null);
+
   async function openPackage(file: File) {
+    if (openingRecentPackage.current) return;
     setMessage('');
     let content: Uint8Array;
     let gamePackage: GamePackage;
@@ -72,6 +79,9 @@ export function usePackageOpeningActions({
   }
 
   async function openRecentPackage(recent: RecentPackageItem) {
+    if (openingRecentPackage.current) return;
+    openingRecentPackage.current = recent.id;
+    setOpeningRecentPackageId(recent.id);
     setMessage('');
     try {
       const driveFileId = parseDrivePackageReference(recent.id);
@@ -85,10 +95,14 @@ export function usePackageOpeningActions({
       onDriveFailure?.();
       setMessage(copy.editor.recentOpenFailed);
       await refreshRecentPackages();
+    } finally {
+      openingRecentPackage.current = null;
+      setOpeningRecentPackageId(null);
     }
   }
 
   async function downloadRecentPackage(recent: RecentPackageItem) {
+    if (openingRecentPackage.current) return;
     setMessage('');
     try {
       const driveFileId = parseDrivePackageReference(recent.id);
@@ -106,5 +120,10 @@ export function usePackageOpeningActions({
     }
   }
 
-  return { downloadRecentPackage, openPackage, openRecentPackage };
+  return {
+    downloadRecentPackage,
+    openingRecentPackageId,
+    openPackage,
+    openRecentPackage,
+  };
 }

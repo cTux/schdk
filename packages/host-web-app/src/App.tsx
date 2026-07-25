@@ -40,6 +40,7 @@ export function App({
     clearPackage,
     downloadRecentPackage,
     message,
+    openingRecentPackageId,
     openPackage,
     openRecentPackage,
     packageDetails,
@@ -206,6 +207,7 @@ export function App({
       game={game}
       layout={layout}
       message={message}
+      openingRecentPackageId={openingRecentPackageId}
       packageDetails={packageDetails}
       recentPackages={recentPackages}
       recentPackagesLoading={recentPackagesLoading}

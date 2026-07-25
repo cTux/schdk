@@ -66,6 +66,10 @@
     line-height: 58px;
   }
 
+  .package-drop-zone[aria-disabled='true'] {
+    opacity: 0.55;
+  }
+
   .package-drop-zone h2 {
     font-size: 1.35rem;
     letter-spacing: -0.02em;
@@ -127,37 +131,6 @@
     border-top: 1px solid $border;
   }
 
-  .recent-package-skeleton {
-    display: flex;
-    min-height: 58px;
-    flex-direction: column;
-    justify-content: center;
-    gap: 7px;
-    padding: 10px 14px;
-    animation: recent-package-skeleton-pulse 900ms ease-in-out infinite
-      alternate;
-  }
-
-  .recent-package-skeleton + .recent-package-skeleton {
-    border-top: 1px solid $border;
-  }
-
-  .recent-package-skeleton-title,
-  .recent-package-skeleton-name {
-    height: 9px;
-    border-radius: 999px;
-    background: $surface-hover;
-  }
-
-  .recent-package-skeleton-title {
-    width: min(68%, 280px);
-  }
-
-  .recent-package-skeleton-name {
-    width: min(42%, 180px);
-    opacity: 0.65;
-  }
-
   .recent-package-list button {
     display: flex;
     align-items: center;
@@ -176,7 +149,7 @@
     min-width: 0;
   }
 
-  .recent-package-list .recent-package-open:hover {
+  .recent-package-list .recent-package-open:hover:not(:disabled) {
     background: $surface-hover;
     padding-left: 17px;
   }
@@ -191,7 +164,7 @@
     color: $muted;
   }
 
-  .recent-package-list .recent-package-download:hover {
+  .recent-package-list .recent-package-download:hover:not(:disabled) {
     background: $surface-hover;
     color: $accent-hover;
   }
@@ -238,15 +211,5 @@
   .recent-package-arrow {
     color: $muted;
     font-size: 1rem;
-  }
-}
-
-@keyframes recent-package-skeleton-pulse {
-  from {
-    opacity: 0.45;
-  }
-
-  to {
-    opacity: 0.95;
   }
 }

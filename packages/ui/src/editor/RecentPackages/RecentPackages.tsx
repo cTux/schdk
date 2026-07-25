@@ -5,6 +5,7 @@ import type { RecentPackageItem } from '../types';
 export interface RecentPackagesProps {
   hidden: boolean;
   loading?: boolean;
+  openingPackageId?: string | null;
   packages: RecentPackageItem[];
   onDownload?(recent: RecentPackageItem): void;
   onOpen(recent: RecentPackageItem): void;
@@ -13,6 +14,7 @@ export interface RecentPackagesProps {
 export function RecentPackages({
   hidden,
   loading = false,
+  openingPackageId = null,
   packages,
   onDownload,
   onOpen,
@@ -39,7 +41,9 @@ export function RecentPackages({
             ))
           : packages.map((recent) => (
               <RecentPackageButton
+                disabled={openingPackageId !== null}
                 key={recent.id}
+                opening={openingPackageId === recent.id}
                 recent={recent}
                 onDownload={onDownload ? () => onDownload(recent) : undefined}
                 onOpen={() => onOpen(recent)}

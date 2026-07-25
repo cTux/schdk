@@ -1,16 +1,25 @@
-import { faArrowRight, faDownload } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowRight,
+  faDownload,
+  faSpinner,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classNames from 'classnames';
 import { Button } from '../../atoms/Button';
 import { useLocalization } from '../../localization';
 import type { RecentPackageItem } from '../types';
 
 export interface RecentPackageButtonProps {
+  disabled?: boolean;
+  opening?: boolean;
   recent: RecentPackageItem;
   onDownload?(): void;
   onOpen(): void;
 }
 
 export function RecentPackageButton({
+  disabled = false,
+  opening = false,
   recent,
   onDownload,
   onOpen,
@@ -22,10 +31,13 @@ export function RecentPackageButton({
     : recent.name;
 
   return (
-    <div className="recent-package-item">
+    <div className="recent-package-item" aria-busy={opening}>
       <Button
         type="button"
-        className="recent-package-open"
+        className={classNames('recent-package-open', {
+          'is-opening': opening,
+        })}
+        disabled={disabled}
         onClick={onOpen}
         title={hasTitle ? `${title} — ${recent.name}` : recent.name}
       >
@@ -39,13 +51,17 @@ export function RecentPackageButton({
           {hasTitle && <small>{recent.name}</small>}
         </span>
         <span className="recent-package-arrow" aria-hidden="true">
-          <FontAwesomeIcon icon={faArrowRight} />
+          <FontAwesomeIcon
+            className={opening ? 'recent-package-spinner' : undefined}
+            icon={opening ? faSpinner : faArrowRight}
+          />
         </span>
       </Button>
       {onDownload && (
         <Button
           type="button"
           className="recent-package-download"
+          disabled={disabled}
           aria-label={copy.shared.downloadPackage}
           title={copy.shared.downloadPackage}
           onClick={onDownload}

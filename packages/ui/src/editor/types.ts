@@ -13,6 +13,7 @@ export interface EditorViewProps {
   gamePackage: GamePackage;
   hasPackage: boolean;
   message: string;
+  openingRecentPackageId?: string | null;
   recentPackages: RecentPackageItem[];
   recentPackagesLoading?: boolean;
   saveStatus: EditorSaveStatus;

@@ -152,6 +152,7 @@ export function App({
       gamePackage={gamePackage}
       hasPackage={hasPackage}
       message={message}
+      openingRecentPackageId={packages.openingRecentPackageId}
       recentPackages={recentPackages}
       recentPackagesLoading={recentPackagesLoading}
       saveStatus={saveStatus}

@@ -14,6 +14,7 @@ export function EditorView({
   gamePackage,
   hasPackage,
   message,
+  openingRecentPackageId = null,
   recentPackages,
   recentPackagesLoading = false,
   saveStatus,
@@ -50,6 +51,7 @@ export function EditorView({
         />
         <PackageStart
           hidden={hasPackage}
+          openingRecentPackageId={openingRecentPackageId}
           recentPackages={recentPackages}
           recentPackagesLoading={recentPackagesLoading}
           onCreatePackage={onCreatePackage}

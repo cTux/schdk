@@ -12,6 +12,7 @@ import type { HostPackageDetails, RecentPackageItem } from '@schdk/ui/host';
 import type { LocalizationCopy } from '@schdk/ui/localization';
 import {
   useCallback,
+  useRef,
   useState,
   type Dispatch,
   type SetStateAction,
@@ -43,6 +44,10 @@ export function useHostPackages({
   setGameActive: Dispatch<SetStateAction<boolean>>;
 }) {
   const [message, setMessage] = useState('');
+  const openingRecentPackage = useRef<string | null>(null);
+  const [openingRecentPackageId, setOpeningRecentPackageId] = useState<
+    string | null
+  >(null);
   const [packageDetails, setPackageDetails] =
     useState<HostPackageDetails | null>(null);
   const [recentPackages, setRecentPackages] = useState<RecentPackageItem[]>([]);
@@ -110,6 +115,7 @@ export function useHostPackages({
   );
 
   async function openPackage(file: File) {
+    if (openingRecentPackage.current) return;
     setMessage('');
     let content: Uint8Array;
     try {
@@ -141,6 +147,9 @@ export function useHostPackages({
   }
 
   async function openRecentPackage(recent: RecentPackageItem) {
+    if (openingRecentPackage.current) return;
+    openingRecentPackage.current = recent.id;
+    setOpeningRecentPackageId(recent.id);
     setMessage('');
     try {
       const driveFileId = parseDrivePackageReference(recent.id);
@@ -156,10 +165,14 @@ export function useHostPackages({
       onDriveFailure?.();
       setMessage(copy.host.recentOpenFailed);
       await refreshRecentPackages();
+    } finally {
+      openingRecentPackage.current = null;
+      setOpeningRecentPackageId(null);
     }
   }
 
   async function downloadRecentPackage(recent: RecentPackageItem) {
+    if (openingRecentPackage.current) return;
     setMessage('');
     try {
       const driveFileId = parseDrivePackageReference(recent.id);
@@ -190,6 +203,7 @@ export function useHostPackages({
     clearPackage,
     downloadRecentPackage,
     message,
+    openingRecentPackageId,
     openPackage,
     openRecentPackage,
     packageDetails,
