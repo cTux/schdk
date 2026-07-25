@@ -849,7 +849,10 @@ export function VisualEditor({
           side="right"
           trigger={
             <button
-              className="visual-editor-add-button"
+              className={classNames(
+                'visual-editor-add-button',
+                'visual-editor-import-button',
+              )}
               type="button"
               aria-label={copy.visualEditor.importTemplate}
               onClick={() => templateInputRef.current?.click()}

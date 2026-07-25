@@ -19,8 +19,10 @@
 - Select the game canvas by default and restore it with Escape. Its toolbar
   owns the optional background image and opacity.
 - Keep the add-elements rail permanently compact. Explain each icon with the
-  shared tooltip on hover and focus. Support editable text and optional image
-  elements, persist their bounds and presentation, and render them in gameplay.
+  shared tooltip on hover and focus. Keep add-element actions at the top and
+  template import/export actions docked at the bottom. Support editable text
+  and optional image elements, persist their bounds and presentation, and
+  render them in gameplay.
 - Share measured text-height fitting between the visual editor and gameplay.
 - Import and export versioned `.schdk-template` JSON files containing only
   visual layout, background, opacity, and custom elements. Preserve unrelated
