@@ -26,6 +26,7 @@
   and optional image elements, persist their bounds and presentation, and
   render them in gameplay.
 - Share measured text-height fitting between the visual editor and gameplay.
-- Import and export versioned `.schdk-template` JSON files containing only
-  visual layout, background, opacity, and custom elements. Preserve unrelated
-  game options such as sound volume when importing.
+- Import and export versioned `.schdk-template` ZIP archives containing
+  `template.json` with only visual layout, background, opacity, and custom
+  elements. Continue importing legacy plain JSON templates and preserve
+  unrelated game options such as sound volume.
