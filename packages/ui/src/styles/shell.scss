@@ -61,29 +61,29 @@ button {
   backdrop-filter: blur(24px) saturate(130%);
 }
 
-.brand {
+.sidebar .brand {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 0 8px 20px;
 }
 
-.brand img {
+.sidebar .brand img {
   width: 44px;
   height: 44px;
   filter: drop-shadow(0 8px 12px rgba($accent, 0.18));
 }
 
-.brand strong,
-.brand span {
+.sidebar .brand strong,
+.sidebar .brand span {
   display: block;
 }
 
-.brand strong {
+.sidebar .brand strong {
   font-size: 0.9rem;
 }
 
-.brand span {
+.sidebar .brand span {
   margin-top: 2px;
   color: $muted;
   font-size: 0.72rem;

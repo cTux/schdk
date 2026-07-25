@@ -122,7 +122,7 @@ body {
     background:
       linear-gradient(120deg, rgba(#fff, 0.045), transparent 42%),
       rgba($surface, 0.82);
-    padding: 14px 16px;
+    padding: 8px 12px;
     box-shadow: $shadow-raised;
     backdrop-filter: blur(24px) saturate(135%);
     animation: editor-header-in 440ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
@@ -906,7 +906,10 @@ body {
   }
 
   @media (width <= 520px) {
-    .app-header,
+    .app-header {
+      padding: 8px 10px;
+    }
+
     .question-editor {
       padding: 14px;
     }
