@@ -185,9 +185,9 @@ export function App({
     function handleKeyDown(event: KeyboardEvent) {
       if (
         event.code !== 'KeyQ' ||
-        !event.ctrlKey ||
-        !event.shiftKey ||
-        event.altKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        !event.altKey ||
         event.metaKey ||
         event.repeat
       ) {
