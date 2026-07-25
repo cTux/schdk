@@ -42,6 +42,7 @@ export interface HostViewProps {
   recentPackages: RecentPackageItem[];
   recentPackagesLoading?: boolean;
   onBack(): void;
+  onDeleteRecentPackage?(recent: RecentPackageItem): void;
   onDownloadRecentPackage?(recent: RecentPackageItem): void;
   onGameBack(): void;
   onGameNext(): void;
@@ -65,6 +66,7 @@ export function HostView({
   recentPackages,
   recentPackagesLoading = false,
   onBack,
+  onDeleteRecentPackage,
   onDownloadRecentPackage,
   onGameBack,
   onGameNext,
@@ -103,6 +105,7 @@ export function HostView({
         openingRecentPackageId={openingRecentPackageId}
         recentPackages={recentPackages}
         recentPackagesLoading={recentPackagesLoading}
+        onDeleteRecentPackage={onDeleteRecentPackage}
         onDownloadRecentPackage={onDownloadRecentPackage}
         onOpenPackage={onOpenPackage}
         onOpenRecentPackage={onOpenRecentPackage}

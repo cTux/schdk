@@ -8,6 +8,7 @@ export interface PackageStartProps {
   recentPackages: RecentPackageItem[];
   recentPackagesLoading?: boolean;
   onCreatePackage?(): void;
+  onDeleteRecentPackage?(recent: RecentPackageItem): void;
   onDownloadRecentPackage?(recent: RecentPackageItem): void;
   onOpenPackage(file: File): void;
   onOpenRecentPackage(recent: RecentPackageItem): void;
@@ -19,6 +20,7 @@ export function PackageStart({
   recentPackages,
   recentPackagesLoading = false,
   onCreatePackage,
+  onDeleteRecentPackage,
   onDownloadRecentPackage,
   onOpenPackage,
   onOpenRecentPackage,
@@ -38,6 +40,7 @@ export function PackageStart({
         loading={recentPackagesLoading}
         openingPackageId={openingRecentPackageId}
         packages={recentPackages}
+        onDelete={onDeleteRecentPackage}
         onDownload={onDownloadRecentPackage}
         onOpen={onOpenRecentPackage}
       />

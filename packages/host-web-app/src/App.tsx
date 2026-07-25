@@ -39,6 +39,7 @@ export function App({
   const {
     acceptPackage,
     clearPackage,
+    deleteRecentPackage,
     downloadRecentPackage,
     message,
     openingRecentPackageId,
@@ -233,6 +234,7 @@ export function App({
       recentPackages={recentPackages}
       recentPackagesLoading={recentPackagesLoading}
       onBack={clearPackage}
+      onDeleteRecentPackage={(recent) => void deleteRecentPackage(recent)}
       onGameBack={wizard.goBack}
       onGameNext={wizard.goNext}
       onDownloadRecentPackage={(recent) => void downloadRecentPackage(recent)}

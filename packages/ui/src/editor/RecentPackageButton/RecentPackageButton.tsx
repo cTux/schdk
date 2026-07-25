@@ -2,6 +2,7 @@ import {
   faArrowRight,
   faDownload,
   faSpinner,
+  faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
@@ -13,6 +14,7 @@ export interface RecentPackageButtonProps {
   disabled?: boolean;
   opening?: boolean;
   recent: RecentPackageItem;
+  onDelete?(): void;
   onDownload?(): void;
   onOpen(): void;
 }
@@ -21,6 +23,7 @@ export function RecentPackageButton({
   disabled = false,
   opening = false,
   recent,
+  onDelete,
   onDownload,
   onOpen,
 }: RecentPackageButtonProps) {
@@ -67,6 +70,18 @@ export function RecentPackageButton({
           onClick={onDownload}
         >
           <FontAwesomeIcon icon={faDownload} />
+        </Button>
+      )}
+      {onDelete && (
+        <Button
+          type="button"
+          className="recent-package-delete"
+          disabled={disabled}
+          aria-label={copy.shared.deletePackage}
+          title={copy.shared.deletePackage}
+          onClick={onDelete}
+        >
+          <FontAwesomeIcon icon={faTrashCan} />
         </Button>
       )}
     </div>

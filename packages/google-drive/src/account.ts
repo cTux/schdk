@@ -1,0 +1,25 @@
+export interface DriveAccount {
+  displayName: string;
+  emailAddress: string;
+  photoLink?: string;
+}
+
+export function parseDriveAccount(value: unknown): DriveAccount | null {
+  const user =
+    value && typeof value === 'object'
+      ? (value as { user?: Partial<DriveAccount> }).user
+      : undefined;
+  if (
+    typeof user?.displayName !== 'string' ||
+    typeof user.emailAddress !== 'string'
+  ) {
+    return null;
+  }
+  return {
+    displayName: user.displayName,
+    emailAddress: user.emailAddress,
+    ...(typeof user.photoLink === 'string'
+      ? { photoLink: user.photoLink }
+      : {}),
+  };
+}

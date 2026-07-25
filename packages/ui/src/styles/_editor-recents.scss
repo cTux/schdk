@@ -154,7 +154,8 @@
     padding-left: 17px;
   }
 
-  .recent-package-list .recent-package-download {
+  .recent-package-list .recent-package-download,
+  .recent-package-list .recent-package-delete {
     width: 44px;
     min-height: 44px;
     flex: 0 0 44px;
@@ -164,9 +165,19 @@
     color: $muted;
   }
 
+  .recent-package-list .recent-package-delete {
+    background: rgba($danger-rgb, 0.12);
+    color: $danger;
+  }
+
   .recent-package-list .recent-package-download:hover:not(:disabled) {
     background: $surface-hover;
     color: $accent-hover;
+  }
+
+  .recent-package-list .recent-package-delete:hover:not(:disabled) {
+    background: rgba($danger-rgb, 0.22);
+    color: $danger-text;
   }
 
   .recent-package-label {

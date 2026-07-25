@@ -7,6 +7,7 @@ export interface RecentPackagesProps {
   loading?: boolean;
   openingPackageId?: string | null;
   packages: RecentPackageItem[];
+  onDelete?(recent: RecentPackageItem): void;
   onDownload?(recent: RecentPackageItem): void;
   onOpen(recent: RecentPackageItem): void;
 }
@@ -16,6 +17,7 @@ export function RecentPackages({
   loading = false,
   openingPackageId = null,
   packages,
+  onDelete,
   onDownload,
   onOpen,
 }: RecentPackagesProps) {
@@ -45,6 +47,7 @@ export function RecentPackages({
                 key={recent.id}
                 opening={openingPackageId === recent.id}
                 recent={recent}
+                onDelete={onDelete ? () => onDelete(recent) : undefined}
                 onDownload={onDownload ? () => onDownload(recent) : undefined}
                 onOpen={() => onOpen(recent)}
               />

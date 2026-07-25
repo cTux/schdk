@@ -166,6 +166,9 @@ export function App({
       onBack={() => void packages.closePackage()}
       onCopyQuestion={() => void questions.copyQuestion()}
       onCreatePackage={() => void packages.createPackage()}
+      onDeleteRecentPackage={(recent) =>
+        void packages.deleteRecentPackage(recent)
+      }
       onDownloadRecentPackage={(recent) =>
         void packages.downloadRecentPackage(recent)
       }

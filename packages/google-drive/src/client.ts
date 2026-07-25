@@ -1,3 +1,4 @@
+import { parseDriveAccount, type DriveAccount } from './account.js';
 import { isDriveFileId, type DriveSettingsDocument } from './settings.js';
 import {
   DRIVE_APP_KIND_KEY,
@@ -23,11 +24,7 @@ export const GOOGLE_DRIVE_SCOPES = [
   'https://www.googleapis.com/auth/drive.appdata',
 ] as const;
 
-export interface DriveAccount {
-  displayName: string;
-  emailAddress: string;
-  photoLink?: string;
-}
+export type { DriveAccount } from './account.js';
 
 export class GoogleDriveAuthorizationError extends Error {}
 
@@ -44,23 +41,11 @@ export class GoogleDriveClient implements DrivePackageStorage {
     const response = await this.request(
       `${DRIVE_API}/about?fields=user(displayName,emailAddress,photoLink)`,
     );
-    const value = (await response.json()) as {
-      user?: Partial<DriveAccount>;
-    };
-    if (
-      typeof value.user?.displayName !== 'string' ||
-      typeof value.user.emailAddress !== 'string'
-    ) {
+    const account = parseDriveAccount(await response.json());
+    if (!account) {
       throw new Error('Google Drive account metadata is unavailable');
     }
-    return {
-      displayName: value.user.displayName,
-      emailAddress: value.user.emailAddress,
-      photoLink:
-        typeof value.user.photoLink === 'string'
-          ? value.user.photoLink
-          : undefined,
-    };
+    return account;
   }
 
   async loadSettings(): Promise<unknown | null> {
@@ -110,6 +95,23 @@ export class GoogleDriveClient implements DrivePackageStorage {
     if (!isDriveFileId(fileId))
       throw new TypeError('Invalid Google Drive file');
     return this.uploadGamePackage(value, fileId);
+  }
+
+  async deleteGamePackage(fileId: string): Promise<void> {
+    if (!isDriveFileId(fileId))
+      throw new TypeError('Invalid Google Drive file');
+    const encodedId = encodeURIComponent(fileId);
+    const metadata = await this.request(
+      `${DRIVE_API}/files/${encodedId}?fields=id,name,description,modifiedTime,appProperties`,
+    );
+    if (!parseDriveGamePackageFile(await metadata.json())) {
+      throw new TypeError('Invalid Google Drive package');
+    }
+    await this.request(`${DRIVE_API}/files/${encodedId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ trashed: true }),
+    });
   }
 
   async listGamePackages(): Promise<DriveGamePackageFile[]> {

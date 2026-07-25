@@ -121,7 +121,35 @@ export function usePackageOpeningActions({
     }
   }
 
+  async function deleteRecentPackage(recent: RecentPackageItem) {
+    if (
+      openingRecentPackage.current ||
+      !window.confirm(
+        copy.shared.deletePackageConfirmation(recent.title || recent.name),
+      )
+    ) {
+      return;
+    }
+    openingRecentPackage.current = recent.id;
+    setOpeningRecentPackageId(recent.id);
+    setMessage('');
+    try {
+      const driveFileId = parseDrivePackageReference(recent.id);
+      if (!drive || !driveFileId)
+        throw new Error('Google Drive is unavailable');
+      await drive.deleteGamePackage(driveFileId);
+      await refreshRecentPackages();
+    } catch {
+      onDriveFailure?.();
+      setMessage(copy.shared.deletePackageFailed);
+    } finally {
+      openingRecentPackage.current = null;
+      setOpeningRecentPackageId(null);
+    }
+  }
+
   return {
+    deleteRecentPackage,
     downloadRecentPackage,
     openingRecentPackageId,
     openPackage,

@@ -9,6 +9,10 @@ export const english: typeof ukrainian = {
     or: 'or',
     recentPackages: 'Recent packages',
     downloadPackage: 'Download package',
+    deletePackage: 'Delete package from the cloud',
+    deletePackageConfirmation: (name) =>
+      `Move “${name}” to Google Drive trash?`,
+    deletePackageFailed: 'Could not delete the package from Google Drive.',
     ready: 'Ready',
     untitled: 'Untitled',
     question: 'Question',

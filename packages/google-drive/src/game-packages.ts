@@ -34,6 +34,7 @@ export interface DrivePackageStorage {
     fileId: string,
     value: DriveGamePackageWrite,
   ): Promise<DriveGamePackageFile>;
+  deleteGamePackage(fileId: string): Promise<void>;
   listGamePackages(): Promise<DriveGamePackageFile[]>;
   loadGamePackage(fileId: string): Promise<DriveGamePackage>;
 }
