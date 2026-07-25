@@ -481,6 +481,44 @@ button {
   left: 0;
 }
 
+.visual-layout-resize-edge.is-top-left,
+.visual-layout-resize-edge.is-top-right,
+.visual-layout-resize-edge.is-bottom-right,
+.visual-layout-resize-edge.is-bottom-left {
+  width: 12px;
+  height: 12px;
+}
+
+.visual-layout-resize-edge.is-top-left,
+.visual-layout-resize-edge.is-bottom-right {
+  cursor: nwse-resize;
+}
+
+.visual-layout-resize-edge.is-top-right,
+.visual-layout-resize-edge.is-bottom-left {
+  cursor: nesw-resize;
+}
+
+.visual-layout-resize-edge.is-top-left {
+  top: 0;
+  left: 0;
+}
+
+.visual-layout-resize-edge.is-top-right {
+  top: 0;
+  right: 0;
+}
+
+.visual-layout-resize-edge.is-bottom-right {
+  right: 0;
+  bottom: 0;
+}
+
+.visual-layout-resize-edge.is-bottom-left {
+  bottom: 0;
+  left: 0;
+}
+
 .visual-layout-item.visual-layout-alternative-answer {
   z-index: 3;
 }

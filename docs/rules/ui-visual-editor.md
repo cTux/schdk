@@ -10,8 +10,8 @@
 - Let every built-in and custom element be marked hidden while remaining
   editable in the visual editor; omit hidden elements only from gameplay.
 - Keep resize and property controls outside the transformed game container.
-  Resize from invisible border zones and keep the grabbed point under the
-  pointer.
+  Resize only selected elements from invisible edge and corner zones, support
+  diagonal resizing, and keep the grabbed point under the pointer.
 - Wrap previews in a click-blocking target with a permanent transparent 2 px
   inset border; change only its color on selection so content never shifts.
 - Clip overflow, keep the selected wrapper above others, and show its text or
