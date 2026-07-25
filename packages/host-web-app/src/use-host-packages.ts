@@ -6,7 +6,6 @@ import {
 import {
   parseDrivePackageReference,
   toDrivePackageReference,
-  type DriveGamePackageFile,
   type DrivePackageStorage,
 } from '@schdk/google-drive';
 import type { HostPackageDetails, RecentPackageItem } from '@schdk/ui/host';
@@ -20,37 +19,8 @@ import {
 } from 'react';
 import { summarizeGamePackage } from './game-package-summary';
 import type { HostSession } from './host-session';
+import { downloadPackage, toRecentPackage } from './package-files';
 import type { GameWizardSnapshot } from './use-game-wizard';
-
-function downloadPackage(name: string, content: Uint8Array) {
-  const url = URL.createObjectURL(
-    new Blob([new Uint8Array(content)], { type: 'application/zip' }),
-  );
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = name;
-  link.click();
-  URL.revokeObjectURL(url);
-}
-
-async function toRecentPackage(
-  drive: DrivePackageStorage,
-  { id, name, title, ready }: DriveGamePackageFile,
-): Promise<RecentPackageItem> {
-  if (title === undefined) {
-    try {
-      title = parseGamePackage((await drive.loadGamePackage(id)).content).title;
-    } catch {
-      // Legacy or unavailable packages still fall back to their filename.
-    }
-  }
-  return {
-    id: toDrivePackageReference(id),
-    name,
-    ...(title === undefined ? {} : { title }),
-    ...(ready === undefined ? {} : { ready }),
-  };
-}
 
 export function useHostPackages({
   copy,
@@ -212,6 +182,33 @@ export function useHostPackages({
     }
   }
 
+  async function deleteRecentPackage(recent: RecentPackageItem) {
+    if (
+      openingRecentPackage.current ||
+      !window.confirm(
+        copy.shared.deletePackageConfirmation(recent.title || recent.name),
+      )
+    ) {
+      return;
+    }
+    openingRecentPackage.current = recent.id;
+    setOpeningRecentPackageId(recent.id);
+    setMessage('');
+    try {
+      const driveFileId = parseDrivePackageReference(recent.id);
+      if (!drive || !driveFileId)
+        throw new Error('Google Drive is unavailable');
+      await drive.deleteGamePackage(driveFileId);
+      await refreshRecentPackages();
+    } catch {
+      onDriveFailure?.();
+      setMessage(copy.shared.deletePackageFailed);
+    } finally {
+      openingRecentPackage.current = null;
+      setOpeningRecentPackageId(null);
+    }
+  }
+
   const clearPackage = useCallback(() => {
     setGameActive(false);
     setSelectedPackage(null);
@@ -223,6 +220,7 @@ export function useHostPackages({
   return {
     acceptPackage,
     clearPackage,
+    deleteRecentPackage,
     downloadRecentPackage,
     message,
     openingRecentPackageId,

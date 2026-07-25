@@ -44,6 +44,8 @@ const editorApi = {
       ipcRenderer.invoke('create-google-drive-game-package', value),
     updateGamePackage: (fileId: string, value: unknown) =>
       ipcRenderer.invoke('update-google-drive-game-package', fileId, value),
+    deleteGamePackage: (fileId: string) =>
+      ipcRenderer.invoke('delete-google-drive-game-package', fileId),
   },
 };
 

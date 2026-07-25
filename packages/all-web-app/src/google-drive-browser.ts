@@ -219,6 +219,10 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
     return this.client.updateGamePackage(fileId, value);
   }
 
+  deleteGamePackage(fileId: string) {
+    return this.client.deleteGamePackage(fileId);
+  }
+
   listGamePackages() {
     return this.client.listGamePackages();
   }

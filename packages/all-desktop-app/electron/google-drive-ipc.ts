@@ -47,4 +47,9 @@ export function registerGoogleDriveIpc() {
       return client.updateGamePackage(fileId, gamePackage);
     },
   );
+  ipcMain.handle('delete-google-drive-game-package', (_event, fileId) => {
+    if (!isDriveFileId(fileId))
+      throw new TypeError('Invalid Google Drive file');
+    return client.deleteGamePackage(fileId);
+  });
 }

@@ -24,10 +24,11 @@
   below it and show non-interactive skeleton rows while Drive recents load.
 - In recents, show title before filename and fall back to filename for legacy
   entries. Show `Готовий` only when shared validation finds no missing fields
-  or unresolved remarks. Give every recent row a separate icon-only download
-  button with a localized accessible name. While a recent package opens,
-  animate that row and disable all other start-screen actions until the Drive
-  request settles.
+  or unresolved remarks. Give every recent row separate icon-only download and
+  red cloud-delete buttons with localized accessible names. Confirm deletion
+  and move the package to Google Drive trash. While a recent package opens or
+  deletes, animate that row and disable all other start-screen actions until
+  the Drive request settles.
 - On question-number hover or focus, show completed question and answer text in
   a tooltip that stays within the layout. Show unresolved remarks below the
   question in red and mark their number dark red without a red border.

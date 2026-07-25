@@ -10,6 +10,10 @@ export const ukrainian = {
     or: 'або',
     recentPackages: 'Недавні пакети',
     downloadPackage: 'Завантажити пакет',
+    deletePackage: 'Видалити пакет із хмари',
+    deletePackageConfirmation: (name: string) =>
+      `Перемістити «${name}» у кошик Google Диска?`,
+    deletePackageFailed: 'Не вдалося видалити пакет із Google Диска.',
     ready: 'Готовий',
     untitled: 'Без назви',
     question: 'Питання',

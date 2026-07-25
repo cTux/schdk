@@ -11,8 +11,9 @@ description: Build, debug, secure, or package SCHDK Electron applications. Use f
 2. Trace main, preload, renderer, and packaging paths affected by the change.
 3. Keep Electron and filesystem access inside `@schdk/all-desktop-app`; preserve every trust boundary in the rules.
 4. Read `docs/rules/google-drive.md` for OAuth, secure token storage, or Drive IPC changes.
-5. Keep Drive package IPC limited to validated create, update, list, and load
-   operations; renderer code never receives access tokens or generic requests.
+5. Keep Drive package IPC limited to validated create, update, delete, list,
+   and load operations; renderer code never receives access tokens or generic
+   requests.
 6. Keep filesystem package IPC limited to explicit downloads. Local file import
    uses the renderer file chooser and uploads through the Drive bridge.
 

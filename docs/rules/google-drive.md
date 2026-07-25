@@ -35,7 +35,7 @@
   loopback callback on `127.0.0.1`, and refresh tokens encrypted with Electron
   `safeStorage`. Never persist a refresh token through Linux `basic_text`.
 - Expose only status, connect, disconnect, settings operations, and validated
-  package create/update/list/load operations through Electron IPC. Tokens and
+  package create/update/delete/list/load operations through Electron IPC. Tokens and
   generic authenticated requests never cross into the renderer.
 - Bundle the production Web application client ID in the browser application.
   Allow `VITE_GOOGLE_WEB_CLIENT_ID` to override it for development.
