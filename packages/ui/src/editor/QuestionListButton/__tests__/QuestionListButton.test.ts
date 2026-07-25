@@ -10,6 +10,7 @@ describe('question list items', () => {
         questionParts: [' Питання '],
         answer: ' Відповідь ',
         alternativeAnswers: [],
+        wrongAnswers: [],
       },
       false,
     );
@@ -28,6 +29,7 @@ describe('question list items', () => {
         questionParts: ['Питання'],
         answer: 'Відповідь',
         alternativeAnswers: [],
+        wrongAnswers: [],
         comment: ' Перевірити джерело ',
       },
       true,
@@ -51,6 +53,7 @@ describe('question list items', () => {
         questionParts: ['Питання'],
         answer: 'Відповідь',
         alternativeAnswers: [],
+        wrongAnswers: [],
       },
       selected: true,
       showTooltip: false,

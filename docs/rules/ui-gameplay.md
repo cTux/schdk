@@ -14,3 +14,4 @@
 - Give image and text handouts the answer gradient and a soft black shadow
   without a border. Align images bottom-right and center text.
 - Render the main answer prominently with smaller alternative answers above it.
+  Show wrong answers in the same area in red.

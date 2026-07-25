@@ -8,6 +8,7 @@ describe('question order', () => {
       questionParts: [`Question ${index + 1}`],
       answer: `Answer ${index + 1}`,
       alternativeAnswers: [],
+      wrongAnswers: [],
     }));
 
     const swapped = swapQuestions(questions, 2, 17);

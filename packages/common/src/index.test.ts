@@ -79,6 +79,7 @@ describe('game package rules', () => {
       answer: 'Відповідь',
       answerComment: 'Коментар до відповіді',
       alternativeAnswers: ['Альтернатива'],
+      wrongAnswers: ['Неправильна'],
       handout: {
         name: 'handout.png',
         mimeType: 'image/png',

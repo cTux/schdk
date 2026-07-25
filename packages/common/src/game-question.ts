@@ -26,6 +26,7 @@ export interface GameQuestion {
   answer: string;
   answerComment?: string;
   alternativeAnswers: string[];
+  wrongAnswers: string[];
   handout?: Handout;
   comment?: string;
   hostNotes?: string;
@@ -81,6 +82,7 @@ export function createEmptyGameQuestion(): GameQuestion {
     questionParts: [''],
     answer: '',
     alternativeAnswers: [],
+    wrongAnswers: [],
   };
 }
 
@@ -103,6 +105,7 @@ export function parseGameQuestion(value: unknown): GameQuestion {
   const handout = 'handout' in value ? value.handout : undefined;
   const answerComment =
     'answerComment' in value ? value.answerComment : undefined;
+  const wrongAnswers = 'wrongAnswers' in value ? value.wrongAnswers : [];
   const comment = 'comment' in value ? value.comment : undefined;
   const hostNotes = 'hostNotes' in value ? value.hostNotes : undefined;
   if (handout !== undefined && !isHandout(handout)) {
@@ -110,6 +113,8 @@ export function parseGameQuestion(value: unknown): GameQuestion {
   }
   if (
     (answerComment !== undefined && typeof answerComment !== 'string') ||
+    !Array.isArray(wrongAnswers) ||
+    !wrongAnswers.every((answer: unknown) => typeof answer === 'string') ||
     (comment !== undefined && typeof comment !== 'string') ||
     (hostNotes !== undefined && typeof hostNotes !== 'string')
   ) {
@@ -122,6 +127,7 @@ export function parseGameQuestion(value: unknown): GameQuestion {
     answer: value.answer,
     ...(answerComment !== undefined ? { answerComment } : {}),
     alternativeAnswers: value.alternativeAnswers,
+    wrongAnswers,
     ...(handout ? { handout } : {}),
     ...(comment !== undefined ? { comment } : {}),
     ...(hostNotes !== undefined ? { hostNotes } : {}),
@@ -144,6 +150,9 @@ export function serializeGameQuestion(question: GameQuestion) {
       ? { answerComment: question.answerComment.trim() }
       : {}),
     alternativeAnswers: question.alternativeAnswers
+      .map((answer) => answer.trim())
+      .filter(Boolean),
+    wrongAnswers: question.wrongAnswers
       .map((answer) => answer.trim())
       .filter(Boolean),
     ...(handout && (handout.kind !== 'text' || handout.text)

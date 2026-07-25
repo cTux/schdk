@@ -11,6 +11,7 @@ describe('summarizeGamePackage', () => {
       questionParts: ['Секретне питання'],
       answer: 'Секретна відповідь',
       alternativeAnswers: [],
+      wrongAnswers: [],
       handout: {
         name: 'secret.png',
         mimeType: 'image/png',

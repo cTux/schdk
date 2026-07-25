@@ -73,7 +73,7 @@ export const ukrainian = {
       'Капіталізувати перше слово та додавати крапку, якщо наприкінці немає розділового знака.',
     answers: 'Відповіді',
     answersCorrection:
-      'Капіталізувати перше слово основної та альтернативних відповідей.',
+      'Капіталізувати перше слово основної, альтернативних і неправильних відповідей.',
     answerComment: 'Коментар до відповіді',
     game: 'Гра',
     signalVolume: 'Гучність звукових сигналів',
@@ -103,6 +103,8 @@ export const ukrainian = {
     questionPart: (number: number) => `Частина питання ${number}`,
     alternativeAnswers: 'Альтернативні відповіді',
     alternativeAnswer: (number: number) => `Альтернативна відповідь ${number}`,
+    wrongAnswers: 'Неправильні відповіді',
+    wrongAnswer: (number: number) => `Неправильна відповідь ${number}`,
     addAnswer: 'Додати відповідь',
     hostNotes: 'Примітки для ведучого',
     hostNotesLabel: 'Примітки ведучого',

@@ -3,23 +3,27 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '../../atoms/Button';
 import { useLocalization } from '../../localization';
 
-export interface AlternativeAnswersFieldProps {
+export interface AnswerListFieldProps {
   answers: string[];
+  answerLabel(number: number): string;
+  legend: string;
   onChange(answers: string[]): void;
   onBlur(index: number): void;
 }
 
-export function AlternativeAnswersField({
+export function AnswerListField({
   answers,
+  answerLabel,
+  legend,
   onChange,
   onBlur,
-}: AlternativeAnswersFieldProps) {
+}: AnswerListFieldProps) {
   const { copy } = useLocalization();
 
   return (
     <fieldset>
       <legend>
-        {copy.editor.alternativeAnswers} <span>{copy.shared.optional}</span>
+        {legend} <span>{copy.shared.optional}</span>
       </legend>
       {answers.map((answer, index) => (
         <div className="alternative" key={index}>
@@ -33,7 +37,7 @@ export function AlternativeAnswersField({
               )
             }
             onBlur={() => onBlur(index)}
-            aria-label={copy.editor.alternativeAnswer(index + 1)}
+            aria-label={answerLabel(index + 1)}
           />
           <Button
             type="button"

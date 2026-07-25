@@ -53,13 +53,16 @@ export function useQuestionActions({
     if (corrected !== value) updateQuestion({ [field]: corrected });
   };
 
-  function correctAlternativeAnswer(index: number) {
+  function correctListedAnswer(
+    field: 'alternativeAnswers' | 'wrongAnswers',
+    index: number,
+  ) {
     if (!textOptions.correctAnswers) return;
-    const answers = gamePackage.questions[selectedIndex]!.alternativeAnswers;
+    const answers = gamePackage.questions[selectedIndex]![field];
     const corrected = correctAnswer(answers[index] ?? '');
     if (corrected === answers[index]) return;
     updateQuestion({
-      alternativeAnswers: answers.map((answer, answerIndex) =>
+      [field]: answers.map((answer, answerIndex) =>
         answerIndex === index ? corrected : answer,
       ),
     });
@@ -139,7 +142,8 @@ export function useQuestionActions({
   return {
     addHandout,
     copyQuestion,
-    correctAlternativeAnswer,
+    correctAlternativeAnswer: (index: number) =>
+      correctListedAnswer('alternativeAnswers', index),
     correctAnswerComment: () =>
       correct(
         textOptions.correctAnswerComment,
@@ -155,6 +159,8 @@ export function useQuestionActions({
         correctAnswer,
       ),
     correctQuestionText,
+    correctWrongAnswer: (index: number) =>
+      correctListedAnswer('wrongAnswers', index),
     pasteQuestion,
     swapQuestionPositions,
     updateQuestion,

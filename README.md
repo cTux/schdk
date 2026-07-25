@@ -246,7 +246,8 @@ Turborepo.
 - рівно 36 упорядкованих елементів `questions`.
 
 Кожне питання має тип `standard`, `blitz-2x30` або `blitz-3x20`, масив
-`questionParts`, одну відповідь `answer` і масив `alternativeAnswers`.
+`questionParts`, одну відповідь `answer`, масив `alternativeAnswers` і масив
+`wrongAnswers`.
 Зображення-роздатка, невирішений коментар і примітки для ведучого є
 необов'язковими. Формат потрібно змінювати в спільному контракті, описаному в
 [docs/GAME_PACKAGE.md](docs/GAME_PACKAGE.md), а не в коді окремого застосунку.
