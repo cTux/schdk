@@ -20,8 +20,8 @@
   policy, configure branch protection when repository settings support it, and
   do not merge until both are green.
 - Before committing, run `pnpm fmt:check`, `pnpm lint`, `pnpm typecheck`,
-  `pnpm test`, and affected builds. Run root `pnpm build` when no packaged
-  executable blocks artifact collection.
+  `pnpm test`, and affected builds. Run root `pnpm build` for complete workspace
+  build verification.
 - For every prompt that changes repository files, work on a prompt-based
   `codex/` branch, commit all verified task changes, push the branch to `origin`,
   and create a GitHub pull request. Preserve unrelated user changes, confirm the

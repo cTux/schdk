@@ -130,9 +130,7 @@ Then a production `electron-builder --win` run emits both:
 - `dist/release/win-unpacked/`;
 - `dist/release/ЩДК Setup <version>.exe`.
 
-The root collection script already copies the package's entire `dist`
-directory, so both artifacts will also appear under
-`dist/all-desktop-app/release`.
+Both artifacts remain under `packages/all-desktop-app/dist/release`.
 
 ### 4. Keep normal compression
 

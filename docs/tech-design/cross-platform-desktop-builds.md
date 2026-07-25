@@ -118,9 +118,8 @@ This explicit sequence keeps the renderer dependency classified as build-only
 while guaranteeing that `extraResources` has a current web build.
 
 Root `pnpm build` continues to produce development/unpacked output for the
-current host and collect `dist`. Release jobs upload directly from
-`packages/all-desktop-app/dist/release` to avoid mixing artifacts from
-different operating systems.
+current host in package-local `dist` directories. Release jobs upload directly
+from `packages/all-desktop-app/dist/release`.
 
 ## GitHub Actions workflow
 
