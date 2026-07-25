@@ -7,7 +7,10 @@
     },
     "@schdk/all-desktop-app#build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"],
+      "outputs": ["dist/electron/**"]
+    },
+    "package": {
+      "dependsOn": ["build", "^build"],
       "cache": false
     },
     "dev": {

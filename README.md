@@ -172,7 +172,8 @@ pnpm build
 ```
 
 Turborepo збирає пакети в порядку залежностей, кешує локальні результати й
-залишає їх у каталозі `dist` відповідного пакета.
+залишає їх у каталозі `dist` відповідного пакета. Пакування Electron завжди
+виконується окремо: файли з `dist/release`, зокрема `.exe`, до кешу не потрапляють.
 
 Electron-пакет наразі використовує розпакований каталог electron-builder,
 а не створює інсталятор. Виконуваний файл Windows розташований тут:
@@ -185,7 +186,7 @@ packages/all-desktop-app/dist/release/win-unpacked/ЩДК.exe
 
 ```powershell
 pnpm --filter @schdk/editor-web-app build
-pnpm --filter @schdk/all-desktop-app build
+pnpm turbo package --filter @schdk/all-desktop-app
 ```
 
 Під час прямого збирання десктопного пакета спершу потрібно зібрати його

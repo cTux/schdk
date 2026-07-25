@@ -16,7 +16,7 @@
     "dev:host-web": "pnpm --filter @schdk/host-web-app dev",
     "dev:editor-web": "pnpm --filter @schdk/editor-web-app dev",
     "prepare": "git config core.hooksPath .githooks",
-    "build": "turbo build",
+    "build": "turbo build package",
     "fmt": "oxfmt .",
     "fmt:check": "oxfmt --check .",
     "lint": "turbo lint",
