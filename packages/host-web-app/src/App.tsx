@@ -67,6 +67,37 @@ export function App({
     setGameAudioVolume(soundVolume);
   }, [soundVolume]);
 
+  useEffect(() => {
+    if (!window.desktop) return;
+    if (
+      !gameActive ||
+      wizard.finished ||
+      !selectedPackage ||
+      !wizard.question
+    ) {
+      window.desktop.setPresenterNotes(null);
+      return;
+    }
+    window.desktop.setPresenterNotes({
+      questionNumber: wizard.position.questionIndex + 1,
+      questionCount: selectedPackage.questions.length,
+      notes: wizard.question.hostNotes?.trim() ?? '',
+    });
+  }, [
+    gameActive,
+    selectedPackage,
+    wizard.finished,
+    wizard.position.questionIndex,
+    wizard.question,
+  ]);
+
+  useEffect(
+    () => () => {
+      window.desktop?.setPresenterNotes(null);
+    },
+    [],
+  );
+
   async function acceptPackage(
     content: Uint8Array,
     fileName: string,

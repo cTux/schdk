@@ -15,6 +15,9 @@
   and `ArrowRight` advance; `Backspace`, `PageUp`, and `ArrowLeft` go back.
 - Play the main signal when the timer starts and expires and the pre-alarm with
   10 seconds remaining.
+- In the desktop application, publish the current question number and host notes
+  to the separate presenter window while a game is active. Close it when the
+  game ends or the host view unmounts.
 - Persist game volume in shell options with a 40% default.
 - Persist validated visual-editor bounds, presentation settings, and background
   settings in shell options. Use the standard host layout until changed and

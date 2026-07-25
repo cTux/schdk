@@ -16,9 +16,6 @@
     - Space | PageDown | ArrowRight -> Next action
     - Backspace | PageUp | ArrowLeft -> Previous action
   - Timer for each type of question
-  - Host comments for desktop version of the app
-    - Separate window
-    - "On-top" functionality
 - Different types of questions
   - Blitz (2 questions, 30s each)
   - Blitz (3 questions, 20s each)
