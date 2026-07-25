@@ -1,16 +1,12 @@
 import { useLayoutEffect, useRef } from 'react';
-import { MAX_FIT_SCALE, MIN_FIT_SCALE } from './constants';
+import { MIN_FIT_SCALE } from './constants';
 import type { FitTextObserverProps } from './types';
 
 export function getFitScale(fits: (scale: number) => boolean) {
+  if (fits(1)) return 1;
   if (!fits(MIN_FIT_SCALE)) return MIN_FIT_SCALE;
   let low = MIN_FIT_SCALE;
   let high = 1;
-  while (high < MAX_FIT_SCALE && fits(high)) {
-    low = high;
-    high = Math.min(high * 2, MAX_FIT_SCALE);
-  }
-  if (high === MAX_FIT_SCALE && fits(high)) return high;
   for (let index = 0; index < 10; index += 1) {
     const middle = (low + high) / 2;
     if (fits(middle)) low = middle;
@@ -55,9 +51,7 @@ export function FitTextObserver({
           );
         });
         const safeScale =
-          scale === MAX_FIT_SCALE
-            ? scale
-            : Math.max(MIN_FIT_SCALE, scale - 0.002);
+          scale === 1 ? 1 : Math.max(MIN_FIT_SCALE, scale - 0.002);
         wrapper.style.setProperty('--game-fit-scale', safeScale.toFixed(3));
         const overflowing =
           content.scrollHeight > wrapper.clientHeight + 1 ||
