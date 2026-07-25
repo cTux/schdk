@@ -41,7 +41,7 @@ export function App({
   backgroundOpacity = 1,
   customElements = [],
   layout = null,
-  soundVolume = 0.4,
+  soundVolume = 0.05,
 }: AppProps) {
   const { copy } = useLocalization();
   const sessionScope = window.location.pathname;

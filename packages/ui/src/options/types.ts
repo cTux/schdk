@@ -83,7 +83,7 @@ export const DEFAULT_EDITOR_TEXT_OPTIONS: EditorTextOptions = {
 };
 
 export const DEFAULT_GAME_OPTIONS: GameOptions = {
-  soundVolume: 0.4,
+  soundVolume: 0.05,
   layout: null,
   customElements: [],
   backgroundImage: null,

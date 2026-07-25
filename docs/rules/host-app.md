@@ -20,7 +20,7 @@
 - In the desktop application, publish the current question number and host notes
   to the separate presenter window while a game is active. Close it when the
   game ends or the host view unmounts.
-- Persist game volume in shell options with a 40% default.
+- Persist game volume in shell options with a 5% default.
 - Persist the selected package and exact game question/stage continuously on
   web and desktop. Restore browser games through the host recent-package store,
   desktop games through the authorized recent-file bridge, and expose browser
