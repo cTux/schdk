@@ -37,7 +37,7 @@ export const SCHDK_ITEMS: readonly ShellItem[] = [
   {
     id: 'editor',
     icon: faPen,
-    label: 'Редагувати питання',
+    label: 'Редагувати пакети питань',
     description: 'Створюйте та редагуйте пакети запитань у форматі .schdk.',
   },
   {
