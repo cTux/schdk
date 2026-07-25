@@ -6,7 +6,8 @@ describe('question list items', () => {
   it('builds previews and remark states', () => {
     const complete = getQuestionListItem(
       {
-        question: ' Питання ',
+        type: 'standard',
+        questionParts: [' Питання '],
         answer: ' Відповідь ',
         alternativeAnswers: [],
       },
@@ -23,7 +24,8 @@ describe('question list items', () => {
 
     const remarked = getQuestionListItem(
       {
-        question: 'Питання',
+        type: 'standard',
+        questionParts: ['Питання'],
         answer: 'Відповідь',
         alternativeAnswers: [],
         comment: ' Перевірити джерело ',
@@ -45,7 +47,8 @@ describe('question list items', () => {
       dropTarget: true,
       index: 0,
       question: {
-        question: 'Питання',
+        type: 'standard',
+        questionParts: ['Питання'],
         answer: 'Відповідь',
         alternativeAnswers: [],
       },

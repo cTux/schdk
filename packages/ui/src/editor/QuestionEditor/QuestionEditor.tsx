@@ -1,4 +1,8 @@
-import type { GameQuestion } from '@schdk/common';
+import {
+  QUESTION_TYPE_CONFIG,
+  type GameQuestion,
+  type GameQuestionType,
+} from '@schdk/common';
 import { TextAreaField } from '../../atoms/TextAreaField';
 import { useLocalization } from '../../localization';
 import { AlternativeAnswersField } from '../AlternativeAnswersField';
@@ -20,7 +24,7 @@ export interface QuestionEditorProps {
   onCopy(): void;
   onPaste(): void;
   onSelectQuestion(index: number): void;
-  onQuestionTextBlur(): void;
+  onQuestionTextBlur(index: number): void;
 }
 
 export function QuestionEditor({
@@ -39,6 +43,17 @@ export function QuestionEditor({
 }: QuestionEditorProps) {
   const { copy } = useLocalization();
 
+  function changeQuestionType(type: GameQuestionType) {
+    const partCount = QUESTION_TYPE_CONFIG[type].partCount;
+    onChange({
+      type,
+      questionParts: Array.from(
+        { length: partCount },
+        (_, index) => question.questionParts[index] ?? '',
+      ),
+    });
+  }
+
   return (
     <section className="question-editor">
       <QuestionEditorHeader
@@ -46,6 +61,24 @@ export function QuestionEditor({
         onCopy={onCopy}
         onPaste={onPaste}
       />
+
+      <label className="question-type">
+        {copy.editor.questionType}
+        <select
+          value={question.type}
+          onChange={(event) =>
+            changeQuestionType(event.target.value as GameQuestionType)
+          }
+        >
+          <option value="standard">{copy.editor.questionTypes.standard}</option>
+          <option value="blitz-2x30">
+            {copy.editor.questionTypes.blitz2x30}
+          </option>
+          <option value="blitz-3x20">
+            {copy.editor.questionTypes.blitz3x20}
+          </option>
+        </select>
+      </label>
 
       <QuestionHandoutField
         handout={question.handout}
@@ -59,14 +92,30 @@ export function QuestionEditor({
       />
 
       <div className="question-pair">
-        <TextAreaField
-          label={copy.editor.questionText}
-          invalid={showValidation && !question.question.trim()}
-          rows={7}
-          value={question.question}
-          onBlur={onQuestionTextBlur}
-          onValueChange={(value) => onChange({ question: value })}
-        />
+        <div className="question-part-fields">
+          {question.questionParts.map((part, index) => (
+            <TextAreaField
+              key={index}
+              label={
+                question.questionParts.length === 1
+                  ? copy.editor.questionText
+                  : copy.editor.questionPart(index + 1)
+              }
+              invalid={showValidation && !part.trim()}
+              rows={7}
+              value={part}
+              onBlur={() => onQuestionTextBlur(index)}
+              onValueChange={(value) =>
+                onChange({
+                  questionParts: question.questionParts.map(
+                    (currentPart, partIndex) =>
+                      partIndex === index ? value : currentPart,
+                  ),
+                })
+              }
+            />
+          ))}
+        </div>
         <QuestionRemarkField
           remark={question.comment ?? ''}
           showValidation={showValidation}

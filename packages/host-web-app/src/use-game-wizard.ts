@@ -1,12 +1,12 @@
-import type { GamePackage } from '@schdk/common';
+import { QUESTION_TYPE_CONFIG, type GamePackage } from '@schdk/common';
 import type { HostGameTransition, HostQuestionStage } from '@schdk/ui/host';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { playMainSignal, playPreAlarm, stopGameAudio } from './game-audio';
 import {
   getNextPosition,
   getPreviousPosition,
-  getQuestionStages,
   getVisibleQuestionStages,
+  isValidGamePosition,
   type GamePosition,
 } from './game-flow';
 import {
@@ -19,6 +19,7 @@ const EXIT_DURATION_MS = 280;
 const ENTER_DURATION_MS = 680;
 const INITIAL_POSITION: GamePosition = {
   questionIndex: 0,
+  questionPartIndex: 0,
   stage: 'intro',
 };
 
@@ -71,14 +72,21 @@ export function useGameWizard(
     const restoredPosition =
       restoredState &&
       gamePackage?.questions[restoredState.position.questionIndex] &&
-      getQuestionStages(
+      isValidGamePosition(
         gamePackage.questions[restoredState.position.questionIndex],
-      ).includes(restoredState.position.stage)
+        restoredState.position,
+      )
         ? restoredState.position
         : INITIAL_POSITION;
     setFinished(restoredState?.finished ?? false);
     setPosition(restoredPosition);
-    setRemainingSeconds(QUESTION_TIME_SECONDS);
+    setRemainingSeconds(
+      gamePackage?.questions[restoredPosition.questionIndex]
+        ? QUESTION_TYPE_CONFIG[
+            gamePackage.questions[restoredPosition.questionIndex].type
+          ].seconds
+        : QUESTION_TIME_SECONDS,
+    );
     transitionLocked.current = active;
     if (!active || restoredState?.finished) {
       setTransition(idleTransition());
@@ -129,6 +137,13 @@ export function useGameWizard(
           if (!target) {
             setFinished(true);
           } else {
+            if (target.stage === 'timer') {
+              setRemainingSeconds(
+                QUESTION_TYPE_CONFIG[
+                  gamePackage.questions[target.questionIndex]!.type
+                ].seconds,
+              );
+            }
             setPosition(target);
           }
           setTransition({
@@ -175,6 +190,9 @@ export function useGameWizard(
   }, [active, finished, move]);
 
   const question = gamePackage?.questions[position.questionIndex] ?? null;
+  const questionTimeSeconds = question
+    ? QUESTION_TYPE_CONFIG[question.type].seconds
+    : QUESTION_TIME_SECONDS;
   const visibleStages = useMemo<HostQuestionStage[]>(
     () =>
       question ? getVisibleQuestionStages(question, position.stage) : ['intro'],
@@ -184,17 +202,21 @@ export function useGameWizard(
 
   useEffect(() => {
     if (!timerVisible) {
-      setRemainingSeconds(QUESTION_TIME_SECONDS);
+      setRemainingSeconds(questionTimeSeconds);
       stopGameAudio();
       return;
     }
 
     const startedAt = Date.now();
-    let previousSeconds = QUESTION_TIME_SECONDS;
+    let previousSeconds: number = questionTimeSeconds;
     setRemainingSeconds(previousSeconds);
     playMainSignal();
     const timer = window.setInterval(() => {
-      const nextSeconds = getRemainingSeconds(startedAt, Date.now());
+      const nextSeconds = getRemainingSeconds(
+        startedAt,
+        Date.now(),
+        questionTimeSeconds,
+      );
       if (nextSeconds === previousSeconds) return;
       const signal = getTimerSignal(previousSeconds, nextSeconds);
       if (signal === 'preAlarm') playPreAlarm();
@@ -208,7 +230,12 @@ export function useGameWizard(
       window.clearInterval(timer);
       stopGameAudio();
     };
-  }, [position.questionIndex, timerVisible]);
+  }, [
+    position.questionIndex,
+    position.questionPartIndex,
+    questionTimeSeconds,
+    timerVisible,
+  ]);
 
   return {
     finished,

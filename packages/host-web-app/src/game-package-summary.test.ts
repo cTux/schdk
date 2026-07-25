@@ -7,7 +7,8 @@ describe('summarizeGamePackage', () => {
     const gamePackage = createEmptyGamePackage();
     gamePackage.title = 'Кубок Києва';
     gamePackage.questions[0] = {
-      question: 'Секретне питання',
+      type: 'standard',
+      questionParts: ['Секретне питання'],
       answer: 'Секретна відповідь',
       alternativeAnswers: [],
       handout: {

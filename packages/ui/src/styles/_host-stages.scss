@@ -83,6 +83,14 @@
     overflow-wrap: anywhere;
   }
 
+  .game-question-part {
+    margin: 0;
+  }
+
+  .game-question-part + .game-question-part {
+    margin-top: 0.7em;
+  }
+
   .game-timer {
     --enter-x: -44px;
     --enter-y: 24px;

@@ -9,10 +9,14 @@ export function getQuestionListItem(
   question: GameQuestion,
   showValidation: boolean,
 ) {
-  const questionText = question.question.trim();
+  const questionText = question.questionParts
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .join(' / ');
   const answer = question.answer.trim();
   const remark = question.comment?.trim() ?? '';
-  const hasSummary = Boolean(questionText && answer);
+  const hasSummary =
+    question.questionParts.every((part) => part.trim()) && Boolean(answer);
   const complete = hasSummary && !remark;
 
   return {

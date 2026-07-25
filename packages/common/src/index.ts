@@ -1,72 +1,41 @@
 import { strFromU8, strToU8, unzipSync, zipSync } from 'fflate';
+import {
+  createEmptyGameQuestion,
+  parseGameQuestion,
+  serializeGameQuestion,
+  type GameQuestion,
+} from './game-question';
 
 export const QUESTION_COUNT = 36;
 export const QUESTIONS_PER_ROUND = 12;
 const PACKAGE_ENTRY = 'game.json';
 
-export interface ImageHandout {
-  kind?: 'image';
-  name: string;
-  mimeType: string;
-  dataUrl: string;
-}
-
-export interface TextHandout {
-  kind: 'text';
-  text: string;
-}
-
-export type Handout = ImageHandout | TextHandout;
-
-export interface GameQuestion {
-  question: string;
-  answer: string;
-  answerComment?: string;
-  alternativeAnswers: string[];
-  handout?: Handout;
-  comment?: string;
-  hostNotes?: string;
-}
+export {
+  QUESTION_TYPE_CONFIG,
+  createEmptyGameQuestion,
+  parseGameQuestion,
+} from './game-question';
+export type {
+  GameQuestion,
+  GameQuestionType,
+  Handout,
+  ImageHandout,
+  TextHandout,
+} from './game-question';
 
 export interface GamePackage {
   format: 'schdk-game-package';
-  version: 1;
+  version: 2;
   title: string;
   questions: GameQuestion[];
-}
-
-function isHandout(value: unknown): value is Handout {
-  if (!value || typeof value !== 'object') return false;
-  if ('kind' in value && value.kind === 'text') {
-    return 'text' in value && typeof value.text === 'string';
-  }
-  return (
-    (!('kind' in value) || value.kind === 'image') &&
-    'name' in value &&
-    typeof value.name === 'string' &&
-    'mimeType' in value &&
-    typeof value.mimeType === 'string' &&
-    'dataUrl' in value &&
-    typeof value.dataUrl === 'string'
-  );
-}
-
-function normalizeHandout(handout?: Handout): Handout | undefined {
-  if (handout?.kind !== 'text') return handout;
-  const text = handout.text.trim();
-  return text ? { kind: 'text', text } : undefined;
 }
 
 export function createEmptyGamePackage(): GamePackage {
   return {
     format: 'schdk-game-package',
-    version: 1,
+    version: 2,
     title: 'Без назви',
-    questions: Array.from({ length: QUESTION_COUNT }, () => ({
-      question: '',
-      answer: '',
-      alternativeAnswers: [],
-    })),
+    questions: Array.from({ length: QUESTION_COUNT }, createEmptyGameQuestion),
   };
 }
 
@@ -81,8 +50,15 @@ export function validateGamePackage(gamePackage: GamePackage): string[] {
 
   gamePackage.questions.forEach((question, index) => {
     const number = index + 1;
-    if (!question.question.trim())
-      errors.push(`Питання ${number}: немає тексту.`);
+    question.questionParts.forEach((part, partIndex) => {
+      if (!part.trim()) {
+        const suffix =
+          question.questionParts.length === 1
+            ? ''
+            : `, частина ${partIndex + 1}`;
+        errors.push(`Питання ${number}${suffix}: немає тексту.`);
+      }
+    });
     if (!question.answer.trim())
       errors.push(`Питання ${number}: немає відповіді.`);
     if (question.comment?.trim())
@@ -97,26 +73,7 @@ function serializeGamePackageJson(gamePackage: GamePackage): string {
     {
       ...gamePackage,
       title: gamePackage.title.trim(),
-      questions: gamePackage.questions.map((question) => {
-        const handout = normalizeHandout(question.handout);
-        return {
-          question: question.question.trim(),
-          answer: question.answer.trim(),
-          ...(question.answerComment?.trim()
-            ? { answerComment: question.answerComment.trim() }
-            : {}),
-          alternativeAnswers: question.alternativeAnswers
-            .map((answer) => answer.trim())
-            .filter(Boolean),
-          ...(handout ? { handout } : {}),
-          ...(question.comment?.trim()
-            ? { comment: question.comment.trim() }
-            : {}),
-          ...(question.hostNotes?.trim()
-            ? { hostNotes: question.hostNotes.trim() }
-            : {}),
-        };
-      }),
+      questions: gamePackage.questions.map(serializeGameQuestion),
     },
     null,
     2,
@@ -147,7 +104,7 @@ export function parseGamePackage(content: string | Uint8Array): GamePackage {
     !('format' in value) ||
     value.format !== 'schdk-game-package' ||
     !('version' in value) ||
-    value.version !== 1 ||
+    (value.version !== 1 && value.version !== 2) ||
     !('title' in value) ||
     typeof value.title !== 'string' ||
     !('questions' in value) ||
@@ -166,52 +123,8 @@ export function parseGamePackage(content: string | Uint8Array): GamePackage {
 
   return {
     format: value.format,
-    version: value.version,
+    version: 2,
     title: value.title,
     questions,
-  };
-}
-
-export function parseGameQuestion(value: unknown): GameQuestion {
-  if (
-    !value ||
-    typeof value !== 'object' ||
-    !('question' in value) ||
-    typeof value.question !== 'string' ||
-    !('answer' in value) ||
-    typeof value.answer !== 'string' ||
-    !('alternativeAnswers' in value) ||
-    !Array.isArray(value.alternativeAnswers) ||
-    !value.alternativeAnswers.every(
-      (answer: unknown) => typeof answer === 'string',
-    )
-  ) {
-    throw new Error('Invalid game question');
-  }
-
-  const handout = 'handout' in value ? value.handout : undefined;
-  const answerComment =
-    'answerComment' in value ? value.answerComment : undefined;
-  const comment = 'comment' in value ? value.comment : undefined;
-  const hostNotes = 'hostNotes' in value ? value.hostNotes : undefined;
-  if (handout !== undefined && !isHandout(handout)) {
-    throw new Error('Invalid game question');
-  }
-  if (
-    (answerComment !== undefined && typeof answerComment !== 'string') ||
-    (comment !== undefined && typeof comment !== 'string') ||
-    (hostNotes !== undefined && typeof hostNotes !== 'string')
-  ) {
-    throw new Error('Invalid game question');
-  }
-
-  return {
-    question: value.question,
-    answer: value.answer,
-    ...(answerComment !== undefined ? { answerComment } : {}),
-    alternativeAnswers: value.alternativeAnswers,
-    ...(handout ? { handout } : {}),
-    ...(comment !== undefined ? { comment } : {}),
-    ...(hostNotes !== undefined ? { hostNotes } : {}),
   };
 }

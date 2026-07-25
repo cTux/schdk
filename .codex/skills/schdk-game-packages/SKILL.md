@@ -8,7 +8,9 @@ description: Maintain or diagnose the SCHDK .schdk file contract in @schdk/commo
 ## Workflow
 
 1. Follow `$schdk-development`, then read `docs/GAME_PACKAGE.md` and `docs/rules/game-packages.md`.
-2. Treat `packages/common/src/index.ts` as the executable source of truth; do not duplicate schema or validation logic in consumers.
+2. Treat `packages/common/src/index.ts` as the public contract entry point and
+   `packages/common/src/game-question.ts` as the owner of question types and
+   parsing; do not duplicate schema or validation logic in consumers.
 3. Update implementation and `docs/GAME_PACKAGE.md` together for contract changes.
 4. Rebuild affected consumers when exported types or behavior change.
 

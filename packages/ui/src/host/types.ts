@@ -18,6 +18,7 @@ export interface HostGameView {
   question: GameQuestion;
   questionNumber: number;
   questionCount: number;
+  currentQuestionPartIndex: number;
   currentStage: HostQuestionStage;
   visibleStages: HostQuestionStage[];
   remainingSeconds: number;

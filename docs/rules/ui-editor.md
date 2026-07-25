@@ -16,6 +16,9 @@
 - Label optional fields. A non-empty unresolved remark keeps a question
   unfinished. Give question, remark, answer, and answer-comment text areas the
   same default height.
+- Let each package slot select `Звичайне`, `Бліц 2×30`, or `Бліц 3×20`.
+  Standard questions have one text part; blitz questions have two or three
+  separate text parts and still share one answer.
 - Keep the file-open drop zone compact and at most 250 px tall. Keep recents
   below it.
 - In recents, show title before filename and fall back to filename for legacy

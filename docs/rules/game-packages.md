@@ -5,8 +5,10 @@ compatibility contract. Do not duplicate its schema here.
 
 ## Ownership and use
 
-- `packages/common/src/index.ts` is the executable source of truth. Reuse its
-  types, constants, and package helpers instead of recreating format logic.
+- `packages/common/src/index.ts` is the public contract entry point, while
+  `packages/common/src/game-question.ts` owns question types and parsing. Reuse
+  their exported types, constants, and helpers instead of recreating format
+  logic.
 - Create packages with `createEmptyGamePackage` and write them with
   `serializeGamePackage`.
 - Parse every imported, restored, or recent package with `parseGamePackage`;

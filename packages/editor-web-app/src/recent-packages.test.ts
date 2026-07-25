@@ -23,7 +23,7 @@ describe('selectRecentPackages', () => {
     expect(isRecentPackageReady(serializeGamePackage(gamePackage))).toBe(false);
 
     gamePackage.questions.forEach((question) => {
-      question.question = 'Питання?';
+      question.questionParts = ['Питання?'];
       question.answer = 'Відповідь';
     });
     expect(isRecentPackageReady(serializeGamePackage(gamePackage))).toBe(true);

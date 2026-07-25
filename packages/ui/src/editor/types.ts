@@ -28,7 +28,7 @@ export interface EditorViewProps {
   onOpenRecentPackage(recent: RecentPackageItem): void;
   onPasteQuestion(): void;
   onQuestionChange(change: Partial<GameQuestion>): void;
-  onQuestionTextBlur(): void;
+  onQuestionTextBlur(index: number): void;
   onSelectQuestion(index: number): void;
   onSwapQuestions(sourceIndex: number, targetIndex: number): void;
   onTitleChange(value: string): void;
