@@ -1,0 +1,4 @@
+interface:
+  display_name: 'SCHDK Find Next Feature'
+  short_description: 'Find the first actionable SCHDK task'
+  default_prompt: 'Use $schdk-find-next-feature to suggest the next SCHDK task.'

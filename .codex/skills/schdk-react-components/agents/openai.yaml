@@ -1,0 +1,4 @@
+interface:
+  display_name: 'SCHDK React Components'
+  short_description: 'Build correct and performant SCHDK React components'
+  default_prompt: 'Use $schdk-react-components to build or optimize a SCHDK React component safely.'
