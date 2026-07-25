@@ -2,6 +2,8 @@ import {
   faCircleHalfStroke,
   faEye,
   faEyeSlash,
+  faFileExport,
+  faFileImport,
   faFont,
   faImage,
   faPalette,
@@ -196,6 +198,8 @@ export interface VisualEditorProps {
   game: GameOptions;
   message: string;
   onChange(game: GameOptions): void;
+  onImportTemplate(file: File): void;
+  onExportTemplate(): void;
 }
 
 export function VisualEditor({
@@ -203,10 +207,13 @@ export function VisualEditor({
   game,
   message,
   onChange,
+  onImportTemplate,
+  onExportTemplate,
 }: VisualEditorProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const workspaceRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const templateInputRef = useRef<HTMLInputElement>(null);
   const panRef = useRef<{
     pointerId: number;
     start: { x: number; y: number };
@@ -807,6 +814,46 @@ export function VisualEditor({
               <FontAwesomeIcon icon={faImage} aria-hidden="true" />
             </button>
           }
+        />
+        <Tooltip
+          label="Імпортувати шаблон оформлення"
+          side="right"
+          trigger={
+            <button
+              className="visual-editor-add-button"
+              type="button"
+              aria-label="Імпортувати шаблон оформлення"
+              onClick={() => templateInputRef.current?.click()}
+            >
+              <FontAwesomeIcon icon={faFileImport} aria-hidden="true" />
+            </button>
+          }
+        />
+        <Tooltip
+          label="Експортувати шаблон оформлення"
+          side="right"
+          trigger={
+            <button
+              className="visual-editor-add-button"
+              type="button"
+              aria-label="Експортувати шаблон оформлення"
+              onClick={onExportTemplate}
+            >
+              <FontAwesomeIcon icon={faFileExport} aria-hidden="true" />
+            </button>
+          }
+        />
+        <input
+          ref={templateInputRef}
+          className="visual-editor-file-input"
+          type="file"
+          hidden
+          accept=".schdk-template,application/json"
+          onChange={(event) => {
+            const file = event.currentTarget.files?.[0];
+            event.currentTarget.value = '';
+            if (file) onImportTemplate(file);
+          }}
         />
       </aside>
       <div

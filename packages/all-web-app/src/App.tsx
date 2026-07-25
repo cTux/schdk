@@ -11,8 +11,10 @@ import {
 import {
   loadEditorTextOptions,
   loadGameOptions,
+  parseVisualEditorTemplate,
   saveEditorTextOptions,
   saveGameOptions,
+  serializeVisualEditorTemplate,
 } from './options-storage';
 
 const HostApp = lazy(() =>
@@ -94,6 +96,39 @@ export function App() {
     setView(nextView);
   }
 
+  async function importVisualEditorTemplate(file: File) {
+    try {
+      const imported = parseVisualEditorTemplate(
+        await file.text(),
+        gameOptions.soundVolume,
+      );
+      if (imported) {
+        setGameOptions(imported);
+        return;
+      }
+    } catch {
+      // Report file read failures with the same actionable import error.
+    }
+    setGameOptionsError('Не вдалося імпортувати шаблон оформлення.');
+  }
+
+  function exportVisualEditorTemplate() {
+    try {
+      const url = URL.createObjectURL(
+        new Blob([serializeVisualEditorTemplate(gameOptions)], {
+          type: 'application/json',
+        }),
+      );
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'schdk-visual-template.schdk-template';
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      setGameOptionsError('Не вдалося експортувати шаблон оформлення.');
+    }
+  }
+
   return (
     <ShellView
       editorApp={
@@ -119,6 +154,8 @@ export function App() {
       view={view}
       onEditorOptionsChange={setEditorOptions}
       onGameOptionsChange={setGameOptions}
+      onImportVisualEditorTemplate={importVisualEditorTemplate}
+      onExportVisualEditorTemplate={exportVisualEditorTemplate}
       onShowView={(nextView) => showView(nextView)}
     />
   );
