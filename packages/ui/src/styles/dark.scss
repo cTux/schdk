@@ -1,6 +1,7 @@
 :root,
 :root[data-theme='dark'],
-:root[data-theme='system'] {
+:root[data-theme='system'],
+.visual-editor {
   --schdk-color-scheme: dark;
   --schdk-accent: #ffb45f;
   --schdk-accent-rgb: 255, 180, 95;
