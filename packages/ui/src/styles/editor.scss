@@ -1,4 +1,5 @@
 @use 'tokens' as *;
+@use 'primitives';
 
 :root {
   color: $text;
@@ -26,16 +27,25 @@ body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
-  background: $background;
+  background:
+    radial-gradient(circle at 86% -8%, rgba($accent, 0.11), transparent 32rem),
+    radial-gradient(
+      circle at 8% 96%,
+      rgba($accent-cool, 0.09),
+      transparent 34rem
+    ),
+    $background;
 }
 
 .editor-app {
   width: min(1180px, calc(100% - 32px));
   min-height: 100vh;
   margin: 0 auto;
-  background:
-    radial-gradient(circle at 50% -20%, #1b2029 0, transparent 38rem),
-    $background;
+  background: radial-gradient(
+    circle at 52% -18%,
+    rgba($surface-hover, 0.8) 0,
+    transparent 38rem
+  );
   padding: 16px 0 40px;
 
   button,
@@ -47,7 +57,8 @@ body {
   button,
   .file-button {
     border: 1px solid $border;
-    border-radius: 9px;
+    min-height: $control-normal;
+    border-radius: $radius-control;
     background: $surface-raised;
     color: $text;
     transition:
@@ -100,14 +111,21 @@ body {
   }
 
   .app-header {
+    position: sticky;
+    z-index: 50;
+    top: 12px;
     justify-content: space-between;
     gap: 24px;
     margin-bottom: 16px;
     border: 1px solid rgba($border, 0.8);
-    border-radius: 14px;
-    background: rgba($surface, 0.9);
-    padding: 14px 16px;
-    box-shadow: 0 10px 30px rgba(#000, 0.12);
+    border-radius: $radius-surface;
+    background:
+      linear-gradient(120deg, rgba(#fff, 0.045), transparent 42%),
+      rgba($surface, 0.82);
+    padding: 8px 12px;
+    box-shadow: $shadow-raised;
+    backdrop-filter: blur(24px) saturate(135%);
+    animation: editor-header-in 440ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
   }
 
   .brand {
@@ -119,6 +137,7 @@ body {
     width: 42px;
     height: 42px;
     flex: 0 0 auto;
+    filter: drop-shadow(0 8px 12px rgba($accent, 0.2));
   }
 
   h1,
@@ -160,10 +179,13 @@ body {
   }
 
   .primary {
-    border-color: $accent;
-    background: $accent;
+    border-color: rgba($accent-hover, 0.7);
+    background: linear-gradient(135deg, $accent-hover, $accent);
     color: #1a1308;
     font-weight: 700;
+    box-shadow:
+      inset 0 1px rgba(#fff, 0.38),
+      0 8px 24px rgba($accent, 0.16);
   }
 
   .primary:hover:not(:disabled) {
@@ -190,7 +212,7 @@ body {
     border: 1px solid $border;
     border-radius: 9px;
     outline: none;
-    background: #13161b;
+    background: rgba(#0d0c10, 0.64);
     padding: 10px 12px;
     color: $text;
     line-height: 1.45;
@@ -208,8 +230,10 @@ body {
   input:focus,
   textarea:focus {
     border-color: rgba($accent, 0.8);
-    background: #15181e;
-    box-shadow: 0 0 0 3px rgba($accent, 0.08);
+    background: rgba(#111015, 0.9);
+    box-shadow:
+      0 0 0 3px rgba($accent, 0.1),
+      0 10px 28px rgba(#000, 0.12);
   }
 
   input.invalid,
@@ -286,9 +310,13 @@ body {
   .question-list,
   .question-editor {
     border: 1px solid $border;
-    border-radius: 14px;
-    background: rgba($surface, 0.96);
-    box-shadow: 0 12px 32px rgba(#000, 0.1);
+    border-radius: $radius-surface;
+    background:
+      linear-gradient(145deg, rgba(#fff, 0.035), transparent 45%),
+      rgba($surface, 0.9);
+    box-shadow: $shadow-raised;
+    backdrop-filter: blur(16px);
+    animation: editor-panel-in 480ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
   }
 
   .question-list {
@@ -302,6 +330,10 @@ body {
   .question-editor {
     flex: 1 1 auto;
     min-width: 0;
+  }
+
+  .question-editor {
+    animation-delay: 60ms;
   }
 
   .question-list section + section {
@@ -329,7 +361,7 @@ body {
     padding: 7px 0;
     border-width: 2px;
     border-color: transparent;
-    background: #22262d;
+    background: rgba($surface-raised, 0.92);
     color: #aeb5c0;
     font-size: 1rem;
     cursor: grab;
@@ -532,16 +564,38 @@ body {
   }
 
   .package-drop-zone {
+    position: relative;
     display: flex;
     min-height: min(250px, calc(50vh - 75px));
     align-items: center;
     flex-direction: column;
     justify-content: center;
     border: 1px dashed $border-strong;
-    border-radius: 16px;
+    overflow: hidden;
+    border-radius: $radius-surface;
     gap: 14px;
-    background: rgba($surface, 0.7);
+    background:
+      radial-gradient(circle at 50% 0%, rgba($accent, 0.1), transparent 22rem),
+      linear-gradient(145deg, rgba(#fff, 0.035), transparent 45%),
+      rgba($surface, 0.78);
+    box-shadow: $shadow-raised;
     text-align: center;
+    animation: editor-panel-in 500ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  .package-drop-zone::before {
+    width: 58px;
+    height: 58px;
+    border: 1px solid rgba($accent, 0.3);
+    border-radius: 20px;
+    background:
+      radial-gradient(circle at 34% 28%, rgba(#fff, 0.35), transparent 12%),
+      linear-gradient(145deg, rgba($accent, 0.28), rgba($accent-cool, 0.12));
+    box-shadow: 0 18px 44px rgba($accent, 0.12);
+    content: '↗';
+    color: $accent-hover;
+    font-size: 1.35rem;
+    line-height: 58px;
   }
 
   .package-drop-zone h2 {
@@ -588,8 +642,10 @@ body {
     flex-direction: column;
     overflow: hidden;
     border: 1px solid $border;
-    border-radius: 11px;
-    background: rgba($surface, 0.75);
+    border-radius: $radius-panel;
+    background: rgba($surface, 0.78);
+    box-shadow: $shadow-raised;
+    backdrop-filter: blur(16px);
   }
 
   .recent-package-list button {
@@ -612,6 +668,7 @@ body {
 
   .recent-package-list button:hover {
     background: $surface-hover;
+    padding-left: 17px;
   }
 
   .recent-package-label {
@@ -777,11 +834,26 @@ body {
     max-width: min(420px, calc(100% - 40px));
     border: 1px solid rgba($danger, 0.35);
     border-radius: 10px;
-    background: #282127;
+    background: rgba(#2b2028, 0.92);
     padding: 11px 14px;
     box-shadow: 0 12px 30px rgba(#000, 0.3);
     color: #f1c2c2;
     font-size: 0.85rem;
+    backdrop-filter: blur(18px);
+  }
+
+  @keyframes editor-header-in {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes editor-panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
   }
 
   @keyframes saving-pulse {
@@ -834,7 +906,10 @@ body {
   }
 
   @media (width <= 520px) {
-    .app-header,
+    .app-header {
+      padding: 8px 10px;
+    }
+
     .question-editor {
       padding: 14px;
     }

@@ -11,11 +11,12 @@ import {
   DEFAULT_GAME_OPTIONS,
 } from '@schdk/ui/options';
 
-function createStorage(initial: string | null = null) {
+function createStorage(initial: string | null = null, failWrites = false) {
   let value = initial;
   return {
     getItem: () => value,
     setItem: (_key: string, next: string) => {
+      if (failWrites) throw new Error('quota');
       value = next;
     },
   };
@@ -40,9 +41,20 @@ describe('game options', () => {
     const options = {
       ...DEFAULT_GAME_OPTIONS,
       soundVolume: 0.65,
-      layout: DEFAULT_GAME_LAYOUT,
+      layout: {
+        ...DEFAULT_GAME_LAYOUT,
+        question: { ...DEFAULT_GAME_LAYOUT.question, hidden: true },
+      },
+      customElements: [
+        {
+          id: 'title',
+          kind: 'text' as const,
+          text: 'Заголовок',
+          position: { ...DEFAULT_GAME_LAYOUT.question, hidden: true },
+        },
+      ],
     };
-    saveGameOptions(storage, options);
+    expect(saveGameOptions(storage, options)).toBe(true);
     expect(loadGameOptions(storage)).toEqual(options);
     expect(loadGameOptions(createStorage('{"soundVolume":2}'))).toEqual(
       DEFAULT_GAME_OPTIONS,
@@ -101,5 +113,65 @@ describe('game options', () => {
         ),
       ),
     ).toEqual(DEFAULT_GAME_OPTIONS);
+  });
+
+  it('migrates missing custom elements and rejects invalid ones', () => {
+    expect(
+      loadGameOptions(
+        createStorage(
+          JSON.stringify({
+            soundVolume: 0.4,
+            layout: DEFAULT_GAME_LAYOUT,
+          }),
+        ),
+      ).customElements,
+    ).toEqual([]);
+    const { hidden: _hidden, ...legacyPosition } = DEFAULT_GAME_LAYOUT.question;
+    expect(
+      loadGameOptions(
+        createStorage(
+          JSON.stringify({
+            ...DEFAULT_GAME_OPTIONS,
+            customElements: [
+              {
+                id: 'legacy',
+                kind: 'text',
+                text: 'Старий елемент',
+                position: legacyPosition,
+              },
+            ],
+          }),
+        ),
+      ).customElements[0]?.position.hidden,
+    ).toBe(false);
+    expect(
+      loadGameOptions(
+        createStorage(
+          JSON.stringify({
+            ...DEFAULT_GAME_OPTIONS,
+            customElements: [
+              {
+                id: 'duplicate',
+                kind: 'text',
+                text: 'Один',
+                position: DEFAULT_GAME_LAYOUT.question,
+              },
+              {
+                id: 'duplicate',
+                kind: 'text',
+                text: 'Два',
+                position: DEFAULT_GAME_LAYOUT.question,
+              },
+            ],
+          }),
+        ),
+      ),
+    ).toEqual(DEFAULT_GAME_OPTIONS);
+  });
+
+  it('reports storage write failures', () => {
+    expect(
+      saveGameOptions(createStorage(null, true), DEFAULT_GAME_OPTIONS),
+    ).toBe(false);
   });
 });

@@ -2,9 +2,11 @@
 
 - Show save state with text and a live status role: green `saved`, amber
   `pending`, blue `saving`, and red `error`.
-- Keep package title and save state on the header's right. Do not restore the
-  completion counter or add transient save, cancel, or download success
-  messages; keep actionable validation and file errors.
+- Keep editor and host headers compact around their visible controls without
+  decorative empty padding. Keep package title and save state on the editor
+  header's right. Do not restore the completion counter or add transient save,
+  cancel, or download success messages; keep actionable validation and file
+  errors.
 - Place the optional handout before question text. Show no filename, put remove
   below its thumbnail, and open a 100–400% zoomable, pannable full-size modal
   from the thumbnail.

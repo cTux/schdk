@@ -1,14 +1,43 @@
-$accent: #e9ad45;
-$accent-hover: #f2bc5c;
-$background: #101216;
-$sidebar: #171a20;
-$surface: #181b21;
-$surface-raised: #1d2128;
-$surface-hover: #252a33;
-$border: #2d323c;
-$border-strong: #3b424e;
-$text: #eef1f5;
-$muted: #929aa8;
-$success: #60c989;
-$danger: #ef7777;
-$saving: #69a9ff;
+$accent: #ffb45f;
+$accent-hover: #ffd08f;
+$accent-cool: #91a1ff;
+$accent-jade: #63d3bd;
+$background: #100f14;
+$sidebar: #15131a;
+$surface: #1b1821;
+$surface-raised: #24212b;
+$surface-hover: #2e2937;
+$border: #35303e;
+$border-strong: #4d4658;
+$text: #f8f5f0;
+$muted: #aaa3b1;
+$success: #69d49e;
+$danger: #ff7d86;
+$saving: $accent-cool;
+$pending: $accent;
+$canvas: #f3eee6;
+$canvas-raised: #fffaf3;
+$canvas-text: #24202a;
+$canvas-muted: #716979;
+$canvas-border: #dcd3c8;
+$space-1: 4px;
+$space-2: 8px;
+$space-3: 12px;
+$space-4: 16px;
+$space-6: 24px;
+$space-8: 32px;
+$control-compact: 36px;
+$control-normal: 40px;
+$radius-control: 12px;
+$radius-panel: 18px;
+$radius-surface: 24px;
+$shadow-raised:
+  0 1px 0 rgba(#fff, 0.04) inset,
+  0 12px 34px rgba(#09070d, 0.22);
+$shadow-overlay:
+  0 1px 0 rgba(#fff, 0.06) inset,
+  0 24px 70px rgba(#09070d, 0.34);
+$motion-fast: 140ms;
+$motion-standard: 240ms;
+$focus-width: 2px;
+$focus-offset: 2px;

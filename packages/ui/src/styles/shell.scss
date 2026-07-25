@@ -1,4 +1,5 @@
 @use 'tokens' as *;
+@use 'primitives';
 
 :root {
   color: $text;
@@ -35,41 +36,54 @@ button {
   display: flex;
   height: 100vh;
   overflow: hidden;
+  background:
+    radial-gradient(circle at 78% -10%, rgba($accent, 0.12), transparent 30rem),
+    radial-gradient(
+      circle at 38% 110%,
+      rgba($accent-cool, 0.1),
+      transparent 34rem
+    ),
+    $background;
 }
 
 .sidebar {
   display: flex;
-  width: 220px;
+  width: 232px;
   height: 100vh;
-  flex: 0 0 220px;
+  flex: 0 0 232px;
   flex-direction: column;
   border-right: 1px solid $border;
-  background: $sidebar;
-  padding: 18px 14px;
+  background:
+    linear-gradient(180deg, rgba(#fff, 0.025), transparent 24%),
+    rgba($sidebar, 0.88);
+  padding: 20px 14px;
+  box-shadow: 14px 0 45px rgba(#08070a, 0.18);
+  backdrop-filter: blur(24px) saturate(130%);
 }
 
-.brand {
+.sidebar .brand {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 0 8px 20px;
 }
 
-.brand img {
-  width: 40px;
-  height: 40px;
+.sidebar .brand img {
+  width: 44px;
+  height: 44px;
+  filter: drop-shadow(0 8px 12px rgba($accent, 0.18));
 }
 
-.brand strong,
-.brand span {
+.sidebar .brand strong,
+.sidebar .brand span {
   display: block;
 }
 
-.brand strong {
+.sidebar .brand strong {
   font-size: 0.9rem;
 }
 
-.brand span {
+.sidebar .brand span {
   margin-top: 2px;
   color: $muted;
   font-size: 0.72rem;
@@ -97,27 +111,49 @@ button {
 }
 
 .sidebar nav button {
+  position: relative;
   display: flex;
   width: 100%;
   align-items: center;
   gap: 10px;
   border: 0;
-  border-radius: 9px;
+  min-height: $control-normal;
+  border-radius: $radius-control;
   background: transparent;
   padding: 10px;
   color: #b7bdc7;
   text-align: left;
   cursor: pointer;
+  transition:
+    background-color $motion-fast ease,
+    color $motion-fast ease,
+    transform $motion-fast ease;
 }
 
 .sidebar nav button:hover {
   background: $surface-raised;
   color: $text;
+  transform: translateX(2px);
 }
 
 .sidebar nav button.active {
-  background: rgba($accent, 0.12);
-  color: #f2c36f;
+  background:
+    linear-gradient(90deg, rgba($accent, 0.18), rgba($accent-cool, 0.08)),
+    $surface-raised;
+  color: $accent-hover;
+  box-shadow: inset 0 1px rgba(#fff, 0.04);
+}
+
+.sidebar nav button.active::after {
+  position: absolute;
+  top: 9px;
+  bottom: 9px;
+  left: -10px;
+  width: 3px;
+  border-radius: 999px;
+  background: $accent;
+  box-shadow: 0 0 16px rgba($accent, 0.65);
+  content: '';
 }
 
 .nav-icon {
@@ -127,8 +163,8 @@ button {
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  border-radius: 7px;
-  background: rgba(#fff, 0.05);
+  border-radius: 9px;
+  background: rgba(#fff, 0.055);
   font-size: 0.85rem;
 }
 
@@ -141,17 +177,25 @@ button {
   flex: 1 1 auto;
   min-width: 0;
   overflow-y: auto;
-  background: $background;
+  background:
+    radial-gradient(circle at 80% 0%, rgba($accent, 0.08), transparent 28rem),
+    radial-gradient(
+      circle at 15% 100%,
+      rgba($accent-cool, 0.08),
+      transparent 32rem
+    ),
+    $background;
 }
 
 .home {
-  width: min(760px, calc(100% - 48px));
+  position: relative;
+  width: min(980px, calc(100% - 56px));
   margin: 0 auto;
   padding: clamp(64px, 10vh, 110px) 0 48px;
 }
 
 .options-page {
-  width: min(760px, calc(100% - 48px));
+  width: min(860px, calc(100% - 56px));
   margin: 0 auto;
   padding: clamp(48px, 8vh, 80px) 0;
 }
@@ -161,17 +205,69 @@ button {
   width: 100%;
   height: 100%;
   min-height: 0;
+  background: $background;
+  color: $text;
+}
+
+.visual-editor-add-panel {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  width: 84px;
+  min-width: 84px;
   flex-direction: column;
-  background: #fff;
-  color: #111827;
+  gap: $space-3;
+  border-right: 1px solid $border;
+  background:
+    linear-gradient(180deg, rgba(#fff, 0.035), transparent 28%),
+    rgba($sidebar, 0.96);
+  padding: 20px 14px;
+  box-shadow: 10px 0 34px rgba(#070609, 0.24);
+}
+
+.visual-editor-add-button {
+  display: flex;
+  width: 100%;
+  height: 54px;
+  min-height: 54px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid $border;
+  border-radius: $radius-control;
+  background:
+    linear-gradient(145deg, rgba(#fff, 0.035), transparent 52%), $surface-raised;
+  padding: 0;
+  color: $text;
+  cursor: pointer;
+  font: inherit;
+  transition:
+    border-color $motion-fast ease,
+    box-shadow $motion-fast ease,
+    transform $motion-fast ease;
+}
+
+.visual-editor-add-button svg {
+  width: 20px;
+  color: $saving;
+}
+
+.visual-editor-add-button:hover {
+  border-color: rgba($saving, 0.72);
+  background: $surface-hover;
+  box-shadow: 0 10px 24px rgba(#070609, 0.2);
+  transform: translateY(-1px);
 }
 
 .visual-editor-workspace {
   position: relative;
   overflow: hidden;
+  min-width: 0;
   min-height: 0;
   flex: 1 1 auto;
-  background: #fff;
+  background:
+    radial-gradient(circle at 62% 38%, rgba($accent, 0.08), transparent 30rem),
+    radial-gradient(circle at 28% 78%, rgba($saving, 0.08), transparent 34rem),
+    #121117;
   touch-action: none;
 }
 
@@ -181,87 +277,49 @@ button {
 
 .visual-editor-toolbar {
   position: absolute;
-  z-index: 10;
+  z-index: 120;
   top: 12px;
   left: 50%;
-  display: flex;
   max-width: calc(100% - 24px);
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 14px;
-  border: 1px solid #c9ced8;
-  border-radius: 10px;
-  background: rgba(#fff, 0.96);
-  padding: 8px 10px;
-  color: #111827;
-  box-shadow: 0 10px 30px rgba(#111827, 0.16);
   transform: translateX(-50%);
 }
 
-.visual-editor-toolbar strong {
-  white-space: nowrap;
+.visual-editor-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
 }
 
-.visual-editor-toolbar label,
-.visual-editor-font-size {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  color: #4b5565;
+.visual-editor-message {
+  position: absolute;
+  z-index: 120;
+  right: $space-4;
+  bottom: $space-4;
+  max-width: min(420px, calc(100% - 32px));
+  margin: 0;
+  border: 1px solid rgba($danger, 0.36);
+  border-radius: $radius-control;
+  background: rgba(#2b2028, 0.94);
+  padding: 10px 12px;
+  color: #ffc2c6;
+  box-shadow: $shadow-raised;
   font-size: 0.78rem;
-  white-space: nowrap;
-}
-
-.visual-editor-toolbar select {
-  border: 1px solid #c9ced8;
-  border-radius: 6px;
-  background: #fff;
-  padding: 6px 8px;
-  color: #111827;
-}
-
-.visual-editor-toolbar input[type='color'] {
-  width: 32px;
-  height: 28px;
-  border: 0;
-  background: transparent;
-  padding: 0;
-}
-
-.visual-editor-toolbar button {
-  min-width: 28px;
-  min-height: 28px;
-  padding: 2px 8px;
-  color: #111827;
-}
-
-.visual-editor-font-size output {
-  min-width: 38px;
-  color: #111827;
-  text-align: center;
-}
-
-.visual-editor-background-image input {
-  max-width: 190px;
-}
-
-.visual-editor-background-opacity input {
-  width: 120px;
 }
 
 .visual-editor-canvas {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(1280px, calc(100% - 64px));
+  width: min(1280px, calc(100% - 72px));
   aspect-ratio: 16 / 9;
   overflow: hidden;
   border: 1px solid $border-strong;
-  border-radius: 16px;
+  border-radius: $radius-surface;
   background:
     radial-gradient(circle at 50% 35%, #202733 0, transparent 32rem), #0d1015;
-  box-shadow: 0 20px 60px rgba(#000, 0.28);
+  box-shadow: 0 22px 60px rgba(#111827, 0.26);
   transform-origin: center;
 }
 
@@ -329,6 +387,31 @@ button {
 
 .visual-layout-item.is-dragging {
   cursor: grabbing;
+}
+
+.visual-layout-item.is-hidden {
+  filter: grayscale(0.65);
+  opacity: 0.38;
+}
+
+.visual-layout-item.is-hidden::before {
+  position: absolute;
+  z-index: 21;
+  top: 4px;
+  right: 4px;
+  border: 1px solid rgba($saving, 0.5);
+  border-radius: 999px;
+  background: rgba($background, 0.88);
+  padding: 2px 6px;
+  color: #cbd3ff;
+  content: 'Приховано';
+  font-size: 0.58rem;
+  line-height: 1.2;
+  pointer-events: none;
+}
+
+.visual-layout-item.is-hidden.is-selected {
+  opacity: 0.62;
 }
 
 .visual-editor .visual-layout-handout .game-handout {
@@ -418,13 +501,17 @@ button {
   display: flex;
   gap: 6px;
   margin: 32px 0 24px;
-  border-bottom: 1px solid $border;
+  width: fit-content;
+  border: 1px solid $border;
+  border-radius: $radius-panel;
+  background: rgba($surface, 0.72);
+  padding: 5px;
+  box-shadow: $shadow-raised;
 }
 
 .options-tabs button {
   border: 0;
-  border-bottom: 2px solid transparent;
-  border-radius: 0;
+  border-radius: $radius-control;
   background: transparent;
   padding: 10px 14px;
   color: $muted;
@@ -432,17 +519,27 @@ button {
 }
 
 .options-tabs button.active {
-  border-bottom-color: $accent;
+  border-color: rgba($accent, 0.25);
+  background: rgba($accent, 0.12);
   color: $text;
 }
 
 .options-primary-tabs {
   margin-bottom: 0;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+.options-primary-tabs button.active {
+  border: 1px solid rgba($accent, 0.26);
+  background: rgba($accent, 0.1);
+  color: $accent-hover;
 }
 
 .options-secondary-tabs {
-  margin-top: 0;
-  padding-left: 12px;
+  margin-top: 10px;
 }
 
 .options-page section {
@@ -462,10 +559,24 @@ button {
   align-items: center;
   gap: 24px;
   border: 1px solid $border;
-  border-radius: 12px;
-  background: $sidebar;
-  padding: 15px 16px;
+  border-radius: $radius-panel;
+  background:
+    linear-gradient(135deg, rgba(#fff, 0.035), transparent 50%),
+    rgba($surface, 0.84);
+  padding: 18px;
+  box-shadow: $shadow-raised;
   cursor: pointer;
+  transition:
+    border-color $motion-fast ease,
+    transform $motion-fast ease,
+    box-shadow $motion-standard ease;
+}
+
+.option-toggle:hover,
+.option-slider:hover {
+  border-color: $border-strong;
+  box-shadow: $shadow-overlay;
+  transform: translateY(-2px);
 }
 
 .option-toggle > span,
@@ -489,9 +600,49 @@ button {
 }
 
 .option-toggle input {
-  width: 18px;
-  height: 18px;
-  accent-color: $accent;
+  position: relative;
+  width: 42px;
+  height: 24px;
+  flex: 0 0 42px;
+  appearance: none;
+  border: 1px solid $border-strong;
+  border-radius: 999px;
+  outline: none;
+  background: $surface-raised;
+  cursor: pointer;
+  transition:
+    border-color $motion-fast ease,
+    background-color $motion-fast ease;
+}
+
+.option-toggle input::after {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: $muted;
+  content: '';
+  transition:
+    background-color $motion-fast ease,
+    transform $motion-standard cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.option-toggle input:checked {
+  border-color: rgba($accent, 0.7);
+  background: rgba($accent, 0.18);
+}
+
+.option-toggle input:checked::after {
+  background: $accent-hover;
+  box-shadow: 0 0 14px rgba($accent, 0.34);
+  transform: translateX(18px);
+}
+
+.option-toggle input:focus-visible {
+  outline: 2px solid rgba($accent, 0.8);
+  outline-offset: 3px;
 }
 
 .option-slider input {
@@ -508,7 +659,29 @@ button {
 }
 
 .home header {
-  max-width: 620px;
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  animation: surface-enter 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.home::before {
+  position: absolute;
+  top: 36px;
+  right: 3%;
+  width: clamp(150px, 24vw, 250px);
+  aspect-ratio: 1;
+  border-radius: 42% 58% 64% 36% / 42% 38% 62% 58%;
+  background:
+    radial-gradient(circle at 35% 28%, rgba(#fff, 0.38), transparent 9%),
+    linear-gradient(145deg, #e99b48, #7169d1);
+  box-shadow:
+    0 30px 90px rgba($accent, 0.18),
+    inset 0 1px rgba(#fff, 0.3);
+  content: '';
+  filter: saturate(115%);
+  opacity: 0.72;
+  transform: rotate(12deg);
 }
 
 .eyebrow {
@@ -524,7 +697,8 @@ h1 {
   margin: 0;
   font-size: clamp(2rem, 5vw, 3.4rem);
   line-height: 1.05;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
 }
 
 .home header > p:last-child {
@@ -537,8 +711,8 @@ h1 {
 
 .tool-list {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 14px;
   margin-top: 44px;
 }
 
@@ -547,16 +721,33 @@ h1 {
   align-items: center;
   gap: 14px;
   border: 1px solid $border;
-  border-radius: 13px;
-  background: $sidebar;
-  padding: 16px;
+  min-height: $control-normal;
+  min-width: min(280px, 100%);
+  flex: 1 1 280px;
+  border-radius: $radius-surface;
+  background:
+    linear-gradient(145deg, rgba(#fff, 0.045), transparent 46%),
+    rgba($surface, 0.82);
+  padding: 20px;
   color: $text;
   text-align: left;
   cursor: pointer;
   transition:
     border-color 120ms ease,
     background-color 120ms ease,
-    transform 120ms ease;
+    transform $motion-standard cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow $motion-standard ease;
+  box-shadow: $shadow-raised;
+  backdrop-filter: blur(16px);
+  animation: card-rise 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.tool-list button:nth-child(2) {
+  animation-delay: 70ms;
+}
+
+.tool-list button:nth-child(3) {
+  animation-delay: 140ms;
 }
 
 .tool-list button > span:nth-child(2) {
@@ -565,9 +756,10 @@ h1 {
 }
 
 .tool-list button:hover {
-  border-color: #454c58;
+  border-color: rgba($accent, 0.34);
   background: $surface-raised;
-  transform: translateY(-1px);
+  box-shadow: $shadow-overlay;
+  transform: translateY(-4px);
 }
 
 .tool-icon {
@@ -577,10 +769,15 @@ h1 {
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
-  background: rgba($accent, 0.12);
+  border-radius: 14px;
+  background: linear-gradient(
+    145deg,
+    rgba($accent, 0.22),
+    rgba($accent-cool, 0.08)
+  );
   color: $accent;
   font-size: 1.15rem;
+  box-shadow: inset 0 1px rgba(#fff, 0.08);
 }
 
 .tool-list strong,
@@ -602,12 +799,20 @@ h1 {
 .arrow {
   color: $muted;
   font-size: 1.2rem;
+  transition:
+    color $motion-fast ease,
+    transform $motion-fast ease;
+}
+
+.tool-list button:hover .arrow {
+  color: $accent-hover;
+  transform: translateX(3px);
 }
 
 .embedded-app {
   display: block;
   width: 100%;
-  height: 100vh;
+  min-height: 100%;
   border: 0;
   background: $background;
 }
@@ -615,6 +820,20 @@ h1 {
 button:focus-visible {
   outline: 2px solid rgba($accent, 0.8);
   outline-offset: 2px;
+}
+
+@keyframes surface-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+@keyframes card-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
 }
 
 @media (width <= 700px) {
@@ -665,7 +884,7 @@ button:focus-visible {
   }
 
   .visual-editor-canvas {
-    width: calc(100% - 32px);
+    width: calc(100% - 24px);
   }
 
   .option-slider {
@@ -683,5 +902,21 @@ button:focus-visible {
 
   .arrow {
     display: none;
+  }
+
+  .home::before {
+    top: 14px;
+    right: -25px;
+    width: 120px;
+    opacity: 0.32;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .visual-editor-add-button,
+  .tool-list button,
+  .home header {
+    animation: none;
+    transition: none;
   }
 }

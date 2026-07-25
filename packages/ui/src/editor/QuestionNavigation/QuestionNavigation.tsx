@@ -2,8 +2,7 @@ import './styles.scss';
 
 import { QUESTION_COUNT } from '@schdk/common';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button } from '../../atoms/Button';
+import { IconButton } from '../../atoms/IconButton';
 
 export interface QuestionNavigationProps {
   selectedIndex: number;
@@ -16,20 +15,18 @@ export function QuestionNavigation({
 }: QuestionNavigationProps) {
   return (
     <div className="question-actions">
-      <Button
-        type="button"
+      <IconButton
+        icon={faArrowLeft}
+        label="Попереднє питання"
         disabled={selectedIndex === 0}
         onClick={() => onSelect(selectedIndex - 1)}
-      >
-        <FontAwesomeIcon icon={faArrowLeft} aria-hidden="true" /> Попереднє
-      </Button>
-      <Button
-        type="button"
+      />
+      <IconButton
+        icon={faArrowRight}
+        label="Наступне питання"
         disabled={selectedIndex === QUESTION_COUNT - 1}
         onClick={() => onSelect(selectedIndex + 1)}
-      >
-        Наступне <FontAwesomeIcon icon={faArrowRight} aria-hidden="true" />
-      </Button>
+      />
     </div>
   );
 }

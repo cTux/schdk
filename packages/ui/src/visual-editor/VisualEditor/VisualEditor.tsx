@@ -1,5 +1,15 @@
-import './styles.scss';
-
+import {
+  faCircleHalfStroke,
+  faEye,
+  faEyeSlash,
+  faFont,
+  faImage,
+  faPalette,
+  faPen,
+  faTrashCan,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classNames from 'classnames';
 import {
   useEffect,
   useRef,
@@ -9,13 +19,19 @@ import {
   type PointerEvent,
   type ReactNode,
 } from 'react';
-import classNames from 'classnames';
-import { Button } from '../../atoms/Button';
+import {
+  ActionToolbar,
+  ActionToolbarButton,
+  ActionToolbarPopover,
+  ActionToolbarSeparator,
+} from '../../atoms/ActionToolbar';
+import { Tooltip } from '../../atoms/Tooltip';
 import {
   GameAnswer,
   GameAnswerComment,
   GameAlternativeAnswer,
   GameControls,
+  GameCustomElement,
   GameHandout,
   GameLogo,
   GameProgress,
@@ -28,6 +44,10 @@ import {
   DEFAULT_GAME_LAYOUT,
   GAME_IMAGE_POSITIONS,
   GAME_LAYOUT_ELEMENT_IDS,
+  MAX_CUSTOM_GAME_ELEMENTS,
+  MAX_CUSTOM_IMAGE_DATA_LENGTH,
+  getDefaultCustomElementPosition,
+  type CustomGameElement,
   type GameLayoutElementId,
   type GameLayoutPosition,
   type GameOptions,
@@ -43,7 +63,7 @@ const LABELS: Record<GameLayoutElementId, string> = {
   timer: '00:42',
   'answer-comment': 'Коментар до відповіді',
   'alternative-answer': 'Альтернативна відповідь',
-  answer: 'ВІДПОВІДЬ',
+  answer: 'Відповідь',
   progress: '5 / 36',
   controls: 'Кнопки керування',
 };
@@ -94,6 +114,9 @@ const clampZoom = (value: number) => Math.min(2.5, Math.max(0.5, value));
 const clampSize = (value: number) => Math.min(100, Math.max(2, value));
 type GamePoint = Pick<GameLayoutPosition, 'x' | 'y'>;
 type ResizeSide = (typeof RESIZE_SIDES)[number];
+type ElementSelection =
+  | { kind: 'built-in'; id: GameLayoutElementId }
+  | { kind: 'custom'; id: string };
 
 export function getNextZoom(current: number, deltaY: number) {
   return clampZoom(current * (deltaY < 0 ? 1.1 : 0.9));
@@ -152,41 +175,74 @@ export function getResizedPosition(
   };
 }
 
+export function createCustomElement(
+  kind: CustomGameElement['kind'],
+  index: number,
+  id: string = crypto.randomUUID(),
+): CustomGameElement {
+  const base = {
+    id,
+    position: getDefaultCustomElementPosition(kind, (index % 6) * 3),
+  };
+  return kind === 'text'
+    ? { ...base, kind, text: 'Текст' }
+    : { ...base, kind, image: null };
+}
+
 export interface VisualEditorProps {
   hidden: boolean;
   game: GameOptions;
+  message: string;
   onChange(game: GameOptions): void;
 }
 
-export function VisualEditor({ hidden, game, onChange }: VisualEditorProps) {
+export function VisualEditor({
+  hidden,
+  game,
+  message,
+  onChange,
+}: VisualEditorProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const workspaceRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const panRef = useRef<{
     pointerId: number;
     start: { x: number; y: number };
     offset: { x: number; y: number };
   } | null>(null);
   const dragRef = useRef<{
-    id: GameLayoutElementId;
+    selection: ElementSelection;
     pointerId: number;
     startPointer: GamePoint;
     startPosition: GamePoint;
   } | null>(null);
   const resizeRef = useRef<{
-    id: GameLayoutElementId;
+    selection: ElementSelection;
     pointerId: number;
     startPointer: GamePoint;
     startPosition: GameLayoutPosition;
     side: ResizeSide;
   } | null>(null);
-  const [dragging, setDragging] = useState<GameLayoutElementId | null>(null);
-  const [resizing, setResizing] = useState<GameLayoutElementId | null>(null);
+  const [dragging, setDragging] = useState('');
+  const [resizing, setResizing] = useState('');
   const [panning, setPanning] = useState(false);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const [selected, setSelected] = useState<GameLayoutElementId | null>(null);
+  const [selected, setSelected] = useState<ElementSelection | null>(null);
+  const [imageTarget, setImageTarget] = useState<'background' | string | null>(
+    null,
+  );
+  const [localMessage, setLocalMessage] = useState('');
   const positions = game.layout ?? DEFAULT_GAME_LAYOUT;
-  const selectedPosition = selected ? positions[selected] : null;
+  const selectedCustom =
+    selected?.kind === 'custom'
+      ? (game.customElements.find(({ id }) => id === selected.id) ?? null)
+      : null;
+  const selectedPosition = selected
+    ? selected.kind === 'built-in'
+      ? positions[selected.id]
+      : selectedCustom?.position
+    : null;
 
   useEffect(() => {
     const workspace = workspaceRef.current;
@@ -199,6 +255,16 @@ export function VisualEditor({ hidden, game, onChange }: VisualEditorProps) {
     return () => workspace.removeEventListener('wheel', handleWheel);
   }, []);
 
+  function selectionKey(selection: ElementSelection) {
+    return `${selection.kind}:${selection.id}`;
+  }
+
+  function positionFor(selection: ElementSelection) {
+    return selection.kind === 'built-in'
+      ? positions[selection.id]
+      : game.customElements.find(({ id }) => id === selection.id)?.position;
+  }
+
   function pointerPosition(event: PointerEvent<HTMLElement>) {
     const bounds = canvasRef.current?.getBoundingClientRect();
     if (!bounds) return null;
@@ -208,16 +274,38 @@ export function VisualEditor({ hidden, game, onChange }: VisualEditorProps) {
     };
   }
 
-  function updateElement(
-    id: GameLayoutElementId,
+  function updatePosition(
+    selection: ElementSelection,
     patch: Partial<GameLayoutPosition>,
   ) {
+    if (selection.kind === 'built-in') {
+      onChange({
+        ...game,
+        layout: {
+          ...positions,
+          [selection.id]: { ...positions[selection.id], ...patch },
+        },
+      });
+      return;
+    }
     onChange({
       ...game,
-      layout: {
-        ...positions,
-        [id]: { ...positions[id], ...patch },
-      },
+      customElements: game.customElements.map((element) =>
+        element.id === selection.id
+          ? { ...element, position: { ...element.position, ...patch } }
+          : element,
+      ),
+    });
+  }
+
+  function updateCustom(id: string, patch: Partial<CustomGameElement>) {
+    onChange({
+      ...game,
+      customElements: game.customElements.map((element) =>
+        element.id === id
+          ? ({ ...element, ...patch } as CustomGameElement)
+          : element,
+      ),
     });
   }
 
@@ -226,18 +314,71 @@ export function VisualEditor({ hidden, game, onChange }: VisualEditorProps) {
     canvasRef.current?.focus();
   }
 
+  function addElement(kind: CustomGameElement['kind']) {
+    if (game.customElements.length >= MAX_CUSTOM_GAME_ELEMENTS) {
+      setLocalMessage('Можна додати не більше 20 власних елементів.');
+      return;
+    }
+    const element = createCustomElement(kind, game.customElements.length);
+    setLocalMessage('');
+    onChange({
+      ...game,
+      customElements: [...game.customElements, element],
+    });
+    setSelected({ kind: 'custom', id: element.id });
+    if (kind === 'image') chooseImage(element.id);
+  }
+
+  function removeCustom(id: string) {
+    onChange({
+      ...game,
+      customElements: game.customElements.filter(
+        (element) => element.id !== id,
+      ),
+    });
+    selectWorkspace();
+  }
+
+  function chooseImage(target: 'background' | string) {
+    setImageTarget(target);
+    fileInputRef.current?.click();
+  }
+
+  function applyImage(dataUrl: string) {
+    if (imageTarget === 'background') {
+      onChange({ ...game, backgroundImage: dataUrl });
+      return;
+    }
+    if (!imageTarget) return;
+    const otherImageDataLength = game.customElements.reduce(
+      (total, element) =>
+        total +
+        (element.kind === 'image' && element.id !== imageTarget && element.image
+          ? element.image.length
+          : 0),
+      0,
+    );
+    if (otherImageDataLength + dataUrl.length > MAX_CUSTOM_IMAGE_DATA_LENGTH) {
+      setLocalMessage(
+        'Зображення завеликі для збереження. Видаліть одне з них або виберіть менший файл.',
+      );
+      return;
+    }
+    updateCustom(imageTarget, { image: dataUrl });
+  }
+
   function moveFromPointer(event: PointerEvent<HTMLDivElement>) {
     const drag = dragRef.current;
     const pointer = pointerPosition(event);
     if (!drag || drag.pointerId !== event.pointerId || !pointer) return;
-    updateElement(
-      drag.id,
+    updatePosition(
+      drag.selection,
       getDraggedPosition(drag.startPosition, drag.startPointer, pointer),
     );
   }
 
   function moveFromKeyboard(
-    id: GameLayoutElementId,
+    selection: ElementSelection,
     event: KeyboardEvent<HTMLDivElement>,
   ) {
     const delta = event.shiftKey ? 5 : 1;
@@ -247,16 +388,417 @@ export function VisualEditor({ hidden, game, onChange }: VisualEditorProps) {
       ArrowUp: { x: 0, y: -delta },
       ArrowDown: { x: 0, y: delta },
     }[event.key];
-    if (!movement) return;
+    const position = positionFor(selection);
+    if (!movement || !position) return;
     event.preventDefault();
-    updateElement(id, {
-      x: clamp(positions[id].x + movement.x),
-      y: clamp(positions[id].y + movement.y),
+    updatePosition(selection, {
+      x: clamp(position.x + movement.x),
+      y: clamp(position.y + movement.y),
     });
+  }
+
+  function renderLayoutItem(
+    selection: ElementSelection,
+    position: GameLayoutPosition,
+    label: string,
+    content: ReactNode,
+  ) {
+    const key = selectionKey(selection);
+    return (
+      <div
+        key={key}
+        role="button"
+        tabIndex={0}
+        className={classNames(
+          'visual-layout-item',
+          selection.kind === 'built-in'
+            ? `visual-layout-${selection.id}`
+            : 'visual-layout-custom',
+          {
+            'is-dragging': dragging === key,
+            'is-resizing': resizing === key,
+            'is-selected': selected && selectionKey(selected) === key,
+            'is-hidden': position.hidden,
+          },
+        )}
+        style={
+          {
+            left: `${position.x}%`,
+            top: `${position.y}%`,
+            width: `${position.width}%`,
+            height: `${position.height}%`,
+            '--game-font-scale': position.fontScale,
+            '--game-text-color': position.textColor,
+            '--game-grow-align':
+              position.textGrowDirection === 'up' ? 'flex-end' : 'flex-start',
+            '--game-image-position': position.imagePosition,
+          } as CSSProperties
+        }
+        aria-label={`${label}${position.hidden ? '. Приховано у грі' : ''}. Перетягніть, щоб змінити позицію`}
+        aria-pressed={selected ? selectionKey(selected) === key : false}
+        onClick={() => setSelected(selection)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            setSelected(selection);
+            return;
+          }
+          if (
+            event.key === 'Delete' &&
+            selection.kind === 'custom' &&
+            event.target === event.currentTarget
+          ) {
+            event.preventDefault();
+            removeCustom(selection.id);
+            return;
+          }
+          moveFromKeyboard(selection, event);
+        }}
+        onPointerDown={(event) => {
+          if (event.button !== 0) return;
+          const startPointer = pointerPosition(event);
+          if (!startPointer) return;
+          event.currentTarget.setPointerCapture(event.pointerId);
+          dragRef.current = {
+            selection,
+            pointerId: event.pointerId,
+            startPointer,
+            startPosition: position,
+          };
+          setDragging(key);
+          setSelected(selection);
+        }}
+        onPointerMove={moveFromPointer}
+        onPointerUp={(event) => {
+          if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+            event.currentTarget.releasePointerCapture(event.pointerId);
+          }
+          dragRef.current = null;
+          setDragging('');
+        }}
+        onPointerCancel={() => {
+          dragRef.current = null;
+          setDragging('');
+        }}
+      >
+        {content}
+        {selection.kind === 'built-in' && (
+          <FitTextObserver enabled={position.fitTextToHeight} />
+        )}
+        {RESIZE_SIDES.map((side) => (
+          <span
+            key={side}
+            className={classNames('visual-layout-resize-edge', `is-${side}`)}
+            aria-hidden="true"
+            onPointerDown={(event) => {
+              if (event.button !== 0) return;
+              event.stopPropagation();
+              const startPointer = pointerPosition(event);
+              if (!startPointer) return;
+              event.currentTarget.setPointerCapture(event.pointerId);
+              resizeRef.current = {
+                selection,
+                pointerId: event.pointerId,
+                startPointer,
+                startPosition: position,
+                side,
+              };
+              setResizing(key);
+              setSelected(selection);
+            }}
+            onPointerMove={(event) => {
+              const resize = resizeRef.current;
+              const pointer = pointerPosition(event);
+              if (!resize || resize.pointerId !== event.pointerId || !pointer) {
+                return;
+              }
+              updatePosition(
+                resize.selection,
+                getResizedPosition(
+                  resize.startPosition,
+                  resize.startPointer,
+                  pointer,
+                  resize.side,
+                ),
+              );
+            }}
+            onPointerUp={(event) => {
+              if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+                event.currentTarget.releasePointerCapture(event.pointerId);
+              }
+              resizeRef.current = null;
+              setResizing('');
+            }}
+            onPointerCancel={() => {
+              resizeRef.current = null;
+              setResizing('');
+            }}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  function textSettings(
+    selection: ElementSelection,
+    position: GameLayoutPosition,
+  ) {
+    return (
+      <ActionToolbarPopover icon={faPalette} label="Оформлення тексту">
+        <h2>Оформлення тексту</h2>
+        <label>
+          Розмір
+          <input
+            type="range"
+            min="50"
+            max="200"
+            value={Math.round(position.fontScale * 100)}
+            onChange={(event) =>
+              updatePosition(selection, {
+                fontScale: Number(event.target.value) / 100,
+              })
+            }
+          />
+          <output>{Math.round(position.fontScale * 100)}%</output>
+        </label>
+        <label>
+          Колір
+          <input
+            type="color"
+            value={position.textColor}
+            onChange={(event) =>
+              updatePosition(selection, { textColor: event.target.value })
+            }
+          />
+        </label>
+        <label>
+          Напрямок
+          <select
+            value={position.textGrowDirection}
+            onChange={(event) =>
+              updatePosition(selection, {
+                textGrowDirection: event.target.value as GameTextGrowDirection,
+              })
+            }
+          >
+            <option value="up">Вгору</option>
+            <option value="down">Вниз</option>
+          </select>
+        </label>
+        <label>
+          Підлаштувати до висоти
+          <input
+            type="checkbox"
+            checked={position.fitTextToHeight}
+            onChange={(event) =>
+              updatePosition(selection, {
+                fitTextToHeight: event.target.checked,
+              })
+            }
+          />
+        </label>
+      </ActionToolbarPopover>
+    );
+  }
+
+  function imagePositionSettings(
+    selection: ElementSelection,
+    position: GameLayoutPosition,
+  ) {
+    return (
+      <ActionToolbarPopover
+        icon={faCircleHalfStroke}
+        label="Позиція зображення"
+      >
+        <h2>Позиція зображення</h2>
+        <label>
+          Вирівнювання
+          <select
+            value={position.imagePosition}
+            onChange={(event) =>
+              updatePosition(selection, {
+                imagePosition: event.target
+                  .value as GameLayoutPosition['imagePosition'],
+              })
+            }
+          >
+            {GAME_IMAGE_POSITIONS.map((positionName) => (
+              <option key={positionName} value={positionName}>
+                {IMAGE_POSITION_LABELS[positionName]}
+              </option>
+            ))}
+          </select>
+        </label>
+      </ActionToolbarPopover>
+    );
+  }
+
+  function contextualToolbar() {
+    if (!selected || !selectedPosition) {
+      return (
+        <ActionToolbar label="Дії з робочою областю">
+          <ActionToolbarButton
+            icon={faImage}
+            label={
+              game.backgroundImage ? 'Замінити фон' : 'Застосувати зображення'
+            }
+            onClick={() => chooseImage('background')}
+          />
+          {game.backgroundImage && (
+            <ActionToolbarButton
+              danger
+              icon={faTrashCan}
+              label="Видалити фон"
+              onClick={() => onChange({ ...game, backgroundImage: null })}
+            />
+          )}
+          <ActionToolbarPopover
+            icon={faCircleHalfStroke}
+            label="Прозорість фону"
+          >
+            <h2>Прозорість фону</h2>
+            <label>
+              Прозорість
+              <input
+                type="range"
+                min="0"
+                max="100"
+                disabled={!game.backgroundImage}
+                value={Math.round((1 - game.backgroundOpacity) * 100)}
+                onChange={(event) =>
+                  onChange({
+                    ...game,
+                    backgroundOpacity: 1 - Number(event.target.value) / 100,
+                  })
+                }
+              />
+              <output>{Math.round((1 - game.backgroundOpacity) * 100)}%</output>
+            </label>
+          </ActionToolbarPopover>
+        </ActionToolbar>
+      );
+    }
+
+    if (selected.kind === 'built-in') {
+      return (
+        <ActionToolbar label={`Дії: ${LABELS[selected.id]}`}>
+          {GRAPHIC_ELEMENTS.has(selected.id)
+            ? imagePositionSettings(selected, selectedPosition)
+            : textSettings(selected, selectedPosition)}
+          <ActionToolbarSeparator />
+          <ActionToolbarButton
+            icon={selectedPosition.hidden ? faEye : faEyeSlash}
+            label={
+              selectedPosition.hidden ? 'Показати у грі' : 'Приховати у грі'
+            }
+            pressed={selectedPosition.hidden}
+            onClick={() =>
+              updatePosition(selected, { hidden: !selectedPosition.hidden })
+            }
+          />
+        </ActionToolbar>
+      );
+    }
+
+    if (!selectedCustom) return null;
+    return (
+      <ActionToolbar
+        label={`Дії: ${
+          selectedCustom.kind === 'text' ? 'Власний текст' : 'Власне зображення'
+        }`}
+      >
+        {selectedCustom.kind === 'text' ? (
+          <>
+            <ActionToolbarPopover icon={faPen} label="Змінити текст">
+              <h2>Змінити текст</h2>
+              <label htmlFor="visual-editor-custom-text">Текст</label>
+              <textarea
+                id="visual-editor-custom-text"
+                maxLength={500}
+                value={selectedCustom.text}
+                onChange={(event) => {
+                  if (event.target.value.length > 0) {
+                    updateCustom(selectedCustom.id, {
+                      text: event.target.value,
+                    });
+                  }
+                }}
+              />
+            </ActionToolbarPopover>
+            {textSettings(selected, selectedPosition)}
+          </>
+        ) : (
+          <>
+            <ActionToolbarButton
+              icon={faImage}
+              label={
+                selectedCustom.image
+                  ? 'Замінити зображення'
+                  : 'Застосувати зображення'
+              }
+              onClick={() => chooseImage(selectedCustom.id)}
+            />
+            <ActionToolbarButton
+              danger
+              disabled={!selectedCustom.image}
+              icon={faTrashCan}
+              label="Видалити зображення"
+              onClick={() => updateCustom(selectedCustom.id, { image: null })}
+            />
+            {imagePositionSettings(selected, selectedPosition)}
+          </>
+        )}
+        <ActionToolbarSeparator />
+        <ActionToolbarButton
+          icon={selectedPosition.hidden ? faEye : faEyeSlash}
+          label={selectedPosition.hidden ? 'Показати у грі' : 'Приховати у грі'}
+          pressed={selectedPosition.hidden}
+          onClick={() =>
+            updatePosition(selected, { hidden: !selectedPosition.hidden })
+          }
+        />
+        <ActionToolbarButton
+          danger
+          icon={faTrashCan}
+          label="Видалити елемент"
+          onClick={() => removeCustom(selectedCustom.id)}
+        />
+      </ActionToolbar>
+    );
   }
 
   return (
     <div className="visual-editor" hidden={hidden}>
+      <aside className="visual-editor-add-panel" aria-label="Додати елемент">
+        <Tooltip
+          label="Додати редагований текст на екран гри"
+          side="right"
+          trigger={
+            <button
+              className="visual-editor-add-button"
+              type="button"
+              aria-label="Додати редагований текст на екран гри"
+              onClick={() => addElement('text')}
+            >
+              <FontAwesomeIcon icon={faFont} aria-hidden="true" />
+            </button>
+          }
+        />
+        <Tooltip
+          label="Додати власне зображення або логотип"
+          side="right"
+          trigger={
+            <button
+              className="visual-editor-add-button"
+              type="button"
+              aria-label="Додати власне зображення або логотип"
+              onClick={() => addElement('image')}
+            >
+              <FontAwesomeIcon icon={faImage} aria-hidden="true" />
+            </button>
+          }
+        />
+      </aside>
       <div
         ref={workspaceRef}
         className={classNames('visual-editor-workspace', {
@@ -300,169 +842,34 @@ export function VisualEditor({ hidden, game, onChange }: VisualEditorProps) {
           setPanning(false);
         }}
       >
-        {selected && selectedPosition && (
-          <aside
-            className="visual-editor-toolbar"
-            aria-label={`Властивості: ${LABELS[selected]}`}
-          >
-            <strong>{LABELS[selected]}</strong>
-            {GRAPHIC_ELEMENTS.has(selected) ? (
-              <label>
-                Позиція зображення
-                <select
-                  value={selectedPosition.imagePosition}
-                  onChange={(event) =>
-                    updateElement(selected, {
-                      imagePosition: event.target
-                        .value as GameLayoutPosition['imagePosition'],
-                    })
-                  }
-                >
-                  {GAME_IMAGE_POSITIONS.map((position) => (
-                    <option key={position} value={position}>
-                      {IMAGE_POSITION_LABELS[position]}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            ) : (
-              <>
-                <div className="visual-editor-font-size">
-                  <span>Розмір тексту</span>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    aria-label="Зменшити текст"
-                    onClick={() =>
-                      updateElement(selected, {
-                        fontScale: Math.max(
-                          0.5,
-                          selectedPosition.fontScale - 0.1,
-                        ),
-                      })
-                    }
-                  >
-                    −
-                  </Button>
-                  <output>
-                    {Math.round(selectedPosition.fontScale * 100)}%
-                  </output>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    aria-label="Збільшити текст"
-                    onClick={() =>
-                      updateElement(selected, {
-                        fontScale: Math.min(
-                          2,
-                          selectedPosition.fontScale + 0.1,
-                        ),
-                      })
-                    }
-                  >
-                    +
-                  </Button>
-                </div>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={selectedPosition.fitTextToHeight}
-                    onChange={(event) =>
-                      updateElement(selected, {
-                        fitTextToHeight: event.target.checked,
-                      })
-                    }
-                  />
-                  Підлаштувати до висоти
-                </label>
-                <label>
-                  Колір тексту
-                  <input
-                    type="color"
-                    value={selectedPosition.textColor}
-                    onChange={(event) =>
-                      updateElement(selected, {
-                        textColor: event.target.value,
-                      })
-                    }
-                  />
-                </label>
-                <label>
-                  Ріст тексту
-                  <select
-                    value={selectedPosition.textGrowDirection}
-                    onChange={(event) =>
-                      updateElement(selected, {
-                        textGrowDirection: event.target
-                          .value as GameTextGrowDirection,
-                      })
-                    }
-                  >
-                    <option value="up">Вгору</option>
-                    <option value="down">Вниз</option>
-                  </select>
-                </label>
-              </>
-            )}
-          </aside>
-        )}
-        {!selected && (
-          <aside
-            className="visual-editor-toolbar"
-            aria-label="Властивості: Робоча область"
-          >
-            <strong>Робоча область</strong>
-            <label className="visual-editor-background-image">
-              Фонове зображення
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(event) => {
-                  const file = event.currentTarget.files?.[0];
-                  event.currentTarget.value = '';
-                  if (!file || !file.type.startsWith('image/')) return;
-                  const reader = new FileReader();
-                  reader.addEventListener(
-                    'load',
-                    () => {
-                      if (typeof reader.result === 'string') {
-                        onChange({ ...game, backgroundImage: reader.result });
-                      }
-                    },
-                    { once: true },
-                  );
-                  reader.readAsDataURL(file);
-                }}
-              />
-            </label>
-            {game.backgroundImage && (
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={() => onChange({ ...game, backgroundImage: null })}
-              >
-                Видалити фон
-              </Button>
-            )}
-            <label className="visual-editor-background-opacity">
-              Прозорість фону
-              <input
-                type="range"
-                min="0"
-                max="100"
-                disabled={!game.backgroundImage}
-                value={Math.round((1 - game.backgroundOpacity) * 100)}
-                onChange={(event) =>
-                  onChange({
-                    ...game,
-                    backgroundOpacity: 1 - Number(event.target.value) / 100,
-                  })
+        <div className="visual-editor-toolbar">{contextualToolbar()}</div>
+        <input
+          ref={fileInputRef}
+          className="visual-editor-file-input"
+          type="file"
+          accept="image/*"
+          onChange={(event) => {
+            const file = event.currentTarget.files?.[0];
+            event.currentTarget.value = '';
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+              setLocalMessage('Оберіть файл зображення.');
+              return;
+            }
+            const reader = new FileReader();
+            reader.addEventListener(
+              'load',
+              () => {
+                if (typeof reader.result === 'string') {
+                  setLocalMessage('');
+                  applyImage(reader.result);
                 }
-              />
-              <output>{Math.round((1 - game.backgroundOpacity) * 100)}%</output>
-            </label>
-          </aside>
-        )}
+              },
+              { once: true },
+            );
+            reader.readAsDataURL(file);
+          }}
+        />
         <div
           ref={canvasRef}
           className={classNames('visual-editor-canvas', 'host-app', {
@@ -485,141 +892,30 @@ export function VisualEditor({ hidden, game, onChange }: VisualEditorProps) {
             if (event.target === event.currentTarget) selectWorkspace();
           }}
         >
-          {GAME_LAYOUT_ELEMENT_IDS.map((id) => (
-            <div
-              key={id}
-              role="button"
-              tabIndex={0}
-              className={classNames(
-                'visual-layout-item',
-                `visual-layout-${id}`,
-                {
-                  'is-dragging': dragging === id,
-                  'is-resizing': resizing === id,
-                  'is-selected': selected === id,
-                },
-              )}
-              style={
-                {
-                  left: `${positions[id].x}%`,
-                  top: `${positions[id].y}%`,
-                  width: `${positions[id].width}%`,
-                  height: `${positions[id].height}%`,
-                  '--game-font-scale': positions[id].fontScale,
-                  '--game-text-color': positions[id].textColor,
-                  '--game-grow-align':
-                    positions[id].textGrowDirection === 'up'
-                      ? 'flex-end'
-                      : 'flex-start',
-                  '--game-image-position': positions[id].imagePosition,
-                } as CSSProperties
-              }
-              aria-label={`${LABELS[id]}. Перетягніть, щоб змінити позицію`}
-              aria-pressed={selected === id}
-              onClick={() => setSelected(id)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                  event.preventDefault();
-                  setSelected(id);
-                  return;
-                }
-                moveFromKeyboard(id, event);
-              }}
-              onPointerDown={(event) => {
-                if (event.button !== 0) return;
-                const startPointer = pointerPosition(event);
-                if (!startPointer) return;
-                event.currentTarget.setPointerCapture(event.pointerId);
-                dragRef.current = {
-                  id,
-                  pointerId: event.pointerId,
-                  startPointer,
-                  startPosition: positions[id],
-                };
-                setDragging(id);
-                setSelected(id);
-              }}
-              onPointerMove={moveFromPointer}
-              onPointerUp={(event) => {
-                if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-                  event.currentTarget.releasePointerCapture(event.pointerId);
-                }
-                dragRef.current = null;
-                setDragging(null);
-              }}
-              onPointerCancel={() => {
-                dragRef.current = null;
-                setDragging(null);
-              }}
-            >
-              {PREVIEWS[id]}
-              <FitTextObserver enabled={positions[id].fitTextToHeight} />
-              {RESIZE_SIDES.map((side) => (
-                <span
-                  key={side}
-                  className={classNames(
-                    'visual-layout-resize-edge',
-                    `is-${side}`,
-                  )}
-                  aria-hidden="true"
-                  onPointerDown={(event) => {
-                    if (event.button !== 0) return;
-                    event.preventDefault();
-                    event.stopPropagation();
-                    const startPointer = pointerPosition(event);
-                    if (!startPointer) return;
-                    event.currentTarget.setPointerCapture(event.pointerId);
-                    resizeRef.current = {
-                      id,
-                      pointerId: event.pointerId,
-                      startPointer,
-                      startPosition: positions[id],
-                      side,
-                    };
-                    setResizing(id);
-                    setSelected(id);
-                  }}
-                  onPointerMove={(event) => {
-                    const resize = resizeRef.current;
-                    const pointer = pointerPosition(event);
-                    if (
-                      !resize ||
-                      resize.pointerId !== event.pointerId ||
-                      !pointer
-                    ) {
-                      return;
-                    }
-                    updateElement(
-                      resize.id,
-                      getResizedPosition(
-                        resize.startPosition,
-                        resize.startPointer,
-                        pointer,
-                        resize.side,
-                      ),
-                    );
-                  }}
-                  onPointerUp={(event) => {
-                    if (
-                      event.currentTarget.hasPointerCapture(event.pointerId)
-                    ) {
-                      event.currentTarget.releasePointerCapture(
-                        event.pointerId,
-                      );
-                    }
-                    resizeRef.current = null;
-                    setResizing(null);
-                  }}
-                  onPointerCancel={() => {
-                    resizeRef.current = null;
-                    setResizing(null);
-                  }}
-                />
-              ))}
-            </div>
-          ))}
+          {GAME_LAYOUT_ELEMENT_IDS.map((id) =>
+            renderLayoutItem(
+              { kind: 'built-in', id },
+              positions[id],
+              LABELS[id],
+              PREVIEWS[id],
+            ),
+          )}
+          {game.customElements.map((element) =>
+            renderLayoutItem(
+              { kind: 'custom', id: element.id },
+              element.position,
+              element.kind === 'text' ? 'Власний текст' : 'Власне зображення',
+              <GameCustomElement element={element} preview />,
+            ),
+          )}
         </div>
+        {(localMessage || message) && (
+          <p className="visual-editor-message" role="alert">
+            {localMessage || message}
+          </p>
+        )}
       </div>
     </div>
   );
 }
+import './styles.scss';

@@ -1,0 +1,195 @@
+@use 'tokens' as *;
+
+:root {
+  --schdk-color-brand: #{$accent};
+  --schdk-color-interaction: #{$saving};
+  --schdk-color-jade: #{$accent-jade};
+  --schdk-color-surface: #{$surface};
+  --schdk-color-surface-raised: #{$surface-raised};
+  --schdk-radius-control: #{$radius-control};
+  --schdk-radius-panel: #{$radius-panel};
+  --schdk-control-compact: #{$control-compact};
+  --schdk-control-normal: #{$control-normal};
+}
+
+.icon-button,
+.action-button {
+  display: inline-flex;
+  width: $control-compact;
+  min-width: $control-compact;
+  height: $control-compact;
+  min-height: $control-compact;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: $radius-control;
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    border-color $motion-fast ease,
+    background-color $motion-fast ease,
+    color $motion-fast ease,
+    transform $motion-fast ease;
+}
+
+.icon-button:active:not(:disabled),
+.action-button:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.icon-button:focus-visible,
+.action-button:focus-visible {
+  outline: $focus-width solid $saving;
+  outline-offset: $focus-offset;
+}
+
+.ui-tooltip-positioner,
+.ui-popover-positioner {
+  z-index: 2000;
+}
+
+.ui-tooltip {
+  max-width: min(260px, calc(100vw - 16px));
+  border: 1px solid $border-strong;
+  border-radius: 10px;
+  background: rgba($surface-raised, 0.94);
+  padding: 7px 9px;
+  color: $text;
+  box-shadow: $shadow-raised;
+  backdrop-filter: blur(18px) saturate(135%);
+  font:
+    600 0.74rem/1.25 'Segoe UI',
+    system-ui,
+    sans-serif;
+  transform-origin: var(--transform-origin);
+  transition:
+    opacity $motion-fast ease,
+    transform $motion-fast ease;
+}
+
+.ui-tooltip[data-starting-style],
+.ui-tooltip[data-ending-style] {
+  opacity: 0;
+  transform: translateY(2px) scale(0.98);
+}
+
+.ui-tooltip-arrow,
+.ui-popover-arrow {
+  width: 9px;
+  height: 9px;
+  fill: $surface-raised;
+}
+
+.ui-popover {
+  width: min(320px, calc(100vw - 24px));
+  border: 1px solid $border-strong;
+  border-radius: $radius-panel;
+  background:
+    linear-gradient(145deg, rgba(#fff, 0.05), transparent 38%),
+    rgba($surface-raised, 0.96);
+  padding: $space-3;
+  color: $text;
+  box-shadow: $shadow-overlay;
+  backdrop-filter: blur(24px) saturate(135%);
+  transform-origin: var(--transform-origin);
+  transition:
+    opacity $motion-fast ease,
+    transform $motion-standard ease;
+}
+
+.ui-popover[data-starting-style],
+.ui-popover[data-ending-style] {
+  opacity: 0;
+  transform: translateY(-4px) scale(0.98);
+}
+
+.ui-popover h2 {
+  margin: 0 0 $space-3;
+  font-size: 0.86rem;
+}
+
+.ui-popover label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-3;
+  color: #d3d7de;
+  font-size: 0.78rem;
+}
+
+.ui-popover label + label {
+  margin-top: $space-3;
+}
+
+.ui-popover input,
+.ui-popover select,
+.ui-popover textarea {
+  border: 1px solid $border-strong;
+  border-radius: 8px;
+  background: rgba($background, 0.72);
+  color: $text;
+  font: inherit;
+}
+
+.ui-popover textarea {
+  width: 100%;
+  min-height: 84px;
+  margin-top: $space-2;
+  padding: $space-2;
+  resize: vertical;
+}
+
+.ui-popover select {
+  min-height: $control-compact;
+  padding: 0 $space-2;
+}
+
+.action-toolbar {
+  display: flex;
+  align-items: center;
+  gap: $space-1;
+  border: 1px solid rgba($border-strong, 0.94);
+  border-radius: $radius-panel;
+  background:
+    linear-gradient(135deg, rgba(#fff, 0.07), transparent 45%),
+    rgba($surface-raised, 0.9);
+  padding: 5px;
+  color: $text;
+  box-shadow: $shadow-overlay;
+  backdrop-filter: blur(22px) saturate(140%);
+}
+
+.action-button:hover:not(:disabled),
+.action-button[aria-pressed='true'] {
+  border-color: rgba($accent, 0.28);
+  background: rgba($accent, 0.14);
+  color: $accent-hover;
+  transform: translateY(-1px);
+}
+
+.action-button.danger:hover:not(:disabled) {
+  border-color: rgba($danger, 0.32);
+  background: rgba($danger, 0.12);
+  color: $danger;
+}
+
+.action-button:disabled {
+  cursor: default;
+  opacity: 0.36;
+}
+
+.action-toolbar-separator {
+  width: 1px;
+  height: 22px;
+  margin: 0 2px;
+  background: $border;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-tooltip,
+  .ui-popover {
+    transition: none;
+  }
+}

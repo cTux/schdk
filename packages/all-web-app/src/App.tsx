@@ -36,6 +36,7 @@ export function App() {
   const [gameOptions, setGameOptions] = useState<GameOptions>(() =>
     loadGameOptions(localStorage),
   );
+  const [gameOptionsError, setGameOptionsError] = useState('');
 
   useEffect(() => {
     if (isDesktop) saveDesktopShellView(localStorage, sessionScope, view);
@@ -46,7 +47,11 @@ export function App() {
   }, [editorOptions]);
 
   useEffect(() => {
-    saveGameOptions(localStorage, gameOptions);
+    setGameOptionsError(
+      saveGameOptions(localStorage, gameOptions)
+        ? ''
+        : 'Не вдалося зберегти оформлення. Видаліть зайві зображення та спробуйте ще раз.',
+    );
   }, [gameOptions]);
 
   function showView(nextView: ShellViewName) {
@@ -68,6 +73,7 @@ export function App() {
           <HostApp
             backgroundImage={gameOptions.backgroundImage}
             backgroundOpacity={gameOptions.backgroundOpacity}
+            customElements={gameOptions.customElements}
             layout={gameOptions.layout}
             soundVolume={gameOptions.soundVolume}
           />
@@ -76,6 +82,7 @@ export function App() {
       loadedApps={loadedApps}
       editorOptions={editorOptions}
       gameOptions={gameOptions}
+      gameOptionsError={gameOptionsError}
       view={view}
       onEditorOptionsChange={setEditorOptions}
       onGameOptionsChange={setGameOptions}

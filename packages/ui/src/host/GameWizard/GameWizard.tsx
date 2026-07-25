@@ -2,12 +2,17 @@ import './styles.scss';
 
 import classNames from 'classnames';
 import type { CSSProperties, ReactNode } from 'react';
-import type { GameLayout, GameLayoutElementId } from '../../options/types';
+import type {
+  CustomGameElement,
+  GameLayout,
+  GameLayoutElementId,
+} from '../../options/types';
 import {
   GameAnswer,
   GameAnswerComment,
   GameAlternativeAnswer,
   GameControls,
+  GameCustomElement,
   GameHandout,
   GameLogo,
   GameProgress,
@@ -23,6 +28,7 @@ import type {
 import { FitTextObserver } from '../FitTextObserver';
 
 export interface GameWizardProps {
+  customElements?: CustomGameElement[];
   game: HostGameView;
   layout: GameLayout | null;
   onBack(): void;
@@ -37,6 +43,7 @@ export interface GameLayoutItemProps {
 
 function GameLayoutItem({ children, id, layout }: GameLayoutItemProps) {
   const position = layout?.[id];
+  if (position?.hidden) return null;
   const style = position
     ? ({
         '--game-layout-x': `${position.x}%`,
@@ -78,7 +85,13 @@ function stageMotionClass(
     : 'is-settling';
 }
 
-export function GameWizard({ game, layout, onBack, onNext }: GameWizardProps) {
+export function GameWizard({
+  customElements = [],
+  game,
+  layout,
+  onBack,
+  onNext,
+}: GameWizardProps) {
   const visible = new Set(game.visibleStages);
   const isIntro = game.currentStage === 'intro';
   const isHandoutFocus = game.currentStage === 'handout';
@@ -212,6 +225,9 @@ export function GameWizard({ game, layout, onBack, onNext }: GameWizardProps) {
           </div>
         )}
       </div>
+      {customElements.map((element) => (
+        <GameCustomElement element={element} key={element.id} />
+      ))}
       <GameLayoutItem id="controls" layout={layout}>
         <GameControls
           canGoBack={game.canGoBack}

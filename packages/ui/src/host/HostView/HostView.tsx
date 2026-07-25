@@ -10,7 +10,7 @@ import { GameFinished } from '../GameFinished';
 import { GamePackageDetails } from '../GamePackageDetails';
 import { GameWizard } from '../GameWizard';
 import type { HostGameView } from '../types';
-import type { GameLayout } from '../../options/types';
+import type { CustomGameElement, GameLayout } from '../../options/types';
 
 export type { RecentPackageItem } from '../../editor/types';
 export type {
@@ -30,6 +30,7 @@ export interface HostPackageDetails {
 export interface HostViewProps {
   backgroundImage: string | null;
   backgroundOpacity: number;
+  customElements?: CustomGameElement[];
   finished: boolean;
   game: HostGameView | null;
   layout: GameLayout | null;
@@ -48,6 +49,7 @@ export interface HostViewProps {
 export function HostView({
   backgroundImage,
   backgroundOpacity,
+  customElements = [],
   finished,
   game,
   layout,
@@ -83,7 +85,7 @@ export function HostView({
           <AppIcon />
           <div>
             <p className="eyebrow">Проведення гри</p>
-            <h1>ЩДК Гра</h1>
+            <h1>Провести гру</h1>
           </div>
         </div>
       </header>
@@ -102,6 +104,7 @@ export function HostView({
       )}
       {game && (
         <GameWizard
+          customElements={customElements}
           game={game}
           layout={layout}
           onBack={onGameBack}
