@@ -14,6 +14,7 @@ import type { VisualLayoutItemProps } from './types';
 
 export function VisualLayoutItem({
   content,
+  fitWarningLabel,
   hiddenLabel,
   hiddenSuffix,
   dragInstruction,
@@ -139,7 +140,10 @@ export function VisualLayoutItem({
     >
       {content}
       {selection.kind === 'built-in' && (
-        <FitTextObserver enabled={position.fitTextToHeight} />
+        <FitTextObserver
+          enabled={position.fitTextToHeight}
+          warningLabel={fitWarningLabel}
+        />
       )}
       {selected &&
         RESIZE_HANDLES.map((handle) => (

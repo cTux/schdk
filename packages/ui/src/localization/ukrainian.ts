@@ -198,6 +198,7 @@ export const ukrainian = {
     up: 'Вгору',
     down: 'Вниз',
     fitHeight: 'Підлаштувати до висоти',
+    fitWarning: 'Збільште елемент або скоротіть текст',
     imagePosition: 'Позиція зображення',
     alignment: 'Вирівнювання',
     workspaceActions: 'Дії з робочою областю',

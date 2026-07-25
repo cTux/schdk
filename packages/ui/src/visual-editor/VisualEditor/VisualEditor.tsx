@@ -62,6 +62,7 @@ export function VisualEditor({
         key={selectionKey(selection)}
         content={content}
         dragInstruction={copy.visualEditor.dragInstruction}
+        fitWarningLabel={copy.visualEditor.fitWarning}
         hiddenLabel={copy.visualEditor.hidden}
         hiddenSuffix={copy.visualEditor.hiddenSuffix}
         label={label}
