@@ -125,7 +125,10 @@ export function GameCustomElement({
   if (position.hidden && !preview) return null;
   return (
     <div
-      className={`game-custom-element game-custom-${element.kind}`}
+      className={classNames(
+        'game-custom-element',
+        `game-custom-${element.kind}`,
+      )}
       style={
         {
           '--game-layout-x': `${position.x}%`,

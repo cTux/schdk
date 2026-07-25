@@ -1,17 +1,17 @@
+import './styles.scss';
+
 import { Popover } from '@base-ui/react/popover';
 import { Toolbar } from '@base-ui/react/toolbar';
-import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { ReactNode } from 'react';
-import { Tooltip } from './Tooltip';
+import classNames from 'classnames';
+import { Tooltip } from '../Tooltip';
+import type {
+  ActionToolbarButtonProps,
+  ActionToolbarPopoverProps,
+  ActionToolbarProps,
+} from './types';
 
-export function ActionToolbar({
-  label,
-  children,
-}: {
-  label: string;
-  children: ReactNode;
-}) {
+export function ActionToolbar({ label, children }: ActionToolbarProps) {
   return (
     <Toolbar.Root className="action-toolbar" aria-label={label}>
       {children}
@@ -26,20 +26,13 @@ export function ActionToolbarButton({
   danger = false,
   disabled,
   onClick,
-}: {
-  icon: IconDefinition;
-  label: string;
-  pressed?: boolean;
-  danger?: boolean;
-  disabled?: boolean;
-  onClick(): void;
-}) {
+}: ActionToolbarButtonProps) {
   return (
     <Tooltip
       label={label}
       trigger={
         <Toolbar.Button
-          className={`action-button${danger ? ' danger' : ''}`}
+          className={classNames('action-button', { danger })}
           aria-label={label}
           aria-pressed={pressed}
           disabled={disabled}
@@ -56,11 +49,7 @@ export function ActionToolbarPopover({
   icon,
   label,
   children,
-}: {
-  icon: IconDefinition;
-  label: string;
-  children: ReactNode;
-}) {
+}: ActionToolbarPopoverProps) {
   return (
     <Popover.Root>
       <Tooltip

@@ -106,9 +106,6 @@ export function GameWizard({
       className={classNames('game-wizard', customLayoutClass)}
       aria-label="Проведення гри"
     >
-      {customElements.map((element) => (
-        <GameCustomElement element={element} key={element.id} />
-      ))}
       <GameLayoutItem id="logo" layout={layout}>
         <GameLogo />
       </GameLayoutItem>
@@ -228,6 +225,9 @@ export function GameWizard({
           </div>
         )}
       </div>
+      {customElements.map((element) => (
+        <GameCustomElement element={element} key={element.id} />
+      ))}
       <GameLayoutItem id="controls" layout={layout}>
         <GameControls
           canGoBack={game.canGoBack}

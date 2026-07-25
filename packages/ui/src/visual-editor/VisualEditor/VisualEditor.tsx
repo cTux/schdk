@@ -9,6 +9,7 @@ import {
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classNames from 'classnames';
 import {
   useEffect,
   useRef,
@@ -408,15 +409,18 @@ export function VisualEditor({
         key={key}
         role="button"
         tabIndex={0}
-        className={`visual-layout-item${
+        className={classNames(
+          'visual-layout-item',
           selection.kind === 'built-in'
-            ? ` visual-layout-${selection.id}`
-            : ' visual-layout-custom'
-        }${dragging === key ? ' is-dragging' : ''}${
-          resizing === key ? ' is-resizing' : ''
-        }${selected && selectionKey(selected) === key ? ' is-selected' : ''}${
-          position.hidden ? ' is-hidden' : ''
-        }`}
+            ? `visual-layout-${selection.id}`
+            : 'visual-layout-custom',
+          {
+            'is-dragging': dragging === key,
+            'is-resizing': resizing === key,
+            'is-selected': selected && selectionKey(selected) === key,
+            'is-hidden': position.hidden,
+          },
+        )}
         style={
           {
             left: `${position.x}%`,
@@ -484,7 +488,7 @@ export function VisualEditor({
         {RESIZE_SIDES.map((side) => (
           <span
             key={side}
-            className={`visual-layout-resize-edge is-${side}`}
+            className={classNames('visual-layout-resize-edge', `is-${side}`)}
             aria-hidden="true"
             onPointerDown={(event) => {
               if (event.button !== 0) return;
@@ -797,7 +801,9 @@ export function VisualEditor({
       </aside>
       <div
         ref={workspaceRef}
-        className={`visual-editor-workspace${panning ? ' is-panning' : ''}`}
+        className={classNames('visual-editor-workspace', {
+          'is-panning': panning,
+        })}
         onKeyDown={(event) => {
           if (event.key !== 'Escape' || !selected) return;
           event.preventDefault();
@@ -866,9 +872,9 @@ export function VisualEditor({
         />
         <div
           ref={canvasRef}
-          className={`visual-editor-canvas host-app${
-            selected ? '' : ' is-selected'
-          }`}
+          className={classNames('visual-editor-canvas', 'host-app', {
+            'is-selected': !selected,
+          })}
           tabIndex={0}
           style={
             {

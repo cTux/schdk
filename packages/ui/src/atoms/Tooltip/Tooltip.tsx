@@ -1,7 +1,9 @@
-import { Tooltip as BaseTooltip } from '@base-ui/react/tooltip';
-import type { ReactElement, ReactNode } from 'react';
+import './styles.scss';
 
-export function TooltipProvider({ children }: { children: ReactNode }) {
+import { Tooltip as BaseTooltip } from '@base-ui/react/tooltip';
+import type { TooltipProps, TooltipProviderProps } from './types';
+
+export function TooltipProvider({ children }: TooltipProviderProps) {
   return (
     <BaseTooltip.Provider delay={450} closeDelay={100} timeout={400}>
       {children}
@@ -9,15 +11,7 @@ export function TooltipProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function Tooltip({
-  label,
-  side,
-  trigger,
-}: {
-  label: string;
-  side?: 'top' | 'right' | 'bottom' | 'left';
-  trigger: ReactElement;
-}) {
+export function Tooltip({ label, side, trigger }: TooltipProps) {
   return (
     <BaseTooltip.Root>
       <BaseTooltip.Trigger render={trigger} />

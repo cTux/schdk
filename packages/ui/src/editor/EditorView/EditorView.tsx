@@ -37,45 +37,45 @@ export function EditorView({
   return (
     <TooltipProvider>
       <main className="editor-app">
-      <EditorHeader
-        hasPackage={hasPackage}
-        packageTitle={gamePackage.title}
-        saveStatus={saveStatus}
-        showValidation={showValidation}
-        onBack={onBack}
-        onTitleChange={onTitleChange}
-      />
-      <PackageStart
-        hidden={hasPackage}
-        recentPackages={recentPackages}
-        onCreatePackage={onCreatePackage}
-        onOpenPackage={onOpenPackage}
-        onOpenRecentPackage={onOpenRecentPackage}
-      />
-      <div className="editor-layout" hidden={!hasPackage}>
-        <QuestionList
-          gamePackage={gamePackage}
-          selectedIndex={selectedIndex}
+        <EditorHeader
+          hasPackage={hasPackage}
+          packageTitle={gamePackage.title}
+          saveStatus={saveStatus}
           showValidation={showValidation}
-          onSelectQuestion={onSelectQuestion}
-          onSwapQuestions={onSwapQuestions}
+          onBack={onBack}
+          onTitleChange={onTitleChange}
         />
-        <QuestionEditor
-          question={gamePackage.questions[selectedIndex]!}
-          selectedIndex={selectedIndex}
-          showValidation={showValidation}
-          onAddHandout={onAddHandout}
-          onChange={onQuestionChange}
-          onAnswerBlur={onAnswerBlur}
-          onAnswerCommentBlur={onAnswerCommentBlur}
-          onAlternativeAnswerBlur={onAlternativeAnswerBlur}
-          onCopy={onCopyQuestion}
-          onPaste={onPasteQuestion}
-          onSelectQuestion={onSelectQuestion}
-          onQuestionTextBlur={onQuestionTextBlur}
+        <PackageStart
+          hidden={hasPackage}
+          recentPackages={recentPackages}
+          onCreatePackage={onCreatePackage}
+          onOpenPackage={onOpenPackage}
+          onOpenRecentPackage={onOpenRecentPackage}
         />
-      </div>
-      {message && <StatusMessage>{message}</StatusMessage>}
+        <div className="editor-layout" hidden={!hasPackage}>
+          <QuestionList
+            gamePackage={gamePackage}
+            selectedIndex={selectedIndex}
+            showValidation={showValidation}
+            onSelectQuestion={onSelectQuestion}
+            onSwapQuestions={onSwapQuestions}
+          />
+          <QuestionEditor
+            question={gamePackage.questions[selectedIndex]!}
+            selectedIndex={selectedIndex}
+            showValidation={showValidation}
+            onAddHandout={onAddHandout}
+            onChange={onQuestionChange}
+            onAnswerBlur={onAnswerBlur}
+            onAnswerCommentBlur={onAnswerCommentBlur}
+            onAlternativeAnswerBlur={onAlternativeAnswerBlur}
+            onCopy={onCopyQuestion}
+            onPaste={onPasteQuestion}
+            onSelectQuestion={onSelectQuestion}
+            onQuestionTextBlur={onQuestionTextBlur}
+          />
+        </div>
+        {message && <StatusMessage>{message}</StatusMessage>}
       </main>
     </TooltipProvider>
   );

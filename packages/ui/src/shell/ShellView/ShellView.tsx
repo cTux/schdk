@@ -39,33 +39,33 @@ export function ShellView({
   return (
     <TooltipProvider>
       <main className="app-shell">
-      <ShellNavigation view={view} onSelect={onShowView} />
-      <section className="workspace">
-        <ShellHome hidden={view !== 'home'} onOpen={onShowView} />
-        <OptionsPage
-          hidden={view !== 'options'}
-          editor={editorOptions}
-          game={gameOptions}
-          onEditorChange={onEditorOptionsChange}
-          onGameChange={onGameOptionsChange}
-        />
-        <VisualEditor
-          message={gameOptionsError}
-          hidden={view !== 'visualEditor'}
-          game={gameOptions}
-          onChange={onGameOptionsChange}
-        />
-        {loadedApps.host && (
-          <div className="embedded-app" hidden={view !== 'host'}>
-            {hostApp}
-          </div>
-        )}
-        {loadedApps.editor && (
-          <div className="embedded-app" hidden={view !== 'editor'}>
-            {editorApp}
-          </div>
-        )}
-      </section>
+        <ShellNavigation view={view} onSelect={onShowView} />
+        <section className="workspace">
+          <ShellHome hidden={view !== 'home'} onOpen={onShowView} />
+          <OptionsPage
+            hidden={view !== 'options'}
+            editor={editorOptions}
+            game={gameOptions}
+            onEditorChange={onEditorOptionsChange}
+            onGameChange={onGameOptionsChange}
+          />
+          <VisualEditor
+            message={gameOptionsError}
+            hidden={view !== 'visualEditor'}
+            game={gameOptions}
+            onChange={onGameOptionsChange}
+          />
+          {loadedApps.host && (
+            <div className="embedded-app" hidden={view !== 'host'}>
+              {hostApp}
+            </div>
+          )}
+          {loadedApps.editor && (
+            <div className="embedded-app" hidden={view !== 'editor'}>
+              {editorApp}
+            </div>
+          )}
+        </section>
       </main>
     </TooltipProvider>
   );
