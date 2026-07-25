@@ -21,6 +21,27 @@ export const ukrainianSettings = {
   googleDriveConnect: 'Підключити',
   googleDriveReconnectAction: 'Підключити знову',
   googleDriveDisconnect: 'Відключити',
+  shortcutsTitle: 'Гарячі клавіші',
+  shortcutGroups: [
+    {
+      heading: 'Проведення гри',
+      items: [
+        { label: 'Наступний стан', keys: 'Пробіл · PgDn · →' },
+        { label: 'Попередній стан', keys: 'Backspace · PgUp · ←' },
+        { label: 'Вийти з гри', keys: 'Alt + Q' },
+      ],
+    },
+    {
+      heading: 'Візуальний редактор',
+      items: [
+        { label: 'Вибрати елемент', keys: 'Enter · Пробіл' },
+        { label: 'Перемістити елемент на 1%', keys: 'Стрілки' },
+        { label: 'Перемістити елемент на 5%', keys: 'Shift + стрілки' },
+        { label: 'Видалити власний елемент', keys: 'Delete' },
+        { label: 'Вибрати полотно', keys: 'Escape' },
+      ],
+    },
+  ],
   schdkTabsLabel: 'Налаштування ЩДК',
   gameTab: 'Проведення гри',
   editorTab: 'Редагування питань',

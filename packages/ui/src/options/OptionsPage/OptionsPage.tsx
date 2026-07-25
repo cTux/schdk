@@ -144,6 +144,27 @@ export function OptionsPage({
             </Button>
           )}
         </div>
+        <section
+          className="options-shortcuts"
+          aria-labelledby="options-shortcuts-title"
+        >
+          <h2 id="options-shortcuts-title">{copy.settings.shortcutsTitle}</h2>
+          {copy.settings.shortcutGroups.map((shortcutGroup) => (
+            <div key={shortcutGroup.heading}>
+              <h3>{shortcutGroup.heading}</h3>
+              <dl>
+                {shortcutGroup.items.map((shortcut) => (
+                  <div key={shortcut.label}>
+                    <dt>{shortcut.label}</dt>
+                    <dd>
+                      <kbd>{shortcut.keys}</kbd>
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          ))}
+        </section>
       </section>
 
       <div
