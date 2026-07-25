@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import type { InputHTMLAttributes, ReactNode } from 'react';
 
 export interface FileButtonProps extends InputHTMLAttributes<HTMLInputElement> {

@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import { useRef, type ChangeEvent, type DragEvent } from 'react';
 import { Button } from '../../atoms/Button';
 import { useLocalization } from '../../localization';

@@ -1,5 +1,3 @@
-import './styles.scss';
-
 export interface StatusMessageProps {
   children: string;
 }

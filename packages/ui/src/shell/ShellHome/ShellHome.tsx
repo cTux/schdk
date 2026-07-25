@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import { useLocalization } from '../../localization';
 import { getShellContent, type ShellViewName } from '../shellItems';
 import { ToolCard } from '../ToolCard';

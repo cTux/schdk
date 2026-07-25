@@ -18,11 +18,13 @@ ComponentName/
   ComponentName.tsx
   constants.ts
   index.ts
-  styles.scss
   types.ts
 ```
 
-5. Omit `constants.ts` when no component-specific constants exist. Create `__tests__` with the first explicitly requested test; Git cannot preserve an empty directory, and placeholder tests are forbidden.
+5. Add `styles.scss` only when the component emits component-specific CSS.
+   Omit `constants.ts` when no component-specific constants exist. Create
+   `__tests__` with the first explicitly requested test; Git cannot preserve an
+   empty directory, and placeholder files and tests are forbidden.
 6. Export only the component's consumer-facing component, types, and applicable constants from `index.ts`; update package entry points only when consumers need them.
 7. Use `classnames` for conditional class composition. If the touched component needs it and `@schdk/ui` does not yet declare it, add it with pnpm; do not add an unused dependency.
 8. Run `$schdk-quality` checks for the affected package and consumers.

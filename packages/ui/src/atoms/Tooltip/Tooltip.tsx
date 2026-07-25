@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import { Tooltip as BaseTooltip } from '@base-ui/react/tooltip';
 import type { TooltipProps, TooltipProviderProps } from './types';
 

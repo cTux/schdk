@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import { Button } from '../../atoms/Button';
 import { TextAreaField } from '../../atoms/TextAreaField';
 import { useLocalization } from '../../localization';

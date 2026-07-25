@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import classNames from 'classnames';
 import { useState } from 'react';
 import { Button } from '../../atoms/Button';

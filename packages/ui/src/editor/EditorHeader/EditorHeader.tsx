@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import { useLocalization } from '../../localization';
 import { EditorBrand } from '../EditorBrand';
 import { PackageTitleField } from '../PackageTitleField';

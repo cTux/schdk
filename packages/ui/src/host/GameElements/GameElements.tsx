@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import classNames from 'classnames';
 import type { CSSProperties } from 'react';
 import type { Handout } from '@schdk/common';

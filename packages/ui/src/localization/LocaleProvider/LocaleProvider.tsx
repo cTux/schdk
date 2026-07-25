@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import { createContext, useContext, useMemo } from 'react';
 import {
   LOCALIZATION_COPY,

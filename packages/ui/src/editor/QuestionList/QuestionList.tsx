@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import { QUESTIONS_PER_ROUND, type GamePackage } from '@schdk/common';
 import { useState, type DragEvent } from 'react';
 import { useLocalization } from '../../localization';

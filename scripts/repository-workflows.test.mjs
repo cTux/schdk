@@ -93,12 +93,23 @@ test('UI components follow the directory and class composition contracts', async
 
     assert.equal(directoryName, componentName, componentFile.pathname);
     await Promise.all(
-      ['index.ts', 'styles.scss', 'types.ts'].map((name) =>
+      ['index.ts', 'types.ts'].map((name) =>
         access(new URL(name, componentDirectory)),
       ),
     );
 
     const source = await readFile(componentFile, 'utf8');
+    const stylesheet = files.find(
+      (file) => file.href === new URL('styles.scss', componentDirectory).href,
+    );
+    const importsStylesheet = source.includes("import './styles.scss';");
+
+    assert.equal(importsStylesheet, stylesheet !== undefined);
+    if (stylesheet) {
+      const styles = (await readFile(stylesheet, 'utf8')).trim();
+      assert.doesNotMatch(styles, /^(?:\/\/[^\r\n]*|\/\*[^\r\n]*\*\/)$/);
+    }
+
     assert.doesNotMatch(source, /className="[^"]+\s+[^"]+"/);
     assert.doesNotMatch(source, /className=\{`/);
     assert.doesNotMatch(source, /\.filter\(Boolean\)\s*\.join\(['"] ['"]\)/);

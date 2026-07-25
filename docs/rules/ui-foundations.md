@@ -18,6 +18,12 @@
 - Define the complete light and dark color palettes in `styles/light.scss` and
   `styles/dark.scss`. Other SCSS files must consume those theme variables
   instead of declaring color values.
+- Load Sass modules with `@use` or `@forward`, keep selector nesting at two
+  levels or fewer, and use class selectors instead of IDs.
+- Avoid `!important` except for documented accessibility or platform
+  overrides, including `[hidden]` and reduced-motion rules.
+- Create and import a component `styles.scss` only when it emits
+  component-specific CSS; do not keep empty stylesheet placeholders.
 - Use the shared ink/plum chrome, amber brand actions, periwinkle interaction
   states, warm canvases, soft elevation, and restrained translucent overlays.
 - Keep action bars compact and icon-only with Ukrainian accessible labels shown

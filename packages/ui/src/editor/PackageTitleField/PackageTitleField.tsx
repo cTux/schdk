@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import { useLocalization } from '../../localization';
 
 export interface PackageTitleFieldProps {

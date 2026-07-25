@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import classNames from 'classnames';
 import type { TextareaHTMLAttributes } from 'react';
 import { LOCALIZATION_COPY } from '../../localization';

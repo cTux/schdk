@@ -7,7 +7,9 @@ directions in [architecture.md](architecture.md).
 
 - Put each new or structurally changed component in its own
   `packages/ui/src/<area>/<ComponentName>/` directory.
-- Include `ComponentName.tsx`, `types.ts`, `styles.scss`, and `index.ts`.
+- Include `ComponentName.tsx`, `types.ts`, and `index.ts`. Add `styles.scss`
+  only when the component emits component-specific CSS; never add an empty
+  placeholder stylesheet or import.
 - Add `constants.ts` only for component-specific constants.
 - Keep tests in `__tests__/`. Because Git does not track empty directories and
   tests are added only by an explicit `add missing tests` prompt, create the
