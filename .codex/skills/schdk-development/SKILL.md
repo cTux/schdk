@@ -21,6 +21,8 @@ description: Implement, debug, refactor, review, or document changes anywhere in
 - Use `$schdk-update-dependencies` for pnpm, dependency, lockfile, or audit updates.
 - Use `$schdk-add-missing-tests` only for an explicit `add missing tests` prompt.
 - Use `$schdk-project-structure` for package, component, file-layout, or public-export changes.
+- Use `$schdk-react-components` for React component behavior, hooks, and rendering performance.
+- Use `$schdk-find-next-feature` when asked to suggest one actionable task from the current repository.
 - Read `docs/rules/host-app.md` for host gameplay behavior without a narrower skill.
 - Use `$schdk-ui` for components, styles, accessibility, or visual changes.
 - Use `$schdk-game-packages` for `.schdk` schema, parsing, serialization, or readiness.

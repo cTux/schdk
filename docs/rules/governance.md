@@ -25,6 +25,9 @@
   workflow, command, ownership boundary, or verification requirement changes.
 - Add a project skill only for a distinct recurring workflow. Do not create
   speculative skills for features or packages that do not exist yet.
+- Keep the root `TODO.md` tracked even when it is empty.
+- Rename completed task documents under `docs/research` and `docs/tech-design`
+  with an `-implemented.md` suffix so task discovery can skip them.
 
 ## Documentation and language
 

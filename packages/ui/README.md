@@ -9,7 +9,7 @@ Read only the areas touched by the task:
 - [Component structure](../../docs/rules/project-structure.md): directories,
   colocated files, exports, props, tests, and conditional classes.
 - [Foundations](../../docs/rules/ui-foundations.md): ownership, components,
-  styling, accessibility, icons, and copy.
+  React behavior and performance, styling, accessibility, icons, and copy.
 - [Editor UI](../../docs/rules/ui-editor.md): editor fields, status, handouts,
   question navigation, and recents.
 - [Gameplay UI](../../docs/rules/ui-gameplay.md): host summary, question stages,

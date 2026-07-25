@@ -5,6 +5,12 @@
 - Build screens from the smallest practical components. Extract coherent
   controls, repeated structures, and stateful interactions; keep one-off
   wrappers inline.
+- Keep rendering pure, derive values during render, keep transient state local,
+  and use Effects only to synchronize with external systems.
+- Treat `memo`, `useMemo`, and `useCallback` as performance optimizations, not
+  correctness guarantees. Keep dependencies complete and use memoization where
+  it skips meaningful work or stabilizes a value for an identity-sensitive
+  consumer; do not cache trivial work.
 - Keep composed views controlled through typed data and callbacks. UI
   components must not read storage, Electron APIs, or the filesystem.
 - Reuse existing visual tokens and interaction patterns. Prefer compact,
