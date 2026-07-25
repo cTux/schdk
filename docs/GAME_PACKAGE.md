@@ -29,6 +29,7 @@ The editor saves new and unfinished packages to the same `.schdk` file. The
 title, questions, and answers may remain empty during editing. Structural
 parsing accepts unfinished packages; `validateGamePackage` performs the
 separate readiness check when a complete package is required.
+The filename follows the filesystem-safe package title plus `.schdk`.
 
 Legacy `.schdk` files containing plain JSON are still supported. The editor
 rewrites them in ZIP format on the next save.

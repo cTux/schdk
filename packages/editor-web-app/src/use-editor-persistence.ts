@@ -3,7 +3,10 @@ import {
   validateGamePackage,
   type GamePackage,
 } from '@schdk/common';
-import type { DrivePackageStorage } from '@schdk/google-drive';
+import {
+  createGamePackageFilename,
+  type DrivePackageStorage,
+} from '@schdk/google-drive';
 import type { EditorSaveStatus } from '@schdk/ui/editor';
 import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
 import {
@@ -37,6 +40,7 @@ interface EditorPersistenceOptions {
   selectedIndex: number;
   currentPackage: MutableRefObject<GamePackage>;
   onDriveFailure?(): void;
+  setFileName: Dispatch<SetStateAction<string | null>>;
   setMessage: Dispatch<SetStateAction<string>>;
   setSaveStatus: Dispatch<SetStateAction<EditorSaveStatus>>;
 }
@@ -57,6 +61,7 @@ export function useEditorPersistence({
   selectedIndex,
   currentPackage,
   onDriveFailure,
+  setFileName,
   setMessage,
   setSaveStatus,
 }: EditorPersistenceOptions) {
@@ -80,7 +85,10 @@ export function useEditorPersistence({
       .catch(() => undefined)
       .then(() =>
         drive.updateGamePackage(driveFileId, {
-          name: fileName,
+          name: createGamePackageFilename(
+            gamePackage.title,
+            copy.editor.unfinishedGame,
+          ),
           title: gamePackage.title,
           content,
           ready: validateGamePackage(gamePackage).length === 0,
@@ -88,7 +96,8 @@ export function useEditorPersistence({
       );
     saveQueue.current = save.then(() => undefined);
     try {
-      await save;
+      const saved = await save;
+      setFileName(saved.name);
       setSaveStatus(
         saveStatusAfterWrite(gamePackage === currentPackage.current),
       );
@@ -98,6 +107,7 @@ export function useEditorPersistence({
       throw error;
     }
   }, [
+    copy.editor.unfinishedGame,
     currentPackage,
     drive,
     driveFileId,
@@ -105,6 +115,7 @@ export function useEditorPersistence({
     gamePackage,
     onDriveFailure,
     saveQueue,
+    setFileName,
     setSaveStatus,
   ]);
 

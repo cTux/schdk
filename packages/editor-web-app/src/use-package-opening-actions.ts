@@ -4,6 +4,7 @@ import {
   type GamePackage,
 } from '@schdk/common';
 import {
+  createGamePackageFilename,
   parseDrivePackageReference,
   toDrivePackageReference,
   type DrivePackageStorage,
@@ -65,7 +66,10 @@ export function usePackageOpeningActions({
     try {
       if (!drive) throw new Error('Google Drive is unavailable');
       const saved = await drive.createGamePackage({
-        name: file.name,
+        name: createGamePackageFilename(
+          gamePackage.title,
+          copy.editor.unfinishedGame,
+        ),
         title: gamePackage.title,
         content,
         ready: validateGamePackage(gamePackage).length === 0,

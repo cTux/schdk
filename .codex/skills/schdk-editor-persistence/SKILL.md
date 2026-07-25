@@ -13,8 +13,8 @@ description: Change or debug Drive-backed SCHDK editor state and persistence in 
 4. Read `docs/rules/security.md` and `docs/rules/desktop-apps.md` only for bridge or close changes; read `docs/rules/ui-editor.md` only for visual changes.
 5. Validate restored packages through `@schdk/common` and preserve pending data across every changed path.
 6. Trace the stable Drive file ID, reconnect retry, deep link/session
-   reference, local import upload, and explicit download. Do not add local
-   package persistence or recovery fallbacks.
+   reference, title-synchronized filename, local import upload, and explicit
+   download. Do not add local package persistence or recovery fallbacks.
 
 ## Checks
 

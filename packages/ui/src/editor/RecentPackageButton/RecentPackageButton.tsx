@@ -31,7 +31,7 @@ export function RecentPackageButton({
   const hasTitle = recent.title !== undefined;
   const title = hasTitle
     ? recent.title?.trim() || copy.shared.untitled
-    : recent.name;
+    : recent.name.replace(/\.schdk$/i, '');
 
   return (
     <div className="recent-package-item" aria-busy={opening}>
@@ -42,7 +42,7 @@ export function RecentPackageButton({
         })}
         disabled={disabled}
         onClick={onOpen}
-        title={hasTitle ? `${title} — ${recent.name}` : recent.name}
+        title={title}
       >
         <span className="recent-package-label">
           <span className="recent-package-title">
@@ -51,7 +51,6 @@ export function RecentPackageButton({
               <span className="recent-package-ready">{copy.shared.ready}</span>
             )}
           </span>
-          {hasTitle && <small>{recent.name}</small>}
         </span>
         <span className="recent-package-arrow" aria-hidden="true">
           <FontAwesomeIcon
