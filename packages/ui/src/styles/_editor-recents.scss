@@ -130,6 +130,7 @@
   .recent-package-list button {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     gap: 10px;
     border: 0;
     border-radius: 0;
