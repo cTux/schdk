@@ -12,9 +12,11 @@ import {
   type GameLayoutPosition,
   type GameOptions,
 } from '@schdk/ui/options';
+import { strFromU8, strToU8, unzipSync, zipSync } from 'fflate';
 
 const OPTIONS_KEY = 'schdk:editor-text-options';
 const GAME_OPTIONS_KEY = 'schdk:game-options';
+const VISUAL_TEMPLATE_ENTRY = 'template.json';
 
 type OptionsStorage = Pick<Storage, 'getItem' | 'setItem'>;
 type VisualEditorTemplate = Omit<GameOptions, 'soundVolume'>;
@@ -94,11 +96,17 @@ function normalizeGameOptions(value: unknown): GameOptions | null {
 }
 
 export function parseVisualEditorTemplate(
-  content: string,
+  content: string | Uint8Array,
   soundVolume: number,
 ): GameOptions | null {
   try {
-    const value = JSON.parse(content) as Record<string, unknown> | null;
+    const templateJson =
+      typeof content === 'string'
+        ? content
+        : content[0] === 0x50 && content[1] === 0x4b
+          ? strFromU8(unzipSync(content)[VISUAL_TEMPLATE_ENTRY])
+          : strFromU8(content);
+    const value = JSON.parse(templateJson) as Record<string, unknown> | null;
     if (!value || value.version !== 1) return null;
     return normalizeGameOptions({ ...value, soundVolume });
   } catch {
@@ -106,7 +114,9 @@ export function parseVisualEditorTemplate(
   }
 }
 
-export function serializeVisualEditorTemplate(options: GameOptions): string {
+export function serializeVisualEditorTemplate(
+  options: GameOptions,
+): Uint8Array {
   const template: VisualEditorTemplate & { version: 1 } = {
     version: 1,
     layout: options.layout,
@@ -114,7 +124,12 @@ export function serializeVisualEditorTemplate(options: GameOptions): string {
     backgroundImage: options.backgroundImage,
     backgroundOpacity: options.backgroundOpacity,
   };
-  return JSON.stringify(template, null, 2);
+  return zipSync(
+    {
+      [VISUAL_TEMPLATE_ENTRY]: strToU8(JSON.stringify(template, null, 2)),
+    },
+    { level: 9 },
+  );
 }
 
 function normalizeCustomElements(value: unknown): CustomGameElement[] | null {

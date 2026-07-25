@@ -150,7 +150,7 @@ export function App() {
   async function importVisualEditorTemplate(file: File) {
     try {
       const imported = parseVisualEditorTemplate(
-        await file.text(),
+        new Uint8Array(await file.arrayBuffer()),
         gameOptions.soundVolume,
       );
       if (imported) {
@@ -166,8 +166,8 @@ export function App() {
   function exportVisualEditorTemplate() {
     try {
       const url = URL.createObjectURL(
-        new Blob([serializeVisualEditorTemplate(gameOptions)], {
-          type: 'application/json',
+        new Blob([new Uint8Array(serializeVisualEditorTemplate(gameOptions))], {
+          type: 'application/zip',
         }),
       );
       const link = document.createElement('a');
