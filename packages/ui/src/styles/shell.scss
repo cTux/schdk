@@ -168,15 +168,40 @@ button {
   font-size: $font-size-md;
 }
 
-.sidebar-options {
+.sidebar-language {
+  display: grid;
+  gap: $space-1;
   margin-top: auto;
+  padding: 0 10px $space-3;
+  color: $muted;
+  font-size: $font-size-xs;
+}
+
+.sidebar-language select {
+  width: 100%;
+  min-width: 0;
+  min-height: $control-compact;
+  border: 1px solid $border;
+  border-radius: $radius-control;
+  outline: none;
+  background: $surface-raised;
+  padding: 0 $space-2;
+  color: $text;
+  font: inherit;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.sidebar-language select:focus-visible {
+  outline: 2px solid rgba($accent, 0.8);
+  outline-offset: 2px;
 }
 
 .workspace {
   height: 100vh;
   flex: 1 1 auto;
   min-width: 0;
-  overflow-y: auto;
+  overflow: hidden auto;
   background:
     radial-gradient(circle at 80% 0%, rgba($accent, 0.08), transparent 28rem),
     radial-gradient(
@@ -901,6 +926,23 @@ button:focus-visible {
 
   .sidebar nav button.active {
     font-size: 0;
+  }
+
+  .sidebar-language {
+    padding-inline: 0;
+  }
+
+  .sidebar-language > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .sidebar-language select {
+    padding-inline: 2px;
+    font-size: 0.68rem;
   }
 
   .nav-icon {

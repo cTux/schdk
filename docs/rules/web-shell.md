@@ -18,3 +18,6 @@
   and browser back/forward restores the selected page.
 - Persist validated visual-editor custom elements and background settings with
   the other game options.
+- Default unified-shell copy to Ukrainian for Ukrainian browser locales and
+  English otherwise. Persist an explicit Ukrainian or English selection in
+  browser storage and apply it to shell navigation and home content.

@@ -3,13 +3,13 @@ import './styles.scss';
 import type { ReactNode } from 'react';
 import { ShellHome } from '../ShellHome';
 import { ShellNavigation } from '../ShellNavigation';
-import type { ShellViewName } from '../shellItems';
+import type { ShellLocale, ShellViewName } from '../shellItems';
 import { OptionsPage } from '../../options/OptionsPage';
 import type { EditorTextOptions, GameOptions } from '../../options/types';
 import { VisualEditor } from '../../visual-editor/VisualEditor';
 import { TooltipProvider } from '../../atoms/Tooltip';
 
-export type { ShellViewName } from '../shellItems';
+export type { ShellLocale, ShellViewName } from '../shellItems';
 
 export interface ShellViewProps {
   editorApp: ReactNode;
@@ -18,11 +18,13 @@ export interface ShellViewProps {
   editorOptions: EditorTextOptions;
   gameOptions: GameOptions;
   gameOptionsError: string;
+  locale: ShellLocale;
   view: ShellViewName;
   onEditorOptionsChange(options: EditorTextOptions): void;
   onGameOptionsChange(options: GameOptions): void;
   onImportVisualEditorTemplate(file: File): void;
   onExportVisualEditorTemplate(): void;
+  onLocaleChange(locale: ShellLocale): void;
   onShowView(view: ShellViewName): void;
 }
 
@@ -33,19 +35,30 @@ export function ShellView({
   editorOptions,
   gameOptions,
   gameOptionsError,
+  locale,
   view,
   onEditorOptionsChange,
   onGameOptionsChange,
   onImportVisualEditorTemplate,
   onExportVisualEditorTemplate,
+  onLocaleChange,
   onShowView,
 }: ShellViewProps) {
   return (
     <TooltipProvider>
       <main className="app-shell">
-        <ShellNavigation view={view} onSelect={onShowView} />
+        <ShellNavigation
+          locale={locale}
+          view={view}
+          onLocaleChange={onLocaleChange}
+          onSelect={onShowView}
+        />
         <section className="workspace">
-          <ShellHome hidden={view !== 'home'} onOpen={onShowView} />
+          <ShellHome
+            hidden={view !== 'home'}
+            locale={locale}
+            onOpen={onShowView}
+          />
           <OptionsPage
             hidden={view !== 'options'}
             editor={editorOptions}

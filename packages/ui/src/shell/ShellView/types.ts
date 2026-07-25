@@ -1,2 +1,2 @@
 export type { ShellViewProps } from './ShellView';
-export type { ShellViewName } from '../shellItems';
+export type { ShellLocale, ShellViewName } from '../shellItems';

@@ -2,7 +2,7 @@
 
 ## Potential features
 
-- Localization
+- Localization beyond the unified shell
   - Ukrainian
   - English
 - Themes

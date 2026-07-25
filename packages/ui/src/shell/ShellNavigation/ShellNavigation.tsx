@@ -4,36 +4,49 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { AppIcon } from '../../atoms/AppIcon';
 import { Button } from '../../atoms/Button';
-import { HOME_ITEM, SCHDK_ITEMS, type ShellViewName } from '../shellItems';
+import {
+  getShellContent,
+  type ShellLocale,
+  type ShellViewName,
+} from '../shellItems';
 
 export interface ShellNavigationProps {
+  locale: ShellLocale;
   view: ShellViewName;
+  onLocaleChange(locale: ShellLocale): void;
   onSelect(view: ShellViewName): void;
 }
 
-export function ShellNavigation({ view, onSelect }: ShellNavigationProps) {
+export function ShellNavigation({
+  locale,
+  view,
+  onLocaleChange,
+  onSelect,
+}: ShellNavigationProps) {
+  const content = getShellContent(locale);
+
   return (
     <aside className="sidebar">
       <div className="brand">
         <AppIcon />
         <div>
-          <strong>Що? Де? Коли?</strong>
-          <span>Інструменти</span>
+          <strong>{content.brand}</strong>
+          <span>{content.toolsLabel}</span>
         </div>
       </div>
 
-      <nav aria-label="Інструменти">
+      <nav aria-label={content.toolsLabel}>
         <Button
           variant="ghost"
-          className={HOME_ITEM.id === view ? 'active' : ''}
+          className={content.homeItem.id === view ? 'active' : ''}
           type="button"
-          onClick={() => onSelect(HOME_ITEM.id)}
-          aria-current={HOME_ITEM.id === view ? 'page' : undefined}
+          onClick={() => onSelect(content.homeItem.id)}
+          aria-current={content.homeItem.id === view ? 'page' : undefined}
         >
           <span className="nav-icon" aria-hidden="true">
-            <FontAwesomeIcon icon={HOME_ITEM.icon} />
+            <FontAwesomeIcon icon={content.homeItem.icon} />
           </span>
-          {HOME_ITEM.label}
+          {content.homeItem.label}
         </Button>
 
         <div
@@ -42,9 +55,9 @@ export function ShellNavigation({ view, onSelect }: ShellNavigationProps) {
           aria-labelledby="sidebar-schdk-group"
         >
           <span id="sidebar-schdk-group" className="sidebar-group-label">
-            ЩДК
+            {content.groupLabel}
           </span>
-          {SCHDK_ITEMS.map((item) => (
+          {content.items.map((item) => (
             <Button
               variant="ghost"
               className={item.id === view ? 'active' : ''}
@@ -62,7 +75,21 @@ export function ShellNavigation({ view, onSelect }: ShellNavigationProps) {
         </div>
       </nav>
 
-      <nav className="sidebar-options" aria-label="Налаштування">
+      <label className="sidebar-language">
+        <span>{content.languageLabel}</span>
+        <select
+          value={locale}
+          aria-label={content.languageLabel}
+          onChange={(event) =>
+            onLocaleChange(event.target.value as ShellLocale)
+          }
+        >
+          <option value="uk">Українська</option>
+          <option value="en">English</option>
+        </select>
+      </label>
+
+      <nav className="sidebar-options" aria-label={content.settingsLabel}>
         <Button
           variant="ghost"
           className={view === 'options' ? 'active' : ''}
@@ -73,7 +100,7 @@ export function ShellNavigation({ view, onSelect }: ShellNavigationProps) {
           <span className="nav-icon" aria-hidden="true">
             <FontAwesomeIcon icon={faGear} />
           </span>
-          Налаштування
+          {content.settingsLabel}
         </Button>
       </nav>
     </aside>

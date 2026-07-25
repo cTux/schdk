@@ -1,6 +1,10 @@
 import { getDeepLinkedPackageName } from '@schdk/editor-web-app/deep-link';
 import type { EditorTextOptions, GameOptions } from '@schdk/ui/options';
-import { ShellView, type ShellViewName } from '@schdk/ui/shell';
+import {
+  ShellView,
+  type ShellLocale,
+  type ShellViewName,
+} from '@schdk/ui/shell';
 import { lazy, Suspense, useEffect, useState } from 'react';
 import {
   getDeepLinkedShellView,
@@ -16,6 +20,14 @@ import {
   saveGameOptions,
   serializeVisualEditorTemplate,
 } from './options-storage';
+
+const SHELL_LOCALE_STORAGE_KEY = 'schdk.shell.locale';
+
+function getInitialLocale(): ShellLocale {
+  const stored = localStorage.getItem(SHELL_LOCALE_STORAGE_KEY);
+  if (stored === 'uk' || stored === 'en') return stored;
+  return navigator.language.toLowerCase().startsWith('uk') ? 'uk' : 'en';
+}
 
 const HostApp = lazy(() =>
   import('@schdk/host-web-app/app').then(({ App }) => ({ default: App })),
@@ -35,6 +47,7 @@ function getLinkedView(): ShellViewName | null {
 
 export function App() {
   const sessionScope = window.location.pathname;
+  const [locale, setLocale] = useState(getInitialLocale);
   const [view, setView] = useState<ShellViewName>(() => {
     return (
       getLinkedView() ??
@@ -53,6 +66,11 @@ export function App() {
     loadGameOptions(localStorage),
   );
   const [gameOptionsError, setGameOptionsError] = useState('');
+
+  useEffect(() => {
+    localStorage.setItem(SHELL_LOCALE_STORAGE_KEY, locale);
+    document.documentElement.lang = locale;
+  }, [locale]);
 
   useEffect(() => {
     saveDesktopShellView(localStorage, sessionScope, view);
@@ -151,11 +169,13 @@ export function App() {
       editorOptions={editorOptions}
       gameOptions={gameOptions}
       gameOptionsError={gameOptionsError}
+      locale={locale}
       view={view}
       onEditorOptionsChange={setEditorOptions}
       onGameOptionsChange={setGameOptions}
       onImportVisualEditorTemplate={importVisualEditorTemplate}
       onExportVisualEditorTemplate={exportVisualEditorTemplate}
+      onLocaleChange={setLocale}
       onShowView={(nextView) => showView(nextView)}
     />
   );
