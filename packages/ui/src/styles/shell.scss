@@ -1,4 +1,5 @@
 @use 'tokens' as *;
+@use 'primitives';
 
 :root {
   color: $text;
@@ -35,6 +36,9 @@ button {
   display: flex;
   height: 100vh;
   overflow: hidden;
+  background:
+    radial-gradient(circle at 68% -20%, rgba($accent, 0.08), transparent 34rem),
+    $background;
 }
 
 .sidebar {
@@ -44,7 +48,7 @@ button {
   flex: 0 0 220px;
   flex-direction: column;
   border-right: 1px solid $border;
-  background: $sidebar;
+  background: rgba($sidebar, 0.98);
   padding: 18px 14px;
 }
 
@@ -102,7 +106,8 @@ button {
   align-items: center;
   gap: 10px;
   border: 0;
-  border-radius: 9px;
+  min-height: $control-normal;
+  border-radius: $radius-control;
   background: transparent;
   padding: 10px;
   color: #b7bdc7;
@@ -161,17 +166,122 @@ button {
   width: 100%;
   height: 100%;
   min-height: 0;
+  background: $canvas;
+  color: $canvas-text;
+}
+
+.visual-editor-add-panel {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  width: 176px;
+  min-width: 176px;
   flex-direction: column;
+  gap: $space-3;
+  border-right: 1px solid $canvas-border;
+  background: rgba($canvas-raised, 0.96);
+  padding: $space-4;
+  box-shadow: 8px 0 24px rgba(#26303d, 0.06);
+  transition:
+    width $motion-standard ease,
+    min-width $motion-standard ease;
+}
+
+.visual-editor-add-heading {
+  display: flex;
+  min-height: $control-compact;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-2;
+  margin-bottom: $space-2;
+}
+
+.visual-editor-add-heading strong,
+.visual-editor-add-heading span {
+  display: block;
+  white-space: nowrap;
+}
+
+.visual-editor-add-heading strong {
+  font-size: 0.95rem;
+}
+
+.visual-editor-add-heading span {
+  margin-top: 2px;
+  color: $canvas-muted;
+  font-size: 0.68rem;
+}
+
+.visual-editor-add-heading .icon-button {
+  flex: 0 0 auto;
+  color: $canvas-muted;
+}
+
+.visual-editor-add-heading .icon-button:hover {
+  background: rgba($saving, 0.1);
+  color: #285fb8;
+}
+
+.visual-editor-add-button {
+  display: flex;
+  width: 100%;
+  min-height: 58px;
+  align-items: center;
+  gap: $space-3;
+  border: 1px solid $canvas-border;
+  border-radius: $radius-control;
   background: #fff;
-  color: #111827;
+  padding: $space-3;
+  color: $canvas-text;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 650;
+  text-align: left;
+  transition:
+    border-color $motion-fast ease,
+    box-shadow $motion-fast ease,
+    transform $motion-fast ease;
+}
+
+.visual-editor-add-button svg {
+  width: 18px;
+  color: #285fb8;
+}
+
+.visual-editor-add-button:hover {
+  border-color: rgba($saving, 0.72);
+  box-shadow: 0 8px 18px rgba(#26303d, 0.08);
+  transform: translateY(-1px);
+}
+
+.visual-editor.is-panel-collapsed .visual-editor-add-panel {
+  width: 56px;
+  min-width: 56px;
+  padding-inline: 10px;
+}
+
+.visual-editor.is-panel-collapsed .visual-editor-add-heading > div,
+.visual-editor.is-panel-collapsed .visual-editor-add-button span {
+  display: none;
+}
+
+.visual-editor.is-panel-collapsed .visual-editor-add-button {
+  min-height: $control-compact;
+  justify-content: center;
+  padding: 0;
 }
 
 .visual-editor-workspace {
   position: relative;
   overflow: hidden;
+  min-width: 0;
   min-height: 0;
   flex: 1 1 auto;
-  background: #fff;
+  background:
+    radial-gradient(circle at 62% 38%, rgba($accent, 0.14), transparent 30rem),
+    radial-gradient(circle at 28% 78%, rgba($saving, 0.11), transparent 34rem),
+    $canvas;
   touch-action: none;
 }
 
@@ -181,87 +291,49 @@ button {
 
 .visual-editor-toolbar {
   position: absolute;
-  z-index: 10;
+  z-index: 120;
   top: 12px;
   left: 50%;
-  display: flex;
   max-width: calc(100% - 24px);
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 14px;
-  border: 1px solid #c9ced8;
-  border-radius: 10px;
-  background: rgba(#fff, 0.96);
-  padding: 8px 10px;
-  color: #111827;
-  box-shadow: 0 10px 30px rgba(#111827, 0.16);
   transform: translateX(-50%);
 }
 
-.visual-editor-toolbar strong {
-  white-space: nowrap;
+.visual-editor-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
 }
 
-.visual-editor-toolbar label,
-.visual-editor-font-size {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  color: #4b5565;
+.visual-editor-message {
+  position: absolute;
+  z-index: 120;
+  right: $space-4;
+  bottom: $space-4;
+  max-width: min(420px, calc(100% - 32px));
+  margin: 0;
+  border: 1px solid rgba($danger, 0.36);
+  border-radius: $radius-control;
+  background: rgba(#fff, 0.96);
+  padding: 10px 12px;
+  color: #a52f35;
+  box-shadow: $shadow-raised;
   font-size: 0.78rem;
-  white-space: nowrap;
-}
-
-.visual-editor-toolbar select {
-  border: 1px solid #c9ced8;
-  border-radius: 6px;
-  background: #fff;
-  padding: 6px 8px;
-  color: #111827;
-}
-
-.visual-editor-toolbar input[type='color'] {
-  width: 32px;
-  height: 28px;
-  border: 0;
-  background: transparent;
-  padding: 0;
-}
-
-.visual-editor-toolbar button {
-  min-width: 28px;
-  min-height: 28px;
-  padding: 2px 8px;
-  color: #111827;
-}
-
-.visual-editor-font-size output {
-  min-width: 38px;
-  color: #111827;
-  text-align: center;
-}
-
-.visual-editor-background-image input {
-  max-width: 190px;
-}
-
-.visual-editor-background-opacity input {
-  width: 120px;
 }
 
 .visual-editor-canvas {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(1280px, calc(100% - 64px));
+  width: min(1280px, calc(100% - 72px));
   aspect-ratio: 16 / 9;
   overflow: hidden;
   border: 1px solid $border-strong;
-  border-radius: 16px;
+  border-radius: $radius-surface;
   background:
     radial-gradient(circle at 50% 35%, #202733 0, transparent 32rem), #0d1015;
-  box-shadow: 0 20px 60px rgba(#000, 0.28);
+  box-shadow: 0 22px 60px rgba(#111827, 0.26);
   transform-origin: center;
 }
 
@@ -462,9 +534,10 @@ button {
   align-items: center;
   gap: 24px;
   border: 1px solid $border;
-  border-radius: 12px;
-  background: $sidebar;
+  border-radius: $radius-panel;
+  background: $surface;
   padding: 15px 16px;
+  box-shadow: 0 8px 22px rgba(#000, 0.08);
   cursor: pointer;
 }
 
@@ -547,8 +620,9 @@ h1 {
   align-items: center;
   gap: 14px;
   border: 1px solid $border;
-  border-radius: 13px;
-  background: $sidebar;
+  min-height: $control-normal;
+  border-radius: $radius-panel;
+  background: $surface;
   padding: 16px;
   color: $text;
   text-align: left;
@@ -557,6 +631,7 @@ h1 {
     border-color 120ms ease,
     background-color 120ms ease,
     transform 120ms ease;
+  box-shadow: 0 8px 22px rgba(#000, 0.08);
 }
 
 .tool-list button > span:nth-child(2) {
@@ -664,8 +739,25 @@ button:focus-visible {
     width: 100%;
   }
 
+  .visual-editor-add-panel {
+    width: 56px;
+    min-width: 56px;
+    padding-inline: 10px;
+  }
+
+  .visual-editor-add-heading > div,
+  .visual-editor-add-button span {
+    display: none;
+  }
+
+  .visual-editor-add-button {
+    min-height: $control-compact;
+    justify-content: center;
+    padding: 0;
+  }
+
   .visual-editor-canvas {
-    width: calc(100% - 32px);
+    width: calc(100% - 24px);
   }
 
   .option-slider {
@@ -683,5 +775,13 @@ button:focus-visible {
 
   .arrow {
     display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .visual-editor-add-panel,
+  .visual-editor-add-button,
+  .tool-list button {
+    transition: none;
   }
 }

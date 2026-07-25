@@ -48,9 +48,29 @@ export interface GameLayoutPosition {
 
 export type GameLayout = Record<GameLayoutElementId, GameLayoutPosition>;
 
+interface CustomGameElementBase {
+  id: string;
+  position: GameLayoutPosition;
+}
+
+export interface CustomTextElement extends CustomGameElementBase {
+  kind: 'text';
+  text: string;
+}
+
+export interface CustomImageElement extends CustomGameElementBase {
+  kind: 'image';
+  image: string | null;
+}
+
+export type CustomGameElement = CustomTextElement | CustomImageElement;
+export const MAX_CUSTOM_GAME_ELEMENTS = 20;
+export const MAX_CUSTOM_IMAGE_DATA_LENGTH = 3 * 1024 * 1024;
+
 export interface GameOptions {
   soundVolume: number;
   layout: GameLayout | null;
+  customElements: CustomGameElement[];
   backgroundImage: string | null;
   backgroundOpacity: number;
 }
@@ -64,6 +84,7 @@ export const DEFAULT_EDITOR_TEXT_OPTIONS: EditorTextOptions = {
 export const DEFAULT_GAME_OPTIONS: GameOptions = {
   soundVolume: 0.4,
   layout: null,
+  customElements: [],
   backgroundImage: null,
   backgroundOpacity: 1,
 };
@@ -99,4 +120,16 @@ function layout(
     textGrowDirection: 'down',
     imagePosition: 'right bottom',
   };
+}
+
+export function getDefaultCustomElementPosition(
+  kind: CustomGameElement['kind'],
+  offset = 0,
+): GameLayoutPosition {
+  return layout(
+    Math.min(76, 50 + offset),
+    Math.min(76, 50 + offset),
+    24,
+    kind === 'text' ? 10 : 24,
+  );
 }

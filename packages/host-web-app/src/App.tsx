@@ -8,7 +8,7 @@ import {
   type HostPackageDetails,
   type RecentPackageItem,
 } from '@schdk/ui/host';
-import type { GameLayout } from '@schdk/ui/options';
+import type { CustomGameElement, GameLayout } from '@schdk/ui/options';
 import { useCallback, useEffect, useState } from 'react';
 import {
   listRecentWebPackages,
@@ -23,6 +23,7 @@ import { useGameWizard } from './use-game-wizard';
 interface AppProps {
   backgroundImage?: string | null;
   backgroundOpacity?: number;
+  customElements?: CustomGameElement[];
   layout?: GameLayout | null;
   soundVolume?: number;
 }
@@ -30,6 +31,7 @@ interface AppProps {
 export function App({
   backgroundImage = null,
   backgroundOpacity = 1,
+  customElements = [],
   layout = null,
   soundVolume = 0.4,
 }: AppProps) {
@@ -160,6 +162,7 @@ export function App({
     <HostView
       backgroundImage={backgroundImage}
       backgroundOpacity={backgroundOpacity}
+      customElements={customElements}
       finished={gameActive && wizard.finished}
       game={game}
       layout={layout}

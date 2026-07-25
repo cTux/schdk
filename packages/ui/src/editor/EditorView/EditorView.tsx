@@ -1,6 +1,7 @@
 import './styles.scss';
 
 import { StatusMessage } from '../../atoms/StatusMessage';
+import { TooltipProvider } from '../../atoms/Tooltip';
 import { EditorHeader } from '../EditorHeader';
 import { PackageStart } from '../PackageStart';
 import { QuestionEditor } from '../QuestionEditor';
@@ -34,7 +35,8 @@ export function EditorView({
   onTitleChange,
 }: EditorViewProps) {
   return (
-    <main className="editor-app">
+    <TooltipProvider>
+      <main className="editor-app">
       <EditorHeader
         hasPackage={hasPackage}
         packageTitle={gamePackage.title}
@@ -74,6 +76,7 @@ export function EditorView({
         />
       </div>
       {message && <StatusMessage>{message}</StatusMessage>}
-    </main>
+      </main>
+    </TooltipProvider>
   );
 }

@@ -1,6 +1,6 @@
 # Visual editor and app-wide UI redesign
 
-Status: proposed
+Status: implemented
 
 Date: 2026-07-25
 

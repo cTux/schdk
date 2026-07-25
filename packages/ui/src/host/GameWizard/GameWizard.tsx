@@ -2,12 +2,17 @@ import './styles.scss';
 
 import classNames from 'classnames';
 import type { CSSProperties, ReactNode } from 'react';
-import type { GameLayout, GameLayoutElementId } from '../../options/types';
+import type {
+  CustomGameElement,
+  GameLayout,
+  GameLayoutElementId,
+} from '../../options/types';
 import {
   GameAnswer,
   GameAnswerComment,
   GameAlternativeAnswer,
   GameControls,
+  GameCustomElement,
   GameHandout,
   GameLogo,
   GameProgress,
@@ -23,6 +28,7 @@ import type {
 import { FitTextObserver } from '../FitTextObserver';
 
 export interface GameWizardProps {
+  customElements?: CustomGameElement[];
   game: HostGameView;
   layout: GameLayout | null;
   onBack(): void;
@@ -78,7 +84,13 @@ function stageMotionClass(
     : 'is-settling';
 }
 
-export function GameWizard({ game, layout, onBack, onNext }: GameWizardProps) {
+export function GameWizard({
+  customElements = [],
+  game,
+  layout,
+  onBack,
+  onNext,
+}: GameWizardProps) {
   const visible = new Set(game.visibleStages);
   const isIntro = game.currentStage === 'intro';
   const isHandoutFocus = game.currentStage === 'handout';
@@ -93,6 +105,9 @@ export function GameWizard({ game, layout, onBack, onNext }: GameWizardProps) {
       className={classNames('game-wizard', customLayoutClass)}
       aria-label="Проведення гри"
     >
+      {customElements.map((element) => (
+        <GameCustomElement element={element} key={element.id} />
+      ))}
       <GameLayoutItem id="logo" layout={layout}>
         <GameLogo />
       </GameLayoutItem>

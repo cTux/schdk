@@ -13,3 +13,5 @@
 - Reflect an opened browser package in the `package` URL query parameter. A
   unified-shell deep link with this parameter opens the editor before loading
   the package.
+- Persist validated visual-editor custom elements and background settings with
+  the other game options.

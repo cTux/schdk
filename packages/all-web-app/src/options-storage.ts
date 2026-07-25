@@ -4,6 +4,9 @@ import {
   DEFAULT_GAME_OPTIONS,
   GAME_IMAGE_POSITIONS,
   GAME_LAYOUT_ELEMENT_IDS,
+  MAX_CUSTOM_GAME_ELEMENTS,
+  MAX_CUSTOM_IMAGE_DATA_LENGTH,
+  type CustomGameElement,
   type EditorTextOptions,
   type GameLayout,
   type GameLayoutPosition,
@@ -62,18 +65,66 @@ export function loadGameOptions(storage: OptionsStorage): GameOptions {
     }
     const backgroundImage = value.backgroundImage ?? null;
     const backgroundOpacity = value.backgroundOpacity ?? 1;
-    if (!isBackgroundImage(backgroundImage) || !isOpacity(backgroundOpacity)) {
+    const customElements = normalizeCustomElements(value.customElements);
+    if (
+      !customElements ||
+      !isBackgroundImage(backgroundImage) ||
+      !isOpacity(backgroundOpacity)
+    ) {
       return DEFAULT_GAME_OPTIONS;
     }
     return {
       soundVolume: value.soundVolume,
       layout,
+      customElements,
       backgroundImage,
       backgroundOpacity,
     };
   } catch {
     return DEFAULT_GAME_OPTIONS;
   }
+}
+
+function normalizeCustomElements(value: unknown): CustomGameElement[] | null {
+  if (value === undefined) return [];
+  if (!Array.isArray(value) || value.length > MAX_CUSTOM_GAME_ELEMENTS) {
+    return null;
+  }
+  const ids = new Set<string>();
+  let imageDataLength = 0;
+  const normalized: CustomGameElement[] = [];
+  for (const entry of value) {
+    if (!entry || typeof entry !== 'object') return null;
+    const candidate = entry as Record<string, unknown>;
+    const { id, kind, position } = candidate;
+    if (
+      typeof id !== 'string' ||
+      id.length === 0 ||
+      ids.has(id) ||
+      !isGameLayoutElement(position)
+    ) {
+      return null;
+    }
+    ids.add(id);
+    if (
+      kind === 'text' &&
+      typeof candidate.text === 'string' &&
+      candidate.text.length >= 1 &&
+      candidate.text.length <= 500
+    ) {
+      normalized.push({ id, kind, text: candidate.text, position });
+      continue;
+    }
+    if (kind === 'image' && isBackgroundImage(candidate.image ?? null)) {
+      const image = (candidate.image ?? null) as string | null;
+      imageDataLength += image?.length ?? 0;
+      if (imageDataLength > MAX_CUSTOM_IMAGE_DATA_LENGTH) return null;
+      normalized.push({ id, kind, image, position });
+      continue;
+    }
+    return null;
+  }
+  return normalized;
 }
 
 function normalizeGameLayout(value: unknown): GameLayout | null {
@@ -174,10 +225,14 @@ function isPercentage(value: unknown) {
   );
 }
 
-export function saveGameOptions(storage: OptionsStorage, options: GameOptions) {
+export function saveGameOptions(
+  storage: OptionsStorage,
+  options: GameOptions,
+): boolean {
   try {
     storage.setItem(GAME_OPTIONS_KEY, JSON.stringify(options));
+    return true;
   } catch {
-    // Preferences are optional and must not prevent the shell from loading.
+    return false;
   }
 }

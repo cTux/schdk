@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_GAME_LAYOUT } from '../../../options/types';
 import {
+  createCustomElement,
   getDraggedPosition,
   getNextZoom,
   getResizedPosition,
@@ -14,6 +15,21 @@ describe('visual editor drag position', () => {
     expect(
       getDraggedPosition({ x: 40, y: 30 }, { x: 45, y: 35 }, { x: 50, y: 45 }),
     ).toEqual({ x: 45, y: 40 });
+  });
+
+  it('offsets new custom elements without changing their defaults', () => {
+    expect(createCustomElement('text', 0, 'text')).toMatchObject({
+      id: 'text',
+      kind: 'text',
+      text: 'Текст',
+      position: { x: 50, y: 50, width: 24, height: 10 },
+    });
+    expect(createCustomElement('image', 2, 'image')).toMatchObject({
+      id: 'image',
+      kind: 'image',
+      image: null,
+      position: { x: 56, y: 56, width: 24, height: 24 },
+    });
   });
 
   it('clamps wheel zoom to the supported range', () => {

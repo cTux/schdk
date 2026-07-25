@@ -109,6 +109,59 @@
     flex-direction: column;
   }
 
+  .game-custom-element {
+    position: absolute;
+    z-index: 2;
+    top: var(--game-layout-y);
+    left: var(--game-layout-x);
+    display: flex;
+    width: var(--game-layout-width);
+    height: var(--game-layout-height);
+    overflow: hidden;
+    align-items: stretch;
+    transform: translate(-50%, -50%);
+    container-type: inline-size;
+  }
+
+  .game-custom-text p {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: var(--game-grow-align);
+    margin: 0;
+    color: var(--game-text-color);
+    font-size: calc(8cqw * var(--game-font-scale) * var(--game-fit-scale, 1));
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
+
+  .game-custom-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: var(--game-image-position);
+  }
+
+  .game-custom-image-placeholder {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed rgba($muted, 0.55);
+    border-radius: 8px;
+    color: $muted;
+    font-size: 10cqw;
+  }
+
+  .visual-layout-item > .game-custom-element {
+    position: static;
+    width: 100%;
+    height: 100%;
+    transform: none;
+  }
+
   .game-layout-item {
     display: contents;
   }

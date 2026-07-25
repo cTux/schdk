@@ -16,4 +16,6 @@
   image controls in a fixed toolbar.
 - Select the game canvas by default and restore it with Escape. Its toolbar
   owns the optional background image and opacity.
+- Keep the add-elements rail compact. Support editable text and optional image
+  elements, persist their bounds and presentation, and render them in gameplay.
 - Share measured text-height fitting between the visual editor and gameplay.
