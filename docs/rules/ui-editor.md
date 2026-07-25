@@ -21,7 +21,7 @@
   Standard questions have one text part; blitz questions have two or three
   separate text parts and still share one answer.
 - Keep the file-open drop zone compact and at most 250 px tall. Keep recents
-  below it.
+  below it and show non-interactive skeleton rows while Drive recents load.
 - In recents, show title before filename and fall back to filename for legacy
   entries. Show `Готовий` only when shared validation finds no missing fields
   or unresolved remarks. Give every recent row a separate icon-only download

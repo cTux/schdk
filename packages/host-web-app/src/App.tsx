@@ -44,6 +44,7 @@ export function App({
     openRecentPackage,
     packageDetails,
     recentPackages,
+    recentPackagesLoading,
     refreshRecentPackages,
     selectedPackage,
     selectedPackageId,
@@ -207,6 +208,7 @@ export function App({
       message={message}
       packageDetails={packageDetails}
       recentPackages={recentPackages}
+      recentPackagesLoading={recentPackagesLoading}
       onBack={clearPackage}
       onGameBack={wizard.goBack}
       onGameNext={wizard.goNext}

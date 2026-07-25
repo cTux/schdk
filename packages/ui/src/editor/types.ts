@@ -14,6 +14,7 @@ export interface EditorViewProps {
   hasPackage: boolean;
   message: string;
   recentPackages: RecentPackageItem[];
+  recentPackagesLoading?: boolean;
   saveStatus: EditorSaveStatus;
   selectedIndex: number;
   showValidation: boolean;

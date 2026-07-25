@@ -46,6 +46,9 @@ export function useHostPackages({
   const [packageDetails, setPackageDetails] =
     useState<HostPackageDetails | null>(null);
   const [recentPackages, setRecentPackages] = useState<RecentPackageItem[]>([]);
+  const [recentPackagesLoading, setRecentPackagesLoading] = useState(
+    drive !== undefined,
+  );
   const [selectedPackage, setSelectedPackage] = useState<GamePackage | null>(
     null,
   );
@@ -57,7 +60,11 @@ export function useHostPackages({
   );
 
   const refreshRecentPackages = useCallback(async () => {
-    if (!drive) return;
+    if (!drive) {
+      setRecentPackagesLoading(false);
+      return;
+    }
+    setRecentPackagesLoading(true);
     try {
       setRecentPackages(
         (await drive.listGamePackages()).map(({ id, name, ready }) => ({
@@ -69,6 +76,8 @@ export function useHostPackages({
     } catch {
       setRecentPackages([]);
       onDriveFailure?.();
+    } finally {
+      setRecentPackagesLoading(false);
     }
   }, [drive, onDriveFailure]);
 
@@ -185,6 +194,7 @@ export function useHostPackages({
     openRecentPackage,
     packageDetails,
     recentPackages,
+    recentPackagesLoading,
     refreshRecentPackages,
     selectedPackage,
     selectedPackageId,

@@ -15,9 +15,16 @@ export function useEditorRecents({
   onDriveFailure,
 }: EditorRecentsOptions) {
   const [recentPackages, setRecentPackages] = useState<RecentPackageItem[]>([]);
+  const [recentPackagesLoading, setRecentPackagesLoading] = useState(
+    drive !== undefined,
+  );
 
   const refreshRecentPackages = useCallback(async () => {
-    if (!drive) return;
+    if (!drive) {
+      setRecentPackagesLoading(false);
+      return;
+    }
+    setRecentPackagesLoading(true);
     try {
       setRecentPackages(
         (await drive.listGamePackages()).map(
@@ -32,8 +39,14 @@ export function useEditorRecents({
     } catch {
       setRecentPackages([]);
       onDriveFailure?.();
+    } finally {
+      setRecentPackagesLoading(false);
     }
   }, [drive, onDriveFailure]);
 
-  return { recentPackages, refreshRecentPackages };
+  return {
+    recentPackages,
+    recentPackagesLoading,
+    refreshRecentPackages,
+  };
 }

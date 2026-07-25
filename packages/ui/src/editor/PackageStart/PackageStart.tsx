@@ -5,6 +5,7 @@ import type { RecentPackageItem } from '../types';
 export interface PackageStartProps {
   hidden: boolean;
   recentPackages: RecentPackageItem[];
+  recentPackagesLoading?: boolean;
   onCreatePackage?(): void;
   onDownloadRecentPackage?(recent: RecentPackageItem): void;
   onOpenPackage(file: File): void;
@@ -14,6 +15,7 @@ export interface PackageStartProps {
 export function PackageStart({
   hidden,
   recentPackages,
+  recentPackagesLoading = false,
   onCreatePackage,
   onDownloadRecentPackage,
   onOpenPackage,
@@ -28,6 +30,7 @@ export function PackageStart({
       />
       <RecentPackages
         hidden={hidden}
+        loading={recentPackagesLoading}
         packages={recentPackages}
         onDownload={onDownloadRecentPackage}
         onOpen={onOpenRecentPackage}

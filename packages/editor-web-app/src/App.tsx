@@ -77,10 +77,8 @@ export function App({
     [],
   );
 
-  const { recentPackages, refreshRecentPackages } = useEditorRecents({
-    drive,
-    onDriveFailure,
-  });
+  const { recentPackages, recentPackagesLoading, refreshRecentPackages } =
+    useEditorRecents({ drive, onDriveFailure });
 
   useEditorOpening({
     copy,
@@ -155,6 +153,7 @@ export function App({
       hasPackage={hasPackage}
       message={message}
       recentPackages={recentPackages}
+      recentPackagesLoading={recentPackagesLoading}
       saveStatus={saveStatus}
       selectedIndex={selectedIndex}
       showValidation={showValidation}

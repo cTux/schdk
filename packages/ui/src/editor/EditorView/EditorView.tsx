@@ -15,6 +15,7 @@ export function EditorView({
   hasPackage,
   message,
   recentPackages,
+  recentPackagesLoading = false,
   saveStatus,
   selectedIndex,
   showValidation,
@@ -50,6 +51,7 @@ export function EditorView({
         <PackageStart
           hidden={hasPackage}
           recentPackages={recentPackages}
+          recentPackagesLoading={recentPackagesLoading}
           onCreatePackage={onCreatePackage}
           onDownloadRecentPackage={onDownloadRecentPackage}
           onOpenPackage={onOpenPackage}
