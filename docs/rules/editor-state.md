@@ -13,5 +13,5 @@
   success messages. Show actionable validation and file-operation errors.
 - A new package needs a destination before entering the editor. Canceling the
   save dialog leaves the start screen unchanged.
-- Generate filenames from a filesystem-safe title, local `HH.MM.SS` time, and
+- Keep each filename synchronized with its filesystem-safe package title and
   the `.schdk` extension.

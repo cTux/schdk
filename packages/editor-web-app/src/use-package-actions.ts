@@ -4,6 +4,7 @@ import {
   type GamePackage,
 } from '@schdk/common';
 import {
+  createGamePackageFilename,
   toDrivePackageReference,
   type DrivePackageStorage,
 } from '@schdk/google-drive';
@@ -11,7 +12,6 @@ import type { EditorSaveStatus } from '@schdk/ui/editor';
 import type { LocalizationCopy } from '@schdk/ui/localization';
 import type { Dispatch, SetStateAction } from 'react';
 import { replaceBrowserPackageDeepLink } from './browser-deep-link';
-import { createPackageFilename } from './package-filename';
 import { usePackageOpeningActions } from './use-package-opening-actions';
 
 interface PackageActionsOptions {
@@ -69,9 +69,8 @@ export function usePackageActions(options: PackageActionsOptions) {
 
   async function createPackage() {
     const emptyPackage = createLocalizedPackage();
-    const filename = createPackageFilename(
+    const filename = createGamePackageFilename(
       emptyPackage.title,
-      new Date(),
       copy.editor.unfinishedGame,
     );
     setMessage('');

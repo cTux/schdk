@@ -12,7 +12,8 @@
   folder and packages with private app properties, and expose package identity
   to browser deep links and sessions through validated `drive:<fileId>`
   references. Keep the package title in Drive file metadata so recents can show
-  it above the filename without downloading package contents.
+  it without downloading package contents, and keep the Drive filename
+  synchronized as the filesystem-safe title plus `.schdk`.
 - Gate the unified web and desktop application behind Google authorization.
   Do not mount application tools before the first successful connection; when
   authorization expires, keep mounted state inaccessible until reconnection.

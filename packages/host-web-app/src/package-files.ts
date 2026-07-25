@@ -1,8 +1,6 @@
-import { parseGamePackage } from '@schdk/common';
 import {
   toDrivePackageReference,
   type DriveGamePackageFile,
-  type DrivePackageStorage,
 } from '@schdk/google-drive';
 import type { RecentPackageItem } from '@schdk/ui/host';
 
@@ -17,17 +15,12 @@ export function downloadPackage(name: string, content: Uint8Array) {
   URL.revokeObjectURL(url);
 }
 
-export async function toRecentPackage(
-  drive: DrivePackageStorage,
-  { id, name, title, ready }: DriveGamePackageFile,
-): Promise<RecentPackageItem> {
-  if (title === undefined) {
-    try {
-      title = parseGamePackage((await drive.loadGamePackage(id)).content).title;
-    } catch {
-      // Legacy or unavailable packages still fall back to their filename.
-    }
-  }
+export function toRecentPackage({
+  id,
+  name,
+  title,
+  ready,
+}: DriveGamePackageFile): RecentPackageItem {
   return {
     id: toDrivePackageReference(id),
     name,

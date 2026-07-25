@@ -34,7 +34,7 @@ interface SettingsFile {
 
 export class GoogleDriveClient implements DrivePackageStorage {
   private packageFolderId?: string;
-
+  private gamePackagesRequest?: Promise<DriveGamePackageFile[]>;
   constructor(private readonly getAccessToken: () => Promise<string>) {}
 
   async getAccount(): Promise<DriveAccount> {
@@ -82,24 +82,17 @@ export class GoogleDriveClient implements DrivePackageStorage {
     });
   }
 
-  async createGamePackage(
-    value: DriveGamePackageWrite,
-  ): Promise<DriveGamePackageFile> {
+  createGamePackage(value: DriveGamePackageWrite) {
     return this.uploadGamePackage(value);
   }
 
-  async updateGamePackage(
-    fileId: string,
-    value: DriveGamePackageWrite,
-  ): Promise<DriveGamePackageFile> {
-    if (!isDriveFileId(fileId))
-      throw new TypeError('Invalid Google Drive file');
+  updateGamePackage(fileId: string, value: DriveGamePackageWrite) {
+    if (!isDriveFileId(fileId)) throw new TypeError('Invalid Drive file');
     return this.uploadGamePackage(value, fileId);
   }
 
   async deleteGamePackage(fileId: string): Promise<void> {
-    if (!isDriveFileId(fileId))
-      throw new TypeError('Invalid Google Drive file');
+    if (!isDriveFileId(fileId)) throw new TypeError('Invalid Drive file');
     const encodedId = encodeURIComponent(fileId);
     const metadata = await this.request(
       `${DRIVE_API}/files/${encodedId}?fields=id,name,description,modifiedTime,appProperties`,
@@ -115,6 +108,16 @@ export class GoogleDriveClient implements DrivePackageStorage {
   }
 
   async listGamePackages(): Promise<DriveGamePackageFile[]> {
+    if (this.gamePackagesRequest) return this.gamePackagesRequest;
+    this.gamePackagesRequest = this.fetchGamePackages();
+    try {
+      return await this.gamePackagesRequest;
+    } finally {
+      this.gamePackagesRequest = undefined;
+    }
+  }
+
+  private async fetchGamePackages(): Promise<DriveGamePackageFile[]> {
     const folderId = await this.ensurePackageFolder();
     const query = new URLSearchParams({
       spaces: 'drive',

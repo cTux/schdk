@@ -1,20 +1,16 @@
 import { describe, expect, it } from 'vitest';
-import { createPackageFilename } from './package-filename';
+import { createGamePackageFilename } from '@schdk/google-drive';
 
-describe('createPackageFilename', () => {
-  it('adds local time with seconds to prevent duplicate downloads', () => {
-    const date = new Date(2026, 6, 22, 9, 8, 7);
-
-    expect(createPackageFilename('Wix Astartes 22.07.2026', date)).toBe(
-      'Wix Astartes 22.07.2026 09.08.07.schdk',
-    );
+describe('createGamePackageFilename', () => {
+  it('uses the package title', () => {
+    expect(
+      createGamePackageFilename('Wix Astartes 22.07.2026', 'Незавершена гра'),
+    ).toBe('Wix Astartes 22.07.2026.schdk');
   });
 
   it('keeps the generated filename safe', () => {
-    const date = new Date(2026, 6, 22, 9, 8, 7);
-
-    expect(createPackageFilename('Game: final?', date)).toBe(
-      'Game- final- 09.08.07.schdk',
+    expect(createGamePackageFilename('Game: final?', 'Незавершена гра')).toBe(
+      'Game- final-.schdk',
     );
   });
 });

@@ -113,6 +113,7 @@ export function App({
     saveStatus,
     selectedIndex,
     onDriveFailure,
+    setFileName,
     setMessage,
     setSaveStatus,
   });

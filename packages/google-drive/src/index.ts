@@ -5,6 +5,7 @@ export {
 } from './client.js';
 export type { DriveAccount } from './client.js';
 export {
+  createGamePackageFilename,
   isDriveGamePackageName,
   parseDriveGamePackageWrite,
   parseDrivePackageReference,

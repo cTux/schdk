@@ -1,4 +1,3 @@
-import { parseGamePackage } from '@schdk/common';
 import {
   toDrivePackageReference,
   type DriveGamePackageFile,
@@ -12,17 +11,12 @@ interface EditorRecentsOptions {
   onDriveFailure?(): void;
 }
 
-async function toRecentPackage(
-  drive: DrivePackageStorage,
-  { id, name, title, ready }: DriveGamePackageFile,
-): Promise<RecentPackageItem> {
-  if (title === undefined) {
-    try {
-      title = parseGamePackage((await drive.loadGamePackage(id)).content).title;
-    } catch {
-      // Legacy or unavailable packages still fall back to their filename.
-    }
-  }
+function toRecentPackage({
+  id,
+  name,
+  title,
+  ready,
+}: DriveGamePackageFile): RecentPackageItem {
   return {
     id: toDrivePackageReference(id),
     name,
@@ -47,13 +41,7 @@ export function useEditorRecents({
     }
     setRecentPackagesLoading(true);
     try {
-      setRecentPackages(
-        await Promise.all(
-          (await drive.listGamePackages()).map((file) =>
-            toRecentPackage(drive, file),
-          ),
-        ),
-      );
+      setRecentPackages((await drive.listGamePackages()).map(toRecentPackage));
     } catch {
       setRecentPackages([]);
       onDriveFailure?.();

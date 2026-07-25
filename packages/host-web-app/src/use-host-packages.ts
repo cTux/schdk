@@ -4,6 +4,7 @@ import {
   type GamePackage,
 } from '@schdk/common';
 import {
+  createGamePackageFilename,
   parseDrivePackageReference,
   toDrivePackageReference,
   type DrivePackageStorage,
@@ -61,13 +62,7 @@ export function useHostPackages({
     }
     setRecentPackagesLoading(true);
     try {
-      setRecentPackages(
-        await Promise.all(
-          (await drive.listGamePackages()).map((file) =>
-            toRecentPackage(drive, file),
-          ),
-        ),
-      );
+      setRecentPackages((await drive.listGamePackages()).map(toRecentPackage));
     } catch {
       setRecentPackages([]);
       onDriveFailure?.();
@@ -122,7 +117,10 @@ export function useHostPackages({
     try {
       if (!drive) throw new Error('Google Drive is unavailable');
       const saved = await drive.createGamePackage({
-        name: file.name,
+        name: createGamePackageFilename(
+          gamePackage.title,
+          copy.shared.untitled,
+        ),
         title: gamePackage.title,
         content,
         ready: true,

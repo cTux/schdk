@@ -48,6 +48,12 @@ export function isDriveGamePackageName(value: unknown): value is string {
   );
 }
 
+export function createGamePackageFilename(title: string, fallback: string) {
+  const safeTitle =
+    title.replace(/[\p{Cc}<>:"/\\|?*]/gu, '-').trim() || fallback;
+  return `${safeTitle}.schdk`;
+}
+
 export function parseDriveGamePackageWrite(
   value: unknown,
 ): DriveGamePackageWrite | null {
