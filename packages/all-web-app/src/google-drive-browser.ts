@@ -15,7 +15,7 @@ interface TokenResponse {
 }
 
 interface TokenClient {
-  requestAccessToken(config?: { prompt?: 'none' }): void;
+  requestAccessToken(): void;
 }
 
 interface GoogleOauth {
@@ -29,24 +29,6 @@ interface GoogleOauth {
 }
 
 let googleScript: Promise<GoogleOauth> | undefined;
-const CONNECTED_KEY = 'schdk:google-drive-connected';
-
-function connectionWasRemembered() {
-  try {
-    return localStorage.getItem(CONNECTED_KEY) === 'true';
-  } catch {
-    return false;
-  }
-}
-
-function rememberConnection(connected: boolean) {
-  try {
-    if (connected) localStorage.setItem(CONNECTED_KEY, 'true');
-    else localStorage.removeItem(CONNECTED_KEY);
-  } catch {
-    // Connection still works when browser storage is unavailable.
-  }
-}
 
 function loadGoogleOauth(): Promise<GoogleOauth> {
   googleScript ??= new Promise((resolve, reject) => {
@@ -84,12 +66,6 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
   private expiresAt = 0;
   private tokenRequest?: Promise<void>;
   private readonly client = new GoogleDriveClient(async () => {
-    if (
-      (!this.accessToken || Date.now() >= this.expiresAt) &&
-      connectionWasRemembered()
-    ) {
-      await this.requestToken('none');
-    }
     if (!this.accessToken || Date.now() >= this.expiresAt) {
       throw new GoogleDriveAuthorizationError('Google Drive access expired');
     }
@@ -98,14 +74,14 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
 
   constructor(private readonly clientId: string) {}
 
-  private requestToken(prompt?: 'none') {
-    this.tokenRequest ??= this.fetchToken(prompt).finally(() => {
+  private requestToken() {
+    this.tokenRequest ??= this.fetchToken().finally(() => {
       this.tokenRequest = undefined;
     });
     return this.tokenRequest;
   }
 
-  private async fetchToken(prompt?: 'none') {
+  private async fetchToken() {
     const oauth = await loadGoogleOauth();
     const response = await new Promise<TokenResponse>((resolve, reject) => {
       const client = oauth.initTokenClient({
@@ -115,7 +91,7 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
         error_callback: (error) =>
           reject(new Error(error.type ?? 'Google authorization failed')),
       });
-      client.requestAccessToken(prompt ? { prompt } : undefined);
+      client.requestAccessToken();
     });
     if (
       response.error ||
@@ -131,16 +107,6 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
   }
 
   async status() {
-    if (
-      (!this.accessToken || Date.now() >= this.expiresAt) &&
-      connectionWasRemembered()
-    ) {
-      try {
-        await this.requestToken('none');
-      } catch {
-        return { state: 'disconnected' } as const;
-      }
-    }
     if (!this.accessToken || Date.now() >= this.expiresAt) {
       return { state: 'disconnected' } as const;
     }
@@ -151,12 +117,10 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
   async connect() {
     await this.requestToken();
     this.account = await this.client.getAccount();
-    rememberConnection(true);
     return this.account;
   }
 
   async disconnect() {
-    rememberConnection(false);
     const token = this.accessToken;
     this.accessToken = '';
     this.expiresAt = 0;

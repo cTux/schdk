@@ -19,11 +19,10 @@
 - Never silently change a Drive-backed document to another destination after a
   failed write. Keep its recovery draft, retry after reconnection, and offer a
   local save flow when the user leaves or closes while unsynchronized.
-- Browser authorization uses Google Identity Services from an explicit first
-  connection. Keep its access token in memory, persist only a connection
-  preference, and use `prompt: 'none'` to restore or renew a previously
-  connected session without UI. Fall back to explicit reconnection when silent
-  authorization is unavailable.
+- Browser authorization uses Google Identity Services only from an explicit
+  Connect action. Keep its access token in memory and never call the popup-based
+  token flow during startup, refresh, autosave, or other background work. After
+  a refresh or token expiry, require explicit reconnection.
 - Desktop authorization uses the system browser, PKCE S256, a random-state
   loopback callback on `127.0.0.1`, and refresh tokens encrypted with Electron
   `safeStorage`. Never persist a refresh token through Linux `basic_text`.
