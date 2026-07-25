@@ -2,7 +2,12 @@ import { getDeepLinkedPackageName } from '@schdk/editor-web-app/deep-link';
 import type { EditorTextOptions, GameOptions } from '@schdk/ui/options';
 import { ShellView, type ShellViewName } from '@schdk/ui/shell';
 import { lazy, Suspense, useEffect, useState } from 'react';
-import { loadDesktopShellView, saveDesktopShellView } from './desktop-session';
+import {
+  getDeepLinkedShellView,
+  getShellDeepLink,
+  loadDesktopShellView,
+  saveDesktopShellView,
+} from './desktop-session';
 import {
   loadEditorTextOptions,
   loadGameOptions,
@@ -17,17 +22,26 @@ const EditorApp = lazy(() =>
   import('@schdk/editor-web-app/app').then(({ App }) => ({ default: App })),
 );
 
+function getLinkedView(): ShellViewName | null {
+  const url = new URL(window.location.href);
+  return (
+    getDeepLinkedShellView(url.href) ??
+    (url.searchParams.has('hostPackage') ? 'host' : null) ??
+    (getDeepLinkedPackageName(url.href) ? 'editor' : null)
+  );
+}
+
 export function App() {
-  const isDesktop = Boolean(window.desktop);
   const sessionScope = window.location.pathname;
   const [view, setView] = useState<ShellViewName>(() => {
-    if (isDesktop) {
-      return loadDesktopShellView(localStorage, sessionScope) ?? 'home';
-    }
-    return getDeepLinkedPackageName(window.location.href) ? 'editor' : 'home';
+    return (
+      getLinkedView() ??
+      loadDesktopShellView(localStorage, sessionScope) ??
+      'home'
+    );
   });
   const [loadedApps, setLoadedApps] = useState({
-    host: false,
+    host: view === 'host',
     editor: view === 'editor',
   });
   const [editorOptions, setEditorOptions] = useState<EditorTextOptions>(() =>
@@ -39,8 +53,20 @@ export function App() {
   const [gameOptionsError, setGameOptionsError] = useState('');
 
   useEffect(() => {
-    if (isDesktop) saveDesktopShellView(localStorage, sessionScope, view);
-  }, [isDesktop, sessionScope, view]);
+    saveDesktopShellView(localStorage, sessionScope, view);
+    const deepLink = getShellDeepLink(window.location.href, view);
+    if (deepLink !== window.location.href) {
+      window.history.replaceState(window.history.state, '', deepLink);
+    }
+  }, [sessionScope, view]);
+
+  useEffect(() => {
+    function restoreDeepLinkedView() {
+      showView(getLinkedView() ?? 'home', false);
+    }
+    window.addEventListener('popstate', restoreDeepLinkedView);
+    return () => window.removeEventListener('popstate', restoreDeepLinkedView);
+  }, []);
 
   useEffect(() => {
     saveEditorTextOptions(localStorage, editorOptions);
@@ -54,9 +80,16 @@ export function App() {
     );
   }, [gameOptions]);
 
-  function showView(nextView: ShellViewName) {
+  function showView(nextView: ShellViewName, pushHistory = true) {
     if (nextView === 'host' || nextView === 'editor') {
       setLoadedApps((current) => ({ ...current, [nextView]: true }));
+    }
+    if (pushHistory) {
+      window.history.pushState(
+        window.history.state,
+        '',
+        getShellDeepLink(window.location.href, nextView),
+      );
     }
     setView(nextView);
   }
@@ -86,7 +119,7 @@ export function App() {
       view={view}
       onEditorOptionsChange={setEditorOptions}
       onGameOptionsChange={setGameOptions}
-      onShowView={showView}
+      onShowView={(nextView) => showView(nextView)}
     />
   );
 }

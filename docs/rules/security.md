@@ -11,6 +11,8 @@
   trust renderer-supplied path-like properties on `File` objects.
 - Allow writes only to paths selected through save/open flows in the current
   process. Keep the editable-path allowlist and reject arbitrary renderer paths.
+- Open host packages through read-only bridge methods that do not add their
+  paths to the editable-path allowlist.
 - Allow recent-file opens only for paths already present in the persisted
   recent list.
 - Parse file content in `@schdk/common` before using it as a game package.
