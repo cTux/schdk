@@ -17,7 +17,7 @@ Run tests and build the unified desktop package:
 
 ```powershell
 pnpm --filter @schdk/all-desktop-app test
-pnpm --filter @schdk/all-desktop-app build
+pnpm turbo package --filter @schdk/all-desktop-app
 ```
 
 Close running packaged executables before rebuilding locked Windows output.
