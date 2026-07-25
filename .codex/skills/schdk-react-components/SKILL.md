@@ -20,6 +20,6 @@ description: Build, refactor, optimize, or review React components and hooks acr
 6. Include every reactive dependency. Prefer functional state updates or moving values inside an Effect only when that preserves behavior and safely removes a dependency.
 7. Do not memoize trivial calculations, primitive values, or local handlers with no identity-sensitive consumer; the cache and dependency checks can cost more than the work.
 8. Avoid custom `memo` comparators unless production profiling shows a win. Compare every prop, including functions, and preserve closure behavior.
-9. Run focused existing tests, typecheck, and a real-browser smoke test. For performance work, compare the affected interaction in a production build and confirm the optimization skips work without changing output, state, focus, timing, or accessibility.
+9. Run focused existing tests, typecheck, and the `$schdk-quality` browser smoke-test workflow. For performance work, compare the affected interaction in a production build and confirm the optimization skips work without changing output, state, focus, timing, or accessibility.
 
 Use the current official React guidance for [purity](https://react.dev/learn/keeping-components-pure), [Effects](https://react.dev/learn/you-might-not-need-an-effect), [`memo`](https://react.dev/reference/react/memo), [`useMemo`](https://react.dev/reference/react/useMemo), and [`useCallback`](https://react.dev/reference/react/useCallback).

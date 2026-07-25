@@ -21,4 +21,4 @@ pnpm --filter @schdk/all-web-app test
 pnpm --filter @schdk/all-web-app build
 ```
 
-Use `$playwright` for browser flows.
+Use the `$schdk-quality` browser smoke-test workflow for browser flows.

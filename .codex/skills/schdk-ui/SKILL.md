@@ -23,4 +23,4 @@ pnpm --filter @schdk/ui test
 pnpm --filter @schdk/all-web-app build
 ```
 
-Use `$playwright` for browser interaction and screenshots.
+Use the `$schdk-quality` browser smoke-test workflow for interaction and screenshots.
