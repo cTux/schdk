@@ -88,7 +88,7 @@ button:focus-visible {
 
   .options-page {
     width: min(100% - 28px, 560px);
-    padding-top: 36px;
+    padding-top: 24px;
   }
 
   .visual-editor {
@@ -103,16 +103,10 @@ button:focus-visible {
     flex-wrap: wrap;
   }
 
-  .option-select {
-    flex-wrap: wrap;
-  }
-
-  .option-select > span,
   .option-slider > span {
     flex-basis: 100%;
   }
 
-  .option-select select,
   .option-slider input {
     width: auto;
     flex: 1 1 auto;
@@ -127,6 +121,25 @@ button:focus-visible {
     right: -25px;
     width: 120px;
     opacity: 0.32;
+  }
+}
+
+@media (width <= 400px) {
+  .options-page h1 {
+    font-size: 1.625rem;
+  }
+
+  .option-select {
+    flex-wrap: wrap;
+  }
+
+  .option-select > span {
+    flex-basis: 100%;
+  }
+
+  .option-select select {
+    width: auto;
+    flex: 1 1 auto;
   }
 }
 
