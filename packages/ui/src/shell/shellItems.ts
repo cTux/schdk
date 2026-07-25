@@ -29,13 +29,13 @@ export function getShellContent(copy: LocalizationCopy) {
     ...shell.home,
   };
   const items: readonly ShellItem[] = [
-    { id: 'host', icon: faPlay, ...shell.host },
-    { id: 'editor', icon: faPen, ...shell.editor },
     {
       id: 'visualEditor',
       icon: faObjectGroup,
       ...shell.visualEditor,
     },
+    { id: 'editor', icon: faPen, ...shell.editor },
+    { id: 'host', icon: faPlay, ...shell.host },
   ];
 
   return { ...shell, homeItem, items };

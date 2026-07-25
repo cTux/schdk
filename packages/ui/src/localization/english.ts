@@ -41,7 +41,7 @@ export const english: typeof ukrainian = {
     loginAction: 'Continue with Google',
     homeTitle: 'Everything for the game in one place',
     homeDescription:
-      'Create a question package in the editor, then open it under “Host a game”.',
+      'Set up the layout in the visual editor, then create a question package, then start the game.',
     home: {
       label: 'Home',
       description: 'Tools for preparing and hosting a game.',
