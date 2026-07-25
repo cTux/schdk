@@ -11,8 +11,7 @@ Related research:
   the existing Electron/electron-builder stack.
 - Produce both the unpacked application and a compiled NSIS installer from the
   normal production build.
-- Preserve current Electron behavior, security boundaries, icon handling, and
-  root artifact collection.
+- Preserve current Electron behavior, security boundaries, and icon handling.
 
 ## Non-goals
 
@@ -90,11 +89,7 @@ packages/all-desktop-app/dist/release/
   ЩДК Setup <version>.exe.blockmap
 ```
 
-Root `pnpm build` continues to copy the entire package output to:
-
-```text
-dist/all-desktop-app/release/
-```
+Root `pnpm build` leaves this output in the package-local directory.
 
 The block map is expected electron-builder output. It may be retained for
 future updates even though publishing is out of scope.
@@ -143,7 +138,7 @@ pnpm build
 - Open, edit, save, reopen, and restore a `.schdk` file.
 - Install with `ЩДК Setup <version>.exe`, launch the installed application, and
   uninstall it.
-- Confirm both package-local artifacts are copied to the root `dist`.
+- Confirm both artifacts exist in the package-local `dist`.
 - Inspect `resources/app.asar` and confirm it no longer contains React,
   Font Awesome, or SCHDK renderer workspace packages.
 - Confirm only `uk.pak` and `en-US.pak` remain under `locales`.

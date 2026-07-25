@@ -171,15 +171,14 @@ pnpm dev:all-desktop
 pnpm build
 ```
 
-Turborepo збирає пакети в порядку залежностей і кешує локальні результати.
-Після цього `scripts/collect-dist.mjs` копіює каталог `dist` кожного пакета до
-кореневого каталогу `dist/<package>`.
+Turborepo збирає пакети в порядку залежностей, кешує локальні результати й
+залишає їх у каталозі `dist` відповідного пакета.
 
 Electron-пакет наразі використовує розпакований каталог electron-builder,
 а не створює інсталятор. Виконуваний файл Windows розташований тут:
 
 ```text
-dist/all-desktop-app/release/win-unpacked/ЩДК.exe
+packages/all-desktop-app/dist/release/win-unpacked/ЩДК.exe
 ```
 
 Для збирання окремого пакета скористайтеся фільтром робочого простору pnpm:
@@ -229,8 +228,7 @@ Turborepo.
 │   ├── host-web-app/        # React-оболонка ведучого
 │   ├── common/              # спільна модель пакета та ZIP-кодек
 │   └── ui/                  # компоненти, стилі, ресурси та правила UI
-├── scripts/
-│   └── collect-dist.mjs     # збирання результатів пакетів після pnpm build
+├── scripts/                 # перевірки workflow репозиторію
 ├── package.json             # кореневі команди та версії інструментів
 ├── pnpm-workspace.yaml      # робочий простір і каталог залежностей
 └── turbo.json               # завдання збирання, тестів і перевірок
