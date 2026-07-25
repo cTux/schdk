@@ -117,7 +117,7 @@ export class GoogleDriveClient implements DrivePackageStorage {
     const query = new URLSearchParams({
       spaces: 'drive',
       q: `'${folderId}' in parents and trashed = false and appProperties has { key='${DRIVE_APP_KIND_KEY}' and value='${DRIVE_PACKAGE_KIND}' }`,
-      fields: 'files(id,name,modifiedTime,appProperties)',
+      fields: 'files(id,name,description,modifiedTime,appProperties)',
       orderBy: 'modifiedTime desc',
       pageSize: '20',
     });
@@ -135,7 +135,7 @@ export class GoogleDriveClient implements DrivePackageStorage {
     const encodedId = encodeURIComponent(fileId);
     const [metadataResponse, contentResponse] = await Promise.all([
       this.request(
-        `${DRIVE_API}/files/${encodedId}?fields=id,name,modifiedTime,appProperties`,
+        `${DRIVE_API}/files/${encodedId}?fields=id,name,description,modifiedTime,appProperties`,
       ),
       this.request(`${DRIVE_API}/files/${encodedId}?alt=media`),
     ]);
@@ -156,6 +156,7 @@ export class GoogleDriveClient implements DrivePackageStorage {
     }
     const metadata = {
       name: value.name,
+      description: value.title,
       mimeType: DRIVE_PACKAGE_MIME_TYPE,
       appProperties: {
         [DRIVE_APP_KIND_KEY]: DRIVE_PACKAGE_KIND,
@@ -172,8 +173,8 @@ export class GoogleDriveClient implements DrivePackageStorage {
       `\r\n--${boundary}--`,
     ]);
     const target = fileId
-      ? `${DRIVE_UPLOAD_API}/files/${encodeURIComponent(fileId)}?uploadType=multipart&fields=id,name,modifiedTime,appProperties`
-      : `${DRIVE_UPLOAD_API}/files?uploadType=multipart&fields=id,name,modifiedTime,appProperties`;
+      ? `${DRIVE_UPLOAD_API}/files/${encodeURIComponent(fileId)}?uploadType=multipart&fields=id,name,description,modifiedTime,appProperties`
+      : `${DRIVE_UPLOAD_API}/files?uploadType=multipart&fields=id,name,description,modifiedTime,appProperties`;
     const response = await this.request(target, {
       method: fileId ? 'PATCH' : 'POST',
       headers: {

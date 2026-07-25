@@ -11,7 +11,8 @@
 - Store app-created `.schdk` files in a visible `SCHDK` Drive folder. Mark the
   folder and packages with private app properties, and expose package identity
   to browser deep links and sessions through validated `drive:<fileId>`
-  references.
+  references. Keep the package title in Drive file metadata so recents can show
+  it above the filename without downloading package contents.
 - Gate the unified web and desktop application behind Google authorization.
   Do not mount application tools before the first successful connection; when
   authorization expires, keep mounted state inaccessible until reconnection.

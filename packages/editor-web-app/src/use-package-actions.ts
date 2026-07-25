@@ -79,6 +79,7 @@ export function usePackageActions(options: PackageActionsOptions) {
       if (!drive) throw new Error('Google Drive is unavailable');
       const saved = await drive.createGamePackage({
         name: filename,
+        title: emptyPackage.title,
         content: serializeGamePackage(emptyPackage),
         ready: validateGamePackage(emptyPackage).length === 0,
       });

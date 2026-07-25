@@ -81,6 +81,7 @@ export function useEditorPersistence({
       .then(() =>
         drive.updateGamePackage(driveFileId, {
           name: fileName,
+          title: gamePackage.title,
           content,
           ready: validateGamePackage(gamePackage).length === 0,
         }),

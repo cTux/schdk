@@ -11,6 +11,7 @@ export interface DriveGamePackageFile {
   id: string;
   name: string;
   modifiedTime: string;
+  title?: string;
   ready?: boolean;
 }
 
@@ -20,6 +21,7 @@ export interface DriveGamePackage extends DriveGamePackageFile {
 
 export interface DriveGamePackageWrite {
   name: string;
+  title: string;
   content: Uint8Array;
   ready: boolean;
 }
@@ -51,10 +53,12 @@ export function parseDriveGamePackageWrite(
   if (!value || typeof value !== 'object') return null;
   const candidate = value as Record<string, unknown>;
   return isDriveGamePackageName(candidate.name) &&
+    typeof candidate.title === 'string' &&
     candidate.content instanceof Uint8Array &&
     typeof candidate.ready === 'boolean'
     ? {
         name: candidate.name,
+        title: candidate.title,
         content: candidate.content,
         ready: candidate.ready,
       }
@@ -83,6 +87,9 @@ export function parseDriveGamePackageFile(
     id: file.id,
     name: file.name,
     modifiedTime: file.modifiedTime,
+    ...(typeof file.description === 'string'
+      ? { title: file.description }
+      : {}),
     ...(properties.ready === 'true'
       ? { ready: true }
       : properties.ready === 'false'

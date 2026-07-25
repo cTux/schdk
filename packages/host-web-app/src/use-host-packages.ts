@@ -6,6 +6,7 @@ import {
 import {
   parseDrivePackageReference,
   toDrivePackageReference,
+  type DriveGamePackageFile,
   type DrivePackageStorage,
 } from '@schdk/google-drive';
 import type { HostPackageDetails, RecentPackageItem } from '@schdk/ui/host';
@@ -30,6 +31,25 @@ function downloadPackage(name: string, content: Uint8Array) {
   link.download = name;
   link.click();
   URL.revokeObjectURL(url);
+}
+
+async function toRecentPackage(
+  drive: DrivePackageStorage,
+  { id, name, title, ready }: DriveGamePackageFile,
+): Promise<RecentPackageItem> {
+  if (title === undefined) {
+    try {
+      title = parseGamePackage((await drive.loadGamePackage(id)).content).title;
+    } catch {
+      // Legacy or unavailable packages still fall back to their filename.
+    }
+  }
+  return {
+    id: toDrivePackageReference(id),
+    name,
+    ...(title === undefined ? {} : { title }),
+    ...(ready === undefined ? {} : { ready }),
+  };
 }
 
 export function useHostPackages({
@@ -72,11 +92,11 @@ export function useHostPackages({
     setRecentPackagesLoading(true);
     try {
       setRecentPackages(
-        (await drive.listGamePackages()).map(({ id, name, ready }) => ({
-          id: toDrivePackageReference(id),
-          name,
-          ...(ready === undefined ? {} : { ready }),
-        })),
+        await Promise.all(
+          (await drive.listGamePackages()).map((file) =>
+            toRecentPackage(drive, file),
+          ),
+        ),
       );
     } catch {
       setRecentPackages([]);
@@ -118,9 +138,10 @@ export function useHostPackages({
     if (openingRecentPackage.current) return;
     setMessage('');
     let content: Uint8Array;
+    let gamePackage: GamePackage;
     try {
       content = new Uint8Array(await file.arrayBuffer());
-      const gamePackage = parseGamePackage(content);
+      gamePackage = parseGamePackage(content);
       if (validateGamePackage(gamePackage).length > 0) {
         throw new Error('Package is unfinished');
       }
@@ -132,6 +153,7 @@ export function useHostPackages({
       if (!drive) throw new Error('Google Drive is unavailable');
       const saved = await drive.createGamePackage({
         name: file.name,
+        title: gamePackage.title,
         content,
         ready: true,
       });
