@@ -15,9 +15,10 @@
   fail.
 - Keep pure logic outside React/Electron objects when that makes it directly
   testable.
-- Run all tests in the dedicated `tests` GitHub Actions job for every pull
-  request. Treat that check as required project policy, configure branch
-  protection when repository settings support it, and do not merge until green.
+- Run all tests and the root build in dedicated `tests` and `build` GitHub
+  Actions jobs for every pull request. Treat both checks as required project
+  policy, configure branch protection when repository settings support it, and
+  do not merge until both are green.
 - Before committing, run `pnpm fmt:check`, `pnpm lint`, `pnpm typecheck`,
   `pnpm test`, and affected builds. Run root `pnpm build` when no packaged
   executable blocks artifact collection.
