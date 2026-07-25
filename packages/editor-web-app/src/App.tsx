@@ -23,7 +23,12 @@ import {
   shouldScheduleAutosave,
 } from './autosave';
 import { saveWithPicker } from './browser-save';
-import { getDeepLinkedPackageName, getPackageDeepLink } from './deep-link';
+import {
+  getDeepLinkedPackageName,
+  getDeepLinkedQuestionIndex,
+  getPackageDeepLink,
+  getQuestionDeepLink,
+} from './deep-link';
 import {
   loadDesktopRecentMetadata,
   loadDesktopEditorSession,
@@ -46,13 +51,16 @@ interface BrowserSaveResult {
   content: Uint8Array;
 }
 
-function replaceBrowserPackageDeepLink(packageName: string | null) {
+function replaceBrowserPackageDeepLink(
+  packageName: string | null,
+  selectedIndex?: number,
+) {
   if (window.desktop) return;
-  window.history.replaceState(
-    window.history.state,
-    '',
-    getPackageDeepLink(window.location.href, packageName),
-  );
+  let deepLink = getPackageDeepLink(window.location.href, packageName);
+  if (packageName && selectedIndex !== undefined) {
+    deepLink = getQuestionDeepLink(deepLink, selectedIndex);
+  }
+  window.history.replaceState(window.history.state, '', deepLink);
 }
 
 interface AppProps {
@@ -69,6 +77,9 @@ export function App({
   const saveQueue = useRef(Promise.resolve());
   const initialDeepLink = useRef(
     window.desktop ? null : getDeepLinkedPackageName(window.location.href),
+  );
+  const initialDeepLinkedQuestion = useRef(
+    window.desktop ? null : getDeepLinkedQuestionIndex(window.location.href),
   );
   const initialDesktopSession = useRef(
     window.desktop
@@ -189,6 +200,7 @@ export function App({
         const content = await loadRecentWebPackage(packageName);
         if (!content) throw new Error('Deep-linked package is unavailable');
         const openedPackage = applyOpenedPackage(content, null, packageName);
+        setSelectedIndex(initialDeepLinkedQuestion.current ?? 0);
         await rememberBrowserPackage(packageName, openedPackage.title, content);
       } catch {
         replaceBrowserPackageDeepLink(null);
@@ -198,6 +210,12 @@ export function App({
       }
     })();
   }, [applyOpenedPackage, rememberBrowserPackage]);
+
+  useEffect(() => {
+    if (!window.desktop && hasPackage && fileName) {
+      replaceBrowserPackageDeepLink(fileName, selectedIndex);
+    }
+  }, [fileName, hasPackage, selectedIndex]);
 
   useEffect(() => {
     const desktop = window.desktop;
@@ -441,7 +459,7 @@ export function App({
           openedPackage.title,
           opened.content,
         );
-        replaceBrowserPackageDeepLink(file.name);
+        replaceBrowserPackageDeepLink(file.name, 0);
       }
     } catch {
       setMessage('Не вдалося відкрити файл: неправильний формат.');
@@ -459,7 +477,7 @@ export function App({
         if (!content) throw new Error('Recent package is unavailable');
         const openedPackage = applyOpenedPackage(content, null, recent.name);
         await rememberBrowserPackage(recent.name, openedPackage.title, content);
-        replaceBrowserPackageDeepLink(recent.name);
+        replaceBrowserPackageDeepLink(recent.name, 0);
       }
       await refreshRecentPackages();
     } catch {
@@ -500,7 +518,7 @@ export function App({
         packageToSave.title,
         saved.content,
       );
-      replaceBrowserPackageDeepLink(saved.name);
+      replaceBrowserPackageDeepLink(saved.name, 0);
       return true;
     } catch {
       setMessage('Не вдалося зберегти файл.');

@@ -5,6 +5,7 @@ import { playMainSignal, playPreAlarm, stopGameAudio } from './game-audio';
 import {
   getNextPosition,
   getPreviousPosition,
+  getQuestionStages,
   getVisibleQuestionStages,
   type GamePosition,
 } from './game-flow';
@@ -23,6 +24,11 @@ const INITIAL_POSITION: GamePosition = {
 
 type Direction = 'forward' | 'backward';
 
+export interface GameWizardSnapshot {
+  finished: boolean;
+  position: GamePosition;
+}
+
 function idleTransition(): HostGameTransition {
   return {
     phase: 'idle',
@@ -34,6 +40,7 @@ function idleTransition(): HostGameTransition {
 export function useGameWizard(
   gamePackage: GamePackage | null,
   active: boolean,
+  restoredState: GameWizardSnapshot | null = null,
 ) {
   const [finished, setFinished] = useState(false);
   const [position, setPosition] = useState(INITIAL_POSITION);
@@ -61,11 +68,19 @@ export function useGameWizard(
   useEffect(() => {
     clearTransitionTimers();
     stopGameAudio();
-    setFinished(false);
-    setPosition(INITIAL_POSITION);
+    const restoredPosition =
+      restoredState &&
+      gamePackage?.questions[restoredState.position.questionIndex] &&
+      getQuestionStages(
+        gamePackage.questions[restoredState.position.questionIndex],
+      ).includes(restoredState.position.stage)
+        ? restoredState.position
+        : INITIAL_POSITION;
+    setFinished(restoredState?.finished ?? false);
+    setPosition(restoredPosition);
     setRemainingSeconds(QUESTION_TIME_SECONDS);
     transitionLocked.current = active;
-    if (!active) {
+    if (!active || restoredState?.finished) {
       setTransition(idleTransition());
       return;
     }
@@ -82,7 +97,7 @@ export function useGameWizard(
       reducedMotion.current ? 0 : ENTER_DURATION_MS,
     );
     return clearTransitionTimers;
-  }, [active, clearTransitionTimers, gamePackage, schedule]);
+  }, [active, clearTransitionTimers, gamePackage, restoredState, schedule]);
 
   const move = useCallback(
     (direction: Direction) => {

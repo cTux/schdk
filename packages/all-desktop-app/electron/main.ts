@@ -184,6 +184,17 @@ async function persistRecentGamePackages() {
   }
 }
 
+async function readGamePackage(filePath: string, editable: boolean) {
+  const content = await readFile(filePath);
+  if (editable) editableGamePackages.add(filePath);
+  await rememberGamePackage(filePath);
+  return {
+    filePath,
+    fileName: basename(filePath),
+    content: new Uint8Array(content),
+  };
+}
+
 async function handleCloseFailure(
   window: BrowserWindow,
   controller: CloseController,
@@ -286,10 +297,14 @@ ipcMain.handle('open-game-package', async (_event, filePath) => {
     throw new TypeError('Invalid file path');
   }
 
-  const content = await readFile(filePath);
-  editableGamePackages.add(filePath);
-  await rememberGamePackage(filePath);
-  return { filePath, content: new Uint8Array(content) };
+  return readGamePackage(filePath, true);
+});
+
+ipcMain.handle('open-host-game-package', async (_event, filePath) => {
+  if (typeof filePath !== 'string' || !/\.schdk$/iu.test(filePath)) {
+    throw new TypeError('Invalid file path');
+  }
+  return readGamePackage(filePath, false);
 });
 
 ipcMain.handle('list-recent-game-packages', () =>
@@ -305,14 +320,19 @@ ipcMain.handle('open-recent-game-package', async (_event, filePath) => {
   }
 
   try {
-    const content = await readFile(filePath);
-    editableGamePackages.add(filePath);
-    await rememberGamePackage(filePath);
-    return {
-      filePath,
-      fileName: basename(filePath),
-      content: new Uint8Array(content),
-    };
+    return await readGamePackage(filePath, true);
+  } catch (error) {
+    await forgetGamePackage(filePath);
+    throw error;
+  }
+});
+
+ipcMain.handle('open-recent-host-game-package', async (_event, filePath) => {
+  if (typeof filePath !== 'string' || !recentGamePackages.includes(filePath)) {
+    throw new TypeError('Invalid recent game package');
+  }
+  try {
+    return await readGamePackage(filePath, false);
   } catch (error) {
     await forgetGamePackage(filePath);
     throw error;

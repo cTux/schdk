@@ -9,7 +9,7 @@ import {
   type RecentPackageItem,
 } from '@schdk/ui/host';
 import type { CustomGameElement, GameLayout } from '@schdk/ui/options';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   listRecentWebPackages,
   loadRecentWebPackage,
@@ -18,7 +18,14 @@ import {
 import type {} from './electron';
 import { setGameAudioVolume, unlockGameAudio } from './game-audio';
 import { summarizeGamePackage } from './game-package-summary';
-import { useGameWizard } from './use-game-wizard';
+import {
+  getDeepLinkedHostSession,
+  getHostDeepLink,
+  loadHostSession,
+  saveHostSession,
+  type HostSession,
+} from './host-session';
+import { useGameWizard, type GameWizardSnapshot } from './use-game-wizard';
 
 interface AppProps {
   backgroundImage?: string | null;
@@ -35,6 +42,12 @@ export function App({
   layout = null,
   soundVolume = 0.4,
 }: AppProps) {
+  const sessionScope = window.location.pathname;
+  const initialSession = useRef(
+    (window.desktop ? null : getDeepLinkedHostSession(window.location.href)) ??
+      loadHostSession(localStorage, sessionScope),
+  );
+  const [sessionReady, setSessionReady] = useState(!initialSession.current);
   const [gameActive, setGameActive] = useState(false);
   const [message, setMessage] = useState('');
   const [packageDetails, setPackageDetails] =
@@ -43,7 +56,13 @@ export function App({
   const [selectedPackage, setSelectedPackage] = useState<GamePackage | null>(
     null,
   );
-  const wizard = useGameWizard(selectedPackage, gameActive);
+  const [selectedPackageId, setSelectedPackageId] = useState<string | null>(
+    null,
+  );
+  const [wizardRestore, setWizardRestore] = useState<GameWizardSnapshot | null>(
+    null,
+  );
+  const wizard = useGameWizard(selectedPackage, gameActive, wizardRestore);
 
   const refreshRecentPackages = useCallback(async () => {
     try {
@@ -59,13 +78,113 @@ export function App({
     }
   }, []);
 
+  const acceptPackage = useCallback(
+    async (
+      content: Uint8Array,
+      fileName: string,
+      packageId = fileName,
+      restoredSession: HostSession | null = null,
+    ): Promise<void> => {
+      const gamePackage = parseGamePackage(content);
+      if (validateGamePackage(gamePackage).length > 0) {
+        throw new Error('Package is unfinished');
+      }
+      if (!window.desktop) {
+        await rememberWebPackage(fileName, gamePackage.title, content);
+      }
+      setWizardRestore(
+        restoredSession
+          ? {
+              finished: restoredSession.finished,
+              position: restoredSession.position,
+            }
+          : null,
+      );
+      setGameActive(restoredSession?.gameActive ?? false);
+      setSelectedPackage(gamePackage);
+      setSelectedPackageId(packageId);
+      setPackageDetails({
+        fileName,
+        ...summarizeGamePackage(gamePackage),
+      });
+      await refreshRecentPackages();
+    },
+    [refreshRecentPackages],
+  );
+
   useEffect(() => {
     void refreshRecentPackages();
   }, [refreshRecentPackages]);
 
   useEffect(() => {
+    const session = initialSession.current;
+    if (!session) return;
+    initialSession.current = null;
+
+    void (async () => {
+      try {
+        const opened = window.desktop
+          ? await window.desktop.openRecentHostGamePackage(session.packageId)
+          : {
+              fileName: session.packageId,
+              content: await loadRecentWebPackage(session.packageId),
+            };
+        if (!opened.content) throw new Error('Saved package is unavailable');
+        await acceptPackage(
+          opened.content,
+          opened.fileName,
+          session.packageId,
+          session,
+        );
+      } catch {
+        saveHostSession(localStorage, sessionScope, null);
+        if (!window.desktop) {
+          window.history.replaceState(
+            window.history.state,
+            '',
+            getHostDeepLink(window.location.href, null),
+          );
+        }
+        setMessage(
+          'Не вдалося відновити попередню гру. Можливо, файл переміщено або видалено.',
+        );
+      } finally {
+        setSessionReady(true);
+      }
+    })();
+  }, [acceptPackage, sessionScope]);
+
+  useEffect(() => {
     setGameAudioVolume(soundVolume);
   }, [soundVolume]);
+
+  useEffect(() => {
+    if (!sessionReady) return;
+    const session: HostSession | null =
+      selectedPackage && selectedPackageId
+        ? {
+            packageId: selectedPackageId,
+            gameActive,
+            finished: wizard.finished,
+            position: wizard.position,
+          }
+        : null;
+    saveHostSession(localStorage, sessionScope, session);
+    if (!window.desktop) {
+      const deepLink = getHostDeepLink(window.location.href, session);
+      if (deepLink !== window.location.href) {
+        window.history.replaceState(window.history.state, '', deepLink);
+      }
+    }
+  }, [
+    gameActive,
+    selectedPackage,
+    selectedPackageId,
+    sessionReady,
+    sessionScope,
+    wizard.finished,
+    wizard.position,
+  ]);
 
   useEffect(() => {
     if (!window.desktop) return;
@@ -98,33 +217,16 @@ export function App({
     [],
   );
 
-  async function acceptPackage(
-    content: Uint8Array,
-    fileName: string,
-  ): Promise<void> {
-    const gamePackage = parseGamePackage(content);
-    if (validateGamePackage(gamePackage).length > 0) {
-      throw new Error('Package is unfinished');
-    }
-    if (!window.desktop) {
-      await rememberWebPackage(fileName, gamePackage.title, content);
-    }
-    setGameActive(false);
-    setSelectedPackage(gamePackage);
-    setPackageDetails({
-      fileName,
-      ...summarizeGamePackage(gamePackage),
-    });
-    await refreshRecentPackages();
-  }
-
   async function openPackage(file: File) {
     setMessage('');
     try {
-      const content = window.desktop
-        ? (await window.desktop.openGamePackage(file)).content
-        : new Uint8Array(await file.arrayBuffer());
-      await acceptPackage(content, file.name);
+      const opened = window.desktop
+        ? await window.desktop.openHostGamePackage(file)
+        : {
+            filePath: file.name,
+            content: new Uint8Array(await file.arrayBuffer()),
+          };
+      await acceptPackage(opened.content, file.name, opened.filePath);
     } catch {
       setMessage(
         'Не вдалося відкрити файл: пакет має неправильний формат або ще не готовий до гри.',
@@ -136,13 +238,13 @@ export function App({
     setMessage('');
     try {
       const opened = window.desktop
-        ? await window.desktop.openRecentGamePackage(recent.id)
+        ? await window.desktop.openRecentHostGamePackage(recent.id)
         : {
             fileName: recent.name,
             content: await loadRecentWebPackage(recent.id),
           };
       if (!opened.content) throw new Error('Recent package is unavailable');
-      await acceptPackage(opened.content, opened.fileName);
+      await acceptPackage(opened.content, opened.fileName, recent.id);
     } catch {
       setMessage(
         'Не вдалося відкрити недавній файл. Можливо, його переміщено, видалено або пакет ще не готовий до гри.',
@@ -153,6 +255,7 @@ export function App({
 
   function startGame() {
     unlockGameAudio();
+    setWizardRestore(null);
     const host = document.getElementById('schdk-host-app');
     if (host && !document.fullscreenElement) {
       void host.requestFullscreen().catch(() => {
@@ -165,6 +268,7 @@ export function App({
   function returnToGames() {
     setGameActive(false);
     setSelectedPackage(null);
+    setSelectedPackageId(null);
     setPackageDetails(null);
     setMessage('');
     if (document.fullscreenElement) {
@@ -203,6 +307,7 @@ export function App({
       onBack={() => {
         setGameActive(false);
         setSelectedPackage(null);
+        setSelectedPackageId(null);
         setPackageDetails(null);
         setMessage('');
       }}

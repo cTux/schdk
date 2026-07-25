@@ -19,6 +19,10 @@
   to the separate presenter window while a game is active. Close it when the
   game ends or the host view unmounts.
 - Persist game volume in shell options with a 40% default.
+- Persist the selected package and exact game question/stage continuously on
+  web and desktop. Restore browser games through the host recent-package store,
+  desktop games through the authorized recent-file bridge, and expose browser
+  host state through validated deep-link query parameters.
 - Persist validated visual-editor bounds, presentation settings, and background
   settings in shell options. Use the standard host layout until changed and
   apply the same settings without changing question stages.
