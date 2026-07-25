@@ -2,86 +2,17 @@ import { QUESTION_COUNT } from '@schdk/common';
 import { isDriveFileId, isDriveGamePackageName } from '@schdk/google-drive';
 
 const SESSION_KEY_PREFIX = 'schdk.desktop.editor-session:';
-const RECENT_METADATA_KEY_PREFIX = 'schdk.desktop.recent-titles:';
 
 type SessionStorage = Pick<Storage, 'getItem' | 'removeItem' | 'setItem'>;
 
 export interface DesktopEditorSession {
-  filePath: string | null;
-  driveFileId?: string;
-  fileName?: string;
+  driveFileId: string;
+  fileName: string;
   selectedIndex: number;
 }
 
 function sessionKey(scope: string) {
   return `${SESSION_KEY_PREFIX}${scope}`;
-}
-
-export interface DesktopRecentMetadata {
-  title: string;
-  ready?: boolean;
-}
-
-function recentMetadataKey(scope: string) {
-  return `${RECENT_METADATA_KEY_PREFIX}${scope}`;
-}
-
-export function loadDesktopRecentMetadata(
-  storage: SessionStorage,
-  scope: string,
-): Record<string, DesktopRecentMetadata> {
-  try {
-    const value: unknown = JSON.parse(
-      storage.getItem(recentMetadataKey(scope)) ?? 'null',
-    );
-    if (!value || typeof value !== 'object') return {};
-    return Object.fromEntries(
-      Object.entries(value).flatMap(([filePath, metadata]) => {
-        if (!/\.schdk$/iu.test(filePath)) return [];
-        if (typeof metadata === 'string')
-          return [[filePath, { title: metadata }]];
-        if (
-          !metadata ||
-          typeof metadata !== 'object' ||
-          !('title' in metadata) ||
-          typeof metadata.title !== 'string'
-        )
-          return [];
-        return [
-          [
-            filePath,
-            {
-              title: metadata.title,
-              ...('ready' in metadata && typeof metadata.ready === 'boolean'
-                ? { ready: metadata.ready }
-                : {}),
-            },
-          ],
-        ];
-      }),
-    );
-  } catch {
-    return {};
-  }
-}
-
-export function saveDesktopRecentMetadata(
-  storage: SessionStorage,
-  scope: string,
-  filePath: string,
-  metadata: DesktopRecentMetadata,
-) {
-  try {
-    storage.setItem(
-      recentMetadataKey(scope),
-      JSON.stringify({
-        ...loadDesktopRecentMetadata(storage, scope),
-        [filePath]: metadata,
-      }),
-    );
-  } catch {
-    // Recent package metadata is best-effort.
-  }
 }
 
 export function loadDesktopEditorSession(
@@ -92,23 +23,13 @@ export function loadDesktopEditorSession(
     const value: unknown = JSON.parse(
       storage.getItem(sessionKey(scope)) ?? 'null',
     );
-    if (!value || typeof value !== 'object') return null;
-    const localFilePath =
-      'filePath' in value &&
-      typeof value.filePath === 'string' &&
-      /\.schdk$/iu.test(value.filePath)
-        ? value.filePath
-        : null;
-    const driveFileId =
-      'driveFileId' in value && isDriveFileId(value.driveFileId)
-        ? value.driveFileId
-        : null;
-    const fileName =
-      'fileName' in value && isDriveGamePackageName(value.fileName)
-        ? value.fileName
-        : null;
     if (
-      (!localFilePath && (!driveFileId || !fileName)) ||
+      !value ||
+      typeof value !== 'object' ||
+      !('driveFileId' in value) ||
+      !isDriveFileId(value.driveFileId) ||
+      !('fileName' in value) ||
+      !isDriveGamePackageName(value.fileName) ||
       !('selectedIndex' in value) ||
       typeof value.selectedIndex !== 'number' ||
       !Number.isSafeInteger(value.selectedIndex) ||
@@ -118,8 +39,8 @@ export function loadDesktopEditorSession(
       return null;
     }
     return {
-      filePath: localFilePath,
-      ...(driveFileId && fileName ? { driveFileId, fileName } : {}),
+      driveFileId: value.driveFileId,
+      fileName: value.fileName,
       selectedIndex: value.selectedIndex,
     };
   } catch {

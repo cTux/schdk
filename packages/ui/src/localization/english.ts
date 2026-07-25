@@ -8,6 +8,7 @@ export const english: typeof ukrainian = {
     chooseFile: 'Choose file',
     or: 'or',
     recentPackages: 'Recent packages',
+    downloadPackage: 'Download package',
     ready: 'Ready',
     untitled: 'Untitled',
     question: 'Question',
@@ -34,6 +35,10 @@ export const english: typeof ukrainian = {
     settingsLabel: 'Settings',
     accountConnected: 'Connected',
     accountDisconnected: 'Disconnected',
+    loginTitle: 'Sign in with Google',
+    loginDescription:
+      'Sign in to create, open, and save SCHDK packages in Google Drive.',
+    loginAction: 'Continue with Google',
     homeTitle: 'Everything for the game in one place',
     homeDescription:
       'Create a question package in the editor, then open it under “Host a game”.',
@@ -119,6 +124,7 @@ export const english: typeof ukrainian = {
     invalidFile: 'Could not open the file because its format is invalid.',
     recentOpenFailed:
       'Could not open the recent file. It may have been moved or deleted.',
+    downloadFailed: 'Could not download the file from Google Drive.',
     saveFailed: 'Could not save the file.',
   },
   host: {
@@ -146,6 +152,8 @@ export const english: typeof ukrainian = {
       'Could not restore the previous game. The file may have been moved or deleted.',
     invalidFile:
       'Could not open the file because the package is invalid or not ready to play.',
+    uploadFailed: 'Could not upload the file to Google Drive.',
+    downloadFailed: 'Could not download the file from Google Drive.',
     recentOpenFailed:
       'Could not open the recent file. It may have been moved, deleted, or may not be ready to play.',
   },

@@ -26,6 +26,9 @@
   apply them to every unified application surface.
 - Keep locale selection in the first `App` settings group, before the `WWW`
   group; do not place it in the sidebar.
-- Keep the optional Google Drive connection in the `App` settings group.
-  Synchronize editor and game options through [google-drive.md](google-drive.md)
-  while preserving immediate local storage.
+- Show a localized Google login screen before mounting the unified tools.
+  Authentication is mandatory on web and desktop; reconnect before restoring
+  access after authorization expires.
+- Keep the connected Google Drive account and disconnect action in the `App`
+  settings group. Synchronize editor and game options through
+  [google-drive.md](google-drive.md) while preserving immediate local storage.

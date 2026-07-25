@@ -1,5 +1,5 @@
-import { HostView } from '@schdk/ui/host';
 import { parseDrivePackageReference } from '@schdk/google-drive';
+import { HostView } from '@schdk/ui/host';
 import { useLocalization } from '@schdk/ui/localization';
 import { useEffect, useRef, useState } from 'react';
 import type {} from './electron';
@@ -11,7 +11,6 @@ import {
   saveHostSession,
   type HostSession,
 } from './host-session';
-import { loadRecentWebPackage } from './recent-packages';
 import { useGameWizard } from './use-game-wizard';
 import { useHostPackages } from './use-host-packages';
 import type { AppProps } from './types';
@@ -25,8 +24,7 @@ export function App({
   layout = null,
   soundVolume = 0.05,
   drive,
-  driveConnected = false,
-  driveReady = true,
+  driveActive = false,
   onDriveFailure,
 }: AppProps) {
   const { copy } = useLocalization();
@@ -40,6 +38,7 @@ export function App({
   const {
     acceptPackage,
     clearPackage,
+    downloadRecentPackage,
     message,
     openPackage,
     openRecentPackage,
@@ -54,42 +53,31 @@ export function App({
   } = useHostPackages({
     copy,
     drive,
-    driveConnected,
-    driveReady,
     onDriveFailure,
     setGameActive,
   });
   const wizard = useGameWizard(selectedPackage, gameActive, wizardRestore);
 
   useEffect(() => {
-    void refreshRecentPackages();
-  }, [refreshRecentPackages]);
+    if (driveActive) void refreshRecentPackages();
+  }, [driveActive, refreshRecentPackages]);
 
   useEffect(() => {
     const session = initialSession.current;
-    if (!session || !driveReady) return;
+    if (!session) return;
     initialSession.current = null;
     void (async () => {
       try {
         const driveFileId = parseDrivePackageReference(session.packageId);
-        const opened = driveFileId
-          ? driveConnected && drive
-            ? await drive.loadGamePackage(driveFileId)
-            : null
-          : window.desktop
-            ? await window.desktop.openRecentHostGamePackage(session.packageId)
-            : {
-                fileName: session.packageId,
-                content: await loadRecentWebPackage(session.packageId),
-              };
-        if (!opened) throw new Error('Saved package is unavailable');
-        if (!opened.content) throw new Error('Saved package is unavailable');
+        if (!driveFileId || !drive) {
+          throw new Error('Saved Drive package is unavailable');
+        }
+        const opened = await drive.loadGamePackage(driveFileId);
         await acceptPackage(
           opened.content,
-          'fileName' in opened ? opened.fileName : opened.name,
+          opened.name,
           session.packageId,
           session,
-          Boolean(driveFileId),
         );
       } catch {
         if (parseDrivePackageReference(session.packageId)) onDriveFailure?.();
@@ -106,16 +94,7 @@ export function App({
         setSessionReady(true);
       }
     })();
-  }, [
-    acceptPackage,
-    copy,
-    drive,
-    driveConnected,
-    driveReady,
-    onDriveFailure,
-    sessionScope,
-    setMessage,
-  ]);
+  }, [acceptPackage, copy, drive, onDriveFailure, sessionScope, setMessage]);
 
   useEffect(() => setGameAudioVolume(soundVolume), [soundVolume]);
 
@@ -215,6 +194,7 @@ export function App({
         }
       : null;
 
+  if (!driveActive) return null;
   return (
     <HostView
       backgroundImage={backgroundImage}
@@ -230,6 +210,7 @@ export function App({
       onBack={clearPackage}
       onGameBack={wizard.goBack}
       onGameNext={wizard.goNext}
+      onDownloadRecentPackage={(recent) => void downloadRecentPackage(recent)}
       onOpenPackage={(file) => void openPackage(file)}
       onOpenRecentPackage={(recent) => void openRecentPackage(recent)}
       onReturnToGames={returnToGames}

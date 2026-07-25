@@ -1,0 +1,61 @@
+@use '../../styles/tokens' as *;
+
+.google-login-screen {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba($accent-rgb, 0.18),
+      transparent 30rem
+    ),
+    radial-gradient(
+      circle at 10% 100%,
+      rgba($accent-cool-rgb, 0.12),
+      transparent 34rem
+    ),
+    $background;
+}
+
+.google-login-card {
+  display: flex;
+  width: min(440px, 100%);
+  align-items: center;
+  flex-direction: column;
+  border: 1px solid $border;
+  border-radius: $radius-surface;
+  padding: 40px;
+  gap: 14px;
+  background: rgba($surface-rgb, 0.88);
+  box-shadow: $shadow-raised;
+  text-align: center;
+  backdrop-filter: blur(24px);
+}
+
+.google-login-card img {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 4px;
+  filter: drop-shadow(0 12px 20px rgba($accent-rgb, 0.22));
+}
+
+.google-login-card h1 {
+  margin: 0;
+  font-size: clamp(1.65rem, 5vw, 2.25rem);
+}
+
+.google-login-card > p {
+  margin: 0;
+}
+
+.google-login-card > p:not(.eyebrow),
+.google-login-card small {
+  color: $muted;
+}
+
+.google-login-card .ui-button {
+  min-width: 210px;
+  margin-top: 8px;
+}

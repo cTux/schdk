@@ -25,6 +25,7 @@ export interface EditorViewProps {
   onBack(): void;
   onCopyQuestion(): void;
   onCreatePackage(): void;
+  onDownloadRecentPackage(recent: RecentPackageItem): void;
   onOpenPackage(file: File): void;
   onOpenRecentPackage(recent: RecentPackageItem): void;
   onPasteQuestion(): void;

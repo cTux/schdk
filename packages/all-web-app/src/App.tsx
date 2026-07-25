@@ -9,7 +9,11 @@ import {
   LocaleProvider,
   type AppLocale,
 } from '@schdk/ui/localization';
-import { ShellView, type ShellViewName } from '@schdk/ui/shell';
+import {
+  GoogleLoginView,
+  ShellView,
+  type ShellViewName,
+} from '@schdk/ui/shell';
 import { lazy, Suspense, useEffect, useState } from 'react';
 import {
   getDeepLinkedShellView,
@@ -29,7 +33,6 @@ import { useGoogleDriveSettings } from './use-google-drive-settings';
 
 const SHELL_LOCALE_STORAGE_KEY = 'schdk.shell.locale';
 const SHELL_THEME_STORAGE_KEY = 'schdk.shell.theme';
-
 function getInitialLocale(): AppLocale {
   const stored = localStorage.getItem(SHELL_LOCALE_STORAGE_KEY);
   if (stored === 'uk' || stored === 'en') return stored;
@@ -87,6 +90,12 @@ export function App() {
     setEditorTextOptions: setEditorOptionsState,
     setGameOptions: setGameOptionsState,
   });
+  const { connection } = googleDrive;
+  const connected = connection.state === 'connected';
+  const loginState = googleDrive.statusReady ? connection.state : 'connecting';
+  const [unlocked, setUnlocked] = useState(connected);
+
+  useEffect(() => setUnlocked((current) => current || connected), [connected]);
 
   useEffect(() => {
     localStorage.setItem(SHELL_LOCALE_STORAGE_KEY, locale);
@@ -145,11 +154,8 @@ export function App() {
       setLoadedApps((current) => ({ ...current, [nextView]: true }));
     }
     if (pushHistory) {
-      window.history.pushState(
-        window.history.state,
-        '',
-        getShellDeepLink(window.location.href, nextView),
-      );
+      const deepLink = getShellDeepLink(window.location.href, nextView);
+      window.history.pushState(window.history.state, '', deepLink);
     }
     setView(nextView);
   }
@@ -189,59 +195,61 @@ export function App() {
 
   return (
     <LocaleProvider locale={locale} onLocaleChange={setLocale}>
-      <ShellView
-        editorApp={
-          <Suspense fallback={null}>
-            {googleDrive.statusReady && (
-              <EditorApp
-                drive={googleDrive.bridge ?? undefined}
-                driveConnected={googleDrive.connection.state === 'connected'}
-                driveReady
-                manageDocumentTitle={false}
-                onDriveFailure={() => void googleDrive.reportFailure()}
-                textOptions={editorOptions}
-              />
-            )}
-          </Suspense>
-        }
-        hostApp={
-          <Suspense fallback={null}>
-            {googleDrive.statusReady && (
-              <HostApp
-                backgroundImage={gameOptions.backgroundImage}
-                backgroundOpacity={gameOptions.backgroundOpacity}
-                customElements={gameOptions.customElements}
-                drive={googleDrive.bridge ?? undefined}
-                driveConnected={googleDrive.connection.state === 'connected'}
-                driveReady
-                layout={gameOptions.layout}
-                onDriveFailure={() => void googleDrive.reportFailure()}
-                soundVolume={gameOptions.soundVolume}
-              />
-            )}
-          </Suspense>
-        }
-        loadedApps={loadedApps}
-        editorOptions={editorOptions}
-        gameOptions={gameOptions}
-        gameOptionsError={gameOptionsError}
-        googleDriveAccount={
-          'account' in googleDrive.connection
-            ? googleDrive.connection.account
-            : undefined
-        }
-        googleDriveState={googleDrive.connection.state}
-        theme={theme}
-        view={view}
-        onEditorOptionsChange={googleDrive.setEditorTextOptions}
-        onGameOptionsChange={googleDrive.setGameOptions}
-        onGoogleDriveConnect={() => void googleDrive.connect()}
-        onGoogleDriveDisconnect={() => void googleDrive.disconnect()}
-        onImportVisualEditorTemplate={importVisualEditorTemplate}
-        onExportVisualEditorTemplate={exportVisualEditorTemplate}
-        onShowView={(nextView) => showView(nextView)}
-        onThemeChange={setTheme}
-      />
+      {(!unlocked || !connected) && (
+        <GoogleLoginView
+          state={loginState}
+          onConnect={() => void googleDrive.connect()}
+        />
+      )}
+      {unlocked && (
+        <div hidden={!connected}>
+          <ShellView
+            editorApp={
+              <Suspense fallback={null}>
+                <EditorApp
+                  drive={googleDrive.bridge ?? undefined}
+                  driveActive={connected}
+                  manageDocumentTitle={false}
+                  onDriveFailure={() => void googleDrive.reportFailure()}
+                  textOptions={editorOptions}
+                />
+              </Suspense>
+            }
+            hostApp={
+              <Suspense fallback={null}>
+                <HostApp
+                  backgroundImage={gameOptions.backgroundImage}
+                  backgroundOpacity={gameOptions.backgroundOpacity}
+                  customElements={gameOptions.customElements}
+                  drive={googleDrive.bridge ?? undefined}
+                  driveActive={connected}
+                  layout={gameOptions.layout}
+                  onDriveFailure={() => void googleDrive.reportFailure()}
+                  soundVolume={gameOptions.soundVolume}
+                />
+              </Suspense>
+            }
+            loadedApps={loadedApps}
+            editorOptions={editorOptions}
+            gameOptions={gameOptions}
+            gameOptionsError={gameOptionsError}
+            googleDriveAccount={
+              'account' in connection ? connection.account : undefined
+            }
+            googleDriveState={connection.state}
+            theme={theme}
+            view={view}
+            onEditorOptionsChange={googleDrive.setEditorTextOptions}
+            onGameOptionsChange={googleDrive.setGameOptions}
+            onGoogleDriveConnect={() => void googleDrive.connect()}
+            onGoogleDriveDisconnect={() => void googleDrive.disconnect()}
+            onImportVisualEditorTemplate={importVisualEditorTemplate}
+            onExportVisualEditorTemplate={exportVisualEditorTemplate}
+            onShowView={(nextView) => showView(nextView)}
+            onThemeChange={setTheme}
+          />
+        </div>
+      )}
     </LocaleProvider>
   );
 }

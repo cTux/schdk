@@ -3,8 +3,7 @@ import type { EditorTextOptions } from '@schdk/ui/options';
 
 export interface AppProps {
   drive?: DrivePackageStorage;
-  driveConnected?: boolean;
-  driveReady?: boolean;
+  driveActive?: boolean;
   manageDocumentTitle?: boolean;
   textOptions?: EditorTextOptions;
   onDriveFailure?(): void;

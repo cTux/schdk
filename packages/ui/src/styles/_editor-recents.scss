@@ -116,12 +116,21 @@
     backdrop-filter: blur(16px);
   }
 
+  .recent-package-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .recent-package-item + .recent-package-item {
+    border-top: 1px solid $border;
+  }
+
   .recent-package-list button {
     display: flex;
     align-items: center;
     gap: 10px;
-    width: 100%;
-    min-height: 44px;
     border: 0;
     border-radius: 0;
     padding: 10px 14px;
@@ -130,13 +139,29 @@
     text-align: left;
   }
 
-  .recent-package-list button + button {
-    border-top: 1px solid $border;
+  .recent-package-open {
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
-  .recent-package-list button:hover {
+  .recent-package-list .recent-package-open:hover {
     background: $surface-hover;
     padding-left: 17px;
+  }
+
+  .recent-package-list .recent-package-download {
+    width: 44px;
+    min-height: 44px;
+    flex: 0 0 44px;
+    justify-content: center;
+    border-left: 1px solid $border;
+    padding: 0;
+    color: $muted;
+  }
+
+  .recent-package-list .recent-package-download:hover {
+    background: $surface-hover;
+    color: $accent-hover;
   }
 
   .recent-package-label {

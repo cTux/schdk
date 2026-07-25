@@ -1,10 +1,7 @@
 import { app, BrowserWindow, dialog, ipcMain, Menu } from 'electron';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import {
-  loadRecentGamePackages,
-  registerGamePackageIpc,
-} from './game-package-ipc.js';
+import { registerGamePackageIpc } from './game-package-ipc.js';
 import {
   closePresenterNotes,
   registerPresenterNotesIpc,
@@ -121,8 +118,7 @@ registerGamePackageIpc();
 registerGoogleDriveIpc();
 registerPresenterNotesIpc(() => mainWindow);
 
-app.whenReady().then(async () => {
-  await loadRecentGamePackages();
+app.whenReady().then(() => {
   Menu.setApplicationMenu(null);
   createWindow();
 

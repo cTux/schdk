@@ -8,8 +8,8 @@
   assets, Ukrainian/English application copy and locale context, and UI rules.
   Its detailed rules live in
   [`packages/ui/README.md`](../../packages/ui/README.md).
-- `@schdk/editor-web-app` owns editor state, browser persistence, save
-  orchestration, and the optional desktop bridge. It renders `@schdk/ui`
+- `@schdk/editor-web-app` owns editor state, Drive persistence, save
+  orchestration, and the optional download bridge. It renders `@schdk/ui`
   views rather than defining an app-local visual layer.
 - `@schdk/host-web-app` owns host behavior: package opening and recents,
   spoiler-free pre-game details, fullscreen gameplay state, keyboard
@@ -18,7 +18,8 @@
   lazily loads the host and editor React application exports.
 - `@schdk/all-desktop-app` is the only desktop application. It wraps
   `@schdk/all-web-app` and owns Electron main/preload code, packaging, and the
-  narrow file bridge exposed to the trusted unified renderer.
+  narrow Drive and explicit-download bridges exposed to the trusted unified
+  renderer.
 - `@schdk/google-drive` owns the platform-neutral Drive REST client and opaque
   settings envelope, package-storage types, and Drive reference helpers.
   Browser authorization stays in `@schdk/all-web-app`; installed-app
@@ -40,5 +41,8 @@
 - Prefer shared ownership over copied implementations: data contracts belong
   in `common`, visuals in `ui`, browser behavior in web apps, and operating
   system integration in desktop apps.
+- Application React packages compose exported `@schdk/ui` controls and views;
+  they do not render native interactive JSX or define app-local visual
+  controls.
 - Do not add an abstraction, package, or dependency for hypothetical future
   use. Reuse existing helpers and native platform APIs first.

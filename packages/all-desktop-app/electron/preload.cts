@@ -1,9 +1,4 @@
-import {
-  contextBridge,
-  ipcRenderer,
-  type IpcRendererEvent,
-  webUtils,
-} from 'electron';
+import { contextBridge, ipcRenderer, type IpcRendererEvent } from 'electron';
 
 const closeApi = {
   onCloseRequested: (callback: (attempt: number) => void): (() => void) => {
@@ -24,17 +19,6 @@ const editorApi = {
     content: Uint8Array,
   ): Promise<string | null> =>
     ipcRenderer.invoke('save-game-package', filename, content),
-  openGamePackage: (file: File) =>
-    ipcRenderer.invoke('open-game-package', webUtils.getPathForFile(file)),
-  openHostGamePackage: (file: File) =>
-    ipcRenderer.invoke('open-host-game-package', webUtils.getPathForFile(file)),
-  listRecentGamePackages: () => ipcRenderer.invoke('list-recent-game-packages'),
-  openRecentGamePackage: (filePath: string) =>
-    ipcRenderer.invoke('open-recent-game-package', filePath),
-  openRecentHostGamePackage: (filePath: string) =>
-    ipcRenderer.invoke('open-recent-host-game-package', filePath),
-  writeGamePackage: (filePath: string, content: Uint8Array): Promise<void> =>
-    ipcRenderer.invoke('write-game-package', filePath, content),
   setEditorPackageOpen: (open: boolean): void =>
     ipcRenderer.send('set-editor-package-open', open),
   setPresenterNotes: (

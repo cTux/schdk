@@ -26,6 +26,7 @@ export function EditorView({
   onBack,
   onCopyQuestion,
   onCreatePackage,
+  onDownloadRecentPackage,
   onOpenPackage,
   onOpenRecentPackage,
   onPasteQuestion,
@@ -50,6 +51,7 @@ export function EditorView({
           hidden={hasPackage}
           recentPackages={recentPackages}
           onCreatePackage={onCreatePackage}
+          onDownloadRecentPackage={onDownloadRecentPackage}
           onOpenPackage={onOpenPackage}
           onOpenRecentPackage={onOpenRecentPackage}
         />

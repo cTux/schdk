@@ -6,6 +6,7 @@ export interface PackageStartProps {
   hidden: boolean;
   recentPackages: RecentPackageItem[];
   onCreatePackage?(): void;
+  onDownloadRecentPackage?(recent: RecentPackageItem): void;
   onOpenPackage(file: File): void;
   onOpenRecentPackage(recent: RecentPackageItem): void;
 }
@@ -14,6 +15,7 @@ export function PackageStart({
   hidden,
   recentPackages,
   onCreatePackage,
+  onDownloadRecentPackage,
   onOpenPackage,
   onOpenRecentPackage,
 }: PackageStartProps) {
@@ -27,6 +29,7 @@ export function PackageStart({
       <RecentPackages
         hidden={hidden}
         packages={recentPackages}
+        onDownload={onDownloadRecentPackage}
         onOpen={onOpenRecentPackage}
       />
     </>

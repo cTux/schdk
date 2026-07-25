@@ -2,6 +2,9 @@
 
 - Keep reusable components, composed views, SCSS, tokens, and assets in
   `@schdk/ui`; application packages own state and platform integration.
+- Render interactive controls in application packages only through exported
+  `@schdk/ui` components. Native interactive JSX elements belong inside UI
+  atoms and composed UI components, never directly in application packages.
 - Build screens from the smallest practical components. Extract coherent
   controls, repeated structures, and stateful interactions; keep one-off
   wrappers inline.
@@ -15,6 +18,9 @@
   components must not read storage, Electron APIs, or the filesystem.
 - Reuse existing visual tokens and interaction patterns. Prefer compact,
   readable layouts without decoration that carries no information.
+- Every atom owns the base styles required to render correctly in isolation;
+  composed-view styles may refine an atom but must not be its only styling
+  source.
 - Define the complete light and dark color palettes in `styles/light.scss` and
   `styles/dark.scss`. Other SCSS files must consume those theme variables
   instead of declaring color values.

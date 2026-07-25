@@ -17,10 +17,9 @@
 
 - Persist restorable desktop renderer state continuously so normal and
   unexpected shutdowns can resume the last location.
-- Restore the active section, opened `.schdk` path, and selected question.
-- Restore files only through the authorized recent-file desktop bridge. Clear
-  stale session state and show an actionable error when a remembered file is
-  unavailable.
+- Restore the active section, opened Drive file ID, and selected question.
+- Restore packages only through the Drive bridge. Clear stale session state and
+  show an actionable error when a remembered Drive file is unavailable.
 - Keep browser URL deep links and desktop session restoration separate. A
   desktop application resumes local state without encoding disk paths in URLs.
 
@@ -34,18 +33,19 @@
 - On timeout or save failure, offer exactly three outcomes: retry saving, close
   without saving, or cancel closing. Never leave a window permanently
   uncloseable after a renderer or IPC failure.
-- Send close requests to the main renderer only after a
-  local or Drive-backed editor package is open. A failed Drive write first
-  offers the native local-save flow; cancellation continues to the standard
-  retry, close-without-saving, or cancel-close outcomes.
+- Send close requests to the main renderer only after a Drive-backed editor
+  package is open. A failed Drive write continues to the standard retry,
+  close-without-saving, or cancel-close outcomes without a local fallback.
 
 ## Preload and packaging
 
 - Keep preload files as self-contained `.cts` files with no local imports so
   TypeScript emits sandbox-compatible `.cjs`; reference `preload.cjs` from
   `BrowserWindow`.
-- The preload exposes the narrow editor API to its trusted main renderer. Do
-  not enable Node integration for renderer content or subframes.
+- The preload exposes the narrow Drive, close, presenter, and explicit package
+  download APIs to its trusted main renderer. Do not expose local package open,
+  recent-path, or autosave IPC. Do not enable Node integration for renderer
+  content or subframes.
 - Package the Windows app with electron-builder's unpacked `dir` target under
   `dist/release/win-unpacked`; the project does not currently build installers.
 - Keep `signExecutable: false` so executable resource editing can apply the

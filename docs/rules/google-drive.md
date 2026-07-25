@@ -12,15 +12,20 @@
   folder and packages with private app properties, and expose package identity
   to browser deep links and sessions through validated `drive:<fileId>`
   references.
-- When Drive is connected, create or import editor packages in Drive and
-  serialize every autosave to the same Drive file ID. List and load those
-  packages in both Editor and Host. When Drive is disconnected, preserve the
-  existing browser and desktop local file paths and recents.
+- Gate the unified web and desktop application behind Google authorization.
+  Do not mount application tools before the first successful connection; when
+  authorization expires, keep mounted state inaccessible until reconnection.
+- Create or import every editor package in Drive and serialize every autosave
+  to the same Drive file ID. Editor and Host recents list and load only those
+  Drive packages. Never fall back to browser storage or desktop paths.
+- Treat a local `.schdk` selection only as an import: validate it, upload it to
+  Drive, and continue from the resulting Drive file. Treat the recent-file
+  download action only as an explicit export to the user's computer.
 - Never silently change a Drive-backed document to another destination after a
-  failed write. Keep its recovery draft, retry after reconnection, and offer a
-  local save flow when the user leaves or closes while unsynchronized.
+  failed write. Keep it open, report the failure, and require reconnection or a
+  successful retry before leaving it.
 - Browser authorization uses Google Identity Services only from an explicit
-  Connect action. Keep its short-lived access token in per-tab session storage
+  login action. Keep its short-lived access token in per-tab session storage
   so a refresh can restore the connection; validate its client ID and expiry
   before use, and clear invalid, expired, or disconnected sessions. Never call
   the popup-based token flow during startup, refresh, autosave, or other

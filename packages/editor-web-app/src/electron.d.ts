@@ -1,5 +1,3 @@
-import type { SaveFilePicker } from './browser-save';
-
 export {};
 
 declare global {
@@ -8,22 +6,6 @@ declare global {
       filename: string,
       content: Uint8Array,
     ): Promise<string | null>;
-    openGamePackage(
-      file: File,
-    ): Promise<{ filePath: string; content: Uint8Array }>;
-    listRecentGamePackages(): Promise<
-      Array<{
-        filePath: string;
-        fileName: string;
-        content: Uint8Array;
-      }>
-    >;
-    openRecentGamePackage(filePath: string): Promise<{
-      filePath: string;
-      fileName: string;
-      content: Uint8Array;
-    }>;
-    writeGamePackage(filePath: string, content: Uint8Array): Promise<void>;
     setEditorPackageOpen(open: boolean): void;
     setPresenterNotes(
       notes: {
@@ -37,7 +19,6 @@ declare global {
   }
 
   interface Window {
-    showSaveFilePicker?: SaveFilePicker;
     desktop?: SchdkDesktopApi;
   }
 }

@@ -16,27 +16,29 @@ import {
   type Dispatch,
   type SetStateAction,
 } from 'react';
-import {
-  listRecentWebPackages,
-  loadRecentWebPackage,
-  rememberWebPackage,
-} from './recent-packages';
 import { summarizeGamePackage } from './game-package-summary';
 import type { HostSession } from './host-session';
 import type { GameWizardSnapshot } from './use-game-wizard';
 
+function downloadPackage(name: string, content: Uint8Array) {
+  const url = URL.createObjectURL(
+    new Blob([new Uint8Array(content)], { type: 'application/zip' }),
+  );
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = name;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
 export function useHostPackages({
   copy,
   drive,
-  driveConnected,
-  driveReady,
   onDriveFailure,
   setGameActive,
 }: {
   copy: LocalizationCopy;
   drive?: DrivePackageStorage;
-  driveConnected: boolean;
-  driveReady: boolean;
   onDriveFailure?(): void;
   setGameActive: Dispatch<SetStateAction<boolean>>;
 }) {
@@ -55,57 +57,31 @@ export function useHostPackages({
   );
 
   const refreshRecentPackages = useCallback(async () => {
+    if (!drive) return;
     try {
-      if (!driveReady) return;
-      if (driveConnected && drive) {
-        setRecentPackages(
-          (await drive.listGamePackages()).map(({ id, name, ready }) => ({
-            id: toDrivePackageReference(id),
-            name,
-            ...(ready === undefined ? {} : { ready }),
-          })),
-        );
-        return;
-      }
       setRecentPackages(
-        window.desktop
-          ? (await window.desktop.listRecentGamePackages()).map(
-              ({ filePath: id, fileName: name, content }) => {
-                try {
-                  const gamePackage = parseGamePackage(content);
-                  return {
-                    id,
-                    name,
-                    title: gamePackage.title,
-                    ready: validateGamePackage(gamePackage).length === 0,
-                  };
-                } catch {
-                  return { id, name };
-                }
-              },
-            )
-          : await listRecentWebPackages(),
+        (await drive.listGamePackages()).map(({ id, name, ready }) => ({
+          id: toDrivePackageReference(id),
+          name,
+          ...(ready === undefined ? {} : { ready }),
+        })),
       );
     } catch {
       setRecentPackages([]);
-      if (driveConnected) onDriveFailure?.();
+      onDriveFailure?.();
     }
-  }, [drive, driveConnected, driveReady, onDriveFailure]);
+  }, [drive, onDriveFailure]);
 
   const acceptPackage = useCallback(
     async (
       content: Uint8Array,
       fileName: string,
-      packageId = fileName,
+      packageId: string,
       restoredSession: HostSession | null = null,
-      driveBacked = false,
     ) => {
       const gamePackage = parseGamePackage(content);
       if (validateGamePackage(gamePackage).length > 0) {
         throw new Error('Package is unfinished');
-      }
-      if (!window.desktop && !driveBacked) {
-        await rememberWebPackage(fileName, gamePackage.title, content);
       }
       setWizardRestore(
         restoredSession
@@ -126,16 +102,32 @@ export function useHostPackages({
 
   async function openPackage(file: File) {
     setMessage('');
+    let content: Uint8Array;
     try {
-      const opened = window.desktop
-        ? await window.desktop.openHostGamePackage(file)
-        : {
-            filePath: file.name,
-            content: new Uint8Array(await file.arrayBuffer()),
-          };
-      await acceptPackage(opened.content, file.name, opened.filePath);
+      content = new Uint8Array(await file.arrayBuffer());
+      const gamePackage = parseGamePackage(content);
+      if (validateGamePackage(gamePackage).length > 0) {
+        throw new Error('Package is unfinished');
+      }
     } catch {
       setMessage(copy.host.invalidFile);
+      return;
+    }
+    try {
+      if (!drive) throw new Error('Google Drive is unavailable');
+      const saved = await drive.createGamePackage({
+        name: file.name,
+        content,
+        ready: true,
+      });
+      await acceptPackage(
+        content,
+        saved.name,
+        toDrivePackageReference(saved.id),
+      );
+    } catch {
+      onDriveFailure?.();
+      setMessage(copy.host.uploadFailed);
     }
   }
 
@@ -143,28 +135,36 @@ export function useHostPackages({
     setMessage('');
     try {
       const driveFileId = parseDrivePackageReference(recent.id);
-      const opened = driveFileId
-        ? driveConnected && drive
-          ? await drive.loadGamePackage(driveFileId)
-          : null
-        : window.desktop
-          ? await window.desktop.openRecentHostGamePackage(recent.id)
-          : {
-              fileName: recent.name,
-              content: await loadRecentWebPackage(recent.id),
-            };
-      if (!opened?.content) throw new Error('Recent package is unavailable');
+      if (!drive || !driveFileId)
+        throw new Error('Google Drive is unavailable');
+      const opened = await drive.loadGamePackage(driveFileId);
       await acceptPackage(
         opened.content,
-        'fileName' in opened ? opened.fileName : opened.name,
-        recent.id,
-        null,
-        Boolean(driveFileId),
+        opened.name,
+        toDrivePackageReference(opened.id),
       );
     } catch {
-      if (parseDrivePackageReference(recent.id)) onDriveFailure?.();
+      onDriveFailure?.();
       setMessage(copy.host.recentOpenFailed);
       await refreshRecentPackages();
+    }
+  }
+
+  async function downloadRecentPackage(recent: RecentPackageItem) {
+    setMessage('');
+    try {
+      const driveFileId = parseDrivePackageReference(recent.id);
+      if (!drive || !driveFileId)
+        throw new Error('Google Drive is unavailable');
+      const opened = await drive.loadGamePackage(driveFileId);
+      if (window.desktop) {
+        await window.desktop.saveGamePackage(opened.name, opened.content);
+      } else {
+        downloadPackage(opened.name, opened.content);
+      }
+    } catch {
+      onDriveFailure?.();
+      setMessage(copy.host.downloadFailed);
     }
   }
 
@@ -179,6 +179,7 @@ export function useHostPackages({
   return {
     acceptPackage,
     clearPackage,
+    downloadRecentPackage,
     message,
     openPackage,
     openRecentPackage,

@@ -5,12 +5,14 @@ import type { RecentPackageItem } from '../types';
 export interface RecentPackagesProps {
   hidden: boolean;
   packages: RecentPackageItem[];
+  onDownload?(recent: RecentPackageItem): void;
   onOpen(recent: RecentPackageItem): void;
 }
 
 export function RecentPackages({
   hidden,
   packages,
+  onDownload,
   onOpen,
 }: RecentPackagesProps) {
   const { copy } = useLocalization();
@@ -26,6 +28,7 @@ export function RecentPackages({
           <RecentPackageButton
             key={recent.id}
             recent={recent}
+            onDownload={onDownload ? () => onDownload(recent) : undefined}
             onOpen={() => onOpen(recent)}
           />
         ))}

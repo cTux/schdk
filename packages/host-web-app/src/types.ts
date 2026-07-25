@@ -8,7 +8,6 @@ export interface AppProps {
   layout?: GameLayout | null;
   soundVolume?: number;
   drive?: DrivePackageStorage;
-  driveConnected?: boolean;
-  driveReady?: boolean;
+  driveActive?: boolean;
   onDriveFailure?(): void;
 }

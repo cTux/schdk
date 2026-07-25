@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import { access, readFile, readdir } from 'node:fs/promises';
 import test from 'node:test';
 import { promisify } from 'node:util';
@@ -94,6 +95,7 @@ test('tracked source files stay within 256 physical lines', async () => {
   const sourceFiles = stdout
     .split('\0')
     .filter(Boolean)
+    .filter((path) => existsSync(new URL(path, repositoryRoot)))
     .filter((path) =>
       sourceExtensions.has(path.slice(path.lastIndexOf('.')).toLowerCase()),
     );

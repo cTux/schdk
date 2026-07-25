@@ -1,19 +1,12 @@
 # Browser editor persistence
 
-- Prefer the File System Access API and fall back to Blob download. Treat save
-  dialog `AbortError` as cancellation.
-- Store pending recovery drafts in `localStorage`, keyed by filename. Offer to
-  restore a valid matching draft and remove rejected or invalid drafts.
-- Remove a draft only after the latest package version saves successfully.
-- Store up to 20 saved copies in IndexedDB, newest first, with title metadata.
-  Recents reopen stored copies, not unrestricted disk paths.
-- Browser deep links identify an IndexedDB copy by recent-package ID. Restore
-  it and the selected question when available; clear unavailable links without
-  disk access.
-- IndexedDB failures must not prevent opening or saving packages.
-- Browser pending changes trigger a save dialog before returning to start;
-  cancellation keeps the package open.
-- In the unified app, a connected Drive session replaces browser package
-  creation, autosave, recents, and deep-link loading with Drive-backed
-  persistence. Disconnected and standalone editor sessions retain all local
-  behavior above.
+- Package creation, import, autosave, recents, deep links, and restoration use
+  Google Drive only. Do not store `.schdk` bytes or recovery drafts in
+  localStorage or IndexedDB.
+- Browser deep links contain only validated `drive:<fileId>` references and the
+  selected question. Clear unavailable references without disk access.
+- Selecting a local `.schdk` file validates and uploads it before opening it.
+- Downloading a recent package loads its current Drive bytes and uses a native
+  browser download. It does not change the editor's backing file.
+- The editor package root has no local persistence fallback when rendered
+  without an injected Drive bridge.

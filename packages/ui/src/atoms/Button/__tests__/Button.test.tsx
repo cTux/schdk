@@ -5,7 +5,7 @@ describe('Button', () => {
   it('composes variant and consumer classes', () => {
     expect(
       Button({ variant: 'primary', className: 'wide' }).props.className,
-    ).toMatchInlineSnapshot(`"primary wide"`);
-    expect(Button({}).props.className).toBeUndefined();
+    ).toMatchInlineSnapshot(`"ui-button primary wide"`);
+    expect(Button({}).props.className).toBe('ui-button');
   });
 });
