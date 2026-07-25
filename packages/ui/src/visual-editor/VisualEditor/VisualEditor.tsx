@@ -28,6 +28,7 @@ import {
   ActionToolbarSeparator,
 } from '../../atoms/ActionToolbar';
 import { Tooltip } from '../../atoms/Tooltip';
+import { useLocalization } from '../../localization';
 import {
   GameAnswer,
   GameAnswerComment,
@@ -57,59 +58,7 @@ import {
 } from '../../options/types';
 import { RESIZE_HANDLES } from './constants';
 
-const LABELS: Record<GameLayoutElementId, string> = {
-  logo: 'Лого гри',
-  intro: 'Питання №5',
-  handout: 'Роздатка',
-  question: 'Текст питання',
-  timer: '00:42',
-  'answer-comment': 'Коментар до відповіді',
-  'alternative-answer': 'Альтернативна відповідь',
-  answer: 'Відповідь',
-  progress: '5 / 36',
-  controls: 'Кнопки керування',
-};
-
-const PREVIEWS: Record<GameLayoutElementId, ReactNode> = {
-  logo: <GameLogo />,
-  intro: <GameQuestionIntro questionNumber={5} />,
-  handout: <GameHandout />,
-  question: <GameQuestion>Текст питання</GameQuestion>,
-  timer: <GameTimer seconds={42} />,
-  'answer-comment': (
-    <GameAnswerComment>Коментар до відповіді</GameAnswerComment>
-  ),
-  'alternative-answer': (
-    <GameAlternativeAnswer>Альтернативна відповідь</GameAlternativeAnswer>
-  ),
-  answer: <GameAnswer answer="Відповідь" />,
-  progress: <GameProgress questionNumber={5} questionCount={36} />,
-  controls: (
-    <GameControls
-      canGoBack
-      controlsDisabled={false}
-      preview
-      onBack={() => undefined}
-      onNext={() => undefined}
-    />
-  ),
-};
-
 const GRAPHIC_ELEMENTS = new Set<GameLayoutElementId>(['logo', 'handout']);
-const IMAGE_POSITION_LABELS: Record<
-  (typeof GAME_IMAGE_POSITIONS)[number],
-  string
-> = {
-  'left top': 'Ліворуч угорі',
-  'center top': 'По центру вгорі',
-  'right top': 'Праворуч угорі',
-  'left center': 'Ліворуч по центру',
-  'center center': 'По центру',
-  'right center': 'Праворуч по центру',
-  'left bottom': 'Ліворуч унизу',
-  'center bottom': 'По центру внизу',
-  'right bottom': 'Праворуч унизу',
-};
 
 const clamp = (value: number) => Math.min(100, Math.max(0, value));
 const clampZoom = (value: number) => Math.min(2.5, Math.max(0.5, value));
@@ -183,13 +132,14 @@ export function createCustomElement(
   kind: CustomGameElement['kind'],
   index: number,
   id: string = crypto.randomUUID(),
+  text = 'Текст',
 ): CustomGameElement {
   const base = {
     id,
     position: getDefaultCustomElementPosition(kind, (index % 6) * 3),
   };
   return kind === 'text'
-    ? { ...base, kind, text: 'Текст' }
+    ? { ...base, kind, text }
     : { ...base, kind, image: null };
 }
 
@@ -210,6 +160,60 @@ export function VisualEditor({
   onImportTemplate,
   onExportTemplate,
 }: VisualEditorProps) {
+  const { copy } = useLocalization();
+  const labels: Record<GameLayoutElementId, string> = {
+    logo: copy.visualEditor.labels.logo,
+    intro: copy.visualEditor.labels.intro,
+    handout: copy.visualEditor.labels.handout,
+    question: copy.visualEditor.labels.question,
+    timer: copy.visualEditor.labels.timer,
+    'answer-comment': copy.visualEditor.labels.answerComment,
+    'alternative-answer': copy.visualEditor.labels.alternativeAnswer,
+    answer: copy.visualEditor.labels.answer,
+    progress: copy.visualEditor.labels.progress,
+    controls: copy.visualEditor.labels.controls,
+  };
+  const previews: Record<GameLayoutElementId, ReactNode> = {
+    logo: <GameLogo />,
+    intro: <GameQuestionIntro questionNumber={5} />,
+    handout: <GameHandout copy={copy} />,
+    question: <GameQuestion>{copy.visualEditor.previewText}</GameQuestion>,
+    timer: <GameTimer seconds={42} />,
+    'answer-comment': (
+      <GameAnswerComment>{copy.shared.answerComment}</GameAnswerComment>
+    ),
+    'alternative-answer': (
+      <GameAlternativeAnswer>
+        {copy.editor.alternativeAnswers}
+      </GameAlternativeAnswer>
+    ),
+    answer: <GameAnswer answer={copy.shared.answer} />,
+    progress: <GameProgress questionNumber={5} questionCount={36} />,
+    controls: (
+      <GameControls
+        copy={copy}
+        canGoBack
+        controlsDisabled={false}
+        preview
+        onBack={() => undefined}
+        onNext={() => undefined}
+      />
+    ),
+  };
+  const imagePositionLabels: Record<
+    (typeof GAME_IMAGE_POSITIONS)[number],
+    string
+  > = {
+    'left top': copy.visualEditor.alignments.leftTop,
+    'center top': copy.visualEditor.alignments.centerTop,
+    'right top': copy.visualEditor.alignments.rightTop,
+    'left center': copy.visualEditor.alignments.leftCenter,
+    'center center': copy.visualEditor.alignments.centerCenter,
+    'right center': copy.visualEditor.alignments.rightCenter,
+    'left bottom': copy.visualEditor.alignments.leftBottom,
+    'center bottom': copy.visualEditor.alignments.centerBottom,
+    'right bottom': copy.visualEditor.alignments.rightBottom,
+  };
   const canvasRef = useRef<HTMLDivElement>(null);
   const workspaceRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -325,10 +329,15 @@ export function VisualEditor({
 
   function addElement(kind: CustomGameElement['kind']) {
     if (game.customElements.length >= MAX_CUSTOM_GAME_ELEMENTS) {
-      setLocalMessage('Можна додати не більше 20 власних елементів.');
+      setLocalMessage(copy.visualEditor.customLimit);
       return;
     }
-    const element = createCustomElement(kind, game.customElements.length);
+    const element = createCustomElement(
+      kind,
+      game.customElements.length,
+      undefined,
+      copy.visualEditor.customText,
+    );
     setLocalMessage('');
     onChange({
       ...game,
@@ -368,9 +377,7 @@ export function VisualEditor({
       0,
     );
     if (otherImageDataLength + dataUrl.length > MAX_CUSTOM_IMAGE_DATA_LENGTH) {
-      setLocalMessage(
-        'Зображення завеликі для збереження. Видаліть одне з них або виберіть менший файл.',
-      );
+      setLocalMessage(copy.visualEditor.imagesTooLarge);
       return;
     }
     updateCustom(imageTarget, { image: dataUrl });
@@ -444,7 +451,8 @@ export function VisualEditor({
             '--game-image-position': position.imagePosition,
           } as CSSProperties
         }
-        aria-label={`${label}${position.hidden ? '. Приховано у грі' : ''}. Перетягніть, щоб змінити позицію`}
+        data-hidden-label={copy.visualEditor.hidden}
+        aria-label={`${label}${position.hidden ? copy.visualEditor.hiddenSuffix : ''}. ${copy.visualEditor.dragInstruction}`}
         aria-pressed={selected ? selectionKey(selected) === key : false}
         onClick={() => setSelected(selection)}
         onKeyDown={(event) => {
@@ -561,10 +569,13 @@ export function VisualEditor({
     position: GameLayoutPosition,
   ) {
     return (
-      <ActionToolbarPopover icon={faPalette} label="Оформлення тексту">
-        <h2>Оформлення тексту</h2>
+      <ActionToolbarPopover
+        icon={faPalette}
+        label={copy.visualEditor.textFormatting}
+      >
+        <h2>{copy.visualEditor.textFormatting}</h2>
         <label>
-          Розмір
+          {copy.visualEditor.size}
           <input
             type="range"
             min="50"
@@ -579,7 +590,7 @@ export function VisualEditor({
           <output>{Math.round(position.fontScale * 100)}%</output>
         </label>
         <label>
-          Колір
+          {copy.visualEditor.color}
           <input
             type="color"
             value={position.textColor}
@@ -589,7 +600,7 @@ export function VisualEditor({
           />
         </label>
         <label>
-          Напрямок
+          {copy.visualEditor.direction}
           <select
             value={position.textGrowDirection}
             onChange={(event) =>
@@ -598,12 +609,12 @@ export function VisualEditor({
               })
             }
           >
-            <option value="up">Вгору</option>
-            <option value="down">Вниз</option>
+            <option value="up">{copy.visualEditor.up}</option>
+            <option value="down">{copy.visualEditor.down}</option>
           </select>
         </label>
         <label>
-          Підлаштувати до висоти
+          {copy.visualEditor.fitHeight}
           <input
             type="checkbox"
             checked={position.fitTextToHeight}
@@ -625,11 +636,11 @@ export function VisualEditor({
     return (
       <ActionToolbarPopover
         icon={faCircleHalfStroke}
-        label="Позиція зображення"
+        label={copy.visualEditor.imagePosition}
       >
-        <h2>Позиція зображення</h2>
+        <h2>{copy.visualEditor.imagePosition}</h2>
         <label>
-          Вирівнювання
+          {copy.visualEditor.alignment}
           <select
             value={position.imagePosition}
             onChange={(event) =>
@@ -641,7 +652,7 @@ export function VisualEditor({
           >
             {GAME_IMAGE_POSITIONS.map((positionName) => (
               <option key={positionName} value={positionName}>
-                {IMAGE_POSITION_LABELS[positionName]}
+                {imagePositionLabels[positionName]}
               </option>
             ))}
           </select>
@@ -653,11 +664,13 @@ export function VisualEditor({
   function contextualToolbar() {
     if (!selected || !selectedPosition) {
       return (
-        <ActionToolbar label="Дії з робочою областю">
+        <ActionToolbar label={copy.visualEditor.workspaceActions}>
           <ActionToolbarButton
             icon={faImage}
             label={
-              game.backgroundImage ? 'Замінити фон' : 'Застосувати зображення'
+              game.backgroundImage
+                ? copy.visualEditor.replaceBackground
+                : copy.visualEditor.applyImage
             }
             onClick={() => chooseImage('background')}
           />
@@ -665,17 +678,17 @@ export function VisualEditor({
             <ActionToolbarButton
               danger
               icon={faTrashCan}
-              label="Видалити фон"
+              label={copy.visualEditor.removeBackground}
               onClick={() => onChange({ ...game, backgroundImage: null })}
             />
           )}
           <ActionToolbarPopover
             icon={faCircleHalfStroke}
-            label="Прозорість фону"
+            label={copy.visualEditor.backgroundOpacity}
           >
-            <h2>Прозорість фону</h2>
+            <h2>{copy.visualEditor.backgroundOpacity}</h2>
             <label>
-              Прозорість
+              {copy.visualEditor.opacity}
               <input
                 type="range"
                 min="0"
@@ -698,7 +711,7 @@ export function VisualEditor({
 
     if (selected.kind === 'built-in') {
       return (
-        <ActionToolbar label={`Дії: ${LABELS[selected.id]}`}>
+        <ActionToolbar label={copy.visualEditor.actions(labels[selected.id])}>
           {GRAPHIC_ELEMENTS.has(selected.id)
             ? imagePositionSettings(selected, selectedPosition)
             : textSettings(selected, selectedPosition)}
@@ -706,7 +719,9 @@ export function VisualEditor({
           <ActionToolbarButton
             icon={selectedPosition.hidden ? faEye : faEyeSlash}
             label={
-              selectedPosition.hidden ? 'Показати у грі' : 'Приховати у грі'
+              selectedPosition.hidden
+                ? copy.visualEditor.showInGame
+                : copy.visualEditor.hideInGame
             }
             pressed={selectedPosition.hidden}
             onClick={() =>
@@ -720,15 +735,22 @@ export function VisualEditor({
     if (!selectedCustom) return null;
     return (
       <ActionToolbar
-        label={`Дії: ${
-          selectedCustom.kind === 'text' ? 'Власний текст' : 'Власне зображення'
-        }`}
+        label={copy.visualEditor.actions(
+          selectedCustom.kind === 'text'
+            ? copy.visualEditor.ownText
+            : copy.visualEditor.ownImage,
+        )}
       >
         {selectedCustom.kind === 'text' ? (
           <>
-            <ActionToolbarPopover icon={faPen} label="Змінити текст">
-              <h2>Змінити текст</h2>
-              <label htmlFor="visual-editor-custom-text">Текст</label>
+            <ActionToolbarPopover
+              icon={faPen}
+              label={copy.visualEditor.editText}
+            >
+              <h2>{copy.visualEditor.editText}</h2>
+              <label htmlFor="visual-editor-custom-text">
+                {copy.visualEditor.text}
+              </label>
               <textarea
                 id="visual-editor-custom-text"
                 maxLength={500}
@@ -750,8 +772,8 @@ export function VisualEditor({
               icon={faImage}
               label={
                 selectedCustom.image
-                  ? 'Замінити зображення'
-                  : 'Застосувати зображення'
+                  ? copy.visualEditor.replaceImage
+                  : copy.visualEditor.applyImage
               }
               onClick={() => chooseImage(selectedCustom.id)}
             />
@@ -759,7 +781,7 @@ export function VisualEditor({
               danger
               disabled={!selectedCustom.image}
               icon={faTrashCan}
-              label="Видалити зображення"
+              label={copy.visualEditor.removeImage}
               onClick={() => updateCustom(selectedCustom.id, { image: null })}
             />
             {imagePositionSettings(selected, selectedPosition)}
@@ -768,7 +790,11 @@ export function VisualEditor({
         <ActionToolbarSeparator />
         <ActionToolbarButton
           icon={selectedPosition.hidden ? faEye : faEyeSlash}
-          label={selectedPosition.hidden ? 'Показати у грі' : 'Приховати у грі'}
+          label={
+            selectedPosition.hidden
+              ? copy.visualEditor.showInGame
+              : copy.visualEditor.hideInGame
+          }
           pressed={selectedPosition.hidden}
           onClick={() =>
             updatePosition(selected, { hidden: !selectedPosition.hidden })
@@ -777,7 +803,7 @@ export function VisualEditor({
         <ActionToolbarButton
           danger
           icon={faTrashCan}
-          label="Видалити елемент"
+          label={copy.visualEditor.removeElement}
           onClick={() => removeCustom(selectedCustom.id)}
         />
       </ActionToolbar>
@@ -786,15 +812,18 @@ export function VisualEditor({
 
   return (
     <div className="visual-editor" hidden={hidden}>
-      <aside className="visual-editor-add-panel" aria-label="Додати елемент">
+      <aside
+        className="visual-editor-add-panel"
+        aria-label={copy.visualEditor.addElement}
+      >
         <Tooltip
-          label="Додати редагований текст на екран гри"
+          label={copy.visualEditor.addText}
           side="right"
           trigger={
             <button
               className="visual-editor-add-button"
               type="button"
-              aria-label="Додати редагований текст на екран гри"
+              aria-label={copy.visualEditor.addText}
               onClick={() => addElement('text')}
             >
               <FontAwesomeIcon icon={faFont} aria-hidden="true" />
@@ -802,13 +831,13 @@ export function VisualEditor({
           }
         />
         <Tooltip
-          label="Додати власне зображення або логотип"
+          label={copy.visualEditor.addImage}
           side="right"
           trigger={
             <button
               className="visual-editor-add-button"
               type="button"
-              aria-label="Додати власне зображення або логотип"
+              aria-label={copy.visualEditor.addImage}
               onClick={() => addElement('image')}
             >
               <FontAwesomeIcon icon={faImage} aria-hidden="true" />
@@ -816,13 +845,13 @@ export function VisualEditor({
           }
         />
         <Tooltip
-          label="Імпортувати шаблон оформлення"
+          label={copy.visualEditor.importTemplate}
           side="right"
           trigger={
             <button
               className="visual-editor-add-button"
               type="button"
-              aria-label="Імпортувати шаблон оформлення"
+              aria-label={copy.visualEditor.importTemplate}
               onClick={() => templateInputRef.current?.click()}
             >
               <FontAwesomeIcon icon={faFileImport} aria-hidden="true" />
@@ -830,13 +859,13 @@ export function VisualEditor({
           }
         />
         <Tooltip
-          label="Експортувати шаблон оформлення"
+          label={copy.visualEditor.exportTemplate}
           side="right"
           trigger={
             <button
               className="visual-editor-add-button"
               type="button"
-              aria-label="Експортувати шаблон оформлення"
+              aria-label={copy.visualEditor.exportTemplate}
               onClick={onExportTemplate}
             >
               <FontAwesomeIcon icon={faFileExport} aria-hidden="true" />
@@ -910,7 +939,7 @@ export function VisualEditor({
             event.currentTarget.value = '';
             if (!file) return;
             if (!file.type.startsWith('image/')) {
-              setLocalMessage('Оберіть файл зображення.');
+              setLocalMessage(copy.visualEditor.chooseImage);
               return;
             }
             const reader = new FileReader();
@@ -942,7 +971,7 @@ export function VisualEditor({
               '--game-surface-background-opacity': game.backgroundOpacity,
             } as CSSProperties
           }
-          aria-label="Макет екрана гри"
+          aria-label={copy.visualEditor.gameLayout}
           aria-current={selected ? undefined : 'true'}
           role="region"
           onClick={(event) => {
@@ -953,15 +982,17 @@ export function VisualEditor({
             renderLayoutItem(
               { kind: 'built-in', id },
               positions[id],
-              LABELS[id],
-              PREVIEWS[id],
+              labels[id],
+              previews[id],
             ),
           )}
           {game.customElements.map((element) =>
             renderLayoutItem(
               { kind: 'custom', id: element.id },
               element.position,
-              element.kind === 'text' ? 'Власний текст' : 'Власне зображення',
+              element.kind === 'text'
+                ? copy.visualEditor.ownText
+                : copy.visualEditor.ownImage,
               <GameCustomElement element={element} preview />,
             ),
           )}

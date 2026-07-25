@@ -1,5 +1,6 @@
 import './styles.scss';
 
+import { useLocalization } from '../../localization';
 import { EditorBrand } from '../EditorBrand';
 import { PackageTitleField } from '../PackageTitleField';
 import { SaveStatus } from '../SaveStatus';
@@ -22,6 +23,8 @@ export function EditorHeader({
   onBack,
   onTitleChange,
 }: EditorHeaderProps) {
+  const { copy } = useLocalization();
+
   return (
     <header className="app-header">
       <EditorBrand showBackButton={hasPackage} onBack={onBack} />
@@ -32,7 +35,10 @@ export function EditorHeader({
             value={packageTitle}
             onChange={onTitleChange}
           />
-          <SaveStatus status={saveStatus} />
+          <SaveStatus
+            label={copy.editor.saveStatus[saveStatus]}
+            status={saveStatus}
+          />
         </div>
       )}
     </header>

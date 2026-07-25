@@ -1,6 +1,7 @@
 import './styles.scss';
 
 import { TextAreaField } from '../../atoms/TextAreaField';
+import { useLocalization } from '../../localization';
 
 export interface HostNotesFieldProps {
   value: string;
@@ -8,13 +9,15 @@ export interface HostNotesFieldProps {
 }
 
 export function HostNotesField({ value, onChange }: HostNotesFieldProps) {
+  const { copy } = useLocalization();
+
   return (
     <fieldset>
       <legend>
-        Примітки для ведучого <span>(необов'язково)</span>
+        {copy.editor.hostNotes} <span>{copy.shared.optional}</span>
       </legend>
       <TextAreaField
-        label="Примітки ведучого"
+        label={copy.editor.hostNotesLabel}
         rows={3}
         value={value}
         onValueChange={onChange}

@@ -3,6 +3,11 @@ import './styles.scss';
 import classNames from 'classnames';
 import type { CSSProperties } from 'react';
 import type { Handout } from '@schdk/common';
+import {
+  LOCALIZATION_COPY,
+  type LocalizationCopy,
+  useLocalization,
+} from '../../localization';
 import type { CustomGameElement } from '../../options/types';
 import { FitTextObserver } from '../FitTextObserver';
 
@@ -22,8 +27,10 @@ export function GameProgress({
   questionNumber: number;
   questionCount: number;
 }) {
+  const { copy } = useLocalization();
+
   return (
-    <div className="game-progress" aria-label="Прогрес гри">
+    <div className="game-progress" aria-label={copy.host.gameProgress}>
       <span>
         {questionNumber} / {questionCount}
       </span>
@@ -38,17 +45,21 @@ export function GameQuestionIntro({
   questionNumber: number;
   className?: string;
 }) {
+  const { copy } = useLocalization();
+
   return (
     <div className={classNames('question-intro', className)}>
-      Питання №{questionNumber}
+      {copy.host.questionIntro(questionNumber)}
     </div>
   );
 }
 
 export function GameHandout({
+  copy = LOCALIZATION_COPY.uk,
   handout,
   className,
 }: {
+  copy?: LocalizationCopy;
   handout?: Handout;
   className?: string;
 }) {
@@ -65,11 +76,11 @@ export function GameHandout({
     <img
       className={handoutClasses}
       src={handout.dataUrl}
-      alt="Роздатковий матеріал"
+      alt={copy.host.handoutAlt}
     />
   ) : (
     <div className={classNames(handoutClasses, 'game-handout-placeholder')}>
-      Роздатка
+      {copy.shared.handout}
     </div>
   );
 }
@@ -134,6 +145,7 @@ export function GameCustomElement({
   element: CustomGameElement;
   preview?: boolean;
 }) {
+  const { copy } = useLocalization();
   const { position } = element;
   if (position.hidden && !preview) return null;
   return (
@@ -162,7 +174,7 @@ export function GameCustomElement({
         <img src={element.image} alt="" />
       ) : preview ? (
         <span className="game-custom-image-placeholder" aria-hidden="true">
-          Зображення
+          {copy.shared.image}
         </span>
       ) : null}
       {element.kind === 'text' && (
@@ -173,12 +185,14 @@ export function GameCustomElement({
 }
 
 export function GameControls({
+  copy = LOCALIZATION_COPY.uk,
   canGoBack,
   controlsDisabled,
   preview = false,
   onBack,
   onNext,
 }: {
+  copy?: LocalizationCopy;
   canGoBack: boolean;
   controlsDisabled: boolean;
   preview?: boolean;
@@ -188,28 +202,28 @@ export function GameControls({
   return (
     <nav
       className={classNames('game-controls', { 'is-preview': preview })}
-      aria-label="Керування станами питання"
+      aria-label={copy.host.controls}
     >
       <Button
         type="button"
         variant="ghost"
-        aria-label="Попередній стан"
+        aria-label={copy.host.previousStage}
         disabled={preview || controlsDisabled || !canGoBack}
         tabIndex={preview ? -1 : undefined}
         onClick={onBack}
       >
         <FontAwesomeIcon icon={faArrowLeft} aria-hidden="true" />
-        <kbd>← · PgUp · Backspace</kbd>
+        <kbd>{copy.host.previousStageKeys}</kbd>
       </Button>
       <Button
         type="button"
         variant="ghost"
-        aria-label="Наступний стан"
+        aria-label={copy.host.nextStage}
         disabled={preview || controlsDisabled}
         tabIndex={preview ? -1 : undefined}
         onClick={onNext}
       >
-        <kbd>Space · PgDn · →</kbd>
+        <kbd>{copy.host.nextStageKeys}</kbd>
         <FontAwesomeIcon icon={faArrowRight} aria-hidden="true" />
       </Button>
     </nav>

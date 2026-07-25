@@ -1,18 +1,19 @@
 import './styles.scss';
 
 import classNames from 'classnames';
+import { LOCALIZATION_COPY } from '../../localization';
 import type { EditorSaveStatus } from '../types';
-import { SAVE_STATUS_LABELS } from './constants';
 
 export interface SaveStatusProps {
+  label?: string;
   status: EditorSaveStatus;
 }
 
-export function SaveStatus({ status }: SaveStatusProps) {
+export function SaveStatus({ label, status }: SaveStatusProps) {
   return (
     <p className={classNames('save-status', status)} role="status">
       <span className="save-status-dot" aria-hidden="true" />
-      {SAVE_STATUS_LABELS[status]}
+      {label ?? LOCALIZATION_COPY.uk.editor.saveStatus[status]}
     </p>
   );
 }

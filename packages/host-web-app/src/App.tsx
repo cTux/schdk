@@ -8,6 +8,7 @@ import {
   type HostPackageDetails,
   type RecentPackageItem,
 } from '@schdk/ui/host';
+import { useLocalization } from '@schdk/ui/localization';
 import type { CustomGameElement, GameLayout } from '@schdk/ui/options';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
@@ -42,6 +43,7 @@ export function App({
   layout = null,
   soundVolume = 0.4,
 }: AppProps) {
+  const { copy } = useLocalization();
   const sessionScope = window.location.pathname;
   const initialSession = useRef(
     (window.desktop ? null : getDeepLinkedHostSession(window.location.href)) ??
@@ -145,14 +147,12 @@ export function App({
             getHostDeepLink(window.location.href, null),
           );
         }
-        setMessage(
-          'Не вдалося відновити попередню гру. Можливо, файл переміщено або видалено.',
-        );
+        setMessage(copy.host.restoreFailed);
       } finally {
         setSessionReady(true);
       }
     })();
-  }, [acceptPackage, sessionScope]);
+  }, [acceptPackage, copy, sessionScope]);
 
   useEffect(() => {
     setGameAudioVolume(soundVolume);
@@ -228,9 +228,7 @@ export function App({
           };
       await acceptPackage(opened.content, file.name, opened.filePath);
     } catch {
-      setMessage(
-        'Не вдалося відкрити файл: пакет має неправильний формат або ще не готовий до гри.',
-      );
+      setMessage(copy.host.invalidFile);
     }
   }
 
@@ -246,9 +244,7 @@ export function App({
       if (!opened.content) throw new Error('Recent package is unavailable');
       await acceptPackage(opened.content, opened.fileName, recent.id);
     } catch {
-      setMessage(
-        'Не вдалося відкрити недавній файл. Можливо, його переміщено, видалено або пакет ще не готовий до гри.',
-      );
+      setMessage(copy.host.recentOpenFailed);
       await refreshRecentPackages();
     }
   }
@@ -297,6 +293,7 @@ export function App({
     <HostView
       backgroundImage={backgroundImage}
       backgroundOpacity={backgroundOpacity}
+      copy={copy}
       customElements={customElements}
       finished={gameActive && wizard.finished}
       game={game}

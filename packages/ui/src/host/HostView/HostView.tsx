@@ -6,6 +6,7 @@ import { AppIcon } from '../../atoms/AppIcon';
 import { StatusMessage } from '../../atoms/StatusMessage';
 import { PackageStart } from '../../editor/PackageStart';
 import type { RecentPackageItem } from '../../editor/types';
+import { LOCALIZATION_COPY, type LocalizationCopy } from '../../localization';
 import { GameFinished } from '../GameFinished';
 import { GamePackageDetails } from '../GamePackageDetails';
 import { GameWizard } from '../GameWizard';
@@ -30,6 +31,7 @@ export interface HostPackageDetails {
 export interface HostViewProps {
   backgroundImage: string | null;
   backgroundOpacity: number;
+  copy?: LocalizationCopy;
   customElements?: CustomGameElement[];
   finished: boolean;
   game: HostGameView | null;
@@ -49,6 +51,7 @@ export interface HostViewProps {
 export function HostView({
   backgroundImage,
   backgroundOpacity,
+  copy = LOCALIZATION_COPY.uk,
   customElements = [],
   finished,
   game,
@@ -84,8 +87,8 @@ export function HostView({
         <div className="brand">
           <AppIcon />
           <div>
-            <p className="eyebrow">Проведення гри</p>
-            <h1>Провести гру</h1>
+            <p className="eyebrow">{copy.host.eyebrow}</p>
+            <h1>{copy.host.title}</h1>
           </div>
         </div>
       </header>
@@ -104,6 +107,7 @@ export function HostView({
       )}
       {game && (
         <GameWizard
+          copy={copy}
           customElements={customElements}
           game={game}
           layout={layout}

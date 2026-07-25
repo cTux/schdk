@@ -18,3 +18,8 @@
   and browser back/forward restores the selected page.
 - Persist validated visual-editor custom elements and background settings with
   the other game options.
+- Default the unified application to Ukrainian when no locale was selected.
+  Persist an explicit Ukrainian or English selection in browser storage and
+  apply it to every unified application surface.
+- Keep locale selection in the first `App` settings group, before the `WWW`
+  group; do not place it in the sidebar.

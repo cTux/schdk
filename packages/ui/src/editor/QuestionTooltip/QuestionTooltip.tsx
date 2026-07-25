@@ -1,9 +1,11 @@
 import './styles.scss';
 
 import classNames from 'classnames';
+import { LOCALIZATION_COPY, type LocalizationCopy } from '../../localization';
 
 export interface QuestionTooltipProps {
   answer: string;
+  copy?: LocalizationCopy;
   hasSummary: boolean;
   id: string;
   question: string;
@@ -12,6 +14,7 @@ export interface QuestionTooltipProps {
 
 export function QuestionTooltip({
   answer,
+  copy = LOCALIZATION_COPY.uk,
   hasSummary,
   id,
   question,
@@ -21,7 +24,7 @@ export function QuestionTooltip({
     <span className="question-tooltip" id={id} role="tooltip">
       {hasSummary && (
         <span className="question-tooltip-block">
-          <strong>Питання</strong>
+          <strong>{copy.shared.question}</strong>
           <span>{question}</span>
         </span>
       )}
@@ -32,13 +35,13 @@ export function QuestionTooltip({
             'question-tooltip-remark',
           )}
         >
-          <strong>Зауваження</strong>
+          <strong>{copy.editor.remark}</strong>
           <span>{remark}</span>
         </span>
       )}
       {hasSummary && (
         <span className="question-tooltip-block">
-          <strong>Відповідь</strong>
+          <strong>{copy.shared.answer}</strong>
           <span>{answer}</span>
         </span>
       )}

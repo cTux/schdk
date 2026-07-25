@@ -7,6 +7,7 @@ import type {
   GameLayout,
   GameLayoutElementId,
 } from '../../options/types';
+import { LOCALIZATION_COPY, type LocalizationCopy } from '../../localization';
 import {
   GameAnswer,
   GameAnswerComment,
@@ -28,6 +29,7 @@ import type {
 import { FitTextObserver } from '../FitTextObserver';
 
 export interface GameWizardProps {
+  copy?: LocalizationCopy;
   customElements?: CustomGameElement[];
   game: HostGameView;
   layout: GameLayout | null;
@@ -86,6 +88,7 @@ function stageMotionClass(
 }
 
 export function GameWizard({
+  copy = LOCALIZATION_COPY.uk,
   customElements = [],
   game,
   layout,
@@ -104,7 +107,7 @@ export function GameWizard({
   return (
     <section
       className={classNames('game-wizard', customLayoutClass)}
-      aria-label="Проведення гри"
+      aria-label={copy.host.game}
     >
       <GameLayoutItem id="logo" layout={layout}>
         <GameLogo />
@@ -137,6 +140,7 @@ export function GameWizard({
                 {visible.has('handout') && game.question.handout && (
                   <GameLayoutItem id="handout" layout={layout}>
                     <GameHandout
+                      copy={copy}
                       handout={game.question.handout}
                       className={stageMotionClass(
                         'handout',
@@ -230,6 +234,7 @@ export function GameWizard({
       ))}
       <GameLayoutItem id="controls" layout={layout}>
         <GameControls
+          copy={copy}
           canGoBack={game.canGoBack}
           controlsDisabled={game.controlsDisabled}
           onBack={onBack}

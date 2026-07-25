@@ -9,6 +9,9 @@
 - File-open controls must always invoke a visible native chooser. Use the
   renderer's hidden `<input type="file" accept=".schdk">`, clear its value
   after handling, and also support drag-and-drop.
-- Keep HTML language metadata and user-visible copy Ukrainian. Use the shared
-  owl asset from `@schdk/ui` as the favicon.
+- Keep standalone applications Ukrainian by default. The unified application
+  localizes all shell, settings, editor, host, gameplay, and visual-editor copy
+  in Ukrainian and English through the shared `@schdk/ui` locale context.
+  Update HTML language metadata and document copy with the selected locale.
+  Use the shared owl asset from `@schdk/ui` as the favicon.
 - Keep Vite `base` relative so built apps work from Electron `file:` URLs.

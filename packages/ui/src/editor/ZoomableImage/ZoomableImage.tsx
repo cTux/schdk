@@ -9,6 +9,7 @@ import classNames from 'classnames';
 import { useRef, useState, type PointerEvent } from 'react';
 import { Button } from '../../atoms/Button';
 import { IconButton } from '../../atoms/IconButton';
+import { useLocalization } from '../../localization';
 import { MAX_ZOOM, MIN_ZOOM, ZOOM_STEP } from './constants';
 
 export function clampImageZoom(zoom: number) {
@@ -28,6 +29,7 @@ export function ZoomableImage({
   src,
   title,
 }: ZoomableImageProps) {
+  const { copy } = useLocalization();
   const dialog = useRef<HTMLDialogElement>(null);
   const viewport = useRef<HTMLDivElement>(null);
   const drag = useRef<{
@@ -100,7 +102,7 @@ export function ZoomableImage({
           <div className="handout-dialog-actions">
             <IconButton
               icon={faMagnifyingGlassMinus}
-              label="Зменшити"
+              label={copy.shared.zoomOut}
               disabled={zoom === MIN_ZOOM}
               onClick={() =>
                 setZoom((current) => clampImageZoom(current - ZOOM_STEP))
@@ -109,13 +111,17 @@ export function ZoomableImage({
             <span aria-live="polite">{zoom * 100}%</span>
             <IconButton
               icon={faMagnifyingGlassPlus}
-              label="Збільшити"
+              label={copy.shared.zoomIn}
               disabled={zoom === MAX_ZOOM}
               onClick={() =>
                 setZoom((current) => clampImageZoom(current + ZOOM_STEP))
               }
             />
-            <IconButton icon={faXmark} label="Закрити" onClick={close} />
+            <IconButton
+              icon={faXmark}
+              label={copy.shared.close}
+              onClick={close}
+            />
           </div>
         </header>
         <div

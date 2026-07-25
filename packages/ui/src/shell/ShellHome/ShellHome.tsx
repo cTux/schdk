@@ -1,6 +1,7 @@
 import './styles.scss';
 
-import { SCHDK_ITEMS, type ShellViewName } from '../shellItems';
+import { useLocalization } from '../../localization';
+import { getShellContent, type ShellViewName } from '../shellItems';
 import { ToolCard } from '../ToolCard';
 
 export interface ShellHomeProps {
@@ -9,19 +10,19 @@ export interface ShellHomeProps {
 }
 
 export function ShellHome({ hidden, onOpen }: ShellHomeProps) {
+  const { copy } = useLocalization();
+  const content = getShellContent(copy);
+
   return (
     <div className="home" hidden={hidden}>
       <header>
-        <p className="eyebrow">Домашня</p>
-        <h1>Усе для гри в одному місці</h1>
-        <p>
-          Створіть пакет запитань у редакторі, а потім відкрийте його в розділі
-          «Провести гру».
-        </p>
+        <p className="eyebrow">{content.homeItem.label}</p>
+        <h1>{content.homeTitle}</h1>
+        <p>{content.homeDescription}</p>
       </header>
 
       <div className="tool-list">
-        {SCHDK_ITEMS.map((item) => (
+        {content.items.map((item) => (
           <ToolCard key={item.id} item={item} onOpen={() => onOpen(item.id)} />
         ))}
       </div>

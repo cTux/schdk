@@ -12,6 +12,7 @@ import {
   type EditorSaveStatus,
   type RecentPackageItem,
 } from '@schdk/ui/editor';
+import { useLocalization } from '@schdk/ui/localization';
 import {
   DEFAULT_EDITOR_TEXT_OPTIONS,
   type EditorTextOptions,
@@ -64,14 +65,20 @@ function replaceBrowserPackageDeepLink(
 }
 
 interface AppProps {
+  manageDocumentTitle?: boolean;
   textOptions?: EditorTextOptions;
 }
 
 export function App({
+  manageDocumentTitle = true,
   textOptions = DEFAULT_EDITOR_TEXT_OPTIONS,
 }: AppProps = {}) {
-  const [gamePackage, setGamePackage] = useState<GamePackage>(
-    createEmptyGamePackage,
+  const { copy, locale } = useLocalization();
+  function createLocalizedPackage() {
+    return { ...createEmptyGamePackage(), title: copy.shared.untitled };
+  }
+  const [gamePackage, setGamePackage] = useState<GamePackage>(() =>
+    createLocalizedPackage(),
   );
   const currentPackage = useRef(gamePackage);
   const saveQueue = useRef(Promise.resolve());
@@ -99,13 +106,16 @@ export function App({
   const [recentPackages, setRecentPackages] = useState<RecentPackageItem[]>([]);
   currentPackage.current = gamePackage;
 
-  const clearDraft = useCallback((name: string) => {
-    try {
-      removeDraft(localStorage, name);
-    } catch {
-      setMessage('Файл збережено, але аварійну копію не вдалося видалити.');
-    }
-  }, []);
+  const clearDraft = useCallback(
+    (name: string) => {
+      try {
+        removeDraft(localStorage, name);
+      } catch {
+        setMessage(copy.editor.savedDraftRemovalFailed);
+      }
+    },
+    [copy],
+  );
 
   const refreshRecentPackages = useCallback(async () => {
     try {
@@ -152,14 +162,12 @@ export function App({
       try {
         const draft = loadDraft(localStorage, openedFileName);
         if (draft) {
-          restored = window.confirm(
-            `Знайдено незбережену версію пакета «${openedFileName}». Відновити її?`,
-          );
+          restored = window.confirm(copy.editor.restoreDraft(openedFileName));
           if (restored) packageToEdit = draft;
           else removeDraft(localStorage, openedFileName);
         }
       } catch {
-        setMessage('Не вдалося перевірити аварійну копію в браузері.');
+        setMessage(copy.editor.draftCheckFailed);
       }
 
       setGamePackage(packageToEdit);
@@ -171,7 +179,7 @@ export function App({
       setShowValidation(false);
       return packageToEdit;
     },
-    [],
+    [copy],
   );
 
   const rememberBrowserPackage = useCallback(
@@ -204,12 +212,10 @@ export function App({
         await rememberBrowserPackage(packageName, openedPackage.title, content);
       } catch {
         replaceBrowserPackageDeepLink(null);
-        setMessage(
-          'Не вдалося відкрити пакет із посилання: локальна копія недоступна.',
-        );
+        setMessage(copy.editor.deepLinkOpenFailed);
       }
     })();
-  }, [applyOpenedPackage, rememberBrowserPackage]);
+  }, [applyOpenedPackage, copy, rememberBrowserPackage]);
 
   useEffect(() => {
     if (!window.desktop && hasPackage && fileName) {
@@ -230,14 +236,12 @@ export function App({
         setSelectedIndex(session.selectedIndex);
       } catch {
         saveDesktopEditorSession(localStorage, window.location.pathname, null);
-        setMessage(
-          'Не вдалося відновити попередній файл. Можливо, його переміщено або видалено.',
-        );
+        setMessage(copy.editor.restoreFileFailed);
       } finally {
         setDesktopSessionReady(true);
       }
     })();
-  }, [applyOpenedPackage]);
+  }, [applyOpenedPackage, copy]);
 
   useEffect(() => {
     if (!window.desktop || !desktopSessionReady) return;
@@ -288,9 +292,9 @@ export function App({
     try {
       saveDraft(localStorage, fileName, gamePackage);
     } catch {
-      setMessage('Не вдалося створити аварійну копію в браузері.');
+      setMessage(copy.editor.draftSaveFailed);
     }
-  }, [fileName, gamePackage, hasPackage, saveStatus]);
+  }, [copy, fileName, gamePackage, hasPackage, saveStatus]);
 
   useEffect(() => {
     if (
@@ -302,10 +306,10 @@ export function App({
       try {
         await saveCurrentPackage();
       } catch {
-        setMessage('Не вдалося автоматично зберегти файл.');
+        setMessage(copy.editor.autoSaveFailed);
       }
     });
-  }, [filePath, saveCurrentPackage, saveStatus]);
+  }, [copy, filePath, saveCurrentPackage, saveStatus]);
 
   useEffect(
     () =>
@@ -314,19 +318,18 @@ export function App({
           await saveCurrentPackage();
           window.desktop!.finishCloseAttempt(attempt, true);
         } catch {
-          setMessage('Не вдалося автоматично зберегти файл.');
+          setMessage(copy.editor.autoSaveFailed);
           window.desktop!.finishCloseAttempt(attempt, false);
         }
       }),
-    [saveCurrentPackage],
+    [copy, saveCurrentPackage],
   );
 
   useEffect(() => {
-    if (!window.desktop) return;
-    document.title = fileName
-      ? `${fileName} — Редактор ЩДК`
-      : 'Що? Де? Коли? — Редактор';
-  }, [fileName]);
+    if (!manageDocumentTitle) return;
+    document.documentElement.lang = locale;
+    document.title = copy.meta.editorTitle(fileName);
+  }, [copy, fileName, locale, manageDocumentTitle]);
 
   function updateQuestion(change: Partial<GameQuestion>) {
     setGamePackage((current) => ({
@@ -379,19 +382,12 @@ export function App({
         JSON.stringify(gamePackage.questions[selectedIndex], null, 2),
       );
     } catch {
-      setMessage(
-        'Не вдалося скопіювати питання. Перевірте доступ до буфера обміну.',
-      );
+      setMessage(copy.editor.copyFailed);
     }
   }
 
   async function pasteQuestion() {
-    if (
-      !window.confirm(
-        `Дійсно вставити питання з буфера обміну замість питання ${selectedIndex + 1}?`,
-      )
-    )
-      return;
+    if (!window.confirm(copy.editor.confirmPaste(selectedIndex + 1))) return;
 
     setMessage('');
     try {
@@ -406,9 +402,7 @@ export function App({
       }));
       setSaveStatus('pending');
     } catch {
-      setMessage(
-        'Не вдалося вставити питання. Перевірте доступ до буфера обміну та формат JSON.',
-      );
+      setMessage(copy.editor.pasteFailed);
     }
   }
 
@@ -463,7 +457,7 @@ export function App({
         replaceBrowserPackageDeepLink(file.name, 0);
       }
     } catch {
-      setMessage('Не вдалося відкрити файл: неправильний формат.');
+      setMessage(copy.editor.invalidFile);
     }
   }
 
@@ -482,9 +476,7 @@ export function App({
       }
       await refreshRecentPackages();
     } catch {
-      setMessage(
-        'Не вдалося відкрити недавній файл. Можливо, його переміщено або видалено.',
-      );
+      setMessage(copy.editor.recentOpenFailed);
       await refreshRecentPackages();
     }
   }
@@ -493,7 +485,11 @@ export function App({
     packageToSave: GamePackage,
   ): Promise<boolean> {
     setMessage('');
-    const filename = createPackageFilename(packageToSave.title);
+    const filename = createPackageFilename(
+      packageToSave.title,
+      new Date(),
+      copy.editor.unfinishedGame,
+    );
 
     try {
       if (window.desktop) {
@@ -522,7 +518,7 @@ export function App({
       replaceBrowserPackageDeepLink(saved.name, 0);
       return true;
     } catch {
-      setMessage('Не вдалося зберегти файл.');
+      setMessage(copy.editor.saveFailed);
       return false;
     }
   }
@@ -537,6 +533,7 @@ export function App({
         window.showSaveFilePicker.bind(window),
         suggestedName,
         content,
+        copy.editor.filePickerDescription,
       );
       return name ? { name, content } : null;
     }
@@ -553,7 +550,7 @@ export function App({
   }
 
   async function createPackage() {
-    const emptyPackage = createEmptyGamePackage();
+    const emptyPackage = createLocalizedPackage();
     if (!(await createPackageFile(emptyPackage))) return;
 
     setGamePackage(emptyPackage);
@@ -570,7 +567,11 @@ export function App({
         const oldFileName = fileName;
         const saved = await savePackageInBrowser(
           gamePackage,
-          createPackageFilename(gamePackage.title),
+          createPackageFilename(
+            gamePackage.title,
+            new Date(),
+            copy.editor.unfinishedGame,
+          ),
         );
         if (!saved) return;
         await rememberBrowserPackage(
@@ -581,7 +582,7 @@ export function App({
         if (oldFileName) clearDraft(oldFileName);
         if (saved.name !== oldFileName) clearDraft(saved.name);
       }
-      setGamePackage(createEmptyGamePackage());
+      setGamePackage(createLocalizedPackage());
       setHasPackage(false);
       setFilePath(null);
       setFileName(null);
@@ -591,7 +592,7 @@ export function App({
       setMessage('');
       replaceBrowserPackageDeepLink(null);
     } catch {
-      setMessage('Не вдалося автоматично зберегти файл.');
+      setMessage(copy.editor.autoSaveFailed);
     }
   }
 

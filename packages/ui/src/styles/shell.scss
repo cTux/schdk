@@ -176,7 +176,7 @@ button {
   height: 100vh;
   flex: 1 1 auto;
   min-width: 0;
-  overflow-y: auto;
+  overflow: hidden auto;
   background:
     radial-gradient(circle at 80% 0%, rgba($accent, 0.08), transparent 28rem),
     radial-gradient(
@@ -404,7 +404,7 @@ button {
   background: rgba($background, 0.88);
   padding: 2px 6px;
   color: #cbd3ff;
-  content: 'Приховано';
+  content: attr(data-hidden-label);
   font-size: 0.58rem;
   line-height: 1.2;
   pointer-events: none;
@@ -563,7 +563,7 @@ button {
 }
 
 .options-primary-tabs {
-  margin-bottom: 0;
+  margin-bottom: 24px;
   border: 0;
   background: transparent;
   padding: 0;
@@ -587,11 +587,12 @@ button {
 }
 
 .options-page section h2 {
-  margin: 0 0 8px;
+  margin: 0;
   font-size: 1rem;
 }
 
 .option-toggle,
+.option-select,
 .option-slider {
   display: flex;
   align-items: center;
@@ -611,6 +612,7 @@ button {
 }
 
 .option-toggle:hover,
+.option-select:hover,
 .option-slider:hover {
   border-color: $border-strong;
   box-shadow: $shadow-overlay;
@@ -618,18 +620,22 @@ button {
 }
 
 .option-toggle > span,
+.option-select > span,
 .option-slider > span {
   flex: 1 1 auto;
 }
 
 .option-toggle strong,
+.option-select strong,
 .option-toggle small,
+.option-select small,
 .option-slider strong,
 .option-slider small {
   display: block;
 }
 
 .option-toggle small,
+.option-select small,
 .option-slider small,
 .options-empty {
   margin-top: 4px;
@@ -679,6 +685,24 @@ button {
 }
 
 .option-toggle input:focus-visible {
+  outline: 2px solid rgba($accent, 0.8);
+  outline-offset: 3px;
+}
+
+.option-select select {
+  min-width: min(240px, 40vw);
+  min-height: $control-normal;
+  border: 1px solid $border-strong;
+  border-radius: $radius-control;
+  outline: none;
+  background: $surface-raised;
+  padding: 0 $space-3;
+  color: $text;
+  font: inherit;
+  cursor: pointer;
+}
+
+.option-select select:focus-visible {
   outline: 2px solid rgba($accent, 0.8);
   outline-offset: 3px;
 }
@@ -929,10 +953,16 @@ button:focus-visible {
     flex-wrap: wrap;
   }
 
+  .option-select {
+    flex-wrap: wrap;
+  }
+
+  .option-select > span,
   .option-slider > span {
     flex-basis: 100%;
   }
 
+  .option-select select,
   .option-slider input {
     width: auto;
     flex: 1 1 auto;

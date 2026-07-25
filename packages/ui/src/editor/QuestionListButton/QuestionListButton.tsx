@@ -4,6 +4,7 @@ import type { GameQuestion } from '@schdk/common';
 import classNames from 'classnames';
 import type { DragEvent } from 'react';
 import { Button } from '../../atoms/Button';
+import { LOCALIZATION_COPY, type LocalizationCopy } from '../../localization';
 import { QuestionTooltip } from '../QuestionTooltip';
 
 export function getQuestionListItem(
@@ -28,6 +29,7 @@ export function getQuestionListItem(
 }
 
 export interface QuestionListButtonProps {
+  copy?: LocalizationCopy;
   dragging: boolean;
   dropTarget: boolean;
   index: number;
@@ -44,6 +46,7 @@ export interface QuestionListButtonProps {
 }
 
 export function QuestionListButton({
+  copy = LOCALIZATION_COPY.uk,
   dragging,
   dropTarget,
   index,
@@ -80,7 +83,7 @@ export function QuestionListButton({
       onDragOver={onDragOver}
       onDrop={onDrop}
       onDragEnd={onDragEnd}
-      aria-label={`Питання ${index + 1}`}
+      aria-label={copy.shared.questionNumber(index + 1)}
       aria-describedby={hasTooltip ? tooltipId : undefined}
       aria-invalid={item.invalid}
     >
@@ -88,6 +91,7 @@ export function QuestionListButton({
       {hasTooltip && (
         <QuestionTooltip
           answer={item.answer}
+          copy={copy}
           hasSummary={item.hasSummary}
           id={tooltipId}
           question={item.questionText}

@@ -5,7 +5,8 @@
 - `@schdk/common` owns the game-package types, constants, parser, serializer,
   and readiness validation. It must not depend on UI or platform code.
 - `@schdk/ui` owns components, composed views, styles, design tokens, UI
-  assets, and UI rules. Its detailed rules live in
+  assets, Ukrainian/English application copy and locale context, and UI rules.
+  Its detailed rules live in
   [`packages/ui/README.md`](../../packages/ui/README.md).
 - `@schdk/editor-web-app` owns editor state, browser persistence, save
   orchestration, and the optional desktop bridge. It renders `@schdk/ui`
@@ -13,8 +14,8 @@
 - `@schdk/host-web-app` owns host behavior: package opening and recents,
   spoiler-free pre-game details, fullscreen gameplay state, keyboard
   navigation, timer/audio orchestration, and completion.
-- `@schdk/all-web-app` owns shell navigation and lazily loads the host and
-  editor React application exports.
+- `@schdk/all-web-app` owns shell navigation, persisted locale selection, and
+  lazily loads the host and editor React application exports.
 - `@schdk/all-desktop-app` is the only desktop application. It wraps
   `@schdk/all-web-app` and owns Electron main/preload code, packaging, and the
   narrow file bridge exposed to the trusted unified renderer.

@@ -1,5 +1,10 @@
 import { getDeepLinkedPackageName } from '@schdk/editor-web-app/deep-link';
 import type { EditorTextOptions, GameOptions } from '@schdk/ui/options';
+import {
+  LOCALIZATION_COPY,
+  LocaleProvider,
+  type AppLocale,
+} from '@schdk/ui/localization';
 import { ShellView, type ShellViewName } from '@schdk/ui/shell';
 import { lazy, Suspense, useEffect, useState } from 'react';
 import {
@@ -16,6 +21,14 @@ import {
   saveGameOptions,
   serializeVisualEditorTemplate,
 } from './options-storage';
+
+const SHELL_LOCALE_STORAGE_KEY = 'schdk.shell.locale';
+
+function getInitialLocale(): AppLocale {
+  const stored = localStorage.getItem(SHELL_LOCALE_STORAGE_KEY);
+  if (stored === 'uk' || stored === 'en') return stored;
+  return 'uk';
+}
 
 const HostApp = lazy(() =>
   import('@schdk/host-web-app/app').then(({ App }) => ({ default: App })),
@@ -35,6 +48,8 @@ function getLinkedView(): ShellViewName | null {
 
 export function App() {
   const sessionScope = window.location.pathname;
+  const [locale, setLocale] = useState(getInitialLocale);
+  const copy = LOCALIZATION_COPY[locale];
   const [view, setView] = useState<ShellViewName>(() => {
     return (
       getLinkedView() ??
@@ -53,6 +68,25 @@ export function App() {
     loadGameOptions(localStorage),
   );
   const [gameOptionsError, setGameOptionsError] = useState('');
+
+  useEffect(() => {
+    localStorage.setItem(SHELL_LOCALE_STORAGE_KEY, locale);
+    document.documentElement.lang = locale;
+    const sectionTitle =
+      view === 'home'
+        ? ''
+        : view === 'options'
+          ? copy.shell.settingsLabel
+          : view === 'visualEditor'
+            ? copy.shell.visualEditor.label
+            : copy.shell[view].label;
+    document.title = sectionTitle
+      ? `${sectionTitle} — ${copy.meta.title}`
+      : copy.meta.title;
+    document
+      .querySelector('meta[name="description"]')
+      ?.setAttribute('content', copy.meta.description);
+  }, [copy, locale, view]);
 
   useEffect(() => {
     saveDesktopShellView(localStorage, sessionScope, view);
@@ -78,9 +112,9 @@ export function App() {
     setGameOptionsError(
       saveGameOptions(localStorage, gameOptions)
         ? ''
-        : 'Не вдалося зберегти оформлення. Видаліть зайві зображення та спробуйте ще раз.',
+        : copy.allWeb.saveVisualsFailed,
     );
-  }, [gameOptions]);
+  }, [copy, gameOptions]);
 
   function showView(nextView: ShellViewName, pushHistory = true) {
     if (nextView === 'host' || nextView === 'editor') {
@@ -109,7 +143,7 @@ export function App() {
     } catch {
       // Report file read failures with the same actionable import error.
     }
-    setGameOptionsError('Не вдалося імпортувати шаблон оформлення.');
+    setGameOptionsError(copy.allWeb.importVisualsFailed);
   }
 
   function exportVisualEditorTemplate() {
@@ -125,38 +159,43 @@ export function App() {
       link.click();
       URL.revokeObjectURL(url);
     } catch {
-      setGameOptionsError('Не вдалося експортувати шаблон оформлення.');
+      setGameOptionsError(copy.allWeb.exportVisualsFailed);
     }
   }
 
   return (
-    <ShellView
-      editorApp={
-        <Suspense fallback={null}>
-          <EditorApp textOptions={editorOptions} />
-        </Suspense>
-      }
-      hostApp={
-        <Suspense fallback={null}>
-          <HostApp
-            backgroundImage={gameOptions.backgroundImage}
-            backgroundOpacity={gameOptions.backgroundOpacity}
-            customElements={gameOptions.customElements}
-            layout={gameOptions.layout}
-            soundVolume={gameOptions.soundVolume}
-          />
-        </Suspense>
-      }
-      loadedApps={loadedApps}
-      editorOptions={editorOptions}
-      gameOptions={gameOptions}
-      gameOptionsError={gameOptionsError}
-      view={view}
-      onEditorOptionsChange={setEditorOptions}
-      onGameOptionsChange={setGameOptions}
-      onImportVisualEditorTemplate={importVisualEditorTemplate}
-      onExportVisualEditorTemplate={exportVisualEditorTemplate}
-      onShowView={(nextView) => showView(nextView)}
-    />
+    <LocaleProvider locale={locale} onLocaleChange={setLocale}>
+      <ShellView
+        editorApp={
+          <Suspense fallback={null}>
+            <EditorApp
+              manageDocumentTitle={false}
+              textOptions={editorOptions}
+            />
+          </Suspense>
+        }
+        hostApp={
+          <Suspense fallback={null}>
+            <HostApp
+              backgroundImage={gameOptions.backgroundImage}
+              backgroundOpacity={gameOptions.backgroundOpacity}
+              customElements={gameOptions.customElements}
+              layout={gameOptions.layout}
+              soundVolume={gameOptions.soundVolume}
+            />
+          </Suspense>
+        }
+        loadedApps={loadedApps}
+        editorOptions={editorOptions}
+        gameOptions={gameOptions}
+        gameOptionsError={gameOptionsError}
+        view={view}
+        onEditorOptionsChange={setEditorOptions}
+        onGameOptionsChange={setGameOptions}
+        onImportVisualEditorTemplate={importVisualEditorTemplate}
+        onExportVisualEditorTemplate={exportVisualEditorTemplate}
+        onShowView={(nextView) => showView(nextView)}
+      />
+    </LocaleProvider>
   );
 }

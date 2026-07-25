@@ -3,6 +3,7 @@ import './styles.scss';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '../../atoms/Button';
+import { useLocalization } from '../../localization';
 import type { RecentPackageItem } from '../types';
 
 export interface RecentPackageButtonProps {
@@ -14,8 +15,11 @@ export function RecentPackageButton({
   recent,
   onOpen,
 }: RecentPackageButtonProps) {
+  const { copy } = useLocalization();
   const hasTitle = recent.title !== undefined;
-  const title = hasTitle ? recent.title?.trim() || 'Без назви' : recent.name;
+  const title = hasTitle
+    ? recent.title?.trim() || copy.shared.untitled
+    : recent.name;
 
   return (
     <Button
@@ -27,7 +31,7 @@ export function RecentPackageButton({
         <span className="recent-package-title">
           <strong>{title}</strong>
           {recent.ready && (
-            <span className="recent-package-ready">Готовий</span>
+            <span className="recent-package-ready">{copy.shared.ready}</span>
           )}
         </span>
         {hasTitle && <small>{recent.name}</small>}

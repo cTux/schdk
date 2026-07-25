@@ -29,5 +29,7 @@
 - Use the shared owl only for SCHDK branding and favicons.
 - Scope application-specific styles under each application root to prevent
   collisions between lazy components.
-- Keep contextual copy in its composed view, not atoms. Keep user-visible copy
-  Ukrainian and use `Провести гру` as the host area name.
+- Keep contextual copy in its composed view, not atoms. Read user-visible copy
+  from the shared Ukrainian/English locale context, default to Ukrainian
+  outside the unified application, and use `Провести гру` / `Host a game` as
+  the localized host area names.

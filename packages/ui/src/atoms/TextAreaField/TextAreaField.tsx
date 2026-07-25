@@ -2,6 +2,7 @@ import './styles.scss';
 
 import classNames from 'classnames';
 import type { TextareaHTMLAttributes } from 'react';
+import { LOCALIZATION_COPY } from '../../localization';
 
 export interface TextAreaFieldProps extends Omit<
   TextareaHTMLAttributes<HTMLTextAreaElement>,
@@ -10,6 +11,7 @@ export interface TextAreaFieldProps extends Omit<
   invalid?: boolean;
   label: string;
   optional?: boolean;
+  optionalLabel?: string;
   value: string;
   onValueChange(value: string): void;
 }
@@ -18,6 +20,7 @@ export function TextAreaField({
   invalid = false,
   label,
   optional = false,
+  optionalLabel = LOCALIZATION_COPY.uk.shared.optional,
   className = '',
   value,
   onValueChange,
@@ -25,7 +28,7 @@ export function TextAreaField({
 }: TextAreaFieldProps) {
   return (
     <label>
-      {label} {optional && <span>(необов'язково)</span>}
+      {label} {optional && <span>{optionalLabel}</span>}
       <textarea
         {...props}
         className={classNames(className, { invalid }) || undefined}

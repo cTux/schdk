@@ -5,6 +5,7 @@ import {
   faPen,
   faPlay,
 } from '@fortawesome/free-solid-svg-icons';
+import type { LocalizationCopy } from '../localization';
 
 export type ShellViewName =
   | 'home'
@@ -20,30 +21,22 @@ export interface ShellItem {
   description: string;
 }
 
-export const HOME_ITEM: ShellItem = {
-  id: 'home',
-  icon: faHouse,
-  label: 'Домашня',
-  description: 'Огляд інструментів для підготовки та проведення гри.',
-};
+export function getShellContent(copy: LocalizationCopy) {
+  const shell = copy.shell;
+  const homeItem: ShellItem = {
+    id: 'home',
+    icon: faHouse,
+    ...shell.home,
+  };
+  const items: readonly ShellItem[] = [
+    { id: 'host', icon: faPlay, ...shell.host },
+    { id: 'editor', icon: faPen, ...shell.editor },
+    {
+      id: 'visualEditor',
+      icon: faObjectGroup,
+      ...shell.visualEditor,
+    },
+  ];
 
-export const SCHDK_ITEMS: readonly ShellItem[] = [
-  {
-    id: 'host',
-    icon: faPlay,
-    label: 'Провести гру',
-    description: 'Запускайте готовий пакет і проводьте гру для команд.',
-  },
-  {
-    id: 'editor',
-    icon: faPen,
-    label: 'Редагувати пакети питань',
-    description: 'Створюйте та редагуйте пакети запитань у форматі .schdk.',
-  },
-  {
-    id: 'visualEditor',
-    icon: faObjectGroup,
-    label: 'Візуальний редактор',
-    description: 'Створюйте власний макет екрана проведення гри.',
-  },
-];
+  return { ...shell, homeItem, items };
+}

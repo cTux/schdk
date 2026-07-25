@@ -1,6 +1,7 @@
 import './styles.scss';
 
 import { Button } from '../../atoms/Button';
+import { useLocalization } from '../../localization';
 import type { HostPackageDetails } from '../HostView';
 
 export interface GamePackageDetailsProps {
@@ -14,36 +15,36 @@ export function GamePackageDetails({
   onBack,
   onStart,
 }: GamePackageDetailsProps) {
+  const { copy } = useLocalization();
+
   return (
     <section className="game-package-details">
       <div className="game-package-heading">
-        <p className="eyebrow">Пакет готовий</p>
+        <p className="eyebrow">{copy.host.packageReady}</p>
         <h2>{details.title}</h2>
         <p>{details.fileName}</p>
       </div>
       <dl className="game-package-stats">
         <div>
-          <dt>Раундів</dt>
+          <dt>{copy.host.rounds}</dt>
           <dd>{details.roundCount}</dd>
         </div>
         <div>
-          <dt>Питань</dt>
+          <dt>{copy.host.questions}</dt>
           <dd>{details.questionCount}</dd>
         </div>
         <div>
-          <dt>Роздаткових матеріалів</dt>
+          <dt>{copy.host.handouts}</dt>
           <dd>{details.handoutCount}</dd>
         </div>
       </dl>
-      <p className="game-package-note">
-        Питання та відповіді залишаються прихованими до початку гри.
-      </p>
+      <p className="game-package-note">{copy.host.hiddenContent}</p>
       <div className="game-package-actions">
         <Button type="button" onClick={onBack}>
-          Повернутися назад
+          {copy.host.back}
         </Button>
         <Button type="button" variant="primary" onClick={onStart}>
-          Почати гру
+          {copy.host.start}
         </Button>
       </div>
     </section>

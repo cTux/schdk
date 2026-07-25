@@ -3,6 +3,7 @@ import './styles.scss';
 import { QUESTION_COUNT } from '@schdk/common';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { IconButton } from '../../atoms/IconButton';
+import { useLocalization } from '../../localization';
 
 export interface QuestionNavigationProps {
   selectedIndex: number;
@@ -13,17 +14,19 @@ export function QuestionNavigation({
   selectedIndex,
   onSelect,
 }: QuestionNavigationProps) {
+  const { copy } = useLocalization();
+
   return (
     <div className="question-actions">
       <IconButton
         icon={faArrowLeft}
-        label="Попереднє питання"
+        label={copy.editor.previousQuestion}
         disabled={selectedIndex === 0}
         onClick={() => onSelect(selectedIndex - 1)}
       />
       <IconButton
         icon={faArrowRight}
-        label="Наступне питання"
+        label={copy.editor.nextQuestion}
         disabled={selectedIndex === QUESTION_COUNT - 1}
         onClick={() => onSelect(selectedIndex + 1)}
       />

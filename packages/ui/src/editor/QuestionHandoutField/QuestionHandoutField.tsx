@@ -4,6 +4,7 @@ import type { Handout } from '@schdk/common';
 import { Button } from '../../atoms/Button';
 import { FileButton } from '../../atoms/FileButton';
 import { TextAreaField } from '../../atoms/TextAreaField';
+import { useLocalization } from '../../localization';
 import { HandoutPreview } from '../HandoutPreview';
 
 export interface QuestionHandoutFieldProps {
@@ -19,11 +20,12 @@ export function QuestionHandoutField({
   onRemove,
   onTextChange,
 }: QuestionHandoutFieldProps) {
+  const { copy } = useLocalization();
   const textHandout = handout?.kind === 'text' ? handout : undefined;
   return (
     <fieldset>
       <legend>
-        Роздатка <span>(необов'язково)</span>
+        {copy.shared.handout} <span>{copy.shared.optional}</span>
       </legend>
       {handout && handout.kind !== 'text' ? (
         <HandoutPreview handout={handout} onRemove={onRemove} />
@@ -38,18 +40,18 @@ export function QuestionHandoutField({
                 event.target.value = '';
               }}
             >
-              Додати зображення
+              {copy.editor.addImage}
             </FileButton>
           )}
           <TextAreaField
-            label="Або введіть текст"
+            label={copy.editor.orEnterText}
             rows={4}
             value={textHandout?.text ?? ''}
             onValueChange={onTextChange}
           />
           {textHandout && (
             <Button className="handout-remove" type="button" onClick={onRemove}>
-              Видалити
+              {copy.shared.remove}
             </Button>
           )}
         </div>

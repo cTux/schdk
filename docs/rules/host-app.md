@@ -28,5 +28,5 @@
   apply the same settings without changing question stages.
 - Render persisted custom text and image elements with the same bounds and
   presentation used in the visual editor.
-- After the final answer, show `Дякуємо за гру!`; returning to games exits
-  fullscreen and restores the package chooser and recents.
+- After the final answer, show the localized thank-you message; returning to
+  games exits fullscreen and restores the package chooser and recents.
