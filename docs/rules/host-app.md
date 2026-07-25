@@ -10,9 +10,11 @@
   text.
 - Request fullscreen on the host root so the unified shell is excluded. Keep a
   fixed full-viewport fallback when fullscreen is denied.
-- Advance through intro, optional handout, question, 60-second timer, optional
-  answer comment, and answer. Keep revealed content visible until the next
-  question.
+- Advance standard questions through intro, optional handout, question,
+  60-second timer, optional answer comment, and answer. For blitz questions,
+  show the first part with its timer, then reveal each next part below the
+  previous ones while restarting a 30- or 20-second timer. Keep revealed
+  content visible until the next question.
 - Lock mouse and keyboard navigation during transitions. `Space`, `PageDown`,
   and `ArrowRight` advance; `Backspace`, `PageUp`, and `ArrowLeft` go back.
 - Play the main signal when the timer starts and expires and the pre-alarm with

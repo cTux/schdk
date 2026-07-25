@@ -2,10 +2,14 @@ export const QUESTION_TIME_SECONDS = 60;
 
 export type TimerSignal = 'main' | 'preAlarm' | null;
 
-export function getRemainingSeconds(startedAt: number, now: number): number {
+export function getRemainingSeconds(
+  startedAt: number,
+  now: number,
+  durationSeconds = QUESTION_TIME_SECONDS,
+): number {
   return Math.max(
     0,
-    Math.ceil((startedAt + QUESTION_TIME_SECONDS * 1000 - now) / 1000),
+    Math.ceil((startedAt + durationSeconds * 1000 - now) / 1000),
   );
 }
 

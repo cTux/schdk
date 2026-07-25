@@ -16,6 +16,7 @@ import {
   GameLogo,
   GameProgress,
   GameQuestion,
+  GameQuestionParts,
   GameQuestionIntro,
   GameTimer,
 } from '../GameElements';
@@ -153,13 +154,24 @@ export function GameWizard({
                 {visible.has('question') && (
                   <GameLayoutItem id="question" layout={layout}>
                     <GameQuestion
-                      className={stageMotionClass(
-                        'question',
-                        game.currentStage,
-                        game.transition,
-                      )}
+                      className={
+                        game.question.type === 'standard'
+                          ? stageMotionClass(
+                              'question',
+                              game.currentStage,
+                              game.transition,
+                            )
+                          : undefined
+                      }
                     >
-                      {game.question.question}
+                      <GameQuestionParts
+                        currentPartIndex={game.currentQuestionPartIndex}
+                        entering={
+                          game.question.type !== 'standard' &&
+                          game.transition.phase === 'enter'
+                        }
+                        parts={game.question.questionParts}
+                      />
                     </GameQuestion>
                   </GameLayoutItem>
                 )}

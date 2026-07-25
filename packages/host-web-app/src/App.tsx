@@ -182,6 +182,7 @@ export function App({
           question: wizard.question,
           questionNumber: wizard.position.questionIndex + 1,
           questionCount: selectedPackage.questions.length,
+          currentQuestionPartIndex: wizard.position.questionPartIndex,
           currentStage: wizard.position.stage,
           visibleStages: wizard.visibleStages,
           remainingSeconds: wizard.remainingSeconds,

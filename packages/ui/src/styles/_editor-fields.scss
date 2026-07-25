@@ -29,6 +29,7 @@
   }
 
   input,
+  select,
   textarea {
     width: 100%;
     margin-top: 7px;
@@ -46,11 +47,13 @@
   }
 
   input:hover,
+  select:hover,
   textarea:hover {
     border-color: $border-strong;
   }
 
   input:focus,
+  select:focus,
   textarea:focus {
     border-color: rgba($accent-rgb, 0.8);
     background: rgba($background-rgb, 0.9);
@@ -69,6 +72,16 @@
     min-height: 76px;
     font-size: 1.05rem;
     resize: vertical;
+  }
+
+  .question-type select {
+    display: block;
+  }
+
+  .question-part-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 
   .package-header {

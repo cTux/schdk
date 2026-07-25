@@ -45,7 +45,7 @@ export function useQuestionActions({
   const correct = (
     enabled: boolean,
     value: string,
-    field: 'question' | 'answer' | 'answerComment',
+    field: 'answer' | 'answerComment',
     correction: (value: string) => string,
   ) => {
     if (!enabled) return;
@@ -61,6 +61,18 @@ export function useQuestionActions({
     updateQuestion({
       alternativeAnswers: answers.map((answer, answerIndex) =>
         answerIndex === index ? corrected : answer,
+      ),
+    });
+  }
+
+  function correctQuestionText(index: number) {
+    if (!textOptions.correctQuestionText) return;
+    const parts = gamePackage.questions[selectedIndex]!.questionParts;
+    const corrected = correctSentence(parts[index] ?? '');
+    if (corrected === parts[index]) return;
+    updateQuestion({
+      questionParts: parts.map((part, partIndex) =>
+        partIndex === index ? corrected : part,
       ),
     });
   }
@@ -142,13 +154,7 @@ export function useQuestionActions({
         'answer',
         correctAnswer,
       ),
-    correctQuestionText: () =>
-      correct(
-        textOptions.correctQuestionText,
-        question.question,
-        'question',
-        correctSentence,
-      ),
+    correctQuestionText,
     pasteQuestion,
     swapQuestionPositions,
     updateQuestion,

@@ -6,6 +6,7 @@ const HOST_PACKAGE_PARAMETER = 'hostPackage';
 const HOST_ACTIVE_PARAMETER = 'hostActive';
 const HOST_FINISHED_PARAMETER = 'hostFinished';
 const HOST_QUESTION_PARAMETER = 'hostQuestion';
+const HOST_QUESTION_PART_PARAMETER = 'hostQuestionPart';
 const HOST_STAGE_PARAMETER = 'hostStage';
 const STAGES: HostQuestionStage[] = [
   'intro',
@@ -37,6 +38,9 @@ function parseHostSession(value: unknown): HostSession | null {
     !position ||
     !Number.isSafeInteger(position.questionIndex) ||
     Number(position.questionIndex) < 0 ||
+    (position.questionPartIndex !== undefined &&
+      (!Number.isSafeInteger(position.questionPartIndex) ||
+        Number(position.questionPartIndex) < 0)) ||
     !STAGES.includes(position.stage as HostQuestionStage)
   ) {
     return null;
@@ -47,6 +51,9 @@ function parseHostSession(value: unknown): HostSession | null {
     finished: session.finished,
     position: {
       questionIndex: Number(position.questionIndex),
+      questionPartIndex: Number.isSafeInteger(position.questionPartIndex)
+        ? Number(position.questionPartIndex)
+        : 0,
       stage: position.stage as HostQuestionStage,
     },
   };
@@ -93,6 +100,8 @@ export function getDeepLinkedHostSession(url: string): HostSession | null {
       position: {
         questionIndex:
           Number(parameters.get(HOST_QUESTION_PARAMETER) ?? '1') - 1,
+        questionPartIndex:
+          Number(parameters.get(HOST_QUESTION_PART_PARAMETER) ?? '1') - 1,
         stage: parameters.get(HOST_STAGE_PARAMETER) ?? 'intro',
       },
     });
@@ -108,6 +117,7 @@ export function getHostDeepLink(url: string, session: HostSession | null) {
     HOST_ACTIVE_PARAMETER,
     HOST_FINISHED_PARAMETER,
     HOST_QUESTION_PARAMETER,
+    HOST_QUESTION_PART_PARAMETER,
     HOST_STAGE_PARAMETER,
   ]) {
     nextUrl.searchParams.delete(parameter);
@@ -124,6 +134,12 @@ export function getHostDeepLink(url: string, session: HostSession | null) {
       HOST_QUESTION_PARAMETER,
       String(session.position.questionIndex + 1),
     );
+    if (session.position.questionPartIndex > 0) {
+      nextUrl.searchParams.set(
+        HOST_QUESTION_PART_PARAMETER,
+        String(session.position.questionPartIndex + 1),
+      );
+    }
     nextUrl.searchParams.set(HOST_STAGE_PARAMETER, session.position.stage);
   }
   return nextUrl.href;

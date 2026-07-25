@@ -11,7 +11,7 @@ describe('game question flow', () => {
   it('skips absent optional stages and keeps revealed stages visible', () => {
     const gamePackage = createEmptyGamePackage();
     const question = gamePackage.questions[0]!;
-    question.question = 'Question';
+    question.questionParts = ['Question'];
     question.answer = 'Answer';
 
     expect(getQuestionStages(question)).toEqual([
@@ -52,24 +52,28 @@ describe('game question flow', () => {
     expect(
       getNextPosition(gamePackage, {
         questionIndex: 0,
+        questionPartIndex: 0,
         stage: 'answer',
       }),
-    ).toEqual({ questionIndex: 1, stage: 'intro' });
+    ).toEqual({ questionIndex: 1, questionPartIndex: 0, stage: 'intro' });
     expect(
       getPreviousPosition(gamePackage, {
         questionIndex: 1,
+        questionPartIndex: 0,
         stage: 'intro',
       }),
-    ).toEqual({ questionIndex: 0, stage: 'answer' });
+    ).toEqual({ questionIndex: 0, questionPartIndex: 0, stage: 'answer' });
     expect(
       getPreviousPosition(gamePackage, {
         questionIndex: 0,
+        questionPartIndex: 0,
         stage: 'intro',
       }),
     ).toBeNull();
     expect(
       getNextPosition(gamePackage, {
         questionIndex: 35,
+        questionPartIndex: 0,
         stage: 'answer',
       }),
     ).toBeNull();

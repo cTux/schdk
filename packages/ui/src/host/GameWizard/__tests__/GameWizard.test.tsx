@@ -5,12 +5,14 @@ import { GameWizard } from '..';
 
 const game: HostGameView = {
   question: {
-    question: 'Питання',
+    type: 'standard',
+    questionParts: ['Питання'],
     answer: 'Відповідь',
     alternativeAnswers: [],
   },
   questionNumber: 1,
   questionCount: 36,
+  currentQuestionPartIndex: 0,
   currentStage: 'intro',
   visibleStages: ['intro'],
   remainingSeconds: 60,

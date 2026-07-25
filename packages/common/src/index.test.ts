@@ -16,7 +16,7 @@ describe('game package rules', () => {
 
     gamePackage.title = 'Тестовий пакет';
     gamePackage.questions.forEach((question) => {
-      question.question = 'Питання';
+      question.questionParts = ['Питання'];
       question.answer = 'Відповідь';
     });
     expect(validateGamePackage(gamePackage)).toEqual([]);
@@ -32,7 +32,7 @@ describe('game package rules', () => {
   it('round-trips unfinished packages and rejects malformed files', () => {
     const unfinished = createEmptyGamePackage();
     unfinished.title = 'Чернетка';
-    unfinished.questions[0]!.question = 'Незакінчене питання';
+    unfinished.questions[0]!.questionParts = ['Незакінчене питання'];
     unfinished.questions[0]!.answerComment = 'Пояснення після відповіді';
     unfinished.questions[0]!.comment = 'Перевірити джерело';
     unfinished.questions[0]!.hostNotes = 'Показати роздатку після сигналу';
@@ -74,7 +74,8 @@ describe('game package rules', () => {
 
   it('parses clipboard questions with every supported field', () => {
     const question = {
-      question: 'Питання',
+      type: 'standard' as const,
+      questionParts: ['Питання'],
       answer: 'Відповідь',
       answerComment: 'Коментар до відповіді',
       alternativeAnswers: ['Альтернатива'],

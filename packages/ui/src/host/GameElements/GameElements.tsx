@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import type { Handout } from '@schdk/common';
 import {
   LOCALIZATION_COPY,
@@ -10,7 +10,7 @@ import type { CustomGameElement } from '../../options/types';
 import { FitTextObserver } from '../FitTextObserver';
 
 export interface ElementProps {
-  children: string;
+  children: ReactNode;
   className?: string;
 }
 
@@ -84,7 +84,30 @@ export function GameHandout({
 }
 
 export function GameQuestion({ children, className }: ElementProps) {
-  return <p className={classNames('game-question', className)}>{children}</p>;
+  return (
+    <div className={classNames('game-question', className)}>{children}</div>
+  );
+}
+
+export function GameQuestionParts({
+  currentPartIndex,
+  entering,
+  parts,
+}: {
+  currentPartIndex: number;
+  entering: boolean;
+  parts: string[];
+}) {
+  return parts.slice(0, currentPartIndex + 1).map((part, index) => (
+    <p
+      className={classNames('game-question-part', {
+        'is-entering is-forward': entering && index === currentPartIndex,
+      })}
+      key={index}
+    >
+      {part}
+    </p>
+  ));
 }
 
 export function GameTimer({
