@@ -86,7 +86,7 @@ button {
 .sidebar .brand span {
   margin-top: 2px;
   color: $muted;
-  font-size: 0.72rem;
+  font-size: $font-size-xs;
 }
 
 .sidebar nav {
@@ -165,7 +165,7 @@ button {
   justify-content: center;
   border-radius: 9px;
   background: rgba(#fff, 0.055);
-  font-size: 0.85rem;
+  font-size: $font-size-md;
 }
 
 .sidebar-options {
@@ -305,7 +305,7 @@ button {
   padding: 10px 12px;
   color: #ffc2c6;
   box-shadow: $shadow-raised;
-  font-size: 0.78rem;
+  font-size: $font-size-sm;
 }
 
 .visual-editor-canvas {
@@ -424,7 +424,7 @@ button {
 .visual-layout-controls {
   max-width: none;
   color: $muted;
-  font-size: 0.72rem;
+  font-size: $font-size-xs;
   white-space: nowrap;
 }
 
@@ -725,7 +725,7 @@ button {
 .eyebrow {
   margin: 0 0 10px;
   color: $accent;
-  font-size: 0.72rem;
+  font-size: $font-size-xs;
   font-weight: 750;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -904,7 +904,7 @@ button:focus-visible {
   }
 
   .nav-icon {
-    font-size: 0.85rem;
+    font-size: $font-size-md;
   }
 
   .home {

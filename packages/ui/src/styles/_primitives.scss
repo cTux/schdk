@@ -116,7 +116,7 @@
   justify-content: space-between;
   gap: $space-3;
   color: #d3d7de;
-  font-size: 0.78rem;
+  font-size: $font-size-sm;
 }
 
 .ui-popover label + label {
