@@ -21,8 +21,9 @@
 - Before committing, run `pnpm fmt:check`, `pnpm lint`, `pnpm typecheck`,
   `pnpm test`, and affected builds. Run root `pnpm build` when no packaged
   executable blocks artifact collection.
-- End every prompt that changes repository files by committing all verified
-  task changes as one clear commit. Preserve unrelated user changes and confirm
-  the worktree is clean.
+- For every prompt that changes repository files, work on a prompt-based
+  `codex/` branch, commit all verified task changes, push the branch to `origin`,
+  and create a GitHub pull request. Preserve unrelated user changes, confirm the
+  worktree is clean, and keep changes local only when the user explicitly asks.
 - Visually smoke-test changed UI in a real browser. Build the affected Electron
   package for preload, main-process, packaging, icon, or web-resource changes.
