@@ -246,6 +246,10 @@ button {
     transform $motion-fast ease;
 }
 
+.visual-editor-import-button {
+  margin-top: auto;
+}
+
 .visual-editor-add-button svg {
   width: 20px;
   color: $saving;
