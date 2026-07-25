@@ -11,7 +11,7 @@ Research: [2026 UI and visual-editor research](../research/2026-ui-editor-resear
 Create one elegant SCHDK design system across the shell, editor, options, host
 setup, and visual editor. Rebuild the visual editor around:
 
-1. a labeled add-element panel on the left;
+1. a compact icon-only add-element rail on the left;
 2. the existing pannable and zoomable game workspace in the center;
 3. one compact, icon-only contextual action bar above the canvas;
 4. custom text and image elements that persist and render in gameplay.
@@ -22,8 +22,8 @@ the game screen into a generic admin UI.
 
 ![Proposed SCHDK visual editor with a labeled add panel, compact contextual action bar, and centered game canvas](../images/visual-editor-layout.svg)
 
-_Proposed desktop composition. The add palette stays labeled; only the
-contextual action bar becomes icon-only with custom tooltips._
+_Desktop composition. The add palette and contextual action bar are compact,
+icon-only controls with custom tooltips._
 
 ## Goals
 
@@ -52,7 +52,7 @@ contextual action bar becomes icon-only with custom tooltips._
 
 The visual editor fills its shell workspace:
 
-- **Add panel:** fixed 176 px left rail on normal widths.
+- **Add panel:** fixed compact left icon rail at every width.
 - **Workspace:** remaining area, with the 16:9 canvas centered as today.
 - **Action bar:** floating above the canvas and centered independently of the
   add panel.
@@ -61,21 +61,17 @@ The add panel uses a dark raised surface and a quiet boundary. The workspace
 uses a deep ink background with a subtle amber/blue radial wash. The canvas
 remains the highest-contrast object.
 
-At narrow widths, the add panel collapses to a 56 px icon rail. Its two item
-buttons retain custom tooltips. A single chevron action expands or collapses
-the rail; no separate mobile drawer is needed.
+The add panel stays compact at every width. Its two item buttons use custom
+tooltips that explain the element each action adds.
 
 ### Add panel
 
-Heading: `Додати`
+Two icon buttons are shown:
 
-Two labeled buttons are shown:
+- text icon;
+- image icon.
 
-- text icon + `Текст`;
-- image icon + `Зображення`.
-
-These labels remain visible because this is an object palette, not an action
-bar.
+Their accessible labels and custom tooltips explain the element being added.
 
 Adding text:
 

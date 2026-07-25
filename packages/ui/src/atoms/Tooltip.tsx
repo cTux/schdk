@@ -11,9 +11,11 @@ export function TooltipProvider({ children }: { children: ReactNode }) {
 
 export function Tooltip({
   label,
+  side,
   trigger,
 }: {
   label: string;
+  side?: 'top' | 'right' | 'bottom' | 'left';
   trigger: ReactElement;
 }) {
   return (
@@ -21,6 +23,7 @@ export function Tooltip({
       <BaseTooltip.Trigger render={trigger} />
       <BaseTooltip.Portal>
         <BaseTooltip.Positioner
+          side={side}
           sideOffset={8}
           className="ui-tooltip-positioner"
         >

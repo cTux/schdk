@@ -1,6 +1,4 @@
 import {
-  faChevronLeft,
-  faChevronRight,
   faCircleHalfStroke,
   faFont,
   faImage,
@@ -24,7 +22,7 @@ import {
   ActionToolbarPopover,
   ActionToolbarSeparator,
 } from '../../atoms/ActionToolbar';
-import { IconButton } from '../../atoms/IconButton';
+import { Tooltip } from '../../atoms/Tooltip';
 import {
   GameAnswer,
   GameAnswerComment,
@@ -228,7 +226,6 @@ export function VisualEditor({
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [selected, setSelected] = useState<ElementSelection | null>(null);
-  const [panelCollapsed, setPanelCollapsed] = useState(false);
   const [imageTarget, setImageTarget] = useState<'background' | string | null>(
     null,
   );
@@ -743,39 +740,36 @@ export function VisualEditor({
   }
 
   return (
-    <div
-      className={`visual-editor${panelCollapsed ? ' is-panel-collapsed' : ''}`}
-      hidden={hidden}
-    >
+    <div className="visual-editor" hidden={hidden}>
       <aside className="visual-editor-add-panel" aria-label="Додати елемент">
-        <div className="visual-editor-add-heading">
-          <div>
-            <strong>Додати</strong>
-            <span>Елементи екрана гри</span>
-          </div>
-          <IconButton
-            icon={panelCollapsed ? faChevronRight : faChevronLeft}
-            label={panelCollapsed ? 'Розгорнути панель' : 'Згорнути панель'}
-            variant="ghost"
-            onClick={() => setPanelCollapsed((current) => !current)}
-          />
-        </div>
-        <button
-          className="visual-editor-add-button"
-          type="button"
-          onClick={() => addElement('text')}
-        >
-          <FontAwesomeIcon icon={faFont} aria-hidden="true" />
-          <span>Текст</span>
-        </button>
-        <button
-          className="visual-editor-add-button"
-          type="button"
-          onClick={() => addElement('image')}
-        >
-          <FontAwesomeIcon icon={faImage} aria-hidden="true" />
-          <span>Зображення</span>
-        </button>
+        <Tooltip
+          label="Додати редагований текст на екран гри"
+          side="right"
+          trigger={
+            <button
+              className="visual-editor-add-button"
+              type="button"
+              aria-label="Додати редагований текст на екран гри"
+              onClick={() => addElement('text')}
+            >
+              <FontAwesomeIcon icon={faFont} aria-hidden="true" />
+            </button>
+          }
+        />
+        <Tooltip
+          label="Додати власне зображення або логотип"
+          side="right"
+          trigger={
+            <button
+              className="visual-editor-add-button"
+              type="button"
+              aria-label="Додати власне зображення або логотип"
+              onClick={() => addElement('image')}
+            >
+              <FontAwesomeIcon icon={faImage} aria-hidden="true" />
+            </button>
+          }
+        />
       </aside>
       <div
         ref={workspaceRef}
