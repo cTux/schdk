@@ -2,7 +2,12 @@ import { cp, mkdir, readdir, rm } from 'node:fs/promises';
 
 const packages = await readdir('packages', { withFileTypes: true });
 
-await rm('dist', { force: true, recursive: true });
+await rm('dist', {
+  force: true,
+  maxRetries: 10,
+  recursive: true,
+  retryDelay: 100,
+});
 await mkdir('dist');
 
 await Promise.all(
