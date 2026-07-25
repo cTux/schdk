@@ -10,7 +10,7 @@
     system-ui,
     -apple-system,
     sans-serif;
-  color-scheme: dark;
+  color-scheme: var(--schdk-color-scheme);
   font-synthesis: none;
 }
 
@@ -37,10 +37,14 @@ button {
   height: 100vh;
   overflow: hidden;
   background:
-    radial-gradient(circle at 78% -10%, rgba($accent, 0.12), transparent 30rem),
+    radial-gradient(
+      circle at 78% -10%,
+      rgba($accent-rgb, 0.12),
+      transparent 30rem
+    ),
     radial-gradient(
       circle at 38% 110%,
-      rgba($accent-cool, 0.1),
+      rgba($accent-cool-rgb, 0.1),
       transparent 34rem
     ),
     $background;
@@ -54,10 +58,10 @@ button {
   flex-direction: column;
   border-right: 1px solid $border;
   background:
-    linear-gradient(180deg, rgba(#fff, 0.025), transparent 24%),
-    rgba($sidebar, 0.88);
+    linear-gradient(180deg, rgba($highlight-rgb, 0.025), transparent 24%),
+    rgba($sidebar-rgb, 0.88);
   padding: 20px 14px;
-  box-shadow: 14px 0 45px rgba(#08070a, 0.18);
+  box-shadow: 14px 0 45px rgba($shadow-rgb, 0.18);
   backdrop-filter: blur(24px) saturate(130%);
 }
 
@@ -71,7 +75,7 @@ button {
 .sidebar .brand img {
   width: 44px;
   height: 44px;
-  filter: drop-shadow(0 8px 12px rgba($accent, 0.18));
+  filter: drop-shadow(0 8px 12px rgba($accent-rgb, 0.18));
 }
 
 .sidebar .brand strong,
@@ -121,7 +125,7 @@ button {
   border-radius: $radius-control;
   background: transparent;
   padding: 10px;
-  color: #b7bdc7;
+  color: $muted;
   text-align: left;
   cursor: pointer;
   transition:
@@ -138,10 +142,14 @@ button {
 
 .sidebar nav button.active {
   background:
-    linear-gradient(90deg, rgba($accent, 0.18), rgba($accent-cool, 0.08)),
+    linear-gradient(
+      90deg,
+      rgba($accent-rgb, 0.18),
+      rgba($accent-cool-rgb, 0.08)
+    ),
     $surface-raised;
   color: $accent-hover;
-  box-shadow: inset 0 1px rgba(#fff, 0.04);
+  box-shadow: inset 0 1px rgba($highlight-rgb, 0.04);
 }
 
 .sidebar nav button.active::after {
@@ -152,7 +160,7 @@ button {
   width: 3px;
   border-radius: 999px;
   background: $accent;
-  box-shadow: 0 0 16px rgba($accent, 0.65);
+  box-shadow: 0 0 16px rgba($accent-rgb, 0.65);
   content: '';
 }
 
@@ -164,7 +172,7 @@ button {
   align-items: center;
   justify-content: center;
   border-radius: 9px;
-  background: rgba(#fff, 0.055);
+  background: rgba($highlight-rgb, 0.055);
   font-size: $font-size-md;
 }
 
@@ -178,10 +186,14 @@ button {
   min-width: 0;
   overflow: hidden auto;
   background:
-    radial-gradient(circle at 80% 0%, rgba($accent, 0.08), transparent 28rem),
+    radial-gradient(
+      circle at 80% 0%,
+      rgba($accent-rgb, 0.08),
+      transparent 28rem
+    ),
     radial-gradient(
       circle at 15% 100%,
-      rgba($accent-cool, 0.08),
+      rgba($accent-cool-rgb, 0.08),
       transparent 32rem
     ),
     $background;
@@ -219,10 +231,10 @@ button {
   gap: $space-3;
   border-right: 1px solid $border;
   background:
-    linear-gradient(180deg, rgba(#fff, 0.035), transparent 28%),
-    rgba($sidebar, 0.96);
+    linear-gradient(180deg, rgba($highlight-rgb, 0.035), transparent 28%),
+    rgba($sidebar-rgb, 0.96);
   padding: 20px 14px;
-  box-shadow: 10px 0 34px rgba(#070609, 0.24);
+  box-shadow: 10px 0 34px rgba($shadow-rgb, 0.24);
 }
 
 .visual-editor-add-button {
@@ -235,7 +247,8 @@ button {
   border: 1px solid $border;
   border-radius: $radius-control;
   background:
-    linear-gradient(145deg, rgba(#fff, 0.035), transparent 52%), $surface-raised;
+    linear-gradient(145deg, rgba($highlight-rgb, 0.035), transparent 52%),
+    $surface-raised;
   padding: 0;
   color: $text;
   cursor: pointer;
@@ -256,9 +269,9 @@ button {
 }
 
 .visual-editor-add-button:hover {
-  border-color: rgba($saving, 0.72);
+  border-color: rgba($saving-rgb, 0.72);
   background: $surface-hover;
-  box-shadow: 0 10px 24px rgba(#070609, 0.2);
+  box-shadow: 0 10px 24px rgba($shadow-rgb, 0.2);
   transform: translateY(-1px);
 }
 
@@ -269,9 +282,17 @@ button {
   min-height: 0;
   flex: 1 1 auto;
   background:
-    radial-gradient(circle at 62% 38%, rgba($accent, 0.08), transparent 30rem),
-    radial-gradient(circle at 28% 78%, rgba($saving, 0.08), transparent 34rem),
-    #121117;
+    radial-gradient(
+      circle at 62% 38%,
+      rgba($accent-rgb, 0.08),
+      transparent 30rem
+    ),
+    radial-gradient(
+      circle at 28% 78%,
+      rgba($saving-rgb, 0.08),
+      transparent 34rem
+    ),
+    $background;
   touch-action: none;
 }
 
@@ -303,11 +324,11 @@ button {
   bottom: $space-4;
   max-width: min(420px, calc(100% - 32px));
   margin: 0;
-  border: 1px solid rgba($danger, 0.36);
+  border: 1px solid rgba($danger-rgb, 0.36);
   border-radius: $radius-control;
-  background: rgba(#2b2028, 0.94);
+  background: rgba($danger-surface-rgb, 0.94);
   padding: 10px 12px;
-  color: #ffc2c6;
+  color: $danger-text;
   box-shadow: $shadow-raised;
   font-size: $font-size-sm;
 }
@@ -322,8 +343,9 @@ button {
   border: 1px solid $border-strong;
   border-radius: $radius-surface;
   background:
-    radial-gradient(circle at 50% 35%, #202733 0, transparent 32rem), #0d1015;
-  box-shadow: 0 22px 60px rgba(#111827, 0.26);
+    radial-gradient(circle at 50% 35%, $game-surface-glow 0, transparent 32rem),
+    $game-surface;
+  box-shadow: 0 22px 60px rgba($shadow-rgb, 0.26);
   transform-origin: center;
 }
 
@@ -342,11 +364,11 @@ button {
   border-color: $saving;
   box-shadow:
     inset 0 0 0 1px $saving,
-    0 20px 60px rgba(#000, 0.28);
+    0 20px 60px rgba($shadow-rgb, 0.28);
 }
 
 .visual-editor-canvas:focus-visible {
-  outline: 2px solid rgba($saving, 0.72);
+  outline: 2px solid rgba($saving-rgb, 0.72);
   outline-offset: 3px;
 }
 
@@ -381,7 +403,7 @@ button {
 
 .visual-layout-item:focus-visible {
   z-index: 2;
-  outline: 2px solid rgba($saving, 0.72);
+  outline: 2px solid rgba($saving-rgb, 0.72);
   outline-offset: 2px;
 }
 
@@ -403,11 +425,11 @@ button {
   z-index: 21;
   top: 4px;
   right: 4px;
-  border: 1px solid rgba($saving, 0.5);
+  border: 1px solid rgba($saving-rgb, 0.5);
   border-radius: 999px;
-  background: rgba($background, 0.88);
+  background: rgba($background-rgb, 0.88);
   padding: 2px 6px;
-  color: #cbd3ff;
+  color: $saving;
   content: attr(data-hidden-label);
   font-size: 0.58rem;
   line-height: 1.2;
@@ -546,7 +568,7 @@ button {
   width: fit-content;
   border: 1px solid $border;
   border-radius: $radius-panel;
-  background: rgba($surface, 0.72);
+  background: rgba($surface-rgb, 0.72);
   padding: 5px;
   box-shadow: $shadow-raised;
 }
@@ -561,8 +583,8 @@ button {
 }
 
 .options-tabs button.active {
-  border-color: rgba($accent, 0.25);
-  background: rgba($accent, 0.12);
+  border-color: rgba($accent-rgb, 0.25);
+  background: rgba($accent-rgb, 0.12);
   color: $text;
 }
 
@@ -575,8 +597,8 @@ button {
 }
 
 .options-primary-tabs button.active {
-  border: 1px solid rgba($accent, 0.26);
-  background: rgba($accent, 0.1);
+  border: 1px solid rgba($accent-rgb, 0.26);
+  background: rgba($accent-rgb, 0.1);
   color: $accent-hover;
 }
 
@@ -604,8 +626,8 @@ button {
   border: 1px solid $border;
   border-radius: $radius-panel;
   background:
-    linear-gradient(135deg, rgba(#fff, 0.035), transparent 50%),
-    rgba($surface, 0.84);
+    linear-gradient(135deg, rgba($highlight-rgb, 0.035), transparent 50%),
+    rgba($surface-rgb, 0.84);
   padding: 18px;
   box-shadow: $shadow-raised;
   cursor: pointer;
@@ -678,18 +700,18 @@ button {
 }
 
 .option-toggle input:checked {
-  border-color: rgba($accent, 0.7);
-  background: rgba($accent, 0.18);
+  border-color: rgba($accent-rgb, 0.7);
+  background: rgba($accent-rgb, 0.18);
 }
 
 .option-toggle input:checked::after {
   background: $accent-hover;
-  box-shadow: 0 0 14px rgba($accent, 0.34);
+  box-shadow: 0 0 14px rgba($accent-rgb, 0.34);
   transform: translateX(18px);
 }
 
 .option-toggle input:focus-visible {
-  outline: 2px solid rgba($accent, 0.8);
+  outline: 2px solid rgba($accent-rgb, 0.8);
   outline-offset: 3px;
 }
 
@@ -707,7 +729,7 @@ button {
 }
 
 .option-select select:focus-visible {
-  outline: 2px solid rgba($accent, 0.8);
+  outline: 2px solid rgba($accent-rgb, 0.8);
   outline-offset: 3px;
 }
 
@@ -739,11 +761,15 @@ button {
   aspect-ratio: 1;
   border-radius: 42% 58% 64% 36% / 42% 38% 62% 58%;
   background:
-    radial-gradient(circle at 35% 28%, rgba(#fff, 0.38), transparent 9%),
-    linear-gradient(145deg, #e99b48, #7169d1);
+    radial-gradient(
+      circle at 35% 28%,
+      rgba($highlight-rgb, 0.38),
+      transparent 9%
+    ),
+    linear-gradient(145deg, $accent, $accent-cool);
   box-shadow:
-    0 30px 90px rgba($accent, 0.18),
-    inset 0 1px rgba(#fff, 0.3);
+    0 30px 90px rgba($accent-rgb, 0.18),
+    inset 0 1px rgba($highlight-rgb, 0.3);
   content: '';
   filter: saturate(115%);
   opacity: 0.72;
@@ -792,8 +818,8 @@ h1 {
   flex: 1 1 280px;
   border-radius: $radius-surface;
   background:
-    linear-gradient(145deg, rgba(#fff, 0.045), transparent 46%),
-    rgba($surface, 0.82);
+    linear-gradient(145deg, rgba($highlight-rgb, 0.045), transparent 46%),
+    rgba($surface-rgb, 0.82);
   padding: 20px;
   color: $text;
   text-align: left;
@@ -822,7 +848,7 @@ h1 {
 }
 
 .tool-list button:hover {
-  border-color: rgba($accent, 0.34);
+  border-color: rgba($accent-rgb, 0.34);
   background: $surface-raised;
   box-shadow: $shadow-overlay;
   transform: translateY(-4px);
@@ -838,12 +864,12 @@ h1 {
   border-radius: 14px;
   background: linear-gradient(
     145deg,
-    rgba($accent, 0.22),
-    rgba($accent-cool, 0.08)
+    rgba($accent-rgb, 0.22),
+    rgba($accent-cool-rgb, 0.08)
   );
   color: $accent;
   font-size: 1.15rem;
-  box-shadow: inset 0 1px rgba(#fff, 0.08);
+  box-shadow: inset 0 1px rgba($highlight-rgb, 0.08);
 }
 
 .tool-list strong,
@@ -884,7 +910,7 @@ h1 {
 }
 
 button:focus-visible {
-  outline: 2px solid rgba($accent, 0.8);
+  outline: 2px solid rgba($accent-rgb, 0.8);
   outline-offset: 2px;
 }
 

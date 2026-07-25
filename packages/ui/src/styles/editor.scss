@@ -28,10 +28,14 @@ body {
   min-height: 100vh;
   margin: 0;
   background:
-    radial-gradient(circle at 86% -8%, rgba($accent, 0.11), transparent 32rem),
+    radial-gradient(
+      circle at 86% -8%,
+      rgba($accent-rgb, 0.11),
+      transparent 32rem
+    ),
     radial-gradient(
       circle at 8% 96%,
-      rgba($accent-cool, 0.09),
+      rgba($accent-cool-rgb, 0.09),
       transparent 34rem
     ),
     $background;
@@ -43,7 +47,7 @@ body {
   margin: 0 auto;
   background: radial-gradient(
     circle at 52% -18%,
-    rgba($surface-hover, 0.8) 0,
+    rgba($surface-hover-rgb, 0.8) 0,
     transparent 38rem
   );
   padding: 16px 0 40px;
@@ -92,7 +96,7 @@ body {
   .file-button:focus-within,
   input:focus-visible,
   textarea:focus-visible {
-    outline: 2px solid rgba($accent, 0.75);
+    outline: 2px solid rgba($accent-rgb, 0.75);
     outline-offset: 2px;
   }
 
@@ -117,11 +121,11 @@ body {
     justify-content: space-between;
     gap: 24px;
     margin-bottom: 16px;
-    border: 1px solid rgba($border, 0.8);
+    border: 1px solid rgba($border-rgb, 0.8);
     border-radius: $radius-surface;
     background:
-      linear-gradient(120deg, rgba(#fff, 0.045), transparent 42%),
-      rgba($surface, 0.82);
+      linear-gradient(120deg, rgba($highlight-rgb, 0.045), transparent 42%),
+      rgba($surface-rgb, 0.82);
     padding: 8px 12px;
     box-shadow: $shadow-raised;
     backdrop-filter: blur(24px) saturate(135%);
@@ -137,7 +141,7 @@ body {
     width: 42px;
     height: 42px;
     flex: 0 0 auto;
-    filter: drop-shadow(0 8px 12px rgba($accent, 0.2));
+    filter: drop-shadow(0 8px 12px rgba($accent-rgb, 0.2));
   }
 
   h1,
@@ -179,13 +183,13 @@ body {
   }
 
   .primary {
-    border-color: rgba($accent-hover, 0.7);
+    border-color: rgba($accent-hover-rgb, 0.7);
     background: linear-gradient(135deg, $accent-hover, $accent);
-    color: #1a1308;
+    color: $on-accent;
     font-weight: 700;
     box-shadow:
-      inset 0 1px rgba(#fff, 0.38),
-      0 8px 24px rgba($accent, 0.16);
+      inset 0 1px rgba($highlight-rgb, 0.38),
+      0 8px 24px rgba($accent-rgb, 0.16);
   }
 
   .primary:hover:not(:disabled) {
@@ -195,7 +199,7 @@ body {
 
   label,
   legend {
-    color: #cbd0d8;
+    color: $muted;
     font-size: 0.82rem;
     font-weight: 650;
   }
@@ -212,7 +216,7 @@ body {
     border: 1px solid $border;
     border-radius: 9px;
     outline: none;
-    background: rgba(#0d0c10, 0.64);
+    background: rgba($background-rgb, 0.64);
     padding: 10px 12px;
     color: $text;
     line-height: 1.45;
@@ -229,17 +233,17 @@ body {
 
   input:focus,
   textarea:focus {
-    border-color: rgba($accent, 0.8);
-    background: rgba(#111015, 0.9);
+    border-color: rgba($accent-rgb, 0.8);
+    background: rgba($background-rgb, 0.9);
     box-shadow:
-      0 0 0 3px rgba($accent, 0.1),
-      0 10px 28px rgba(#000, 0.12);
+      0 0 0 3px rgba($accent-rgb, 0.1),
+      0 10px 28px rgba($shadow-rgb, 0.12);
   }
 
   input.invalid,
   textarea.invalid {
     border-color: $danger;
-    box-shadow: 0 0 0 3px rgba($danger, 0.08);
+    box-shadow: 0 0 0 3px rgba($danger-rgb, 0.08);
   }
 
   textarea {
@@ -312,8 +316,8 @@ body {
     border: 1px solid $border;
     border-radius: $radius-surface;
     background:
-      linear-gradient(145deg, rgba(#fff, 0.035), transparent 45%),
-      rgba($surface, 0.9);
+      linear-gradient(145deg, rgba($highlight-rgb, 0.035), transparent 45%),
+      rgba($surface-rgb, 0.9);
     box-shadow: $shadow-raised;
     backdrop-filter: blur(16px);
     animation: editor-panel-in 480ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
@@ -361,8 +365,8 @@ body {
     padding: 7px 0;
     border-width: 2px;
     border-color: transparent;
-    background: rgba($surface-raised, 0.92);
-    color: #aeb5c0;
+    background: rgba($surface-raised-rgb, 0.92);
+    color: $muted;
     font-size: 1rem;
     cursor: grab;
   }
@@ -372,19 +376,19 @@ body {
   }
 
   .question-grid .complete {
-    background: rgba($success, 0.12);
-    color: #8bddaa;
+    background: rgba($success-rgb, 0.12);
+    color: $success;
     font-weight: 700;
   }
 
   .question-grid .invalid {
-    color: #ff9a9a;
+    color: $danger-text;
   }
 
   .question-grid .remark,
   .question-grid .remark:hover:not(:disabled) {
-    background: rgba($danger, 0.16);
-    color: #faa;
+    background: rgba($danger-rgb, 0.16);
+    color: $danger-text;
   }
 
   .question-grid .selected,
@@ -414,9 +418,9 @@ body {
     gap: 10px;
     border: 1px solid $border-strong;
     border-radius: 9px;
-    background: #20242b;
+    background: $surface-raised;
     padding: 11px 12px;
-    box-shadow: 0 12px 30px rgba(#000, 0.4);
+    box-shadow: 0 12px 30px rgba($shadow-rgb, 0.4);
     color: $text;
     font-size: $font-size-sm;
     font-weight: 400;
@@ -457,7 +461,7 @@ body {
 
   .question-tooltip-remark,
   .question-tooltip-remark strong {
-    color: #ff8f8f;
+    color: $danger-text;
   }
 
   .question-editor {
@@ -535,20 +539,20 @@ body {
   .handout-remove {
     border-color: transparent;
     background: transparent;
-    color: #d98b8b;
+    color: $danger-text;
   }
 
   .alternative button:hover:not(:disabled),
   .handout-remove:hover:not(:disabled) {
-    border-color: rgba($danger, 0.18);
-    background: rgba($danger, 0.08);
-    color: #f0a0a0;
+    border-color: rgba($danger-rgb, 0.18);
+    background: rgba($danger-rgb, 0.08);
+    color: $danger-text;
   }
 
   .secondary {
     margin-top: 4px;
     background: transparent;
-    color: #c4c9d1;
+    color: $muted;
   }
 
   .file-button {
@@ -575,9 +579,13 @@ body {
     border-radius: $radius-surface;
     gap: 14px;
     background:
-      radial-gradient(circle at 50% 0%, rgba($accent, 0.1), transparent 22rem),
-      linear-gradient(145deg, rgba(#fff, 0.035), transparent 45%),
-      rgba($surface, 0.78);
+      radial-gradient(
+        circle at 50% 0%,
+        rgba($accent-rgb, 0.1),
+        transparent 22rem
+      ),
+      linear-gradient(145deg, rgba($highlight-rgb, 0.035), transparent 45%),
+      rgba($surface-rgb, 0.78);
     box-shadow: $shadow-raised;
     text-align: center;
     animation: editor-panel-in 500ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
@@ -586,12 +594,20 @@ body {
   .package-drop-zone::before {
     width: 58px;
     height: 58px;
-    border: 1px solid rgba($accent, 0.3);
+    border: 1px solid rgba($accent-rgb, 0.3);
     border-radius: 20px;
     background:
-      radial-gradient(circle at 34% 28%, rgba(#fff, 0.35), transparent 12%),
-      linear-gradient(145deg, rgba($accent, 0.28), rgba($accent-cool, 0.12));
-    box-shadow: 0 18px 44px rgba($accent, 0.12);
+      radial-gradient(
+        circle at 34% 28%,
+        rgba($highlight-rgb, 0.35),
+        transparent 12%
+      ),
+      linear-gradient(
+        145deg,
+        rgba($accent-rgb, 0.28),
+        rgba($accent-cool-rgb, 0.12)
+      );
+    box-shadow: 0 18px 44px rgba($accent-rgb, 0.12);
     content: '↗';
     color: $accent-hover;
     font-size: 1.35rem;
@@ -643,7 +659,7 @@ body {
     overflow: hidden;
     border: 1px solid $border;
     border-radius: $radius-panel;
-    background: rgba($surface, 0.78);
+    background: rgba($surface-rgb, 0.78);
     box-shadow: $shadow-raised;
     backdrop-filter: blur(16px);
   }
@@ -701,10 +717,10 @@ body {
 
   .recent-package-ready {
     flex: 0 0 auto;
-    border: 1px solid rgba($success, 0.45);
+    border: 1px solid rgba($success-rgb, 0.45);
     border-radius: 999px;
     padding: 2px 7px;
-    background: rgba($success, 0.12);
+    background: rgba($success-rgb, 0.12);
     color: $success;
     font-size: 0.65rem;
     font-weight: 700;
@@ -777,7 +793,7 @@ body {
   }
 
   .handout-dialog::backdrop {
-    background: rgba(#000, 0.78);
+    background: rgba($shadow-rgb, 0.78);
     backdrop-filter: blur(2px);
   }
 
@@ -809,7 +825,7 @@ body {
     min-height: 0;
     flex: 1 1 auto;
     overflow: auto;
-    background: #0f1217;
+    background: $game-surface;
     padding: 16px;
     overscroll-behavior: contain;
   }
@@ -843,12 +859,12 @@ body {
     right: 20px;
     bottom: 20px;
     max-width: min(420px, calc(100% - 40px));
-    border: 1px solid rgba($danger, 0.35);
+    border: 1px solid rgba($danger-rgb, 0.35);
     border-radius: 10px;
-    background: rgba(#2b2028, 0.92);
+    background: rgba($danger-surface-rgb, 0.92);
     padding: 11px 14px;
-    box-shadow: 0 12px 30px rgba(#000, 0.3);
-    color: #f1c2c2;
+    box-shadow: 0 12px 30px rgba($shadow-rgb, 0.3);
+    color: $danger-text;
     font-size: $font-size-md;
     backdrop-filter: blur(18px);
   }

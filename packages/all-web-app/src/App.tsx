@@ -1,5 +1,9 @@
 import { getDeepLinkedPackageName } from '@schdk/editor-web-app/deep-link';
-import type { EditorTextOptions, GameOptions } from '@schdk/ui/options';
+import type {
+  AppTheme,
+  EditorTextOptions,
+  GameOptions,
+} from '@schdk/ui/options';
 import {
   LOCALIZATION_COPY,
   LocaleProvider,
@@ -23,11 +27,18 @@ import {
 } from './options-storage';
 
 const SHELL_LOCALE_STORAGE_KEY = 'schdk.shell.locale';
+const SHELL_THEME_STORAGE_KEY = 'schdk.shell.theme';
 
 function getInitialLocale(): AppLocale {
   const stored = localStorage.getItem(SHELL_LOCALE_STORAGE_KEY);
   if (stored === 'uk' || stored === 'en') return stored;
   return 'uk';
+}
+
+function getInitialTheme(): AppTheme {
+  const stored = localStorage.getItem(SHELL_THEME_STORAGE_KEY);
+  if (stored === 'light' || stored === 'dark') return stored;
+  return 'system';
 }
 
 const HostApp = lazy(() =>
@@ -49,6 +60,7 @@ function getLinkedView(): ShellViewName | null {
 export function App() {
   const sessionScope = window.location.pathname;
   const [locale, setLocale] = useState(getInitialLocale);
+  const [theme, setTheme] = useState(getInitialTheme);
   const copy = LOCALIZATION_COPY[locale];
   const [view, setView] = useState<ShellViewName>(() => {
     return (
@@ -87,6 +99,11 @@ export function App() {
       .querySelector('meta[name="description"]')
       ?.setAttribute('content', copy.meta.description);
   }, [copy, locale, view]);
+
+  useEffect(() => {
+    localStorage.setItem(SHELL_THEME_STORAGE_KEY, theme);
+    document.documentElement.dataset.theme = theme;
+  }, [theme]);
 
   useEffect(() => {
     saveDesktopShellView(localStorage, sessionScope, view);
@@ -189,12 +206,14 @@ export function App() {
         editorOptions={editorOptions}
         gameOptions={gameOptions}
         gameOptionsError={gameOptionsError}
+        theme={theme}
         view={view}
         onEditorOptionsChange={setEditorOptions}
         onGameOptionsChange={setGameOptions}
         onImportVisualEditorTemplate={importVisualEditorTemplate}
         onExportVisualEditorTemplate={exportVisualEditorTemplate}
         onShowView={(nextView) => showView(nextView)}
+        onThemeChange={setTheme}
       />
     </LocaleProvider>
   );

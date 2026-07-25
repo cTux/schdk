@@ -5,6 +5,8 @@
   game logo visible through every question stage with an upper-left default.
 - Use a full-size dark workspace with a pannable, wheel-zoomable 16:9 game
   container.
+- Keep the visual editor on its fixed dark presentation palette; application
+  theme changes must not alter its canvas, controls, or text colors.
 - Persist bounds as percentages and apply identical bounds and presentation
   settings in gameplay. Keep the standard layout until changed.
 - Let every built-in and custom element be marked hidden while remaining

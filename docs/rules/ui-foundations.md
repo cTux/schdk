@@ -15,6 +15,9 @@
   components must not read storage, Electron APIs, or the filesystem.
 - Reuse existing visual tokens and interaction patterns. Prefer compact,
   readable layouts without decoration that carries no information.
+- Define the complete light and dark color palettes in `styles/light.scss` and
+  `styles/dark.scss`. Other SCSS files must consume those theme variables
+  instead of declaring color values.
 - Use the shared ink/plum chrome, amber brand actions, periwinkle interaction
   states, warm canvases, soft elevation, and restrained translucent overlays.
 - Keep action bars compact and icon-only with Ukrainian accessible labels shown

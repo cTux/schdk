@@ -5,7 +5,11 @@ import { ShellHome } from '../ShellHome';
 import { ShellNavigation } from '../ShellNavigation';
 import type { ShellViewName } from '../shellItems';
 import { OptionsPage } from '../../options/OptionsPage';
-import type { EditorTextOptions, GameOptions } from '../../options/types';
+import type {
+  AppTheme,
+  EditorTextOptions,
+  GameOptions,
+} from '../../options/types';
 import { VisualEditor } from '../../visual-editor/VisualEditor';
 import { TooltipProvider } from '../../atoms/Tooltip';
 
@@ -18,12 +22,14 @@ export interface ShellViewProps {
   editorOptions: EditorTextOptions;
   gameOptions: GameOptions;
   gameOptionsError: string;
+  theme: AppTheme;
   view: ShellViewName;
   onEditorOptionsChange(options: EditorTextOptions): void;
   onGameOptionsChange(options: GameOptions): void;
   onImportVisualEditorTemplate(file: File): void;
   onExportVisualEditorTemplate(): void;
   onShowView(view: ShellViewName): void;
+  onThemeChange(theme: AppTheme): void;
 }
 
 export function ShellView({
@@ -33,16 +39,18 @@ export function ShellView({
   editorOptions,
   gameOptions,
   gameOptionsError,
+  theme,
   view,
   onEditorOptionsChange,
   onGameOptionsChange,
   onImportVisualEditorTemplate,
   onExportVisualEditorTemplate,
   onShowView,
+  onThemeChange,
 }: ShellViewProps) {
   return (
     <TooltipProvider>
-      <main className="app-shell">
+      <main className="app-shell" data-theme={theme}>
         <ShellNavigation view={view} onSelect={onShowView} />
         <section className="workspace">
           <ShellHome hidden={view !== 'home'} onOpen={onShowView} />
@@ -50,8 +58,10 @@ export function ShellView({
             hidden={view !== 'options'}
             editor={editorOptions}
             game={gameOptions}
+            theme={theme}
             onEditorChange={onEditorOptionsChange}
             onGameChange={onGameOptionsChange}
+            onThemeChange={onThemeChange}
           />
           <VisualEditor
             message={gameOptionsError}
