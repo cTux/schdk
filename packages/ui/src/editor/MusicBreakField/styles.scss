@@ -1,0 +1,34 @@
+@use '../../styles/tokens' as *;
+
+.editor-app .music-break-field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+  border-top: 1px solid $border;
+  padding-top: 10px;
+  color: $muted;
+  font-size: $font-size-xs;
+}
+
+.editor-app .music-break-field > span {
+  overflow: hidden;
+  color: $text;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.editor-app .music-break-field > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.editor-app .music-break-field .file-button,
+.editor-app .music-break-field button {
+  min-height: 32px;
+  margin: 0;
+  padding: 6px 9px;
+  font-size: $font-size-xs;
+}

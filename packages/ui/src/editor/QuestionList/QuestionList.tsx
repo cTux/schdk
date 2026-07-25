@@ -1,6 +1,7 @@
 import { QUESTIONS_PER_ROUND, type GamePackage } from '@schdk/common';
 import { useState, type DragEvent } from 'react';
 import { useLocalization } from '../../localization';
+import { MusicBreakField } from '../MusicBreakField';
 import { QuestionListButton } from '../QuestionListButton';
 
 export interface QuestionListProps {
@@ -9,6 +10,7 @@ export interface QuestionListProps {
   showValidation: boolean;
   onSelectQuestion(index: number): void;
   onSwapQuestions(sourceIndex: number, targetIndex: number): void;
+  onMusicBreakChange(index: number, file: File | null): void;
 }
 
 export function QuestionList({
@@ -17,6 +19,7 @@ export function QuestionList({
   showValidation,
   onSelectQuestion,
   onSwapQuestions,
+  onMusicBreakChange,
 }: QuestionListProps) {
   const { copy } = useLocalization();
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
@@ -78,6 +81,12 @@ export function QuestionList({
               );
             })}
           </div>
+          {round < 2 && (
+            <MusicBreakField
+              musicBreak={gamePackage.musicBreaks[round]}
+              onChange={(file) => onMusicBreakChange(round, file)}
+            />
+          )}
         </section>
       ))}
     </nav>

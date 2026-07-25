@@ -1,4 +1,5 @@
 import { parseDrivePackageReference } from '@schdk/google-drive';
+import { QUESTIONS_PER_ROUND } from '@schdk/common';
 import { HostView } from '@schdk/ui/host';
 import { useLocalization } from '@schdk/ui/localization';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -13,6 +14,7 @@ import {
 } from './host-session';
 import { useGameWizard } from './use-game-wizard';
 import { useHostPackages } from './use-host-packages';
+import { usePresenterNotes } from './use-presenter-notes';
 import type { AppProps } from './types';
 
 export type { AppProps } from './types';
@@ -23,6 +25,7 @@ export function App({
   backgroundOpacity = 1,
   customElements = [],
   layout = null,
+  musicVolume = 0.05,
   soundVolume = 0.05,
   drive,
   driveActive = false,
@@ -130,36 +133,13 @@ export function App({
     wizard.position,
   ]);
 
-  useEffect(() => {
-    if (!window.desktop) return;
-    if (
-      !gameActive ||
-      wizard.finished ||
-      !selectedPackage ||
-      !wizard.question
-    ) {
-      window.desktop.setPresenterNotes(null);
-      return;
-    }
-    window.desktop.setPresenterNotes({
-      questionNumber: wizard.position.questionIndex + 1,
-      questionCount: selectedPackage.questions.length,
-      notes: wizard.question.hostNotes?.trim() ?? '',
-    });
-  }, [
-    gameActive,
-    selectedPackage,
-    wizard.finished,
-    wizard.position.questionIndex,
-    wizard.question,
-  ]);
-
-  useEffect(
-    () => () => {
-      window.desktop?.setPresenterNotes(null);
-    },
-    [],
-  );
+  usePresenterNotes({
+    active: gameActive,
+    finished: wizard.finished,
+    gamePackage: selectedPackage,
+    position: wizard.position,
+    question: wizard.question,
+  });
 
   function startGame() {
     unlockGameAudio();
@@ -215,6 +195,15 @@ export function App({
           transition: wizard.transition,
           controlsDisabled: wizard.controlsDisabled,
           canGoBack: wizard.canGoBack,
+          musicBreak:
+            wizard.position.stage === 'musicBreak'
+              ? (selectedPackage.musicBreaks[
+                  Math.floor(
+                    wizard.position.questionIndex / QUESTIONS_PER_ROUND,
+                  )
+                ] ?? null)
+              : null,
+          musicVolume,
         }
       : null;
 

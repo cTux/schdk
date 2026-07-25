@@ -73,6 +73,7 @@ export const MAX_CUSTOM_IMAGE_DATA_LENGTH = 3 * 1024 * 1024;
 export interface GameOptions {
   autoFullscreen: boolean;
   soundVolume: number;
+  musicVolume: number;
   layout: GameLayout | null;
   customElements: CustomGameElement[];
   backgroundImage: string | null;
@@ -88,6 +89,7 @@ export const DEFAULT_EDITOR_TEXT_OPTIONS: EditorTextOptions = {
 export const DEFAULT_GAME_OPTIONS: GameOptions = {
   autoFullscreen: true,
   soundVolume: 0.05,
+  musicVolume: 0.05,
   layout: null,
   customElements: [],
   backgroundImage: null,

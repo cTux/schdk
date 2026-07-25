@@ -1,10 +1,5 @@
 import classNames from 'classnames';
-import type { CSSProperties, ReactNode } from 'react';
-import type {
-  CustomGameElement,
-  GameLayout,
-  GameLayoutElementId,
-} from '../../options/types';
+import type { CustomGameElement, GameLayout } from '../../options/types';
 import { LOCALIZATION_COPY, type LocalizationCopy } from '../../localization';
 import {
   GameAnswer,
@@ -20,8 +15,9 @@ import {
   GameQuestionIntro,
   GameTimer,
 } from '../GameElements';
+import { GameMusicBreak } from '../GameMusicBreak';
 import type { HostGameView } from '../types';
-import { FitTextObserver } from '../FitTextObserver';
+import { GameLayoutItem } from '../GameLayoutItem';
 import { stageMotionClass } from './stage-motion';
 
 export interface GameWizardProps {
@@ -31,41 +27,6 @@ export interface GameWizardProps {
   layout: GameLayout | null;
   onBack(): void;
   onNext(): void;
-}
-
-export interface GameLayoutItemProps {
-  children: ReactNode;
-  id: GameLayoutElementId;
-  layout: GameLayout | null;
-}
-
-function GameLayoutItem({ children, id, layout }: GameLayoutItemProps) {
-  const position = layout?.[id];
-  if (position?.hidden) return null;
-  const style = position
-    ? ({
-        '--game-layout-x': `${position.x}%`,
-        '--game-layout-y': `${position.y}%`,
-        '--game-layout-width': `${position.width}%`,
-        '--game-layout-height': `${position.height}%`,
-        '--game-font-scale': position.fontScale,
-        '--game-text-color': position.textColor,
-        '--game-grow-align':
-          position.textGrowDirection === 'up' ? 'flex-end' : 'flex-start',
-        '--game-image-position': position.imagePosition,
-      } as CSSProperties)
-    : undefined;
-  return (
-    <div
-      className={classNames('game-layout-item', `game-layout-${id}`, {
-        'has-position': position,
-      })}
-      style={style}
-    >
-      {children}
-      <FitTextObserver enabled={position?.fitTextToHeight ?? false} />
-    </div>
-  );
 }
 
 export function GameWizard({
@@ -78,6 +39,7 @@ export function GameWizard({
 }: GameWizardProps) {
   const visible = new Set(game.visibleStages);
   const isIntro = game.currentStage === 'intro';
+  const isMusicBreak = game.currentStage === 'musicBreak';
   const isHandoutFocus = game.currentStage === 'handout';
   const questionChangingClass = game.transition.questionChanging
     ? `is-${game.transition.phase}-${game.transition.direction}`
@@ -93,18 +55,25 @@ export function GameWizard({
       <GameLayoutItem id="logo" layout={layout}>
         <GameLogo />
       </GameLayoutItem>
-      <GameLayoutItem id="progress" layout={layout}>
-        <GameProgress
-          questionNumber={game.questionNumber}
-          questionCount={game.questionCount}
-        />
-      </GameLayoutItem>
+      {!isMusicBreak && (
+        <GameLayoutItem id="progress" layout={layout}>
+          <GameProgress
+            questionNumber={game.questionNumber}
+            questionCount={game.questionCount}
+          />
+        </GameLayoutItem>
+      )}
       <div
         className={classNames('game-wizard-canvas', {
           'is-handout-focus': isHandoutFocus,
         })}
       >
-        {isIntro ? (
+        {isMusicBreak && game.musicBreak ? (
+          <GameMusicBreak
+            musicBreak={game.musicBreak}
+            volume={game.musicVolume}
+          />
+        ) : isIntro ? (
           <GameLayoutItem id="intro" layout={layout}>
             <GameQuestionIntro
               questionNumber={game.questionNumber}

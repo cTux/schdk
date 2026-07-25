@@ -15,6 +15,7 @@ const STAGES: HostQuestionStage[] = [
   'timer',
   'answerComment',
   'answer',
+  'musicBreak',
 ];
 
 export interface HostSession {

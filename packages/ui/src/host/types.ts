@@ -1,4 +1,5 @@
 import type { GameQuestion } from '@schdk/common';
+import type { MusicBreak } from '@schdk/common';
 
 export type HostQuestionStage =
   | 'intro'
@@ -6,7 +7,8 @@ export type HostQuestionStage =
   | 'question'
   | 'timer'
   | 'answerComment'
-  | 'answer';
+  | 'answer'
+  | 'musicBreak';
 
 export interface HostGameTransition {
   phase: 'idle' | 'exit' | 'enter';
@@ -25,4 +27,6 @@ export interface HostGameView {
   transition: HostGameTransition;
   controlsDisabled: boolean;
   canGoBack: boolean;
+  musicBreak: MusicBreak | null;
+  musicVolume: number;
 }

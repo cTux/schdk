@@ -35,8 +35,7 @@ const SHELL_LOCALE_STORAGE_KEY = 'schdk.shell.locale';
 const SHELL_THEME_STORAGE_KEY = 'schdk.shell.theme';
 function getInitialLocale(): AppLocale {
   const stored = localStorage.getItem(SHELL_LOCALE_STORAGE_KEY);
-  if (stored === 'uk' || stored === 'en') return stored;
-  return 'uk';
+  return stored === 'uk' || stored === 'en' ? stored : 'uk';
 }
 
 function getInitialTheme(): AppTheme {
@@ -227,6 +226,7 @@ export function App() {
                   layout={gameOptions.layout}
                   onDriveFailure={() => void googleDrive.reportFailure()}
                   soundVolume={gameOptions.soundVolume}
+                  musicVolume={gameOptions.musicVolume}
                 />
               </Suspense>
             }

@@ -11,6 +11,7 @@ description: Maintain or diagnose the SCHDK .schdk file contract in @schdk/commo
 2. Treat `packages/common/src/index.ts` as the public contract entry point and
    `packages/common/src/game-question.ts` as the owner of question types and
    parsing; do not duplicate schema or validation logic in consumers.
+   Store music-break bytes in their fixed ZIP entries, not in `game.json`.
 3. Update implementation and `docs/GAME_PACKAGE.md` together for contract changes.
 4. Rebuild affected consumers when exported types or behavior change.
 

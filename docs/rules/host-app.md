@@ -18,10 +18,13 @@
 - Exit an active game with `Alt+Q` after explicit confirmation.
 - Play the main signal when the timer starts and expires and the pre-alarm with
   10 seconds remaining.
+- After questions 12 and 24, show a music-break slide when the package contains
+  the matching audio file. Start it with native audio controls and use the
+  separately persisted music volume.
 - In the desktop application, publish the current question number and host notes
   to the separate presenter window while a game is active. Close it when the
   game ends or the host view unmounts.
-- Persist game volume in shell options with a 5% default.
+- Persist signal and music volumes separately in shell options with 5% defaults.
 - List and load app-created packages from Google Drive only. A local file
   selected in Host must be validated, uploaded, and then hosted by Drive ID.
 - Give every recent package an icon-only download action that exports the

@@ -1,4 +1,8 @@
-import type { GamePackage, GameQuestion } from '@schdk/common';
+import {
+  QUESTIONS_PER_ROUND,
+  type GamePackage,
+  type GameQuestion,
+} from '@schdk/common';
 import type { HostQuestionStage } from '@schdk/ui/host';
 
 export interface GamePosition {
@@ -45,6 +49,7 @@ export function getVisibleQuestionStages(
   question: GameQuestion,
   stage: HostQuestionStage,
 ): HostQuestionStage[] {
+  if (stage === 'musicBreak') return [];
   if (stage === 'intro') return ['intro'];
   const stages: HostQuestionStage[] = [
     ...(question.handout ? (['handout'] as const) : []),
@@ -57,9 +62,17 @@ export function getVisibleQuestionStages(
 }
 
 export function isValidGamePosition(
-  question: GameQuestion,
+  gamePackage: GamePackage,
   position: GamePosition,
 ) {
+  if (position.stage === 'musicBreak') {
+    return (
+      position.questionPartIndex === 0 &&
+      Boolean(getMusicBreak(gamePackage, position.questionIndex))
+    );
+  }
+  const question = gamePackage.questions[position.questionIndex];
+  if (!question) return false;
   return getQuestionPositions(question).some(
     ({ questionPartIndex, stage }) =>
       questionPartIndex === position.questionPartIndex &&
@@ -67,10 +80,28 @@ export function isValidGamePosition(
   );
 }
 
+function getMusicBreak(gamePackage: GamePackage, questionIndex: number) {
+  const questionNumber = questionIndex + 1;
+  if (
+    questionNumber % QUESTIONS_PER_ROUND !== 0 ||
+    questionNumber === gamePackage.questions.length
+  ) {
+    return null;
+  }
+  return gamePackage.musicBreaks[questionNumber / QUESTIONS_PER_ROUND - 1];
+}
+
 export function getNextPosition(
   gamePackage: GamePackage,
   position: GamePosition,
 ): GamePosition | null {
+  if (position.stage === 'musicBreak') {
+    return {
+      questionIndex: position.questionIndex + 1,
+      questionPartIndex: 0,
+      stage: 'intro',
+    };
+  }
   const positions = getQuestionPositions(
     gamePackage.questions[position.questionIndex]!,
   );
@@ -83,6 +114,13 @@ export function getNextPosition(
     return {
       questionIndex: position.questionIndex,
       ...positions[positionIndex + 1]!,
+    };
+  }
+  if (getMusicBreak(gamePackage, position.questionIndex)) {
+    return {
+      questionIndex: position.questionIndex,
+      questionPartIndex: 0,
+      stage: 'musicBreak',
     };
   }
   return position.questionIndex < gamePackage.questions.length - 1
@@ -98,6 +136,15 @@ export function getPreviousPosition(
   gamePackage: GamePackage,
   position: GamePosition,
 ): GamePosition | null {
+  if (position.stage === 'musicBreak') {
+    const positions = getQuestionPositions(
+      gamePackage.questions[position.questionIndex]!,
+    );
+    return {
+      questionIndex: position.questionIndex,
+      ...positions[positions.length - 1]!,
+    };
+  }
   const positions = getQuestionPositions(
     gamePackage.questions[position.questionIndex]!,
   );
@@ -114,6 +161,13 @@ export function getPreviousPosition(
   }
   if (position.questionIndex === 0) return null;
   const previousQuestionIndex = position.questionIndex - 1;
+  if (getMusicBreak(gamePackage, previousQuestionIndex)) {
+    return {
+      questionIndex: previousQuestionIndex,
+      questionPartIndex: 0,
+      stage: 'musicBreak',
+    };
+  }
   const previousPositions = getQuestionPositions(
     gamePackage.questions[previousQuestionIndex]!,
   );

@@ -11,6 +11,9 @@ compatibility contract. Do not duplicate its schema here.
   logic.
 - Create packages with `createEmptyGamePackage` and write them with
   `serializeGamePackage`.
+- Keep optional music-break metadata in `game.json` and the audio bytes in the
+  fixed `audio/break-1` and `audio/break-2` ZIP entries. Do not encode audio as
+  JSON or data URLs.
 - Parse every imported, restored, or recent package with `parseGamePackage`;
   never trust content based only on its file extension.
 - Parse question JSON from the clipboard with `parseGameQuestion` before

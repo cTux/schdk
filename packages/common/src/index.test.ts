@@ -13,6 +13,7 @@ describe('game package rules', () => {
 
     expect(gamePackage.title).toBe('Без назви');
     expect(gamePackage.questions).toHaveLength(36);
+    expect(gamePackage.musicBreaks).toEqual([null, null]);
 
     gamePackage.title = 'Тестовий пакет';
     gamePackage.questions.forEach((question) => {
@@ -70,6 +71,24 @@ describe('game package rules', () => {
       parseGamePackage(withoutHandout).questions[0]!.handout,
     ).toBeUndefined();
     expect(withHandout.byteLength).toBeLessThan(uncompressedLength);
+  });
+
+  it('stores music breaks as uncompressed package files', () => {
+    const gamePackage = createEmptyGamePackage();
+    gamePackage.musicBreaks[0] = {
+      name: 'pause.mp3',
+      mimeType: 'audio/mpeg',
+      data: Uint8Array.from([1, 2, 3, 4]),
+    };
+
+    expect(parseGamePackage(serializeGamePackage(gamePackage))).toEqual(
+      gamePackage,
+    );
+
+    gamePackage.musicBreaks[0] = null;
+    expect(
+      parseGamePackage(serializeGamePackage(gamePackage)).musicBreaks,
+    ).toEqual([null, null]);
   });
 
   it('parses clipboard questions with every supported field', () => {

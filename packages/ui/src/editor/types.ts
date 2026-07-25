@@ -20,6 +20,7 @@ export interface EditorViewProps {
   selectedIndex: number;
   showValidation: boolean;
   onAddHandout(file: File): void;
+  onMusicBreakChange(index: number, file: File | null): void;
   onAnswerBlur(): void;
   onAnswerCommentBlur(): void;
   onAlternativeAnswerBlur(index: number): void;

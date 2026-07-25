@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';
 import { useLocalization } from '../../localization';
+import { OptionSlider } from '../OptionSlider';
 import { OptionToggle } from '../OptionToggle';
 import { OptionsTabs, type OptionsTab } from '../OptionsTabs';
 import type { AppTheme } from '../types';
@@ -222,25 +223,18 @@ export function OptionsPage({
               onGameChange({ ...game, autoFullscreen })
             }
           />
-          <label className="option-slider">
-            <span>
-              <strong>{copy.settings.signalVolume}</strong>
-              <small>{copy.settings.signalVolumeDescription}</small>
-            </span>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={Math.round(game.soundVolume * 100)}
-              onChange={(event) =>
-                onGameChange({
-                  ...game,
-                  soundVolume: Number(event.target.value) / 100,
-                })
-              }
-            />
-            <output>{Math.round(game.soundVolume * 100)}%</output>
-          </label>
+          <OptionSlider
+            label={copy.settings.signalVolume}
+            description={copy.settings.signalVolumeDescription}
+            value={game.soundVolume}
+            onChange={(soundVolume) => onGameChange({ ...game, soundVolume })}
+          />
+          <OptionSlider
+            label={copy.settings.musicVolume}
+            description={copy.settings.musicVolumeDescription}
+            value={game.musicVolume}
+            onChange={(musicVolume) => onGameChange({ ...game, musicVolume })}
+          />
         </section>
       </div>
     </div>
