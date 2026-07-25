@@ -11,7 +11,7 @@ description: Verify SCHDK changes and produce local build artifacts. Use for pre
 2. Inspect `git status` and the diff before selecting checks. Preserve unrelated user changes.
 3. Run the full static and test suite, then build affected packages in dependency order.
 4. Use the browser smoke-test workflow below for changed UI. Build affected Electron apps for main, preload, packaging, icon, or bundled-resource changes.
-5. Run root `pnpm build` only when packaged executables are closed; otherwise report the lock and use targeted builds.
+5. Run root `pnpm build` only when packaged executables are closed; its dist cleanup fails after 10 seconds when locked, so report the lock and use targeted builds.
 6. Confirm `git diff --check` and ensure generated output remains ignored before committing.
 7. Keep the pre-commit hook limited to formatting and linting; run the remaining checks outside it.
 

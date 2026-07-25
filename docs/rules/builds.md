@@ -7,7 +7,8 @@
 - Root `pnpm build` builds packages in dependency order, deletes the root
   `dist`, and collects each package's `dist` under `dist/<package>`.
 - Close applications launched from root `dist` before collection; Windows will
-  lock their executable directories and cause `EBUSY`.
+  lock their executable directories and cause `EBUSY`. Dist cleanup runs in a
+  child process and fails after 10 seconds instead of hanging indefinitely.
 - If parallel root packaging makes Electron's Windows icon tool exit with
   `3221225477` after producing the icon, rerun the affected desktop package
   build sequentially, then run the dist collection script.
