@@ -25,7 +25,8 @@
   template import/export actions docked at the bottom. Support editable text
   and optional image elements, persist their bounds and presentation, and
   render them in gameplay.
-- Share measured text-height fitting between the visual editor and gameplay.
+- Share measured text-height fitting between the visual editor and gameplay,
+  and never enlarge text beyond its configured size.
 - Warn when fitted text cannot fit at the readable minimum size.
 - Apply the question element's saved bounds to the complete stack of revealed
   blitz parts rather than positioning each part independently.
