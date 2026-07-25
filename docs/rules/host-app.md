@@ -14,6 +14,7 @@
   content visible until the next question.
 - Lock mouse and keyboard navigation during transitions. `Space`, `PageDown`,
   and `ArrowRight` advance; `Backspace`, `PageUp`, and `ArrowLeft` go back.
+- Exit an active game with `Ctrl+Shift+Q` after explicit confirmation.
 - Play the main signal when the timer starts and expires and the pre-alarm with
   10 seconds remaining.
 - In the desktop application, publish the current question number and host notes

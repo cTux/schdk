@@ -212,13 +212,13 @@ export function useHostPackages({
     }
   }
 
-  function clearPackage() {
+  const clearPackage = useCallback(() => {
     setGameActive(false);
     setSelectedPackage(null);
     setSelectedPackageId(null);
     setPackageDetails(null);
     setMessage('');
-  }
+  }, [setGameActive]);
 
   return {
     acceptPackage,
