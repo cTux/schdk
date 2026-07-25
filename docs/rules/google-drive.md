@@ -10,8 +10,11 @@
   retain local changes when Drive is unavailable.
 - Store `settings-v1.json` in `appDataFolder` using only the non-sensitive
   `drive.file` and `drive.appdata` scopes.
-- Browser authorization uses Google Identity Services from an explicit user
-  action. Keep its access token in memory and require reconnect after expiry.
+- Browser authorization uses Google Identity Services from an explicit first
+  connection. Keep its access token in memory, persist only a connection
+  preference, and use `prompt: 'none'` to restore or renew a previously
+  connected session without UI. Fall back to explicit reconnection when silent
+  authorization is unavailable.
 - Desktop authorization uses the system browser, PKCE S256, a random-state
   loopback callback on `127.0.0.1`, and refresh tokens encrypted with Electron
   `safeStorage`. Never persist a refresh token through Linux `basic_text`.
