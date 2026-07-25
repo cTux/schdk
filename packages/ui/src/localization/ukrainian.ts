@@ -151,6 +151,8 @@ export const ukrainian = {
     game: 'Проведення гри',
     finished: 'Дякуємо за гру!',
     returnToGames: 'Повернутися до ігор',
+    exitGameConfirmation:
+      'Вийти з гри? Поточний прогрес проведення буде скинуто.',
     restoreFailed:
       'Не вдалося відновити попередню гру. Можливо, файл переміщено або видалено.',
     invalidFile:

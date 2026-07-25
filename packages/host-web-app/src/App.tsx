@@ -1,7 +1,7 @@
 import { parseDrivePackageReference } from '@schdk/google-drive';
 import { HostView } from '@schdk/ui/host';
 import { useLocalization } from '@schdk/ui/localization';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type {} from './electron';
 import { setGameAudioVolume, unlockGameAudio } from './game-audio';
 import {
@@ -171,14 +171,34 @@ export function App({
     setGameActive(true);
   }
 
-  function returnToGames() {
+  const returnToGames = useCallback(() => {
     clearPackage();
     if (document.fullscreenElement) {
       void document.exitFullscreen().catch(() => {
         // Leaving the game must not depend on fullscreen support.
       });
     }
-  }
+  }, [clearPackage]);
+
+  useEffect(() => {
+    if (!gameActive) return;
+    function handleKeyDown(event: KeyboardEvent) {
+      if (
+        event.code !== 'KeyQ' ||
+        !event.ctrlKey ||
+        !event.shiftKey ||
+        event.altKey ||
+        event.metaKey ||
+        event.repeat
+      ) {
+        return;
+      }
+      event.preventDefault();
+      if (window.confirm(copy.host.exitGameConfirmation)) returnToGames();
+    }
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [copy.host.exitGameConfirmation, gameActive, returnToGames]);
 
   const game =
     gameActive && !wizard.finished && selectedPackage && wizard.question

@@ -148,6 +148,8 @@ export const english: typeof ukrainian = {
     game: 'Game hosting',
     finished: 'Thank you for playing!',
     returnToGames: 'Return to games',
+    exitGameConfirmation:
+      'Exit the game? The current hosting progress will be reset.',
     restoreFailed:
       'Could not restore the previous game. The file may have been moved or deleted.',
     invalidFile:
