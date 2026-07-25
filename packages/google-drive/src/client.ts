@@ -12,6 +12,7 @@ export const GOOGLE_DRIVE_SCOPES = [
 export interface DriveAccount {
   displayName: string;
   emailAddress: string;
+  photoLink?: string;
 }
 
 export class GoogleDriveAuthorizationError extends Error {}
@@ -25,7 +26,7 @@ export class GoogleDriveClient {
 
   async getAccount(): Promise<DriveAccount> {
     const response = await this.request(
-      `${DRIVE_API}/about?fields=user(displayName,emailAddress)`,
+      `${DRIVE_API}/about?fields=user(displayName,emailAddress,photoLink)`,
     );
     const value = (await response.json()) as {
       user?: Partial<DriveAccount>;
@@ -39,6 +40,10 @@ export class GoogleDriveClient {
     return {
       displayName: value.user.displayName,
       emailAddress: value.user.emailAddress,
+      photoLink:
+        typeof value.user.photoLink === 'string'
+          ? value.user.photoLink
+          : undefined,
     };
   }
 

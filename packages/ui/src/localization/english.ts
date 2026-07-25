@@ -32,6 +32,8 @@ export const english: typeof ukrainian = {
     toolsLabel: 'Tools',
     groupLabel: 'WWW',
     settingsLabel: 'Settings',
+    accountConnected: 'Connected',
+    accountDisconnected: 'Disconnected',
     homeTitle: 'Everything for the game in one place',
     homeDescription:
       'Create a question package in the editor, then open it under “Host a game”.',

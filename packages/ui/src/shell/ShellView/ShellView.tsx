@@ -3,6 +3,7 @@ import './styles.scss';
 import type { ReactNode } from 'react';
 import { ShellHome } from '../ShellHome';
 import { ShellNavigation } from '../ShellNavigation';
+import type { ShellAccount } from '../ShellNavigation';
 import type { ShellViewName } from '../shellItems';
 import { OptionsPage } from '../../options/OptionsPage';
 import type { GoogleDriveState } from '../../options/OptionsPage';
@@ -23,7 +24,7 @@ export interface ShellViewProps {
   editorOptions: EditorTextOptions;
   gameOptions: GameOptions;
   gameOptionsError: string;
-  googleDriveAccount?: string;
+  googleDriveAccount?: ShellAccount;
   googleDriveState: GoogleDriveState;
   theme: AppTheme;
   view: ShellViewName;
@@ -60,14 +61,19 @@ export function ShellView({
   return (
     <TooltipProvider>
       <main className="app-shell" data-theme={theme}>
-        <ShellNavigation view={view} onSelect={onShowView} />
+        <ShellNavigation
+          account={googleDriveAccount}
+          connected={googleDriveState === 'connected'}
+          view={view}
+          onSelect={onShowView}
+        />
         <section className="workspace">
           <ShellHome hidden={view !== 'home'} onOpen={onShowView} />
           <OptionsPage
             hidden={view !== 'options'}
             editor={editorOptions}
             game={gameOptions}
-            googleDriveAccount={googleDriveAccount}
+            googleDriveAccount={googleDriveAccount?.emailAddress}
             googleDriveState={googleDriveState}
             theme={theme}
             onEditorChange={onEditorOptionsChange}

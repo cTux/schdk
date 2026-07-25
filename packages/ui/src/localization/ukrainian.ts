@@ -33,6 +33,8 @@ export const ukrainian = {
     toolsLabel: 'Інструменти',
     groupLabel: 'ЩДК',
     settingsLabel: 'Налаштування',
+    accountConnected: 'Підключено',
+    accountDisconnected: 'Не підключено',
     homeTitle: 'Усе для гри в одному місці',
     homeDescription:
       'Створіть пакет запитань у редакторі, а потім відкрийте його в розділі «Провести гру».',

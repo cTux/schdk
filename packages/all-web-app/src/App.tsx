@@ -215,7 +215,7 @@ export function App() {
         gameOptionsError={gameOptionsError}
         googleDriveAccount={
           'account' in googleDrive.connection
-            ? googleDrive.connection.account?.emailAddress
+            ? googleDrive.connection.account
             : undefined
         }
         googleDriveState={googleDrive.connection.state}

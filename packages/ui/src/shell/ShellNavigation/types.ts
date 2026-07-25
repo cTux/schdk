@@ -1,1 +1,1 @@
-export type { ShellNavigationProps } from './ShellNavigation';
+export type { ShellAccount, ShellNavigationProps } from './ShellNavigation';
