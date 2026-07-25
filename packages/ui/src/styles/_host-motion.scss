@@ -1,0 +1,127 @@
+@use './tokens' as *;
+
+.host-app {
+  .game-finished {
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    animation: finished-in 680ms cubic-bezier(0.12, 0.82, 0.18, 1) both;
+    text-align: center;
+  }
+
+  .game-finished h2 {
+    font-size: clamp(3rem, 8vw, 8rem);
+    letter-spacing: -0.055em;
+  }
+
+  .game-finished button {
+    min-width: 220px;
+    padding: 13px 20px;
+    font-size: 1rem;
+  }
+
+  .is-entering:not(.question-intro) {
+    animation: game-part-in 680ms cubic-bezier(0.12, 0.82, 0.18, 1) both;
+  }
+
+  .is-exiting:not(.question-intro) {
+    animation: game-part-out 280ms cubic-bezier(0.65, 0, 0.85, 0.2) both;
+  }
+
+  .is-settling {
+    animation: game-part-settle 280ms ease-out both;
+  }
+
+  .question-intro.is-entering.is-forward {
+    animation: intro-in-left 680ms cubic-bezier(0.12, 0.82, 0.18, 1) both;
+  }
+
+  .question-intro.is-entering.is-backward {
+    animation: intro-in-right 680ms cubic-bezier(0.12, 0.82, 0.18, 1) both;
+  }
+
+  .question-intro.is-exit-forward {
+    animation: intro-out-right 280ms cubic-bezier(0.65, 0, 0.85, 0.2) both;
+  }
+
+  .question-intro.is-exit-backward {
+    animation: intro-out-left 280ms cubic-bezier(0.65, 0, 0.85, 0.2) both;
+  }
+
+  .question-board.is-exit-forward {
+    animation: board-out-right 280ms cubic-bezier(0.65, 0, 0.85, 0.2) both;
+  }
+
+  .question-board.is-exit-backward {
+    animation: board-out-left 280ms cubic-bezier(0.65, 0, 0.85, 0.2) both;
+  }
+
+  .question-board.is-enter-forward {
+    animation: board-in-left 680ms cubic-bezier(0.12, 0.82, 0.18, 1) both;
+  }
+
+  .question-board.is-enter-backward {
+    animation: board-in-right 680ms cubic-bezier(0.12, 0.82, 0.18, 1) both;
+  }
+
+  @media (width <= 520px) {
+    .game-package-stats,
+    .game-package-actions {
+      flex-direction: column;
+    }
+
+    .game-package-actions {
+      width: 100%;
+    }
+
+    .game-progress {
+      top: 10px;
+      right: 12px;
+    }
+
+    .game-wizard-canvas {
+      overflow: auto;
+      align-items: flex-start;
+      padding: 48px 16px 80px;
+    }
+
+    .question-board {
+      height: auto;
+      gap: 20px;
+    }
+
+    .question-board-top,
+    .question-board-bottom {
+      flex: none;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .handout-slot,
+    .question-slot,
+    .question-bottom-left,
+    .answer-slot {
+      flex: none;
+    }
+
+    .game-handout {
+      width: min(100%, 600px);
+      height: auto;
+      max-height: 30dvh;
+    }
+
+    .game-controls {
+      gap: 8px;
+      padding: 8px;
+    }
+
+    .game-controls button {
+      min-width: 0;
+      padding-inline: 10px;
+    }
+
+    .game-controls kbd {
+      display: none;
+    }
+  }
+}

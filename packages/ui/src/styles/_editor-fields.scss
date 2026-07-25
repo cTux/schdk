@@ -1,0 +1,126 @@
+@use './tokens' as *;
+
+.editor-app {
+  .primary {
+    border-color: rgba($accent-hover-rgb, 0.7);
+    background: linear-gradient(135deg, $accent-hover, $accent);
+    color: $on-accent;
+    font-weight: 700;
+    box-shadow:
+      inset 0 1px rgba($highlight-rgb, 0.38),
+      0 8px 24px rgba($accent-rgb, 0.16);
+  }
+
+  .primary:hover:not(:disabled) {
+    border-color: $accent-hover;
+    background: $accent-hover;
+  }
+
+  label,
+  legend {
+    color: $muted;
+    font-size: 0.82rem;
+    font-weight: 650;
+  }
+
+  legend span {
+    color: $muted;
+    font-weight: 400;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    margin-top: 7px;
+    border: 1px solid $border;
+    border-radius: 9px;
+    outline: none;
+    background: rgba($background-rgb, 0.64);
+    padding: 10px 12px;
+    color: $text;
+    line-height: 1.45;
+    transition:
+      border-color 120ms ease,
+      background-color 120ms ease,
+      box-shadow 120ms ease;
+  }
+
+  input:hover,
+  textarea:hover {
+    border-color: $border-strong;
+  }
+
+  input:focus,
+  textarea:focus {
+    border-color: rgba($accent-rgb, 0.8);
+    background: rgba($background-rgb, 0.9);
+    box-shadow:
+      0 0 0 3px rgba($accent-rgb, 0.1),
+      0 10px 28px rgba($shadow-rgb, 0.12);
+  }
+
+  input.invalid,
+  textarea.invalid {
+    border-color: $danger;
+    box-shadow: 0 0 0 3px rgba($danger-rgb, 0.08);
+  }
+
+  textarea {
+    min-height: 76px;
+    font-size: 1.05rem;
+    resize: vertical;
+  }
+
+  .package-header {
+    width: min(430px, 45%);
+    margin-left: auto;
+  }
+
+  .package-title {
+    display: block;
+    color: $muted;
+    font-size: $font-size-xs;
+    letter-spacing: 0.035em;
+  }
+
+  .package-title input {
+    margin-top: 5px;
+    padding-block: 8px;
+    font-weight: 600;
+  }
+
+  .save-status {
+    min-height: 16px;
+    gap: 7px;
+    margin-top: 6px;
+    font-size: 0.75rem;
+  }
+
+  .save-status-dot {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: currentcolor;
+  }
+
+  .save-status.saved {
+    color: $success;
+  }
+
+  .save-status.pending {
+    color: $accent;
+  }
+
+  .save-status.saving {
+    color: $saving;
+  }
+
+  .save-status.saving .save-status-dot {
+    animation: saving-pulse 900ms ease-in-out infinite alternate;
+  }
+
+  .save-status.error {
+    color: $danger;
+  }
+}

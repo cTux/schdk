@@ -1,0 +1,196 @@
+@use './tokens' as *;
+
+.options-page {
+  width: min(860px, calc(100% - 56px));
+  margin: 0 auto;
+  padding: clamp(48px, 8vh, 80px) 0;
+}
+
+.options-page h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.options-tabs {
+  display: flex;
+  gap: 6px;
+  margin: 32px 0 24px;
+  width: fit-content;
+  border: 1px solid $border;
+  border-radius: $radius-panel;
+  background: rgba($surface-rgb, 0.72);
+  padding: 5px;
+  box-shadow: $shadow-raised;
+}
+
+.options-tabs button {
+  border: 0;
+  border-radius: $radius-control;
+  background: transparent;
+  padding: 10px 14px;
+  color: $muted;
+  cursor: pointer;
+}
+
+.options-tabs button.active {
+  border-color: rgba($accent-rgb, 0.25);
+  background: rgba($accent-rgb, 0.12);
+  color: $text;
+}
+
+.options-primary-tabs {
+  margin-bottom: 24px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+.options-primary-tabs button.active {
+  border: 1px solid rgba($accent-rgb, 0.26);
+  background: rgba($accent-rgb, 0.1);
+  color: $accent-hover;
+}
+
+.options-secondary-tabs {
+  margin-top: 10px;
+}
+
+.options-page section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.options-page section h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.option-toggle,
+.option-select,
+.option-slider {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  border: 1px solid $border;
+  border-radius: $radius-panel;
+  background:
+    linear-gradient(135deg, rgba($highlight-rgb, 0.035), transparent 50%),
+    rgba($surface-rgb, 0.84);
+  padding: 18px;
+  box-shadow: $shadow-raised;
+  cursor: pointer;
+  transition:
+    border-color $motion-fast ease,
+    transform $motion-fast ease,
+    box-shadow $motion-standard ease;
+}
+
+.option-toggle:hover,
+.option-select:hover,
+.option-slider:hover {
+  border-color: $border-strong;
+  box-shadow: $shadow-overlay;
+  transform: translateY(-2px);
+}
+
+.option-toggle > span,
+.option-select > span,
+.option-slider > span {
+  flex: 1 1 auto;
+}
+
+.option-toggle strong,
+.option-select strong,
+.option-toggle small,
+.option-select small,
+.option-slider strong,
+.option-slider small {
+  display: block;
+}
+
+.option-toggle small,
+.option-select small,
+.option-slider small,
+.options-empty {
+  margin-top: 4px;
+  color: $muted;
+  line-height: 1.45;
+}
+
+.option-toggle input {
+  position: relative;
+  width: 42px;
+  height: 24px;
+  flex: 0 0 42px;
+  appearance: none;
+  border: 1px solid $border-strong;
+  border-radius: 999px;
+  outline: none;
+  background: $surface-raised;
+  cursor: pointer;
+  transition:
+    border-color $motion-fast ease,
+    background-color $motion-fast ease;
+}
+
+.option-toggle input::after {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: $muted;
+  content: '';
+  transition:
+    background-color $motion-fast ease,
+    transform $motion-standard cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.option-toggle input:checked {
+  border-color: rgba($accent-rgb, 0.7);
+  background: rgba($accent-rgb, 0.18);
+}
+
+.option-toggle input:checked::after {
+  background: $accent-hover;
+  box-shadow: 0 0 14px rgba($accent-rgb, 0.34);
+  transform: translateX(18px);
+}
+
+.option-toggle input:focus-visible {
+  outline: 2px solid rgba($accent-rgb, 0.8);
+  outline-offset: 3px;
+}
+
+.option-select select {
+  min-width: min(240px, 40vw);
+  min-height: $control-normal;
+  border: 1px solid $border-strong;
+  border-radius: $radius-control;
+  outline: none;
+  background: $surface-raised;
+  padding: 0 $space-3;
+  color: $text;
+  font: inherit;
+  cursor: pointer;
+}
+
+.option-select select:focus-visible {
+  outline: 2px solid rgba($accent-rgb, 0.8);
+  outline-offset: 3px;
+}
+
+.option-slider input {
+  width: min(220px, 32vw);
+  accent-color: $accent;
+  cursor: pointer;
+}
+
+.option-slider output {
+  min-width: 3ch;
+  color: $text;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}

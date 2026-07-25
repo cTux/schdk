@@ -1,0 +1,201 @@
+@use 'tokens' as *;
+@use 'primitives';
+
+:root {
+  color: $text;
+  background: $background;
+  font-family:
+    Inter,
+    'Segoe UI',
+    system-ui,
+    -apple-system,
+    sans-serif;
+  color-scheme: var(--schdk-color-scheme);
+  font-synthesis: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  /* stylelint-disable-next-line declaration-no-important -- Hidden content must override authored display rules. */
+  display: none !important;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+}
+
+button {
+  font: inherit;
+}
+
+.app-shell {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 78% -10%,
+      rgba($accent-rgb, 0.12),
+      transparent 30rem
+    ),
+    radial-gradient(
+      circle at 38% 110%,
+      rgba($accent-cool-rgb, 0.1),
+      transparent 34rem
+    ),
+    $background;
+}
+
+.sidebar {
+  display: flex;
+  width: 232px;
+  height: 100vh;
+  flex: 0 0 232px;
+  flex-direction: column;
+  border-right: 1px solid $border;
+  background:
+    linear-gradient(180deg, rgba($highlight-rgb, 0.025), transparent 24%),
+    rgba($sidebar-rgb, 0.88);
+  padding: 20px 14px;
+  box-shadow: 14px 0 45px rgba($shadow-rgb, 0.18);
+  backdrop-filter: blur(24px) saturate(130%);
+}
+
+.sidebar .brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px 20px;
+}
+
+.sidebar .brand img {
+  width: 44px;
+  height: 44px;
+  filter: drop-shadow(0 8px 12px rgba($accent-rgb, 0.18));
+}
+
+.sidebar .brand strong,
+.sidebar .brand span {
+  display: block;
+}
+
+.sidebar .brand strong {
+  font-size: 0.9rem;
+}
+
+.sidebar .brand span {
+  margin-top: 2px;
+  color: $muted;
+  font-size: $font-size-xs;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sidebar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.sidebar-group-label {
+  margin: 14px 10px 2px;
+  color: $muted;
+  font-size: 0.65rem;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.sidebar nav button {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  min-height: $control-normal;
+  border-radius: $radius-control;
+  background: transparent;
+  padding: 10px;
+  color: $muted;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color $motion-fast ease,
+    color $motion-fast ease,
+    transform $motion-fast ease;
+}
+
+.sidebar nav button:hover {
+  background: $surface-raised;
+  color: $text;
+  transform: translateX(2px);
+}
+
+.sidebar nav button.active {
+  background:
+    linear-gradient(
+      90deg,
+      rgba($accent-rgb, 0.18),
+      rgba($accent-cool-rgb, 0.08)
+    ),
+    $surface-raised;
+  color: $accent-hover;
+  box-shadow: inset 0 1px rgba($highlight-rgb, 0.04);
+}
+
+.sidebar nav button.active::after {
+  position: absolute;
+  top: 9px;
+  bottom: 9px;
+  left: -10px;
+  width: 3px;
+  border-radius: 999px;
+  background: $accent;
+  box-shadow: 0 0 16px rgba($accent-rgb, 0.65);
+  content: '';
+}
+
+.nav-icon {
+  display: flex;
+  width: 25px;
+  height: 25px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  background: rgba($highlight-rgb, 0.055);
+  font-size: $font-size-md;
+}
+
+.sidebar-options {
+  margin-top: auto;
+}
+
+.workspace {
+  height: 100vh;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden auto;
+  background:
+    radial-gradient(
+      circle at 80% 0%,
+      rgba($accent-rgb, 0.08),
+      transparent 28rem
+    ),
+    radial-gradient(
+      circle at 15% 100%,
+      rgba($accent-cool-rgb, 0.08),
+      transparent 32rem
+    ),
+    $background;
+}

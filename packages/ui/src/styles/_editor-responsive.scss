@@ -1,0 +1,154 @@
+@use './tokens' as *;
+
+.editor-app {
+  .question-actions {
+    justify-content: space-between;
+    gap: 10px;
+    border-top: 1px solid $border;
+    padding-top: 18px;
+  }
+
+  .status {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    max-width: min(420px, calc(100% - 40px));
+    border: 1px solid rgba($danger-rgb, 0.35);
+    border-radius: 10px;
+    background: rgba($danger-surface-rgb, 0.92);
+    padding: 11px 14px;
+    box-shadow: 0 12px 30px rgba($shadow-rgb, 0.3);
+    color: $danger-text;
+    font-size: $font-size-md;
+    backdrop-filter: blur(18px);
+  }
+
+  @keyframes editor-header-in {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes editor-panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+
+  @keyframes saving-pulse {
+    to {
+      opacity: 0.35;
+    }
+  }
+
+  @media (width <= 800px) {
+    width: min(100% - 20px, 680px);
+    padding-top: 10px;
+
+    .app-header {
+      align-items: stretch;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .package-header {
+      width: 100%;
+    }
+
+    .editor-layout {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .question-list {
+      position: static;
+      display: flex;
+      width: 100%;
+      flex: none;
+      gap: 12px;
+    }
+
+    .question-list section {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .question-list section + section {
+      margin-top: 0;
+    }
+
+    .question-grid button:nth-child(4n + 3) .question-tooltip,
+    .question-grid button:nth-child(4n + 4) .question-tooltip {
+      right: 0;
+      left: auto;
+    }
+  }
+
+  @media (width <= 520px) {
+    .app-header {
+      padding: 8px 10px;
+    }
+
+    .question-editor {
+      padding: 14px;
+    }
+
+    .brand {
+      gap: 9px;
+    }
+
+    .app-icon {
+      width: 36px;
+      height: 36px;
+    }
+
+    .eyebrow {
+      display: none;
+    }
+
+    .question-list {
+      flex-direction: column;
+    }
+
+    .question-list section + section {
+      margin-top: 2px;
+    }
+
+    .alternative {
+      align-items: stretch;
+      flex-direction: column;
+    }
+
+    .question-pair {
+      flex-direction: column;
+    }
+
+    .question-pair > label,
+    .question-remark {
+      width: 100%;
+    }
+
+    .alternative button {
+      align-self: flex-end;
+    }
+
+    .drop-actions {
+      flex-direction: column;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      /* stylelint-disable declaration-no-important -- Reduced motion must override component motion. */
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      /* stylelint-enable declaration-no-important */
+    }
+  }
+}

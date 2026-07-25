@@ -1,0 +1,191 @@
+@use './tokens' as *;
+
+.visual-editor-canvas:focus-visible {
+  outline: 2px solid rgba($saving-rgb, 0.72);
+  outline-offset: 3px;
+}
+
+.visual-layout-item {
+  position: absolute;
+  z-index: 1;
+  max-width: none;
+  overflow: hidden;
+  background: transparent;
+  padding: 0;
+  color: $text;
+  cursor: grab;
+  touch-action: none;
+  transform: translate(-50%, -50%);
+  user-select: none;
+  container-type: inline-size;
+}
+
+.visual-layout-item::after {
+  position: absolute;
+  z-index: 20;
+  inset: 0;
+  box-shadow: inset 0 0 0 2px transparent;
+  content: '';
+  pointer-events: none;
+}
+
+.visual-layout-item:hover,
+.visual-layout-item.is-dragging {
+  z-index: 2;
+}
+
+.visual-layout-item:focus-visible {
+  z-index: 2;
+  outline: 2px solid rgba($saving-rgb, 0.72);
+  outline-offset: 2px;
+}
+
+.visual-layout-item > * {
+  pointer-events: none;
+}
+
+.visual-layout-item.is-dragging {
+  cursor: grabbing;
+}
+
+.visual-layout-item.is-hidden {
+  filter: grayscale(0.65);
+  opacity: 0.38;
+}
+
+.visual-layout-item.is-hidden::before {
+  position: absolute;
+  z-index: 21;
+  top: 4px;
+  right: 4px;
+  border: 1px solid rgba($saving-rgb, 0.5);
+  border-radius: 999px;
+  background: rgba($background-rgb, 0.88);
+  padding: 2px 6px;
+  color: $saving;
+  content: attr(data-hidden-label);
+  font-size: 0.58rem;
+  line-height: 1.2;
+  pointer-events: none;
+}
+
+.visual-layout-item.is-hidden.is-selected {
+  opacity: 0.62;
+}
+
+.visual-editor .visual-layout-handout .game-handout {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+}
+
+.visual-layout-progress,
+.visual-layout-controls {
+  max-width: none;
+  color: $muted;
+  font-size: $font-size-xs;
+  white-space: nowrap;
+}
+
+.visual-editor .visual-layout-progress .game-progress {
+  position: static;
+}
+
+.visual-editor .visual-layout-controls .game-controls {
+  position: static;
+  width: max-content;
+  padding: 0;
+  pointer-events: none;
+}
+
+.visual-editor .visual-layout-logo .game-logo {
+  position: static;
+}
+
+.visual-layout-resize-edge {
+  position: absolute;
+  z-index: 6;
+  pointer-events: auto;
+}
+
+.visual-layout-resize-edge.is-top,
+.visual-layout-resize-edge.is-bottom {
+  right: 6px;
+  left: 6px;
+  height: 8px;
+  cursor: ns-resize;
+}
+
+.visual-layout-resize-edge.is-top {
+  top: 0;
+}
+
+.visual-layout-resize-edge.is-bottom {
+  bottom: 0;
+}
+
+.visual-layout-resize-edge.is-right,
+.visual-layout-resize-edge.is-left {
+  top: 6px;
+  bottom: 6px;
+  width: 8px;
+  cursor: ew-resize;
+}
+
+.visual-layout-resize-edge.is-right {
+  right: 0;
+}
+
+.visual-layout-resize-edge.is-left {
+  left: 0;
+}
+
+.visual-layout-resize-edge.is-top-left,
+.visual-layout-resize-edge.is-top-right,
+.visual-layout-resize-edge.is-bottom-right,
+.visual-layout-resize-edge.is-bottom-left {
+  width: 12px;
+  height: 12px;
+}
+
+.visual-layout-resize-edge.is-top-left,
+.visual-layout-resize-edge.is-bottom-right {
+  cursor: nwse-resize;
+}
+
+.visual-layout-resize-edge.is-top-right,
+.visual-layout-resize-edge.is-bottom-left {
+  cursor: nesw-resize;
+}
+
+.visual-layout-resize-edge.is-top-left {
+  top: 0;
+  left: 0;
+}
+
+.visual-layout-resize-edge.is-top-right {
+  top: 0;
+  right: 0;
+}
+
+.visual-layout-resize-edge.is-bottom-right {
+  right: 0;
+  bottom: 0;
+}
+
+.visual-layout-resize-edge.is-bottom-left {
+  bottom: 0;
+  left: 0;
+}
+
+.visual-layout-item.visual-layout-alternative-answer {
+  z-index: 3;
+}
+
+.visual-layout-item.is-selected {
+  z-index: 100;
+}
+
+.visual-layout-item.is-selected::after {
+  box-shadow: inset 0 0 0 2px $saving;
+}

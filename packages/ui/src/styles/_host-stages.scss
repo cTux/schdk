@@ -1,0 +1,200 @@
+@use './tokens' as *;
+
+.host-app {
+  .game-handout-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text;
+  }
+
+  .game-handout-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: clamp(20px, 4cqw, 64px);
+    container-type: inline-size;
+    color: $text;
+  }
+
+  .game-handout-text p {
+    margin: 0;
+    font-size: clamp(1.5rem, calc(8cqw * var(--game-fit-scale, 1)), 6rem);
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    white-space: pre-wrap;
+  }
+
+  .game-wizard-canvas.is-handout-focus {
+    padding: 32px;
+  }
+
+  .is-handout-focus .question-board {
+    width: 100%;
+    max-width: none;
+  }
+
+  .is-handout-focus .question-board-top,
+  .is-handout-focus .handout-slot {
+    flex: 1 1 auto;
+  }
+
+  .is-handout-focus .handout-slot {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .is-handout-focus .question-slot,
+  .is-handout-focus .question-board-bottom {
+    display: none;
+  }
+
+  .is-handout-focus .game-handout {
+    width: min(100%, 1400px);
+    height: auto;
+    max-width: 100%;
+    max-height: calc(100dvh - 64px);
+  }
+
+  .is-handout-focus .game-handout-text {
+    height: calc(100dvh - 64px);
+  }
+
+  .game-question {
+    --enter-x: -44px;
+    --enter-y: -24px;
+
+    width: min(100%, 620px);
+    margin: 0;
+    border-radius: 12px;
+    background: linear-gradient(
+      to right,
+      rgba($surface-raised-rgb, 0.88),
+      rgba($surface-raised-rgb, 0)
+    );
+    padding: 16px 18px;
+    color: $text;
+    font-size: clamp(1rem, min(3.2vw, 2.5vh), 3.4rem);
+    font-weight: 650;
+    letter-spacing: -0.025em;
+    line-height: 1.18;
+    overflow-wrap: anywhere;
+  }
+
+  .game-timer {
+    --enter-x: -44px;
+    --enter-y: 24px;
+
+    display: flex;
+    align-items: flex-start;
+    align-self: flex-start;
+  }
+
+  .game-timer strong {
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(2.6rem, 6vw, 6rem);
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
+
+  .game-answer-comment {
+    --enter-x: -38px;
+    --enter-y: 24px;
+
+    width: min(100%, 620px);
+    margin: auto 0 0;
+    border-radius: 12px;
+    background: linear-gradient(
+      to right,
+      rgba($surface-raised-rgb, 0.88),
+      rgba($surface-raised-rgb, 0)
+    );
+    padding: 16px 18px;
+    color: $game-secondary-text;
+    font-size: clamp(1rem, 1.7vw, 1.5rem);
+    line-height: 1.35;
+  }
+
+  .game-answer,
+  .game-alternative-answer {
+    --enter-x: 44px;
+    --enter-y: 24px;
+
+    display: flex;
+    width: min(100%, 620px);
+    align-items: flex-end;
+    flex-direction: column;
+    border-radius: 12px;
+    background: linear-gradient(
+      to left,
+      rgba($surface-raised-rgb, 0.88),
+      rgba($surface-raised-rgb, 0)
+    );
+    gap: 7px;
+    padding: 16px 18px;
+    text-align: right;
+  }
+
+  .game-answer > strong {
+    color: $accent;
+    font-size: clamp(2rem, 4.5vw, 5rem);
+    font-weight: 850;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .game-alternative-answer {
+    margin: 0;
+    color: $game-secondary-text;
+    font-size: clamp(0.9rem, 1.5vw, 1.25rem);
+    line-height: 1.35;
+  }
+
+  .game-controls {
+    position: absolute;
+    z-index: 4;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    pointer-events: none;
+  }
+
+  .game-controls button {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border-color: rgba($border-strong-rgb, 0.28);
+    background: rgba($surface-raised-rgb, 0.24);
+    padding: 7px 10px;
+    color: rgba($text-rgb, 0.48);
+    opacity: 0.5;
+    pointer-events: auto;
+  }
+
+  .game-controls button:hover,
+  .game-controls button:focus-visible {
+    background: rgba($surface-raised-rgb, 0.72);
+    color: $text;
+    opacity: 1;
+  }
+
+  .game-controls kbd {
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    padding: 0;
+    color: inherit;
+    font-family: inherit;
+    font-size: 0.68rem;
+    font-weight: 500;
+  }
+}

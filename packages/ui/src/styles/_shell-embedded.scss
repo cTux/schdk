@@ -1,0 +1,119 @@
+@use './tokens' as *;
+
+.embedded-app {
+  display: block;
+  width: 100%;
+  min-height: 100%;
+  border: 0;
+  background: $background;
+}
+
+button:focus-visible {
+  outline: 2px solid rgba($accent-rgb, 0.8);
+  outline-offset: 2px;
+}
+
+@keyframes surface-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+@keyframes card-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+}
+
+@media (width <= 700px) {
+  .sidebar {
+    width: 72px;
+    flex-basis: 72px;
+    padding-inline: 10px;
+  }
+
+  .brand {
+    justify-content: center;
+    padding-inline: 0;
+  }
+
+  .sidebar .brand div {
+    display: none;
+  }
+
+  .sidebar nav button:not(.active) {
+    font-size: 0;
+  }
+
+  .sidebar nav button {
+    justify-content: center;
+    padding-inline: 0;
+  }
+
+  .sidebar nav button.active {
+    font-size: 0;
+  }
+
+  .nav-icon {
+    font-size: $font-size-md;
+  }
+
+  .home {
+    width: min(100% - 28px, 560px);
+    padding-top: 44px;
+  }
+
+  .options-page {
+    width: min(100% - 28px, 560px);
+    padding-top: 36px;
+  }
+
+  .visual-editor {
+    width: 100%;
+  }
+
+  .visual-editor-canvas {
+    width: calc(100% - 24px);
+  }
+
+  .option-slider {
+    flex-wrap: wrap;
+  }
+
+  .option-select {
+    flex-wrap: wrap;
+  }
+
+  .option-select > span,
+  .option-slider > span {
+    flex-basis: 100%;
+  }
+
+  .option-select select,
+  .option-slider input {
+    width: auto;
+    flex: 1 1 auto;
+  }
+
+  .arrow {
+    display: none;
+  }
+
+  .home::before {
+    top: 14px;
+    right: -25px;
+    width: 120px;
+    opacity: 0.32;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .visual-editor-add-button,
+  .tool-list button,
+  .home header {
+    animation: none;
+    transition: none;
+  }
+}

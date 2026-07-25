@@ -1,0 +1,43 @@
+@use 'tokens' as *;
+@use 'primitives';
+
+:root {
+  color: $text;
+  background: $background;
+  font-family:
+    Inter,
+    'Segoe UI',
+    system-ui,
+    -apple-system,
+    sans-serif;
+  color-scheme: dark;
+  font-synthesis: none;
+  text-rendering: optimizelegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  /* stylelint-disable-next-line declaration-no-important -- Hidden content must override authored display rules. */
+  display: none !important;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(
+      circle at 86% -8%,
+      rgba($accent-rgb, 0.11),
+      transparent 32rem
+    ),
+    radial-gradient(
+      circle at 8% 96%,
+      rgba($accent-cool-rgb, 0.09),
+      transparent 34rem
+    ),
+    $background;
+}
