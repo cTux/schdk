@@ -120,12 +120,20 @@ export function OptionsPage({
             </small>
           </span>
           {googleDriveState === 'connected' ? (
-            <Button type="button" onClick={onGoogleDriveDisconnect}>
+            <Button
+              type="button"
+              className={classNames(
+                'google-drive-action',
+                'google-drive-disconnect',
+              )}
+              onClick={onGoogleDriveDisconnect}
+            >
               {copy.settings.googleDriveDisconnect}
             </Button>
           ) : (
             <Button
               type="button"
+              className="google-drive-action"
               disabled={
                 googleDriveState === 'unavailable' ||
                 googleDriveState === 'connecting'
