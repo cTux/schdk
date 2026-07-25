@@ -101,10 +101,16 @@ function normalizeCustomElements(value: unknown): CustomGameElement[] | null {
       typeof id !== 'string' ||
       id.length === 0 ||
       ids.has(id) ||
-      !isGameLayoutElement(position)
+      !isGameLayoutPosition(position)
     ) {
       return null;
     }
+    const rawPosition = position as Record<string, unknown>;
+    const normalizedPosition = {
+      ...rawPosition,
+      hidden: rawPosition.hidden ?? false,
+    };
+    if (!isGameLayoutElement(normalizedPosition)) return null;
     ids.add(id);
     if (
       kind === 'text' &&
@@ -112,14 +118,19 @@ function normalizeCustomElements(value: unknown): CustomGameElement[] | null {
       candidate.text.length >= 1 &&
       candidate.text.length <= 500
     ) {
-      normalized.push({ id, kind, text: candidate.text, position });
+      normalized.push({
+        id,
+        kind,
+        text: candidate.text,
+        position: normalizedPosition,
+      });
       continue;
     }
     if (kind === 'image' && isBackgroundImage(candidate.image ?? null)) {
       const image = (candidate.image ?? null) as string | null;
       imageDataLength += image?.length ?? 0;
       if (imageDataLength > MAX_CUSTOM_IMAGE_DATA_LENGTH) return null;
-      normalized.push({ id, kind, image, position });
+      normalized.push({ id, kind, image, position: normalizedPosition });
       continue;
     }
     return null;
@@ -184,6 +195,7 @@ function isGameLayoutElement(value: unknown): value is GameLayoutPosition {
   return (
     isPercentage(position.width) &&
     isPercentage(position.height) &&
+    typeof position.hidden === 'boolean' &&
     typeof position.fontScale === 'number' &&
     Number.isFinite(position.fontScale) &&
     position.fontScale >= 0.5 &&

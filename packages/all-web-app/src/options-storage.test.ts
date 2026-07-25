@@ -41,13 +41,16 @@ describe('game options', () => {
     const options = {
       ...DEFAULT_GAME_OPTIONS,
       soundVolume: 0.65,
-      layout: DEFAULT_GAME_LAYOUT,
+      layout: {
+        ...DEFAULT_GAME_LAYOUT,
+        question: { ...DEFAULT_GAME_LAYOUT.question, hidden: true },
+      },
       customElements: [
         {
           id: 'title',
           kind: 'text' as const,
           text: 'Заголовок',
-          position: DEFAULT_GAME_LAYOUT.question,
+          position: { ...DEFAULT_GAME_LAYOUT.question, hidden: true },
         },
       ],
     };
@@ -123,6 +126,24 @@ describe('game options', () => {
         ),
       ).customElements,
     ).toEqual([]);
+    const { hidden: _hidden, ...legacyPosition } = DEFAULT_GAME_LAYOUT.question;
+    expect(
+      loadGameOptions(
+        createStorage(
+          JSON.stringify({
+            ...DEFAULT_GAME_OPTIONS,
+            customElements: [
+              {
+                id: 'legacy',
+                kind: 'text',
+                text: 'Старий елемент',
+                position: legacyPosition,
+              },
+            ],
+          }),
+        ),
+      ).customElements[0]?.position.hidden,
+    ).toBe(false);
     expect(
       loadGameOptions(
         createStorage(

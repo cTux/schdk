@@ -35,6 +35,7 @@ export type GameImagePosition = (typeof GAME_IMAGE_POSITIONS)[number];
 export type GameTextGrowDirection = 'up' | 'down';
 
 export interface GameLayoutPosition {
+  hidden: boolean;
   x: number;
   y: number;
   width: number;
@@ -110,6 +111,7 @@ function layout(
   textColor = '#f1f3f6',
 ): GameLayoutPosition {
   return {
+    hidden: false,
     x,
     y,
     width,

@@ -1,5 +1,7 @@
 import {
   faCircleHalfStroke,
+  faEye,
+  faEyeSlash,
   faFont,
   faImage,
   faPalette,
@@ -412,7 +414,9 @@ export function VisualEditor({
             : ' visual-layout-custom'
         }${dragging === key ? ' is-dragging' : ''}${
           resizing === key ? ' is-resizing' : ''
-        }${selected && selectionKey(selected) === key ? ' is-selected' : ''}`}
+        }${selected && selectionKey(selected) === key ? ' is-selected' : ''}${
+          position.hidden ? ' is-hidden' : ''
+        }`}
         style={
           {
             left: `${position.x}%`,
@@ -426,7 +430,7 @@ export function VisualEditor({
             '--game-image-position': position.imagePosition,
           } as CSSProperties
         }
-        aria-label={`${label}. Перетягніть, щоб змінити позицію`}
+        aria-label={`${label}${position.hidden ? '. Приховано у грі' : ''}. Перетягніть, щоб змінити позицію`}
         aria-pressed={selected ? selectionKey(selected) === key : false}
         onClick={() => setSelected(selection)}
         onKeyDown={(event) => {
@@ -636,13 +640,14 @@ export function VisualEditor({
             }
             onClick={() => chooseImage('background')}
           />
-          <ActionToolbarButton
-            danger
-            disabled={!game.backgroundImage}
-            icon={faTrashCan}
-            label="Видалити фон"
-            onClick={() => onChange({ ...game, backgroundImage: null })}
-          />
+          {game.backgroundImage && (
+            <ActionToolbarButton
+              danger
+              icon={faTrashCan}
+              label="Видалити фон"
+              onClick={() => onChange({ ...game, backgroundImage: null })}
+            />
+          )}
           <ActionToolbarPopover
             icon={faCircleHalfStroke}
             label="Прозорість фону"
@@ -676,6 +681,17 @@ export function VisualEditor({
           {GRAPHIC_ELEMENTS.has(selected.id)
             ? imagePositionSettings(selected, selectedPosition)
             : textSettings(selected, selectedPosition)}
+          <ActionToolbarSeparator />
+          <ActionToolbarButton
+            icon={selectedPosition.hidden ? faEye : faEyeSlash}
+            label={
+              selectedPosition.hidden ? 'Показати у грі' : 'Приховати у грі'
+            }
+            pressed={selectedPosition.hidden}
+            onClick={() =>
+              updatePosition(selected, { hidden: !selectedPosition.hidden })
+            }
+          />
         </ActionToolbar>
       );
     }
@@ -729,6 +745,14 @@ export function VisualEditor({
           </>
         )}
         <ActionToolbarSeparator />
+        <ActionToolbarButton
+          icon={selectedPosition.hidden ? faEye : faEyeSlash}
+          label={selectedPosition.hidden ? 'Показати у грі' : 'Приховати у грі'}
+          pressed={selectedPosition.hidden}
+          onClick={() =>
+            updatePosition(selected, { hidden: !selectedPosition.hidden })
+          }
+        />
         <ActionToolbarButton
           danger
           icon={faTrashCan}

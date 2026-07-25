@@ -105,13 +105,13 @@ arrow keys move between controls.
 
 Context determines the available actions:
 
-| Selection              | Actions                                                                                         |
-| ---------------------- | ----------------------------------------------------------------------------------------------- |
-| Canvas                 | Apply/replace background, remove background, background opacity                                 |
-| Built-in text element  | Typography popover, text color, fit-to-height toggle, grow direction                            |
-| Built-in image element | Image-position popover                                                                          |
-| Custom text            | Edit text, typography popover, text color, fit-to-height toggle, grow direction, delete element |
-| Custom image           | Apply/replace image, remove image, image-position popover, delete element                       |
+| Selection              | Actions                                                                                                            |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Canvas                 | Apply/replace background, remove background when present, background opacity                                       |
+| Built-in text element  | Typography popover, text color, fit-to-height toggle, grow direction, hide/show in game                            |
+| Built-in image element | Image-position popover, hide/show in game                                                                          |
+| Custom text            | Edit text, typography popover, text color, fit-to-height toggle, grow direction, hide/show in game, delete element |
+| Custom image           | Apply/replace image, remove image, image-position popover, hide/show in game, delete element                       |
 
 Text entry and multi-control settings live in labeled popovers. They are not
 placed directly in the toolbar. This keeps the toolbar compact and avoids
@@ -204,6 +204,8 @@ join the design system.
 
 Keep fixed game elements in the existing `GameLayout`. Store user-created
 elements separately so fixed IDs and their migration remain simple.
+`GameLayoutPosition.hidden` stores whether either kind of element is omitted
+from gameplay while remaining available in the editor.
 
 ```ts
 interface CustomGameElementBase {
@@ -349,9 +351,13 @@ the first and defer migration indefinitely.
 - Custom text can be changed and renders identically in the editor and game.
 - A custom image can be applied, replaced, removed, and later reapplied.
 - Custom elements can be moved, resized, selected, and deleted.
+- Every built-in and custom element can be hidden without deletion, remains
+  visibly marked and selectable in the editor, and is omitted from gameplay.
+- The background remove action is available only while a background exists.
 - Layout, content, and images survive reload; invalid or oversized stored data
   falls back safely with an actionable error where user input caused it.
-- Legacy options without `customElements` still load.
+- Legacy options without `customElements` or element visibility still load,
+  with missing visibility treated as visible.
 - All application chrome uses the shared tokens and primitives.
 - The editor works at 320 px and normal desktop width without clipped
   tooltips or unreachable controls.

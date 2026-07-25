@@ -122,6 +122,7 @@ export function GameCustomElement({
   preview?: boolean;
 }) {
   const { position } = element;
+  if (position.hidden && !preview) return null;
   return (
     <div
       className={`game-custom-element game-custom-${element.kind}`}

@@ -389,6 +389,31 @@ button {
   cursor: grabbing;
 }
 
+.visual-layout-item.is-hidden {
+  filter: grayscale(0.65);
+  opacity: 0.38;
+}
+
+.visual-layout-item.is-hidden::before {
+  position: absolute;
+  z-index: 21;
+  top: 4px;
+  right: 4px;
+  border: 1px solid rgba($saving, 0.5);
+  border-radius: 999px;
+  background: rgba($background, 0.88);
+  padding: 2px 6px;
+  color: #cbd3ff;
+  content: 'Приховано';
+  font-size: 0.58rem;
+  line-height: 1.2;
+  pointer-events: none;
+}
+
+.visual-layout-item.is-hidden.is-selected {
+  opacity: 0.62;
+}
+
 .visual-editor .visual-layout-handout .game-handout {
   width: 100%;
   height: 100%;

@@ -43,6 +43,7 @@ export interface GameLayoutItemProps {
 
 function GameLayoutItem({ children, id, layout }: GameLayoutItemProps) {
   const position = layout?.[id];
+  if (position?.hidden) return null;
   const style = position
     ? ({
         '--game-layout-x': `${position.x}%`,

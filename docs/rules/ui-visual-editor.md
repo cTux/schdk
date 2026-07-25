@@ -7,6 +7,8 @@
   container.
 - Persist bounds as percentages and apply identical bounds and presentation
   settings in gameplay. Keep the standard layout until changed.
+- Let every built-in and custom element be marked hidden while remaining
+  editable in the visual editor; omit hidden elements only from gameplay.
 - Keep resize and property controls outside the transformed game container.
   Resize from invisible border zones and keep the grabbed point under the
   pointer.
