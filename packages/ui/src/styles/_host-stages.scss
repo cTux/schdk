@@ -161,6 +161,10 @@
     line-height: 1.35;
   }
 
+  .game-wrong-answer {
+    color: $danger;
+  }
+
   .game-controls {
     position: absolute;
     z-index: 4;

@@ -233,6 +233,7 @@ export function App({
       onAnswerBlur={questions.correctMainAnswer}
       onAnswerCommentBlur={questions.correctAnswerComment}
       onAlternativeAnswerBlur={questions.correctAlternativeAnswer}
+      onWrongAnswerBlur={questions.correctWrongAnswer}
       onBack={() => void packages.closePackage()}
       onCopyQuestion={() => void questions.copyQuestion()}
       onCreatePackage={() => void packages.createPackage()}

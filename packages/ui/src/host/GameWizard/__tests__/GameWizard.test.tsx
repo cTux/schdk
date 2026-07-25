@@ -9,6 +9,7 @@ const game: HostGameView = {
     questionParts: ['Питання'],
     answer: 'Відповідь',
     alternativeAnswers: [],
+    wrongAnswers: [],
   },
   questionNumber: 1,
   questionCount: 36,

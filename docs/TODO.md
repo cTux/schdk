@@ -2,7 +2,6 @@
 
 ## Potential features
 
-- Make a possibility to specify wrong answers
 - Logging in with Google account
   - Saving to Google Drive
 

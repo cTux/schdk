@@ -73,7 +73,7 @@ export const english: typeof ukrainian = {
       'Capitalize the first word and add a period when no punctuation ends the text.',
     answers: 'Answers',
     answersCorrection:
-      'Capitalize the first word of the main and alternative answers.',
+      'Capitalize the first word of the main, alternative, and wrong answers.',
     answerComment: 'Answer comment',
     game: 'Game',
     signalVolume: 'Signal volume',
@@ -103,6 +103,8 @@ export const english: typeof ukrainian = {
     questionPart: (number) => `Question part ${number}`,
     alternativeAnswers: 'Alternative answers',
     alternativeAnswer: (number) => `Alternative answer ${number}`,
+    wrongAnswers: 'Wrong answers',
+    wrongAnswer: (number) => `Wrong answer ${number}`,
     addAnswer: 'Add answer',
     hostNotes: 'Host notes',
     hostNotesLabel: 'Host notes',

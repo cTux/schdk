@@ -5,7 +5,7 @@ import {
 } from '@schdk/common';
 import { TextAreaField } from '../../atoms/TextAreaField';
 import { useLocalization } from '../../localization';
-import { AlternativeAnswersField } from '../AlternativeAnswersField';
+import { AnswerListField } from '../AnswerListField';
 import { HostNotesField } from '../HostNotesField';
 import { QuestionEditorHeader } from '../QuestionEditorHeader';
 import { QuestionHandoutField } from '../QuestionHandoutField';
@@ -20,6 +20,7 @@ export interface QuestionEditorProps {
   onAnswerBlur(): void;
   onAnswerCommentBlur(): void;
   onAlternativeAnswerBlur(index: number): void;
+  onWrongAnswerBlur(index: number): void;
   onChange(change: Partial<GameQuestion>): void;
   onCopy(): void;
   onPaste(): void;
@@ -35,6 +36,7 @@ export function QuestionEditor({
   onAnswerBlur,
   onAnswerCommentBlur,
   onAlternativeAnswerBlur,
+  onWrongAnswerBlur,
   onChange,
   onCopy,
   onPaste,
@@ -144,10 +146,19 @@ export function QuestionEditor({
         />
       </div>
 
-      <AlternativeAnswersField
+      <AnswerListField
         answers={question.alternativeAnswers}
+        answerLabel={copy.editor.alternativeAnswer}
+        legend={copy.editor.alternativeAnswers}
         onBlur={onAlternativeAnswerBlur}
         onChange={(alternativeAnswers) => onChange({ alternativeAnswers })}
+      />
+      <AnswerListField
+        answers={question.wrongAnswers}
+        answerLabel={copy.editor.wrongAnswer}
+        legend={copy.editor.wrongAnswers}
+        onBlur={onWrongAnswerBlur}
+        onChange={(wrongAnswers) => onChange({ wrongAnswers })}
       />
 
       <HostNotesField

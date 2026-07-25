@@ -20,12 +20,9 @@ import {
   GameQuestionIntro,
   GameTimer,
 } from '../GameElements';
-import type {
-  HostGameTransition,
-  HostGameView,
-  HostQuestionStage,
-} from '../types';
+import type { HostGameView } from '../types';
 import { FitTextObserver } from '../FitTextObserver';
+import { stageMotionClass } from './stage-motion';
 
 export interface GameWizardProps {
   copy?: LocalizationCopy;
@@ -69,21 +66,6 @@ function GameLayoutItem({ children, id, layout }: GameLayoutItemProps) {
       <FitTextObserver enabled={position?.fitTextToHeight ?? false} />
     </div>
   );
-}
-
-function stageMotionClass(
-  stage: HostQuestionStage,
-  currentStage: HostQuestionStage,
-  transition: HostGameTransition,
-) {
-  if (stage !== currentStage || transition.phase === 'idle') return '';
-  if (transition.phase === 'enter') {
-    return `is-entering is-${transition.direction}`;
-  }
-  if (transition.questionChanging) return '';
-  return transition.direction === 'backward'
-    ? 'is-exiting is-backward'
-    : 'is-settling';
 }
 
 export function GameWizard({
@@ -209,7 +191,8 @@ export function GameWizard({
               <div className="answer-slot">
                 {visible.has('answer') && (
                   <>
-                    {game.question.alternativeAnswers.length > 0 && (
+                    {(game.question.alternativeAnswers.length > 0 ||
+                      game.question.wrongAnswers.length > 0) && (
                       <GameLayoutItem id="alternative-answer" layout={layout}>
                         <GameAlternativeAnswer
                           className={stageMotionClass(
@@ -219,6 +202,17 @@ export function GameWizard({
                           )}
                         >
                           {game.question.alternativeAnswers.join(' · ')}
+                          {game.question.alternativeAnswers.length > 0 &&
+                            game.question.wrongAnswers.length > 0 &&
+                            ' · '}
+                          {game.question.wrongAnswers.length > 0 && (
+                            <span
+                              className="game-wrong-answer"
+                              aria-label={`${copy.editor.wrongAnswers}: ${game.question.wrongAnswers.join(' · ')}`}
+                            >
+                              {game.question.wrongAnswers.join(' · ')}
+                            </span>
+                          )}
                         </GameAlternativeAnswer>
                       </GameLayoutItem>
                     )}

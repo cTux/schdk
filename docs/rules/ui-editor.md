@@ -16,6 +16,7 @@
 - Label optional fields. A non-empty unresolved remark keeps a question
   unfinished. Give question, remark, answer, and answer-comment text areas the
   same default height.
+- Let authors add optional alternative and wrong answer lists.
 - Let each package slot select `Звичайне`, `Бліц 2×30`, or `Бліц 3×20`.
   Standard questions have one text part; blitz questions have two or three
   separate text parts and still share one answer.

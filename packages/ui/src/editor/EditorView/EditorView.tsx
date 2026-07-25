@@ -22,6 +22,7 @@ export function EditorView({
   onAnswerBlur,
   onAnswerCommentBlur,
   onAlternativeAnswerBlur,
+  onWrongAnswerBlur,
   onBack,
   onCopyQuestion,
   onCreatePackage,
@@ -69,6 +70,7 @@ export function EditorView({
             onAnswerBlur={onAnswerBlur}
             onAnswerCommentBlur={onAnswerCommentBlur}
             onAlternativeAnswerBlur={onAlternativeAnswerBlur}
+            onWrongAnswerBlur={onWrongAnswerBlur}
             onCopy={onCopyQuestion}
             onPaste={onPasteQuestion}
             onSelectQuestion={onSelectQuestion}
