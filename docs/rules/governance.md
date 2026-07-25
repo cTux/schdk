@@ -23,6 +23,8 @@
 - Keep repository skills under `.codex/skills` synchronized with the workflows
   they guide. Update the affected skill in the same change when a durable
   workflow, command, ownership boundary, or verification requirement changes.
+- Before creating a pull request, fetch `origin/main`, rebase the task branch
+  onto it, resolve conflicts, and reverify the rebased result.
 - Add a project skill only for a distinct recurring workflow. Do not create
   speculative skills for features or packages that do not exist yet.
 - Keep the root `TODO.md` tracked even when it is empty.

@@ -3,6 +3,8 @@
 - Reuse the shared package start view; the host omits package creation, accepts
   only structurally valid and complete packages, and keeps up to 20 browser
   recent copies in its own IndexedDB database.
+- Show the same title, filename, and readiness metadata for desktop recents as
+  the editor, using the current contents of each authorized recent file.
 - Show only the package title, filename, aggregate counts, and start/back
   actions before gameplay; never expose question, answer, comment, or host-note
   text.

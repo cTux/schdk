@@ -14,7 +14,8 @@ description: Implement, debug, refactor, review, or document changes anywhere in
 5. Update the matching rule and skill only when a durable contract or workflow changes.
 6. Verify with `$schdk-quality`.
 7. After every prompt that changes repository files, stage and commit all task changes once verified; preserve unrelated changes.
-8. Push the branch with `git push -u origin HEAD`, create the pull request with `gh pr create --fill`, wait for its checks with `gh pr checks --watch --fail-fast`, and confirm the worktree is clean unless the user explicitly asks to keep the change local.
+8. Before creating a pull request, run `git fetch origin main` and `git rebase origin/main`; resolve conflicts and reverify the rebased result.
+9. Push the branch with `git push -u origin HEAD`, create the pull request with `gh pr create --fill`, wait for its checks with `gh pr checks --watch --fail-fast`, and confirm the worktree is clean unless the user explicitly asks to keep the change local. If rebasing rewrote a published branch, update it with `git push --force-with-lease`.
 
 ## Route Specialized Work
 

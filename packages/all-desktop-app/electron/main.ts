@@ -307,12 +307,29 @@ ipcMain.handle('open-host-game-package', async (_event, filePath) => {
   return readGamePackage(filePath, false);
 });
 
-ipcMain.handle('list-recent-game-packages', () =>
-  recentGamePackages.map((filePath) => ({
-    filePath,
-    fileName: basename(filePath),
-  })),
-);
+ipcMain.handle('list-recent-game-packages', async () => {
+  const packages = await Promise.all(
+    recentGamePackages.map(async (filePath) => {
+      try {
+        return {
+          filePath,
+          fileName: basename(filePath),
+          content: new Uint8Array(await readFile(filePath)),
+        };
+      } catch {
+        return null;
+      }
+    }),
+  );
+  const availablePackages = packages.filter(
+    (gamePackage) => gamePackage !== null,
+  );
+  if (availablePackages.length !== recentGamePackages.length) {
+    recentGamePackages = availablePackages.map(({ filePath }) => filePath);
+    await persistRecentGamePackages();
+  }
+  return availablePackages;
+});
 
 ipcMain.handle('open-recent-game-package', async (_event, filePath) => {
   if (typeof filePath !== 'string' || !recentGamePackages.includes(filePath)) {
