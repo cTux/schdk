@@ -35,7 +35,7 @@ describe('editor text options', () => {
 });
 
 describe('game options', () => {
-  it('defaults to 40% and persists only a valid volume', () => {
+  it('defaults to 5% and persists only a valid volume', () => {
     const storage = createStorage();
     expect(loadGameOptions(storage)).toEqual(DEFAULT_GAME_OPTIONS);
     const options = {
