@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import classNames from 'classnames';
 import { Button } from '../../atoms/Button';
 import { LOCALIZATION_COPY } from '../../localization';

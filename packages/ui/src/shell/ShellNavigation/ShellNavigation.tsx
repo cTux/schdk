@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { AppIcon } from '../../atoms/AppIcon';

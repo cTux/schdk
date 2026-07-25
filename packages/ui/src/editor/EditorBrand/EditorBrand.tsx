@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { AppIcon } from '../../atoms/AppIcon';
 import { IconButton } from '../../atoms/IconButton';

@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import { useLayoutEffect, useRef } from 'react';
 import { MIN_FIT_SCALE } from './constants';
 import type { FitTextObserverProps } from './types';

@@ -19,6 +19,7 @@
 }
 
 [hidden] {
+  /* stylelint-disable-next-line declaration-no-important -- Hidden content must override authored display rules. */
   display: none !important;
 }
 

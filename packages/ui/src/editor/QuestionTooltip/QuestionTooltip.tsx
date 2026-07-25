@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import classNames from 'classnames';
 import { LOCALIZATION_COPY, type LocalizationCopy } from '../../localization';
 

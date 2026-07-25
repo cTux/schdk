@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import { faCopy, faPaste } from '@fortawesome/free-solid-svg-icons';
 import { IconButton } from '../../atoms/IconButton';
 import { useLocalization } from '../../localization';

@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import { Popover } from '@base-ui/react/popover';
 import { Toolbar } from '@base-ui/react/toolbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

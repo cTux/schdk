@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import type { Handout } from '@schdk/common';
 import { Button } from '../../atoms/Button';
 import { FileButton } from '../../atoms/FileButton';

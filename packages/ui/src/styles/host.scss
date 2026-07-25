@@ -935,6 +935,7 @@
   .host-app *,
   .host-app *::before,
   .host-app *::after {
+    /* stylelint-disable-next-line declaration-no-important -- Reduced motion must override component motion. */
     animation-duration: 1ms !important;
   }
 }

@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import { QUESTION_COUNT } from '@schdk/common';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { IconButton } from '../../atoms/IconButton';

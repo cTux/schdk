@@ -20,6 +20,7 @@
 }
 
 [hidden] {
+  /* stylelint-disable-next-line declaration-no-important -- Hidden content must override authored display rules. */
   display: none !important;
 }
 
@@ -989,10 +990,12 @@ body {
     *,
     *::before,
     *::after {
+      /* stylelint-disable declaration-no-important -- Reduced motion must override component motion. */
       scroll-behavior: auto !important;
       transition-duration: 0.01ms !important;
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
+      /* stylelint-enable declaration-no-important */
     }
   }
 }

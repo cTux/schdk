@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import type { GameQuestion } from '@schdk/common';
 import classNames from 'classnames';
 import type { DragEvent } from 'react';

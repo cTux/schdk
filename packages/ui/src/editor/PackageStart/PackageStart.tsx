@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import { PackageDropZone } from '../PackageDropZone';
 import { RecentPackages } from '../RecentPackages';
 import type { RecentPackageItem } from '../types';

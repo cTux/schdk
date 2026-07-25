@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import type { ImageHandout } from '@schdk/common';
 import { Button } from '../../atoms/Button';
 import { useLocalization } from '../../localization';

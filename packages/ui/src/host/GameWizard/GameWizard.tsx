@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import classNames from 'classnames';
 import type { CSSProperties, ReactNode } from 'react';
 import type {

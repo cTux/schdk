@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import { useLocalization } from '../../localization';
 import { RecentPackageButton } from '../RecentPackageButton';
 import type { RecentPackageItem } from '../types';

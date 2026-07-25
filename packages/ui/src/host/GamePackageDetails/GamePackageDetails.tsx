@@ -1,5 +1,3 @@
-import './styles.scss';
-
 import { Button } from '../../atoms/Button';
 import { useLocalization } from '../../localization';
 import type { HostPackageDetails } from '../HostView';

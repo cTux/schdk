@@ -1,0 +1,4 @@
+interface:
+  display_name: 'How to SCSS'
+  short_description: 'Write and audit maintainable SCHDK SCSS'
+  default_prompt: 'Use $schdk-scss to write or audit SCSS in SCHDK.'
