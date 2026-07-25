@@ -4,31 +4,51 @@ import type { RecentPackageItem } from '../types';
 
 export interface RecentPackagesProps {
   hidden: boolean;
+  loading?: boolean;
+  openingPackageId?: string | null;
   packages: RecentPackageItem[];
+  onDownload?(recent: RecentPackageItem): void;
   onOpen(recent: RecentPackageItem): void;
 }
 
 export function RecentPackages({
   hidden,
+  loading = false,
+  openingPackageId = null,
   packages,
+  onDownload,
   onOpen,
 }: RecentPackagesProps) {
   const { copy } = useLocalization();
-  if (packages.length === 0) return null;
+  if (!loading && packages.length === 0) return null;
 
   return (
-    <section className="recent-packages" hidden={hidden}>
+    <section className="recent-packages" hidden={hidden} aria-busy={loading}>
       <div className="recent-packages-heading">
         <h2>{copy.shared.recentPackages}</h2>
       </div>
       <div className="recent-package-list">
-        {packages.map((recent) => (
-          <RecentPackageButton
-            key={recent.id}
-            recent={recent}
-            onOpen={() => onOpen(recent)}
-          />
-        ))}
+        {loading
+          ? Array.from({ length: 3 }, (_, index) => (
+              <div
+                className="recent-package-skeleton"
+                aria-hidden="true"
+                key={index}
+              >
+                <span className="recent-package-skeleton-title" />
+                <span className="recent-package-skeleton-name" />
+              </div>
+            ))
+          : packages.map((recent) => (
+              <RecentPackageButton
+                disabled={openingPackageId !== null}
+                key={recent.id}
+                opening={openingPackageId === recent.id}
+                recent={recent}
+                onDownload={onDownload ? () => onDownload(recent) : undefined}
+                onOpen={() => onOpen(recent)}
+              />
+            ))}
       </div>
     </section>
   );

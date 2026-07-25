@@ -1,3 +1,5 @@
+import './styles.scss';
+
 import classNames from 'classnames';
 import type { ButtonHTMLAttributes } from 'react';
 
@@ -15,7 +17,8 @@ export function Button({
   return (
     <button
       className={
-        classNames(variant !== 'default' && variant, className) || undefined
+        classNames('ui-button', variant !== 'default' && variant, className) ||
+        undefined
       }
       {...props}
     />

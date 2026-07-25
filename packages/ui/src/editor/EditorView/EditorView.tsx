@@ -14,7 +14,9 @@ export function EditorView({
   gamePackage,
   hasPackage,
   message,
+  openingRecentPackageId = null,
   recentPackages,
+  recentPackagesLoading = false,
   saveStatus,
   selectedIndex,
   showValidation,
@@ -26,6 +28,7 @@ export function EditorView({
   onBack,
   onCopyQuestion,
   onCreatePackage,
+  onDownloadRecentPackage,
   onOpenPackage,
   onOpenRecentPackage,
   onPasteQuestion,
@@ -48,8 +51,11 @@ export function EditorView({
         />
         <PackageStart
           hidden={hasPackage}
+          openingRecentPackageId={openingRecentPackageId}
           recentPackages={recentPackages}
+          recentPackagesLoading={recentPackagesLoading}
           onCreatePackage={onCreatePackage}
+          onDownloadRecentPackage={onDownloadRecentPackage}
           onOpenPackage={onOpenPackage}
           onOpenRecentPackage={onOpenRecentPackage}
         />

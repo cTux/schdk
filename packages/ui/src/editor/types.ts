@@ -13,7 +13,9 @@ export interface EditorViewProps {
   gamePackage: GamePackage;
   hasPackage: boolean;
   message: string;
+  openingRecentPackageId?: string | null;
   recentPackages: RecentPackageItem[];
+  recentPackagesLoading?: boolean;
   saveStatus: EditorSaveStatus;
   selectedIndex: number;
   showValidation: boolean;
@@ -25,6 +27,7 @@ export interface EditorViewProps {
   onBack(): void;
   onCopyQuestion(): void;
   onCreatePackage(): void;
+  onDownloadRecentPackage(recent: RecentPackageItem): void;
   onOpenPackage(file: File): void;
   onOpenRecentPackage(recent: RecentPackageItem): void;
   onPasteQuestion(): void;

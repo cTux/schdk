@@ -1,5 +1,7 @@
 export type AppLocale = 'uk' | 'en';
 
+import { ukrainianSettings } from './ukrainian-settings';
+
 export const ukrainian = {
   shared: {
     optional: '(необов’язково)',
@@ -7,6 +9,7 @@ export const ukrainian = {
     chooseFile: 'Вибрати файл',
     or: 'або',
     recentPackages: 'Недавні пакети',
+    downloadPackage: 'Завантажити пакет',
     ready: 'Готовий',
     untitled: 'Без назви',
     question: 'Питання',
@@ -31,6 +34,12 @@ export const ukrainian = {
     toolsLabel: 'Інструменти',
     groupLabel: 'ЩДК',
     settingsLabel: 'Налаштування',
+    accountConnected: 'Підключено',
+    accountDisconnected: 'Не підключено',
+    loginTitle: 'Увійдіть через Google',
+    loginDescription:
+      'Увійдіть, щоб створювати, відкривати та зберігати пакети SCHDK на Google Диску.',
+    loginAction: 'Продовжити з Google',
     homeTitle: 'Усе для гри в одному місці',
     homeDescription:
       'Створіть пакет запитань у редакторі, а потім відкрийте його в розділі «Провести гру».',
@@ -51,34 +60,7 @@ export const ukrainian = {
       description: 'Створюйте власний макет екрана проведення гри.',
     },
   },
-  settings: {
-    title: 'Налаштування',
-    groupsLabel: 'Групи налаштувань',
-    appTab: 'Застосунок',
-    schdkTab: 'ЩДК',
-    languageHeading: 'Мова застосунку',
-    languageLabel: 'Мова',
-    ukrainian: 'Українська',
-    english: 'English',
-    themeLabel: 'Тема',
-    systemTheme: 'Системна',
-    lightTheme: 'Світла',
-    darkTheme: 'Темна',
-    schdkTabsLabel: 'Налаштування ЩДК',
-    gameTab: 'Проведення гри',
-    editorTab: 'Редагування питань',
-    textCorrection: 'Автоматичне коригування тексту',
-    questionText: 'Текст питання',
-    sentenceCorrection:
-      'Капіталізувати перше слово та додавати крапку, якщо наприкінці немає розділового знака.',
-    answers: 'Відповіді',
-    answersCorrection:
-      'Капіталізувати перше слово основної, альтернативних і неправильних відповідей.',
-    answerComment: 'Коментар до відповіді',
-    game: 'Гра',
-    signalVolume: 'Гучність звукових сигналів',
-    signalVolumeDescription: 'Головний сигнал і попередження таймера.',
-  },
+  settings: ukrainianSettings,
   editor: {
     brandEyebrow: 'Редактор пакетів',
     brandTitle: 'Що? Де? Коли?',
@@ -144,6 +126,7 @@ export const ukrainian = {
     invalidFile: 'Не вдалося відкрити файл: неправильний формат.',
     recentOpenFailed:
       'Не вдалося відкрити недавній файл. Можливо, його переміщено або видалено.',
+    downloadFailed: 'Не вдалося завантажити файл із Google Диска.',
     saveFailed: 'Не вдалося зберегти файл.',
   },
   host: {
@@ -172,6 +155,8 @@ export const ukrainian = {
       'Не вдалося відновити попередню гру. Можливо, файл переміщено або видалено.',
     invalidFile:
       'Не вдалося відкрити файл: пакет має неправильний формат або ще не готовий до гри.',
+    uploadFailed: 'Не вдалося вивантажити файл на Google Диск.',
+    downloadFailed: 'Не вдалося завантажити файл із Google Диска.',
     recentOpenFailed:
       'Не вдалося відкрити недавній файл. Можливо, його переміщено, видалено або пакет ще не готовий до гри.',
   },

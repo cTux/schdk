@@ -37,9 +37,12 @@ export interface HostViewProps {
   game: HostGameView | null;
   layout: GameLayout | null;
   message: string;
+  openingRecentPackageId?: string | null;
   packageDetails: HostPackageDetails | null;
   recentPackages: RecentPackageItem[];
+  recentPackagesLoading?: boolean;
   onBack(): void;
+  onDownloadRecentPackage?(recent: RecentPackageItem): void;
   onGameBack(): void;
   onGameNext(): void;
   onOpenPackage(file: File): void;
@@ -57,9 +60,12 @@ export function HostView({
   game,
   layout,
   message,
+  openingRecentPackageId = null,
   packageDetails,
   recentPackages,
+  recentPackagesLoading = false,
   onBack,
+  onDownloadRecentPackage,
   onGameBack,
   onGameNext,
   onOpenPackage,
@@ -94,7 +100,10 @@ export function HostView({
       </header>
       <PackageStart
         hidden={packageDetails !== null || playing}
+        openingRecentPackageId={openingRecentPackageId}
         recentPackages={recentPackages}
+        recentPackagesLoading={recentPackagesLoading}
+        onDownloadRecentPackage={onDownloadRecentPackage}
         onOpenPackage={onOpenPackage}
         onOpenRecentPackage={onOpenRecentPackage}
       />

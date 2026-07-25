@@ -1,9 +1,4 @@
-import {
-  contextBridge,
-  ipcRenderer,
-  type IpcRendererEvent,
-  webUtils,
-} from 'electron';
+import { contextBridge, ipcRenderer, type IpcRendererEvent } from 'electron';
 
 const closeApi = {
   onCloseRequested: (callback: (attempt: number) => void): (() => void) => {
@@ -24,17 +19,8 @@ const editorApi = {
     content: Uint8Array,
   ): Promise<string | null> =>
     ipcRenderer.invoke('save-game-package', filename, content),
-  openGamePackage: (file: File) =>
-    ipcRenderer.invoke('open-game-package', webUtils.getPathForFile(file)),
-  openHostGamePackage: (file: File) =>
-    ipcRenderer.invoke('open-host-game-package', webUtils.getPathForFile(file)),
-  listRecentGamePackages: () => ipcRenderer.invoke('list-recent-game-packages'),
-  openRecentGamePackage: (filePath: string) =>
-    ipcRenderer.invoke('open-recent-game-package', filePath),
-  openRecentHostGamePackage: (filePath: string) =>
-    ipcRenderer.invoke('open-recent-host-game-package', filePath),
-  writeGamePackage: (filePath: string, content: Uint8Array): Promise<void> =>
-    ipcRenderer.invoke('write-game-package', filePath, content),
+  setEditorPackageOpen: (open: boolean): void =>
+    ipcRenderer.send('set-editor-package-open', open),
   setPresenterNotes: (
     notes: {
       questionNumber: number;
@@ -43,6 +29,22 @@ const editorApi = {
     } | null,
   ): void => ipcRenderer.send('set-presenter-notes', notes),
   ...closeApi,
+  googleDrive: {
+    status: () => ipcRenderer.invoke('google-drive-status'),
+    connect: () => ipcRenderer.invoke('connect-google-drive'),
+    disconnect: () => ipcRenderer.invoke('disconnect-google-drive'),
+    loadSettings: () => ipcRenderer.invoke('load-google-drive-settings'),
+    saveSettings: (settings: unknown) =>
+      ipcRenderer.invoke('save-google-drive-settings', settings),
+    listGamePackages: () =>
+      ipcRenderer.invoke('list-google-drive-game-packages'),
+    loadGamePackage: (fileId: string) =>
+      ipcRenderer.invoke('load-google-drive-game-package', fileId),
+    createGamePackage: (value: unknown) =>
+      ipcRenderer.invoke('create-google-drive-game-package', value),
+    updateGamePackage: (fileId: string, value: unknown) =>
+      ipcRenderer.invoke('update-google-drive-game-package', fileId, value),
+  },
 };
 
 contextBridge.exposeInMainWorld('desktop', editorApi);

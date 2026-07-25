@@ -1,4 +1,9 @@
 import type { GamePackage } from '@schdk/common';
+import {
+  parseDrivePackageReference,
+  toDrivePackageReference,
+  type DrivePackageStorage,
+} from '@schdk/google-drive';
 import type { LocalizationCopy } from '@schdk/ui/localization';
 import {
   useEffect,
@@ -11,11 +16,12 @@ import {
   saveDesktopEditorSession,
   type DesktopEditorSession,
 } from './desktop-session';
-import { loadRecentWebPackage } from './recent-packages';
 
 interface EditorOpeningOptions {
   copy: LocalizationCopy;
-  fileName: string | null;
+  drive?: DrivePackageStorage;
+  driveActive: boolean;
+  driveFileId: string | null;
   hasPackage: boolean;
   selectedIndex: number;
   initialDeepLink: MutableRefObject<string | null>;
@@ -23,15 +29,11 @@ interface EditorOpeningOptions {
   initialDesktopSession: MutableRefObject<DesktopEditorSession | null>;
   applyOpenedPackage(
     content: Uint8Array,
-    filePath: string | null,
     fileName: string,
+    driveFileId: string,
   ): GamePackage;
   refreshRecentPackages(): Promise<void>;
-  rememberBrowserPackage(
-    name: string,
-    title: string,
-    content: Uint8Array,
-  ): Promise<void>;
+  onDriveFailure?(): void;
   setDesktopSessionReady: Dispatch<SetStateAction<boolean>>;
   setMessage: Dispatch<SetStateAction<string>>;
   setSelectedIndex: Dispatch<SetStateAction<number>>;
@@ -39,7 +41,9 @@ interface EditorOpeningOptions {
 
 export function useEditorOpening({
   copy,
-  fileName,
+  drive,
+  driveActive,
+  driveFileId,
   hasPackage,
   selectedIndex,
   initialDeepLink,
@@ -47,27 +51,28 @@ export function useEditorOpening({
   initialDesktopSession,
   applyOpenedPackage,
   refreshRecentPackages,
-  rememberBrowserPackage,
+  onDriveFailure,
   setDesktopSessionReady,
   setMessage,
   setSelectedIndex,
 }: EditorOpeningOptions) {
   useEffect(() => {
-    if (!hasPackage) void refreshRecentPackages();
-  }, [hasPackage, refreshRecentPackages]);
+    if (driveActive && !hasPackage) void refreshRecentPackages();
+  }, [driveActive, hasPackage, refreshRecentPackages]);
 
   useEffect(() => {
-    const packageName = initialDeepLink.current;
-    if (!packageName) return;
+    const packageReference = initialDeepLink.current;
+    if (!packageReference) return;
     initialDeepLink.current = null;
     void (async () => {
       try {
-        const content = await loadRecentWebPackage(packageName);
-        if (!content) throw new Error('Deep-linked package is unavailable');
-        const openedPackage = applyOpenedPackage(content, null, packageName);
+        const driveId = parseDrivePackageReference(packageReference);
+        if (!drive || !driveId) throw new Error('Google Drive is unavailable');
+        const opened = await drive.loadGamePackage(driveId);
+        applyOpenedPackage(opened.content, opened.name, opened.id);
         setSelectedIndex(initialDeepLinkedQuestion.current ?? 0);
-        await rememberBrowserPackage(packageName, openedPackage.title, content);
       } catch {
+        onDriveFailure?.();
         replaceBrowserPackageDeepLink(null);
         setMessage(copy.editor.deepLinkOpenFailed);
       }
@@ -75,30 +80,37 @@ export function useEditorOpening({
   }, [
     applyOpenedPackage,
     copy,
+    drive,
     initialDeepLink,
     initialDeepLinkedQuestion,
-    rememberBrowserPackage,
+    onDriveFailure,
     setMessage,
     setSelectedIndex,
   ]);
 
   useEffect(() => {
-    if (!window.desktop && hasPackage && fileName) {
-      replaceBrowserPackageDeepLink(fileName, selectedIndex);
+    if (!window.desktop && hasPackage && driveFileId) {
+      replaceBrowserPackageDeepLink(
+        toDrivePackageReference(driveFileId),
+        selectedIndex,
+      );
     }
-  }, [fileName, hasPackage, selectedIndex]);
+  }, [driveFileId, hasPackage, selectedIndex]);
 
   useEffect(() => {
-    const desktop = window.desktop;
     const session = initialDesktopSession.current;
-    if (!desktop || !session) return;
+    if (!window.desktop || !session) return;
     initialDesktopSession.current = null;
     void (async () => {
       try {
-        const opened = await desktop.openRecentGamePackage(session.filePath);
-        applyOpenedPackage(opened.content, opened.filePath, opened.fileName);
+        if (!drive) {
+          throw new Error('Google Drive session is unavailable');
+        }
+        const opened = await drive.loadGamePackage(session.driveFileId);
+        applyOpenedPackage(opened.content, opened.name, opened.id);
         setSelectedIndex(session.selectedIndex);
       } catch {
+        onDriveFailure?.();
         saveDesktopEditorSession(localStorage, window.location.pathname, null);
         setMessage(copy.editor.restoreFileFailed);
       } finally {
@@ -108,7 +120,9 @@ export function useEditorOpening({
   }, [
     applyOpenedPackage,
     copy,
+    drive,
     initialDesktopSession,
+    onDriveFailure,
     setDesktopSessionReady,
     setMessage,
     setSelectedIndex,

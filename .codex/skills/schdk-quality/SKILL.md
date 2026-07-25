@@ -11,6 +11,8 @@ description: Verify SCHDK changes and produce local build artifacts. Use for pre
 2. Inspect `git status` and the diff before selecting checks. Preserve unrelated user changes.
 3. Run the full static and test suite, then build affected packages in dependency order.
    Keep the pull-request `tests` and root `build` GitHub Actions jobs required.
+   Keep Turbo test tasks dependent on dependency builds so fresh clones can
+   resolve packages that export compiled output.
 4. Use the browser smoke-test workflow below for changed UI. Build affected Electron apps for main, preload, packaging, icon, or bundled-resource changes.
 5. Run root `pnpm build` for complete workspace build verification.
 6. Confirm `git diff --check` and ensure generated output remains ignored before committing.

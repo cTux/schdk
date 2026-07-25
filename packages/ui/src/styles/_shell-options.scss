@@ -167,19 +167,44 @@
 .option-select select {
   min-width: min(240px, 40vw);
   min-height: $control-normal;
+  appearance: none;
   border: 1px solid $border-strong;
   border-radius: $radius-control;
   outline: none;
   background: $surface-raised;
-  padding: 0 $space-3;
+  padding: 0 42px 0 $space-3;
   color: $text;
   font: inherit;
   cursor: pointer;
 }
 
+label.option-select {
+  position: relative;
+}
+
+label.option-select::after {
+  position: absolute;
+  top: 50%;
+  right: 34px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid $muted;
+  border-bottom: 2px solid $muted;
+  content: '';
+  pointer-events: none;
+  transform: translateY(-2px) rotate(45deg);
+}
+
 .option-select select:focus-visible {
   outline: 2px solid rgba($accent-rgb, 0.8);
   outline-offset: 3px;
+}
+
+@media (width <= 700px) {
+  label.option-select::after {
+    top: auto;
+    bottom: 34px;
+  }
 }
 
 .option-slider input {

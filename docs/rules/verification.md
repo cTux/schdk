@@ -19,6 +19,8 @@
   Actions jobs for every pull request. Treat both checks as required project
   policy, configure branch protection when repository settings support it, and
   do not merge until both are green.
+- Build workspace dependencies before testing their consumers so fresh clones
+  can resolve packages that intentionally export compiled output.
 - Before committing, run `pnpm fmt:check`, `pnpm lint`, `pnpm typecheck`,
   `pnpm test`, and affected builds. Run root `pnpm build` for complete workspace
   build verification.

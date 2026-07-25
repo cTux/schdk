@@ -72,6 +72,7 @@ h1 {
 .tool-list button {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 14px;
   border: 1px solid $border;
   min-height: $control-normal;

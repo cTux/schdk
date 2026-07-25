@@ -8,3 +8,11 @@
 - Keep the native Ukrainian/English language control in the first `App`
   settings tab. Keep `WWW` as the second primary tab with its host/editor
   secondary tabs.
+- Keep the localized Google Drive connection and sync status in the first
+  `App` settings tab, using the existing settings-row and button patterns.
+- Show the Google Drive account status immediately above the sidebar settings
+  item, with the account avatar when available, an anonymous-user fallback, and
+  a green connected or red disconnected indicator.
+- Before the first successful connection, show only the centered Google login
+  surface. When an active session loses authorization, hide the mounted shell
+  behind the same login surface until reconnection.

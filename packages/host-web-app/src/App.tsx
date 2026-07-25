@@ -1,6 +1,6 @@
+import { parseDrivePackageReference } from '@schdk/google-drive';
 import { HostView } from '@schdk/ui/host';
 import { useLocalization } from '@schdk/ui/localization';
-import type { CustomGameElement, GameLayout } from '@schdk/ui/options';
 import { useEffect, useRef, useState } from 'react';
 import type {} from './electron';
 import { setGameAudioVolume, unlockGameAudio } from './game-audio';
@@ -11,17 +11,11 @@ import {
   saveHostSession,
   type HostSession,
 } from './host-session';
-import { loadRecentWebPackage } from './recent-packages';
 import { useGameWizard } from './use-game-wizard';
 import { useHostPackages } from './use-host-packages';
+import type { AppProps } from './types';
 
-interface AppProps {
-  backgroundImage?: string | null;
-  backgroundOpacity?: number;
-  customElements?: CustomGameElement[];
-  layout?: GameLayout | null;
-  soundVolume?: number;
-}
+export type { AppProps } from './types';
 
 export function App({
   backgroundImage = null,
@@ -29,6 +23,9 @@ export function App({
   customElements = [],
   layout = null,
   soundVolume = 0.05,
+  drive,
+  driveActive = false,
+  onDriveFailure,
 }: AppProps) {
   const { copy } = useLocalization();
   const sessionScope = window.location.pathname;
@@ -41,23 +38,31 @@ export function App({
   const {
     acceptPackage,
     clearPackage,
+    downloadRecentPackage,
     message,
+    openingRecentPackageId,
     openPackage,
     openRecentPackage,
     packageDetails,
     recentPackages,
+    recentPackagesLoading,
     refreshRecentPackages,
     selectedPackage,
     selectedPackageId,
     setMessage,
     setWizardRestore,
     wizardRestore,
-  } = useHostPackages(copy, setGameActive);
+  } = useHostPackages({
+    copy,
+    drive,
+    onDriveFailure,
+    setGameActive,
+  });
   const wizard = useGameWizard(selectedPackage, gameActive, wizardRestore);
 
   useEffect(() => {
-    void refreshRecentPackages();
-  }, [refreshRecentPackages]);
+    if (driveActive) void refreshRecentPackages();
+  }, [driveActive, refreshRecentPackages]);
 
   useEffect(() => {
     const session = initialSession.current;
@@ -65,20 +70,19 @@ export function App({
     initialSession.current = null;
     void (async () => {
       try {
-        const opened = window.desktop
-          ? await window.desktop.openRecentHostGamePackage(session.packageId)
-          : {
-              fileName: session.packageId,
-              content: await loadRecentWebPackage(session.packageId),
-            };
-        if (!opened.content) throw new Error('Saved package is unavailable');
+        const driveFileId = parseDrivePackageReference(session.packageId);
+        if (!driveFileId || !drive) {
+          throw new Error('Saved Drive package is unavailable');
+        }
+        const opened = await drive.loadGamePackage(driveFileId);
         await acceptPackage(
           opened.content,
-          opened.fileName,
+          opened.name,
           session.packageId,
           session,
         );
       } catch {
+        if (parseDrivePackageReference(session.packageId)) onDriveFailure?.();
         saveHostSession(localStorage, sessionScope, null);
         if (!window.desktop) {
           window.history.replaceState(
@@ -92,7 +96,7 @@ export function App({
         setSessionReady(true);
       }
     })();
-  }, [acceptPackage, copy, sessionScope, setMessage]);
+  }, [acceptPackage, copy, drive, onDriveFailure, sessionScope, setMessage]);
 
   useEffect(() => setGameAudioVolume(soundVolume), [soundVolume]);
 
@@ -192,6 +196,7 @@ export function App({
         }
       : null;
 
+  if (!driveActive) return null;
   return (
     <HostView
       backgroundImage={backgroundImage}
@@ -202,11 +207,14 @@ export function App({
       game={game}
       layout={layout}
       message={message}
+      openingRecentPackageId={openingRecentPackageId}
       packageDetails={packageDetails}
       recentPackages={recentPackages}
+      recentPackagesLoading={recentPackagesLoading}
       onBack={clearPackage}
       onGameBack={wizard.goBack}
       onGameNext={wizard.goNext}
+      onDownloadRecentPackage={(recent) => void downloadRecentPackage(recent)}
       onOpenPackage={(file) => void openPackage(file)}
       onOpenRecentPackage={(recent) => void openRecentPackage(recent)}
       onReturnToGames={returnToGames}

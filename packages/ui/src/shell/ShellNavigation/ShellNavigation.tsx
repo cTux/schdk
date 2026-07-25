@@ -1,18 +1,34 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGear } from '@fortawesome/free-solid-svg-icons';
+import { faGear, faUser } from '@fortawesome/free-solid-svg-icons';
 import { AppIcon } from '../../atoms/AppIcon';
 import { Button } from '../../atoms/Button';
 import { useLocalization } from '../../localization';
 import { getShellContent, type ShellViewName } from '../shellItems';
 
 export interface ShellNavigationProps {
+  account?: ShellAccount;
+  connected: boolean;
   view: ShellViewName;
   onSelect(view: ShellViewName): void;
 }
 
-export function ShellNavigation({ view, onSelect }: ShellNavigationProps) {
+export interface ShellAccount {
+  displayName: string;
+  emailAddress: string;
+  photoLink?: string;
+}
+
+export function ShellNavigation({
+  account,
+  connected,
+  view,
+  onSelect,
+}: ShellNavigationProps) {
   const { copy } = useLocalization();
   const content = getShellContent(copy);
+  const status = connected
+    ? copy.shell.accountConnected
+    : copy.shell.accountDisconnected;
 
   return (
     <aside className="sidebar">
@@ -63,6 +79,33 @@ export function ShellNavigation({ view, onSelect }: ShellNavigationProps) {
           ))}
         </div>
       </nav>
+
+      <div
+        className="sidebar-account"
+        data-connected={connected}
+        role="status"
+        aria-label={
+          connected && account ? `${status}: ${account.emailAddress}` : status
+        }
+      >
+        <span className="sidebar-account-avatar" aria-hidden="true">
+          <FontAwesomeIcon icon={faUser} />
+          {connected && account?.photoLink && (
+            <img
+              src={account.photoLink}
+              alt=""
+              referrerPolicy="no-referrer"
+              onError={(event) => {
+                event.currentTarget.hidden = true;
+              }}
+            />
+          )}
+        </span>
+        <span className="sidebar-account-status">
+          <span className="sidebar-account-dot" aria-hidden="true" />
+          {status}
+        </span>
+      </div>
 
       <nav className="sidebar-options" aria-label={content.settingsLabel}>
         <Button

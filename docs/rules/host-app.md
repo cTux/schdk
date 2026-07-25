@@ -1,10 +1,7 @@
 # Host application and gameplay
 
-- Reuse the shared package start view; the host omits package creation, accepts
-  only structurally valid and complete packages, and keeps up to 20 browser
-  recent copies in its own IndexedDB database.
-- Show the same title, filename, and readiness metadata for desktop recents as
-  the editor, using the current contents of each authorized recent file.
+- Reuse the shared package start view; the host omits package creation and
+  accepts only structurally valid and complete packages.
 - Show only the package title, filename, aggregate counts, and start/back
   actions before gameplay; never expose question, answer, comment, or host-note
   text.
@@ -23,10 +20,13 @@
   to the separate presenter window while a game is active. Close it when the
   game ends or the host view unmounts.
 - Persist game volume in shell options with a 5% default.
+- List and load app-created packages from Google Drive only. A local file
+  selected in Host must be validated, uploaded, and then hosted by Drive ID.
+- Give every recent package an icon-only download action that exports the
+  current Drive bytes without changing the selected package.
 - Persist the selected package and exact game question/stage continuously on
-  web and desktop. Restore browser games through the host recent-package store,
-  desktop games through the authorized recent-file bridge, and expose browser
-  host state through validated deep-link query parameters.
+  web and desktop. Restore the package by validated Drive reference and expose
+  browser host state through validated deep-link query parameters.
 - Persist validated visual-editor bounds, presentation settings, and background
   settings in shell options. Use the standard host layout until changed and
   apply the same settings without changing question stages.

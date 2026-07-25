@@ -3,11 +3,13 @@ import {
   validateGamePackage,
   type GamePackage,
 } from '@schdk/common';
+import type { DrivePackageStorage } from '@schdk/google-drive';
 import type { EditorSaveStatus } from '@schdk/ui/editor';
 import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
 import {
   useCallback,
   useEffect,
+  useRef,
   type Dispatch,
   type MutableRefObject,
   type SetStateAction,
@@ -17,17 +19,15 @@ import {
   scheduleAutosave,
   shouldScheduleAutosave,
 } from './autosave';
-import {
-  saveDesktopEditorSession,
-  saveDesktopRecentMetadata,
-} from './desktop-session';
-import { saveDraft } from './draft-storage';
+import { saveDesktopEditorSession } from './desktop-session';
 
 interface EditorPersistenceOptions {
   copy: LocalizationCopy;
   desktopSessionReady: boolean;
+  drive?: DrivePackageStorage;
+  driveActive: boolean;
+  driveFileId: string | null;
   fileName: string | null;
-  filePath: string | null;
   gamePackage: GamePackage;
   hasPackage: boolean;
   locale: AppLocale;
@@ -36,7 +36,7 @@ interface EditorPersistenceOptions {
   saveStatus: EditorSaveStatus;
   selectedIndex: number;
   currentPackage: MutableRefObject<GamePackage>;
-  clearDraft(name: string): void;
+  onDriveFailure?(): void;
   setMessage: Dispatch<SetStateAction<string>>;
   setSaveStatus: Dispatch<SetStateAction<EditorSaveStatus>>;
 }
@@ -44,8 +44,10 @@ interface EditorPersistenceOptions {
 export function useEditorPersistence({
   copy,
   desktopSessionReady,
+  drive,
+  driveActive,
+  driveFileId,
   fileName,
-  filePath,
   gamePackage,
   hasPackage,
   locale,
@@ -54,73 +56,72 @@ export function useEditorPersistence({
   saveStatus,
   selectedIndex,
   currentPackage,
-  clearDraft,
+  onDriveFailure,
   setMessage,
   setSaveStatus,
 }: EditorPersistenceOptions) {
+  const previousDriveActive = useRef(driveActive);
   useEffect(() => {
     if (!window.desktop || !desktopSessionReady) return;
     saveDesktopEditorSession(
       localStorage,
       window.location.pathname,
-      filePath ? { filePath, selectedIndex } : null,
+      driveFileId && fileName ? { driveFileId, fileName, selectedIndex } : null,
     );
-  }, [desktopSessionReady, filePath, selectedIndex]);
-
-  useEffect(() => {
-    if (!window.desktop || !filePath) return;
-    saveDesktopRecentMetadata(
-      localStorage,
-      window.location.pathname,
-      filePath,
-      {
-        title: gamePackage.title,
-        ready: validateGamePackage(gamePackage).length === 0,
-      },
-    );
-  }, [filePath, gamePackage]);
+  }, [desktopSessionReady, driveFileId, fileName, selectedIndex]);
 
   const saveCurrentPackage = useCallback(async () => {
-    const desktop = window.desktop;
-    if (!filePath || !desktop) return;
+    if (!drive || !driveFileId || !fileName) {
+      throw new Error('Google Drive is unavailable');
+    }
     const content = serializeGamePackage(gamePackage);
     setSaveStatus('saving');
     const save = saveQueue.current
       .catch(() => undefined)
-      .then(() => desktop.writeGamePackage(filePath, content));
-    saveQueue.current = save;
+      .then(() =>
+        drive.updateGamePackage(driveFileId, {
+          name: fileName,
+          title: gamePackage.title,
+          content,
+          ready: validateGamePackage(gamePackage).length === 0,
+        }),
+      );
+    saveQueue.current = save.then(() => undefined);
     try {
       await save;
-      const isLatest = gamePackage === currentPackage.current;
-      setSaveStatus(saveStatusAfterWrite(isLatest));
-      if (isLatest && fileName) clearDraft(fileName);
+      setSaveStatus(
+        saveStatusAfterWrite(gamePackage === currentPackage.current),
+      );
     } catch (error) {
       setSaveStatus('error');
+      onDriveFailure?.();
       throw error;
     }
   }, [
-    clearDraft,
     currentPackage,
+    drive,
+    driveFileId,
     fileName,
-    filePath,
     gamePackage,
+    onDriveFailure,
     saveQueue,
     setSaveStatus,
   ]);
 
   useEffect(() => {
-    if (!hasPackage || !fileName || saveStatus !== 'pending') return;
-    try {
-      saveDraft(localStorage, fileName, gamePackage);
-    } catch {
-      setMessage(copy.editor.draftSaveFailed);
+    if (
+      driveActive &&
+      !previousDriveActive.current &&
+      driveFileId &&
+      saveStatus === 'error'
+    ) {
+      setSaveStatus('pending');
     }
-  }, [copy, fileName, gamePackage, hasPackage, saveStatus, setMessage]);
+    previousDriveActive.current = driveActive;
+  }, [driveActive, driveFileId, saveStatus, setSaveStatus]);
 
   useEffect(() => {
-    if (
-      !shouldScheduleAutosave(saveStatus, Boolean(filePath && window.desktop))
-    ) {
+    if (!shouldScheduleAutosave(saveStatus, Boolean(driveFileId && drive))) {
       return;
     }
     return scheduleAutosave(async () => {
@@ -130,11 +131,20 @@ export function useEditorPersistence({
         setMessage(copy.editor.autoSaveFailed);
       }
     });
-  }, [copy, filePath, saveCurrentPackage, saveStatus, setMessage]);
+  }, [copy, drive, driveFileId, saveCurrentPackage, saveStatus, setMessage]);
+
+  useEffect(() => {
+    window.desktop?.setEditorPackageOpen(hasPackage);
+    return () => window.desktop?.setEditorPackageOpen(false);
+  }, [hasPackage]);
 
   useEffect(
     () =>
       window.desktop?.onCloseRequested(async (attempt) => {
+        if (saveStatus === 'saved') {
+          window.desktop!.finishCloseAttempt(attempt, true);
+          return;
+        }
         try {
           await saveCurrentPackage();
           window.desktop!.finishCloseAttempt(attempt, true);
@@ -143,7 +153,7 @@ export function useEditorPersistence({
           window.desktop!.finishCloseAttempt(attempt, false);
         }
       }),
-    [copy, saveCurrentPackage, setMessage],
+    [copy, saveCurrentPackage, saveStatus, setMessage],
   );
 
   useEffect(() => {

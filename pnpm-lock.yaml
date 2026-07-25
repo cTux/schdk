@@ -74,6 +74,9 @@ importers:
       '@schdk/all-web-app':
         specifier: workspace:*
         version: link:../all-web-app
+      '@schdk/google-drive':
+        specifier: workspace:*
+        version: link:../google-drive
     devDependencies:
       '@types/node':
         specifier: 'catalog:'
@@ -99,6 +102,9 @@ importers:
       '@schdk/editor-web-app':
         specifier: workspace:*
         version: link:../editor-web-app
+      '@schdk/google-drive':
+        specifier: workspace:*
+        version: link:../google-drive
       '@schdk/host-web-app':
         specifier: workspace:*
         version: link:../host-web-app
@@ -164,6 +170,9 @@ importers:
       '@schdk/common':
         specifier: workspace:*
         version: link:../common
+      '@schdk/google-drive':
+        specifier: workspace:*
+        version: link:../google-drive
       '@schdk/ui':
         specifier: workspace:*
         version: link:../ui
@@ -202,11 +211,26 @@ importers:
         specifier: 'catalog:'
         version: 4.1.10(@types/node@26.1.1)(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0)(sass@1.101.7))
 
+  packages/google-drive:
+    devDependencies:
+      oxlint:
+        specifier: ^1.75.0
+        version: 1.75.0
+      typescript:
+        specifier: 'catalog:'
+        version: 7.0.2
+      vitest:
+        specifier: 'catalog:'
+        version: 4.1.10(@types/node@26.1.1)(vite@8.1.5(@types/node@26.1.1)(jiti@2.7.0)(sass@1.101.7))
+
   packages/host-web-app:
     dependencies:
       '@schdk/common':
         specifier: workspace:*
         version: link:../common
+      '@schdk/google-drive':
+        specifier: workspace:*
+        version: link:../google-drive
       '@schdk/ui':
         specifier: workspace:*
         version: link:../ui
