@@ -37,10 +37,10 @@
 ## Documentation and language
 
 - Keep the root `README.md` in Ukrainian and limited to the short project
-  description, the benefits section, and links to detailed sections in
-  `docs/README.md`.
-- Keep `docs/README.md` as the detailed Ukrainian setup, launch, build, and
-  troubleshooting guide.
+  description, the benefits section, and links to detailed topic guides under
+  `docs/guide`.
+- Keep `docs/README.md` as the Ukrainian documentation index. Keep each
+  top-level topic in its own file under `docs/guide`.
 - Keep code identifiers, code comments, package metadata, developer documents,
   and rule documents in English.
 - Keep user-visible application copy in Ukrainian unless a feature explicitly
