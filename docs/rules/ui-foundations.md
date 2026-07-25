@@ -9,6 +9,10 @@
   components must not read storage, Electron APIs, or the filesystem.
 - Reuse existing visual tokens and interaction patterns. Prefer compact,
   readable layouts without decoration that carries no information.
+- Use the shared ink/plum chrome, amber brand actions, periwinkle interaction
+  states, warm canvases, soft elevation, and restrained translucent overlays.
+- Keep action bars compact and icon-only with Ukrainian accessible labels shown
+  by the shared tooltip on hover and keyboard focus.
 - Preserve semantic elements, labels, `aria-*` state, visible focus, disabled
   states, native behavior, and `prefers-reduced-motion`.
 - Keep editor and shell layouts usable from 320 px upward. Use Flexbox, not CSS

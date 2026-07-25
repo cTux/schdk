@@ -37,19 +37,28 @@ button {
   height: 100vh;
   overflow: hidden;
   background:
-    radial-gradient(circle at 68% -20%, rgba($accent, 0.08), transparent 34rem),
+    radial-gradient(circle at 78% -10%, rgba($accent, 0.12), transparent 30rem),
+    radial-gradient(
+      circle at 38% 110%,
+      rgba($accent-cool, 0.1),
+      transparent 34rem
+    ),
     $background;
 }
 
 .sidebar {
   display: flex;
-  width: 220px;
+  width: 232px;
   height: 100vh;
-  flex: 0 0 220px;
+  flex: 0 0 232px;
   flex-direction: column;
   border-right: 1px solid $border;
-  background: rgba($sidebar, 0.98);
-  padding: 18px 14px;
+  background:
+    linear-gradient(180deg, rgba(#fff, 0.025), transparent 24%),
+    rgba($sidebar, 0.88);
+  padding: 20px 14px;
+  box-shadow: 14px 0 45px rgba(#08070a, 0.18);
+  backdrop-filter: blur(24px) saturate(130%);
 }
 
 .brand {
@@ -60,8 +69,9 @@ button {
 }
 
 .brand img {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
+  filter: drop-shadow(0 8px 12px rgba($accent, 0.18));
 }
 
 .brand strong,
@@ -101,6 +111,7 @@ button {
 }
 
 .sidebar nav button {
+  position: relative;
   display: flex;
   width: 100%;
   align-items: center;
@@ -113,16 +124,36 @@ button {
   color: #b7bdc7;
   text-align: left;
   cursor: pointer;
+  transition:
+    background-color $motion-fast ease,
+    color $motion-fast ease,
+    transform $motion-fast ease;
 }
 
 .sidebar nav button:hover {
   background: $surface-raised;
   color: $text;
+  transform: translateX(2px);
 }
 
 .sidebar nav button.active {
-  background: rgba($accent, 0.12);
-  color: #f2c36f;
+  background:
+    linear-gradient(90deg, rgba($accent, 0.18), rgba($accent-cool, 0.08)),
+    $surface-raised;
+  color: $accent-hover;
+  box-shadow: inset 0 1px rgba(#fff, 0.04);
+}
+
+.sidebar nav button.active::after {
+  position: absolute;
+  top: 9px;
+  bottom: 9px;
+  left: -10px;
+  width: 3px;
+  border-radius: 999px;
+  background: $accent;
+  box-shadow: 0 0 16px rgba($accent, 0.65);
+  content: '';
 }
 
 .nav-icon {
@@ -132,8 +163,8 @@ button {
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  border-radius: 7px;
-  background: rgba(#fff, 0.05);
+  border-radius: 9px;
+  background: rgba(#fff, 0.055);
   font-size: 0.85rem;
 }
 
@@ -146,17 +177,25 @@ button {
   flex: 1 1 auto;
   min-width: 0;
   overflow-y: auto;
-  background: $background;
+  background:
+    radial-gradient(circle at 80% 0%, rgba($accent, 0.08), transparent 28rem),
+    radial-gradient(
+      circle at 15% 100%,
+      rgba($accent-cool, 0.08),
+      transparent 32rem
+    ),
+    $background;
 }
 
 .home {
-  width: min(760px, calc(100% - 48px));
+  position: relative;
+  width: min(980px, calc(100% - 56px));
   margin: 0 auto;
   padding: clamp(64px, 10vh, 110px) 0 48px;
 }
 
 .options-page {
-  width: min(760px, calc(100% - 48px));
+  width: min(860px, calc(100% - 56px));
   margin: 0 auto;
   padding: clamp(48px, 8vh, 80px) 0;
 }
@@ -490,13 +529,17 @@ button {
   display: flex;
   gap: 6px;
   margin: 32px 0 24px;
-  border-bottom: 1px solid $border;
+  width: fit-content;
+  border: 1px solid $border;
+  border-radius: $radius-panel;
+  background: rgba($surface, 0.72);
+  padding: 5px;
+  box-shadow: $shadow-raised;
 }
 
 .options-tabs button {
   border: 0;
-  border-bottom: 2px solid transparent;
-  border-radius: 0;
+  border-radius: $radius-control;
   background: transparent;
   padding: 10px 14px;
   color: $muted;
@@ -504,17 +547,27 @@ button {
 }
 
 .options-tabs button.active {
-  border-bottom-color: $accent;
+  border-color: rgba($accent, 0.25);
+  background: rgba($accent, 0.12);
   color: $text;
 }
 
 .options-primary-tabs {
   margin-bottom: 0;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+.options-primary-tabs button.active {
+  border: 1px solid rgba($accent, 0.26);
+  background: rgba($accent, 0.1);
+  color: $accent-hover;
 }
 
 .options-secondary-tabs {
-  margin-top: 0;
-  padding-left: 12px;
+  margin-top: 10px;
 }
 
 .options-page section {
@@ -535,10 +588,23 @@ button {
   gap: 24px;
   border: 1px solid $border;
   border-radius: $radius-panel;
-  background: $surface;
-  padding: 15px 16px;
-  box-shadow: 0 8px 22px rgba(#000, 0.08);
+  background:
+    linear-gradient(135deg, rgba(#fff, 0.035), transparent 50%),
+    rgba($surface, 0.84);
+  padding: 18px;
+  box-shadow: $shadow-raised;
   cursor: pointer;
+  transition:
+    border-color $motion-fast ease,
+    transform $motion-fast ease,
+    box-shadow $motion-standard ease;
+}
+
+.option-toggle:hover,
+.option-slider:hover {
+  border-color: $border-strong;
+  box-shadow: $shadow-overlay;
+  transform: translateY(-2px);
 }
 
 .option-toggle > span,
@@ -562,9 +628,49 @@ button {
 }
 
 .option-toggle input {
-  width: 18px;
-  height: 18px;
-  accent-color: $accent;
+  position: relative;
+  width: 42px;
+  height: 24px;
+  flex: 0 0 42px;
+  appearance: none;
+  border: 1px solid $border-strong;
+  border-radius: 999px;
+  outline: none;
+  background: $surface-raised;
+  cursor: pointer;
+  transition:
+    border-color $motion-fast ease,
+    background-color $motion-fast ease;
+}
+
+.option-toggle input::after {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: $muted;
+  content: '';
+  transition:
+    background-color $motion-fast ease,
+    transform $motion-standard cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.option-toggle input:checked {
+  border-color: rgba($accent, 0.7);
+  background: rgba($accent, 0.18);
+}
+
+.option-toggle input:checked::after {
+  background: $accent-hover;
+  box-shadow: 0 0 14px rgba($accent, 0.34);
+  transform: translateX(18px);
+}
+
+.option-toggle input:focus-visible {
+  outline: 2px solid rgba($accent, 0.8);
+  outline-offset: 3px;
 }
 
 .option-slider input {
@@ -581,7 +687,29 @@ button {
 }
 
 .home header {
-  max-width: 620px;
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  animation: surface-enter 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.home::before {
+  position: absolute;
+  top: 36px;
+  right: 3%;
+  width: clamp(150px, 24vw, 250px);
+  aspect-ratio: 1;
+  border-radius: 42% 58% 64% 36% / 42% 38% 62% 58%;
+  background:
+    radial-gradient(circle at 35% 28%, rgba(#fff, 0.38), transparent 9%),
+    linear-gradient(145deg, #e99b48, #7169d1);
+  box-shadow:
+    0 30px 90px rgba($accent, 0.18),
+    inset 0 1px rgba(#fff, 0.3);
+  content: '';
+  filter: saturate(115%);
+  opacity: 0.72;
+  transform: rotate(12deg);
 }
 
 .eyebrow {
@@ -597,7 +725,8 @@ h1 {
   margin: 0;
   font-size: clamp(2rem, 5vw, 3.4rem);
   line-height: 1.05;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
 }
 
 .home header > p:last-child {
@@ -610,8 +739,8 @@ h1 {
 
 .tool-list {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 14px;
   margin-top: 44px;
 }
 
@@ -621,17 +750,32 @@ h1 {
   gap: 14px;
   border: 1px solid $border;
   min-height: $control-normal;
-  border-radius: $radius-panel;
-  background: $surface;
-  padding: 16px;
+  min-width: min(280px, 100%);
+  flex: 1 1 280px;
+  border-radius: $radius-surface;
+  background:
+    linear-gradient(145deg, rgba(#fff, 0.045), transparent 46%),
+    rgba($surface, 0.82);
+  padding: 20px;
   color: $text;
   text-align: left;
   cursor: pointer;
   transition:
     border-color 120ms ease,
     background-color 120ms ease,
-    transform 120ms ease;
-  box-shadow: 0 8px 22px rgba(#000, 0.08);
+    transform $motion-standard cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow $motion-standard ease;
+  box-shadow: $shadow-raised;
+  backdrop-filter: blur(16px);
+  animation: card-rise 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.tool-list button:nth-child(2) {
+  animation-delay: 70ms;
+}
+
+.tool-list button:nth-child(3) {
+  animation-delay: 140ms;
 }
 
 .tool-list button > span:nth-child(2) {
@@ -640,9 +784,10 @@ h1 {
 }
 
 .tool-list button:hover {
-  border-color: #454c58;
+  border-color: rgba($accent, 0.34);
   background: $surface-raised;
-  transform: translateY(-1px);
+  box-shadow: $shadow-overlay;
+  transform: translateY(-4px);
 }
 
 .tool-icon {
@@ -652,10 +797,15 @@ h1 {
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
-  background: rgba($accent, 0.12);
+  border-radius: 14px;
+  background: linear-gradient(
+    145deg,
+    rgba($accent, 0.22),
+    rgba($accent-cool, 0.08)
+  );
   color: $accent;
   font-size: 1.15rem;
+  box-shadow: inset 0 1px rgba(#fff, 0.08);
 }
 
 .tool-list strong,
@@ -677,6 +827,14 @@ h1 {
 .arrow {
   color: $muted;
   font-size: 1.2rem;
+  transition:
+    color $motion-fast ease,
+    transform $motion-fast ease;
+}
+
+.tool-list button:hover .arrow {
+  color: $accent-hover;
+  transform: translateX(3px);
 }
 
 .embedded-app {
@@ -690,6 +848,20 @@ h1 {
 button:focus-visible {
   outline: 2px solid rgba($accent, 0.8);
   outline-offset: 2px;
+}
+
+@keyframes surface-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+@keyframes card-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
 }
 
 @media (width <= 700px) {
@@ -776,12 +948,21 @@ button:focus-visible {
   .arrow {
     display: none;
   }
+
+  .home::before {
+    top: 14px;
+    right: -25px;
+    width: 120px;
+    opacity: 0.32;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .visual-editor-add-panel,
   .visual-editor-add-button,
-  .tool-list button {
+  .tool-list button,
+  .home header {
+    animation: none;
     transition: none;
   }
 }
