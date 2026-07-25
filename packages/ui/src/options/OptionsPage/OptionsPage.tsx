@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { useState } from 'react';
 import { Button } from '../../atoms/Button';
+import { Dropdown } from '../../atoms/Dropdown';
 import { useLocalization } from '../../localization';
 import { OptionToggle } from '../OptionToggle';
 import { OptionsTabs, type OptionsTab } from '../OptionsTabs';
@@ -83,7 +84,7 @@ export function OptionsPage({
           <span>
             <strong>{copy.settings.languageLabel}</strong>
           </span>
-          <select
+          <Dropdown
             value={locale}
             onChange={(event) =>
               onLocaleChange(event.target.value as 'uk' | 'en')
@@ -91,20 +92,20 @@ export function OptionsPage({
           >
             <option value="uk">{copy.settings.ukrainian}</option>
             <option value="en">{copy.settings.english}</option>
-          </select>
+          </Dropdown>
         </label>
         <label className="option-select">
           <span>
             <strong>{copy.settings.themeLabel}</strong>
           </span>
-          <select
+          <Dropdown
             value={theme}
             onChange={(event) => onThemeChange(event.target.value as AppTheme)}
           >
             <option value="system">{copy.settings.systemTheme}</option>
             <option value="light">{copy.settings.lightTheme}</option>
             <option value="dark">{copy.settings.darkTheme}</option>
-          </select>
+          </Dropdown>
         </label>
         <div className="option-select">
           <span>
