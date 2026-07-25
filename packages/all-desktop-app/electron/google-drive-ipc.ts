@@ -1,6 +1,8 @@
 import {
   GoogleDriveClient,
+  isDriveFileId,
   parseDriveSettingsDocument,
+  parseDriveGamePackageWrite,
 } from '@schdk/google-drive';
 import { ipcMain } from 'electron';
 import {
@@ -22,4 +24,27 @@ export function registerGoogleDriveIpc() {
     if (!settings) throw new TypeError('Invalid Google Drive settings');
     await client.saveSettings(settings);
   });
+  ipcMain.handle('list-google-drive-game-packages', () =>
+    client.listGamePackages(),
+  );
+  ipcMain.handle('load-google-drive-game-package', (_event, fileId) => {
+    if (!isDriveFileId(fileId))
+      throw new TypeError('Invalid Google Drive file');
+    return client.loadGamePackage(fileId);
+  });
+  ipcMain.handle('create-google-drive-game-package', (_event, value) => {
+    const gamePackage = parseDriveGamePackageWrite(value);
+    if (!gamePackage) throw new TypeError('Invalid Google Drive package');
+    return client.createGamePackage(gamePackage);
+  });
+  ipcMain.handle(
+    'update-google-drive-game-package',
+    (_event, fileId, value) => {
+      const gamePackage = parseDriveGamePackageWrite(value);
+      if (!isDriveFileId(fileId) || !gamePackage) {
+        throw new TypeError('Invalid Google Drive package');
+      }
+      return client.updateGamePackage(fileId, gamePackage);
+    },
+  );
 }

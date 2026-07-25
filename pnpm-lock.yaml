@@ -170,6 +170,9 @@ importers:
       '@schdk/common':
         specifier: workspace:*
         version: link:../common
+      '@schdk/google-drive':
+        specifier: workspace:*
+        version: link:../google-drive
       '@schdk/ui':
         specifier: workspace:*
         version: link:../ui
@@ -225,6 +228,9 @@ importers:
       '@schdk/common':
         specifier: workspace:*
         version: link:../common
+      '@schdk/google-drive':
+        specifier: workspace:*
+        version: link:../google-drive
       '@schdk/ui':
         specifier: workspace:*
         version: link:../ui

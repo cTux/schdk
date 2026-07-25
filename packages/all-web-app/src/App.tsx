@@ -192,21 +192,33 @@ export function App() {
       <ShellView
         editorApp={
           <Suspense fallback={null}>
-            <EditorApp
-              manageDocumentTitle={false}
-              textOptions={editorOptions}
-            />
+            {googleDrive.statusReady && (
+              <EditorApp
+                drive={googleDrive.bridge ?? undefined}
+                driveConnected={googleDrive.connection.state === 'connected'}
+                driveReady
+                manageDocumentTitle={false}
+                onDriveFailure={() => void googleDrive.reportFailure()}
+                textOptions={editorOptions}
+              />
+            )}
           </Suspense>
         }
         hostApp={
           <Suspense fallback={null}>
-            <HostApp
-              backgroundImage={gameOptions.backgroundImage}
-              backgroundOpacity={gameOptions.backgroundOpacity}
-              customElements={gameOptions.customElements}
-              layout={gameOptions.layout}
-              soundVolume={gameOptions.soundVolume}
-            />
+            {googleDrive.statusReady && (
+              <HostApp
+                backgroundImage={gameOptions.backgroundImage}
+                backgroundOpacity={gameOptions.backgroundOpacity}
+                customElements={gameOptions.customElements}
+                drive={googleDrive.bridge ?? undefined}
+                driveConnected={googleDrive.connection.state === 'connected'}
+                driveReady
+                layout={gameOptions.layout}
+                onDriveFailure={() => void googleDrive.reportFailure()}
+                soundVolume={gameOptions.soundVolume}
+              />
+            )}
           </Suspense>
         }
         loadedApps={loadedApps}

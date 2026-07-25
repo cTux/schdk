@@ -3,41 +3,34 @@ import {
   parseGamePackage,
   type GamePackage,
 } from '@schdk/common';
-import {
-  EditorView,
-  type EditorSaveStatus,
-  type RecentPackageItem,
-} from '@schdk/ui/editor';
+import { toDrivePackageReference } from '@schdk/google-drive';
+import { EditorView, type EditorSaveStatus } from '@schdk/ui/editor';
 import { useLocalization } from '@schdk/ui/localization';
-import {
-  DEFAULT_EDITOR_TEXT_OPTIONS,
-  type EditorTextOptions,
-} from '@schdk/ui/options';
+import { DEFAULT_EDITOR_TEXT_OPTIONS } from '@schdk/ui/options';
 import { useCallback, useRef, useState } from 'react';
 import {
   getDeepLinkedPackageName,
   getDeepLinkedQuestionIndex,
 } from './deep-link';
-import {
-  loadDesktopEditorSession,
-  loadDesktopRecentMetadata,
-} from './desktop-session';
+import { loadDesktopEditorSession } from './desktop-session';
 import { loadDraft, removeDraft } from './draft-storage';
 import type {} from './electron';
-import { listRecentWebPackages, rememberWebPackage } from './recent-packages';
 import { useEditorOpening } from './use-editor-opening';
 import { useEditorPersistence } from './use-editor-persistence';
+import { useEditorRecents } from './use-editor-recents';
 import { usePackageActions } from './use-package-actions';
 import { useQuestionActions } from './use-question-actions';
+import type { AppProps } from './types';
 
-interface AppProps {
-  manageDocumentTitle?: boolean;
-  textOptions?: EditorTextOptions;
-}
+export type { AppProps } from './types';
 
 export function App({
+  drive,
+  driveConnected = false,
+  driveReady = true,
   manageDocumentTitle = true,
   textOptions = DEFAULT_EDITOR_TEXT_OPTIONS,
+  onDriveFailure,
 }: AppProps = {}) {
   const { copy, locale } = useLocalization();
   const createLocalizedPackage = () => ({
@@ -65,12 +58,12 @@ export function App({
   );
   const [hasPackage, setHasPackage] = useState(false);
   const [filePath, setFilePath] = useState<string | null>(null);
+  const [driveFileId, setDriveFileId] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [saveStatus, setSaveStatus] = useState<EditorSaveStatus>('saved');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showValidation, setShowValidation] = useState(false);
   const [message, setMessage] = useState('');
-  const [recentPackages, setRecentPackages] = useState<RecentPackageItem[]>([]);
   currentPackage.current = gamePackage;
 
   const clearDraft = useCallback(
@@ -84,57 +77,35 @@ export function App({
     [copy],
   );
 
-  const refreshRecentPackages = useCallback(async () => {
-    try {
-      if (!window.desktop) {
-        setRecentPackages(await listRecentWebPackages());
-        return;
-      }
-      const recent = await window.desktop.listRecentGamePackages();
-      const metadata = loadDesktopRecentMetadata(
-        localStorage,
-        window.location.pathname,
-      );
-      setRecentPackages(
-        recent.map(({ filePath: id, fileName: name }) => ({
-          id,
-          name,
-          ...(metadata[id]
-            ? {
-                title: metadata[id].title,
-                ...(metadata[id].ready === undefined
-                  ? {}
-                  : { ready: metadata[id].ready }),
-              }
-            : {}),
-        })),
-      );
-    } catch {
-      setRecentPackages([]);
-    }
-  }, []);
-
   const applyOpenedPackage = useCallback(
     (
       content: Uint8Array,
       openedFilePath: string | null,
       openedName: string,
+      openedDriveFileId: string | null = null,
+      recovered = false,
     ) => {
       const parsedPackage = parseGamePackage(content);
+      const draftKey = openedDriveFileId
+        ? toDrivePackageReference(openedDriveFileId)
+        : openedName;
       let packageToEdit = parsedPackage;
-      let restored = false;
-      try {
-        const draft = loadDraft(localStorage, openedName);
-        if (draft) {
-          restored = window.confirm(copy.editor.restoreDraft(openedName));
-          if (restored) packageToEdit = draft;
-          else removeDraft(localStorage, openedName);
+      let restored = recovered;
+      if (!recovered) {
+        try {
+          const draft = loadDraft(localStorage, draftKey);
+          if (draft) {
+            restored = window.confirm(copy.editor.restoreDraft(openedName));
+            if (restored) packageToEdit = draft;
+            else removeDraft(localStorage, draftKey);
+          }
+        } catch {
+          setMessage(copy.editor.draftCheckFailed);
         }
-      } catch {
-        setMessage(copy.editor.draftCheckFailed);
       }
       setGamePackage(packageToEdit);
       setFilePath(openedFilePath);
+      setDriveFileId(openedDriveFileId);
       setFileName(openedName);
       setSaveStatus(restored ? 'pending' : 'saved');
       setHasPackage(true);
@@ -145,17 +116,13 @@ export function App({
     [copy],
   );
 
-  const rememberBrowserPackage = useCallback(
-    async (name: string, title: string, content: Uint8Array) => {
-      try {
-        await rememberWebPackage(name, title, content);
-        await refreshRecentPackages();
-      } catch {
-        // IndexedDB is optional; opening and saving still work without recents.
-      }
-    },
-    [refreshRecentPackages],
-  );
+  const { recentPackages, refreshRecentPackages, rememberBrowserPackage } =
+    useEditorRecents({
+      drive,
+      driveConnected,
+      driveReady,
+      onDriveFailure,
+    });
 
   useEditorOpening({
     copy,
@@ -168,6 +135,11 @@ export function App({
     applyOpenedPackage,
     refreshRecentPackages,
     rememberBrowserPackage,
+    drive,
+    driveConnected,
+    driveFileId,
+    driveReady,
+    onDriveFailure,
     setDesktopSessionReady,
     setMessage,
     setSelectedIndex,
@@ -176,6 +148,9 @@ export function App({
     copy,
     currentPackage,
     desktopSessionReady,
+    drive,
+    driveConnected,
+    driveFileId,
     fileName,
     filePath,
     gamePackage,
@@ -186,6 +161,7 @@ export function App({
     saveStatus,
     selectedIndex,
     clearDraft,
+    onDriveFailure,
     setMessage,
     setSaveStatus,
   });
@@ -201,6 +177,9 @@ export function App({
   });
   const packages = usePackageActions({
     copy,
+    drive,
+    driveConnected,
+    driveFileId,
     fileName,
     gamePackage,
     saveStatus,
@@ -210,8 +189,10 @@ export function App({
     refreshRecentPackages,
     rememberBrowserPackage,
     saveCurrentPackage,
+    onDriveFailure,
     setFileName,
     setFilePath,
+    setDriveFileId,
     setGamePackage,
     setHasPackage,
     setMessage,

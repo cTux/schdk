@@ -2,7 +2,6 @@ import { app, BrowserWindow, dialog, ipcMain, Menu } from 'electron';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
-  hasEditableGamePackages,
   loadRecentGamePackages,
   registerGamePackageIpc,
 } from './game-package-ipc.js';
@@ -18,6 +17,7 @@ import {
 
 const closeControllers = new Map<number, CloseController>();
 let mainWindow: BrowserWindow | null = null;
+let editorPackageOpen = false;
 
 async function handleCloseFailure(
   window: BrowserWindow,
@@ -73,7 +73,7 @@ function createWindow() {
       destroy: () => window.destroy(),
       onClose: (listener) => window.on('close', listener),
       sendCloseRequested: (attempt) => {
-        if (!hasEditableGamePackages()) return false;
+        if (!editorPackageOpen) return false;
         window.webContents.send('close-requested', attempt);
         return true;
       },
@@ -84,6 +84,7 @@ function createWindow() {
   window.on('closed', () => {
     closeControllers.delete(webContentsId);
     if (mainWindow === window) mainWindow = null;
+    editorPackageOpen = false;
     closePresenterNotes();
   });
 
@@ -104,6 +105,16 @@ ipcMain.on('close-attempt-finished', (event, attempt, succeeded) => {
   )
     return;
   closeControllers.get(event.sender.id)?.finished(attempt, succeeded);
+});
+
+ipcMain.on('set-editor-package-open', (event, open) => {
+  if (
+    typeof open === 'boolean' &&
+    mainWindow &&
+    event.sender.id === mainWindow.webContents.id
+  ) {
+    editorPackageOpen = open;
+  }
 });
 
 registerGamePackageIpc();

@@ -12,6 +12,9 @@ description: Change or debug SCHDK editor state and persistence in @schdk/editor
 3. Read `docs/rules/browser-persistence.md` or `docs/rules/desktop-editor-persistence.md` only for the affected platform.
 4. Read `docs/rules/security.md` and `docs/rules/desktop-apps.md` only for bridge or close changes; read `docs/rules/ui-editor.md` only for visual changes.
 5. Validate restored packages through `@schdk/common` and preserve pending data across every changed path.
+6. For Drive-backed packages, trace the stable Drive file ID, local recovery
+   draft, reconnect retry, deep link/session reference, and explicit local
+   fallback separately from ordinary browser and desktop files.
 
 ## Checks
 

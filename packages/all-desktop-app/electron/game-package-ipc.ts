@@ -44,10 +44,6 @@ async function readGamePackage(filePath: string, editable: boolean) {
   };
 }
 
-export function hasEditableGamePackages() {
-  return editableGamePackages.size > 0;
-}
-
 export async function loadRecentGamePackages() {
   try {
     const value: unknown = JSON.parse(

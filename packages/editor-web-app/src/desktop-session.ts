@@ -1,4 +1,5 @@
 import { QUESTION_COUNT } from '@schdk/common';
+import { isDriveFileId, isDriveGamePackageName } from '@schdk/google-drive';
 
 const SESSION_KEY_PREFIX = 'schdk.desktop.editor-session:';
 const RECENT_METADATA_KEY_PREFIX = 'schdk.desktop.recent-titles:';
@@ -6,7 +7,9 @@ const RECENT_METADATA_KEY_PREFIX = 'schdk.desktop.recent-titles:';
 type SessionStorage = Pick<Storage, 'getItem' | 'removeItem' | 'setItem'>;
 
 export interface DesktopEditorSession {
-  filePath: string;
+  filePath: string | null;
+  driveFileId?: string;
+  fileName?: string;
   selectedIndex: number;
 }
 
@@ -89,12 +92,23 @@ export function loadDesktopEditorSession(
     const value: unknown = JSON.parse(
       storage.getItem(sessionKey(scope)) ?? 'null',
     );
+    if (!value || typeof value !== 'object') return null;
+    const localFilePath =
+      'filePath' in value &&
+      typeof value.filePath === 'string' &&
+      /\.schdk$/iu.test(value.filePath)
+        ? value.filePath
+        : null;
+    const driveFileId =
+      'driveFileId' in value && isDriveFileId(value.driveFileId)
+        ? value.driveFileId
+        : null;
+    const fileName =
+      'fileName' in value && isDriveGamePackageName(value.fileName)
+        ? value.fileName
+        : null;
     if (
-      !value ||
-      typeof value !== 'object' ||
-      !('filePath' in value) ||
-      typeof value.filePath !== 'string' ||
-      !/\.schdk$/iu.test(value.filePath) ||
+      (!localFilePath && (!driveFileId || !fileName)) ||
       !('selectedIndex' in value) ||
       typeof value.selectedIndex !== 'number' ||
       !Number.isSafeInteger(value.selectedIndex) ||
@@ -104,7 +118,8 @@ export function loadDesktopEditorSession(
       return null;
     }
     return {
-      filePath: value.filePath,
+      filePath: localFilePath,
+      ...(driveFileId && fileName ? { driveFileId, fileName } : {}),
       selectedIndex: value.selectedIndex,
     };
   } catch {

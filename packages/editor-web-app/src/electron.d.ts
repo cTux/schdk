@@ -24,6 +24,7 @@ declare global {
       content: Uint8Array;
     }>;
     writeGamePackage(filePath: string, content: Uint8Array): Promise<void>;
+    setEditorPackageOpen(open: boolean): void;
     setPresenterNotes(
       notes: {
         questionNumber: number;

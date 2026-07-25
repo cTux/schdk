@@ -12,3 +12,7 @@
 - Save before returning to start, then clear state.
 - Window close requests a renderer save and waits for its result; timeout and
   recovery behavior live in [desktop-apps.md](desktop-apps.md).
+- In the unified app, a connected Drive session stores editor packages by Drive
+  file ID instead of local path. Persist that ID in the desktop editor session,
+  retain pending recovery drafts locally, and use the native local save dialog
+  if cloud persistence is unavailable while leaving the document.

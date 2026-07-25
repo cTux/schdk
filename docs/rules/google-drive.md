@@ -1,15 +1,24 @@
-# Google Drive settings synchronization
+# Google Drive persistence
 
-- Keep the Drive REST client and settings envelope in `@schdk/google-drive`.
-  Treat option values as opaque there; the owning web shell validates them.
-- Synchronize editor text options and game options only. Locale, theme,
-  navigation, local paths, drafts, tokens, and package bytes remain local
-  until their separately designed Drive features are implemented.
+- Keep the Drive REST client, package-storage contract, reference helpers, and
+  settings envelope in `@schdk/google-drive`. Treat option values as opaque
+  there; the owning web shell validates them.
 - Keep local storage as the immediate source and fallback. Merge remote
   settings per section by `updatedAt`, debounce uploads for one second, and
   retain local changes when Drive is unavailable.
 - Store `settings-v1.json` in `appDataFolder` using only the non-sensitive
   `drive.file` and `drive.appdata` scopes.
+- Store app-created `.schdk` files in a visible `SCHDK` Drive folder. Mark the
+  folder and packages with private app properties, and expose package identity
+  to browser deep links and sessions through validated `drive:<fileId>`
+  references.
+- When Drive is connected, create or import editor packages in Drive and
+  serialize every autosave to the same Drive file ID. List and load those
+  packages in both Editor and Host. When Drive is disconnected, preserve the
+  existing browser and desktop local file paths and recents.
+- Never silently change a Drive-backed document to another destination after a
+  failed write. Keep its recovery draft, retry after reconnection, and offer a
+  local save flow when the user leaves or closes while unsynchronized.
 - Browser authorization uses Google Identity Services from an explicit first
   connection. Keep its access token in memory, persist only a connection
   preference, and use `prompt: 'none'` to restore or renew a previously
@@ -18,9 +27,9 @@
 - Desktop authorization uses the system browser, PKCE S256, a random-state
   loopback callback on `127.0.0.1`, and refresh tokens encrypted with Electron
   `safeStorage`. Never persist a refresh token through Linux `basic_text`.
-- Expose only status, connect, disconnect, settings load, and settings save
-  through Electron IPC. Tokens and generic authenticated requests never cross
-  into the renderer.
+- Expose only status, connect, disconnect, settings operations, and validated
+  package create/update/list/load operations through Electron IPC. Tokens and
+  generic authenticated requests never cross into the renderer.
 - Bundle the production Web application client ID in the browser application.
   Allow `VITE_GOOGLE_WEB_CLIENT_ID` to override it for development.
 - Bundle the production Desktop application client ID in the Electron main

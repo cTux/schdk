@@ -20,9 +20,9 @@
   `@schdk/all-web-app` and owns Electron main/preload code, packaging, and the
   narrow file bridge exposed to the trusted unified renderer.
 - `@schdk/google-drive` owns the platform-neutral Drive REST client and opaque
-  settings envelope. Browser authorization stays in `@schdk/all-web-app`;
-  installed-app authorization and credential storage stay in
-  `@schdk/all-desktop-app`.
+  settings envelope, package-storage types, and Drive reference helpers.
+  Browser authorization stays in `@schdk/all-web-app`; installed-app
+  authorization and credential storage stay in `@schdk/all-desktop-app`.
 
 ## Dependency direction
 
@@ -34,6 +34,9 @@
   every workspace dependency in the consuming package manifest.
 - Preserve workspace dependency edges used to bundle lazy application imports,
   including the unified shell's dependencies on the host and editor packages.
+- Editor and host applications may consume the platform-neutral package
+  storage contract from `@schdk/google-drive`; they must not own authorization
+  or tokens.
 - Prefer shared ownership over copied implementations: data contracts belong
   in `common`, visuals in `ui`, browser behavior in web apps, and operating
   system integration in desktop apps.

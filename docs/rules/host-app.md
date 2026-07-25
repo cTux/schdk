@@ -23,6 +23,9 @@
   to the separate presenter window while a game is active. Close it when the
   game ends or the host view unmounts.
 - Persist game volume in shell options with a 5% default.
+- Load app-created Drive packages from Drive recents while the unified app is
+  connected. Keep existing browser IndexedDB and desktop path recents while
+  disconnected or in standalone builds.
 - Persist the selected package and exact game question/stage continuously on
   web and desktop. Restore browser games through the host recent-package store,
   desktop games through the authorized recent-file bridge, and expose browser

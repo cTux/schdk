@@ -1,14 +1,25 @@
-import { serializeGamePackage, type GamePackage } from '@schdk/common';
-import type { EditorSaveStatus, RecentPackageItem } from '@schdk/ui/editor';
+import {
+  serializeGamePackage,
+  validateGamePackage,
+  type GamePackage,
+} from '@schdk/common';
+import {
+  toDrivePackageReference,
+  type DrivePackageStorage,
+} from '@schdk/google-drive';
+import type { EditorSaveStatus } from '@schdk/ui/editor';
 import type { LocalizationCopy } from '@schdk/ui/localization';
 import type { Dispatch, SetStateAction } from 'react';
 import { replaceBrowserPackageDeepLink } from './browser-deep-link';
-import { saveWithPicker } from './browser-save';
 import { createPackageFilename } from './package-filename';
-import { loadRecentWebPackage } from './recent-packages';
+import { savePackageLocally } from './local-package-save';
+import { usePackageOpeningActions } from './use-package-opening-actions';
 
 interface PackageActionsOptions {
   copy: LocalizationCopy;
+  drive?: DrivePackageStorage;
+  driveConnected: boolean;
+  driveFileId: string | null;
   fileName: string | null;
   gamePackage: GamePackage;
   saveStatus: EditorSaveStatus;
@@ -16,6 +27,8 @@ interface PackageActionsOptions {
     content: Uint8Array,
     filePath: string | null,
     fileName: string,
+    driveFileId?: string | null,
+    recovered?: boolean,
   ): GamePackage;
   clearDraft(name: string): void;
   createLocalizedPackage(): GamePackage;
@@ -26,6 +39,8 @@ interface PackageActionsOptions {
     content: Uint8Array,
   ): Promise<void>;
   saveCurrentPackage(): Promise<void>;
+  onDriveFailure?(): void;
+  setDriveFileId: Dispatch<SetStateAction<string | null>>;
   setFileName: Dispatch<SetStateAction<string | null>>;
   setFilePath: Dispatch<SetStateAction<string | null>>;
   setGamePackage: Dispatch<SetStateAction<GamePackage>>;
@@ -39,6 +54,9 @@ interface PackageActionsOptions {
 export function usePackageActions(options: PackageActionsOptions) {
   const {
     copy,
+    drive,
+    driveConnected,
+    driveFileId,
     fileName,
     gamePackage,
     saveStatus,
@@ -48,6 +66,8 @@ export function usePackageActions(options: PackageActionsOptions) {
     refreshRecentPackages,
     rememberBrowserPackage,
     saveCurrentPackage,
+    onDriveFailure,
+    setDriveFileId,
     setFileName,
     setFilePath,
     setGamePackage,
@@ -57,31 +77,16 @@ export function usePackageActions(options: PackageActionsOptions) {
     setSelectedIndex,
     setShowValidation,
   } = options;
-
-  async function savePackageInBrowser(
-    packageToSave: GamePackage,
-    suggestedName: string,
-  ) {
-    const content = serializeGamePackage(packageToSave);
-    if (window.showSaveFilePicker) {
-      const name = await saveWithPicker(
-        window.showSaveFilePicker.bind(window),
-        suggestedName,
-        content,
-        copy.editor.filePickerDescription,
-      );
-      return name ? { name, content } : null;
-    }
-    const url = URL.createObjectURL(
-      new Blob([new Uint8Array(content)], { type: 'application/zip' }),
-    );
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = suggestedName;
-    link.click();
-    URL.revokeObjectURL(url);
-    return { name: suggestedName, content };
-  }
+  const { openPackage, openRecentPackage } = usePackageOpeningActions({
+    copy,
+    drive,
+    driveConnected,
+    applyOpenedPackage,
+    refreshRecentPackages,
+    rememberBrowserPackage,
+    onDriveFailure,
+    setMessage,
+  });
 
   async function createPackageFile(packageToSave: GamePackage) {
     setMessage('');
@@ -91,78 +96,41 @@ export function usePackageActions(options: PackageActionsOptions) {
       copy.editor.unfinishedGame,
     );
     try {
-      if (window.desktop) {
-        const savedPath = await window.desktop.saveGamePackage(
-          filename,
-          serializeGamePackage(packageToSave),
-        );
-        if (!savedPath) return false;
-        setFilePath(savedPath);
-        const pathParts = savedPath.split(/[\\/]/u);
-        setFileName(pathParts[pathParts.length - 1] || filename);
-      } else {
-        const saved = await savePackageInBrowser(packageToSave, filename);
-        if (!saved) return false;
+      if (driveConnected && drive) {
+        const saved = await drive.createGamePackage({
+          name: filename,
+          content: serializeGamePackage(packageToSave),
+          ready: validateGamePackage(packageToSave).length === 0,
+        });
+        setDriveFileId(saved.id);
+        setFilePath(null);
         setFileName(saved.name);
-        await rememberBrowserPackage(
-          saved.name,
-          packageToSave.title,
-          saved.content,
+        replaceBrowserPackageDeepLink(toDrivePackageReference(saved.id), 0);
+      } else {
+        const saved = await savePackageLocally(
+          packageToSave,
+          filename,
+          copy.editor.filePickerDescription,
         );
-        replaceBrowserPackageDeepLink(saved.name, 0);
+        if (!saved) return false;
+        setDriveFileId(null);
+        setFilePath(saved.filePath);
+        setFileName(saved.name);
+        if (!window.desktop) {
+          await rememberBrowserPackage(
+            saved.name,
+            packageToSave.title,
+            saved.content,
+          );
+          replaceBrowserPackageDeepLink(saved.name, 0);
+        }
       }
       setSaveStatus('saved');
       return true;
     } catch {
+      if (driveConnected) onDriveFailure?.();
       setMessage(copy.editor.saveFailed);
       return false;
-    }
-  }
-
-  async function openPackage(file: File) {
-    setMessage('');
-    try {
-      const opened = window.desktop
-        ? await window.desktop.openGamePackage(file)
-        : {
-            filePath: null,
-            content: new Uint8Array(await file.arrayBuffer()),
-          };
-      const openedPackage = applyOpenedPackage(
-        opened.content,
-        opened.filePath,
-        file.name,
-      );
-      if (!window.desktop) {
-        await rememberBrowserPackage(
-          file.name,
-          openedPackage.title,
-          opened.content,
-        );
-        replaceBrowserPackageDeepLink(file.name, 0);
-      }
-    } catch {
-      setMessage(copy.editor.invalidFile);
-    }
-  }
-
-  async function openRecentPackage(recent: RecentPackageItem) {
-    setMessage('');
-    try {
-      if (window.desktop) {
-        const opened = await window.desktop.openRecentGamePackage(recent.id);
-        applyOpenedPackage(opened.content, opened.filePath, opened.fileName);
-      } else {
-        const content = await loadRecentWebPackage(recent.id);
-        if (!content) throw new Error('Recent package is unavailable');
-        const openedPackage = applyOpenedPackage(content, null, recent.name);
-        await rememberBrowserPackage(recent.name, openedPackage.title, content);
-        replaceBrowserPackageDeepLink(recent.name, 0);
-      }
-      await refreshRecentPackages();
-    } catch {
-      setMessage(copy.editor.recentOpenFailed);
-      await refreshRecentPackages();
     }
   }
 
@@ -177,17 +145,35 @@ export function usePackageActions(options: PackageActionsOptions) {
 
   async function closePackage() {
     try {
-      if (window.desktop) {
+      if (driveFileId) {
+        if (driveConnected && drive && saveStatus !== 'saved') {
+          await saveCurrentPackage();
+        } else if (saveStatus !== 'saved') {
+          const saved = await savePackageLocally(
+            gamePackage,
+            fileName ??
+              createPackageFilename(
+                gamePackage.title,
+                new Date(),
+                copy.editor.unfinishedGame,
+              ),
+            copy.editor.filePickerDescription,
+          );
+          if (!saved) return;
+          clearDraft(toDrivePackageReference(driveFileId));
+        }
+      } else if (window.desktop) {
         await saveCurrentPackage();
       } else if (saveStatus !== 'saved') {
         const oldFileName = fileName;
-        const saved = await savePackageInBrowser(
+        const saved = await savePackageLocally(
           gamePackage,
           createPackageFilename(
             gamePackage.title,
             new Date(),
             copy.editor.unfinishedGame,
           ),
+          copy.editor.filePickerDescription,
         );
         if (!saved) return;
         await rememberBrowserPackage(
@@ -201,6 +187,7 @@ export function usePackageActions(options: PackageActionsOptions) {
       setGamePackage(createLocalizedPackage());
       setHasPackage(false);
       setFilePath(null);
+      setDriveFileId(null);
       setFileName(null);
       setSaveStatus('saved');
       setSelectedIndex(0);
@@ -208,6 +195,7 @@ export function usePackageActions(options: PackageActionsOptions) {
       setMessage('');
       replaceBrowserPackageDeepLink(null);
     } catch {
+      if (driveFileId) onDriveFailure?.();
       setMessage(copy.editor.autoSaveFailed);
     }
   }

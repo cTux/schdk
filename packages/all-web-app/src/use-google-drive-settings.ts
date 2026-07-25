@@ -41,6 +41,7 @@ export function useGoogleDriveSettings({
   const [connection, setConnection] = useState<GoogleDriveConnection>(
     bridge ? { state: 'disconnected' } : { state: 'unavailable' },
   );
+  const [statusReady, setStatusReady] = useState(!bridge);
   const [revision, setRevision] = useState(0);
   const settings = useRef(
     loadLocalDriveSettings(localStorage, editorTextOptions, gameOptions),
@@ -108,7 +109,8 @@ export function useGoogleDriveSettings({
           enqueueSyncEvent();
         }
       })
-      .catch(() => active && setConnection({ state: 'error' }));
+      .catch(() => active && setConnection({ state: 'error' }))
+      .finally(() => active && setStatusReady(true));
     return () => {
       active = false;
     };
@@ -159,6 +161,8 @@ export function useGoogleDriveSettings({
       await enqueueSync();
     } catch {
       setConnection({ state: 'error' });
+    } finally {
+      setStatusReady(true);
     }
   }
 
@@ -175,9 +179,12 @@ export function useGoogleDriveSettings({
   }
 
   return {
+    bridge,
     connection,
+    statusReady,
     connect,
     disconnect,
+    reportFailure: handleSyncFailure,
     setEditorTextOptions: changeEditorTextOptions,
     setGameOptions: changeGameOptions,
   };

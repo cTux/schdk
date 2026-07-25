@@ -1,6 +1,10 @@
-import type { DriveAccount, DriveSettingsDocument } from '@schdk/google-drive';
+import type {
+  DriveAccount,
+  DrivePackageStorage,
+  DriveSettingsDocument,
+} from '@schdk/google-drive';
 
-export interface GoogleDriveBridge {
+export interface GoogleDriveBridge extends DrivePackageStorage {
   status(): Promise<{
     state: 'unavailable' | 'disconnected' | 'connected';
     account?: DriveAccount;

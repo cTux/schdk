@@ -173,4 +173,25 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
   saveSettings(settings: DriveSettingsDocument) {
     return this.client.saveSettings(settings);
   }
+
+  createGamePackage(
+    value: Parameters<GoogleDriveClient['createGamePackage']>[0],
+  ) {
+    return this.client.createGamePackage(value);
+  }
+
+  updateGamePackage(
+    fileId: string,
+    value: Parameters<GoogleDriveClient['updateGamePackage']>[1],
+  ) {
+    return this.client.updateGamePackage(fileId, value);
+  }
+
+  listGamePackages() {
+    return this.client.listGamePackages();
+  }
+
+  loadGamePackage(fileId: string) {
+    return this.client.loadGamePackage(fileId);
+  }
 }

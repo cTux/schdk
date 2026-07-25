@@ -13,3 +13,7 @@
 - IndexedDB failures must not prevent opening or saving packages.
 - Browser pending changes trigger a save dialog before returning to start;
   cancellation keeps the package open.
+- In the unified app, a connected Drive session replaces browser package
+  creation, autosave, recents, and deep-link loading with Drive-backed
+  persistence. Disconnected and standalone editor sessions retain all local
+  behavior above.

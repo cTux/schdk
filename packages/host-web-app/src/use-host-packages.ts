@@ -3,6 +3,11 @@ import {
   validateGamePackage,
   type GamePackage,
 } from '@schdk/common';
+import {
+  parseDrivePackageReference,
+  toDrivePackageReference,
+  type DrivePackageStorage,
+} from '@schdk/google-drive';
 import type { HostPackageDetails, RecentPackageItem } from '@schdk/ui/host';
 import type { LocalizationCopy } from '@schdk/ui/localization';
 import {
@@ -20,10 +25,21 @@ import { summarizeGamePackage } from './game-package-summary';
 import type { HostSession } from './host-session';
 import type { GameWizardSnapshot } from './use-game-wizard';
 
-export function useHostPackages(
-  copy: LocalizationCopy,
-  setGameActive: Dispatch<SetStateAction<boolean>>,
-) {
+export function useHostPackages({
+  copy,
+  drive,
+  driveConnected,
+  driveReady,
+  onDriveFailure,
+  setGameActive,
+}: {
+  copy: LocalizationCopy;
+  drive?: DrivePackageStorage;
+  driveConnected: boolean;
+  driveReady: boolean;
+  onDriveFailure?(): void;
+  setGameActive: Dispatch<SetStateAction<boolean>>;
+}) {
   const [message, setMessage] = useState('');
   const [packageDetails, setPackageDetails] =
     useState<HostPackageDetails | null>(null);
@@ -40,6 +56,17 @@ export function useHostPackages(
 
   const refreshRecentPackages = useCallback(async () => {
     try {
+      if (!driveReady) return;
+      if (driveConnected && drive) {
+        setRecentPackages(
+          (await drive.listGamePackages()).map(({ id, name, ready }) => ({
+            id: toDrivePackageReference(id),
+            name,
+            ...(ready === undefined ? {} : { ready }),
+          })),
+        );
+        return;
+      }
       setRecentPackages(
         window.desktop
           ? (await window.desktop.listRecentGamePackages()).map(
@@ -61,8 +88,9 @@ export function useHostPackages(
       );
     } catch {
       setRecentPackages([]);
+      if (driveConnected) onDriveFailure?.();
     }
-  }, []);
+  }, [drive, driveConnected, driveReady, onDriveFailure]);
 
   const acceptPackage = useCallback(
     async (
@@ -70,12 +98,13 @@ export function useHostPackages(
       fileName: string,
       packageId = fileName,
       restoredSession: HostSession | null = null,
+      driveBacked = false,
     ) => {
       const gamePackage = parseGamePackage(content);
       if (validateGamePackage(gamePackage).length > 0) {
         throw new Error('Package is unfinished');
       }
-      if (!window.desktop) {
+      if (!window.desktop && !driveBacked) {
         await rememberWebPackage(fileName, gamePackage.title, content);
       }
       setWizardRestore(
@@ -113,15 +142,27 @@ export function useHostPackages(
   async function openRecentPackage(recent: RecentPackageItem) {
     setMessage('');
     try {
-      const opened = window.desktop
-        ? await window.desktop.openRecentHostGamePackage(recent.id)
-        : {
-            fileName: recent.name,
-            content: await loadRecentWebPackage(recent.id),
-          };
-      if (!opened.content) throw new Error('Recent package is unavailable');
-      await acceptPackage(opened.content, opened.fileName, recent.id);
+      const driveFileId = parseDrivePackageReference(recent.id);
+      const opened = driveFileId
+        ? driveConnected && drive
+          ? await drive.loadGamePackage(driveFileId)
+          : null
+        : window.desktop
+          ? await window.desktop.openRecentHostGamePackage(recent.id)
+          : {
+              fileName: recent.name,
+              content: await loadRecentWebPackage(recent.id),
+            };
+      if (!opened?.content) throw new Error('Recent package is unavailable');
+      await acceptPackage(
+        opened.content,
+        'fileName' in opened ? opened.fileName : opened.name,
+        recent.id,
+        null,
+        Boolean(driveFileId),
+      );
     } catch {
+      if (parseDrivePackageReference(recent.id)) onDriveFailure?.();
       setMessage(copy.host.recentOpenFailed);
       await refreshRecentPackages();
     }

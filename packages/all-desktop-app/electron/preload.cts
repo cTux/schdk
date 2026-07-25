@@ -35,6 +35,8 @@ const editorApi = {
     ipcRenderer.invoke('open-recent-host-game-package', filePath),
   writeGamePackage: (filePath: string, content: Uint8Array): Promise<void> =>
     ipcRenderer.invoke('write-game-package', filePath, content),
+  setEditorPackageOpen: (open: boolean): void =>
+    ipcRenderer.send('set-editor-package-open', open),
   setPresenterNotes: (
     notes: {
       questionNumber: number;
@@ -50,6 +52,14 @@ const editorApi = {
     loadSettings: () => ipcRenderer.invoke('load-google-drive-settings'),
     saveSettings: (settings: unknown) =>
       ipcRenderer.invoke('save-google-drive-settings', settings),
+    listGamePackages: () =>
+      ipcRenderer.invoke('list-google-drive-game-packages'),
+    loadGamePackage: (fileId: string) =>
+      ipcRenderer.invoke('load-google-drive-game-package', fileId),
+    createGamePackage: (value: unknown) =>
+      ipcRenderer.invoke('create-google-drive-game-package', value),
+    updateGamePackage: (fileId: string, value: unknown) =>
+      ipcRenderer.invoke('update-google-drive-game-package', fileId, value),
   },
 };
 

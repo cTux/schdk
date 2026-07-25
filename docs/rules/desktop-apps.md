@@ -35,8 +35,9 @@
   without saving, or cancel closing. Never leave a window permanently
   uncloseable after a renderer or IPC failure.
 - Send close requests to the main renderer only after a
-  package path has been authorized. Otherwise close immediately because there
-  is no desktop package state to save.
+  local or Drive-backed editor package is open. A failed Drive write first
+  offers the native local-save flow; cancellation continues to the standard
+  retry, close-without-saving, or cancel-close outcomes.
 
 ## Preload and packaging
 
