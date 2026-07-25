@@ -31,6 +31,13 @@ const editorApi = {
     ipcRenderer.invoke('open-recent-game-package', filePath),
   writeGamePackage: (filePath: string, content: Uint8Array): Promise<void> =>
     ipcRenderer.invoke('write-game-package', filePath, content),
+  setPresenterNotes: (
+    notes: {
+      questionNumber: number;
+      questionCount: number;
+      notes: string;
+    } | null,
+  ): void => ipcRenderer.send('set-presenter-notes', notes),
   ...closeApi,
 };
 

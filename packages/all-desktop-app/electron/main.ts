@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain, Menu } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, Menu, screen } from 'electron';
 import { readFile, writeFile } from 'node:fs/promises';
 import { basename, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -10,7 +10,135 @@ import {
 const editableGamePackages = new Set<string>();
 const closeControllers = new Map<number, CloseController>();
 const RECENT_LIMIT = 20;
+const PRESENTER_NOTES_HTML = `<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; style-src 'unsafe-inline'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Примітки ведучого</title>
+    <style>
+      :root {
+        color: #f8fafc;
+        background: #111827;
+        font-family: Inter, system-ui, sans-serif;
+      }
+      body {
+        box-sizing: border-box;
+        min-height: 100vh;
+        margin: 0;
+        padding: 24px;
+      }
+      p {
+        margin: 0;
+      }
+      #position {
+        color: #94a3b8;
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      #notes {
+        margin-top: 18px;
+        font-size: 20px;
+        line-height: 1.5;
+        white-space: pre-wrap;
+      }
+      #notes:empty::before {
+        color: #64748b;
+        content: 'Приміток немає';
+      }
+    </style>
+  </head>
+  <body>
+    <p id="position"></p>
+    <p id="notes"></p>
+  </body>
+</html>`;
+
+interface PresenterNotes {
+  questionNumber: number;
+  questionCount: number;
+  notes: string;
+}
+
+let mainWindow: BrowserWindow | null = null;
+let presenterNotes: PresenterNotes | null = null;
+let presenterNotesDismissed = false;
+let presenterWindow: BrowserWindow | null = null;
 let recentGamePackages: string[] = [];
+
+function isPresenterNotes(value: unknown): value is PresenterNotes {
+  if (!value || typeof value !== 'object') return false;
+  const notes = value as Record<string, unknown>;
+  return (
+    Number.isSafeInteger(notes.questionNumber) &&
+    Number(notes.questionNumber) > 0 &&
+    Number.isSafeInteger(notes.questionCount) &&
+    Number(notes.questionCount) >= Number(notes.questionNumber) &&
+    typeof notes.notes === 'string'
+  );
+}
+
+function closePresenterNotes() {
+  presenterNotes = null;
+  presenterNotesDismissed = false;
+  const window = presenterWindow;
+  presenterWindow = null;
+  if (window && !window.isDestroyed()) window.destroy();
+}
+
+async function showPresenterNotes() {
+  if (presenterWindow || presenterNotesDismissed || !presenterNotes) return;
+
+  const mainDisplay = mainWindow
+    ? screen.getDisplayMatching(mainWindow.getBounds())
+    : screen.getPrimaryDisplay();
+  const display =
+    screen.getAllDisplays().find(({ id }) => id !== mainDisplay.id) ??
+    mainDisplay;
+  const width = 440;
+  const height = 320;
+  const window = new BrowserWindow({
+    alwaysOnTop: true,
+    autoHideMenuBar: true,
+    width,
+    height,
+    minWidth: 320,
+    minHeight: 220,
+    show: false,
+    x: display.workArea.x + display.workArea.width - width - 24,
+    y: display.workArea.y + 24,
+    webPreferences: {
+      contextIsolation: true,
+      devTools: !app.isPackaged,
+      preload: fileURLToPath(
+        new URL('./presenter-preload.cjs', import.meta.url),
+      ),
+    },
+  });
+  presenterWindow = window;
+  window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
+  window.webContents.on('will-navigate', (event) => event.preventDefault());
+  window.on('closed', () => {
+    if (presenterWindow !== window) return;
+    presenterWindow = null;
+    presenterNotesDismissed = true;
+  });
+
+  await window.loadURL(
+    `data:text/html;charset=UTF-8,${encodeURIComponent(PRESENTER_NOTES_HTML)}`,
+  );
+  if (presenterWindow !== window || window.isDestroyed()) return;
+  if (presenterNotes) {
+    window.webContents.send('presenter-notes-updated', presenterNotes);
+  }
+  window.showInactive();
+}
 
 function recentGamePackagesPath() {
   return join(app.getPath('userData'), 'recent-game-packages.json');
@@ -97,6 +225,7 @@ function createWindow() {
       preload: fileURLToPath(new URL('./preload.cjs', import.meta.url)),
     },
   });
+  mainWindow = window;
   window.maximize();
 
   window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
@@ -117,7 +246,11 @@ function createWindow() {
     () => void handleCloseFailure(window, closeController),
   );
   closeControllers.set(webContentsId, closeController);
-  window.on('closed', () => closeControllers.delete(webContentsId));
+  window.on('closed', () => {
+    closeControllers.delete(webContentsId);
+    if (mainWindow === window) mainWindow = null;
+    closePresenterNotes();
+  });
 
   void window.loadFile(
     app.isPackaged
@@ -206,6 +339,22 @@ ipcMain.on('close-attempt-finished', (event, attempt, succeeded) => {
   )
     return;
   closeControllers.get(event.sender.id)?.finished(attempt, succeeded);
+});
+
+ipcMain.on('set-presenter-notes', (event, value: unknown) => {
+  if (event.sender !== mainWindow?.webContents) return;
+  if (value === null) {
+    closePresenterNotes();
+    return;
+  }
+  if (!isPresenterNotes(value)) return;
+
+  presenterNotes = value;
+  if (presenterWindow && !presenterWindow.isDestroyed()) {
+    presenterWindow.webContents.send('presenter-notes-updated', value);
+  } else {
+    void showPresenterNotes();
+  }
 });
 
 app.whenReady().then(async () => {
