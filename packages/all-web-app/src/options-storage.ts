@@ -17,6 +17,7 @@ const OPTIONS_KEY = 'schdk:editor-text-options';
 const GAME_OPTIONS_KEY = 'schdk:game-options';
 
 type OptionsStorage = Pick<Storage, 'getItem' | 'setItem'>;
+type VisualEditorTemplate = Omit<GameOptions, 'soundVolume'>;
 
 export function loadEditorTextOptions(
   storage: OptionsStorage,
@@ -49,40 +50,71 @@ export function saveEditorTextOptions(
 
 export function loadGameOptions(storage: OptionsStorage): GameOptions {
   try {
-    const value = JSON.parse(
-      storage.getItem(GAME_OPTIONS_KEY) ?? 'null',
-    ) as Partial<GameOptions> | null;
-    if (
-      typeof value?.soundVolume !== 'number' ||
-      value.soundVolume < 0 ||
-      value.soundVolume > 1
-    ) {
-      return DEFAULT_GAME_OPTIONS;
-    }
-    const layout = normalizeGameLayout(value.layout);
-    if (value.layout !== undefined && value.layout !== null && !layout) {
-      return DEFAULT_GAME_OPTIONS;
-    }
-    const backgroundImage = value.backgroundImage ?? null;
-    const backgroundOpacity = value.backgroundOpacity ?? 1;
-    const customElements = normalizeCustomElements(value.customElements);
-    if (
-      !customElements ||
-      !isBackgroundImage(backgroundImage) ||
-      !isOpacity(backgroundOpacity)
-    ) {
-      return DEFAULT_GAME_OPTIONS;
-    }
-    return {
-      soundVolume: value.soundVolume,
-      layout,
-      customElements,
-      backgroundImage,
-      backgroundOpacity,
-    };
+    return (
+      normalizeGameOptions(
+        JSON.parse(storage.getItem(GAME_OPTIONS_KEY) ?? 'null'),
+      ) ?? DEFAULT_GAME_OPTIONS
+    );
   } catch {
     return DEFAULT_GAME_OPTIONS;
   }
+}
+
+function normalizeGameOptions(value: unknown): GameOptions | null {
+  if (!value || typeof value !== 'object') return null;
+  const candidate = value as Partial<GameOptions>;
+  if (
+    typeof candidate.soundVolume !== 'number' ||
+    candidate.soundVolume < 0 ||
+    candidate.soundVolume > 1
+  ) {
+    return null;
+  }
+  const layout = normalizeGameLayout(candidate.layout);
+  if (candidate.layout !== undefined && candidate.layout !== null && !layout) {
+    return null;
+  }
+  const backgroundImage = candidate.backgroundImage ?? null;
+  const backgroundOpacity = candidate.backgroundOpacity ?? 1;
+  const customElements = normalizeCustomElements(candidate.customElements);
+  if (
+    !customElements ||
+    !isBackgroundImage(backgroundImage) ||
+    !isOpacity(backgroundOpacity)
+  ) {
+    return null;
+  }
+  return {
+    soundVolume: candidate.soundVolume,
+    layout,
+    customElements,
+    backgroundImage,
+    backgroundOpacity,
+  };
+}
+
+export function parseVisualEditorTemplate(
+  content: string,
+  soundVolume: number,
+): GameOptions | null {
+  try {
+    const value = JSON.parse(content) as Record<string, unknown> | null;
+    if (!value || value.version !== 1) return null;
+    return normalizeGameOptions({ ...value, soundVolume });
+  } catch {
+    return null;
+  }
+}
+
+export function serializeVisualEditorTemplate(options: GameOptions): string {
+  const template: VisualEditorTemplate & { version: 1 } = {
+    version: 1,
+    layout: options.layout,
+    customElements: options.customElements,
+    backgroundImage: options.backgroundImage,
+    backgroundOpacity: options.backgroundOpacity,
+  };
+  return JSON.stringify(template, null, 2);
 }
 
 function normalizeCustomElements(value: unknown): CustomGameElement[] | null {

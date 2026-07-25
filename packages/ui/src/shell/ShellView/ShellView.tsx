@@ -21,6 +21,8 @@ export interface ShellViewProps {
   view: ShellViewName;
   onEditorOptionsChange(options: EditorTextOptions): void;
   onGameOptionsChange(options: GameOptions): void;
+  onImportVisualEditorTemplate(file: File): void;
+  onExportVisualEditorTemplate(): void;
   onShowView(view: ShellViewName): void;
 }
 
@@ -34,6 +36,8 @@ export function ShellView({
   view,
   onEditorOptionsChange,
   onGameOptionsChange,
+  onImportVisualEditorTemplate,
+  onExportVisualEditorTemplate,
   onShowView,
 }: ShellViewProps) {
   return (
@@ -54,6 +58,8 @@ export function ShellView({
             hidden={view !== 'visualEditor'}
             game={gameOptions}
             onChange={onGameOptionsChange}
+            onImportTemplate={onImportVisualEditorTemplate}
+            onExportTemplate={onExportVisualEditorTemplate}
           />
           {loadedApps.host && (
             <div className="embedded-app" hidden={view !== 'host'}>
