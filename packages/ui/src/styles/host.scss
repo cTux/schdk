@@ -321,6 +321,25 @@
     color: $text;
   }
 
+  .game-handout-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: clamp(20px, 4cqw, 64px);
+    container-type: inline-size;
+    color: $text;
+  }
+
+  .game-handout-text p {
+    margin: 0;
+    font-size: clamp(1.5rem, calc(8cqw * var(--game-fit-scale, 1)), 6rem);
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    white-space: pre-wrap;
+  }
+
   .game-wizard-canvas.is-handout-focus {
     padding: 32px;
   }
@@ -350,6 +369,10 @@
     height: auto;
     max-width: 100%;
     max-height: calc(100dvh - 64px);
+  }
+
+  .is-handout-focus .game-handout-text {
+    height: calc(100dvh - 64px);
   }
 
   .game-question {

@@ -19,7 +19,6 @@
 - Different types of questions
   - Blitz (2 questions, 30s each)
   - Blitz (3 questions, 20s each)
-- Make a possibility to specify handout as a text
 - Make a possibility to specify wrong answers
 - Logging in with Google account
   - Saving to Google Drive

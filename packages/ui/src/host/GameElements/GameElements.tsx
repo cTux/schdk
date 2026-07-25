@@ -2,6 +2,7 @@ import './styles.scss';
 
 import classNames from 'classnames';
 import type { CSSProperties } from 'react';
+import type { Handout } from '@schdk/common';
 import type { CustomGameElement } from '../../options/types';
 import { FitTextObserver } from '../FitTextObserver';
 
@@ -45,15 +46,27 @@ export function GameQuestionIntro({
 }
 
 export function GameHandout({
-  src,
+  handout,
   className,
 }: {
-  src?: string;
+  handout?: Handout;
   className?: string;
 }) {
   const handoutClasses = classNames('game-handout', className);
-  return src ? (
-    <img className={handoutClasses} src={src} alt="Роздатковий матеріал" />
+  if (handout?.kind === 'text') {
+    return (
+      <div className={classNames(handoutClasses, 'game-handout-text')}>
+        <p>{handout.text}</p>
+        <FitTextObserver enabled />
+      </div>
+    );
+  }
+  return handout ? (
+    <img
+      className={handoutClasses}
+      src={handout.dataUrl}
+      alt="Роздатковий матеріал"
+    />
   ) : (
     <div className={classNames(handoutClasses, 'game-handout-placeholder')}>
       Роздатка

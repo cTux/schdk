@@ -4,11 +4,19 @@ export const QUESTION_COUNT = 36;
 export const QUESTIONS_PER_ROUND = 12;
 const PACKAGE_ENTRY = 'game.json';
 
-export interface Handout {
+export interface ImageHandout {
+  kind?: 'image';
   name: string;
   mimeType: string;
   dataUrl: string;
 }
+
+export interface TextHandout {
+  kind: 'text';
+  text: string;
+}
+
+export type Handout = ImageHandout | TextHandout;
 
 export interface GameQuestion {
   question: string;
@@ -28,16 +36,25 @@ export interface GamePackage {
 }
 
 function isHandout(value: unknown): value is Handout {
-  return Boolean(
-    value &&
-    typeof value === 'object' &&
+  if (!value || typeof value !== 'object') return false;
+  if ('kind' in value && value.kind === 'text') {
+    return 'text' in value && typeof value.text === 'string';
+  }
+  return (
+    (!('kind' in value) || value.kind === 'image') &&
     'name' in value &&
     typeof value.name === 'string' &&
     'mimeType' in value &&
     typeof value.mimeType === 'string' &&
     'dataUrl' in value &&
-    typeof value.dataUrl === 'string',
+    typeof value.dataUrl === 'string'
   );
+}
+
+function normalizeHandout(handout?: Handout): Handout | undefined {
+  if (handout?.kind !== 'text') return handout;
+  const text = handout.text.trim();
+  return text ? { kind: 'text', text } : undefined;
 }
 
 export function createEmptyGamePackage(): GamePackage {
@@ -80,23 +97,26 @@ function serializeGamePackageJson(gamePackage: GamePackage): string {
     {
       ...gamePackage,
       title: gamePackage.title.trim(),
-      questions: gamePackage.questions.map((question) => ({
-        question: question.question.trim(),
-        answer: question.answer.trim(),
-        ...(question.answerComment?.trim()
-          ? { answerComment: question.answerComment.trim() }
-          : {}),
-        alternativeAnswers: question.alternativeAnswers
-          .map((answer) => answer.trim())
-          .filter(Boolean),
-        ...(question.handout ? { handout: question.handout } : {}),
-        ...(question.comment?.trim()
-          ? { comment: question.comment.trim() }
-          : {}),
-        ...(question.hostNotes?.trim()
-          ? { hostNotes: question.hostNotes.trim() }
-          : {}),
-      })),
+      questions: gamePackage.questions.map((question) => {
+        const handout = normalizeHandout(question.handout);
+        return {
+          question: question.question.trim(),
+          answer: question.answer.trim(),
+          ...(question.answerComment?.trim()
+            ? { answerComment: question.answerComment.trim() }
+            : {}),
+          alternativeAnswers: question.alternativeAnswers
+            .map((answer) => answer.trim())
+            .filter(Boolean),
+          ...(handout ? { handout } : {}),
+          ...(question.comment?.trim()
+            ? { comment: question.comment.trim() }
+            : {}),
+          ...(question.hostNotes?.trim()
+            ? { hostNotes: question.hostNotes.trim() }
+            : {}),
+        };
+      }),
     },
     null,
     2,

@@ -1,11 +1,11 @@
 import './styles.scss';
 
-import type { Handout } from '@schdk/common';
+import type { ImageHandout } from '@schdk/common';
 import { Button } from '../../atoms/Button';
 import { ZoomableImage } from '../ZoomableImage';
 
 export interface HandoutPreviewProps {
-  handout: Handout;
+  handout: ImageHandout;
   onRemove(): void;
 }
 

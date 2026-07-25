@@ -722,6 +722,17 @@ body {
     margin-top: 10px;
   }
 
+  .handout-text-editor {
+    display: grid;
+    justify-items: start;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .handout-text-editor label {
+    width: min(100%, 640px);
+  }
+
   .handout-thumbnail {
     display: block;
     overflow: hidden;
