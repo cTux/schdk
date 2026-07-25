@@ -71,7 +71,19 @@ export function App({
       setRecentPackages(
         window.desktop
           ? (await window.desktop.listRecentGamePackages()).map(
-              ({ filePath: id, fileName: name }) => ({ id, name }),
+              ({ filePath: id, fileName: name, content }) => {
+                try {
+                  const gamePackage = parseGamePackage(content);
+                  return {
+                    id,
+                    name,
+                    title: gamePackage.title,
+                    ready: validateGamePackage(gamePackage).length === 0,
+                  };
+                } catch {
+                  return { id, name };
+                }
+              },
             )
           : await listRecentWebPackages(),
       );

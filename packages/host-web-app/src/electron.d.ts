@@ -14,7 +14,11 @@ declare global {
         file: File,
       ): Promise<{ filePath: string; content: Uint8Array }>;
       listRecentGamePackages(): Promise<
-        Array<{ filePath: string; fileName: string }>
+        Array<{
+          filePath: string;
+          fileName: string;
+          content: Uint8Array;
+        }>
       >;
       openRecentGamePackage(filePath: string): Promise<{
         filePath: string;
