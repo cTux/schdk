@@ -36,6 +36,7 @@ V5|Browser and desktop package workflows remain Drive-backed after import.
 V6|Desktop OAuth tokens stay in Electron main and never cross renderer IPC.
 V7|Every prompt that changes shipped behavior creates or updates affected feature contracts before verification.
 V8|AI API keys persist only in the current Google account's separate Drive app data; desktop renderer IPC exposes only save, remove, and configured status.
+V9|Package-folder discovery and restorable editor/host state never cross connected Google accounts.
 
 ## §T
 
@@ -56,3 +57,4 @@ B7|2026-07-26|The new settings deep-link hook used a multiline import that diffe
 B8|2026-07-26|The Google login button replaced its gradient and border on hover, causing a visible flash|Keep its visual treatment stable across pointer hover.
 B9|2026-07-26|The configured AI key field looked empty and its success status inherited muted text styling|Show a fixed mask without reading the stored key and use the existing success color token.
 B10|2026-07-26|Activity-based token renewal pushed the browser Drive module past the enforced source-file limit|Split Google Identity Services loading into a focused browser module.
+B11|2026-07-26|The Drive client retained a package-folder ID and mounted editor/host state across account changes|V9

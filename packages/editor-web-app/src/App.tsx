@@ -27,6 +27,7 @@ export function App({
   drive,
   driveActive = false,
   manageDocumentTitle = true,
+  sessionScope = window.location.pathname,
   textOptions = DEFAULT_EDITOR_TEXT_OPTIONS,
   onDriveFailure,
 }: AppProps = {}) {
@@ -49,7 +50,7 @@ export function App({
   );
   const initialDesktopSession = useRef(
     window.desktop
-      ? loadDesktopEditorSession(localStorage, window.location.pathname)
+      ? loadDesktopEditorSession(localStorage, sessionScope)
       : null,
   );
   const [desktopSessionReady, setDesktopSessionReady] = useState(
@@ -113,6 +114,7 @@ export function App({
     manageDocumentTitle,
     saveQueue,
     saveStatus,
+    sessionScope,
     selectedIndex,
     onDriveFailure,
     setFileName,

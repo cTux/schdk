@@ -17,6 +17,10 @@
   references. Keep the package title in Drive file metadata so recents can show
   it without downloading package contents, and keep the Drive filename
   synchronized as the filesystem-safe title plus `.schdk`.
+- Discover the current account's existing app-marked package folder instead of
+  retaining a folder ID across authorization changes. Scope restorable editor
+  and host state by account, and remount it only when the connected account
+  changes; same-account authorization renewal keeps mounted state.
 - Gate the unified web and desktop application behind Google authorization.
   Do not mount application tools before the first successful connection; when
   authorization expires, keep mounted state inaccessible until reconnection.

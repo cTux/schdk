@@ -30,11 +30,11 @@ export function App({
   soundVolume = 0.05,
   drive,
   driveActive = false,
+  sessionScope = window.location.pathname,
   onDriveFailure,
 }: AppProps) {
   const { copy } = useLocalization();
   const { confirm, dialogProps } = useConfirmationDialog();
-  const sessionScope = window.location.pathname;
   const initialSession = useRef(
     (window.desktop ? null : getDeepLinkedHostSession(window.location.href)) ??
       loadHostSession(localStorage, sessionScope),

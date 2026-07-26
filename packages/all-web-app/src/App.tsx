@@ -196,18 +196,19 @@ export function App() {
         <div hidden={!connected}>
           <ShellView
             editorApp={
-              <Suspense fallback={null}>
+              <Suspense key={googleDrive.accountId} fallback={null}>
                 <EditorApp
                   drive={googleDrive.bridge ?? undefined}
                   driveActive={connected}
                   manageDocumentTitle={false}
                   onDriveFailure={() => void googleDrive.reportFailure()}
+                  sessionScope={`${window.location.pathname}:${googleDrive.accountId}`}
                   textOptions={editorOptions}
                 />
               </Suspense>
             }
             hostApp={
-              <Suspense fallback={null}>
+              <Suspense key={googleDrive.accountId} fallback={null}>
                 <HostApp
                   autoFullscreen={gameOptions.autoFullscreen}
                   backgroundImage={gameOptions.backgroundImage}
@@ -217,6 +218,7 @@ export function App() {
                   driveActive={connected}
                   layout={gameOptions.layout}
                   onDriveFailure={() => void googleDrive.reportFailure()}
+                  sessionScope={`${window.location.pathname}:${googleDrive.accountId}`}
                   soundVolume={gameOptions.soundVolume}
                   musicVolume={gameOptions.musicVolume}
                 />
