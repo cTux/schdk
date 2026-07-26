@@ -1,3 +1,5 @@
+import type { GameQuestionGenerationRequest } from '@schdk/ai';
+import type { GameQuestion } from '@schdk/common';
 import type {
   DriveAccount,
   DrivePackageStorage,
@@ -17,6 +19,9 @@ declare global {
       disconnect(): Promise<void>;
       hasAiApiKey(): Promise<boolean>;
       saveAiApiKey(apiKey: string | null): Promise<void>;
+      generateAiQuestion(
+        request: GameQuestionGenerationRequest,
+      ): Promise<GameQuestion>;
       loadSettings(): Promise<unknown | null>;
       saveSettings(settings: DriveSettingsDocument): Promise<void>;
     };

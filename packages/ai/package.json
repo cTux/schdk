@@ -1,5 +1,5 @@
 {
-  "name": "@schdk/common",
+  "name": "@schdk/ai",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -12,14 +12,21 @@
     "build": "tsc -p tsconfig.build.json",
     "lint": "oxlint -c ../../.oxlintrc.json src",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^4.0.20",
+    "@ai-sdk/google": "^4.0.24",
+    "@ai-sdk/openai": "^4.0.20",
+    "@schdk/common": "workspace:*",
+    "ai": "^7.0.37",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@types/json-schema": "^7.0.15",
+    "@types/node": "catalog:",
     "oxlint": "^1.75.0",
     "typescript": "catalog:",
     "vitest": "catalog:"
-  },
-  "dependencies": {
-    "fflate": "^0.8.3"
   }
 }

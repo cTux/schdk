@@ -20,8 +20,9 @@
   matching their declared MIME type. Keep application image CSP restricted to
   trusted application, embedded, blob, and Google-account image sources.
 - Keep every browser entry point on a default-deny CSP. Allow the unified shell
-  to connect only to Google GIS, Drive REST, and `models.dev`; standalone tools
-  remain same-origin except for embedded image and media content.
+  to connect only to Google GIS, Drive REST, `models.dev`, and the registered
+  OpenAI, Anthropic, and Google generation endpoints; standalone tools remain
+  same-origin except for embedded image and media content.
 - Deny new-window requests and block navigation from all desktop renderers.
 - The unified application bundles only trusted first-party host, editor, and
   shell code in one renderer. Expose the same narrow, validated editor bridge
@@ -35,8 +36,9 @@
   authenticated requests through IPC.
 - Keep AI API keys in a separate app-data file owned by the current Google
   account, never in local browser persistence or synchronized settings.
-  Desktop renderer IPC may query only whether a key exists and may replace or
-  remove it; never return the stored value.
+  Desktop renderer IPC may query only whether a key exists, replace or remove
+  it, and request validated generation. Generation loads the key in Electron
+  main and returns only the parsed question; never return the stored value.
 - Keep the installed-app OAuth client secret in the Electron main process. It
   is loaded from an ignored packaged resource, distributed with the desktop
   app, and must never be committed, treated as a security boundary, or exposed

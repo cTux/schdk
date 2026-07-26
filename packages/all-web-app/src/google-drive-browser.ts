@@ -195,6 +195,12 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
     return this.client.saveAiApiKey(apiKey);
   }
 
+  async generateAiQuestion(request: GameQuestionGenerationRequest) {
+    const apiKey = await this.client.loadAiApiKey();
+    if (!apiKey) throw new Error('AI API key is not configured');
+    return generateGameQuestion({ ...request, apiKey });
+  }
+
   loadSettings() {
     return this.client.loadSettings();
   }
@@ -228,3 +234,7 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
     return this.client.loadGamePackage(fileId);
   }
 }
+import {
+  generateGameQuestion,
+  type GameQuestionGenerationRequest,
+} from '@schdk/ai';

@@ -37,6 +37,20 @@ const editorApi = {
       ipcRenderer.invoke('has-google-drive-ai-api-key'),
     saveAiApiKey: (apiKey: string | null): Promise<void> =>
       ipcRenderer.invoke('save-google-drive-ai-api-key', apiKey),
+    generateAiQuestion: (request: {
+      provider: string;
+      model: string;
+      locale: 'uk' | 'en';
+      template: {
+        name: string;
+        description: string;
+        goodExamples: string;
+        badExamples: string;
+        enabled: boolean;
+        favorite: boolean;
+      };
+      context: string;
+    }) => ipcRenderer.invoke('generate-ai-question', request),
     loadSettings: () => ipcRenderer.invoke('load-google-drive-settings'),
     saveSettings: (settings: unknown) =>
       ipcRenderer.invoke('save-google-drive-settings', settings),

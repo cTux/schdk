@@ -47,9 +47,10 @@
   recent-path, or autosave IPC. Do not enable Node integration for renderer
   content or subframes.
 - Keep user AI API keys in the current Google account's separate Drive app
-  data. Expose only save, remove, and configured-status operations to the
-  renderer; migrate and remove a legacy `safeStorage` key only after a
-  successful Drive write.
+  data. Expose only save, remove, configured-status, and validated question
+  generation operations to the renderer. Run generation in Electron main and
+  return only the parsed question; migrate and remove a legacy `safeStorage`
+  key only after a successful Drive write.
 - Keep local Windows packaging on electron-builder's unpacked `dir` target
   under `dist/release/win-unpacked`. Release packaging produces versioned x64
   NSIS installer and portable executable assets.

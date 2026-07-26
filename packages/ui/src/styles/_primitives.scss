@@ -125,8 +125,7 @@
   margin-top: $space-3;
 }
 
-.ui-popover input,
-.ui-popover textarea {
+.ui-popover input {
   border: 1px solid $border-strong;
   border-radius: 8px;
   background: rgba($background-rgb, 0.72);
@@ -134,12 +133,9 @@
   font: inherit;
 }
 
-.ui-popover textarea {
-  width: 100%;
+.ui-popover .ui-textarea {
   min-height: 84px;
   margin-top: $space-2;
-  padding: $space-2;
-  resize: vertical;
 }
 
 .action-toolbar {

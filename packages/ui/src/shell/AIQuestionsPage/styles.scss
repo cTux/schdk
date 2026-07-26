@@ -63,8 +63,7 @@
   font-weight: 400;
 }
 
-.ai-question-form input,
-.ai-question-form textarea {
+.ai-question-form input {
   width: 100%;
   border: 1px solid $border-strong;
   border-radius: $radius-control;
@@ -73,11 +72,9 @@
   padding: 10px 12px;
   color: $text;
   font: inherit;
-  resize: vertical;
 }
 
-.ai-question-form input:focus-visible,
-.ai-question-form textarea:focus-visible {
+.ai-question-form input:focus-visible {
   border-color: $accent;
   outline: $focus-width solid rgba($accent-rgb, 0.45);
   outline-offset: $focus-offset;

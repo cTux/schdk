@@ -12,6 +12,7 @@ import {
   ActionToolbarPopover,
   ActionToolbarSeparator,
 } from '../../../atoms/ActionToolbar';
+import { Textarea } from '../../../atoms/Textarea';
 import type { GameLayoutElementId } from '../../../options/types';
 import { ImagePositionSettings, TextSettings } from '../PositionSettings';
 import type { VisualEditorToolbarProps } from './types';
@@ -129,7 +130,7 @@ export function VisualEditorToolbar({
             <label htmlFor="visual-editor-custom-text">
               {copy.visualEditor.text}
             </label>
-            <textarea
+            <Textarea
               id="visual-editor-custom-text"
               maxLength={500}
               value={selectedCustom.text}

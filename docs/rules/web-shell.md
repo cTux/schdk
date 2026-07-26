@@ -30,10 +30,14 @@
   apply them to every unified application surface.
 - Keep locale selection in the first `App` settings group, before the `WWW`
   group; do not place it in the sidebar.
-- Populate AI provider and text-model choices from models.dev, with a small
-  built-in fallback. Keep the selected provider and model in local storage.
+- Populate the OpenAI, Anthropic, and Google text-model choices supported by
+  `@schdk/ai` from models.dev, with a small built-in fallback. Keep the selected
+  provider and model in local storage.
   Keep the AI API key in a separate app-data file for the current Google
   account; exclude it from local storage and synchronized Drive settings.
+- Generate questions through the current Drive bridge. The bridge loads the
+  saved key only for the selected provider call and returns a canonical
+  validated game question, never the key.
 - Show a localized Google login screen before mounting the unified tools.
   Authentication is mandatory on web and desktop; reconnect before restoring
   access after authorization expires.

@@ -27,8 +27,7 @@ import {
   saveShellLocale,
   saveShellTheme,
 } from './shell-preferences';
-import { useAIQuestions } from './ai-question-storage';
-import { useAiSettings } from './use-ai-settings';
+import { useAiQuestionTools } from './ai-question-generation';
 import { useGoogleDriveSettings } from './use-google-drive-settings';
 import { useSettingsDeepLink } from './use-settings-deep-link';
 
@@ -41,11 +40,11 @@ const EditorApp = lazy(() =>
 
 function getLinkedView(): ShellViewName | null {
   const url = new URL(window.location.href);
-  return (
+  const linkedView =
     getDeepLinkedShellView(url.href) ??
     (url.searchParams.has('hostPackage') ? 'host' : null) ??
-    (getDeepLinkedPackageName(url.href) ? 'editor' : null)
-  );
+    (getDeepLinkedPackageName(url.href) ? 'editor' : null);
+  return linkedView;
 }
 
 export function App() {
@@ -72,7 +71,6 @@ export function App() {
     loadGameOptions(localStorage),
   );
   const [gameOptionsError, setGameOptionsError] = useState('');
-  const aiQuestions = useAIQuestions(localStorage);
   const googleDrive = useGoogleDriveSettings({
     editorTextOptions: editorOptions,
     gameOptions,
@@ -81,13 +79,14 @@ export function App() {
   });
   const { connection } = googleDrive;
   const connected = connection.state === 'connected';
-  const ai = useAiSettings(
-    connected ? googleDrive.bridge : null,
-    connected ? connection.account.emailAddress : undefined,
+  const { ai, aiQuestions, aiGeneration } = useAiQuestionTools(
+    localStorage,
+    googleDrive.bridge ?? null,
+    connection,
+    locale,
   );
   const loginState = googleDrive.statusReady ? connection.state : 'connecting';
   const [unlocked, setUnlocked] = useState(connected);
-
   useEffect(() => setUnlocked((current) => current || connected), [connected]);
 
   useEffect(() => {
@@ -197,6 +196,7 @@ export function App() {
             editorApp={
               <Suspense key={googleDrive.accountId} fallback={null}>
                 <EditorApp
+                  aiGeneration={aiGeneration}
                   drive={googleDrive.bridge ?? undefined}
                   driveActive={connected}
                   manageDocumentTitle={false}

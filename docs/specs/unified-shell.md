@@ -43,9 +43,10 @@ package authoring, hosting, settings, and account state.
   in the card's top-right action area, and every change persists locally.
 - **SHL-12:** Artificial intelligence settings expose separate provider and
   model dropdowns plus a user API key. The dropdowns use the models.dev catalog
-  of text-generation providers and non-deprecated models, with a small built-in
-  fallback when the catalog is unavailable. Changing the provider selects its
-  default model; both selections persist locally. The API key persists in a
+  for the OpenAI, Anthropic, and Google providers supported by `@schdk/ai`,
+  with a small built-in fallback when the catalog is unavailable. Changing the
+  provider selects its default model; both selections persist locally. The API
+  key persists in a
   separate app-data file owned by the current Google account and never enters
   synchronized settings or local browser persistence. When configured, the
   empty key field shows a fixed mask without reading the stored value, and the
@@ -58,6 +59,8 @@ package authoring, hosting, settings, and account state.
   when hover begins or ends.
 - **SHL-15:** Pull requests load the production shell in a real headless browser
   and require the Google login view to render.
+- **SHL-16:** Every multiline shell field uses the shared non-resizable control
+  with the same chrome and interaction states as dropdowns.
 
 ## Invariants
 
@@ -92,3 +95,5 @@ package authoring, hosting, settings, and account state.
    a slightly lighter amber state without a background flash.
 9. Run pull-request checks and observe the production login shell render in
    headless Chrome.
+10. Open the Artificial intelligence form and confirm every multiline field
+    matches the shared dropdown styling without a resize handle.

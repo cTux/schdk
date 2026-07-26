@@ -1,9 +1,9 @@
 import classNames from 'classnames';
-import type { TextareaHTMLAttributes } from 'react';
 import { LOCALIZATION_COPY } from '../../localization';
+import { Textarea, type TextareaProps } from '../Textarea';
 
 export interface TextAreaFieldProps extends Omit<
-  TextareaHTMLAttributes<HTMLTextAreaElement>,
+  TextareaProps,
   'onChange' | 'value'
 > {
   invalid?: boolean;
@@ -27,7 +27,7 @@ export function TextAreaField({
   return (
     <label>
       {label} {optional && <span>{optionalLabel}</span>}
-      <textarea
+      <Textarea
         {...props}
         className={classNames(className, { invalid }) || undefined}
         value={value}

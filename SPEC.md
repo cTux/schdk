@@ -25,6 +25,7 @@ I.template|Portable visual layout|`.schdk-template`
 I.web|Unified browser application|`@schdk/all-web-app`
 I.desktop|Windows application|`@schdk/all-desktop-app`
 I.drive|Package and settings persistence|Google Drive
+I.ai|Structured question generation|`@schdk/ai`
 I.pages|Hosted browser application|GitHub Pages
 I.release|Versioned Windows distribution|GitHub Releases
 
@@ -37,7 +38,7 @@ V4|Pre-game hosting never exposes question, answer, comment, or host-note text.
 V5|Browser and desktop package workflows remain Drive-backed after import.
 V6|Desktop OAuth tokens stay in Electron main and never cross renderer IPC.
 V7|Every prompt that changes shipped behavior creates or updates affected feature contracts before verification.
-V8|AI API keys persist only in the current Google account's separate Drive app data; desktop renderer IPC exposes only save, remove, and configured status.
+V8|AI API keys persist only in the current Google account's separate Drive app data; desktop renderer IPC exposes only save, remove, configured status, and validated generation without returning the key.
 V9|Package-folder discovery and restorable editor/host state never cross connected Google accounts.
 V10|Package handout images remain embedded and cannot trigger external image requests.
 V11|Package imports enforce bounded archive and entry sizes before ZIP extraction.
@@ -49,6 +50,8 @@ V16|Windows GitHub Releases contain only Authenticode-valid executables.
 V17|Third-party GitHub Actions execute only from reviewed immutable commit SHAs.
 V18|Pull requests execute the production browser shell and packaged Electron renderer before their required checks pass.
 V19|The browser warns before unloading a package whose current changes are not saved.
+V20|AI output is validated as a complete game question before it can replace editor fields.
+V21|Every multiline text input uses the shared non-resizable `Textarea` control.
 
 ## §T
 
@@ -92,3 +95,8 @@ B30|2026-07-26|Adding AI page copy inline pushed both locale modules past the en
 B31|2026-07-26|The AI form relied on the shared textarea's Ukrainian optional-label default in English locale|Pass the active locale's optional label explicitly; C5 and SHL-5 already define the localization contract.
 B32|2026-07-26|The generic button hover background overrode amber primary actions with the dark surface color|V12
 B33|2026-07-26|AI question updates used an ES2023 array method outside the browser application's configured library target|Use the existing target-compatible array mapping pattern; typechecking covers recurrence.
+B34|2026-07-26|The AI SDK declarations referenced Node and JSON Schema types that the new package did not include|Declare the ambient type packages explicitly; package typechecking covers recurrence.
+B35|2026-07-26|The new NodeNext desktop consumer exposed extensionless relative exports in the shared package|Use runtime-correct `.js` specifiers in shared ESM exports; desktop typechecking covers recurrence.
+B36|2026-07-26|OpenAI rejected handout discriminator schemas without an explicit JSON type|Provider-bound discriminator schemas declare both `type` and `enum`; a live Responses API request covers recurrence.
+B37|2026-07-26|The packaged desktop application omitted the AI SDK's `zod` peer dependency and crashed before its smoke test could run|Declare `zod` as a direct `@schdk/ai` runtime dependency; V18's packaged Electron smoke test covers recurrence.
+B38|2026-07-26|The packaged AI runtime resolved `@schdk/common` to TypeScript source under `node_modules`|Expose the built JavaScript as the package's default export while preserving source exports for types and development; V18 covers recurrence.

@@ -12,8 +12,10 @@ import { QuestionEditorHeader } from '../QuestionEditorHeader';
 import { QuestionHandoutField } from '../QuestionHandoutField';
 import { QuestionNavigation } from '../QuestionNavigation';
 import { QuestionRemarkField } from '../QuestionRemarkField';
+import type { AiQuestionGenerationOptions } from '../types';
 
 export interface QuestionEditorProps {
+  aiGeneration?: AiQuestionGenerationOptions;
   question: GameQuestion;
   selectedIndex: number;
   showValidation: boolean;
@@ -30,6 +32,7 @@ export interface QuestionEditorProps {
 }
 
 export function QuestionEditor({
+  aiGeneration,
   question,
   selectedIndex,
   showValidation,
@@ -60,7 +63,9 @@ export function QuestionEditor({
   return (
     <section className="question-editor">
       <QuestionEditorHeader
+        aiGeneration={aiGeneration}
         questionNumber={selectedIndex + 1}
+        onGenerated={onChange}
         onCopy={onCopy}
         onPaste={onPaste}
       />

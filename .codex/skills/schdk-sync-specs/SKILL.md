@@ -25,8 +25,8 @@ description: Synchronize SCHDK feature specifications, the root project specific
 4. For a confirmed bug, append `§B` in `SPEC.md`; add a new `§V` invariant when
    it would catch recurrence. Update the feature contract when externally
    observable behavior changes.
-5. Keep implementation plans in `docs/TODO.md`, package schema in
-   `docs/GAME_PACKAGE.md`, and detailed shipped behavior in `docs/specs`.
+5. Keep package schema in `docs/GAME_PACKAGE.md` and detailed shipped behavior
+   in `docs/specs`.
 6. Run before `$schdk-quality` and commit. State the specification files
    changed, or state that review found no contract change.
 

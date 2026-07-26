@@ -1,4 +1,5 @@
 export type {
+  AiQuestionGenerationOptions,
   EditorSaveStatus,
   EditorViewProps,
   RecentPackageItem,

@@ -1,0 +1,79 @@
+@use '../../styles/tokens' as *;
+
+.question-generation-backdrop {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  background: rgba($shadow-rgb, 0.72);
+  backdrop-filter: blur(3px);
+}
+
+.question-generation-viewport {
+  position: fixed;
+  z-index: 1001;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $space-4;
+}
+
+.question-generation-popup {
+  display: flex;
+  width: min(560px, 100%);
+  max-height: calc(100dvh - #{$space-8});
+  flex-direction: column;
+  gap: $space-4;
+  overflow: auto;
+  border: 1px solid $border-strong;
+  border-radius: $radius-panel;
+  background: $surface-raised;
+  padding: $space-6;
+  box-shadow: $shadow-overlay;
+  color: $text;
+}
+
+.question-generation-title,
+.question-generation-description,
+.question-generation-message,
+.question-generation-error {
+  margin: 0;
+}
+
+.question-generation-description,
+.question-generation-message {
+  color: $muted;
+}
+
+.question-generation-popup label {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  font-weight: 700;
+}
+
+.question-generation-popup .ui-dropdown,
+.question-generation-popup .ui-dropdown-select {
+  width: 100%;
+}
+
+.question-generation-error {
+  color: $danger;
+}
+
+.question-generation-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $space-2;
+}
+
+@media (width <= 420px) {
+  .question-generation-popup {
+    padding: $space-4;
+  }
+
+  .question-generation-actions {
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+}

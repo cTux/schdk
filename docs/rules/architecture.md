@@ -4,6 +4,8 @@
 
 - `@schdk/common` owns the game-package types, constants, parser, serializer,
   and readiness validation. It must not depend on UI or platform code.
+- `@schdk/ai` owns provider setup, localized generation prompts, structured
+  response validation, and conversion to the canonical game-question type.
 - `@schdk/ui` owns components, composed views, styles, design tokens, UI
   assets, Ukrainian/English application copy and locale context, and UI rules.
   Its detailed rules live in
@@ -40,6 +42,9 @@
 - Editor and host applications may consume the platform-neutral package
   storage contract from `@schdk/google-drive`; they must not own authorization
   or tokens.
+- Browser and Electron generation adapters call `@schdk/ai`; they load the
+  account-scoped key internally and never expose it as renderer state or IPC
+  output.
 - Prefer shared ownership over copied implementations: data contracts belong
   in `common`, visuals in `ui`, browser behavior in web apps, and operating
   system integration in desktop apps.

@@ -1,4 +1,5 @@
 import { Models, type ProviderMap } from '@opencode-ai/models';
+import { isSupportedAiProvider } from '@schdk/ai';
 import type { AiOptions, AiProviderOption } from '@schdk/ui/options';
 import { useEffect, useState } from 'react';
 import type { GoogleDriveBridge } from './google-drive-types';
@@ -37,6 +38,7 @@ const FALLBACK_PROVIDERS: AiProviderOption[] = [
 
 function toProviderOptions(providers: ProviderMap): AiProviderOption[] {
   return Object.values(providers)
+    .filter(({ id }) => isSupportedAiProvider(id))
     .map(({ id, name, models }) => ({
       id,
       name,

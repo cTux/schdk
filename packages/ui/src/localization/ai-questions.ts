@@ -44,3 +44,5 @@ export const aiQuestionsCopy = {
     empty: 'No question kinds have been added yet.',
   },
 };
+
+export { questionGenerationCopy } from './question-generation';
