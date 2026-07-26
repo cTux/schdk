@@ -16,3 +16,4 @@
 - [Формат `.schdk`](guide/schdk-format.md)
 - [Усунення проблем](guide/troubleshooting.md)
 - [Стан проєкту та ліцензія](guide/project-status-and-license.md)
+- [Специфікації реалізованих функцій](specs/README.md)

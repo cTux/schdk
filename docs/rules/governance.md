@@ -41,6 +41,9 @@
   `docs/guide`.
 - Keep `docs/README.md` as the Ukrainian documentation index. Keep each
   top-level topic in its own file under `docs/guide`.
+- Keep shipped feature acceptance contracts under `docs/specs`, indexed by
+  `docs/specs/README.md`. Update the affected specification whenever product
+  behavior changes; do not use feature specifications as a roadmap.
 - Keep code identifiers, code comments, package metadata, developer documents,
   and rule documents in English.
 - Keep user-visible application copy in Ukrainian unless a feature explicitly
