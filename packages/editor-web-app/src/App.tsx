@@ -1,5 +1,6 @@
 import {
   createEmptyGamePackage,
+  MAX_MUSIC_BREAK_BYTES,
   parseGamePackage,
   type GamePackage,
 } from '@schdk/common';
@@ -180,6 +181,7 @@ export function App({
             return;
           }
           if (
+            file.size > MAX_MUSIC_BREAK_BYTES ||
             !file.type.startsWith('audio/') ||
             !new Audio().canPlayType(file.type)
           ) {

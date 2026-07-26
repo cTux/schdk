@@ -15,5 +15,6 @@
   save dialog leaves the start screen unchanged.
 - Validate selected image handouts and their generated data URLs before
   changing package state.
+- Reject oversized music breaks before reading them into memory.
 - Keep each filename synchronized with its filesystem-safe package title and
   the `.schdk` extension.

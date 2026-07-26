@@ -9,10 +9,10 @@ import {
 export const QUESTION_COUNT = 36;
 export const QUESTIONS_PER_ROUND = 12;
 export const MAX_GAME_PACKAGE_BYTES = 160 * 1024 * 1024;
+export const MAX_MUSIC_BREAK_BYTES = 64 * 1024 * 1024;
 const PACKAGE_ENTRY = 'game.json';
 const MUSIC_BREAK_ENTRIES = ['audio/break-1', 'audio/break-2'] as const;
 const MAX_GAME_JSON_BYTES = 16 * 1024 * 1024;
-const MAX_MUSIC_BREAK_BYTES = 64 * 1024 * 1024;
 
 export {
   QUESTION_TYPE_CONFIG,

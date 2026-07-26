@@ -16,8 +16,8 @@ without losing in-progress work.
 - **EDT-3:** Question type selection exposes one, two, or three question parts
   for standard, 2×30 blitz, or 3×20 blitz respectively.
 - **EDT-4:** Authors can add, replace, and remove text or validated image
-  handouts and the two between-round audio files. Non-image selections never
-  mutate package state.
+  handouts and the two between-round audio files. Invalid handouts and
+  oversized audio selections never mutate package state.
 - **EDT-5:** Authors can copy a complete question as JSON and replace another
   question from parsed clipboard JSON after confirmation.
 - **EDT-6:** Dragging one question number onto another swaps the complete
@@ -61,3 +61,5 @@ without losing in-progress work.
    completes.
 6. Select a file without an image MIME type and observe it rejected without
    changing or autosaving the current handout.
+7. Select a music break above the package entry limit and observe it rejected
+   before the file is read.
