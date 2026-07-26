@@ -5,6 +5,7 @@ export interface AppProps {
   drive?: DrivePackageStorage;
   driveActive?: boolean;
   manageDocumentTitle?: boolean;
+  sessionScope?: string;
   textOptions?: EditorTextOptions;
   onDriveFailure?(): void;
 }

@@ -37,14 +37,16 @@ function isHandout(value: unknown): value is Handout {
   if ('kind' in value && value.kind === 'text') {
     return 'text' in value && typeof value.text === 'string';
   }
+  const mimeType = 'mimeType' in value ? value.mimeType : undefined;
+  const dataUrl = 'dataUrl' in value ? value.dataUrl : undefined;
   return (
     (!('kind' in value) || value.kind === 'image') &&
     'name' in value &&
     typeof value.name === 'string' &&
-    'mimeType' in value &&
-    typeof value.mimeType === 'string' &&
-    'dataUrl' in value &&
-    typeof value.dataUrl === 'string'
+    typeof mimeType === 'string' &&
+    mimeType.startsWith('image/') &&
+    typeof dataUrl === 'string' &&
+    dataUrl.startsWith(`data:${mimeType};base64,`)
   );
 }
 

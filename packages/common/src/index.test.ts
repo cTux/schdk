@@ -1,3 +1,4 @@
+import { zipSync } from 'fflate';
 import { describe, expect, it } from 'vitest';
 import {
   createEmptyGamePackage,
@@ -91,6 +92,15 @@ describe('game package rules', () => {
     ).toEqual([null, null]);
   });
 
+  it('rejects oversized ZIP entries before expanding them', () => {
+    const zipBomb = zipSync(
+      { 'game.json': new Uint8Array(16 * 1024 * 1024 + 1) },
+      { level: 9 },
+    );
+
+    expect(() => parseGamePackage(zipBomb)).toThrow('Invalid game package');
+  });
+
   it('parses clipboard questions with every supported field', () => {
     const question = {
       type: 'standard' as const,
@@ -111,6 +121,21 @@ describe('game package rules', () => {
     expect(parseGameQuestion(JSON.parse(JSON.stringify(question)))).toEqual(
       question,
     );
+    expect(() =>
+      parseGameQuestion({
+        ...question,
+        handout: { ...question.handout, dataUrl: 'https://example.com/pixel' },
+      }),
+    ).toThrow('Invalid game question');
+    expect(() =>
+      parseGameQuestion({
+        ...question,
+        handout: {
+          ...question.handout,
+          mimeType: 'image/jpeg',
+        },
+      }),
+    ).toThrow('Invalid game question');
     expect(() => parseGameQuestion({ ...question, hostNotes: 42 })).toThrow(
       'Invalid game question',
     );

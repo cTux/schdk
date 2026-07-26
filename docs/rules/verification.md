@@ -15,10 +15,11 @@
   fail.
 - Keep pure logic outside React/Electron objects when that makes it directly
   testable.
-- Run all tests and the root build in dedicated `tests` and `build` GitHub
-  Actions jobs for every pull request. Treat both checks as required project
-  policy, configure branch protection when repository settings support it, and
-  do not merge until both are green.
+- Run formatting, linting, typechecking, and tests in the pull-request `tests`
+  job. Run the root build and Windows desktop packaging in a
+  `windows-latest` `build` job. Treat both checks as required project policy,
+  configure branch protection when repository settings support it, and do not
+  merge until both are green.
 - Build workspace dependencies before testing their consumers so fresh clones
   can resolve packages that intentionally export compiled output.
 - Before committing, run `pnpm fmt:check`, `pnpm lint`, `pnpm typecheck`,

@@ -36,6 +36,9 @@ preserving recoverable local state during temporary Drive failures.
   `ai-credentials-v1.json` file in the current account's `appDataFolder`; it
   never enters the locally cached settings document.
 - **DRV-12:** The Google login action remains visually stable on pointer hover.
+- **DRV-13:** Each connected account reuses its own existing app-marked
+  `SCHDK` folder, never a folder ID or mounted editor/host state retained from
+  another account.
 
 ## Invariants
 
@@ -47,6 +50,8 @@ preserving recoverable local state during temporary Drive failures.
   reconnection.
 - Settings conflicts resolve per section, not by replacing the whole document.
 - AI credentials remain scoped to the connected Google account.
+- Package-folder discovery and restorable editor/host state remain scoped to
+  the connected Google account.
 
 ## Acceptance
 
@@ -62,3 +67,6 @@ preserving recoverable local state during temporary Drive failures.
 5. Save an AI API key, reconnect to the same account and observe configured
    status, then connect another account and observe no key from the first.
 6. Hover the Google login action and observe no background or border flash.
+7. Connect account A, create a package, switch to account B, then reconnect
+   account A and observe A's original package folder, recents, and restorable
+   editor/host state without content from B.

@@ -41,6 +41,7 @@ export function useGoogleDriveSettings({
   const [connection, setConnection] = useState<GoogleDriveConnection>(
     bridge ? { state: 'disconnected' } : { state: 'unavailable' },
   );
+  const [accountId, setAccountId] = useState<string>();
   const [statusReady, setStatusReady] = useState(!bridge);
   const [revision, setRevision] = useState(0);
   const settings = useRef(
@@ -105,6 +106,7 @@ export function useGoogleDriveSettings({
         if (status.state === 'unavailable') {
           setConnection({ state: 'unavailable' });
         } else if (status.state === 'connected' && status.account) {
+          setAccountId(status.account.emailAddress);
           setConnection({ state: 'connected', account: status.account });
           enqueueSyncEvent();
         }
@@ -157,6 +159,7 @@ export function useGoogleDriveSettings({
     setConnection({ state: 'connecting' });
     try {
       const account = await bridge.connect();
+      setAccountId(account.emailAddress);
       setConnection({ state: 'connected', account });
       await enqueueSync();
     } catch {
@@ -180,6 +183,7 @@ export function useGoogleDriveSettings({
 
   return {
     bridge,
+    accountId,
     connection,
     statusReady,
     connect,

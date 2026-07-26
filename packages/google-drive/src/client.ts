@@ -39,8 +39,6 @@ export class GoogleDriveClient implements DrivePackageStorage {
   private readonly appData = new GoogleDriveAppData((input, init) =>
     this.request(input, init),
   );
-  private packageFolderId?: string;
-  private gamePackagesRequest?: Promise<DriveGamePackageFile[]>;
   constructor(private readonly getAccessToken: () => Promise<string>) {}
 
   async getAccount(): Promise<DriveAccount> {
@@ -107,16 +105,6 @@ export class GoogleDriveClient implements DrivePackageStorage {
   }
 
   async listGamePackages(): Promise<DriveGamePackageFile[]> {
-    if (this.gamePackagesRequest) return this.gamePackagesRequest;
-    this.gamePackagesRequest = this.fetchGamePackages();
-    try {
-      return await this.gamePackagesRequest;
-    } finally {
-      this.gamePackagesRequest = undefined;
-    }
-  }
-
-  private async fetchGamePackages(): Promise<DriveGamePackageFile[]> {
     const folderId = await this.ensurePackageFolder();
     const query = new URLSearchParams({
       spaces: 'drive',
@@ -192,7 +180,6 @@ export class GoogleDriveClient implements DrivePackageStorage {
   }
 
   private async ensurePackageFolder() {
-    if (this.packageFolderId) return this.packageFolderId;
     const query = new URLSearchParams({
       spaces: 'drive',
       q: `mimeType = '${DRIVE_FOLDER_MIME_TYPE}' and trashed = false and appProperties has { key='${DRIVE_APP_KIND_KEY}' and value='${DRIVE_FOLDER_KIND}' }`,
@@ -202,10 +189,7 @@ export class GoogleDriveClient implements DrivePackageStorage {
     const response = await this.request(`${DRIVE_API}/files?${query}`);
     const value = (await response.json()) as { files?: DriveFile[] };
     const existing = value.files?.[0]?.id;
-    if (isDriveFileId(existing)) {
-      this.packageFolderId = existing;
-      return existing;
-    }
+    if (isDriveFileId(existing)) return existing;
     const createdResponse = await this.request(`${DRIVE_API}/files?fields=id`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -219,7 +203,6 @@ export class GoogleDriveClient implements DrivePackageStorage {
     if (!isDriveFileId(created.id)) {
       throw new Error('Google Drive package folder is unavailable');
     }
-    this.packageFolderId = created.id;
     return created.id;
   }
 

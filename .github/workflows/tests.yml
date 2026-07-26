@@ -9,8 +9,8 @@ permissions:
 jobs:
   build:
     name: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+    runs-on: windows-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -37,4 +37,7 @@ jobs:
           node-version: 25.9.0
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm fmt:check
+      - run: pnpm lint
+      - run: pnpm typecheck
       - run: pnpm test

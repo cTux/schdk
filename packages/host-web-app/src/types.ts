@@ -11,5 +11,6 @@ export interface AppProps {
   soundVolume?: number;
   drive?: DrivePackageStorage;
   driveActive?: boolean;
+  sessionScope?: string;
   onDriveFailure?(): void;
 }
