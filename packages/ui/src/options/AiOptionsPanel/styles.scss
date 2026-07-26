@@ -16,6 +16,29 @@
   outline-offset: 2px;
 }
 
+.ai-model-selects {
+  display: flex;
+  gap: 8px;
+}
+
+.ai-model-selects label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ai-model-selects .ui-dropdown {
+  min-width: 0;
+}
+
+.ai-provider-select .ui-dropdown {
+  width: 150px;
+}
+
+.ai-model-select .ui-dropdown {
+  width: 210px;
+}
+
 .ai-api-key-control {
   display: flex;
   flex-wrap: wrap;
@@ -36,5 +59,14 @@
   .ai-options input {
     width: 100%;
     min-width: 0;
+  }
+
+  .ai-model-selects {
+    flex-direction: column;
+  }
+
+  .ai-provider-select .ui-dropdown,
+  .ai-model-select .ui-dropdown {
+    width: 100%;
   }
 }

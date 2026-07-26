@@ -2,12 +2,15 @@ import './styles.scss';
 
 import { useState } from 'react';
 import { Button } from '../../atoms/Button';
+import { Dropdown } from '../../atoms/Dropdown';
 import { useLocalization } from '../../localization';
+import { AI_MODELS, AI_PROVIDERS, type AiProvider } from '../types';
 import type { AiOptionsPanelProps } from './types';
 
 export function AiOptionsPanel({
   options,
-  onProviderModelChange,
+  onProviderChange,
+  onModelChange,
   onApiKeySave,
 }: AiOptionsPanelProps) {
   const { copy } = useLocalization();
@@ -30,18 +33,42 @@ export function AiOptionsPanel({
 
   return (
     <section className="ai-options">
-      <label className="option-select">
+      <div className="option-select">
         <span>
           <strong>{copy.settings.aiProviderModel}</strong>
           <small>{copy.settings.aiProviderModelDescription}</small>
         </span>
-        <input
-          type="text"
-          value={options.providerModel}
-          spellCheck={false}
-          onChange={(event) => onProviderModelChange(event.target.value)}
-        />
-      </label>
+        <div className="ai-model-selects">
+          <label className="ai-provider-select">
+            <small>{copy.settings.aiProvider}</small>
+            <Dropdown
+              value={options.provider}
+              onChange={(event) =>
+                onProviderChange(event.target.value as AiProvider)
+              }
+            >
+              {AI_PROVIDERS.map((provider) => (
+                <option key={provider} value={provider}>
+                  {copy.settings.aiProviders[provider]}
+                </option>
+              ))}
+            </Dropdown>
+          </label>
+          <label className="ai-model-select">
+            <small>{copy.settings.aiModel}</small>
+            <Dropdown
+              value={options.model}
+              onChange={(event) => onModelChange(event.target.value)}
+            >
+              {AI_MODELS[options.provider].map((model) => (
+                <option key={model} value={model}>
+                  {model}
+                </option>
+              ))}
+            </Dropdown>
+          </label>
+        </div>
+      </div>
       <form
         className="option-select"
         onSubmit={(event) => {

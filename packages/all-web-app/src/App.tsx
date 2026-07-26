@@ -230,7 +230,8 @@ export function App() {
             view={view}
             onEditorOptionsChange={googleDrive.setEditorTextOptions}
             onAiApiKeySave={ai.saveApiKey}
-            onAiProviderModelChange={ai.setProviderModel}
+            onAiModelChange={ai.setModel}
+            onAiProviderChange={ai.setProvider}
             onGameOptionsChange={googleDrive.setGameOptions}
             onGoogleDriveConnect={() => void googleDrive.connect()}
             onGoogleDriveDisconnect={() => void googleDrive.disconnect()}

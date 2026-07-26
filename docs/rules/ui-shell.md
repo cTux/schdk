@@ -9,6 +9,8 @@
 - Keep the native Ukrainian/English language control in the first `App`
   settings tab. Keep `WWW` as the second primary tab with its host/editor
   secondary tabs and `Штучний інтелект` as the third primary tab.
+- Keep AI provider and model as separate dropdowns; changing the provider
+  refreshes the available models.
 - Keep the localized Google Drive connection and sync status in the first
   `App` settings tab, using the existing settings-row and button patterns.
 - Keep a localized reference to every custom keyboard shortcut in the first

@@ -9,6 +9,7 @@ import { OptionsPage } from '../../options/OptionsPage';
 import type { GoogleDriveState } from '../../options/OptionsPage';
 import type {
   AiOptions,
+  AiProvider,
   AppTheme,
   EditorTextOptions,
   GameOptions,
@@ -31,7 +32,8 @@ export interface ShellViewProps {
   theme: AppTheme;
   view: ShellViewName;
   onAiApiKeySave(apiKey: string | null): Promise<void>;
-  onAiProviderModelChange(providerModel: string): void;
+  onAiModelChange(model: string): void;
+  onAiProviderChange(provider: AiProvider): void;
   onEditorOptionsChange(options: EditorTextOptions): void;
   onGameOptionsChange(options: GameOptions): void;
   onGoogleDriveConnect(): void;
@@ -55,7 +57,8 @@ export function ShellView({
   theme,
   view,
   onAiApiKeySave,
-  onAiProviderModelChange,
+  onAiModelChange,
+  onAiProviderChange,
   onEditorOptionsChange,
   onGameOptionsChange,
   onGoogleDriveConnect,
@@ -85,7 +88,8 @@ export function ShellView({
             googleDriveState={googleDriveState}
             theme={theme}
             onAiApiKeySave={onAiApiKeySave}
-            onAiProviderModelChange={onAiProviderModelChange}
+            onAiModelChange={onAiModelChange}
+            onAiProviderChange={onAiProviderChange}
             onEditorChange={onEditorOptionsChange}
             onGameChange={onGameOptionsChange}
             onGoogleDriveConnect={onGoogleDriveConnect}

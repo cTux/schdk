@@ -1,12 +1,31 @@
-import type { AiOptions } from '@schdk/ui/options';
+import {
+  AI_MODELS,
+  AI_PROVIDERS,
+  DEFAULT_AI_MODEL,
+  DEFAULT_AI_PROVIDER,
+  type AiOptions,
+  type AiProvider,
+} from '@schdk/ui/options';
 import { useEffect, useState } from 'react';
 
-const PROVIDER_MODEL_KEY = 'schdk.ai.provider-model';
+const PROVIDER_KEY = 'schdk.ai.provider';
+const MODEL_KEY = 'schdk.ai.model';
 const API_KEY = 'schdk.ai.api-key';
-const DEFAULT_PROVIDER_MODEL = 'openai:gpt-5';
 
-function loadProviderModel() {
-  return localStorage.getItem(PROVIDER_MODEL_KEY) || DEFAULT_PROVIDER_MODEL;
+function loadProvider(): AiProvider {
+  const provider = localStorage.getItem(PROVIDER_KEY);
+  return AI_PROVIDERS.includes(provider as AiProvider)
+    ? (provider as AiProvider)
+    : DEFAULT_AI_PROVIDER;
+}
+
+function loadModel(provider: AiProvider) {
+  const model = localStorage.getItem(MODEL_KEY);
+  return (AI_MODELS[provider] as readonly string[]).includes(model ?? '')
+    ? model!
+    : provider === DEFAULT_AI_PROVIDER
+      ? DEFAULT_AI_MODEL
+      : AI_MODELS[provider][0];
 }
 
 function hasBrowserApiKey() {
@@ -14,10 +33,14 @@ function hasBrowserApiKey() {
 }
 
 export function useAiSettings() {
-  const [options, setOptions] = useState<AiOptions>(() => ({
-    providerModel: loadProviderModel(),
-    apiKeyConfigured: hasBrowserApiKey(),
-  }));
+  const [options, setOptions] = useState<AiOptions>(() => {
+    const provider = loadProvider();
+    return {
+      provider,
+      model: loadModel(provider),
+      apiKeyConfigured: hasBrowserApiKey(),
+    };
+  });
 
   useEffect(() => {
     const credentials = window.desktop?.aiCredentials;
@@ -34,9 +57,18 @@ export function useAiSettings() {
     };
   }, []);
 
-  function setProviderModel(providerModel: string) {
-    localStorage.setItem(PROVIDER_MODEL_KEY, providerModel);
-    setOptions((value) => ({ ...value, providerModel }));
+  function setProvider(provider: AiProvider) {
+    const model = AI_MODELS[provider][0];
+    localStorage.setItem(PROVIDER_KEY, provider);
+    localStorage.setItem(MODEL_KEY, model);
+    setOptions((value) => ({ ...value, provider, model }));
+  }
+
+  function setModel(model: string) {
+    if (!(AI_MODELS[options.provider] as readonly string[]).includes(model))
+      return;
+    localStorage.setItem(MODEL_KEY, model);
+    setOptions((value) => ({ ...value, model }));
   }
 
   async function saveApiKey(apiKey: string | null) {
@@ -54,5 +86,5 @@ export function useAiSettings() {
     }));
   }
 
-  return { options, setProviderModel, saveApiKey };
+  return { options, setProvider, setModel, saveApiKey };
 }

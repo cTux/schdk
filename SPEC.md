@@ -47,3 +47,4 @@ T2|x|Automate post-prompt specification sync|V1,V7,I.specs
 
 id|date|cause|fix
 B1|2026-07-26|New AI settings wiring missed existing lint contracts for unused imports and media range syntax|Remove the unused import and use context range notation.
+B2|2026-07-26|Equal dropdown widths truncated longer AI model names|Give the model dropdown more width while preserving the responsive stack.

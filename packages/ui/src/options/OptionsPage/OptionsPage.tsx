@@ -23,7 +23,8 @@ export function OptionsPage({
   hidden,
   theme,
   onAiApiKeySave,
-  onAiProviderModelChange,
+  onAiModelChange,
+  onAiProviderChange,
   onEditorChange,
   onGameChange,
   onGoogleDriveConnect,
@@ -231,7 +232,8 @@ export function OptionsPage({
         <AiOptionsPanel
           options={ai}
           onApiKeySave={onAiApiKeySave}
-          onProviderModelChange={onAiProviderModelChange}
+          onModelChange={onAiModelChange}
+          onProviderChange={onAiProviderChange}
         />
       </div>
     </div>

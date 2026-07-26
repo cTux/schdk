@@ -26,7 +26,15 @@ export const englishSettings: typeof ukrainianSettings = {
   googleDriveReconnectAction: 'Reconnect',
   googleDriveDisconnect: 'Disconnect',
   aiProviderModel: 'AI provider and model',
-  aiProviderModelDescription: 'An AI SDK identifier in provider:model format.',
+  aiProviderModelDescription:
+    'Choose an AI service and model for question generation.',
+  aiProvider: 'Provider',
+  aiModel: 'Model',
+  aiProviders: {
+    openai: 'OpenAI',
+    anthropic: 'Anthropic',
+    google: 'Google',
+  },
   aiApiKey: 'API key',
   aiApiKeyDescription:
     'The browser keeps the key until the tab closes; the desktop app uses encrypted operating-system storage.',

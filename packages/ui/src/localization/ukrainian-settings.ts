@@ -24,7 +24,14 @@ export const ukrainianSettings = {
   googleDriveDisconnect: 'Відключити',
   aiProviderModel: 'Провайдер і модель ШІ',
   aiProviderModelDescription:
-    'Ідентифікатор у форматі провайдер:модель для AI SDK.',
+    'Оберіть сервіс штучного інтелекту та модель для генерації запитань.',
+  aiProvider: 'Провайдер',
+  aiModel: 'Модель',
+  aiProviders: {
+    openai: 'OpenAI',
+    anthropic: 'Anthropic',
+    google: 'Google',
+  },
   aiApiKey: 'API-ключ',
   aiApiKeyDescription:
     'У браузері ключ зберігається до закриття вкладки; у настільному застосунку — у зашифрованому сховищі операційної системи.',
