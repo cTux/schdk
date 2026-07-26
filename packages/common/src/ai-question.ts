@@ -3,4 +3,6 @@ export interface AIQuestion {
   description: string;
   goodExamples: string;
   badExamples: string;
+  enabled: boolean;
+  favorite: boolean;
 }
