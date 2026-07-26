@@ -50,6 +50,10 @@
   flex: 1 1 220px;
 }
 
+.ai-options small.configured {
+  color: $success;
+}
+
 @media (width <= 640px) {
   .ai-options .option-select {
     align-items: stretch;

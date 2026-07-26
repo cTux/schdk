@@ -42,7 +42,9 @@ package authoring, hosting, settings, and account state.
   fallback when the catalog is unavailable. Changing the provider selects its
   default model; both selections persist locally. The API key persists in a
   separate app-data file owned by the current Google account and never enters
-  synchronized settings or local browser persistence.
+  synchronized settings or local browser persistence. When configured, the
+  empty key field shows a fixed mask without reading the stored value, and the
+  configured status is green.
 
 ## Invariants
 
