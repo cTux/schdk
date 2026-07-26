@@ -7,4 +7,5 @@ export * from './atoms/FileButton';
 export * from './atoms/IconButton';
 export * from './atoms/StatusMessage';
 export * from './atoms/TextAreaField';
+export * from './atoms/Textarea';
 export * from './atoms/Tooltip';

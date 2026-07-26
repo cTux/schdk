@@ -31,6 +31,8 @@ to every hosted question.
   game options such as volume.
 - **VIS-12:** Template imports reject archives and `template.json` entries
   larger than 16 MiB before allocating or extracting their content.
+- **VIS-13:** Custom text editing uses the shared non-resizable multiline
+  control.
 
 ## Invariants
 
@@ -53,3 +55,5 @@ to every hosted question.
    size.
 5. Reject an oversized or duplicate-entry template without freezing the
    application.
+6. Edit a custom text element and confirm its multiline control matches other
+   application text areas and has no native resize handle.

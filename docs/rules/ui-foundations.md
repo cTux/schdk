@@ -23,6 +23,9 @@
 - Every atom owns the base styles required to render correctly in isolation;
   composed-view styles may refine an atom but must not be its only styling
   source.
+- Render every multiline text input through the shared `Textarea` atom. Keep
+  its dropdown-aligned chrome and focus states consistent across surfaces and
+  do not expose native resize handles.
 - Define the complete light and dark color palettes in `styles/light.scss` and
   `styles/dark.scss`. Other SCSS files must consume those theme variables
   instead of declaring color values.

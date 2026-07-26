@@ -59,6 +59,8 @@ package authoring, hosting, settings, and account state.
   when hover begins or ends.
 - **SHL-15:** Pull requests load the production shell in a real headless browser
   and require the Google login view to render.
+- **SHL-16:** Every multiline shell field uses the shared non-resizable control
+  with the same chrome and interaction states as dropdowns.
 
 ## Invariants
 
@@ -93,3 +95,5 @@ package authoring, hosting, settings, and account state.
    a slightly lighter amber state without a background flash.
 9. Run pull-request checks and observe the production login shell render in
    headless Chrome.
+10. Open the Artificial intelligence form and confirm every multiline field
+    matches the shared dropdown styling without a resize handle.

@@ -45,6 +45,9 @@ without losing in-progress work.
   key the icon is disabled with an explanatory custom tooltip. Generation
   disables the complete modal, shows a thinking state, and on success replaces
   every generated question field before the modal resets and closes.
+- **EDT-17:** Every multiline package and generation field uses the same
+  non-resizable shared control with dropdown-aligned borders, surfaces, hover,
+  focus, and disabled states.
 
 ## Invariants
 
@@ -75,3 +78,5 @@ without losing in-progress work.
    key, generate from an enabled template and context, observe the blocked
    thinking state, and confirm every returned field replaces the selected
    question.
+10. Inspect every multiline editor and generation field at normal and narrow
+    widths; confirm consistent shared styling and no native resize handle.

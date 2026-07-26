@@ -1,0 +1,40 @@
+@use '../../styles/tokens' as *;
+
+.ui-textarea {
+  display: block;
+  width: 100%;
+  min-height: $control-normal;
+  appearance: none;
+  resize: none;
+  border: 1px solid $border;
+  border-radius: $radius-control;
+  background: $surface-raised;
+  padding: 11px 14px;
+  color: $text;
+  font: inherit;
+  line-height: 1.45;
+  transition:
+    border-color $motion-fast ease,
+    background-color $motion-fast ease,
+    color $motion-fast ease;
+}
+
+.ui-textarea:hover:not(:disabled) {
+  border-color: $border-strong;
+  background: $surface-hover;
+}
+
+.ui-textarea:focus-visible {
+  outline: $focus-width solid rgba($accent-rgb, 0.75);
+  outline-offset: $focus-offset;
+}
+
+.ui-textarea.invalid {
+  border-color: $danger;
+  box-shadow: 0 0 0 3px rgba($danger-rgb, 0.08);
+}
+
+.ui-textarea:disabled {
+  cursor: default;
+  opacity: 0.35;
+}

@@ -51,6 +51,7 @@ V17|Third-party GitHub Actions execute only from reviewed immutable commit SHAs.
 V18|Pull requests execute the production browser shell and packaged Electron renderer before their required checks pass.
 V19|The browser warns before unloading a package whose current changes are not saved.
 V20|AI output is validated as a complete game question before it can replace editor fields.
+V21|Every multiline text input uses the shared non-resizable `Textarea` control.
 
 ## §T
 

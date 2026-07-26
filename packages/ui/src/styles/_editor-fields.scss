@@ -13,8 +13,7 @@
     font-weight: 400;
   }
 
-  input,
-  textarea {
+  input {
     width: 100%;
     margin-top: 7px;
     border: 1px solid $border;
@@ -30,13 +29,11 @@
       box-shadow 120ms ease;
   }
 
-  input:hover,
-  textarea:hover {
+  input:hover {
     border-color: $border-strong;
   }
 
-  input:focus,
-  textarea:focus {
+  input:focus {
     border-color: rgba($accent-rgb, 0.8);
     background: rgba($background-rgb, 0.9);
     box-shadow:
@@ -44,16 +41,15 @@
       0 10px 28px rgba($shadow-rgb, 0.12);
   }
 
-  input.invalid,
-  textarea.invalid {
+  input.invalid {
     border-color: $danger;
     box-shadow: 0 0 0 3px rgba($danger-rgb, 0.08);
   }
 
-  textarea {
+  .ui-textarea {
     min-height: 76px;
+    margin-top: 7px;
     font-size: 1.05rem;
-    resize: vertical;
   }
 
   .question-type .ui-dropdown {
