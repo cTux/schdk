@@ -37,6 +37,7 @@ interface EditorPersistenceOptions {
   manageDocumentTitle: boolean;
   saveQueue: MutableRefObject<Promise<void>>;
   saveStatus: EditorSaveStatus;
+  sessionScope: string;
   selectedIndex: number;
   currentPackage: MutableRefObject<GamePackage>;
   onDriveFailure?(): void;
@@ -58,6 +59,7 @@ export function useEditorPersistence({
   manageDocumentTitle,
   saveQueue,
   saveStatus,
+  sessionScope,
   selectedIndex,
   currentPackage,
   onDriveFailure,
@@ -70,10 +72,10 @@ export function useEditorPersistence({
     if (!window.desktop || !desktopSessionReady) return;
     saveDesktopEditorSession(
       localStorage,
-      window.location.pathname,
+      sessionScope,
       driveFileId && fileName ? { driveFileId, fileName, selectedIndex } : null,
     );
-  }, [desktopSessionReady, driveFileId, fileName, selectedIndex]);
+  }, [desktopSessionReady, driveFileId, fileName, selectedIndex, sessionScope]);
 
   const saveCurrentPackage = useCallback(async () => {
     if (!drive || !driveFileId || !fileName) {
