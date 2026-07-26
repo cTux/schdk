@@ -31,6 +31,10 @@ save and presenter-window integration.
   validated Electron bridges.
 - **DSK-11:** Windows packaging produces an unpacked application under
   `dist/release/win-unpacked`.
+- **DSK-12:** A user AI API key persists in the current Google account's
+  separate Drive app data. Renderer IPC can save, remove, or query its presence
+  but never read the stored value; a legacy `safeStorage` value migrates once
+  after Drive connection.
 
 ## Invariants
 
@@ -51,3 +55,6 @@ save and presenter-window integration.
    verify it can return in the next game.
 4. Attempt renderer navigation, a new window, malformed IPC, and a filesystem
    write outside explicit download; each is rejected.
+5. Save, replace, and remove an AI API key; restart between operations and
+   verify only its configured status crosses into the renderer, then switch
+   Google accounts and verify the prior account's key is not exposed.

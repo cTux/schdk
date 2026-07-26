@@ -15,6 +15,7 @@ C3|Keep browser packages free of Electron and Node APIs.
 C4|Keep renderer access to desktop and Google services narrow and validated.
 C5|Keep user-visible unified application copy localized in Ukrainian and English.
 C6|Keep unfinished packages editable and recoverable without silent destination changes.
+C7|Keep user AI API keys in separate, account-scoped Google Drive app data and out of synchronized settings or local browser persistence.
 
 ## §I
 
@@ -34,6 +35,7 @@ V4|Pre-game hosting never exposes question, answer, comment, or host-note text.
 V5|Browser and desktop package workflows remain Drive-backed after import.
 V6|Desktop OAuth tokens stay in Electron main and never cross renderer IPC.
 V7|Every prompt that changes shipped behavior creates or updates affected feature contracts before verification.
+V8|AI API keys persist only in the current Google account's separate Drive app data; desktop renderer IPC exposes only save, remove, and configured status.
 
 ## §T
 
@@ -44,3 +46,10 @@ T2|x|Automate post-prompt specification sync|V1,V7,I.specs
 ## §B
 
 id|date|cause|fix
+B1|2026-07-26|New AI settings wiring missed existing lint contracts for unused imports and media range syntax|Remove the unused import and use context range notation.
+B2|2026-07-26|Equal dropdown widths truncated longer AI model names|Give the model dropdown more width while preserving the responsive stack.
+B3|2026-07-26|The manually curated AI catalog exposed too few providers and models|Populate text-generation choices from models.dev with a built-in fallback.
+B4|2026-07-26|AI API keys were stored per device instead of following the current Google account|Persist them in a separate account-scoped Drive app-data file and migrate legacy local values after connection.
+B5|2026-07-26|Extracting shared app-data persistence accidentally removed an upload endpoint still used by package writes|Restore the shared upload endpoint constant; existing typechecking catches this mechanical regression.
+B6|2026-07-26|The active settings group lived only in local component state, so its URL could not be shared or restored|Extend the shell deep-link contract to validate and restore the `settings` query parameter.
+B7|2026-07-26|The new settings deep-link hook used a multiline import that differed from the repository formatter output|Apply the existing formatter; no new invariant is needed for this mechanical failure.

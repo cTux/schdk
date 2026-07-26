@@ -23,6 +23,10 @@
   Keep desktop OAuth and refresh tokens in the main process, encrypt persisted
   refresh tokens with `safeStorage`, and never expose tokens or generic
   authenticated requests through IPC.
+- Keep AI API keys in a separate app-data file owned by the current Google
+  account, never in local browser persistence or synchronized settings.
+  Desktop renderer IPC may query only whether a key exists and may replace or
+  remove it; never return the stored value.
 - Keep the installed-app OAuth client secret in the Electron main process. It
   is loaded from an ignored packaged resource, distributed with the desktop
   app, and must never be committed, treated as a security boundary, or exposed

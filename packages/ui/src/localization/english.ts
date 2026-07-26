@@ -65,6 +65,10 @@ export const english: typeof ukrainian = {
       label: 'Visual editor',
       description: 'Create a custom layout for the game screen.',
     },
+    artificialIntelligence: {
+      label: 'Artificial intelligence',
+      description: 'Configure question-generation rules.',
+    },
   },
   settings: englishSettings,
   editor: {

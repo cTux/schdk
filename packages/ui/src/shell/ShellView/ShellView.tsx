@@ -8,9 +8,11 @@ import type { ShellViewName } from '../shellItems';
 import { OptionsPage } from '../../options/OptionsPage';
 import type { GoogleDriveState } from '../../options/OptionsPage';
 import type {
+  AiOptions,
   AppTheme,
   EditorTextOptions,
   GameOptions,
+  SettingsGroup,
 } from '../../options/types';
 import { VisualEditor } from '../../visual-editor/VisualEditor';
 import { TooltipProvider } from '../../atoms/Tooltip';
@@ -18,6 +20,7 @@ import { TooltipProvider } from '../../atoms/Tooltip';
 export type { ShellViewName } from '../shellItems';
 
 export interface ShellViewProps {
+  aiOptions: AiOptions;
   editorApp: ReactNode;
   hostApp: ReactNode;
   loadedApps: { host: boolean; editor: boolean };
@@ -26,8 +29,12 @@ export interface ShellViewProps {
   gameOptionsError: string;
   googleDriveAccount?: ShellAccount;
   googleDriveState: GoogleDriveState;
+  settingsGroup: SettingsGroup;
   theme: AppTheme;
   view: ShellViewName;
+  onAiApiKeySave(apiKey: string | null): Promise<void>;
+  onAiModelChange(model: string): void;
+  onAiProviderChange(provider: string): void;
   onEditorOptionsChange(options: EditorTextOptions): void;
   onGameOptionsChange(options: GameOptions): void;
   onGoogleDriveConnect(): void;
@@ -35,10 +42,12 @@ export interface ShellViewProps {
   onImportVisualEditorTemplate(file: File): void;
   onExportVisualEditorTemplate(): void;
   onShowView(view: ShellViewName): void;
+  onSettingsGroupChange(group: SettingsGroup): void;
   onThemeChange(theme: AppTheme): void;
 }
 
 export function ShellView({
+  aiOptions,
   editorApp,
   hostApp,
   loadedApps,
@@ -47,8 +56,12 @@ export function ShellView({
   gameOptionsError,
   googleDriveAccount,
   googleDriveState,
+  settingsGroup,
   theme,
   view,
+  onAiApiKeySave,
+  onAiModelChange,
+  onAiProviderChange,
   onEditorOptionsChange,
   onGameOptionsChange,
   onGoogleDriveConnect,
@@ -56,6 +69,7 @@ export function ShellView({
   onImportVisualEditorTemplate,
   onExportVisualEditorTemplate,
   onShowView,
+  onSettingsGroupChange,
   onThemeChange,
 }: ShellViewProps) {
   return (
@@ -70,16 +84,22 @@ export function ShellView({
         <section className="workspace">
           <ShellHome hidden={view !== 'home'} onOpen={onShowView} />
           <OptionsPage
+            ai={aiOptions}
             hidden={view !== 'options'}
             editor={editorOptions}
             game={gameOptions}
             googleDriveAccount={googleDriveAccount?.emailAddress}
             googleDriveState={googleDriveState}
+            settingsGroup={settingsGroup}
             theme={theme}
+            onAiApiKeySave={onAiApiKeySave}
+            onAiModelChange={onAiModelChange}
+            onAiProviderChange={onAiProviderChange}
             onEditorChange={onEditorOptionsChange}
             onGameChange={onGameOptionsChange}
             onGoogleDriveConnect={onGoogleDriveConnect}
             onGoogleDriveDisconnect={onGoogleDriveDisconnect}
+            onSettingsGroupChange={onSettingsGroupChange}
             onThemeChange={onThemeChange}
           />
           <VisualEditor
@@ -90,6 +110,7 @@ export function ShellView({
             onImportTemplate={onImportVisualEditorTemplate}
             onExportTemplate={onExportVisualEditorTemplate}
           />
+          <div hidden={view !== 'artificialIntelligence'} />
           {loadedApps.host && (
             <div className="embedded-app" hidden={view !== 'host'}>
               {hostApp}

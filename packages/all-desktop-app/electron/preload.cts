@@ -33,6 +33,10 @@ const editorApi = {
     status: () => ipcRenderer.invoke('google-drive-status'),
     connect: () => ipcRenderer.invoke('connect-google-drive'),
     disconnect: () => ipcRenderer.invoke('disconnect-google-drive'),
+    hasAiApiKey: (): Promise<boolean> =>
+      ipcRenderer.invoke('has-google-drive-ai-api-key'),
+    saveAiApiKey: (apiKey: string | null): Promise<void> =>
+      ipcRenderer.invoke('save-google-drive-ai-api-key', apiKey),
     loadSettings: () => ipcRenderer.invoke('load-google-drive-settings'),
     saveSettings: (settings: unknown) =>
       ipcRenderer.invoke('save-google-drive-settings', settings),

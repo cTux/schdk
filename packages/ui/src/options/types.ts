@@ -4,7 +4,31 @@ export interface EditorTextOptions {
   correctAnswerComment: boolean;
 }
 
+export interface AiModelOption {
+  id: string;
+  name: string;
+}
+
+export interface AiProviderOption {
+  id: string;
+  name: string;
+  models: AiModelOption[];
+}
+
+export interface AiOptions {
+  providers: AiProviderOption[];
+  provider: string;
+  model: string;
+  apiKeyConfigured: boolean;
+}
+
 export type AppTheme = 'system' | 'light' | 'dark';
+export const SETTINGS_GROUPS = [
+  'app',
+  'schdk',
+  'artificialIntelligence',
+] as const;
+export type SettingsGroup = (typeof SETTINGS_GROUPS)[number];
 
 export const GAME_LAYOUT_ELEMENT_IDS = [
   'logo',

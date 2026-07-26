@@ -8,6 +8,9 @@
   retain local changes when Drive is unavailable.
 - Store `settings-v1.json` in `appDataFolder` using only the non-sensitive
   `drive.file` and `drive.appdata` scopes.
+- Store a user AI API key separately in `ai-credentials-v1.json` in the current
+  account's `appDataFolder`. Never copy it into the settings document or its
+  local cache, and never reuse one account's configured status for another.
 - Store app-created `.schdk` files in a visible `SCHDK` Drive folder. Mark the
   folder and packages with private app properties, and expose package identity
   to browser deep links and sessions through validated `drive:<fileId>`
@@ -35,9 +38,10 @@
 - Desktop authorization uses the system browser, PKCE S256, a random-state
   loopback callback on `127.0.0.1`, and refresh tokens encrypted with Electron
   `safeStorage`. Never persist a refresh token through Linux `basic_text`.
-- Expose only status, connect, disconnect, settings operations, and validated
-  package create/update/delete/list/load operations through Electron IPC. Tokens and
-  generic authenticated requests never cross into the renderer.
+- Expose only status, connect, disconnect, settings and AI-key status/write
+  operations, and validated package create/update/delete/list/load operations
+  through Electron IPC. Tokens, stored AI keys, and generic authenticated
+  requests never cross into the renderer.
 - Bundle the production Web application client ID in the browser application.
   Allow `VITE_GOOGLE_WEB_CLIENT_ID` to override it for development.
 - Bundle the production Desktop application client ID and installed-app client

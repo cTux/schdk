@@ -30,6 +30,9 @@ preserving recoverable local state during temporary Drive failures.
   loopback callback, and encrypted refresh-token persistence.
 - **DRV-10:** Disconnect clears the active authorization state and hides tools
   behind the login screen.
+- **DRV-11:** A user AI API key lives in a separate
+  `ai-credentials-v1.json` file in the current account's `appDataFolder`; it
+  never enters the locally cached settings document.
 
 ## Invariants
 
@@ -40,6 +43,7 @@ preserving recoverable local state during temporary Drive failures.
 - A failed package write keeps the same file open and requires retry or
   reconnection.
 - Settings conflicts resolve per section, not by replacing the whole document.
+- AI credentials remain scoped to the connected Google account.
 
 ## Acceptance
 
@@ -51,3 +55,5 @@ preserving recoverable local state during temporary Drive failures.
    of each section.
 4. Lose Drive during an edit, retain local settings and pending package state,
    reconnect, and save to the original file ID.
+5. Save an AI API key, reconnect to the same account and observe configured
+   status, then connect another account and observe no key from the first.

@@ -13,6 +13,7 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@opencode-ai/models": "^0.0.24",
     "@schdk/editor-web-app": "workspace:*",
     "@schdk/google-drive": "workspace:*",
     "@schdk/host-web-app": "workspace:*",

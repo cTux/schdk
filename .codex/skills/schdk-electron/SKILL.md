@@ -19,6 +19,9 @@ description: Build, debug, secure, or package SCHDK Electron applications. Use f
    requests.
 6. Keep filesystem package IPC limited to explicit downloads. Local file import
    uses the renderer file chooser and uploads through the Drive bridge.
+7. Keep user AI API keys in the current Google account's separate Drive app
+   data; expose only save, remove, and configured-status IPC. Migrate a legacy
+   `safeStorage` key only after a successful Drive write.
 
 ## Checks
 

@@ -11,6 +11,8 @@ export interface GoogleDriveBridge extends DrivePackageStorage {
   }>;
   connect(): Promise<DriveAccount>;
   disconnect(): Promise<void>;
+  hasAiApiKey(): Promise<boolean>;
+  saveAiApiKey(apiKey: string | null): Promise<void>;
   loadSettings(): Promise<unknown | null>;
   saveSettings(settings: DriveSettingsDocument): Promise<void>;
 }

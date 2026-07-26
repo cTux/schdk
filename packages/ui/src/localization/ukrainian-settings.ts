@@ -3,6 +3,7 @@ export const ukrainianSettings = {
   groupsLabel: 'Групи налаштувань',
   appTab: 'Застосунок',
   schdkTab: 'ЩДК',
+  artificialIntelligenceTab: 'Штучний інтелект',
   languageLabel: 'Мова',
   ukrainian: 'Українська',
   english: 'English',
@@ -21,6 +22,20 @@ export const ukrainianSettings = {
   googleDriveConnect: 'Підключити',
   googleDriveReconnectAction: 'Підключити знову',
   googleDriveDisconnect: 'Відключити',
+  aiProviderModel: 'Провайдер і модель ШІ',
+  aiProviderModelDescription:
+    'Оберіть сервіс штучного інтелекту та модель для генерації запитань.',
+  aiProvider: 'Провайдер',
+  aiModel: 'Модель',
+  aiApiKey: 'API-ключ',
+  aiApiKeyDescription:
+    'Ключ зберігається в даних застосунку Google Диска поточного акаунта.',
+  aiApiKeyPlaceholder: 'Вставте API-ключ',
+  aiApiKeyConfigured: 'API-ключ збережено.',
+  aiApiKeyMissing: 'API-ключ не збережено.',
+  aiApiKeySave: 'Зберегти',
+  aiApiKeyRemove: 'Видалити',
+  aiApiKeySaveFailed: 'Не вдалося зберегти API-ключ.',
   shortcutsTitle: 'Гарячі клавіші',
   shortcutGroups: [
     {
@@ -42,7 +57,6 @@ export const ukrainianSettings = {
       ],
     },
   ],
-  schdkTabsLabel: 'Налаштування ЩДК',
   gameTab: 'Проведення гри',
   editorTab: 'Редагування питань',
   questionText: 'Текст питання',

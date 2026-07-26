@@ -1,4 +1,5 @@
 import { parseDriveAccount, type DriveAccount } from './account.js';
+import { GoogleDriveAppData } from './app-data.js';
 import { isDriveFileId, type DriveSettingsDocument } from './settings.js';
 import {
   DRIVE_APP_KIND_KEY,
@@ -16,6 +17,8 @@ import {
 
 const DRIVE_API = 'https://www.googleapis.com/drive/v3';
 const DRIVE_UPLOAD_API = 'https://www.googleapis.com/upload/drive/v3';
+const AI_CREDENTIALS_NAME = 'ai-credentials-v1.json';
+const MAX_AI_API_KEY_LENGTH = 16_384;
 const SETTINGS_NAME = 'settings-v1.json';
 const PACKAGE_FOLDER_NAME = 'SCHDK';
 
@@ -28,11 +31,14 @@ export type { DriveAccount } from './account.js';
 
 export class GoogleDriveAuthorizationError extends Error {}
 
-interface SettingsFile {
+interface DriveFile {
   id: string;
 }
 
 export class GoogleDriveClient implements DrivePackageStorage {
+  private readonly appData = new GoogleDriveAppData((input, init) =>
+    this.request(input, init),
+  );
   private packageFolderId?: string;
   private gamePackagesRequest?: Promise<DriveGamePackageFile[]>;
   constructor(private readonly getAccessToken: () => Promise<string>) {}
@@ -49,36 +55,29 @@ export class GoogleDriveClient implements DrivePackageStorage {
   }
 
   async loadSettings(): Promise<unknown | null> {
-    const file = await this.findSettingsFile();
-    if (!file) return null;
-    const response = await this.request(
-      `${DRIVE_API}/files/${encodeURIComponent(file.id)}?alt=media`,
-    );
-    return response.json();
+    return this.appData.load(SETTINGS_NAME);
   }
 
   async saveSettings(settings: DriveSettingsDocument): Promise<void> {
-    const file = await this.findSettingsFile();
-    const metadata = file
-      ? { name: SETTINGS_NAME }
-      : { name: SETTINGS_NAME, parents: ['appDataFolder'] };
-    const boundary = `schdk-${crypto.randomUUID()}`;
-    const body = new Blob([
-      `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n`,
-      JSON.stringify(metadata),
-      `\r\n--${boundary}\r\nContent-Type: application/json\r\n\r\n`,
-      JSON.stringify(settings),
-      `\r\n--${boundary}--`,
-    ]);
-    const target = file
-      ? `${DRIVE_UPLOAD_API}/files/${encodeURIComponent(file.id)}?uploadType=multipart`
-      : `${DRIVE_UPLOAD_API}/files?uploadType=multipart`;
-    await this.request(target, {
-      method: file ? 'PATCH' : 'POST',
-      headers: {
-        'Content-Type': `multipart/related; boundary=${boundary}`,
-      },
-      body,
+    await this.appData.save(SETTINGS_NAME, settings);
+  }
+
+  async loadAiApiKey(): Promise<string | null> {
+    const value = await this.appData.load(AI_CREDENTIALS_NAME);
+    if (value === null) return null;
+    if (
+      typeof value !== 'object' ||
+      (value as { schemaVersion?: unknown }).schemaVersion !== 1
+    ) {
+      throw new TypeError('Invalid AI credentials');
+    }
+    return this.normalizeAiApiKey((value as { apiKey?: unknown }).apiKey);
+  }
+
+  async saveAiApiKey(apiKey: string | null): Promise<void> {
+    await this.appData.save(AI_CREDENTIALS_NAME, {
+      schemaVersion: 1,
+      apiKey: this.normalizeAiApiKey(apiKey),
     });
   }
 
@@ -201,7 +200,7 @@ export class GoogleDriveClient implements DrivePackageStorage {
       pageSize: '1',
     });
     const response = await this.request(`${DRIVE_API}/files?${query}`);
-    const value = (await response.json()) as { files?: SettingsFile[] };
+    const value = (await response.json()) as { files?: DriveFile[] };
     const existing = value.files?.[0]?.id;
     if (isDriveFileId(existing)) {
       this.packageFolderId = existing;
@@ -216,7 +215,7 @@ export class GoogleDriveClient implements DrivePackageStorage {
         appProperties: { [DRIVE_APP_KIND_KEY]: DRIVE_FOLDER_KIND },
       }),
     });
-    const created = (await createdResponse.json()) as SettingsFile;
+    const created = (await createdResponse.json()) as DriveFile;
     if (!isDriveFileId(created.id)) {
       throw new Error('Google Drive package folder is unavailable');
     }
@@ -224,17 +223,14 @@ export class GoogleDriveClient implements DrivePackageStorage {
     return created.id;
   }
 
-  private async findSettingsFile(): Promise<SettingsFile | null> {
-    const query = new URLSearchParams({
-      spaces: 'appDataFolder',
-      q: `name = '${SETTINGS_NAME}' and trashed = false`,
-      fields: 'files(id)',
-      pageSize: '1',
-    });
-    const response = await this.request(`${DRIVE_API}/files?${query}`);
-    const value = (await response.json()) as { files?: SettingsFile[] };
-    const file = value.files?.[0];
-    return file && isDriveFileId(file.id) ? file : null;
+  private normalizeAiApiKey(value: unknown) {
+    if (value === null) return null;
+    if (typeof value !== 'string') throw new TypeError('Invalid AI API key');
+    const apiKey = value.trim();
+    if (!apiKey || apiKey.length > MAX_AI_API_KEY_LENGTH) {
+      throw new TypeError('Invalid AI API key');
+    }
+    return apiKey;
   }
 
   private async request(input: string, init: RequestInit = {}) {

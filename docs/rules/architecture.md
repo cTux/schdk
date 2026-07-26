@@ -23,7 +23,9 @@
 - `@schdk/google-drive` owns the platform-neutral Drive REST client and opaque
   settings envelope, package-storage types, and Drive reference helpers.
   Browser authorization stays in `@schdk/all-web-app`; installed-app
-  authorization and credential storage stay in `@schdk/all-desktop-app`.
+  authorization and OAuth credential storage stay in
+  `@schdk/all-desktop-app`; user AI credentials stay in account-scoped Drive
+  app data.
 
 ## Dependency direction
 

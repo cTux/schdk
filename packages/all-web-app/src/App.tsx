@@ -1,14 +1,6 @@
 import { getDeepLinkedPackageName } from '@schdk/editor-web-app/deep-link';
-import type {
-  AppTheme,
-  EditorTextOptions,
-  GameOptions,
-} from '@schdk/ui/options';
-import {
-  LOCALIZATION_COPY,
-  LocaleProvider,
-  type AppLocale,
-} from '@schdk/ui/localization';
+import type { EditorTextOptions, GameOptions } from '@schdk/ui/options';
+import { LOCALIZATION_COPY, LocaleProvider } from '@schdk/ui/localization';
 import {
   GoogleLoginView,
   ShellView,
@@ -29,20 +21,15 @@ import {
   saveGameOptions,
   serializeVisualEditorTemplate,
 } from './options-storage';
+import {
+  loadShellLocale,
+  loadShellTheme,
+  saveShellLocale,
+  saveShellTheme,
+} from './shell-preferences';
+import { useAiSettings } from './use-ai-settings';
 import { useGoogleDriveSettings } from './use-google-drive-settings';
-
-const SHELL_LOCALE_STORAGE_KEY = 'schdk.shell.locale';
-const SHELL_THEME_STORAGE_KEY = 'schdk.shell.theme';
-function getInitialLocale(): AppLocale {
-  const stored = localStorage.getItem(SHELL_LOCALE_STORAGE_KEY);
-  return stored === 'uk' || stored === 'en' ? stored : 'uk';
-}
-
-function getInitialTheme(): AppTheme {
-  const stored = localStorage.getItem(SHELL_THEME_STORAGE_KEY);
-  if (stored === 'light' || stored === 'dark') return stored;
-  return 'system';
-}
+import { useSettingsDeepLink } from './use-settings-deep-link';
 
 const HostApp = lazy(() =>
   import('@schdk/host-web-app/app').then(({ App }) => ({ default: App })),
@@ -62,8 +49,8 @@ function getLinkedView(): ShellViewName | null {
 
 export function App() {
   const sessionScope = window.location.pathname;
-  const [locale, setLocale] = useState(getInitialLocale);
-  const [theme, setTheme] = useState(getInitialTheme);
+  const [locale, setLocale] = useState(loadShellLocale);
+  const [theme, setTheme] = useState(loadShellTheme);
   const copy = LOCALIZATION_COPY[locale];
   const [view, setView] = useState<ShellViewName>(() => {
     return (
@@ -72,6 +59,7 @@ export function App() {
       'home'
     );
   });
+  const settings = useSettingsDeepLink(view);
   const [loadedApps, setLoadedApps] = useState({
     host: view === 'host',
     editor: view === 'editor',
@@ -91,13 +79,17 @@ export function App() {
   });
   const { connection } = googleDrive;
   const connected = connection.state === 'connected';
+  const ai = useAiSettings(
+    connected ? googleDrive.bridge : null,
+    connected ? connection.account.emailAddress : undefined,
+  );
   const loginState = googleDrive.statusReady ? connection.state : 'connecting';
   const [unlocked, setUnlocked] = useState(connected);
 
   useEffect(() => setUnlocked((current) => current || connected), [connected]);
 
   useEffect(() => {
-    localStorage.setItem(SHELL_LOCALE_STORAGE_KEY, locale);
+    saveShellLocale(locale);
     document.documentElement.lang = locale;
     const sectionTitle =
       view === 'home'
@@ -116,7 +108,7 @@ export function App() {
   }, [copy, locale, view]);
 
   useEffect(() => {
-    localStorage.setItem(SHELL_THEME_STORAGE_KEY, theme);
+    saveShellTheme(theme);
     document.documentElement.dataset.theme = theme;
   }, [theme]);
 
@@ -231,6 +223,7 @@ export function App() {
               </Suspense>
             }
             loadedApps={loadedApps}
+            aiOptions={ai.options}
             editorOptions={editorOptions}
             gameOptions={gameOptions}
             gameOptionsError={gameOptionsError}
@@ -238,15 +231,20 @@ export function App() {
               'account' in connection ? connection.account : undefined
             }
             googleDriveState={connection.state}
+            settingsGroup={settings.group}
             theme={theme}
             view={view}
             onEditorOptionsChange={googleDrive.setEditorTextOptions}
+            onAiApiKeySave={ai.saveApiKey}
+            onAiModelChange={ai.setModel}
+            onAiProviderChange={ai.setProvider}
             onGameOptionsChange={googleDrive.setGameOptions}
             onGoogleDriveConnect={() => void googleDrive.connect()}
             onGoogleDriveDisconnect={() => void googleDrive.disconnect()}
             onImportVisualEditorTemplate={importVisualEditorTemplate}
             onExportVisualEditorTemplate={exportVisualEditorTemplate}
             onShowView={(nextView) => showView(nextView)}
+            onSettingsGroupChange={settings.showGroup}
             onThemeChange={setTheme}
           />
         </div>

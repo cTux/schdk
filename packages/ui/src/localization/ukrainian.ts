@@ -66,6 +66,10 @@ export const ukrainian = {
       label: 'Візуальний редактор',
       description: 'Створюйте власний макет екрана проведення гри.',
     },
+    artificialIntelligence: {
+      label: 'Штучний інтелект',
+      description: 'Налаштовуйте правила створення запитань.',
+    },
   },
   settings: ukrainianSettings,
   editor: {

@@ -1,45 +1,34 @@
 import classNames from 'classnames';
-import { useState } from 'react';
 import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';
 import { useLocalization } from '../../localization';
+import { AiOptionsPanel } from '../AiOptionsPanel';
 import { OptionSlider } from '../OptionSlider';
 import { OptionToggle } from '../OptionToggle';
-import { OptionsTabs, type OptionsTab } from '../OptionsTabs';
-import type { AppTheme } from '../types';
-import type { GoogleDriveState, OptionsPageProps } from './types';
-
-function getGoogleDriveMessage(
-  state: GoogleDriveState,
-  account: string | undefined,
-  copy: ReturnType<typeof useLocalization>['copy'],
-) {
-  if (state === 'unavailable') return copy.settings.googleDriveUnavailable;
-  if (state === 'connecting') return copy.settings.googleDriveConnecting;
-  if (state === 'connected')
-    return copy.settings.googleDriveConnected(account ?? '');
-  if (state === 'reauthorization-required')
-    return copy.settings.googleDriveReconnect;
-  if (state === 'error') return copy.settings.googleDriveError;
-  return copy.settings.googleDriveDisconnected;
-}
+import { SETTINGS_GROUPS, type AppTheme } from '../types';
+import { getGoogleDriveMessage } from './google-drive-message';
+import type { OptionsPageProps } from './types';
 
 export function OptionsPage({
+  ai,
   editor,
   game,
   googleDriveAccount,
   googleDriveState,
   hidden,
+  settingsGroup,
   theme,
+  onAiApiKeySave,
+  onAiModelChange,
+  onAiProviderChange,
   onEditorChange,
   onGameChange,
   onGoogleDriveConnect,
   onGoogleDriveDisconnect,
+  onSettingsGroupChange,
   onThemeChange,
 }: OptionsPageProps) {
   const { copy, locale, onLocaleChange } = useLocalization();
-  const [group, setGroup] = useState<'app' | 'schdk'>('app');
-  const [tab, setTab] = useState<OptionsTab>('editor');
 
   return (
     <div className="options-page" hidden={hidden}>
@@ -51,35 +40,27 @@ export function OptionsPage({
         role="tablist"
         aria-label={copy.settings.groupsLabel}
       >
-        <Button
-          type="button"
-          role="tab"
-          id="options-group-tab-app"
-          aria-controls="options-group-panel-app"
-          aria-selected={group === 'app'}
-          className={group === 'app' ? 'active' : ''}
-          onClick={() => setGroup('app')}
-        >
-          {copy.settings.appTab}
-        </Button>
-        <Button
-          type="button"
-          role="tab"
-          id="options-group-tab-schdk"
-          aria-controls="options-group-panel-schdk"
-          aria-selected={group === 'schdk'}
-          className={group === 'schdk' ? 'active' : ''}
-          onClick={() => setGroup('schdk')}
-        >
-          {copy.settings.schdkTab}
-        </Button>
+        {SETTINGS_GROUPS.map((item) => (
+          <Button
+            key={item}
+            type="button"
+            role="tab"
+            id={`options-group-tab-${item}`}
+            aria-controls={`options-group-panel-${item}`}
+            aria-selected={settingsGroup === item}
+            className={settingsGroup === item ? 'active' : ''}
+            onClick={() => onSettingsGroupChange(item)}
+          >
+            {copy.settings[`${item}Tab`]}
+          </Button>
+        ))}
       </div>
 
       <section
         id="options-group-panel-app"
         role="tabpanel"
         aria-labelledby="options-group-tab-app"
-        hidden={group !== 'app'}
+        hidden={settingsGroup !== 'app'}
       >
         <label className="option-select">
           <span>
@@ -173,16 +154,34 @@ export function OptionsPage({
         id="options-group-panel-schdk"
         role="tabpanel"
         aria-labelledby="options-group-tab-schdk"
-        hidden={group !== 'schdk'}
+        hidden={settingsGroup !== 'schdk'}
       >
-        <OptionsTabs copy={copy} selected={tab} onSelect={setTab} />
+        <fieldset className="options-fieldset">
+          <legend>{copy.settings.gameTab}</legend>
+          <OptionToggle
+            checked={game.autoFullscreen}
+            label={copy.settings.autoFullscreen}
+            description={copy.settings.autoFullscreenDescription}
+            onChange={(autoFullscreen) =>
+              onGameChange({ ...game, autoFullscreen })
+            }
+          />
+          <OptionSlider
+            label={copy.settings.signalVolume}
+            description={copy.settings.signalVolumeDescription}
+            value={game.soundVolume}
+            onChange={(soundVolume) => onGameChange({ ...game, soundVolume })}
+          />
+          <OptionSlider
+            label={copy.settings.musicVolume}
+            description={copy.settings.musicVolumeDescription}
+            value={game.musicVolume}
+            onChange={(musicVolume) => onGameChange({ ...game, musicVolume })}
+          />
+        </fieldset>
 
-        <section
-          id="options-panel-editor"
-          role="tabpanel"
-          aria-labelledby="options-tab-editor"
-          hidden={tab !== 'editor'}
-        >
+        <fieldset className="options-fieldset">
+          <legend>{copy.settings.editorTab}</legend>
           <OptionToggle
             checked={editor.correctQuestionText}
             label={copy.settings.questionText}
@@ -207,35 +206,20 @@ export function OptionsPage({
               onEditorChange({ ...editor, correctAnswerComment })
             }
           />
-        </section>
-
-        <section
-          id="options-panel-game"
-          role="tabpanel"
-          aria-labelledby="options-tab-game"
-          hidden={tab !== 'game'}
-        >
-          <OptionToggle
-            checked={game.autoFullscreen}
-            label={copy.settings.autoFullscreen}
-            description={copy.settings.autoFullscreenDescription}
-            onChange={(autoFullscreen) =>
-              onGameChange({ ...game, autoFullscreen })
-            }
-          />
-          <OptionSlider
-            label={copy.settings.signalVolume}
-            description={copy.settings.signalVolumeDescription}
-            value={game.soundVolume}
-            onChange={(soundVolume) => onGameChange({ ...game, soundVolume })}
-          />
-          <OptionSlider
-            label={copy.settings.musicVolume}
-            description={copy.settings.musicVolumeDescription}
-            value={game.musicVolume}
-            onChange={(musicVolume) => onGameChange({ ...game, musicVolume })}
-          />
-        </section>
+        </fieldset>
+      </div>
+      <div
+        id="options-group-panel-artificialIntelligence"
+        role="tabpanel"
+        aria-labelledby="options-group-tab-artificialIntelligence"
+        hidden={settingsGroup !== 'artificialIntelligence'}
+      >
+        <AiOptionsPanel
+          options={ai}
+          onApiKeySave={onAiApiKeySave}
+          onModelChange={onAiModelChange}
+          onProviderChange={onAiProviderChange}
+        />
       </div>
     </div>
   );

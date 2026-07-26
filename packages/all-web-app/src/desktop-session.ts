@@ -11,6 +11,7 @@ function isShellViewName(value: string | null): value is ShellViewName {
     value === 'host' ||
     value === 'editor' ||
     value === 'visualEditor' ||
+    value === 'artificialIntelligence' ||
     value === 'options'
   );
 }
