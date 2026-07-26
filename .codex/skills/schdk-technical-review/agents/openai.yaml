@@ -1,0 +1,4 @@
+interface:
+  display_name: 'SCHDK Technical Review'
+  short_description: 'Find and rank P0-P2 technical issues'
+  default_prompt: 'Use $schdk-technical-review to review this project for P0-P2 issues.'
