@@ -16,3 +16,5 @@
 - Use the Vercel AI SDK provider registry when question generation is
   implemented. Add its runtime dependency with the first generation call, not
   for settings-only UI.
+- Use `@opencode-ai/models` as the provider and model metadata source; do not
+  maintain a full catalog by hand.

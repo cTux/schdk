@@ -4,20 +4,20 @@ export interface EditorTextOptions {
   correctAnswerComment: boolean;
 }
 
-export const AI_PROVIDERS = ['openai', 'anthropic', 'google'] as const;
-export type AiProvider = (typeof AI_PROVIDERS)[number];
+export interface AiModelOption {
+  id: string;
+  name: string;
+}
 
-export const AI_MODELS = {
-  openai: ['gpt-5.2', 'gpt-5-mini'],
-  anthropic: ['claude-sonnet-4-6', 'claude-haiku-4-5'],
-  google: ['gemini-2.5-pro', 'gemini-2.5-flash'],
-} as const satisfies Record<AiProvider, readonly string[]>;
-
-export const DEFAULT_AI_PROVIDER: AiProvider = 'openai';
-export const DEFAULT_AI_MODEL = AI_MODELS[DEFAULT_AI_PROVIDER][0];
+export interface AiProviderOption {
+  id: string;
+  name: string;
+  models: AiModelOption[];
+}
 
 export interface AiOptions {
-  provider: AiProvider;
+  providers: AiProviderOption[];
+  provider: string;
   model: string;
   apiKeyConfigured: boolean;
 }

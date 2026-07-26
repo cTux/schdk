@@ -27,8 +27,10 @@
   apply them to every unified application surface.
 - Keep locale selection in the first `App` settings group, before the `WWW`
   group; do not place it in the sidebar.
-- Keep the selected AI provider and model in local storage. Keep a browser AI
-  API key only in session storage and exclude it from Google Drive settings.
+- Populate AI provider and text-model choices from models.dev, with a small
+  built-in fallback. Keep the selected provider and model in local storage.
+  Keep a browser AI API key only in session storage and exclude it from Google
+  Drive settings.
 - Show a localized Google login screen before mounting the unified tools.
   Authentication is mandatory on web and desktop; reconnect before restoring
   access after authorization expires.

@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';
 import { useLocalization } from '../../localization';
-import { AI_MODELS, AI_PROVIDERS, type AiProvider } from '../types';
 import type { AiOptionsPanelProps } from './types';
 
 export function AiOptionsPanel({
@@ -17,6 +16,8 @@ export function AiOptionsPanel({
   const [apiKey, setApiKey] = useState('');
   const [saving, setSaving] = useState(false);
   const [failed, setFailed] = useState(false);
+  const models =
+    options.providers.find(({ id }) => id === options.provider)?.models ?? [];
 
   async function saveApiKey(value: string | null) {
     setSaving(true);
@@ -43,13 +44,11 @@ export function AiOptionsPanel({
             <small>{copy.settings.aiProvider}</small>
             <Dropdown
               value={options.provider}
-              onChange={(event) =>
-                onProviderChange(event.target.value as AiProvider)
-              }
+              onChange={(event) => onProviderChange(event.target.value)}
             >
-              {AI_PROVIDERS.map((provider) => (
-                <option key={provider} value={provider}>
-                  {copy.settings.aiProviders[provider]}
+              {options.providers.map((provider) => (
+                <option key={provider.id} value={provider.id}>
+                  {provider.name}
                 </option>
               ))}
             </Dropdown>
@@ -60,9 +59,9 @@ export function AiOptionsPanel({
               value={options.model}
               onChange={(event) => onModelChange(event.target.value)}
             >
-              {AI_MODELS[options.provider].map((model) => (
-                <option key={model} value={model}>
-                  {model}
+              {models.map((model) => (
+                <option key={model.id} value={model.id}>
+                  {model.name}
                 </option>
               ))}
             </Dropdown>

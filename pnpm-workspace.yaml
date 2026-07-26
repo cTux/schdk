@@ -19,6 +19,7 @@ catalog:
   vitest: ^4.1.10
 
 overrides:
+  brace-expansion: 5.0.8
   tar: 7.5.22
 
 allowBuilds:
@@ -28,4 +29,6 @@ allowBuilds:
   esbuild: true
 
 minimumReleaseAgeExclude:
+  - '@opencode-ai/models@0.0.24'
+  - brace-expansion@5.0.8
   - tar@7.5.22

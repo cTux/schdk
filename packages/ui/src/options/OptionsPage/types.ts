@@ -1,6 +1,5 @@
 import type {
   AiOptions,
-  AiProvider,
   AppTheme,
   EditorTextOptions,
   GameOptions,
@@ -24,7 +23,7 @@ export interface OptionsPageProps {
   theme: AppTheme;
   onAiApiKeySave(apiKey: string | null): Promise<void>;
   onAiModelChange(model: string): void;
-  onAiProviderChange(provider: AiProvider): void;
+  onAiProviderChange(provider: string): void;
   onEditorChange(options: EditorTextOptions): void;
   onGameChange(options: GameOptions): void;
   onGoogleDriveConnect(): void;

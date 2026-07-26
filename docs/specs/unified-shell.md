@@ -34,7 +34,9 @@ package authoring, hosting, settings, and account state.
 - **SHL-11:** The Artificial intelligence page is currently empty and reserved
   for bundled and user-authored question-generation rules.
 - **SHL-12:** Artificial intelligence settings expose separate provider and
-  model dropdowns plus a user API key. Changing the provider selects its
+  model dropdowns plus a user API key. The dropdowns use the models.dev catalog
+  of text-generation providers and non-deprecated models, with a small built-in
+  fallback when the catalog is unavailable. Changing the provider selects its
   default model; both selections persist locally. The browser key lasts only
   for the current tab session and never enters Google Drive settings.
 
