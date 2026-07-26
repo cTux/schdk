@@ -11,18 +11,20 @@ description: Implement, debug, refactor, review, or document changes anywhere in
 2. Trace the current flow and all callers before editing. Respect ownership: data in `common`, visuals in `ui`, browser behavior in web apps, and OS integration in desktop apps.
 3. Reuse existing helpers and native APIs before adding code, dependencies, abstractions, or packages.
 4. Make the smallest complete change. Add tests only for the exact prompt `add missing tests`, using `$schdk-add-missing-tests`.
-5. Update the matching feature specification under `docs/specs` when shipped
-   behavior changes. Record project-wide invariants, specification tasks, and
-   confirmed bugs in `SPEC.md` using `FORMAT.md`. Update the matching rule and
-   skill only when a durable contract or workflow changes.
-6. Verify with `$schdk-quality`.
-7. After every prompt that changes repository files, stage and commit all task changes once verified; preserve unrelated changes.
-8. Before creating a pull request, run `git fetch origin main` and `git rebase origin/main`; resolve conflicts and reverify the rebased result.
-9. Push the branch with `git push -u origin HEAD`, create the pull request with `gh pr create --fill`, wait for its checks with `gh pr checks --watch --fail-fast`, and confirm the worktree is clean unless the user explicitly asks to keep the change local. If rebasing rewrote a published branch, update it with `git push --force-with-lease`.
+5. Run `$schdk-sync-specs` after implementation. It creates or updates the
+   matching feature contract and root `SPEC.md` entries when required, or
+   confirms that the change is internal-only.
+6. Update the matching rule and skill when a durable contract or workflow
+   changes, then run `$schdk-sync-specs` again.
+7. Verify with `$schdk-quality`.
+8. After every prompt that changes repository files, stage and commit all task changes once verified; preserve unrelated changes.
+9. Before creating a pull request, run `git fetch origin main` and `git rebase origin/main`; resolve conflicts and reverify the rebased result.
+10. Push the branch with `git push -u origin HEAD`, create the pull request with `gh pr create --fill`, wait for its checks with `gh pr checks --watch --fail-fast`, and confirm the worktree is clean unless the user explicitly asks to keep the change local. If rebasing rewrote a published branch, update it with `git push --force-with-lease`.
 
 ## Route Specialized Work
 
 - Use `$schdk-start-session` when initializing a new implementation worktree.
+- Use `$schdk-sync-specs` after every prompt that changes repository files.
 - Use `$schdk-update-dependencies` for pnpm, dependency, lockfile, or audit updates.
 - Use `$schdk-add-missing-tests` only for an explicit `add missing tests` prompt.
 - Use `$schdk-project-structure` for package, component, file-layout, or public-export changes.

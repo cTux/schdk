@@ -23,6 +23,12 @@
 - Keep repository skills under `.codex/skills` synchronized with the workflows
   they guide. Update the affected skill in the same change when a durable
   workflow, command, ownership boundary, or verification requirement changes.
+- After every prompt that changes repository files, run `$schdk-sync-specs`
+  before verification and commit. Create a missing feature specification or
+  update the matching one when shipped behavior or a public contract changes.
+  Update the matching rule and skill when a durable workflow changes. When no
+  contract changes, explicitly record that the specification review required
+  no edit.
 - Before creating a pull request, fetch `origin/main`, rebase the task branch
   onto it, resolve conflicts, and reverify the rebased result.
 - Add a project skill only for a distinct recurring workflow. Do not create
@@ -42,8 +48,9 @@
 - Keep `docs/README.md` as the Ukrainian documentation index. Keep each
   top-level topic in its own file under `docs/guide`.
 - Keep shipped feature acceptance contracts under `docs/specs`, indexed by
-  `docs/specs/README.md`. Update the affected specification whenever product
-  behavior changes; do not use feature specifications as a roadmap.
+  `docs/specs/README.md`. Create or update the affected specification in the
+  same prompt whenever product behavior changes; do not use feature
+  specifications as a roadmap.
 - Keep `SPEC.md` as the compact project-level goal, constraint, interface,
   invariant, specification-task, and bug registry. Follow `FORMAT.md`; keep
   detailed feature requirements in `docs/specs` and implementation backlog in

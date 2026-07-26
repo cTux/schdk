@@ -33,12 +33,13 @@ V3|Readiness validation stays separate from structural package parsing.
 V4|Pre-game hosting never exposes question, answer, comment, or host-note text.
 V5|Browser and desktop package workflows remain Drive-backed after import.
 V6|Desktop OAuth tokens stay in Electron main and never cross renderer IPC.
-V7|Behavior changes update affected feature contracts in same change.
+V7|Every prompt that changes shipped behavior creates or updates affected feature contracts before verification.
 
 ## §T
 
 id|status|task|cites
 T1|x|Distill shipped feature contracts|V1,V7,I.specs
+T2|x|Automate post-prompt specification sync|V1,V7,I.specs
 
 ## §B
 
