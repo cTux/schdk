@@ -39,6 +39,8 @@ preserving recoverable local state during temporary Drive failures.
 - **DRV-13:** Each connected account reuses its own existing app-marked
   `SCHDK` folder, never a folder ID or mounted editor/host state retained from
   another account.
+- **DRV-14:** Recents traverse every Drive API result page instead of hiding
+  packages beyond the first page.
 
 ## Invariants
 
@@ -70,3 +72,5 @@ preserving recoverable local state during temporary Drive failures.
 7. Connect account A, create a package, switch to account B, then reconnect
    account A and observe A's original package folder, recents, and restorable
    editor/host state without content from B.
+8. Create more than one Drive API result page of packages and observe every
+   package in recents.

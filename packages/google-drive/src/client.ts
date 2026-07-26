@@ -109,16 +109,29 @@ export class GoogleDriveClient implements DrivePackageStorage {
     const query = new URLSearchParams({
       spaces: 'drive',
       q: `'${folderId}' in parents and trashed = false and appProperties has { key='${DRIVE_APP_KIND_KEY}' and value='${DRIVE_PACKAGE_KIND}' }`,
-      fields: 'files(id,name,description,modifiedTime,appProperties)',
+      fields:
+        'nextPageToken,files(id,name,description,modifiedTime,appProperties)',
       orderBy: 'modifiedTime desc',
-      pageSize: '20',
+      pageSize: '100',
     });
-    const response = await this.request(`${DRIVE_API}/files?${query}`);
-    const value = (await response.json()) as { files?: unknown[] };
-    return (value.files ?? []).flatMap((file) => {
-      const parsed = parseDriveGamePackageFile(file);
-      return parsed ? [parsed] : [];
-    });
+    const files: DriveGamePackageFile[] = [];
+    let pageToken: string | undefined;
+    do {
+      if (pageToken) query.set('pageToken', pageToken);
+      const response = await this.request(`${DRIVE_API}/files?${query}`);
+      const value = (await response.json()) as {
+        files?: unknown[];
+        nextPageToken?: string;
+      };
+      files.push(
+        ...(value.files ?? []).flatMap((file) => {
+          const parsed = parseDriveGamePackageFile(file);
+          return parsed ? [parsed] : [];
+        }),
+      );
+      pageToken = value.nextPageToken;
+    } while (pageToken);
+    return files;
   }
 
   async loadGamePackage(fileId: string): Promise<DriveGamePackage> {

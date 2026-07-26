@@ -75,4 +75,27 @@ describe('GoogleDriveClient', () => {
       GoogleDriveAuthorizationError,
     );
   });
+
+  it('lists every page of packages', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (input: string | URL | Request) => {
+        const url = new URL(String(input));
+        if (url.searchParams.get('q')?.startsWith('mimeType')) {
+          return jsonResponse({ files: [{ id: 'folder-id' }] });
+        }
+        return jsonResponse(
+          url.searchParams.get('pageToken')
+            ? { files: [{ ...packageFile, id: 'package-2' }] }
+            : { files: [packageFile], nextPageToken: 'page-2' },
+        );
+      }),
+    );
+
+    const files = await new GoogleDriveClient(
+      async () => 'token',
+    ).listGamePackages();
+
+    expect(files.map(({ id }) => id)).toEqual(['package-id', 'package-2']);
+  });
 });
