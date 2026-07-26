@@ -27,6 +27,7 @@ import {
   saveShellLocale,
   saveShellTheme,
 } from './shell-preferences';
+import { useAIQuestions } from './ai-question-storage';
 import { useAiSettings } from './use-ai-settings';
 import { useGoogleDriveSettings } from './use-google-drive-settings';
 import { useSettingsDeepLink } from './use-settings-deep-link';
@@ -71,6 +72,7 @@ export function App() {
     loadGameOptions(localStorage),
   );
   const [gameOptionsError, setGameOptionsError] = useState('');
+  const aiQuestions = useAIQuestions(localStorage);
   const googleDrive = useGoogleDriveSettings({
     editorTextOptions: editorOptions,
     gameOptions,
@@ -223,6 +225,7 @@ export function App() {
             }
             loadedApps={loadedApps}
             aiOptions={ai.options}
+            aiQuestions={aiQuestions}
             editorOptions={editorOptions}
             gameOptions={gameOptions}
             gameOptionsError={gameOptionsError}

@@ -16,11 +16,17 @@ import type {
 } from '../../options/types';
 import { VisualEditor } from '../../visual-editor/VisualEditor';
 import { TooltipProvider } from '../../atoms/Tooltip';
+import { AIQuestionsPage } from '../AIQuestionsPage';
+import type { AIQuestion } from '@schdk/common';
 
 export type { ShellViewName } from '../shellItems';
 
 export interface ShellViewProps {
   aiOptions: AiOptions;
+  aiQuestions: {
+    questions: AIQuestion[];
+    addQuestion(question: AIQuestion): boolean;
+  };
   editorApp: ReactNode;
   hostApp: ReactNode;
   loadedApps: { host: boolean; editor: boolean };
@@ -48,6 +54,7 @@ export interface ShellViewProps {
 
 export function ShellView({
   aiOptions,
+  aiQuestions,
   editorApp,
   hostApp,
   loadedApps,
@@ -110,7 +117,12 @@ export function ShellView({
             onImportTemplate={onImportVisualEditorTemplate}
             onExportTemplate={onExportVisualEditorTemplate}
           />
-          <div hidden={view !== 'artificialIntelligence'} />
+          <div hidden={view !== 'artificialIntelligence'}>
+            <AIQuestionsPage
+              questions={aiQuestions.questions}
+              onAdd={aiQuestions.addQuestion}
+            />
+          </div>
           {loadedApps.host && (
             <div className="embedded-app" hidden={view !== 'host'}>
               {hostApp}

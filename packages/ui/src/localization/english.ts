@@ -1,5 +1,6 @@
 import { ukrainian } from './ukrainian';
 import { englishSettings } from './english-settings';
+import { aiQuestionsCopy } from './ai-questions';
 
 export const english: typeof ukrainian = {
   shared: {
@@ -70,6 +71,7 @@ export const english: typeof ukrainian = {
       description: 'Configure question-generation rules.',
     },
   },
+  aiQuestions: aiQuestionsCopy.en,
   settings: englishSettings,
   editor: {
     brandEyebrow: 'Package editor',

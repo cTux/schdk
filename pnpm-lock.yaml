@@ -103,6 +103,9 @@ importers:
       '@opencode-ai/models':
         specifier: ^0.0.24
         version: 0.0.24
+      '@schdk/common':
+        specifier: workspace:*
+        version: link:../common
       '@schdk/editor-web-app':
         specifier: workspace:*
         version: link:../editor-web-app

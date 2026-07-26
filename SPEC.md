@@ -88,3 +88,5 @@ B26|2026-07-26|Drive package loading buffered media before checking the canonica
 B27|2026-07-26|Music selection read oversized audio fully into memory before package serialization rejected it|Reject oversized music files before reading their bytes.
 B28|2026-07-26|Generated package filenames could exceed the same length limit enforced by Drive package validation|Truncate generated filenames to the canonical Drive name limit.
 B29|2026-07-26|Failed desktop restoration cleared the pathname session key instead of the account-scoped key that was loaded|V9
+B30|2026-07-26|Adding AI page copy inline pushed both locale modules past the enforced source-file limit|Split the copy into a focused localization module; the existing repository workflow test covers recurrence.
+B31|2026-07-26|The AI form relied on the shared textarea's Ukrainian optional-label default in English locale|Pass the active locale's optional label explicitly; C5 and SHL-5 already define the localization contract.
