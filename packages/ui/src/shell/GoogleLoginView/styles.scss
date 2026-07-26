@@ -59,8 +59,3 @@
   min-width: 210px;
   margin-top: 8px;
 }
-
-.google-login-card .ui-button.primary:hover:not(:disabled) {
-  border-color: rgba($accent-hover-rgb, 0.7);
-  background: linear-gradient(135deg, $accent-hover, $accent);
-}

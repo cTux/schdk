@@ -1,65 +1,10 @@
-@use './tokens' as *;
-
 .option-select .google-drive-action {
-  min-height: $control-normal;
   flex: 0 0 auto;
-  border: 1px solid rgba($accent-hover-rgb, 0.68);
-  border-radius: $radius-control;
-  background: linear-gradient(135deg, $accent-hover, $accent);
-  padding: 0 $space-4;
-  color: $on-accent;
-  font: inherit;
-  font-weight: 700;
-  box-shadow:
-    inset 0 1px rgba($highlight-rgb, 0.38),
-    0 8px 24px rgba($accent-rgb, 0.18);
-  cursor: pointer;
-  transition:
-    border-color $motion-fast ease,
-    background-color $motion-fast ease,
-    box-shadow $motion-fast ease,
-    transform $motion-fast ease;
-}
-
-.option-select .google-drive-action:hover:not(:disabled) {
-  border-color: $accent-hover;
-  background: $accent-hover;
-  box-shadow:
-    inset 0 1px rgba($highlight-rgb, 0.42),
-    0 10px 28px rgba($accent-rgb, 0.24);
-  transform: translateY(-1px);
-}
-
-.option-select .google-drive-action:active:not(:disabled) {
-  box-shadow:
-    inset 0 1px 3px rgba($shadow-rgb, 0.22),
-    0 4px 12px rgba($accent-rgb, 0.16);
-  transform: translateY(1px);
-}
-
-.option-select .google-drive-action:focus-visible {
-  outline: $focus-width solid $saving;
-  outline-offset: $focus-offset;
 }
 
 .option-select .google-drive-action:disabled {
   cursor: wait;
   opacity: 0.52;
-  box-shadow: none;
-}
-
-.option-select .google-drive-disconnect {
-  border-color: $border-strong;
-  background: $surface-raised;
-  color: $text;
-  box-shadow: none;
-}
-
-.option-select .google-drive-disconnect:hover:not(:disabled) {
-  border-color: rgba($accent-rgb, 0.34);
-  background: $surface-hover;
-  color: $accent-hover;
-  box-shadow: none;
 }
 
 @media (width <= 700px) {
