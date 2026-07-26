@@ -54,7 +54,7 @@ Statuses:
 - `x` done
 
 `cites` is a comma-separated list of `§V` or `§I` identifiers. Keep only
-specification work here; implementation backlog stays in `docs/TODO.md`.
+specification work here.
 
 ### §B — bugs
 

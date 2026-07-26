@@ -33,10 +33,6 @@
   onto it, resolve conflicts, and reverify the rebased result.
 - Add a project skill only for a distinct recurring workflow. Do not create
   speculative skills for features or packages that do not exist yet.
-- Keep `docs/TODO.md` tracked even when it is empty.
-- Remove `docs/TODO.md` entries that are already implemented or no longer relevant
-  when task discovery confirms they are stale.
-- Remove a `docs/TODO.md` item in the same change that resolves it.
 - Rename completed task documents under `docs/research` and `docs/tech-design`
   with an `-implemented.md` suffix so task discovery can skip them.
 
@@ -53,8 +49,7 @@
   specifications as a roadmap.
 - Keep `SPEC.md` as the compact project-level goal, constraint, interface,
   invariant, specification-task, and bug registry. Follow `FORMAT.md`; keep
-  detailed feature requirements in `docs/specs` and implementation backlog in
-  `docs/TODO.md`.
+  detailed feature requirements in `docs/specs`.
 - Keep code identifiers, code comments, package metadata, developer documents,
   and rule documents in English.
 - Keep user-visible application copy in Ukrainian unless a feature explicitly
