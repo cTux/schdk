@@ -15,8 +15,9 @@ contain two audio files named `audio/break-1` and `audio/break-2`.
 - Alternative answers are an optional list of strings.
 - Wrong answers are an optional list of strings.
 - A handout is optional. It can be text or an image embedded in the same file
-  as a data URL. Image handouts without a `kind` field remain supported;
-  current image handouts use `kind: "image"` and text handouts use
+  as a base64 `data:image/*` URL matching its declared MIME type. External
+  image URLs are invalid. Image handouts without a `kind` field remain
+  supported; current image handouts use `kind: "image"` and text handouts use
   `kind: "text"` with a `text` string.
 - A comment is an optional string. A question remains unfinished while it has
   an unresolved comment.

@@ -111,6 +111,21 @@ describe('game package rules', () => {
     expect(parseGameQuestion(JSON.parse(JSON.stringify(question)))).toEqual(
       question,
     );
+    expect(() =>
+      parseGameQuestion({
+        ...question,
+        handout: { ...question.handout, dataUrl: 'https://example.com/pixel' },
+      }),
+    ).toThrow('Invalid game question');
+    expect(() =>
+      parseGameQuestion({
+        ...question,
+        handout: {
+          ...question.handout,
+          mimeType: 'image/jpeg',
+        },
+      }),
+    ).toThrow('Invalid game question');
     expect(() => parseGameQuestion({ ...question, hostNotes: 42 })).toThrow(
       'Invalid game question',
     );

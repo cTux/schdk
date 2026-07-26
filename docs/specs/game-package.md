@@ -16,8 +16,8 @@ three-round game, including presentation media.
 - **PKG-3:** A question supports one main answer, alternative answers, wrong
   answers, an optional answer comment, an optional unresolved remark, and
   private host notes.
-- **PKG-4:** A question supports either a text handout or an embedded image
-  handout.
+- **PKG-4:** A question supports either a text handout or an embedded base64
+  image handout that never loads an external image URL.
 - **PKG-5:** Current files are ZIP archives with `game.json` and optional
   `audio/break-1` and `audio/break-2` entries.
 - **PKG-6:** Structurally valid unfinished packages remain editable and
@@ -35,6 +35,8 @@ three-round game, including presentation media.
 - Clipboard question JSON is parsed before it can replace a question.
 - Array order determines question numbers and music-break positions.
 - Audio bytes are ZIP entries, never JSON data URLs.
+- Image handouts are embedded data URLs matching their declared image MIME
+  type.
 
 ## Acceptance
 
@@ -45,5 +47,7 @@ three-round game, including presentation media.
 3. Each supported legacy format opens and saves as the current ZIP format.
 4. Malformed files and malformed clipboard questions are rejected without
    replacing current editor state.
+5. A matching embedded image handout opens, while an external or MIME-mismatched
+   image URL is rejected before rendering.
 
 Canonical format: [`../GAME_PACKAGE.md`](../GAME_PACKAGE.md).
