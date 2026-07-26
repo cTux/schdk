@@ -9,8 +9,8 @@
 - Preserve keyboard-accessible navigation in the shared renderer.
 - Group the visual editor, artificial intelligence, editor, and host pages
   under `ЩДК` in the fixed sidebar. Keep Options at the bottom, nest game and
-  editor settings under the primary `ЩДК` tab, and persist editor text options
-  in localStorage.
+  editor settings as always-visible fieldsets under the primary `ЩДК` tab, and
+  persist editor text options in localStorage.
 - Reflect an opened browser package in the `package` URL query parameter. A
   unified-shell deep link with this parameter opens the editor before loading
   the package.

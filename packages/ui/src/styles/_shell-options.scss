@@ -50,8 +50,23 @@
   color: $accent-hover;
 }
 
-.options-secondary-tabs {
-  margin-top: 0;
+.options-fieldset {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 16px;
+  border: 1px solid $border;
+  border-radius: $radius-panel;
+  background: rgba($surface-rgb, 0.72);
+  padding: 14px;
+  box-shadow: $shadow-raised;
+}
+
+.options-fieldset legend {
+  padding: 0 8px;
+  color: $text;
+  font-weight: 700;
 }
 
 .options-page section {

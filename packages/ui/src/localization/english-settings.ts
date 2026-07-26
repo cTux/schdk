@@ -60,7 +60,6 @@ export const englishSettings: typeof ukrainianSettings = {
       ],
     },
   ],
-  schdkTabsLabel: 'WWW settings',
   gameTab: 'Hosting',
   editorTab: 'Question editing',
   questionText: 'Question text',

@@ -57,7 +57,6 @@ export const ukrainianSettings = {
       ],
     },
   ],
-  schdkTabsLabel: 'Налаштування ЩДК',
   gameTab: 'Проведення гри',
   editorTab: 'Редагування питань',
   questionText: 'Текст питання',

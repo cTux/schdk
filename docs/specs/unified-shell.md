@@ -24,7 +24,8 @@ package authoring, hosting, settings, and account state.
 - **SHL-6:** Theme defaults to operating-system preference and supports
   persisted system, light, and dark choices.
 - **SHL-7:** Settings expose application locale, Google account and sync state,
-  custom shortcuts, host options, and editor text-correction options.
+  custom shortcuts, and always-visible fieldsets for host options and editor
+  text-correction options.
 - **SHL-8:** Host settings persist automatic fullscreen, separate signal and
   music volumes, visual layout, background, and custom elements.
 - **SHL-9:** Editor settings persist correction toggles for question text,
