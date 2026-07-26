@@ -29,9 +29,11 @@ When connected:
 - disconnecting stops Drive access without deleting Drive data.
 
 Browser automatic sync is guaranteed only while its short-lived access token is
-valid. After expiry or reload, changes remain safe locally and the UI requires
-an explicit reconnect. Desktop sync can refresh automatically using a securely
-stored installed-app refresh token.
+valid. An active click renews the current account's token with no more than 20
+minutes remaining; failed renewals retry at most once per five minutes. After
+expiry or reload, changes remain safe locally and the UI requires an explicit
+reconnect. Desktop sync can refresh automatically using a securely stored
+installed-app refresh token.
 
 ## Goals
 
@@ -242,7 +244,10 @@ type GoogleDriveConnection =
 
 Rules:
 
-- request access only from the explicit connect/reconnect action;
+- request initial access only from the explicit connect/reconnect action;
+- while connected, request renewal for the current account from an active click
+  only when no more than 20 minutes remain, with failed attempts throttled to
+  once per five minutes;
 - keep the access token in a closure, never React state or persistent storage;
 - verify both scopes were granted;
 - clear the token on disconnect;

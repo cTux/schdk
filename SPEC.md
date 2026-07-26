@@ -55,3 +55,4 @@ B6|2026-07-26|The active settings group lived only in local component state, so 
 B7|2026-07-26|The new settings deep-link hook used a multiline import that differed from the repository formatter output|Apply the existing formatter; no new invariant is needed for this mechanical failure.
 B8|2026-07-26|The Google login button replaced its gradient and border on hover, causing a visible flash|Keep its visual treatment stable across pointer hover.
 B9|2026-07-26|The configured AI key field looked empty and its success status inherited muted text styling|Show a fixed mask without reading the stored key and use the existing success color token.
+B10|2026-07-26|Activity-based token renewal pushed the browser Drive module past the enforced source-file limit|Split Google Identity Services loading into a focused browser module.
