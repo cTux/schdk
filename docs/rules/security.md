@@ -44,3 +44,5 @@
 - Materialize release-only desktop OAuth credentials from the
   `GOOGLE_DESKTOP_CREDENTIALS_JSON` GitHub Actions secret into the runner
   temporary directory and remove the file even when packaging fails.
+- Pin every third-party GitHub Action to a full commit SHA and retain its
+  release tag in a comment for maintainable supply-chain updates.

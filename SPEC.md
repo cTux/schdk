@@ -46,6 +46,7 @@ V13|Local package and visual-template imports enforce canonical limits before wh
 V14|Drive package recents traverse every API result page.
 V15|Browser entry points deny unlisted scripts, connections, frames, objects, and form targets through CSP.
 V16|Windows GitHub Releases contain only Authenticode-valid executables.
+V17|Third-party GitHub Actions execute only from reviewed immutable commit SHAs.
 
 ## §T
 
@@ -76,3 +77,4 @@ B17|2026-07-26|Adding a template size guard pushed the shell component past the 
 B18|2026-07-26|Drive package recents stopped after the first 20 files|V14
 B19|2026-07-26|Application CSP restricted only image sources and left executable and network capabilities unconstrained|V15
 B20|2026-07-26|Windows release packaging explicitly disabled executable signing|V16
+B21|2026-07-26|GitHub workflows referenced mutable major-version action tags|V17
