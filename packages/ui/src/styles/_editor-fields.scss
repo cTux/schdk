@@ -13,7 +13,7 @@
 
   .primary:hover:not(:disabled) {
     border-color: $accent-hover;
-    background: $accent-hover;
+    background: linear-gradient(135deg, $accent-hover, $accent);
   }
 
   label,
