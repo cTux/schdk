@@ -125,7 +125,7 @@ async function receiveAuthorizationCode(state: string, verifier: string) {
           typeof address === 'object' && address
             ? `http://127.0.0.1:${address.port}${CALLBACK_PATH}`
             : '';
-        const url = new URL(request.url ?? '/', redirectUri);
+        const url = new URL(request.url ?? '/', 'http://127.0.0.1');
         if (
           request.method !== 'GET' ||
           url.pathname !== CALLBACK_PATH ||
