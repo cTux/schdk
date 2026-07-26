@@ -16,6 +16,33 @@ const closeControllers = new Map<number, CloseController>();
 let mainWindow: BrowserWindow | null = null;
 let editorPackageOpen = false;
 
+function attachSmokeTest(window: BrowserWindow) {
+  if (!process.argv.includes('--smoke-test')) return;
+  const timeout = setTimeout(() => {
+    console.error('Electron smoke test timed out');
+    app.exit(1);
+  }, 15_000);
+  window.webContents.once('did-fail-load', (_event, code, description) => {
+    clearTimeout(timeout);
+    console.error(`Electron smoke test failed to load: ${code} ${description}`);
+    app.exit(1);
+  });
+  window.webContents.once('did-finish-load', async () => {
+    try {
+      const passed = await window.webContents.executeJavaScript(
+        "Boolean(document.querySelector('#root')?.childElementCount && window.desktop?.googleDrive?.status)",
+      );
+      if (!passed) throw new Error('Renderer or preload bridge is unavailable');
+      clearTimeout(timeout);
+      app.exit(0);
+    } catch (error) {
+      clearTimeout(timeout);
+      console.error('Electron smoke test failed', error);
+      app.exit(1);
+    }
+  });
+}
+
 async function handleCloseFailure(
   window: BrowserWindow,
   controller: CloseController,
@@ -59,6 +86,7 @@ function createWindow() {
   });
   mainWindow = window;
   window.maximize();
+  attachSmokeTest(window);
 
   window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
   window.webContents.on('will-navigate', (event) => event.preventDefault());

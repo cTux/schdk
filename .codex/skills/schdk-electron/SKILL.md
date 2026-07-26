@@ -27,6 +27,8 @@ description: Build, debug, secure, or package SCHDK Electron applications. Use f
    Release notes come from the matching Ukrainian `CHANGELOG.md` section.
    Require the PFX certificate secrets and verify every release executable's
    Authenticode signature before upload; local unpacked builds may be unsigned.
+9. Keep the packaged-renderer smoke mode limited to CI startup validation: load
+   bundled web assets, confirm root UI and the preload bridge, then exit.
 
 ## Checks
 

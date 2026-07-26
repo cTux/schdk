@@ -22,6 +22,23 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
+      - name: Smoke test packaged Electron shell
+        shell: pwsh
+        run: |
+          $appPath = Resolve-Path 'packages/all-desktop-app/dist/release/win-unpacked/ЩДК.exe'
+          $smoke = Start-Process -FilePath $appPath -ArgumentList '--smoke-test' -PassThru
+          try {
+            if (!$smoke.WaitForExit(30000)) {
+              throw 'Packaged Electron smoke test timed out.'
+            }
+            if ($smoke.ExitCode -ne 0) {
+              throw "Packaged Electron smoke test exited with $($smoke.ExitCode)."
+            }
+          } finally {
+            if (!$smoke.HasExited) {
+              Stop-Process -Id $smoke.Id -Force
+            }
+          }
 
   tests:
     name: tests
@@ -41,3 +58,17 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
+      - run: pnpm turbo build --filter=@schdk/all-web-app
+      - name: Smoke test browser shell
+        shell: bash
+        run: |
+          pnpm --filter @schdk/all-web-app preview --host 127.0.0.1 --port 4173 \
+            > "$RUNNER_TEMP/web-preview.log" 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid"' EXIT
+          curl --retry 20 --retry-connrefused --retry-delay 1 \
+            --silent --show-error --fail http://127.0.0.1:4173/ > /dev/null
+          google-chrome --headless=new --no-sandbox --disable-gpu \
+            --virtual-time-budget=5000 --dump-dom http://127.0.0.1:4173/ \
+            > "$RUNNER_TEMP/web-smoke.html"
+          grep -q 'google-login-screen' "$RUNNER_TEMP/web-smoke.html"

@@ -8,7 +8,8 @@
 - Root `pnpm build` builds packages in dependency order, then packages the
   desktop application, and leaves artifacts in each package's own `dist`.
 - Run the pull-request root build on `windows-latest` so CI verifies the
-  supported Windows desktop package.
+  supported Windows desktop package, then launch that packaged renderer through
+  its smoke-test mode.
 - Keep third-party modules from `node_modules` in a separate `vendors` chunk
   for every runnable Vite application instead of merging them into its main
   application bundle.
@@ -21,6 +22,8 @@
   relative `file:` URLs.
 - Deploy `@schdk/all-web-app` to GitHub Pages after every push to `main` through
   the official Pages artifact and deployment actions.
+- In pull requests, load the production unified web shell in headless Chrome
+  and require its Google login view to render.
 - Create Windows releases only from `main` through the manual release workflow.
   Require a SemVer version and a matching Ukrainian `CHANGELOG.md` section,
   require the Windows certificate secrets, then publish only Authenticode-valid

@@ -50,6 +50,8 @@ package authoring, hosting, settings, and account state.
   subpath.
 - **SHL-14:** Amber primary actions use the same shared visual treatment across
   every mounted surface and do not flash when pointer hover begins or ends.
+- **SHL-15:** Pull requests load the production shell in a real headless browser
+  and require the Google login view to render.
 
 ## Invariants
 
@@ -78,3 +80,5 @@ package authoring, hosting, settings, and account state.
    refresh it, and verify its assets and shell routes remain available.
 7. Hover amber primary actions in the shell, settings, editor, and host; observe
    no background flash when hover begins or ends.
+8. Run pull-request checks and observe the production login shell render in
+   headless Chrome.

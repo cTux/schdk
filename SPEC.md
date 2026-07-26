@@ -47,6 +47,7 @@ V14|Drive package recents traverse every API result page.
 V15|Browser entry points deny unlisted scripts, connections, frames, objects, and form targets through CSP.
 V16|Windows GitHub Releases contain only Authenticode-valid executables.
 V17|Third-party GitHub Actions execute only from reviewed immutable commit SHAs.
+V18|Pull requests execute the production browser shell and packaged Electron renderer before their required checks pass.
 
 ## §T
 
@@ -78,3 +79,4 @@ B18|2026-07-26|Drive package recents stopped after the first 20 files|V14
 B19|2026-07-26|Application CSP restricted only image sources and left executable and network capabilities unconstrained|V15
 B20|2026-07-26|Windows release packaging explicitly disabled executable signing|V16
 B21|2026-07-26|GitHub workflows referenced mutable major-version action tags|V17
+B22|2026-07-26|Pull-request CI built browser and Electron artifacts without executing either runtime|V18

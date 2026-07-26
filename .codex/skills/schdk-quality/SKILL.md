@@ -19,7 +19,10 @@ description: Verify SCHDK changes and produce local build artifacts. Use for pre
    tasks dependent on dependency builds so fresh clones can resolve packages
    that export compiled output. Keep every third-party action pinned to a full
    commit SHA with its release tag in a comment.
-5. Use the browser smoke-test workflow below for changed UI. Build affected Electron apps for main, preload, packaging, icon, or bundled-resource changes.
+5. Keep the pull-request production-browser and packaged-Electron smoke checks
+   green. Use the browser smoke-test workflow below for changed UI. Build
+   affected Electron apps for main, preload, packaging, icon, or
+   bundled-resource changes.
 6. Run root `pnpm build` for complete workspace build verification.
 7. Confirm `git diff --check` and ensure generated output remains ignored before committing.
 8. Keep the pre-commit hook limited to formatting and linting; run the remaining checks outside it.
