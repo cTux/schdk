@@ -151,6 +151,17 @@ export function useEditorPersistence({
     return () => window.desktop?.setEditorPackageOpen(false);
   }, [hasPackage]);
 
+  useEffect(() => {
+    if (window.desktop || !hasPackage || saveStatus === 'saved') return;
+    const preventUnsavedClose = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+    window.addEventListener('beforeunload', preventUnsavedClose);
+    return () =>
+      window.removeEventListener('beforeunload', preventUnsavedClose);
+  }, [hasPackage, saveStatus]);
+
   useEffect(
     () =>
       window.desktop?.onCloseRequested(async (attempt) => {
