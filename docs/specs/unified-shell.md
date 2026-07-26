@@ -45,6 +45,9 @@ package authoring, hosting, settings, and account state.
   synchronized settings or local browser persistence. When configured, the
   empty key field shows a fixed mask without reading the stored value, and the
   configured status is green.
+- **SHL-13:** The production unified web application is deployed from `main`
+  to the repository's GitHub Pages site and remains usable from its repository
+  subpath.
 
 ## Invariants
 
@@ -69,3 +72,5 @@ package authoring, hosting, settings, and account state.
 5. Open the Artificial intelligence route directly, then configure its model
    and API key; reload and confirm both remain for the same Google account,
    then switch accounts and confirm the previous key is not exposed.
+6. Deploy the unified build to GitHub Pages; load the repository URL directly,
+   refresh it, and verify its assets and shell routes remain available.

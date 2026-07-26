@@ -58,6 +58,7 @@ SCHDK прибирає ручну роботу між написанням па�
 - [Окремий запуск вебзастосунків](docs/guide/run-standalone-web-apps.md)
 - [Робота з файлами в браузері та на десктопі](docs/guide/file-handling.md)
 - [Збирання готових застосунків](docs/guide/build-apps.md)
+- [Релізи та вебверсія](docs/guide/releases.md)
 - [Перевірка якості](docs/guide/quality-checks.md)
 - [Структура репозиторію](docs/guide/repository-structure.md)
 - [Формат `.schdk`](docs/guide/schdk-format.md)

@@ -22,6 +22,9 @@ description: Build, debug, secure, or package SCHDK Electron applications. Use f
 7. Keep user AI API keys in the current Google account's separate Drive app
    data; expose only save, remove, and configured-status IPC. Migrate a legacy
    `safeStorage` key only after a successful Drive write.
+8. For Windows release packaging, keep local `package` output unpacked and use
+   `package:win` for the versioned NSIS installer and portable executable.
+   Release notes come from the matching Ukrainian `CHANGELOG.md` section.
 
 ## Checks
 
@@ -33,3 +36,5 @@ pnpm turbo package --filter @schdk/all-desktop-app
 ```
 
 Close running packaged executables before rebuilding locked Windows output.
+For release-packaging changes, also run
+`pnpm --filter @schdk/all-desktop-app package:win`.

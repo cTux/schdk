@@ -50,8 +50,9 @@
   data. Expose only save, remove, and configured-status operations to the
   renderer; migrate and remove a legacy `safeStorage` key only after a
   successful Drive write.
-- Package the Windows app with electron-builder's unpacked `dir` target under
-  `dist/release/win-unpacked`; the project does not currently build installers.
+- Keep local Windows packaging on electron-builder's unpacked `dir` target
+  under `dist/release/win-unpacked`. Release packaging produces versioned x64
+  NSIS installer and portable executable assets.
 - Keep `signExecutable: false` so executable resource editing can apply the
   shared icon without requiring signing.
 - Include compiled Electron files, the package manifest, required build assets,

@@ -10,6 +10,7 @@
     "build": "tsc",
     "prepackage": "node scripts/prepare-google-oauth-client.mjs",
     "package": "electron-builder --dir",
+    "package:win": "node scripts/prepare-google-oauth-client.mjs && electron-builder --win --x64",
     "lint": "oxlint -c ../../.oxlintrc.json electron",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
@@ -49,7 +50,16 @@
     "win": {
       "icon": "build/owl.png",
       "signExecutable": false,
-      "target": "dir"
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "artifactName": "schdk-${version}-windows-${arch}-installer.${ext}"
+    },
+    "portable": {
+      "artifactName": "schdk-${version}-windows-${arch}-portable.${ext}"
     }
   }
 }

@@ -31,3 +31,6 @@
   is loaded from an ignored packaged resource, distributed with the desktop
   app, and must never be committed, treated as a security boundary, or exposed
   through renderer IPC.
+- Materialize release-only desktop OAuth credentials from the
+  `GOOGLE_DESKTOP_CREDENTIALS_JSON` GitHub Actions secret into the runner
+  temporary directory and remove the file even when packaging fails.

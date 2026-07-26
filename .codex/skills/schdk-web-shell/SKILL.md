@@ -24,6 +24,9 @@ description: Maintain SCHDK browser applications and the unified @schdk/all-web-
    models.dev with a built-in fallback. Keep AI API keys in a separate app-data
    file for the current Google account and outside local or synchronized
    settings.
+9. Keep the production Vite base relative and deploy
+   `packages/all-web-app/dist` through the GitHub Pages workflow after pushes to
+   `main`.
 
 ## Checks
 

@@ -35,6 +35,9 @@ save and presenter-window integration.
   separate Drive app data. Renderer IPC can save, remove, or query its presence
   but never read the stored value; a legacy `safeStorage` value migrates once
   after Drive connection.
+- **DSK-13:** Each Windows GitHub Release contains version-matched x64 NSIS
+  installer and portable executable assets plus release notes sourced from the
+  matching Ukrainian changelog section.
 
 ## Invariants
 
@@ -58,3 +61,5 @@ save and presenter-window integration.
 5. Save, replace, and remove an AI API key; restart between operations and
    verify only its configured status crosses into the renderer, then switch
    Google accounts and verify the prior account's key is not exposed.
+6. Create a release from `main`; verify its tag, Ukrainian notes, installer,
+   portable executable, and embedded application versions all match.
