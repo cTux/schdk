@@ -68,10 +68,14 @@ Build configuration:
 ```text
 VITE_GOOGLE_WEB_CLIENT_ID=<public web client ID>
 GOOGLE_DESKTOP_CLIENT_ID=<public desktop client ID>
+GOOGLE_DESKTOP_CLIENT_SECRET=<installed-app client secret>
+GOOGLE_DESKTOP_CREDENTIALS_PATH=<credentials JSON used for packaging>
 ```
 
-Client IDs are public. Do not introduce a client secret into browser code or
-treat a desktop client secret as a security boundary.
+Client IDs and an installed desktop app's client secret are distributed with
+the application. Do not introduce a client secret into browser code or treat
+the desktop client secret as a security boundary. Packaging copies the
+credentials JSON into an ignored generated resource; never commit it.
 
 Production web hosting must provide HTTPS and the GIS-compatible CSP, COOP, and
 referrer-policy headers. Keep Google origins limited to the exact directives

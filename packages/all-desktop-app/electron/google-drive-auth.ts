@@ -9,6 +9,7 @@ import {
   GoogleDriveClient,
   type DriveAccount,
 } from '@schdk/google-drive';
+import { loadGoogleDesktopClientSecret } from './google-oauth-client-secret.js';
 
 const AUTHORIZATION_ENDPOINT = 'https://accounts.google.com/o/oauth2/v2/auth';
 const TOKEN_ENDPOINT = 'https://oauth2.googleapis.com/token';
@@ -18,6 +19,7 @@ const DEFAULT_CLIENT_ID =
   '177890331671-ocg76dk71d5bd9kurbns07c4gauuh8vl.apps.googleusercontent.com';
 const clientId =
   process.env.GOOGLE_DESKTOP_CLIENT_ID?.trim() || DEFAULT_CLIENT_ID;
+const clientSecret = loadGoogleDesktopClientSecret();
 
 interface OAuthTokens {
   accessToken: string;
@@ -63,6 +65,7 @@ async function persistRefreshToken(refreshToken: string) {
 }
 
 async function requestTokens(parameters: URLSearchParams) {
+  parameters.set('client_secret', clientSecret);
   const response = await fetch(TOKEN_ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -70,17 +73,22 @@ async function requestTokens(parameters: URLSearchParams) {
   });
   const value = (await response.json()) as {
     access_token?: string;
+    error?: string;
+    error_description?: string;
     expires_in?: number;
     refresh_token?: string;
   };
   if (!response.ok || !value.access_token) {
-    throw new GoogleDriveAuthorizationError('Google authorization failed');
+    throw new GoogleDriveAuthorizationError(
+      [value.error, value.error_description].filter(Boolean).join(': ') ||
+        'Google authorization failed',
+    );
   }
   return value;
 }
 
 export async function getGoogleDriveAccessToken() {
-  if (!clientId) {
+  if (!clientId || !clientSecret) {
     throw new GoogleDriveAuthorizationError(
       'Google Drive desktop client is not configured',
     );
@@ -178,7 +186,7 @@ async function receiveAuthorizationCode(state: string, verifier: string) {
 }
 
 export async function connectGoogleDrive(): Promise<DriveAccount> {
-  if (!clientId) {
+  if (!clientId || !clientSecret) {
     throw new GoogleDriveAuthorizationError(
       'Google Drive desktop client is not configured',
     );
@@ -221,7 +229,7 @@ export async function disconnectGoogleDrive() {
 }
 
 export async function getGoogleDriveStatus() {
-  if (!clientId) return { state: 'unavailable' } as const;
+  if (!clientId || !clientSecret) return { state: 'unavailable' } as const;
   try {
     const account = await new GoogleDriveClient(
       getGoogleDriveAccessToken,

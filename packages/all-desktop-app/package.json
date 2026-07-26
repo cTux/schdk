@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "pnpm --filter @schdk/all-web-app build && pnpm build && electron .",
     "build": "tsc",
+    "prepackage": "node scripts/prepare-google-oauth-client.mjs",
     "package": "electron-builder --dir",
     "lint": "oxlint -c ../../.oxlintrc.json electron",
     "typecheck": "tsc --noEmit",
@@ -39,6 +40,10 @@
       {
         "from": "../all-web-app/dist",
         "to": "web"
+      },
+      {
+        "from": "build/google-oauth-client.json",
+        "to": "google-oauth-client.json"
       }
     ],
     "win": {

@@ -40,7 +40,12 @@
   generic authenticated requests never cross into the renderer.
 - Bundle the production Web application client ID in the browser application.
   Allow `VITE_GOOGLE_WEB_CLIENT_ID` to override it for development.
-- Bundle the production Desktop application client ID in the Electron main
-  process. Allow `GOOGLE_DESKTOP_CLIENT_ID` to override it for development.
+- Bundle the production Desktop application client ID and installed-app client
+  secret in the Electron main process. Package the client secret from the
+  ignored credentials file selected by `GOOGLE_DESKTOP_CREDENTIALS_PATH`;
+  never commit it. The client secret is distributed with the application and
+  is not a confidential security boundary. Allow `GOOGLE_DESKTOP_CLIENT_ID`
+  and `GOOGLE_DESKTOP_CLIENT_SECRET` to override them for development.
 - Real OAuth smoke tests use development credentials and test accounts. Never
-  put production credentials or OAuth tokens in repository files or logs.
+  put OAuth tokens or confidential production credentials in repository files
+  or logs.
