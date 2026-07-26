@@ -12,6 +12,7 @@ import type {
   AppTheme,
   EditorTextOptions,
   GameOptions,
+  SettingsGroup,
 } from '../../options/types';
 import { VisualEditor } from '../../visual-editor/VisualEditor';
 import { TooltipProvider } from '../../atoms/Tooltip';
@@ -28,6 +29,7 @@ export interface ShellViewProps {
   gameOptionsError: string;
   googleDriveAccount?: ShellAccount;
   googleDriveState: GoogleDriveState;
+  settingsGroup: SettingsGroup;
   theme: AppTheme;
   view: ShellViewName;
   onAiApiKeySave(apiKey: string | null): Promise<void>;
@@ -40,6 +42,7 @@ export interface ShellViewProps {
   onImportVisualEditorTemplate(file: File): void;
   onExportVisualEditorTemplate(): void;
   onShowView(view: ShellViewName): void;
+  onSettingsGroupChange(group: SettingsGroup): void;
   onThemeChange(theme: AppTheme): void;
 }
 
@@ -53,6 +56,7 @@ export function ShellView({
   gameOptionsError,
   googleDriveAccount,
   googleDriveState,
+  settingsGroup,
   theme,
   view,
   onAiApiKeySave,
@@ -65,6 +69,7 @@ export function ShellView({
   onImportVisualEditorTemplate,
   onExportVisualEditorTemplate,
   onShowView,
+  onSettingsGroupChange,
   onThemeChange,
 }: ShellViewProps) {
   return (
@@ -85,6 +90,7 @@ export function ShellView({
             game={gameOptions}
             googleDriveAccount={googleDriveAccount?.emailAddress}
             googleDriveState={googleDriveState}
+            settingsGroup={settingsGroup}
             theme={theme}
             onAiApiKeySave={onAiApiKeySave}
             onAiModelChange={onAiModelChange}
@@ -93,6 +99,7 @@ export function ShellView({
             onGameChange={onGameOptionsChange}
             onGoogleDriveConnect={onGoogleDriveConnect}
             onGoogleDriveDisconnect={onGoogleDriveDisconnect}
+            onSettingsGroupChange={onSettingsGroupChange}
             onThemeChange={onThemeChange}
           />
           <VisualEditor

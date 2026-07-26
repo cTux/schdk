@@ -23,6 +23,12 @@ export interface AiOptions {
 }
 
 export type AppTheme = 'system' | 'light' | 'dark';
+export const SETTINGS_GROUPS = [
+  'app',
+  'schdk',
+  'artificialIntelligence',
+] as const;
+export type SettingsGroup = (typeof SETTINGS_GROUPS)[number];
 
 export const GAME_LAYOUT_ELEMENT_IDS = [
   'logo',

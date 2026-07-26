@@ -6,6 +6,8 @@
   `Налаштування` in a separate group at the bottom.
 - Organize settings under an accessible primary `ЩДК` tab with always-visible
   `Проведення гри` and `Редагування питань` fieldsets.
+- Keep the active primary settings tab controlled by the web shell so its URL
+  deep link and browser history remain authoritative.
 - Keep the native Ukrainian/English language control in the first `App`
   settings tab. Keep `WWW` as the second primary tab with its host/editor
   fieldsets and `Штучний інтелект` as the third primary tab.

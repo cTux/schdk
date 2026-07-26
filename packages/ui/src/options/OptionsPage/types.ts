@@ -3,6 +3,7 @@ import type {
   AppTheme,
   EditorTextOptions,
   GameOptions,
+  SettingsGroup,
 } from '../types';
 
 export type GoogleDriveState =
@@ -20,6 +21,7 @@ export interface OptionsPageProps {
   googleDriveAccount?: string;
   googleDriveState: GoogleDriveState;
   hidden: boolean;
+  settingsGroup: SettingsGroup;
   theme: AppTheme;
   onAiApiKeySave(apiKey: string | null): Promise<void>;
   onAiModelChange(model: string): void;
@@ -28,5 +30,6 @@ export interface OptionsPageProps {
   onGameChange(options: GameOptions): void;
   onGoogleDriveConnect(): void;
   onGoogleDriveDisconnect(): void;
+  onSettingsGroupChange(group: SettingsGroup): void;
   onThemeChange(theme: AppTheme): void;
 }

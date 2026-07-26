@@ -17,8 +17,10 @@ description: Maintain SCHDK browser applications and the unified @schdk/all-web-
 5. Start Google browser token requests only from an explicit login action;
    restore valid short-lived tokens only from per-tab session storage, and never
    open OAuth from startup, refresh, or background synchronization.
-6. Visually smoke-test changed navigation.
-7. Keep AI provider and model as separate validated selections populated from
+6. Keep the shell view and primary settings group in validated URL query
+   state; restore both through browser back/forward.
+7. Visually smoke-test changed navigation.
+8. Keep AI provider and model as separate validated selections populated from
    models.dev with a built-in fallback. Keep AI API keys in a separate app-data
    file for the current Google account and outside local or synchronized
    settings.

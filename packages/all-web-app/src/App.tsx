@@ -29,6 +29,7 @@ import {
 } from './shell-preferences';
 import { useAiSettings } from './use-ai-settings';
 import { useGoogleDriveSettings } from './use-google-drive-settings';
+import { useSettingsDeepLink } from './use-settings-deep-link';
 
 const HostApp = lazy(() =>
   import('@schdk/host-web-app/app').then(({ App }) => ({ default: App })),
@@ -58,6 +59,7 @@ export function App() {
       'home'
     );
   });
+  const settings = useSettingsDeepLink(view);
   const [loadedApps, setLoadedApps] = useState({
     host: view === 'host',
     editor: view === 'editor',
@@ -229,6 +231,7 @@ export function App() {
               'account' in connection ? connection.account : undefined
             }
             googleDriveState={connection.state}
+            settingsGroup={settings.group}
             theme={theme}
             view={view}
             onEditorOptionsChange={googleDrive.setEditorTextOptions}
@@ -241,6 +244,7 @@ export function App() {
             onImportVisualEditorTemplate={importVisualEditorTemplate}
             onExportVisualEditorTemplate={exportVisualEditorTemplate}
             onShowView={(nextView) => showView(nextView)}
+            onSettingsGroupChange={settings.showGroup}
             onThemeChange={setTheme}
           />
         </div>

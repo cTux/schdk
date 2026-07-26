@@ -17,6 +17,9 @@
 - Persist the active shell page in browser storage on web and desktop. Reflect
   it in the `view` URL query parameter so every shell page can be deep-linked
   and browser back/forward restores the selected page.
+- Reflect the active primary settings group in the validated `settings` URL
+  query parameter while `view=options`; restore it through browser
+  back/forward and remove it when leaving settings.
 - Persist validated visual-editor custom elements and background settings with
   the other game options.
 - Default the unified application to Ukrainian when no locale was selected.

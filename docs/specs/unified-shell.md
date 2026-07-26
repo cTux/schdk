@@ -15,7 +15,9 @@ package authoring, hosting, settings, and account state.
 - **SHL-2:** Application chunks load lazily on first selection and remain
   mounted afterward so navigation preserves state.
 - **SHL-3:** Active view persists locally and in the validated `view` query
-  parameter; browser back, forward, and deep links select the matching view.
+  parameter. The active primary settings group persists in the validated
+  `settings` query parameter while settings are open. Browser back, forward,
+  and deep links restore both values.
 - **SHL-4:** A valid browser `package` query opens the editor and restores the
   referenced Drive package and selected question.
 - **SHL-5:** Ukrainian is the default locale; explicit Ukrainian or English
@@ -54,7 +56,8 @@ package authoring, hosting, settings, and account state.
 
 ## Acceptance
 
-1. Deep-link to every shell page and use browser history to restore prior pages.
+1. Deep-link to every shell page and primary settings group, then use browser
+   history to restore prior pages and groups.
 2. Switch locale and theme, reload, and observe the same selection on every
    mounted surface.
 3. Navigate away from an in-progress editor and game, return, and observe

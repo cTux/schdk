@@ -1,17 +1,13 @@
 import classNames from 'classnames';
-import { useState } from 'react';
 import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';
 import { useLocalization } from '../../localization';
 import { AiOptionsPanel } from '../AiOptionsPanel';
 import { OptionSlider } from '../OptionSlider';
 import { OptionToggle } from '../OptionToggle';
-import type { AppTheme } from '../types';
+import { SETTINGS_GROUPS, type AppTheme } from '../types';
 import { getGoogleDriveMessage } from './google-drive-message';
 import type { OptionsPageProps } from './types';
-
-const GROUPS = ['app', 'schdk', 'artificialIntelligence'] as const;
-type OptionsGroup = (typeof GROUPS)[number];
 
 export function OptionsPage({
   ai,
@@ -20,6 +16,7 @@ export function OptionsPage({
   googleDriveAccount,
   googleDriveState,
   hidden,
+  settingsGroup,
   theme,
   onAiApiKeySave,
   onAiModelChange,
@@ -28,10 +25,10 @@ export function OptionsPage({
   onGameChange,
   onGoogleDriveConnect,
   onGoogleDriveDisconnect,
+  onSettingsGroupChange,
   onThemeChange,
 }: OptionsPageProps) {
   const { copy, locale, onLocaleChange } = useLocalization();
-  const [group, setGroup] = useState<OptionsGroup>('app');
 
   return (
     <div className="options-page" hidden={hidden}>
@@ -43,16 +40,16 @@ export function OptionsPage({
         role="tablist"
         aria-label={copy.settings.groupsLabel}
       >
-        {GROUPS.map((item) => (
+        {SETTINGS_GROUPS.map((item) => (
           <Button
             key={item}
             type="button"
             role="tab"
             id={`options-group-tab-${item}`}
             aria-controls={`options-group-panel-${item}`}
-            aria-selected={group === item}
-            className={group === item ? 'active' : ''}
-            onClick={() => setGroup(item)}
+            aria-selected={settingsGroup === item}
+            className={settingsGroup === item ? 'active' : ''}
+            onClick={() => onSettingsGroupChange(item)}
           >
             {copy.settings[`${item}Tab`]}
           </Button>
@@ -63,7 +60,7 @@ export function OptionsPage({
         id="options-group-panel-app"
         role="tabpanel"
         aria-labelledby="options-group-tab-app"
-        hidden={group !== 'app'}
+        hidden={settingsGroup !== 'app'}
       >
         <label className="option-select">
           <span>
@@ -157,7 +154,7 @@ export function OptionsPage({
         id="options-group-panel-schdk"
         role="tabpanel"
         aria-labelledby="options-group-tab-schdk"
-        hidden={group !== 'schdk'}
+        hidden={settingsGroup !== 'schdk'}
       >
         <fieldset className="options-fieldset">
           <legend>{copy.settings.gameTab}</legend>
@@ -215,7 +212,7 @@ export function OptionsPage({
         id="options-group-panel-artificialIntelligence"
         role="tabpanel"
         aria-labelledby="options-group-tab-artificialIntelligence"
-        hidden={group !== 'artificialIntelligence'}
+        hidden={settingsGroup !== 'artificialIntelligence'}
       >
         <AiOptionsPanel
           options={ai}
