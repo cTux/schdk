@@ -78,7 +78,12 @@ export function AiOptionsPanel({
         <span>
           <strong>{copy.settings.aiApiKey}</strong>
           <small>{copy.settings.aiApiKeyDescription}</small>
-          <small aria-live="polite">
+          <small
+            className={
+              !failed && options.apiKeyConfigured ? 'configured' : undefined
+            }
+            aria-live="polite"
+          >
             {failed
               ? copy.settings.aiApiKeySaveFailed
               : options.apiKeyConfigured
@@ -90,7 +95,11 @@ export function AiOptionsPanel({
           <input
             type="password"
             value={apiKey}
-            placeholder={copy.settings.aiApiKeyPlaceholder}
+            placeholder={
+              options.apiKeyConfigured
+                ? '********'
+                : copy.settings.aiApiKeyPlaceholder
+            }
             autoComplete="off"
             onChange={(event) => setApiKey(event.target.value)}
           />
