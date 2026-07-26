@@ -11,7 +11,8 @@
     },
     "package": {
       "dependsOn": ["build", "^build"],
-      "cache": false
+      "cache": false,
+      "env": ["GOOGLE_DESKTOP_CREDENTIALS_PATH"]
     },
     "dev": {
       "cache": false,

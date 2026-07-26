@@ -23,3 +23,7 @@
   Keep desktop OAuth and refresh tokens in the main process, encrypt persisted
   refresh tokens with `safeStorage`, and never expose tokens or generic
   authenticated requests through IPC.
+- Keep the installed-app OAuth client secret in the Electron main process. It
+  is loaded from an ignored packaged resource, distributed with the desktop
+  app, and must never be committed, treated as a security boundary, or exposed
+  through renderer IPC.
