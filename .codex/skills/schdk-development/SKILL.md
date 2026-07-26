@@ -12,8 +12,9 @@ description: Implement, debug, refactor, review, or document changes anywhere in
 3. Reuse existing helpers and native APIs before adding code, dependencies, abstractions, or packages.
 4. Make the smallest complete change. Add tests only for the exact prompt `add missing tests`, using `$schdk-add-missing-tests`.
 5. Update the matching feature specification under `docs/specs` when shipped
-   behavior changes. Update the matching rule and skill only when a durable
-   contract or workflow changes.
+   behavior changes. Record project-wide invariants, specification tasks, and
+   confirmed bugs in `SPEC.md` using `FORMAT.md`. Update the matching rule and
+   skill only when a durable contract or workflow changes.
 6. Verify with `$schdk-quality`.
 7. After every prompt that changes repository files, stage and commit all task changes once verified; preserve unrelated changes.
 8. Before creating a pull request, run `git fetch origin main` and `git rebase origin/main`; resolve conflicts and reverify the rebased result.

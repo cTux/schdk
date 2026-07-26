@@ -3,6 +3,9 @@
 These documents describe shipped product behavior. They are acceptance
 contracts, not implementation plans or a roadmap.
 
+Project-wide goals, constraints, invariants, and bug history live in
+[`../../SPEC.md`](../../SPEC.md).
+
 | Area               | Specification                                           | Covered features                                                                 |
 | ------------------ | ------------------------------------------------------- | -------------------------------------------------------------------------------- |
 | Package contract   | [Game package](game-package.md)                         | Questions, answers, handouts, music breaks, ZIP format, compatibility, readiness |

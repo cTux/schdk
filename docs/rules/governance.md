@@ -44,6 +44,10 @@
 - Keep shipped feature acceptance contracts under `docs/specs`, indexed by
   `docs/specs/README.md`. Update the affected specification whenever product
   behavior changes; do not use feature specifications as a roadmap.
+- Keep `SPEC.md` as the compact project-level goal, constraint, interface,
+  invariant, specification-task, and bug registry. Follow `FORMAT.md`; keep
+  detailed feature requirements in `docs/specs` and implementation backlog in
+  `docs/TODO.md`.
 - Keep code identifiers, code comments, package metadata, developer documents,
   and rule documents in English.
 - Keep user-visible application copy in Ukrainian unless a feature explicitly

@@ -22,6 +22,10 @@ Read only the areas touched by the task:
 
 ## Product contracts
 
+- [../SPEC.md](../SPEC.md) is the compact project-level specification, encoded
+  by [../FORMAT.md](../FORMAT.md).
+- [specs/README.md](specs/README.md) indexes shipped feature acceptance
+  contracts.
 - [GAME_PACKAGE.md](GAME_PACKAGE.md) is the user-facing `.schdk` format
   contract.
 - [../README.md](../README.md) is the short Ukrainian project overview and
