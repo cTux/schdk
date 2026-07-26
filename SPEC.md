@@ -84,3 +84,4 @@ B22|2026-07-26|Pull-request CI built browser and Electron artifacts without exec
 B23|2026-07-26|Every Drive request failure was treated as lost authorization and hid the mounted tools|Keep authorized sessions mounted through transient Drive failures.
 B24|2026-07-26|Browser unload could discard changes before delayed or failed autosave completed|V19
 B25|2026-07-26|Image handout selection trusted the file chooser hint and could serialize a MIME-invalid handout that package parsing later rejected|Validate the selected MIME type and generated data URL before changing package state.
+B26|2026-07-26|Drive package loading buffered media before checking the canonical package limit|V11

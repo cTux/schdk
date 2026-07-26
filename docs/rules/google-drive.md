@@ -29,6 +29,8 @@
   to the same Drive file ID. Editor and Host recents list and load only those
   Drive packages across every Drive API result page. Never fall back to browser
   storage or desktop paths.
+- Reject package metadata above the canonical package-size limit before
+  downloading its media body.
 - Treat a local `.schdk` selection only as an import: validate it, upload it to
   Drive, and continue from the resulting Drive file. Treat the recent-file
   download action only as an explicit export to the user's computer.

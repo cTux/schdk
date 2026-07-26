@@ -42,6 +42,8 @@ preserving recoverable local state during temporary Drive failures.
   another account.
 - **DRV-14:** Recents traverse every Drive API result page instead of hiding
   packages beyond the first page.
+- **DRV-15:** Package loads validate Drive metadata against the canonical
+  package-size limit before downloading package media.
 
 ## Invariants
 
@@ -78,3 +80,5 @@ preserving recoverable local state during temporary Drive failures.
    package in recents.
 9. While connected, make a Drive request fail without expiring authorization
    and observe the mounted tools remain available with their local state.
+10. Open an oversized Drive package and observe it rejected before its media
+    body is downloaded.
