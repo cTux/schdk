@@ -36,6 +36,8 @@ without losing in-progress work.
   the editor's backing file.
 - **EDT-14:** The selected Drive package and question restore after refresh or
   desktop restart when still available.
+- **EDT-15:** The browser warns before unloading an open package with pending,
+  saving, or failed changes and stops warning after the package is saved.
 
 ## Invariants
 
@@ -54,3 +56,5 @@ without losing in-progress work.
    newer content is saved.
 4. Cancel package creation or encounter a failed Drive write without losing or
    redirecting the current document.
+5. Edit a browser package and observe an unload warning until autosave
+   completes.

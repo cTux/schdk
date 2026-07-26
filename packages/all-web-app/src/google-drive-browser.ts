@@ -163,8 +163,14 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
     if (!this.hasValidToken()) {
       return { state: 'disconnected' } as const;
     }
-    this.account ??= await this.client.getAccount();
-    return { state: 'connected', account: this.account } as const;
+    try {
+      this.account ??= await this.client.getAccount();
+      return { state: 'connected', account: this.account } as const;
+    } catch (error) {
+      if (!(error instanceof GoogleDriveAuthorizationError)) throw error;
+      this.clearToken();
+      return { state: 'disconnected' } as const;
+    }
   }
 
   async connect() {

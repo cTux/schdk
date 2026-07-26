@@ -48,6 +48,7 @@ V15|Browser entry points deny unlisted scripts, connections, frames, objects, an
 V16|Windows GitHub Releases contain only Authenticode-valid executables.
 V17|Third-party GitHub Actions execute only from reviewed immutable commit SHAs.
 V18|Pull requests execute the production browser shell and packaged Electron renderer before their required checks pass.
+V19|The browser warns before unloading a package whose current changes are not saved.
 
 ## §T
 
@@ -80,3 +81,5 @@ B19|2026-07-26|Application CSP restricted only image sources and left executable
 B20|2026-07-26|Windows release packaging explicitly disabled executable signing|V16
 B21|2026-07-26|GitHub workflows referenced mutable major-version action tags|V17
 B22|2026-07-26|Pull-request CI built browser and Electron artifacts without executing either runtime|V18
+B23|2026-07-26|Every Drive request failure was treated as lost authorization and hid the mounted tools|Keep authorized sessions mounted through transient Drive failures.
+B24|2026-07-26|Browser unload could discard changes before delayed or failed autosave completed|V19

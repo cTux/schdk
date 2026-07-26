@@ -8,5 +8,7 @@
 - Selecting a local `.schdk` file validates and uploads it before opening it.
 - Downloading a recent package loads its current Drive bytes and uses a native
   browser download. It does not change the editor's backing file.
+- Warn before unloading a browser editor with pending, saving, or failed
+  package changes. Remove the warning after the current package is saved.
 - The editor package root has no local persistence fallback when rendered
   without an injected Drive bridge.

@@ -74,15 +74,14 @@ export function useGoogleDriveSettings({
   async function handleSyncFailure() {
     const account =
       connection.state === 'connected' ? connection.account : undefined;
+    if (!account) return;
     try {
       const status = await bridge?.status();
-      setConnection(
-        status?.state === 'disconnected'
-          ? { state: 'reauthorization-required', account }
-          : { state: 'error', account },
-      );
+      if (status?.state === 'disconnected') {
+        setConnection({ state: 'reauthorization-required', account });
+      }
     } catch {
-      setConnection({ state: 'error', account });
+      // Keep the authorized session mounted through transient Drive failures.
     }
   }
 
