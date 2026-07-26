@@ -1,6 +1,6 @@
 # Workspace and dependencies
 
-- Use Node.js 25.x and pnpm 11.x; the repository pins Node `25.9.0` and pnpm
+- Use Node.js 24.x LTS and pnpm 11.x; the repository pins Node `24.18.0` and pnpm
   `11.17.0`.
 - Run workspace commands from the repository root unless a package-local
   command is explicitly required.
