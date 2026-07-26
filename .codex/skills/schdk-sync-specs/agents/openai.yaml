@@ -1,0 +1,4 @@
+interface:
+  display_name: 'SCHDK Spec Sync'
+  short_description: 'Keep SCHDK specs aligned after changes'
+  default_prompt: 'Use $schdk-sync-specs to synchronize project and feature specifications for this change.'
