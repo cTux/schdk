@@ -16,6 +16,7 @@
     border-color $motion-fast ease,
     background-color $motion-fast ease,
     color $motion-fast ease,
+    filter $motion-fast ease,
     transform $motion-fast ease;
 }
 
@@ -50,6 +51,8 @@
 
 .ui-button.primary:hover:not(:disabled) {
   border-color: $accent-hover;
+  background: linear-gradient(135deg, $accent-hover, $accent);
+  filter: brightness(1.08);
 }
 
 .ui-button.secondary,

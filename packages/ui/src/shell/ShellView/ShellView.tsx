@@ -26,6 +26,8 @@ export interface ShellViewProps {
   aiQuestions: {
     questions: AIQuestion[];
     addQuestion(question: AIQuestion): boolean;
+    removeQuestion(index: number): boolean;
+    updateQuestion(index: number, question: AIQuestion): boolean;
   };
   editorApp: ReactNode;
   hostApp: ReactNode;
@@ -121,6 +123,8 @@ export function ShellView({
             <AIQuestionsPage
               questions={aiQuestions.questions}
               onAdd={aiQuestions.addQuestion}
+              onRemove={aiQuestions.removeQuestion}
+              onUpdate={aiQuestions.updateQuestion}
             />
           </div>
           {loadedApps.host && (

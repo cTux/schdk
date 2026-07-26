@@ -37,7 +37,10 @@ package authoring, hosting, settings, and account state.
 - **SHL-11:** The Artificial intelligence page lists locally persisted
   `AIQuestion` rules and opens a form for adding another rule. Every rule has a
   name, detailed generation description, and optional good and bad question
-  examples. Name and description are required before saving.
+  examples. Name and description are required before saving. Rules render as
+  bounded-width cards with icon actions to edit, enable or disable, favorite or
+  unfavorite, and delete after confirmation. The favorite action and state stay
+  in the card's top-right action area, and every change persists locally.
 - **SHL-12:** Artificial intelligence settings expose separate provider and
   model dropdowns plus a user API key. The dropdowns use the models.dev catalog
   of text-generation providers and non-deprecated models, with a small built-in
@@ -51,7 +54,8 @@ package authoring, hosting, settings, and account state.
   to the repository's GitHub Pages site and remains usable from its repository
   subpath.
 - **SHL-14:** Amber primary actions use the same shared visual treatment across
-  every mounted surface and do not flash when pointer hover begins or ends.
+  every mounted surface, brighten slightly on pointer hover, and do not flash
+  when hover begins or ends.
 - **SHL-15:** Pull requests load the production shell in a real headless browser
   and require the Google login view to render.
 
@@ -76,14 +80,15 @@ package authoring, hosting, settings, and account state.
 4. Disconnect Google and verify mounted tools become inaccessible until
    reconnection.
 5. Open the Artificial intelligence route directly, add a rule with its
-   required name and description plus optional good and bad examples, then
-   reload and confirm the rule remains listed.
+   required name and description plus optional good and bad examples, then edit,
+   disable, favorite, reload, and delete it; confirm each state persists and the
+   rule stays in a bounded-width card.
 6. Configure an AI model and API key; reload and confirm both remain for the
    same Google account, then switch accounts and confirm the previous key is
    not exposed.
 7. Deploy the unified build to GitHub Pages; load the repository URL directly,
    refresh it, and verify its assets and shell routes remain available.
 8. Hover amber primary actions in the shell, settings, editor, and host; observe
-   no background flash when hover begins or ends.
+   a slightly lighter amber state without a background flash.
 9. Run pull-request checks and observe the production login shell render in
    headless Chrome.

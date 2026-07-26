@@ -90,3 +90,5 @@ B28|2026-07-26|Generated package filenames could exceed the same length limit en
 B29|2026-07-26|Failed desktop restoration cleared the pathname session key instead of the account-scoped key that was loaded|V9
 B30|2026-07-26|Adding AI page copy inline pushed both locale modules past the enforced source-file limit|Split the copy into a focused localization module; the existing repository workflow test covers recurrence.
 B31|2026-07-26|The AI form relied on the shared textarea's Ukrainian optional-label default in English locale|Pass the active locale's optional label explicitly; C5 and SHL-5 already define the localization contract.
+B32|2026-07-26|The generic button hover background overrode amber primary actions with the dark surface color|V12
+B33|2026-07-26|AI question updates used an ES2023 array method outside the browser application's configured library target|Use the existing target-compatible array mapping pattern; typechecking covers recurrence.

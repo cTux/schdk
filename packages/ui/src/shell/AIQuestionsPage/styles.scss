@@ -96,16 +96,42 @@
 
 .ai-question-list {
   display: flex;
-  flex-direction: column;
+  flex-flow: row wrap;
   gap: $space-4;
   margin-top: $space-8;
 }
 
 .ai-question-list > article {
+  position: relative;
+  flex: 0 1 560px;
   padding: $space-6;
 }
 
-.ai-question-list article > p,
+.ai-question-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $space-1;
+  margin: (-$space-2) (-$space-2) $space-2 0;
+}
+
+.ai-question-card-actions .ui-button {
+  min-height: $control-compact;
+  padding: $space-2;
+}
+
+.ai-question-favorite[aria-pressed='true'] {
+  color: $accent;
+}
+
+.ai-question-list article[data-disabled='true'] .ai-question-card-body {
+  opacity: 0.48;
+}
+
+.ai-question-list article[data-disabled='true'] {
+  border-style: dashed;
+}
+
+.ai-question-card-body > p,
 .ai-question-list section p {
   margin: $space-3 0 0;
   line-height: 1.6;
@@ -142,5 +168,10 @@
   .ai-question-form,
   .ai-question-list > article {
     padding: $space-4;
+  }
+
+  .ai-question-card-actions {
+    margin-top: 0;
+    margin-right: 0;
   }
 }
