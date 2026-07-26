@@ -1,3 +1,4 @@
+import { zipSync } from 'fflate';
 import { describe, expect, it } from 'vitest';
 import {
   createEmptyGamePackage,
@@ -89,6 +90,15 @@ describe('game package rules', () => {
     expect(
       parseGamePackage(serializeGamePackage(gamePackage)).musicBreaks,
     ).toEqual([null, null]);
+  });
+
+  it('rejects oversized ZIP entries before expanding them', () => {
+    const zipBomb = zipSync(
+      { 'game.json': new Uint8Array(16 * 1024 * 1024 + 1) },
+      { level: 9 },
+    );
+
+    expect(() => parseGamePackage(zipBomb)).toThrow('Invalid game package');
   });
 
   it('parses clipboard questions with every supported field', () => {

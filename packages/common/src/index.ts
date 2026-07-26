@@ -10,6 +10,9 @@ export const QUESTION_COUNT = 36;
 export const QUESTIONS_PER_ROUND = 12;
 const PACKAGE_ENTRY = 'game.json';
 const MUSIC_BREAK_ENTRIES = ['audio/break-1', 'audio/break-2'] as const;
+const MAX_ARCHIVE_BYTES = 160 * 1024 * 1024;
+const MAX_GAME_JSON_BYTES = 16 * 1024 * 1024;
+const MAX_MUSIC_BREAK_BYTES = 64 * 1024 * 1024;
 
 export {
   QUESTION_TYPE_CONFIG,
@@ -99,29 +102,66 @@ function serializeGamePackageJson(gamePackage: GamePackage): string {
 }
 
 export function serializeGamePackage(gamePackage: GamePackage): Uint8Array {
+  const gameJson = strToU8(serializeGamePackageJson(gamePackage));
+  if (gameJson.byteLength > MAX_GAME_JSON_BYTES) {
+    throw new Error('Invalid game package');
+  }
   const entries: Zippable = {
-    [PACKAGE_ENTRY]: [
-      strToU8(serializeGamePackageJson(gamePackage)),
-      { level: 9 },
-    ],
+    [PACKAGE_ENTRY]: [gameJson, { level: 9 }],
   };
   gamePackage.musicBreaks.forEach((musicBreak, index) => {
     if (musicBreak) {
+      if (musicBreak.data.byteLength > MAX_MUSIC_BREAK_BYTES) {
+        throw new Error('Invalid game package');
+      }
       entries[MUSIC_BREAK_ENTRIES[index]!] = [musicBreak.data, { level: 0 }];
     }
   });
-  return zipSync(entries);
+  const archive = zipSync(entries);
+  if (archive.byteLength > MAX_ARCHIVE_BYTES) {
+    throw new Error('Invalid game package');
+  }
+  return archive;
 }
 
 function readGamePackage(
   content: string | Uint8Array,
 ): [string, Record<string, Uint8Array>] {
-  if (typeof content === 'string') return [content, {}];
+  if (typeof content === 'string') {
+    if (strToU8(content).byteLength > MAX_GAME_JSON_BYTES) {
+      throw new Error('Invalid game package');
+    }
+    return [content, {}];
+  }
   if (content[0] !== 0x50 || content[1] !== 0x4b) {
+    if (content.byteLength > MAX_GAME_JSON_BYTES) {
+      throw new Error('Invalid game package');
+    }
     return [strFromU8(content), {}];
   }
+  if (content.byteLength > MAX_ARCHIVE_BYTES) {
+    throw new Error('Invalid game package');
+  }
 
-  const entries = unzipSync(content);
+  const seenEntries = new Set<string>();
+  const entries = unzipSync(content, {
+    filter: ({ name, originalSize }) => {
+      const limit =
+        name === PACKAGE_ENTRY
+          ? MAX_GAME_JSON_BYTES
+          : MUSIC_BREAK_ENTRIES.includes(
+                name as (typeof MUSIC_BREAK_ENTRIES)[number],
+              )
+            ? MAX_MUSIC_BREAK_BYTES
+            : 0;
+      if (!limit) return false;
+      if (seenEntries.has(name) || originalSize > limit) {
+        throw new Error('Invalid game package');
+      }
+      seenEntries.add(name);
+      return true;
+    },
+  });
   const gamePackage = entries[PACKAGE_ENTRY];
   if (!gamePackage) throw new Error('Invalid game package');
   return [strFromU8(gamePackage), entries];

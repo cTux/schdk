@@ -28,6 +28,8 @@ three-round game, including presentation media.
   normalized to the current format on the next save.
 - **PKG-9:** The default filename is the filesystem-safe package title followed
   by `.schdk`.
+- **PKG-10:** Package parsing enforces the canonical archive and entry size
+  limits before extracting ZIP content.
 
 ## Invariants
 
@@ -37,6 +39,8 @@ three-round game, including presentation media.
 - Audio bytes are ZIP entries, never JSON data URLs.
 - Image handouts are embedded data URLs matching their declared image MIME
   type.
+- ZIP extraction is limited to the three recognized entries and rejects
+  oversized or duplicate recognized entries.
 
 ## Acceptance
 
@@ -49,5 +53,6 @@ three-round game, including presentation media.
    replacing current editor state.
 5. A matching embedded image handout opens, while an external or MIME-mismatched
    image URL is rejected before rendering.
+6. An oversized compressed entry is rejected before decompression.
 
 Canonical format: [`../GAME_PACKAGE.md`](../GAME_PACKAGE.md).

@@ -4,6 +4,10 @@ A «Що? Де? Коли?» package is stored as a ZIP archive with the `.schdk`
 extension. The archive contains a UTF-8 JSON file named `game.json` and may
 contain two audio files named `audio/break-1` and `audio/break-2`.
 
+Readers and writers reject archives larger than 160 MiB, `game.json` entries
+larger than 16 MiB, music-break entries larger than 64 MiB, and duplicate
+recognized entries. Unrecognized ZIP entries are ignored without extraction.
+
 - A package has a title and exactly 36 questions: three rounds of 12.
 - Every question has a `type`, one or more required `questionParts`, and one
   required answer. Supported types are:

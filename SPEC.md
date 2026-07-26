@@ -40,6 +40,7 @@ V7|Every prompt that changes shipped behavior creates or updates affected featur
 V8|AI API keys persist only in the current Google account's separate Drive app data; desktop renderer IPC exposes only save, remove, and configured status.
 V9|Package-folder discovery and restorable editor/host state never cross connected Google accounts.
 V10|Package handout images remain embedded and cannot trigger external image requests.
+V11|Package imports enforce bounded archive and entry sizes before ZIP extraction.
 
 ## §T
 
@@ -63,3 +64,4 @@ B10|2026-07-26|Activity-based token renewal pushed the browser Drive module past
 B11|2026-07-26|The initial deployment workflows called Vite directly before workspace dependencies emitted their package outputs|Build each deployable application through its Turbo dependency graph.
 B12|2026-07-26|The Drive client retained a package-folder ID and mounted editor/host state across account changes|V9
 B13|2026-07-26|Image handout parsing accepted arbitrary URLs that renderers used directly as image sources|V10
+B14|2026-07-26|Synchronous package parsing extracted every ZIP entry without resource limits|V11
