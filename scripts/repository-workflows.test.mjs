@@ -74,7 +74,12 @@ test('test creation stays prompt-driven and PR tests stay outside pre-commit', a
   assert.match(workflow, /pull_request:/);
   assert.match(workflow, /name: tests/);
   assert.match(workflow, /pnpm install --frozen-lockfile/);
+  assert.match(workflow, /pnpm fmt:check/);
+  assert.match(workflow, /pnpm lint/);
+  assert.match(workflow, /pnpm typecheck/);
   assert.match(workflow, /pnpm test/);
+  assert.match(workflow, /runs-on: windows-latest/);
+  assert.match(workflow, /pnpm build/);
   assert.doesNotMatch(preCommit, /\bpnpm test\b/);
 });
 

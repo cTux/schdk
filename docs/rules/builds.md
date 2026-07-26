@@ -7,6 +7,8 @@
   executable files, never enters the Turbo cache.
 - Root `pnpm build` builds packages in dependency order, then packages the
   desktop application, and leaves artifacts in each package's own `dist`.
+- Run the pull-request root build on `windows-latest` so CI verifies the
+  supported Windows desktop package.
 - Keep third-party modules from `node_modules` in a separate `vendors` chunk
   for every runnable Vite application instead of merging them into its main
   application bundle.
