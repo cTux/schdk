@@ -7,7 +7,7 @@ import {
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FileButton } from '../../atoms/FileButton';
+import { useRef } from 'react';
 import { IconButton } from '../../atoms/IconButton';
 import { useLocalization } from '../../localization';
 import type { MusicBreakFieldProps } from './types';
@@ -17,6 +17,10 @@ export function MusicBreakField({
   onChange,
 }: MusicBreakFieldProps) {
   const { copy } = useLocalization();
+  const musicInput = useRef<HTMLInputElement>(null);
+  const musicAction = musicBreak
+    ? copy.editor.replaceMusic
+    : copy.editor.addMusic;
   return (
     <div className="music-break-field">
       <div className="music-break-summary">
@@ -29,25 +33,27 @@ export function MusicBreakField({
         </span>
       </div>
       <div className="music-break-actions">
-        <FileButton
+        <IconButton
+          icon={musicBreak ? faRotate : faPlus}
+          label={musicAction}
+          type="button"
+          onClick={() => musicInput.current?.click()}
+        />
+        <input
+          ref={musicInput}
+          className="open-file-input"
+          type="file"
           accept="audio/*"
-          aria-label={
-            musicBreak ? copy.editor.replaceMusic : copy.editor.addMusic
-          }
+          aria-label={musicAction}
           onChange={(event) => {
             const file = event.target.files?.[0];
             if (file) onChange(file);
             event.target.value = '';
           }}
-        >
-          <FontAwesomeIcon
-            icon={musicBreak ? faRotate : faPlus}
-            aria-hidden="true"
-          />
-          {musicBreak ? copy.editor.replaceMusic : copy.editor.addMusic}
-        </FileButton>
+        />
         {musicBreak && (
           <IconButton
+            className="music-break-remove"
             icon={faTrashCan}
             label={copy.shared.remove}
             type="button"
