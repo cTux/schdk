@@ -48,6 +48,8 @@ package authoring, hosting, settings, and account state.
 - **SHL-13:** The production unified web application is deployed from `main`
   to the repository's GitHub Pages site and remains usable from its repository
   subpath.
+- **SHL-14:** Amber primary actions use the same shared visual treatment across
+  every mounted surface and do not flash when pointer hover begins or ends.
 
 ## Invariants
 
@@ -74,3 +76,5 @@ package authoring, hosting, settings, and account state.
    then switch accounts and confirm the previous key is not exposed.
 6. Deploy the unified build to GitHub Pages; load the repository URL directly,
    refresh it, and verify its assets and shell routes remain available.
+7. Hover amber primary actions in the shell, settings, editor, and host; observe
+   no background flash when hover begins or ends.

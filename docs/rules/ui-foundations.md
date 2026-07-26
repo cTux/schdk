@@ -18,6 +18,8 @@
   components must not read storage, Electron APIs, or the filesystem.
 - Reuse existing visual tokens and interaction patterns. Prefer compact,
   readable layouts without decoration that carries no information.
+- Render amber primary actions with the shared `Button` `primary` variant;
+  keep its visual states in the atom instead of application-scoped selectors.
 - Every atom owns the base styles required to render correctly in isolation;
   composed-view styles may refine an atom but must not be its only styling
   source.

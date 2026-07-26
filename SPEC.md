@@ -41,6 +41,7 @@ V8|AI API keys persist only in the current Google account's separate Drive app d
 V9|Package-folder discovery and restorable editor/host state never cross connected Google accounts.
 V10|Package handout images remain embedded and cannot trigger external image requests.
 V11|Package imports enforce bounded archive and entry sizes before ZIP extraction.
+V12|Amber primary actions keep their visual treatment stable across pointer hover on every application surface.
 
 ## §T
 
@@ -65,3 +66,4 @@ B11|2026-07-26|The initial deployment workflows called Vite directly before work
 B12|2026-07-26|The Drive client retained a package-folder ID and mounted editor/host state across account changes|V9
 B13|2026-07-26|Image handout parsing accepted arbitrary URLs that renderers used directly as image sources|V10
 B14|2026-07-26|Synchronous package parsing extracted every ZIP entry without resource limits|V11
+B15|2026-07-26|Shared and application-scoped amber button styles replaced a gradient with a non-interpolable solid hover background, causing visible flashes|V12
