@@ -20,6 +20,8 @@
   `windows-latest` `build` job. Treat both checks as required project policy,
   configure branch protection when repository settings support it, and do not
   merge until both are green.
+- Keep CI smoke checks for the production browser shell and packaged Electron
+  renderer. The Electron check must also confirm the preload bridge is exposed.
 - Build workspace dependencies before testing their consumers so fresh clones
   can resolve packages that intentionally export compiled output.
 - Before committing, run `pnpm fmt:check`, `pnpm lint`, `pnpm typecheck`,

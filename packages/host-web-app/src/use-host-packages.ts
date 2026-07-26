@@ -1,4 +1,5 @@
 import {
+  MAX_GAME_PACKAGE_BYTES,
   parseGamePackage,
   validateGamePackage,
   type GamePackage,
@@ -107,6 +108,9 @@ export function useHostPackages({
     let content: Uint8Array;
     let gamePackage: GamePackage;
     try {
+      if (file.size > MAX_GAME_PACKAGE_BYTES) {
+        throw new Error('Package is too large');
+      }
       content = new Uint8Array(await file.arrayBuffer());
       gamePackage = parseGamePackage(content);
       if (validateGamePackage(gamePackage).length > 0) {

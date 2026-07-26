@@ -26,7 +26,8 @@
   authorization expires, keep mounted state inaccessible until reconnection.
 - Create or import every editor package in Drive and serialize every autosave
   to the same Drive file ID. Editor and Host recents list and load only those
-  Drive packages. Never fall back to browser storage or desktop paths.
+  Drive packages across every Drive API result page. Never fall back to browser
+  storage or desktop paths.
 - Treat a local `.schdk` selection only as an import: validate it, upload it to
   Drive, and continue from the resulting Drive file. Treat the recent-file
   download action only as an explicit export to the user's computer.

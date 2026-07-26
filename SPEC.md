@@ -42,6 +42,12 @@ V9|Package-folder discovery and restorable editor/host state never cross connect
 V10|Package handout images remain embedded and cannot trigger external image requests.
 V11|Package imports enforce bounded archive and entry sizes before ZIP extraction.
 V12|Amber primary actions keep their visual treatment stable across pointer hover on every application surface.
+V13|Local package and visual-template imports enforce canonical limits before whole-file reads or ZIP extraction.
+V14|Drive package recents traverse every API result page.
+V15|Browser entry points deny unlisted scripts, connections, frames, objects, and form targets through CSP.
+V16|Windows GitHub Releases contain only Authenticode-valid executables.
+V17|Third-party GitHub Actions execute only from reviewed immutable commit SHAs.
+V18|Pull requests execute the production browser shell and packaged Electron renderer before their required checks pass.
 
 ## §T
 
@@ -67,3 +73,10 @@ B12|2026-07-26|The Drive client retained a package-folder ID and mounted editor/
 B13|2026-07-26|Image handout parsing accepted arbitrary URLs that renderers used directly as image sources|V10
 B14|2026-07-26|Synchronous package parsing extracted every ZIP entry without resource limits|V11
 B15|2026-07-26|Shared and application-scoped amber button styles replaced a gradient with a non-interpolable solid hover background, causing visible flashes|V12
+B16|2026-07-26|Local package and visual-template imports allocated complete oversized files before enforcing parser limits|V13
+B17|2026-07-26|Adding a template size guard pushed the shell component past the enforced source-file limit|Use bounded native `File.slice`; the existing repository structure test covers recurrence.
+B18|2026-07-26|Drive package recents stopped after the first 20 files|V14
+B19|2026-07-26|Application CSP restricted only image sources and left executable and network capabilities unconstrained|V15
+B20|2026-07-26|Windows release packaging explicitly disabled executable signing|V16
+B21|2026-07-26|GitHub workflows referenced mutable major-version action tags|V17
+B22|2026-07-26|Pull-request CI built browser and Electron artifacts without executing either runtime|V18

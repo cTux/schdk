@@ -8,9 +8,9 @@ import {
 
 export const QUESTION_COUNT = 36;
 export const QUESTIONS_PER_ROUND = 12;
+export const MAX_GAME_PACKAGE_BYTES = 160 * 1024 * 1024;
 const PACKAGE_ENTRY = 'game.json';
 const MUSIC_BREAK_ENTRIES = ['audio/break-1', 'audio/break-2'] as const;
-const MAX_ARCHIVE_BYTES = 160 * 1024 * 1024;
 const MAX_GAME_JSON_BYTES = 16 * 1024 * 1024;
 const MAX_MUSIC_BREAK_BYTES = 64 * 1024 * 1024;
 
@@ -118,7 +118,7 @@ export function serializeGamePackage(gamePackage: GamePackage): Uint8Array {
     }
   });
   const archive = zipSync(entries);
-  if (archive.byteLength > MAX_ARCHIVE_BYTES) {
+  if (archive.byteLength > MAX_GAME_PACKAGE_BYTES) {
     throw new Error('Invalid game package');
   }
   return archive;
@@ -139,7 +139,7 @@ function readGamePackage(
     }
     return [strFromU8(content), {}];
   }
-  if (content.byteLength > MAX_ARCHIVE_BYTES) {
+  if (content.byteLength > MAX_GAME_PACKAGE_BYTES) {
     throw new Error('Invalid game package');
   }
 

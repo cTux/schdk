@@ -29,6 +29,8 @@ to every hosted question.
   versioned `.schdk-template` ZIP files.
 - **VIS-11:** Legacy plain-JSON templates import without overwriting unrelated
   game options such as volume.
+- **VIS-12:** Template imports reject archives and `template.json` entries
+  larger than 16 MiB before allocating or extracting their content.
 
 ## Invariants
 
@@ -49,3 +51,5 @@ to every hosted question.
    gameplay.
 4. Fit long standard and blitz text without overflow or growth above configured
    size.
+5. Reject an oversized or duplicate-entry template without freezing the
+   application.

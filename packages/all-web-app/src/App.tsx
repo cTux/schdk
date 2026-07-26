@@ -16,7 +16,7 @@ import {
 import {
   loadEditorTextOptions,
   loadGameOptions,
-  parseVisualEditorTemplate,
+  parseVisualEditorTemplateFile,
   saveEditorTextOptions,
   saveGameOptions,
   serializeVisualEditorTemplate,
@@ -153,10 +153,7 @@ export function App() {
 
   async function importVisualEditorTemplate(file: File) {
     try {
-      const imported = parseVisualEditorTemplate(
-        new Uint8Array(await file.arrayBuffer()),
-        gameOptions,
-      );
+      const imported = await parseVisualEditorTemplateFile(file, gameOptions);
       if (imported) {
         googleDrive.setGameOptions(imported);
         return;

@@ -38,6 +38,10 @@ save and presenter-window integration.
 - **DSK-13:** Each Windows GitHub Release contains version-matched x64 NSIS
   installer and portable executable assets plus release notes sourced from the
   matching Ukrainian changelog section.
+- **DSK-14:** Every executable published in a Windows GitHub Release has a
+  valid Authenticode signature.
+- **DSK-15:** Pull requests launch the packaged Windows renderer and verify its
+  root UI and preload bridge before the build check passes.
 
 ## Invariants
 
@@ -62,4 +66,7 @@ save and presenter-window integration.
    verify only its configured status crosses into the renderer, then switch
    Google accounts and verify the prior account's key is not exposed.
 6. Create a release from `main`; verify its tag, Ukrainian notes, installer,
-   portable executable, and embedded application versions all match.
+   portable executable, embedded application versions, and Authenticode
+   signatures all match.
+7. Run pull-request checks and observe the packaged renderer smoke test exit
+   successfully.

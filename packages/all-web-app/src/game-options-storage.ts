@@ -4,6 +4,7 @@ import { normalizeGameOptions } from './game-options-validation';
 
 const GAME_OPTIONS_KEY = 'schdk:game-options';
 const VISUAL_TEMPLATE_ENTRY = 'template.json';
+export const MAX_VISUAL_TEMPLATE_BYTES = 16 * 1024 * 1024;
 type OptionsStorage = Pick<Storage, 'getItem' | 'setItem'>;
 type VisualEditorTemplate = Omit<
   GameOptions,
@@ -27,11 +28,33 @@ export function parseVisualEditorTemplate(
   options: Pick<GameOptions, 'autoFullscreen' | 'soundVolume' | 'musicVolume'>,
 ): GameOptions | null {
   try {
+    if (
+      (typeof content === 'string'
+        ? strToU8(content).byteLength
+        : content.byteLength) > MAX_VISUAL_TEMPLATE_BYTES
+    ) {
+      return null;
+    }
+    const seenEntries = new Set<string>();
     const templateJson =
       typeof content === 'string'
         ? content
         : content[0] === 0x50 && content[1] === 0x4b
-          ? strFromU8(unzipSync(content)[VISUAL_TEMPLATE_ENTRY])
+          ? strFromU8(
+              unzipSync(content, {
+                filter: ({ name, originalSize }) => {
+                  if (name !== VISUAL_TEMPLATE_ENTRY) return false;
+                  if (
+                    seenEntries.has(name) ||
+                    originalSize > MAX_VISUAL_TEMPLATE_BYTES
+                  ) {
+                    throw new Error('Invalid visual editor template');
+                  }
+                  seenEntries.add(name);
+                  return true;
+                },
+              })[VISUAL_TEMPLATE_ENTRY],
+            )
           : strFromU8(content);
     const value = JSON.parse(templateJson) as Record<string, unknown> | null;
     if (!value || value.version !== 1) return null;
@@ -39,6 +62,16 @@ export function parseVisualEditorTemplate(
   } catch {
     return null;
   }
+}
+
+export async function parseVisualEditorTemplateFile(
+  file: File,
+  options: Pick<GameOptions, 'autoFullscreen' | 'soundVolume' | 'musicVolume'>,
+): Promise<GameOptions | null> {
+  const content = await file
+    .slice(0, MAX_VISUAL_TEMPLATE_BYTES + 1)
+    .arrayBuffer();
+  return parseVisualEditorTemplate(new Uint8Array(content), options);
 }
 
 export function serializeVisualEditorTemplate(

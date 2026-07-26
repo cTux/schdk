@@ -15,5 +15,7 @@
   Update HTML language metadata and document copy with the selected locale.
   Use the shared owl asset from `@schdk/ui` as the favicon.
 - Keep Vite `base` relative so built apps work from Electron `file:` URLs.
+- Declare a default-deny Content Security Policy in each HTML entry point and
+  add external origins only for integrations used by that application.
 - Publish the unified web build from `packages/all-web-app/dist` to GitHub
   Pages; keep asset paths compatible with the repository subpath.

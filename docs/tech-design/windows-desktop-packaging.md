@@ -18,7 +18,7 @@ Related research:
 - Shrinking the stock Electron executable itself.
 - Migrating to Tauri, Electron Forge, MSI, a web installer, or a portable
   single-file target.
-- Adding publishing, automatic updates, or code signing.
+- Adding publishing or automatic updates.
 - Refactoring renderer or Electron application behavior.
 
 ## Design
@@ -41,8 +41,8 @@ dependencies into `app.asar`.
 
 ### electron-builder configuration
 
-Keep the existing file filters, extra resource, icon, and
-`signExecutable: false`. Add locale and target configuration:
+Keep the existing file filters, extra resource, and icon. Add locale and target
+configuration:
 
 ```json
 {
@@ -50,7 +50,6 @@ Keep the existing file filters, extra resource, icon, and
     "electronLanguages": ["uk", "en-US"],
     "win": {
       "icon": "build/owl.png",
-      "signExecutable": false,
       "target": ["dir", "nsis"]
     }
   }
@@ -171,7 +170,7 @@ Acceptance thresholds:
 | electron-builder still packages renderer dependencies | Inspect ASAR contents and use an electron-builder file hook only as a fallback |
 | Missing Electron locale causes fallback issues        | Keep both `uk` and `en-US`; test on Ukrainian and non-Ukrainian Windows        |
 | Production builds become slower                       | Keep development on `--dir`; only production builds compile NSIS               |
-| Unsigned installer triggers Windows warnings          | Preserve current unsigned behavior; handle signing as a separate release task  |
+| Local installer triggers Windows warnings             | Require signing for releases; allow unsigned local packaging                   |
 | Windows locks an existing unpacked executable         | Close all packaged SCHDK processes before rebuilding                           |
 
 ## Rollback

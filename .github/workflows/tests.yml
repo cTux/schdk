@@ -12,27 +12,44 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
         with:
           version: 11.17.0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 25.9.0
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
+      - name: Smoke test packaged Electron shell
+        shell: pwsh
+        run: |
+          $appPath = Resolve-Path 'packages/all-desktop-app/dist/release/win-unpacked/ЩДК.exe'
+          $smoke = Start-Process -FilePath $appPath -ArgumentList '--smoke-test' -PassThru
+          try {
+            if (!$smoke.WaitForExit(30000)) {
+              throw 'Packaged Electron smoke test timed out.'
+            }
+            if ($smoke.ExitCode -ne 0) {
+              throw "Packaged Electron smoke test exited with $($smoke.ExitCode)."
+            }
+          } finally {
+            if (!$smoke.HasExited) {
+              Stop-Process -Id $smoke.Id -Force
+            }
+          }
 
   tests:
     name: tests
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
         with:
           version: 11.17.0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 25.9.0
           cache: pnpm
@@ -41,3 +58,17 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
+      - run: pnpm turbo build --filter=@schdk/all-web-app
+      - name: Smoke test browser shell
+        shell: bash
+        run: |
+          pnpm --filter @schdk/all-web-app preview --host 127.0.0.1 --port 4173 \
+            > "$RUNNER_TEMP/web-preview.log" 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid"' EXIT
+          curl --retry 20 --retry-connrefused --retry-delay 1 \
+            --silent --show-error --fail http://127.0.0.1:4173/ > /dev/null
+          google-chrome --headless=new --no-sandbox --disable-gpu \
+            --virtual-time-budget=5000 --dump-dom http://127.0.0.1:4173/ \
+            > "$RUNNER_TEMP/web-smoke.html"
+          grep -q 'google-login-screen' "$RUNNER_TEMP/web-smoke.html"

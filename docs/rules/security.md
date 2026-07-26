@@ -14,9 +14,14 @@
 - Parse file content in `@schdk/common` before using it as a game package.
 - Enforce package archive and entry size limits before ZIP extraction, and
   extract only recognized package entries.
+- Reject oversized local package and visual-template files before reading their
+  complete bytes into renderer memory.
 - Accept package handout images only as embedded base64 `data:image/*` URLs
   matching their declared MIME type. Keep application image CSP restricted to
   trusted application, embedded, blob, and Google-account image sources.
+- Keep every browser entry point on a default-deny CSP. Allow the unified shell
+  to connect only to Google GIS, Drive REST, and `models.dev`; standalone tools
+  remain same-origin except for embedded image and media content.
 - Deny new-window requests and block navigation from all desktop renderers.
 - The unified application bundles only trusted first-party host, editor, and
   shell code in one renderer. Expose the same narrow, validated editor bridge
@@ -39,3 +44,5 @@
 - Materialize release-only desktop OAuth credentials from the
   `GOOGLE_DESKTOP_CREDENTIALS_JSON` GitHub Actions secret into the runner
   temporary directory and remove the file even when packaging fails.
+- Pin every third-party GitHub Action to a full commit SHA and retain its
+  release tag in a comment for maintainable supply-chain updates.
