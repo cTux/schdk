@@ -6,6 +6,7 @@ import {
   type GameQuestion,
 } from './game-question';
 
+export type { AIQuestion } from './ai-question';
 export const QUESTION_COUNT = 36;
 export const QUESTIONS_PER_ROUND = 12;
 export const MAX_GAME_PACKAGE_BYTES = 160 * 1024 * 1024;

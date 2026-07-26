@@ -1,6 +1,7 @@
 export type AppLocale = 'uk' | 'en';
 
 import { ukrainianSettings } from './ukrainian-settings';
+import { aiQuestionsCopy } from './ai-questions';
 
 export const ukrainian = {
   shared: {
@@ -71,6 +72,7 @@ export const ukrainian = {
       description: 'Налаштовуйте правила створення запитань.',
     },
   },
+  aiQuestions: aiQuestionsCopy.uk,
   settings: ukrainianSettings,
   editor: {
     brandEyebrow: 'Редактор пакетів',

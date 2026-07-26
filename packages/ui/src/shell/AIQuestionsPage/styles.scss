@@ -1,0 +1,146 @@
+@use '../../styles/tokens' as *;
+
+.ai-questions-page {
+  width: min(920px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: clamp(40px, 7vh, 72px) 0;
+}
+
+.ai-questions-page > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: $space-6;
+}
+
+.ai-questions-page > header > div {
+  max-width: 640px;
+}
+
+.ai-questions-page h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.ai-questions-page > header > div > p:last-child,
+.ai-question-empty {
+  color: $muted;
+  line-height: 1.6;
+}
+
+.ai-question-form,
+.ai-question-list > article,
+.ai-question-empty {
+  border: 1px solid $border;
+  border-radius: $radius-panel;
+  background: rgba($surface-rgb, 0.82);
+  box-shadow: $shadow-raised;
+}
+
+.ai-question-form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  margin-top: $space-8;
+  padding: $space-6;
+}
+
+.ai-question-form h2,
+.ai-question-list h2,
+.ai-question-list h3 {
+  margin: 0;
+}
+
+.ai-question-form label {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  font-weight: 650;
+}
+
+.ai-question-form label span {
+  color: $muted;
+  font-size: $font-size-sm;
+  font-weight: 400;
+}
+
+.ai-question-form input,
+.ai-question-form textarea {
+  width: 100%;
+  border: 1px solid $border-strong;
+  border-radius: $radius-control;
+  outline: none;
+  background: $surface-raised;
+  padding: 10px 12px;
+  color: $text;
+  font: inherit;
+  resize: vertical;
+}
+
+.ai-question-form input:focus-visible,
+.ai-question-form textarea:focus-visible {
+  border-color: $accent;
+  outline: $focus-width solid rgba($accent-rgb, 0.45);
+  outline-offset: $focus-offset;
+}
+
+.ai-question-save-error {
+  margin: 0;
+  color: $danger-text;
+}
+
+.ai-question-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $space-2;
+}
+
+.ai-question-list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  margin-top: $space-8;
+}
+
+.ai-question-list > article {
+  padding: $space-6;
+}
+
+.ai-question-list article > p,
+.ai-question-list section p {
+  margin: $space-3 0 0;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.ai-question-list section {
+  margin-top: $space-6;
+}
+
+.ai-question-list h3 {
+  color: $muted;
+  font-size: $font-size-sm;
+  text-transform: uppercase;
+}
+
+.ai-question-empty {
+  margin-top: $space-8;
+  padding: $space-6;
+  text-align: center;
+}
+
+@media (width <= 640px) {
+  .ai-questions-page {
+    width: min(100% - 24px, 920px);
+    padding-top: $space-8;
+  }
+
+  .ai-questions-page > header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ai-question-form,
+  .ai-question-list > article {
+    padding: $space-4;
+  }
+}

@@ -21,8 +21,8 @@ package authoring, hosting, settings, and account state.
 - **SHL-4:** A valid browser `package` query opens the editor and restores the
   referenced Drive package and selected question.
 - **SHL-5:** Ukrainian is the default locale; explicit Ukrainian or English
-  selection localizes shell, settings, editor, host, gameplay, and visual
-  editor.
+  selection localizes shell, settings, editor, host, gameplay, visual editor,
+  and AI question rules.
 - **SHL-6:** Theme defaults to operating-system preference and supports
   persisted system, light, and dark choices.
 - **SHL-7:** Settings expose application locale, Google account and sync state,
@@ -34,8 +34,10 @@ package authoring, hosting, settings, and account state.
   answers, and answer comments.
 - **SHL-10:** Before authorization, only the localized Google login screen is
   visible; account status and disconnect remain available after connection.
-- **SHL-11:** The Artificial intelligence page is currently empty and reserved
-  for bundled and user-authored question-generation rules.
+- **SHL-11:** The Artificial intelligence page lists locally persisted
+  `AIQuestion` rules and opens a form for adding another rule. Every rule has a
+  name, detailed generation description, and optional good and bad question
+  examples. Name and description are required before saving.
 - **SHL-12:** Artificial intelligence settings expose separate provider and
   model dropdowns plus a user API key. The dropdowns use the models.dev catalog
   of text-generation providers and non-deprecated models, with a small built-in
@@ -73,12 +75,15 @@ package authoring, hosting, settings, and account state.
    preserved state.
 4. Disconnect Google and verify mounted tools become inaccessible until
    reconnection.
-5. Open the Artificial intelligence route directly, then configure its model
-   and API key; reload and confirm both remain for the same Google account,
-   then switch accounts and confirm the previous key is not exposed.
-6. Deploy the unified build to GitHub Pages; load the repository URL directly,
+5. Open the Artificial intelligence route directly, add a rule with its
+   required name and description plus optional good and bad examples, then
+   reload and confirm the rule remains listed.
+6. Configure an AI model and API key; reload and confirm both remain for the
+   same Google account, then switch accounts and confirm the previous key is
+   not exposed.
+7. Deploy the unified build to GitHub Pages; load the repository URL directly,
    refresh it, and verify its assets and shell routes remain available.
-7. Hover amber primary actions in the shell, settings, editor, and host; observe
+8. Hover amber primary actions in the shell, settings, editor, and host; observe
    no background flash when hover begins or ends.
-8. Run pull-request checks and observe the production login shell render in
+9. Run pull-request checks and observe the production login shell render in
    headless Chrome.
