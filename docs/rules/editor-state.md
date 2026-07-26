@@ -13,5 +13,7 @@
   success messages. Show actionable validation and file-operation errors.
 - A new package needs a destination before entering the editor. Canceling the
   save dialog leaves the start screen unchanged.
+- Validate selected image handouts and their generated data URLs before
+  changing package state.
 - Keep each filename synchronized with its filesystem-safe package title and
   the `.schdk` extension.

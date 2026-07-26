@@ -15,8 +15,9 @@ without losing in-progress work.
   [game-package specification](game-package.md).
 - **EDT-3:** Question type selection exposes one, two, or three question parts
   for standard, 2×30 blitz, or 3×20 blitz respectively.
-- **EDT-4:** Authors can add, replace, and remove text or image handouts and the
-  two between-round audio files.
+- **EDT-4:** Authors can add, replace, and remove text or validated image
+  handouts and the two between-round audio files. Non-image selections never
+  mutate package state.
 - **EDT-5:** Authors can copy a complete question as JSON and replace another
   question from parsed clipboard JSON after confirmation.
 - **EDT-6:** Dragging one question number onto another swaps the complete
@@ -58,3 +59,5 @@ without losing in-progress work.
    redirecting the current document.
 5. Edit a browser package and observe an unload warning until autosave
    completes.
+6. Select a file without an image MIME type and observe it rejected without
+   changing or autosaving the current handout.
