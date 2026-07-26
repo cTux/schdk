@@ -5,6 +5,7 @@ export {
 export {
   loadGameOptions,
   parseVisualEditorTemplate,
+  parseVisualEditorTemplateFile,
   saveGameOptions,
   serializeVisualEditorTemplate,
 } from './game-options-storage';

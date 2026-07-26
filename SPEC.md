@@ -42,6 +42,7 @@ V9|Package-folder discovery and restorable editor/host state never cross connect
 V10|Package handout images remain embedded and cannot trigger external image requests.
 V11|Package imports enforce bounded archive and entry sizes before ZIP extraction.
 V12|Amber primary actions keep their visual treatment stable across pointer hover on every application surface.
+V13|Local package and visual-template imports enforce canonical limits before whole-file reads or ZIP extraction.
 
 ## §T
 
@@ -67,3 +68,5 @@ B12|2026-07-26|The Drive client retained a package-folder ID and mounted editor/
 B13|2026-07-26|Image handout parsing accepted arbitrary URLs that renderers used directly as image sources|V10
 B14|2026-07-26|Synchronous package parsing extracted every ZIP entry without resource limits|V11
 B15|2026-07-26|Shared and application-scoped amber button styles replaced a gradient with a non-interpolable solid hover background, causing visible flashes|V12
+B16|2026-07-26|Local package and visual-template imports allocated complete oversized files before enforcing parser limits|V13
+B17|2026-07-26|Adding a template size guard pushed the shell component past the enforced source-file limit|Use bounded native `File.slice`; the existing repository structure test covers recurrence.

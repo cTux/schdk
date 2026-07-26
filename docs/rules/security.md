@@ -14,6 +14,8 @@
 - Parse file content in `@schdk/common` before using it as a game package.
 - Enforce package archive and entry size limits before ZIP extraction, and
   extract only recognized package entries.
+- Reject oversized local package and visual-template files before reading their
+  complete bytes into renderer memory.
 - Accept package handout images only as embedded base64 `data:image/*` URLs
   matching their declared MIME type. Keep application image CSP restricted to
   trusted application, embedded, blob, and Google-account image sources.
