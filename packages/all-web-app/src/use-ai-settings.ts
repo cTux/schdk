@@ -1,10 +1,11 @@
 import { Models, type ProviderMap } from '@opencode-ai/models';
 import type { AiOptions, AiProviderOption } from '@schdk/ui/options';
 import { useEffect, useState } from 'react';
+import type { GoogleDriveBridge } from './google-drive-types';
 
 const PROVIDER_KEY = 'schdk.ai.provider';
 const MODEL_KEY = 'schdk.ai.model';
-const API_KEY = 'schdk.ai.api-key';
+const LEGACY_API_KEY = 'schdk.ai.api-key';
 const DEFAULT_PROVIDER = 'openai';
 const DEFAULT_MODEL = 'gpt-5.2';
 const FALLBACK_PROVIDERS: AiProviderOption[] = [
@@ -79,16 +80,31 @@ function reconcileOptions(
   return { ...options, providers, provider: provider.id, model: model.id };
 }
 
-function hasBrowserApiKey() {
-  return Boolean(sessionStorage.getItem(API_KEY));
+function loadLegacyBrowserApiKey() {
+  try {
+    return sessionStorage.getItem(LEGACY_API_KEY);
+  } catch {
+    return null;
+  }
 }
 
-export function useAiSettings() {
+function clearLegacyBrowserApiKey() {
+  try {
+    sessionStorage.removeItem(LEGACY_API_KEY);
+  } catch {
+    // An unavailable legacy store does not affect Drive persistence.
+  }
+}
+
+export function useAiSettings(
+  credentials: GoogleDriveBridge | null,
+  accountId?: string,
+) {
   const [options, setOptions] = useState<AiOptions>(() => ({
     providers: FALLBACK_PROVIDERS,
     provider: localStorage.getItem(PROVIDER_KEY) ?? DEFAULT_PROVIDER,
     model: localStorage.getItem(MODEL_KEY) ?? DEFAULT_MODEL,
-    apiKeyConfigured: hasBrowserApiKey(),
+    apiKeyConfigured: false,
   }));
 
   useEffect(() => {
@@ -107,11 +123,17 @@ export function useAiSettings() {
   }, [options.model, options.provider]);
 
   useEffect(() => {
-    const credentials = window.desktop?.aiCredentials;
-    if (!credentials) return;
+    setOptions((value) => ({ ...value, apiKeyConfigured: false }));
+    if (!credentials || !accountId) return;
     let active = true;
-    void credentials
-      .hasApiKey()
+    const legacyApiKey = loadLegacyBrowserApiKey();
+    const configured = legacyApiKey
+      ? credentials.saveAiApiKey(legacyApiKey).then(() => {
+          clearLegacyBrowserApiKey();
+          return true;
+        })
+      : credentials.hasAiApiKey();
+    void configured
       .then((apiKeyConfigured) => {
         if (active) setOptions((value) => ({ ...value, apiKeyConfigured }));
       })
@@ -119,7 +141,7 @@ export function useAiSettings() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [accountId, credentials]);
 
   function setProvider(provider: string) {
     const selected = options.providers.find(({ id }) => id === provider);
@@ -140,14 +162,10 @@ export function useAiSettings() {
   }
 
   async function saveApiKey(apiKey: string | null) {
-    const credentials = window.desktop?.aiCredentials;
-    if (credentials) {
-      await credentials.saveApiKey(apiKey);
-    } else if (apiKey) {
-      sessionStorage.setItem(API_KEY, apiKey);
-    } else {
-      sessionStorage.removeItem(API_KEY);
+    if (!credentials || !accountId) {
+      throw new Error('Google Drive is disconnected');
     }
+    await credentials.saveAiApiKey(apiKey);
     setOptions((value) => ({
       ...value,
       apiKeyConfigured: Boolean(apiKey),

@@ -19,8 +19,9 @@ description: Maintain SCHDK browser applications and the unified @schdk/all-web-
    open OAuth from startup, refresh, or background synchronization.
 6. Visually smoke-test changed navigation.
 7. Keep AI provider and model as separate validated selections populated from
-   models.dev with a built-in fallback. Keep browser AI API keys session-only
-   and outside synchronized settings.
+   models.dev with a built-in fallback. Keep AI API keys in a separate app-data
+   file for the current Google account and outside local or synchronized
+   settings.
 
 ## Checks
 

@@ -50,7 +50,6 @@ export function App() {
   const sessionScope = window.location.pathname;
   const [locale, setLocale] = useState(loadShellLocale);
   const [theme, setTheme] = useState(loadShellTheme);
-  const ai = useAiSettings();
   const copy = LOCALIZATION_COPY[locale];
   const [view, setView] = useState<ShellViewName>(() => {
     return (
@@ -78,6 +77,10 @@ export function App() {
   });
   const { connection } = googleDrive;
   const connected = connection.state === 'connected';
+  const ai = useAiSettings(
+    connected ? googleDrive.bridge : null,
+    connected ? connection.account.emailAddress : undefined,
+  );
   const loginState = googleDrive.statusReady ? connection.state : 'connecting';
   const [unlocked, setUnlocked] = useState(connected);
 

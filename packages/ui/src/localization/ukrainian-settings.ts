@@ -29,7 +29,7 @@ export const ukrainianSettings = {
   aiModel: 'Модель',
   aiApiKey: 'API-ключ',
   aiApiKeyDescription:
-    'У браузері ключ зберігається до закриття вкладки; у настільному застосунку — у зашифрованому сховищі операційної системи.',
+    'Ключ зберігається в даних застосунку Google Диска поточного акаунта.',
   aiApiKeyPlaceholder: 'Вставте API-ключ',
   aiApiKeyConfigured: 'API-ключ збережено.',
   aiApiKeyMissing: 'API-ключ не збережено.',

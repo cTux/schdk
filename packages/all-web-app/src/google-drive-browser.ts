@@ -198,6 +198,14 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
     await new Promise<void>((resolve) => oauth.revoke(token, resolve));
   }
 
+  async hasAiApiKey() {
+    return Boolean(await this.client.loadAiApiKey());
+  }
+
+  saveAiApiKey(apiKey: string | null) {
+    return this.client.saveAiApiKey(apiKey);
+  }
+
   loadSettings() {
     return this.client.loadSettings();
   }

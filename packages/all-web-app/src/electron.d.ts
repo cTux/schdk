@@ -8,10 +8,6 @@ export {};
 
 declare global {
   interface SchdkDesktopApi {
-    aiCredentials?: {
-      hasApiKey(): Promise<boolean>;
-      saveApiKey(apiKey: string | null): Promise<void>;
-    };
     googleDrive?: DrivePackageStorage & {
       status(): Promise<{
         state: 'unavailable' | 'disconnected' | 'connected';
@@ -19,6 +15,8 @@ declare global {
       }>;
       connect(): Promise<DriveAccount>;
       disconnect(): Promise<void>;
+      hasAiApiKey(): Promise<boolean>;
+      saveAiApiKey(apiKey: string | null): Promise<void>;
       loadSettings(): Promise<unknown | null>;
       saveSettings(settings: DriveSettingsDocument): Promise<void>;
     };

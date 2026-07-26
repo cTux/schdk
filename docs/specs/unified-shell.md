@@ -37,8 +37,9 @@ package authoring, hosting, settings, and account state.
   model dropdowns plus a user API key. The dropdowns use the models.dev catalog
   of text-generation providers and non-deprecated models, with a small built-in
   fallback when the catalog is unavailable. Changing the provider selects its
-  default model; both selections persist locally. The browser key lasts only
-  for the current tab session and never enters Google Drive settings.
+  default model; both selections persist locally. The API key persists in a
+  separate app-data file owned by the current Google account and never enters
+  synchronized settings or local browser persistence.
 
 ## Invariants
 
@@ -47,7 +48,8 @@ package authoring, hosting, settings, and account state.
 - Standalone host and editor remain Ukrainian by default.
 - Invalid stored locale, theme, view, package reference, or option values fall
   back to validated defaults.
-- AI API keys never enter local storage, URLs, or synchronized settings.
+- AI API keys never enter local storage, URLs, or synchronized settings and
+  never carry across Google accounts.
 
 ## Acceptance
 
@@ -59,5 +61,5 @@ package authoring, hosting, settings, and account state.
 4. Disconnect Google and verify mounted tools become inaccessible until
    reconnection.
 5. Open the Artificial intelligence route directly, then configure its model
-   and API key; reload and confirm the model remains while the browser key is
-   cleared after the tab session ends.
+   and API key; reload and confirm both remain for the same Google account,
+   then switch accounts and confirm the previous key is not exposed.

@@ -32,7 +32,7 @@ export const englishSettings: typeof ukrainianSettings = {
   aiModel: 'Model',
   aiApiKey: 'API key',
   aiApiKeyDescription:
-    'The browser keeps the key until the tab closes; the desktop app uses encrypted operating-system storage.',
+    "The key is stored in the current account's Google Drive app data.",
   aiApiKeyPlaceholder: 'Paste an API key',
   aiApiKeyConfigured: 'API key saved.',
   aiApiKeyMissing: 'No API key saved.',
