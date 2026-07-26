@@ -27,7 +27,7 @@ three-round game, including presentation media.
 - **PKG-8:** Legacy plain-JSON, version 1, and version 2 packages open and are
   normalized to the current format on the next save.
 - **PKG-9:** The default filename is the filesystem-safe package title followed
-  by `.schdk`.
+  by `.schdk`, truncated when needed to remain a valid Drive package name.
 - **PKG-10:** Package parsing enforces the canonical archive and entry size
   limits before extracting ZIP content.
 

@@ -17,4 +17,4 @@
   changing package state.
 - Reject oversized music breaks before reading them into memory.
 - Keep each filename synchronized with its filesystem-safe package title and
-  the `.schdk` extension.
+  the `.schdk` extension, within the Drive filename limit.

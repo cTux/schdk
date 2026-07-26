@@ -86,3 +86,4 @@ B24|2026-07-26|Browser unload could discard changes before delayed or failed aut
 B25|2026-07-26|Image handout selection trusted the file chooser hint and could serialize a MIME-invalid handout that package parsing later rejected|Validate the selected MIME type and generated data URL before changing package state.
 B26|2026-07-26|Drive package loading buffered media before checking the canonical package limit|V11
 B27|2026-07-26|Music selection read oversized audio fully into memory before package serialization rejected it|Reject oversized music files before reading their bytes.
+B28|2026-07-26|Generated package filenames could exceed the same length limit enforced by Drive package validation|Truncate generated filenames to the canonical Drive name limit.
