@@ -4,6 +4,9 @@ import { ukrainianSettings } from './ukrainian-settings';
 
 export const ukrainian = {
   shared: {
+    confirmation: 'Підтвердження дії',
+    confirm: 'Підтвердити',
+    cancel: 'Скасувати',
     optional: '(необов’язково)',
     remove: 'Видалити',
     chooseFile: 'Вибрати файл',
@@ -76,6 +79,7 @@ export const ukrainian = {
     packageQuestions: 'Питання пакета',
     round: (number: number) => `Раунд ${number}`,
     musicBreak: 'Музична пауза',
+    noMusic: 'Музику не додано',
     addMusic: 'Додати музику',
     replaceMusic: 'Замінити музику',
     invalidMusic: 'Цей аудіофайл не підтримується вбудованим програвачем.',

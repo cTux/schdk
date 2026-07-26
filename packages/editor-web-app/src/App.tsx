@@ -3,6 +3,7 @@ import {
   parseGamePackage,
   type GamePackage,
 } from '@schdk/common';
+import { ConfirmationDialog, useConfirmationDialog } from '@schdk/ui';
 import { EditorView, type EditorSaveStatus } from '@schdk/ui/editor';
 import { useLocalization } from '@schdk/ui/localization';
 import { DEFAULT_EDITOR_TEXT_OPTIONS } from '@schdk/ui/options';
@@ -30,6 +31,7 @@ export function App({
   onDriveFailure,
 }: AppProps = {}) {
   const { copy, locale } = useLocalization();
+  const { confirm, dialogProps } = useConfirmationDialog();
   const createLocalizedPackage = () => ({
     ...createEmptyGamePackage(),
     title: copy.shared.untitled,
@@ -118,6 +120,7 @@ export function App({
     setSaveStatus,
   });
   const questions = useQuestionActions({
+    confirm,
     copy,
     gamePackage,
     selectedIndex,
@@ -128,6 +131,7 @@ export function App({
     setSelectedIndex,
   });
   const packages = usePackageActions({
+    confirm,
     copy,
     drive,
     driveFileId,
@@ -149,81 +153,87 @@ export function App({
 
   if (!driveActive) return null;
   return (
-    <EditorView
-      gamePackage={gamePackage}
-      hasPackage={hasPackage}
-      message={message}
-      openingRecentPackageId={packages.openingRecentPackageId}
-      recentPackages={recentPackages}
-      recentPackagesLoading={recentPackagesLoading}
-      saveStatus={saveStatus}
-      selectedIndex={selectedIndex}
-      showValidation={showValidation}
-      onAddHandout={questions.addHandout}
-      onMusicBreakChange={(index, file) => {
-        if (!file) {
-          setGamePackage((current) => ({
-            ...current,
-            musicBreaks: current.musicBreaks.map((musicBreak, breakIndex) =>
-              breakIndex === index ? null : musicBreak,
-            ) as GamePackage['musicBreaks'],
-          }));
-          setSaveStatus('pending');
-          setMessage('');
-          return;
-        }
-        if (
-          !file.type.startsWith('audio/') ||
-          !new Audio().canPlayType(file.type)
-        ) {
-          setMessage(copy.editor.invalidMusic);
-          return;
-        }
-        void file
-          .arrayBuffer()
-          .then((buffer) => {
+    <>
+      <EditorView
+        gamePackage={gamePackage}
+        hasPackage={hasPackage}
+        message={message}
+        openingRecentPackageId={packages.openingRecentPackageId}
+        recentPackages={recentPackages}
+        recentPackagesLoading={recentPackagesLoading}
+        saveStatus={saveStatus}
+        selectedIndex={selectedIndex}
+        showValidation={showValidation}
+        onAddHandout={questions.addHandout}
+        onMusicBreakChange={(index, file) => {
+          if (!file) {
             setGamePackage((current) => ({
               ...current,
               musicBreaks: current.musicBreaks.map((musicBreak, breakIndex) =>
-                breakIndex === index
-                  ? {
-                      name: file.name,
-                      mimeType: file.type,
-                      data: new Uint8Array(buffer),
-                    }
-                  : musicBreak,
+                breakIndex === index ? null : musicBreak,
               ) as GamePackage['musicBreaks'],
             }));
             setSaveStatus('pending');
             setMessage('');
-          })
-          .catch(() => setMessage(copy.editor.invalidMusic));
-      }}
-      onAnswerBlur={questions.correctMainAnswer}
-      onAnswerCommentBlur={questions.correctAnswerComment}
-      onAlternativeAnswerBlur={questions.correctAlternativeAnswer}
-      onWrongAnswerBlur={questions.correctWrongAnswer}
-      onBack={() => void packages.closePackage()}
-      onCopyQuestion={() => void questions.copyQuestion()}
-      onCreatePackage={() => void packages.createPackage()}
-      onDeleteRecentPackage={(recent) =>
-        void packages.deleteRecentPackage(recent)
-      }
-      onDownloadRecentPackage={(recent) =>
-        void packages.downloadRecentPackage(recent)
-      }
-      onOpenPackage={(file) => void packages.openPackage(file)}
-      onOpenRecentPackage={(recent) => void packages.openRecentPackage(recent)}
-      onPasteQuestion={() => void questions.pasteQuestion()}
-      onQuestionChange={questions.updateQuestion}
-      onQuestionTextBlur={questions.correctQuestionText}
-      onSelectQuestion={setSelectedIndex}
-      onSwapQuestions={questions.swapQuestionPositions}
-      onTitleChange={(title) => {
-        setGamePackage({ ...gamePackage, title });
-        setSaveStatus('pending');
-        setMessage('');
-      }}
-    />
+            return;
+          }
+          if (
+            !file.type.startsWith('audio/') ||
+            !new Audio().canPlayType(file.type)
+          ) {
+            setMessage(copy.editor.invalidMusic);
+            return;
+          }
+          void file
+            .arrayBuffer()
+            .then((buffer) => {
+              setGamePackage((current) => ({
+                ...current,
+                musicBreaks: current.musicBreaks.map(
+                  (musicBreak, breakIndex) =>
+                    breakIndex === index
+                      ? {
+                          name: file.name,
+                          mimeType: file.type,
+                          data: new Uint8Array(buffer),
+                        }
+                      : musicBreak,
+                ) as GamePackage['musicBreaks'],
+              }));
+              setSaveStatus('pending');
+              setMessage('');
+            })
+            .catch(() => setMessage(copy.editor.invalidMusic));
+        }}
+        onAnswerBlur={questions.correctMainAnswer}
+        onAnswerCommentBlur={questions.correctAnswerComment}
+        onAlternativeAnswerBlur={questions.correctAlternativeAnswer}
+        onWrongAnswerBlur={questions.correctWrongAnswer}
+        onBack={() => void packages.closePackage()}
+        onCopyQuestion={() => void questions.copyQuestion()}
+        onCreatePackage={() => void packages.createPackage()}
+        onDeleteRecentPackage={(recent) =>
+          void packages.deleteRecentPackage(recent)
+        }
+        onDownloadRecentPackage={(recent) =>
+          void packages.downloadRecentPackage(recent)
+        }
+        onOpenPackage={(file) => void packages.openPackage(file)}
+        onOpenRecentPackage={(recent) =>
+          void packages.openRecentPackage(recent)
+        }
+        onPasteQuestion={() => void questions.pasteQuestion()}
+        onQuestionChange={questions.updateQuestion}
+        onQuestionTextBlur={questions.correctQuestionText}
+        onSelectQuestion={setSelectedIndex}
+        onSwapQuestions={questions.swapQuestionPositions}
+        onTitleChange={(title) => {
+          setGamePackage({ ...gamePackage, title });
+          setSaveStatus('pending');
+          setMessage('');
+        }}
+      />
+      <ConfirmationDialog {...dialogProps} />
+    </>
   );
 }

@@ -36,6 +36,9 @@
   by the shared tooltip on hover and keyboard focus.
 - Preserve semantic elements, labels, `aria-*` state, visible focus, disabled
   states, native behavior, and `prefers-reduced-motion`.
+- Use shared custom dialogs instead of browser alerts or confirms. Dialogs must
+  dim the background, clearly state the action, and show explicit choices with
+  the contrasting primary action focused by default.
 - Keep editor and shell layouts usable from 320 px upward. Use Flexbox, not CSS
   Grid.
 - Use individual Font Awesome free icons for controls and navigation. Keep

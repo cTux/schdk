@@ -1,5 +1,6 @@
 import { parseDrivePackageReference } from '@schdk/google-drive';
 import { QUESTIONS_PER_ROUND } from '@schdk/common';
+import { ConfirmationDialog, useConfirmationDialog } from '@schdk/ui';
 import { HostView } from '@schdk/ui/host';
 import { useLocalization } from '@schdk/ui/localization';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -32,6 +33,7 @@ export function App({
   onDriveFailure,
 }: AppProps) {
   const { copy } = useLocalization();
+  const { confirm, dialogProps } = useConfirmationDialog();
   const sessionScope = window.location.pathname;
   const initialSession = useRef(
     (window.desktop ? null : getDeepLinkedHostSession(window.location.href)) ??
@@ -58,6 +60,7 @@ export function App({
     setWizardRestore,
     wizardRestore,
   } = useHostPackages({
+    confirm,
     copy,
     drive,
     onDriveFailure,
@@ -176,11 +179,13 @@ export function App({
         return;
       }
       event.preventDefault();
-      if (window.confirm(copy.host.exitGameConfirmation)) returnToGames();
+      void confirm(copy.host.exitGameConfirmation).then((confirmed) => {
+        if (confirmed) returnToGames();
+      });
     }
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [copy.host.exitGameConfirmation, gameActive, returnToGames]);
+  }, [confirm, copy.host.exitGameConfirmation, gameActive, returnToGames]);
 
   const game =
     gameActive && !wizard.finished && selectedPackage && wizard.question
@@ -209,28 +214,31 @@ export function App({
 
   if (!driveActive) return null;
   return (
-    <HostView
-      backgroundImage={backgroundImage}
-      backgroundOpacity={backgroundOpacity}
-      copy={copy}
-      customElements={customElements}
-      finished={gameActive && wizard.finished}
-      game={game}
-      layout={layout}
-      message={message}
-      openingRecentPackageId={openingRecentPackageId}
-      packageDetails={packageDetails}
-      recentPackages={recentPackages}
-      recentPackagesLoading={recentPackagesLoading}
-      onBack={clearPackage}
-      onDeleteRecentPackage={(recent) => void deleteRecentPackage(recent)}
-      onGameBack={wizard.goBack}
-      onGameNext={wizard.goNext}
-      onDownloadRecentPackage={(recent) => void downloadRecentPackage(recent)}
-      onOpenPackage={(file) => void openPackage(file)}
-      onOpenRecentPackage={(recent) => void openRecentPackage(recent)}
-      onReturnToGames={returnToGames}
-      onStartGame={startGame}
-    />
+    <>
+      <HostView
+        backgroundImage={backgroundImage}
+        backgroundOpacity={backgroundOpacity}
+        copy={copy}
+        customElements={customElements}
+        finished={gameActive && wizard.finished}
+        game={game}
+        layout={layout}
+        message={message}
+        openingRecentPackageId={openingRecentPackageId}
+        packageDetails={packageDetails}
+        recentPackages={recentPackages}
+        recentPackagesLoading={recentPackagesLoading}
+        onBack={clearPackage}
+        onDeleteRecentPackage={(recent) => void deleteRecentPackage(recent)}
+        onGameBack={wizard.goBack}
+        onGameNext={wizard.goNext}
+        onDownloadRecentPackage={(recent) => void downloadRecentPackage(recent)}
+        onOpenPackage={(file) => void openPackage(file)}
+        onOpenRecentPackage={(recent) => void openRecentPackage(recent)}
+        onReturnToGames={returnToGames}
+        onStartGame={startGame}
+      />
+      <ConfirmationDialog {...dialogProps} />
+    </>
   );
 }

@@ -1,6 +1,7 @@
 export * from './atoms/AppIcon';
 export * from './atoms/ActionToolbar';
 export * from './atoms/Button';
+export * from './atoms/ConfirmationDialog';
 export * from './atoms/Dropdown';
 export * from './atoms/FileButton';
 export * from './atoms/IconButton';
