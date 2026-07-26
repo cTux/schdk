@@ -36,7 +36,8 @@ without losing in-progress work.
 - **EDT-13:** Explicit download exports the latest Drive copy without changing
   the editor's backing file.
 - **EDT-14:** The selected Drive package and question restore after refresh or
-  desktop restart when still available.
+  desktop restart when still available. A failed restoration clears only that
+  account's scoped session.
 - **EDT-15:** The browser warns before unloading an open package with pending,
   saving, or failed changes and stops warning after the package is saved.
 
@@ -63,3 +64,5 @@ without losing in-progress work.
    changing or autosaving the current handout.
 7. Select a music break above the package entry limit and observe it rejected
    before the file is read.
+8. Fail restoration for one account and observe its stale session cleared
+   without changing another account's session.

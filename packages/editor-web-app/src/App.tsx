@@ -96,6 +96,7 @@ export function App({
     refreshRecentPackages,
     drive,
     driveFileId,
+    sessionScope,
     onDriveFailure,
     setDesktopSessionReady,
     setMessage,
