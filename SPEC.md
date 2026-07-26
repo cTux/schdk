@@ -44,6 +44,7 @@ V11|Package imports enforce bounded archive and entry sizes before ZIP extractio
 V12|Amber primary actions keep their visual treatment stable across pointer hover on every application surface.
 V13|Local package and visual-template imports enforce canonical limits before whole-file reads or ZIP extraction.
 V14|Drive package recents traverse every API result page.
+V15|Browser entry points deny unlisted scripts, connections, frames, objects, and form targets through CSP.
 
 ## §T
 
@@ -72,3 +73,4 @@ B15|2026-07-26|Shared and application-scoped amber button styles replaced a grad
 B16|2026-07-26|Local package and visual-template imports allocated complete oversized files before enforcing parser limits|V13
 B17|2026-07-26|Adding a template size guard pushed the shell component past the enforced source-file limit|Use bounded native `File.slice`; the existing repository structure test covers recurrence.
 B18|2026-07-26|Drive package recents stopped after the first 20 files|V14
+B19|2026-07-26|Application CSP restricted only image sources and left executable and network capabilities unconstrained|V15
