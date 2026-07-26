@@ -19,7 +19,8 @@
     "@ai-sdk/google": "^4.0.24",
     "@ai-sdk/openai": "^4.0.20",
     "@schdk/common": "workspace:*",
-    "ai": "^7.0.37"
+    "ai": "^7.0.37",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/json-schema": "^7.0.15",
