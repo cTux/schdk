@@ -10,7 +10,8 @@ preserving recoverable local state during temporary Drive failures.
 ## Requirements
 
 - **DRV-1:** Unified web and desktop tools remain behind explicit Google
-  authorization and become inaccessible again when authorization expires.
+  authorization, become inaccessible again when authorization expires, and
+  remain mounted through transient Drive failures.
 - **DRV-2:** App-created packages live in a visible `SCHDK` Drive folder and
   carry private app identity metadata.
 - **DRV-3:** Package title, filename, readiness, and modified time are available
@@ -54,6 +55,7 @@ preserving recoverable local state during temporary Drive failures.
 - AI credentials remain scoped to the connected Google account.
 - Package-folder discovery and restorable editor/host state remain scoped to
   the connected Google account.
+- Transient Drive failures do not revoke or hide an authorized session.
 
 ## Acceptance
 
@@ -74,3 +76,5 @@ preserving recoverable local state during temporary Drive failures.
    editor/host state without content from B.
 8. Create more than one Drive API result page of packages and observe every
    package in recents.
+9. While connected, make a Drive request fail without expiring authorization
+   and observe the mounted tools remain available with their local state.

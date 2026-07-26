@@ -24,6 +24,7 @@
 - Gate the unified web and desktop application behind Google authorization.
   Do not mount application tools before the first successful connection; when
   authorization expires, keep mounted state inaccessible until reconnection.
+  Keep an authorized session mounted through transient Drive failures.
 - Create or import every editor package in Drive and serialize every autosave
   to the same Drive file ID. Editor and Host recents list and load only those
   Drive packages across every Drive API result page. Never fall back to browser
