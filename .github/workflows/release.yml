@@ -1,0 +1,76 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version without the v prefix
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: release
+    if: github.ref == 'refs/heads/main'
+    runs-on: windows-latest
+    timeout-minutes: 20
+    env:
+      RELEASE_VERSION: ${{ inputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.17.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 25.9.0
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Prepare release notes
+        run: node scripts/release-notes.mjs $env:RELEASE_VERSION release-notes.md
+      - name: Prepare desktop Google credentials
+        env:
+          GOOGLE_DESKTOP_CREDENTIALS_JSON: ${{ secrets.GOOGLE_DESKTOP_CREDENTIALS_JSON }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:GOOGLE_DESKTOP_CREDENTIALS_JSON)) {
+            throw 'GOOGLE_DESKTOP_CREDENTIALS_JSON is required.'
+          }
+          $credentials = $env:GOOGLE_DESKTOP_CREDENTIALS_JSON | ConvertFrom-Json
+          if (!$credentials.installed.client_id -or !$credentials.installed.client_secret) {
+            throw 'GOOGLE_DESKTOP_CREDENTIALS_JSON is invalid.'
+          }
+          $path = Join-Path $env:RUNNER_TEMP 'google-oauth-client.json'
+          [IO.File]::WriteAllText($path, $env:GOOGLE_DESKTOP_CREDENTIALS_JSON)
+          "GOOGLE_DESKTOP_CREDENTIALS_PATH=$path" >> $env:GITHUB_ENV
+      - run: pnpm turbo build --filter=@schdk/all-desktop-app
+      - name: Build installer and portable application
+        run: >
+          pnpm --filter @schdk/all-desktop-app package:win --
+          --config.extraMetadata.version=$env:RELEASE_VERSION
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $releaseRoot = 'packages/all-desktop-app/dist/release'
+          $assets = @(
+            "$releaseRoot/schdk-$env:RELEASE_VERSION-windows-x64-installer.exe"
+            "$releaseRoot/schdk-$env:RELEASE_VERSION-windows-x64-portable.exe"
+          )
+          foreach ($asset in $assets) {
+            if (!(Test-Path -LiteralPath $asset)) {
+              throw "Missing release asset: $asset"
+            }
+          }
+          gh release create "v$env:RELEASE_VERSION" $assets `
+            --target $env:GITHUB_SHA `
+            --title "ЩДК v$env:RELEASE_VERSION" `
+            --notes-file release-notes.md
+      - name: Remove desktop Google credentials
+        if: always()
+        run: |
+          if ($env:GOOGLE_DESKTOP_CREDENTIALS_PATH) {
+            Remove-Item -LiteralPath $env:GOOGLE_DESKTOP_CREDENTIALS_PATH -Force
+          }

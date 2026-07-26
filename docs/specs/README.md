@@ -13,8 +13,8 @@ Project-wide goals, constraints, invariants, and bug history live in
 | Gameplay           | [Game hosting](game-hosting.md)                         | Pre-game summary, stages, timers, audio, navigation, restoration                 |
 | Presentation       | [Visual editor](visual-editor.md)                       | Layout, custom elements, backgrounds, templates                                  |
 | Cloud              | [Google Drive persistence](google-drive-persistence.md) | Authorization, package storage, settings sync, recovery                          |
-| Application shell  | [Unified shell](unified-shell.md)                       | Navigation, localization, themes, settings, deep links                           |
-| Native application | [Desktop application](desktop-application.md)           | Windows shell, presenter notes, close safety, native export                      |
+| Application shell  | [Unified shell](unified-shell.md)                       | Navigation, localization, themes, settings, deep links, GitHub Pages             |
+| Native application | [Desktop application](desktop-application.md)           | Windows shell, presenter notes, close safety, native export, release artifacts   |
 
 ## Maintenance
 

@@ -3,7 +3,6 @@
 ## Technical features
 
 - Build desktop apps for macOS (.app/.pkg) and Linux (.deb)
-- Automate changelog and releases
 
 ## Optimizations
 

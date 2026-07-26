@@ -17,3 +17,8 @@
   logs, coverage, or TypeScript build-info files.
 - Keep Electron output Windows-compatible and web output usable through
   relative `file:` URLs.
+- Deploy `@schdk/all-web-app` to GitHub Pages after every push to `main` through
+  the official Pages artifact and deployment actions.
+- Create Windows releases only from `main` through the manual release workflow.
+  Require a SemVer version and a matching Ukrainian `CHANGELOG.md` section,
+  then publish versioned x64 NSIS installer and portable executable assets.

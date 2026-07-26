@@ -11,6 +11,7 @@
 - [Окремий запуск вебзастосунків](guide/run-standalone-web-apps.md)
 - [Робота з файлами в браузері та на десктопі](guide/file-handling.md)
 - [Збирання готових застосунків](guide/build-apps.md)
+- [Релізи та вебверсія](guide/releases.md)
 - [Перевірка якості](guide/quality-checks.md)
 - [Структура репозиторію](guide/repository-structure.md)
 - [Формат `.schdk`](guide/schdk-format.md)
