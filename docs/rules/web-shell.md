@@ -7,9 +7,10 @@
 - Load an application chunk on first selection, then keep it mounted so
   navigation does not discard state.
 - Preserve keyboard-accessible navigation in the shared renderer.
-- Group the host and editor pages under `ЩДК` in the fixed sidebar. Keep Options
-  at the bottom, nest game and editor settings under the primary `ЩДК` tab, and
-  persist editor text options in localStorage.
+- Group the visual editor, artificial intelligence, editor, and host pages
+  under `ЩДК` in the fixed sidebar. Keep Options at the bottom, nest game and
+  editor settings under the primary `ЩДК` tab, and persist editor text options
+  in localStorage.
 - Reflect an opened browser package in the `package` URL query parameter. A
   unified-shell deep link with this parameter opens the editor before loading
   the package.
@@ -26,6 +27,8 @@
   apply them to every unified application surface.
 - Keep locale selection in the first `App` settings group, before the `WWW`
   group; do not place it in the sidebar.
+- Keep the AI provider/model in local storage. Keep a browser AI API key only
+  in session storage and exclude it from Google Drive settings.
 - Show a localized Google login screen before mounting the unified tools.
   Authentication is mandatory on web and desktop; reconnect before restoring
   access after authorization expires.

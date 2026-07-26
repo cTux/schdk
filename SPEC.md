@@ -15,6 +15,7 @@ C3|Keep browser packages free of Electron and Node APIs.
 C4|Keep renderer access to desktop and Google services narrow and validated.
 C5|Keep user-visible unified application copy localized in Ukrainian and English.
 C6|Keep unfinished packages editable and recoverable without silent destination changes.
+C7|Keep user AI API keys out of synced settings and renderer-readable desktop persistence.
 
 ## §I
 
@@ -34,6 +35,7 @@ V4|Pre-game hosting never exposes question, answer, comment, or host-note text.
 V5|Browser and desktop package workflows remain Drive-backed after import.
 V6|Desktop OAuth tokens stay in Electron main and never cross renderer IPC.
 V7|Every prompt that changes shipped behavior creates or updates affected feature contracts before verification.
+V8|Browser AI API keys last only for the tab session; desktop AI API keys stay encrypted in Electron main.
 
 ## §T
 
@@ -44,3 +46,4 @@ T2|x|Automate post-prompt specification sync|V1,V7,I.specs
 ## §B
 
 id|date|cause|fix
+B1|2026-07-26|New AI settings wiring missed existing lint contracts for unused imports and media range syntax|Remove the unused import and use context range notation.

@@ -46,6 +46,8 @@
   download APIs to its trusted main renderer. Do not expose local package open,
   recent-path, or autosave IPC. Do not enable Node integration for renderer
   content or subframes.
+- Keep user AI API keys encrypted with `safeStorage` in Electron main. Expose
+  only save, remove, and configured-status operations to the renderer.
 - Package the Windows app with electron-builder's unpacked `dir` target under
   `dist/release/win-unpacked`; the project does not currently build installers.
 - Keep `signExecutable: false` so executable resource editing can apply the

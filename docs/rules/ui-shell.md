@@ -1,14 +1,14 @@
 # Shell UI
 
 - Keep the sidebar fixed while application content scrolls.
-- Group, in this order, `Візуальний редактор`, `Редагувати пакети питань`, and
-  `Провести гру` under `ЩДК`. Keep `Налаштування` in a separate group at the
-  bottom.
+- Group, in this order, `Візуальний редактор`, `Штучний інтелект`,
+  `Редагувати пакети питань`, and `Провести гру` under `ЩДК`. Keep
+  `Налаштування` in a separate group at the bottom.
 - Organize settings under an accessible primary `ЩДК` tab with secondary
   `Проведення гри` and `Редагування питань` tabs.
 - Keep the native Ukrainian/English language control in the first `App`
   settings tab. Keep `WWW` as the second primary tab with its host/editor
-  secondary tabs.
+  secondary tabs and `Штучний інтелект` as the third primary tab.
 - Keep the localized Google Drive connection and sync status in the first
   `App` settings tab, using the existing settings-row and button patterns.
 - Keep a localized reference to every custom keyboard shortcut in the first

@@ -3,34 +3,27 @@ import { useState } from 'react';
 import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';
 import { useLocalization } from '../../localization';
+import { AiOptionsPanel } from '../AiOptionsPanel';
 import { OptionSlider } from '../OptionSlider';
 import { OptionToggle } from '../OptionToggle';
 import { OptionsTabs, type OptionsTab } from '../OptionsTabs';
 import type { AppTheme } from '../types';
-import type { GoogleDriveState, OptionsPageProps } from './types';
+import { getGoogleDriveMessage } from './google-drive-message';
+import type { OptionsPageProps } from './types';
 
-function getGoogleDriveMessage(
-  state: GoogleDriveState,
-  account: string | undefined,
-  copy: ReturnType<typeof useLocalization>['copy'],
-) {
-  if (state === 'unavailable') return copy.settings.googleDriveUnavailable;
-  if (state === 'connecting') return copy.settings.googleDriveConnecting;
-  if (state === 'connected')
-    return copy.settings.googleDriveConnected(account ?? '');
-  if (state === 'reauthorization-required')
-    return copy.settings.googleDriveReconnect;
-  if (state === 'error') return copy.settings.googleDriveError;
-  return copy.settings.googleDriveDisconnected;
-}
+const GROUPS = ['app', 'schdk', 'artificialIntelligence'] as const;
+type OptionsGroup = (typeof GROUPS)[number];
 
 export function OptionsPage({
+  ai,
   editor,
   game,
   googleDriveAccount,
   googleDriveState,
   hidden,
   theme,
+  onAiApiKeySave,
+  onAiProviderModelChange,
   onEditorChange,
   onGameChange,
   onGoogleDriveConnect,
@@ -38,7 +31,7 @@ export function OptionsPage({
   onThemeChange,
 }: OptionsPageProps) {
   const { copy, locale, onLocaleChange } = useLocalization();
-  const [group, setGroup] = useState<'app' | 'schdk'>('app');
+  const [group, setGroup] = useState<OptionsGroup>('app');
   const [tab, setTab] = useState<OptionsTab>('editor');
 
   return (
@@ -51,28 +44,20 @@ export function OptionsPage({
         role="tablist"
         aria-label={copy.settings.groupsLabel}
       >
-        <Button
-          type="button"
-          role="tab"
-          id="options-group-tab-app"
-          aria-controls="options-group-panel-app"
-          aria-selected={group === 'app'}
-          className={group === 'app' ? 'active' : ''}
-          onClick={() => setGroup('app')}
-        >
-          {copy.settings.appTab}
-        </Button>
-        <Button
-          type="button"
-          role="tab"
-          id="options-group-tab-schdk"
-          aria-controls="options-group-panel-schdk"
-          aria-selected={group === 'schdk'}
-          className={group === 'schdk' ? 'active' : ''}
-          onClick={() => setGroup('schdk')}
-        >
-          {copy.settings.schdkTab}
-        </Button>
+        {GROUPS.map((item) => (
+          <Button
+            key={item}
+            type="button"
+            role="tab"
+            id={`options-group-tab-${item}`}
+            aria-controls={`options-group-panel-${item}`}
+            aria-selected={group === item}
+            className={group === item ? 'active' : ''}
+            onClick={() => setGroup(item)}
+          >
+            {copy.settings[`${item}Tab`]}
+          </Button>
+        ))}
       </div>
 
       <section
@@ -236,6 +221,18 @@ export function OptionsPage({
             onChange={(musicVolume) => onGameChange({ ...game, musicVolume })}
           />
         </section>
+      </div>
+      <div
+        id="options-group-panel-artificialIntelligence"
+        role="tabpanel"
+        aria-labelledby="options-group-tab-artificialIntelligence"
+        hidden={group !== 'artificialIntelligence'}
+      >
+        <AiOptionsPanel
+          options={ai}
+          onApiKeySave={onAiApiKeySave}
+          onProviderModelChange={onAiProviderModelChange}
+        />
       </div>
     </div>
   );

@@ -18,6 +18,7 @@ description: Maintain SCHDK browser applications and the unified @schdk/all-web-
    restore valid short-lived tokens only from per-tab session storage, and never
    open OAuth from startup, refresh, or background synchronization.
 6. Visually smoke-test changed navigation.
+7. Keep browser AI API keys session-only and outside synchronized settings.
 
 ## Checks
 

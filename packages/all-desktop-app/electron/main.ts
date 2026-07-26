@@ -1,6 +1,7 @@
 import { app, BrowserWindow, dialog, ipcMain, Menu } from 'electron';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { registerAiCredentialsIpc } from './ai-credentials-ipc.js';
 import { registerGamePackageIpc } from './game-package-ipc.js';
 import {
   closePresenterNotes,
@@ -115,6 +116,7 @@ ipcMain.on('set-editor-package-open', (event, open) => {
 });
 
 registerGamePackageIpc();
+registerAiCredentialsIpc();
 registerGoogleDriveIpc();
 registerPresenterNotesIpc(() => mainWindow);
 

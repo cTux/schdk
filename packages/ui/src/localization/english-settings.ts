@@ -5,6 +5,7 @@ export const englishSettings: typeof ukrainianSettings = {
   groupsLabel: 'Settings groups',
   appTab: 'App',
   schdkTab: 'WWW',
+  artificialIntelligenceTab: 'Artificial intelligence',
   languageLabel: 'Language',
   ukrainian: 'Українська',
   english: 'English',
@@ -24,6 +25,17 @@ export const englishSettings: typeof ukrainianSettings = {
   googleDriveConnect: 'Connect',
   googleDriveReconnectAction: 'Reconnect',
   googleDriveDisconnect: 'Disconnect',
+  aiProviderModel: 'AI provider and model',
+  aiProviderModelDescription: 'An AI SDK identifier in provider:model format.',
+  aiApiKey: 'API key',
+  aiApiKeyDescription:
+    'The browser keeps the key until the tab closes; the desktop app uses encrypted operating-system storage.',
+  aiApiKeyPlaceholder: 'Paste an API key',
+  aiApiKeyConfigured: 'API key saved.',
+  aiApiKeyMissing: 'No API key saved.',
+  aiApiKeySave: 'Save',
+  aiApiKeyRemove: 'Remove',
+  aiApiKeySaveFailed: 'Could not save the API key.',
   shortcutsTitle: 'Keyboard shortcuts',
   shortcutGroups: [
     {

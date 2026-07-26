@@ -14,6 +14,11 @@ const closeApi = {
 };
 
 const editorApi = {
+  aiCredentials: {
+    hasApiKey: (): Promise<boolean> => ipcRenderer.invoke('has-ai-api-key'),
+    saveApiKey: (apiKey: string | null): Promise<void> =>
+      ipcRenderer.invoke('save-ai-api-key', apiKey),
+  },
   saveGamePackage: (
     filename: string,
     content: Uint8Array,

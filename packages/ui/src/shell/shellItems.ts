@@ -1,5 +1,6 @@
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import {
+  faBrain,
   faHouse,
   faObjectGroup,
   faPen,
@@ -12,6 +13,7 @@ export type ShellViewName =
   | 'host'
   | 'editor'
   | 'visualEditor'
+  | 'artificialIntelligence'
   | 'options';
 
 export interface ShellItem {
@@ -33,6 +35,11 @@ export function getShellContent(copy: LocalizationCopy) {
       id: 'visualEditor',
       icon: faObjectGroup,
       ...shell.visualEditor,
+    },
+    {
+      id: 'artificialIntelligence',
+      icon: faBrain,
+      ...shell.artificialIntelligence,
     },
     { id: 'editor', icon: faPen, ...shell.editor },
     { id: 'host', icon: faPlay, ...shell.host },

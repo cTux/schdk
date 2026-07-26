@@ -8,6 +8,7 @@ import type { ShellViewName } from '../shellItems';
 import { OptionsPage } from '../../options/OptionsPage';
 import type { GoogleDriveState } from '../../options/OptionsPage';
 import type {
+  AiOptions,
   AppTheme,
   EditorTextOptions,
   GameOptions,
@@ -18,6 +19,7 @@ import { TooltipProvider } from '../../atoms/Tooltip';
 export type { ShellViewName } from '../shellItems';
 
 export interface ShellViewProps {
+  aiOptions: AiOptions;
   editorApp: ReactNode;
   hostApp: ReactNode;
   loadedApps: { host: boolean; editor: boolean };
@@ -28,6 +30,8 @@ export interface ShellViewProps {
   googleDriveState: GoogleDriveState;
   theme: AppTheme;
   view: ShellViewName;
+  onAiApiKeySave(apiKey: string | null): Promise<void>;
+  onAiProviderModelChange(providerModel: string): void;
   onEditorOptionsChange(options: EditorTextOptions): void;
   onGameOptionsChange(options: GameOptions): void;
   onGoogleDriveConnect(): void;
@@ -39,6 +43,7 @@ export interface ShellViewProps {
 }
 
 export function ShellView({
+  aiOptions,
   editorApp,
   hostApp,
   loadedApps,
@@ -49,6 +54,8 @@ export function ShellView({
   googleDriveState,
   theme,
   view,
+  onAiApiKeySave,
+  onAiProviderModelChange,
   onEditorOptionsChange,
   onGameOptionsChange,
   onGoogleDriveConnect,
@@ -70,12 +77,15 @@ export function ShellView({
         <section className="workspace">
           <ShellHome hidden={view !== 'home'} onOpen={onShowView} />
           <OptionsPage
+            ai={aiOptions}
             hidden={view !== 'options'}
             editor={editorOptions}
             game={gameOptions}
             googleDriveAccount={googleDriveAccount?.emailAddress}
             googleDriveState={googleDriveState}
             theme={theme}
+            onAiApiKeySave={onAiApiKeySave}
+            onAiProviderModelChange={onAiProviderModelChange}
             onEditorChange={onEditorOptionsChange}
             onGameChange={onGameOptionsChange}
             onGoogleDriveConnect={onGoogleDriveConnect}
@@ -90,6 +100,7 @@ export function ShellView({
             onImportTemplate={onImportVisualEditorTemplate}
             onExportTemplate={onExportVisualEditorTemplate}
           />
+          <div hidden={view !== 'artificialIntelligence'} />
           {loadedApps.host && (
             <div className="embedded-app" hidden={view !== 'host'}>
               {hostApp}

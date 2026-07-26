@@ -4,6 +4,11 @@ export interface EditorTextOptions {
   correctAnswerComment: boolean;
 }
 
+export interface AiOptions {
+  providerModel: string;
+  apiKeyConfigured: boolean;
+}
+
 export type AppTheme = 'system' | 'light' | 'dark';
 
 export const GAME_LAYOUT_ELEMENT_IDS = [

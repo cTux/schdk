@@ -23,6 +23,9 @@
   Keep desktop OAuth and refresh tokens in the main process, encrypt persisted
   refresh tokens with `safeStorage`, and never expose tokens or generic
   authenticated requests through IPC.
+- Keep browser AI API keys in per-tab session storage only. Keep desktop AI API
+  keys encrypted with `safeStorage`; renderer IPC may query only whether a key
+  exists and may replace or remove it.
 - Keep the installed-app OAuth client secret in the Electron main process. It
   is loaded from an ignored packaged resource, distributed with the desktop
   app, and must never be committed, treated as a security boundary, or exposed
