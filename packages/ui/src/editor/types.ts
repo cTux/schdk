@@ -1,4 +1,4 @@
-import type { GamePackage, GameQuestion } from '@schdk/common';
+import type { AIQuestion, GamePackage, GameQuestion } from '@schdk/common';
 
 export type EditorSaveStatus = 'saved' | 'pending' | 'saving' | 'error';
 
@@ -9,7 +9,14 @@ export interface RecentPackageItem {
   ready?: boolean;
 }
 
+export interface AiQuestionGenerationOptions {
+  apiKeyConfigured: boolean;
+  templates: AIQuestion[];
+  onGenerate(template: AIQuestion, context: string): Promise<GameQuestion>;
+}
+
 export interface EditorViewProps {
+  aiGeneration?: AiQuestionGenerationOptions;
   gamePackage: GamePackage;
   hasPackage: boolean;
   message: string;

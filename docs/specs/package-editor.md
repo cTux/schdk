@@ -40,6 +40,11 @@ without losing in-progress work.
   account's scoped session.
 - **EDT-15:** The browser warns before unloading an open package with pending,
   saving, or failed changes and stops warning after the package is saved.
+- **EDT-16:** An AI icon beside the selected question opens a dimmed modal with
+  an enabled `AIQuestion` template selector and context field. Without a saved
+  key the icon is disabled with an explanatory custom tooltip. Generation
+  disables the complete modal, shows a thinking state, and on success replaces
+  every generated question field before the modal resets and closes.
 
 ## Invariants
 
@@ -66,3 +71,7 @@ without losing in-progress work.
    before the file is read.
 8. Fail restoration for one account and observe its stale session cleared
    without changing another account's session.
+9. With and without an AI key, inspect the generation icon and tooltip. With a
+   key, generate from an enabled template and context, observe the blocked
+   thinking state, and confirm every returned field replaces the selected
+   question.

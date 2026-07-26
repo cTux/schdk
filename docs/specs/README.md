@@ -9,7 +9,7 @@ Project-wide goals, constraints, invariants, and bug history live in
 | Area               | Specification                                           | Covered features                                                                 |
 | ------------------ | ------------------------------------------------------- | -------------------------------------------------------------------------------- |
 | Package contract   | [Game package](game-package.md)                         | Questions, answers, handouts, music breaks, ZIP format, compatibility, readiness |
-| Authoring          | [Package editor](package-editor.md)                     | Create, edit, reorder, import, autosave, recents, export                         |
+| Authoring          | [Package editor](package-editor.md)                     | Create, edit, AI generation, reorder, import, autosave, recents, export          |
 | Gameplay           | [Game hosting](game-hosting.md)                         | Pre-game summary, stages, timers, audio, navigation, restoration                 |
 | Presentation       | [Visual editor](visual-editor.md)                       | Layout, custom elements, backgrounds, templates                                  |
 | Cloud              | [Google Drive persistence](google-drive-persistence.md) | Authorization, package storage, settings sync, recovery                          |

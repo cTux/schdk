@@ -15,6 +15,7 @@
   Import only the Font Awesome icons used by the UI.
 - Use the Vercel AI SDK provider registry when question generation is
   implemented. Add its runtime dependency with the first generation call, not
-  for settings-only UI.
+  for settings-only UI. Register only provider packages shipped in `@schdk/ai`;
+  currently OpenAI, Anthropic, and Google.
 - Use `@opencode-ai/models` as the provider and model metadata source; do not
   maintain a full catalog by hand.

@@ -13,6 +13,12 @@
 - Put Font Awesome copy and paste actions beside the question heading. Copy all
   question fields as JSON; confirm before parsing clipboard JSON and replacing
   the selected question.
+- Put the AI generation icon beside the question heading. Disable it when no
+  API key is configured and explain the disabled state with the shared custom
+  tooltip. Its modal dims the background, selects an enabled `AIQuestion`
+  template, accepts context, and disables every control while generation is
+  pending. Successful structured output replaces every question field, resets
+  the modal, and closes it.
 - Label optional fields. A non-empty unresolved remark keeps a question
   unfinished. Give question, remark, answer, and answer-comment text areas the
   same default height.

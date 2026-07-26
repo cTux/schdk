@@ -1,0 +1,11 @@
+@use '../../styles/tokens' as *;
+
+.disabled-icon-button-trigger {
+  display: inline-flex;
+  border-radius: $radius-control;
+}
+
+.disabled-icon-button-trigger:focus-visible {
+  outline: $focus-width solid $saving;
+  outline-offset: $focus-offset;
+}

@@ -4,9 +4,9 @@ import {
   parseGameQuestion,
   serializeGameQuestion,
   type GameQuestion,
-} from './game-question';
+} from './game-question.js';
 
-export type { AIQuestion } from './ai-question';
+export type { AIQuestion } from './ai-question.js';
 export const QUESTION_COUNT = 36;
 export const QUESTIONS_PER_ROUND = 12;
 export const MAX_GAME_PACKAGE_BYTES = 160 * 1024 * 1024;
@@ -19,14 +19,14 @@ export {
   QUESTION_TYPE_CONFIG,
   createEmptyGameQuestion,
   parseGameQuestion,
-} from './game-question';
+} from './game-question.js';
 export type {
   GameQuestion,
   GameQuestionType,
   Handout,
   ImageHandout,
   TextHandout,
-} from './game-question';
+} from './game-question.js';
 
 export interface GamePackage {
   format: 'schdk-game-package';

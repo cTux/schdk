@@ -25,6 +25,7 @@ import type { AppProps } from './types';
 export type { AppProps } from './types';
 
 export function App({
+  aiGeneration,
   drive,
   driveActive = false,
   manageDocumentTitle = true,
@@ -159,6 +160,7 @@ export function App({
   return (
     <>
       <EditorView
+        aiGeneration={aiGeneration}
         gamePackage={gamePackage}
         hasPackage={hasPackage}
         message={message}

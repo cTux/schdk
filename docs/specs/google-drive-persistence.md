@@ -35,7 +35,8 @@ preserving recoverable local state during temporary Drive failures.
   behind the login screen.
 - **DRV-11:** A user AI API key lives in a separate
   `ai-credentials-v1.json` file in the current account's `appDataFolder`; it
-  never enters the locally cached settings document.
+  never enters the locally cached settings document. Question generation loads
+  it inside the active Drive adapter and returns only a validated question.
 - **DRV-12:** The Google login action remains visually stable on pointer hover.
 - **DRV-13:** Each connected account reuses its own existing app-marked
   `SCHDK` folder, never a folder ID or mounted editor/host state retained from
@@ -70,8 +71,9 @@ preserving recoverable local state during temporary Drive failures.
    of each section.
 4. Lose Drive during an edit, retain local settings and pending package state,
    reconnect, and save to the original file ID.
-5. Save an AI API key, reconnect to the same account and observe configured
-   status, then connect another account and observe no key from the first.
+5. Save an AI API key, generate a question without exposing the key, reconnect
+   to the same account and observe configured status, then connect another
+   account and observe no key from the first.
 6. Hover the Google login action and observe no background or border flash.
 7. Connect account A, create a package, switch to account B, then reconnect
    account A and observe A's original package folder, recents, and restorable

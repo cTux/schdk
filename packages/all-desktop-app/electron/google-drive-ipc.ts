@@ -34,6 +34,14 @@ export function registerGoogleDriveIpc() {
     await client.saveAiApiKey(apiKey);
     await saveAiApiKey(null);
   });
+  ipcMain.handle('generate-ai-question', async (_event, request) => {
+    const apiKey = await client.loadAiApiKey();
+    if (!apiKey) throw new Error('AI API key is not configured');
+    return generateGameQuestion({
+      ...(request as GameQuestionGenerationRequest),
+      apiKey,
+    });
+  });
   ipcMain.handle('load-google-drive-settings', () => client.loadSettings());
   ipcMain.handle('save-google-drive-settings', async (_event, value) => {
     const settings = parseDriveSettingsDocument(value);
@@ -69,3 +77,7 @@ export function registerGoogleDriveIpc() {
     return client.deleteGamePackage(fileId);
   });
 }
+import {
+  generateGameQuestion,
+  type GameQuestionGenerationRequest,
+} from '@schdk/ai';

@@ -11,6 +11,7 @@ import type { EditorViewProps } from '../types';
 export type { EditorSaveStatus, RecentPackageItem } from '../types';
 
 export function EditorView({
+  aiGeneration,
   gamePackage,
   hasPackage,
   message,
@@ -72,6 +73,7 @@ export function EditorView({
             onMusicBreakChange={onMusicBreakChange}
           />
           <QuestionEditor
+            aiGeneration={aiGeneration}
             question={gamePackage.questions[selectedIndex]!}
             selectedIndex={selectedIndex}
             showValidation={showValidation}

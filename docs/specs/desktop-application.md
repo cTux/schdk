@@ -32,8 +32,9 @@ save and presenter-window integration.
 - **DSK-11:** Windows packaging produces an unpacked application under
   `dist/release/win-unpacked`.
 - **DSK-12:** A user AI API key persists in the current Google account's
-  separate Drive app data. Renderer IPC can save, remove, or query its presence
-  but never read the stored value; a legacy `safeStorage` value migrates once
+  separate Drive app data. Renderer IPC can save, remove, query its presence,
+  or request validated question generation, but never read the stored value.
+  Generation runs in Electron main; a legacy `safeStorage` value migrates once
   after Drive connection.
 - **DSK-13:** Each Windows GitHub Release contains version-matched x64 NSIS
   installer and portable executable assets plus release notes sourced from the
@@ -62,9 +63,10 @@ save and presenter-window integration.
    verify it can return in the next game.
 4. Attempt renderer navigation, a new window, malformed IPC, and a filesystem
    write outside explicit download; each is rejected.
-5. Save, replace, and remove an AI API key; restart between operations and
-   verify only its configured status crosses into the renderer, then switch
-   Google accounts and verify the prior account's key is not exposed.
+5. Save, replace, and remove an AI API key; restart between operations, generate
+   a question, and verify only configured status and the validated question
+   cross into the renderer. Then switch Google accounts and verify the prior
+   account's key is not exposed.
 6. Create a release from `main`; verify its tag, Ukrainian notes, installer,
    portable executable, embedded application versions, and Authenticode
    signatures all match.

@@ -1,3 +1,5 @@
+import './styles.scss';
+
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { ButtonHTMLAttributes } from 'react';
@@ -10,17 +12,42 @@ export interface IconButtonProps extends Omit<
 > {
   icon: IconDefinition;
   label: string;
+  tooltipLabel?: string;
   variant?: ButtonVariant;
 }
 
-export function IconButton({ icon, label, ...props }: IconButtonProps) {
+export function IconButton({
+  icon,
+  label,
+  tooltipLabel = label,
+  disabled,
+  ...props
+}: IconButtonProps) {
+  const button = (
+    <Button
+      className="icon-button"
+      aria-label={label}
+      disabled={disabled}
+      {...props}
+    >
+      <FontAwesomeIcon icon={icon} aria-hidden="true" />
+    </Button>
+  );
   return (
     <Tooltip
-      label={label}
+      label={tooltipLabel}
       trigger={
-        <Button className="icon-button" aria-label={label} {...props}>
-          <FontAwesomeIcon icon={icon} aria-hidden="true" />
-        </Button>
+        disabled ? (
+          <span
+            className="disabled-icon-button-trigger"
+            tabIndex={0}
+            aria-label={tooltipLabel}
+          >
+            {button}
+          </span>
+        ) : (
+          button
+        )
       }
     />
   );

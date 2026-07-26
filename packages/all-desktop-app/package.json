@@ -16,6 +16,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@schdk/ai": "workspace:*",
     "@schdk/all-web-app": "workspace:*",
     "@schdk/google-drive": "workspace:*"
   },
