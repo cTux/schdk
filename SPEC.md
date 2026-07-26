@@ -53,3 +53,4 @@ B4|2026-07-26|AI API keys were stored per device instead of following the curren
 B5|2026-07-26|Extracting shared app-data persistence accidentally removed an upload endpoint still used by package writes|Restore the shared upload endpoint constant; existing typechecking catches this mechanical regression.
 B6|2026-07-26|The active settings group lived only in local component state, so its URL could not be shared or restored|Extend the shell deep-link contract to validate and restore the `settings` query parameter.
 B7|2026-07-26|The new settings deep-link hook used a multiline import that differed from the repository formatter output|Apply the existing formatter; no new invariant is needed for this mechanical failure.
+B8|2026-07-26|The Google login button replaced its gradient and border on hover, causing a visible flash|Keep its visual treatment stable across pointer hover.

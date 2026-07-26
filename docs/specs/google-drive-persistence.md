@@ -33,6 +33,7 @@ preserving recoverable local state during temporary Drive failures.
 - **DRV-11:** A user AI API key lives in a separate
   `ai-credentials-v1.json` file in the current account's `appDataFolder`; it
   never enters the locally cached settings document.
+- **DRV-12:** The Google login action remains visually stable on pointer hover.
 
 ## Invariants
 
@@ -57,3 +58,4 @@ preserving recoverable local state during temporary Drive failures.
    reconnect, and save to the original file ID.
 5. Save an AI API key, reconnect to the same account and observe configured
    status, then connect another account and observe no key from the first.
+6. Hover the Google login action and observe no background or border flash.
