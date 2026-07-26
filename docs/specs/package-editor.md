@@ -15,8 +15,9 @@ without losing in-progress work.
   [game-package specification](game-package.md).
 - **EDT-3:** Question type selection exposes one, two, or three question parts
   for standard, 2×30 blitz, or 3×20 blitz respectively.
-- **EDT-4:** Authors can add, replace, and remove text or image handouts and the
-  two between-round audio files.
+- **EDT-4:** Authors can add, replace, and remove text or validated image
+  handouts and the two between-round audio files. Invalid handouts and
+  oversized audio selections never mutate package state.
 - **EDT-5:** Authors can copy a complete question as JSON and replace another
   question from parsed clipboard JSON after confirmation.
 - **EDT-6:** Dragging one question number onto another swaps the complete
@@ -35,7 +36,8 @@ without losing in-progress work.
 - **EDT-13:** Explicit download exports the latest Drive copy without changing
   the editor's backing file.
 - **EDT-14:** The selected Drive package and question restore after refresh or
-  desktop restart when still available.
+  desktop restart when still available. A failed restoration clears only that
+  account's scoped session.
 - **EDT-15:** The browser warns before unloading an open package with pending,
   saving, or failed changes and stops warning after the package is saved.
 
@@ -58,3 +60,9 @@ without losing in-progress work.
    redirecting the current document.
 5. Edit a browser package and observe an unload warning until autosave
    completes.
+6. Select a file without an image MIME type and observe it rejected without
+   changing or autosaving the current handout.
+7. Select a music break above the package entry limit and observe it rejected
+   before the file is read.
+8. Fail restoration for one account and observe its stale session cleared
+   without changing another account's session.

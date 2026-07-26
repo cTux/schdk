@@ -19,6 +19,7 @@ const DRIVE_API = 'https://www.googleapis.com/drive/v3';
 const DRIVE_UPLOAD_API = 'https://www.googleapis.com/upload/drive/v3';
 const AI_CREDENTIALS_NAME = 'ai-credentials-v1.json';
 const MAX_AI_API_KEY_LENGTH = 16_384;
+const MAX_GAME_PACKAGE_BYTES = 160 * 1024 * 1024;
 const SETTINGS_NAME = 'settings-v1.json';
 const PACKAGE_FOLDER_NAME = 'SCHDK';
 
@@ -138,18 +139,25 @@ export class GoogleDriveClient implements DrivePackageStorage {
     if (!isDriveFileId(fileId))
       throw new TypeError('Invalid Google Drive file');
     const encodedId = encodeURIComponent(fileId);
-    const [metadataResponse, contentResponse] = await Promise.all([
-      this.request(
-        `${DRIVE_API}/files/${encodedId}?fields=id,name,description,modifiedTime,appProperties`,
-      ),
-      this.request(`${DRIVE_API}/files/${encodedId}?alt=media`),
-    ]);
-    const file = parseDriveGamePackageFile(await metadataResponse.json());
-    if (!file) throw new Error('Google Drive package metadata is unavailable');
-    return {
-      ...file,
-      content: new Uint8Array(await contentResponse.arrayBuffer()),
-    };
+    const metadataResponse = await this.request(
+      `${DRIVE_API}/files/${encodedId}?fields=id,name,description,modifiedTime,appProperties,size`,
+    );
+    const metadata = (await metadataResponse.json()) as Record<string, unknown>;
+    const file = parseDriveGamePackageFile(metadata);
+    const size = Number(metadata.size);
+    const validSize =
+      typeof metadata.size === 'string' &&
+      Number.isSafeInteger(size) &&
+      size >= 0 &&
+      size <= MAX_GAME_PACKAGE_BYTES;
+    if (!file || !validSize) throw new Error('Invalid Google Drive package');
+    const contentResponse = await this.request(
+      `${DRIVE_API}/files/${encodedId}?alt=media`,
+    );
+    const content = new Uint8Array(await contentResponse.arrayBuffer());
+    if (content.byteLength > MAX_GAME_PACKAGE_BYTES)
+      throw new Error('Invalid Google Drive package');
+    return { ...file, content };
   }
 
   private async uploadGamePackage(

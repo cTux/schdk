@@ -125,9 +125,19 @@ export function useQuestionActions({
   }
 
   function addHandout(file: File) {
+    if (!file.type.startsWith('image/')) {
+      setMessage(copy.visualEditor.chooseImage);
+      return;
+    }
     const reader = new FileReader();
     reader.addEventListener('load', () => {
-      if (typeof reader.result !== 'string') return;
+      if (
+        typeof reader.result !== 'string' ||
+        !reader.result.startsWith(`data:${file.type};base64,`)
+      ) {
+        setMessage(copy.visualEditor.chooseImage);
+        return;
+      }
       updateQuestion({
         handout: {
           kind: 'image',
@@ -137,6 +147,9 @@ export function useQuestionActions({
         },
       });
     });
+    reader.addEventListener('error', () =>
+      setMessage(copy.visualEditor.chooseImage),
+    );
     reader.readAsDataURL(file);
   }
 

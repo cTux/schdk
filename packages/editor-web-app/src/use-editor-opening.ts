@@ -23,6 +23,7 @@ interface EditorOpeningOptions {
   driveActive: boolean;
   driveFileId: string | null;
   hasPackage: boolean;
+  sessionScope: string;
   selectedIndex: number;
   initialDeepLink: MutableRefObject<string | null>;
   initialDeepLinkedQuestion: MutableRefObject<number | null>;
@@ -45,6 +46,7 @@ export function useEditorOpening({
   driveActive,
   driveFileId,
   hasPackage,
+  sessionScope,
   selectedIndex,
   initialDeepLink,
   initialDeepLinkedQuestion,
@@ -111,7 +113,7 @@ export function useEditorOpening({
         setSelectedIndex(session.selectedIndex);
       } catch {
         onDriveFailure?.();
-        saveDesktopEditorSession(localStorage, window.location.pathname, null);
+        saveDesktopEditorSession(localStorage, sessionScope, null);
         setMessage(copy.editor.restoreFileFailed);
       } finally {
         setDesktopSessionReady(true);
@@ -123,6 +125,7 @@ export function useEditorOpening({
     drive,
     initialDesktopSession,
     onDriveFailure,
+    sessionScope,
     setDesktopSessionReady,
     setMessage,
     setSelectedIndex,

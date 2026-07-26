@@ -1,6 +1,8 @@
 import { isDriveFileId } from './settings.js';
 
 const DRIVE_REFERENCE_PREFIX = 'drive:';
+const DRIVE_PACKAGE_EXTENSION = '.schdk';
+const MAX_DRIVE_PACKAGE_NAME_LENGTH = 256;
 export const DRIVE_FOLDER_MIME_TYPE = 'application/vnd.google-apps.folder';
 export const DRIVE_PACKAGE_MIME_TYPE = 'application/vnd.schdk.game-package';
 export const DRIVE_APP_KIND_KEY = 'schdkType';
@@ -43,7 +45,7 @@ export function isDriveGamePackageName(value: unknown): value is string {
   return (
     typeof value === 'string' &&
     value.length > 0 &&
-    value.length <= 256 &&
+    value.length <= MAX_DRIVE_PACKAGE_NAME_LENGTH &&
     /\.schdk$/iu.test(value)
   );
 }
@@ -51,7 +53,9 @@ export function isDriveGamePackageName(value: unknown): value is string {
 export function createGamePackageFilename(title: string, fallback: string) {
   const safeTitle =
     title.replace(/[\p{Cc}<>:"/\\|?*]/gu, '-').trim() || fallback;
-  return `${safeTitle}.schdk`;
+  return `${safeTitle
+    .slice(0, MAX_DRIVE_PACKAGE_NAME_LENGTH - DRIVE_PACKAGE_EXTENSION.length)
+    .trimEnd()}${DRIVE_PACKAGE_EXTENSION}`;
 }
 
 export function parseDriveGamePackageWrite(
