@@ -25,6 +25,8 @@ description: Build, debug, secure, or package SCHDK Electron applications. Use f
 8. For Windows release packaging, keep local `package` output unpacked and use
    `package:win` for the versioned NSIS installer and portable executable.
    Release notes come from the matching Ukrainian `CHANGELOG.md` section.
+   Require the PFX certificate secrets and verify every release executable's
+   Authenticode signature before upload; local unpacked builds may be unsigned.
 
 ## Checks
 

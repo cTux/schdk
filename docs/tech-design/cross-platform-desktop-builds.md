@@ -64,7 +64,6 @@ Windows packaging design:
     "electronLanguages": ["uk", "en-US"],
     "win": {
       "icon": "build/owl.png",
-      "signExecutable": false,
       "target": ["dir", "nsis"],
       "artifactName": "${productName}-${version}-windows-${arch}.${ext}"
     },

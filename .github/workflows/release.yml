@@ -45,11 +45,43 @@ jobs:
           $path = Join-Path $env:RUNNER_TEMP 'google-oauth-client.json'
           [IO.File]::WriteAllText($path, $env:GOOGLE_DESKTOP_CREDENTIALS_JSON)
           "GOOGLE_DESKTOP_CREDENTIALS_PATH=$path" >> $env:GITHUB_ENV
+      - name: Prepare Windows signing certificate
+        env:
+          WINDOWS_CERTIFICATE_BASE64: ${{ secrets.WINDOWS_CERTIFICATE_BASE64 }}
+          WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:WINDOWS_CERTIFICATE_BASE64) -or
+              [string]::IsNullOrWhiteSpace($env:WINDOWS_CERTIFICATE_PASSWORD)) {
+            throw 'Windows signing certificate secrets are required.'
+          }
+          $path = Join-Path $env:RUNNER_TEMP 'windows-signing.pfx'
+          [IO.File]::WriteAllBytes(
+            $path,
+            [Convert]::FromBase64String($env:WINDOWS_CERTIFICATE_BASE64)
+          )
+          "WINDOWS_SIGNING_CERTIFICATE_PATH=$path" >> $env:GITHUB_ENV
       - run: pnpm turbo build --filter=@schdk/all-desktop-app
       - name: Build installer and portable application
+        env:
+          CSC_LINK: ${{ env.WINDOWS_SIGNING_CERTIFICATE_PATH }}
+          CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
         run: >
           pnpm --filter @schdk/all-desktop-app package:win --
           --config.extraMetadata.version=$env:RELEASE_VERSION
+      - name: Verify Windows signatures
+        run: |
+          $releaseRoot = 'packages/all-desktop-app/dist/release'
+          $assets = @(
+            "$releaseRoot/win-unpacked/ЩДК.exe"
+            "$releaseRoot/schdk-$env:RELEASE_VERSION-windows-x64-installer.exe"
+            "$releaseRoot/schdk-$env:RELEASE_VERSION-windows-x64-portable.exe"
+          )
+          foreach ($asset in $assets) {
+            $signature = Get-AuthenticodeSignature -FilePath $asset
+            if ($signature.Status -ne 'Valid') {
+              throw "Invalid signature for ${asset}: $($signature.Status)"
+            }
+          }
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -73,4 +105,7 @@ jobs:
         run: |
           if ($env:GOOGLE_DESKTOP_CREDENTIALS_PATH) {
             Remove-Item -LiteralPath $env:GOOGLE_DESKTOP_CREDENTIALS_PATH -Force
+          }
+          if ($env:WINDOWS_SIGNING_CERTIFICATE_PATH) {
+            Remove-Item -LiteralPath $env:WINDOWS_SIGNING_CERTIFICATE_PATH -Force
           }

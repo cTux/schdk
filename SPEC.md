@@ -45,6 +45,7 @@ V12|Amber primary actions keep their visual treatment stable across pointer hove
 V13|Local package and visual-template imports enforce canonical limits before whole-file reads or ZIP extraction.
 V14|Drive package recents traverse every API result page.
 V15|Browser entry points deny unlisted scripts, connections, frames, objects, and form targets through CSP.
+V16|Windows GitHub Releases contain only Authenticode-valid executables.
 
 ## §T
 
@@ -74,3 +75,4 @@ B16|2026-07-26|Local package and visual-template imports allocated complete over
 B17|2026-07-26|Adding a template size guard pushed the shell component past the enforced source-file limit|Use bounded native `File.slice`; the existing repository structure test covers recurrence.
 B18|2026-07-26|Drive package recents stopped after the first 20 files|V14
 B19|2026-07-26|Application CSP restricted only image sources and left executable and network capabilities unconstrained|V15
+B20|2026-07-26|Windows release packaging explicitly disabled executable signing|V16

@@ -23,4 +23,5 @@
   the official Pages artifact and deployment actions.
 - Create Windows releases only from `main` through the manual release workflow.
   Require a SemVer version and a matching Ukrainian `CHANGELOG.md` section,
-  then publish versioned x64 NSIS installer and portable executable assets.
+  require the Windows certificate secrets, then publish only Authenticode-valid
+  versioned x64 NSIS installer and portable executable assets.

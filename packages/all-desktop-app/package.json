@@ -49,7 +49,6 @@
     ],
     "win": {
       "icon": "build/owl.png",
-      "signExecutable": false,
       "target": [
         "nsis",
         "portable"

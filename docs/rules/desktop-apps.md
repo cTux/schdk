@@ -53,8 +53,9 @@
 - Keep local Windows packaging on electron-builder's unpacked `dir` target
   under `dist/release/win-unpacked`. Release packaging produces versioned x64
   NSIS installer and portable executable assets.
-- Keep `signExecutable: false` so executable resource editing can apply the
-  shared icon without requiring signing.
+- Sign every Windows GitHub Release executable through electron-builder and
+  verify its Authenticode signature before upload. Local unpacked packaging may
+  remain unsigned.
 - Include compiled Electron files, the package manifest, required build assets,
   and the matching web build as an extra resource.
 
