@@ -1,5 +1,6 @@
 import './styles.scss';
 
+import { useEffect } from 'react';
 import { StatusMessage } from '../../atoms/StatusMessage';
 import { TooltipProvider } from '../../atoms/Tooltip';
 import { EditorHeader } from '../EditorHeader';
@@ -42,6 +43,30 @@ export function EditorView({
   onSwapQuestions,
   onTitleChange,
 }: EditorViewProps) {
+  useEffect(() => {
+    if (!hasPackage) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (!event.ctrlKey || event.altKey || event.shiftKey || event.repeat) {
+        return;
+      }
+
+      const action =
+        event.key.toLowerCase() === 'c'
+          ? onCopyQuestion
+          : event.key.toLowerCase() === 'v'
+            ? onPasteQuestion
+            : undefined;
+      if (!action) return;
+
+      event.preventDefault();
+      action();
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [hasPackage, onCopyQuestion, onPasteQuestion]);
+
   return (
     <TooltipProvider>
       <main className="editor-app">

@@ -1,5 +1,6 @@
 import {
   QUESTION_TYPE_CONFIG,
+  createEmptyGameQuestion,
   type GameQuestion,
   type GameQuestionType,
 } from '@schdk/common';
@@ -68,6 +69,7 @@ export function QuestionEditor({
         aiGeneration={aiGeneration}
         questionNumber={selectedIndex + 1}
         onGenerated={onGenerated}
+        onClear={() => onChange(createEmptyGameQuestion())}
         onCopy={onCopy}
         onPaste={onPaste}
       />
