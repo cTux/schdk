@@ -36,17 +36,18 @@ export function createAiQuestionGeneration(
 }
 
 export function useAiQuestionTools(
-  storage: Storage,
   bridge: GoogleDriveBridge | null,
   connection: GoogleDriveConnection,
   locale: AppLocale,
 ) {
-  const aiQuestions = useAIQuestions(storage);
-  const ai = useAiSettings(
-    connection.state === 'connected' ? bridge : null,
+  const accountId =
     connection.state === 'connected'
       ? connection.account.emailAddress
-      : undefined,
+      : undefined;
+  const aiQuestions = useAIQuestions(bridge, accountId);
+  const ai = useAiSettings(
+    connection.state === 'connected' ? bridge : null,
+    accountId,
   );
   return {
     ai,

@@ -5,6 +5,18 @@ export {
 } from './client.js';
 export type { DriveAccount } from './client.js';
 export {
+  createAIQuestionFilename,
+  isDriveAIQuestionName,
+  parseDriveAIQuestionFile,
+  parseDriveAIQuestionWrite,
+} from './ai-questions.js';
+export type {
+  DriveAIQuestion,
+  DriveAIQuestionFile,
+  DriveAIQuestionStorage,
+  DriveAIQuestionWrite,
+} from './ai-questions.js';
+export {
   createGamePackageFilename,
   isDriveGamePackageName,
   parseDriveGamePackageWrite,

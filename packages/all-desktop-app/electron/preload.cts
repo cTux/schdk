@@ -64,6 +64,15 @@ const editorApi = {
       ipcRenderer.invoke('update-google-drive-game-package', fileId, value),
     deleteGamePackage: (fileId: string) =>
       ipcRenderer.invoke('delete-google-drive-game-package', fileId),
+    listAIQuestions: () => ipcRenderer.invoke('list-google-drive-ai-questions'),
+    loadAIQuestion: (fileId: string) =>
+      ipcRenderer.invoke('load-google-drive-ai-question', fileId),
+    createAIQuestion: (value: unknown) =>
+      ipcRenderer.invoke('create-google-drive-ai-question', value),
+    updateAIQuestion: (fileId: string, value: unknown) =>
+      ipcRenderer.invoke('update-google-drive-ai-question', fileId, value),
+    deleteAIQuestion: (fileId: string) =>
+      ipcRenderer.invoke('delete-google-drive-ai-question', fileId),
   },
 };
 

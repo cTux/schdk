@@ -25,9 +25,11 @@ export interface ShellViewProps {
   aiOptions: AiOptions;
   aiQuestions: {
     questions: AIQuestion[];
-    addQuestion(question: AIQuestion): boolean;
-    removeQuestion(index: number): boolean;
-    updateQuestion(index: number, question: AIQuestion): boolean;
+    failed: boolean;
+    loading: boolean;
+    addQuestion(question: AIQuestion): Promise<boolean>;
+    removeQuestion(index: number): Promise<boolean>;
+    updateQuestion(index: number, question: AIQuestion): Promise<boolean>;
   };
   editorApp: ReactNode;
   hostApp: ReactNode;
@@ -122,6 +124,8 @@ export function ShellView({
           <div hidden={view !== 'artificialIntelligence'}>
             <AIQuestionsPage
               questions={aiQuestions.questions}
+              failed={aiQuestions.failed}
+              loading={aiQuestions.loading}
               onAdd={aiQuestions.addQuestion}
               onRemove={aiQuestions.removeQuestion}
               onUpdate={aiQuestions.updateQuestion}

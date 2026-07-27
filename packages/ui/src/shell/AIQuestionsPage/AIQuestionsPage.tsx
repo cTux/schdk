@@ -1,12 +1,5 @@
 import './styles.scss';
 
-import {
-  faEye,
-  faEyeSlash,
-  faPen,
-  faStar,
-  faTrashCan,
-} from '@fortawesome/free-solid-svg-icons';
 import type { AIQuestion } from '@schdk/common';
 import { useState } from 'react';
 import { Button } from '../../atoms/Button';
@@ -14,9 +7,9 @@ import {
   ConfirmationDialog,
   useConfirmationDialog,
 } from '../../atoms/ConfirmationDialog';
-import { IconButton } from '../../atoms/IconButton';
 import { TextAreaField } from '../../atoms/TextAreaField';
 import { useLocalization } from '../../localization';
+import { AIQuestionCard } from '../AIQuestionCard';
 import type { AIQuestionsPageProps } from './types';
 
 const EMPTY_QUESTION: AIQuestion = {
@@ -30,6 +23,8 @@ const EMPTY_QUESTION: AIQuestion = {
 
 export function AIQuestionsPage({
   questions,
+  failed,
+  loading,
   onAdd,
   onRemove,
   onUpdate,
@@ -39,6 +34,7 @@ export function AIQuestionsPage({
   const [draft, setDraft] = useState(EMPTY_QUESTION);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [formOpen, setFormOpen] = useState(false);
+  const [formSaving, setFormSaving] = useState(false);
   const [saveFailed, setSaveFailed] = useState(false);
 
   function updateDraft(
@@ -52,6 +48,7 @@ export function AIQuestionsPage({
     setDraft(EMPTY_QUESTION);
     setEditingIndex(null);
     setSaveFailed(false);
+    setFormSaving(false);
     setFormOpen(false);
   }
 
@@ -63,7 +60,8 @@ export function AIQuestionsPage({
   }
 
   function updateQuestion(index: number, question: AIQuestion) {
-    setSaveFailed(!onUpdate(index, question));
+    setSaveFailed(false);
+    return onUpdate(index, question);
   }
   return (
     <section className="ai-questions-page">
@@ -89,8 +87,9 @@ export function AIQuestionsPage({
       {formOpen && (
         <form
           className="ai-question-form"
-          onSubmit={(event) => {
+          onSubmit={async (event) => {
             event.preventDefault();
+            if (formSaving) return;
             const question = {
               name: draft.name.trim(),
               description: draft.description.trim(),
@@ -99,10 +98,13 @@ export function AIQuestionsPage({
               enabled: draft.enabled,
               favorite: draft.favorite,
             };
-            const saved =
+            setFormSaving(true);
+            const saved = await (
               editingIndex === null
                 ? onAdd(question)
-                : onUpdate(editingIndex, question);
+                : onUpdate(editingIndex, question)
+            ).catch(() => false);
+            setFormSaving(false);
             if (saved) closeForm();
             else setSaveFailed(true);
           }}
@@ -116,6 +118,7 @@ export function AIQuestionsPage({
             {copy.aiQuestions.name}
             <input
               autoFocus
+              disabled={formSaving}
               required
               value={draft.name}
               onChange={(event) => updateDraft('name', event.target.value)}
@@ -123,6 +126,7 @@ export function AIQuestionsPage({
           </label>
           <TextAreaField
             required
+            disabled={formSaving}
             rows={5}
             label={copy.aiQuestions.questionDescription}
             value={draft.description}
@@ -130,6 +134,7 @@ export function AIQuestionsPage({
           />
           <TextAreaField
             optional
+            disabled={formSaving}
             optionalLabel={copy.shared.optional}
             rows={4}
             label={copy.aiQuestions.goodExamples}
@@ -138,6 +143,7 @@ export function AIQuestionsPage({
           />
           <TextAreaField
             optional
+            disabled={formSaving}
             optionalLabel={copy.shared.optional}
             rows={4}
             label={copy.aiQuestions.badExamples}
@@ -150,13 +156,20 @@ export function AIQuestionsPage({
             </p>
           )}
           <div className="ai-question-form-actions">
-            <Button type="button" variant="ghost" onClick={closeForm}>
+            <Button
+              type="button"
+              variant="ghost"
+              disabled={formSaving}
+              onClick={closeForm}
+            >
               {copy.shared.cancel}
             </Button>
             <Button
               type="submit"
               variant="primary"
-              disabled={!draft.name.trim() || !draft.description.trim()}
+              disabled={
+                formSaving || !draft.name.trim() || !draft.description.trim()
+              }
             >
               {copy.aiQuestions.save}
             </Button>
@@ -166,85 +179,28 @@ export function AIQuestionsPage({
       {questions.length ? (
         <div className="ai-question-list">
           {questions.map((question, index) => (
-            <article
+            <AIQuestionCard
               key={`${question.name}-${index}`}
-              data-disabled={question.enabled ? undefined : true}
-            >
-              <div className="ai-question-card-actions">
-                <IconButton
-                  icon={faPen}
-                  label={copy.aiQuestions.edit}
-                  onClick={() => editQuestion(question, index)}
-                />
-                <IconButton
-                  aria-pressed={question.enabled}
-                  icon={question.enabled ? faEye : faEyeSlash}
-                  label={
-                    question.enabled
-                      ? copy.aiQuestions.disable
-                      : copy.aiQuestions.enable
-                  }
-                  onClick={() =>
-                    updateQuestion(index, {
-                      ...question,
-                      enabled: !question.enabled,
-                    })
-                  }
-                />
-                <IconButton
-                  icon={faTrashCan}
-                  label={copy.aiQuestions.delete}
-                  onClick={async () => {
-                    const confirmed = await deleteDialog.confirm(
-                      copy.aiQuestions.deleteConfirmation(question.name),
-                    );
-                    if (confirmed) {
-                      setSaveFailed(!onRemove(index));
-                    }
-                  }}
-                />
-                <IconButton
-                  className="ai-question-favorite"
-                  aria-pressed={question.favorite}
-                  icon={faStar}
-                  label={
-                    question.favorite
-                      ? copy.aiQuestions.removeFavorite
-                      : copy.aiQuestions.favorite
-                  }
-                  onClick={() =>
-                    updateQuestion(index, {
-                      ...question,
-                      favorite: !question.favorite,
-                    })
-                  }
-                />
-              </div>
-              <div className="ai-question-card-body">
-                <h2>{question.name}</h2>
-                <p>{question.description}</p>
-                {question.goodExamples && (
-                  <section>
-                    <h3>{copy.aiQuestions.goodExamples}</h3>
-                    <p>{question.goodExamples}</p>
-                  </section>
-                )}
-                {question.badExamples && (
-                  <section>
-                    <h3>{copy.aiQuestions.badExamples}</h3>
-                    <p>{question.badExamples}</p>
-                  </section>
-                )}
-              </div>
-            </article>
+              question={question}
+              onDelete={async () => {
+                const confirmed = await deleteDialog.confirm(
+                  copy.aiQuestions.deleteConfirmation(question.name),
+                );
+                return !confirmed || onRemove(index);
+              }}
+              onEdit={() => editQuestion(question, index)}
+              onSaveFailed={() => setSaveFailed(true)}
+              onUpdate={(nextQuestion) => updateQuestion(index, nextQuestion)}
+            />
           ))}
         </div>
       ) : (
-        !formOpen && (
+        !formOpen &&
+        !loading && (
           <p className="ai-question-empty">{copy.aiQuestions.empty}</p>
         )
       )}
-      {!formOpen && saveFailed && (
+      {!formOpen && (failed || saveFailed) && (
         <p className="ai-question-save-error" role="alert">
           {copy.aiQuestions.saveFailed}
         </p>

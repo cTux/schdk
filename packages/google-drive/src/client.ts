@@ -1,4 +1,13 @@
 import { parseDriveAccount, type DriveAccount } from './account.js';
+import { GoogleDriveAIQuestionStorage } from './ai-question-client.js';
+import {
+  loadAiApiKey as loadStoredAiApiKey,
+  saveAiApiKey as saveStoredAiApiKey,
+} from './ai-credentials.js';
+import type {
+  DriveAIQuestionStorage,
+  DriveAIQuestionWrite,
+} from './ai-questions.js';
 import { GoogleDriveAppData } from './app-data.js';
 import { isDriveFileId, type DriveSettingsDocument } from './settings.js';
 import {
@@ -17,8 +26,6 @@ import {
 
 const DRIVE_API = 'https://www.googleapis.com/drive/v3';
 const DRIVE_UPLOAD_API = 'https://www.googleapis.com/upload/drive/v3';
-const AI_CREDENTIALS_NAME = 'ai-credentials-v1.json';
-const MAX_AI_API_KEY_LENGTH = 16_384;
 const MAX_GAME_PACKAGE_BYTES = 160 * 1024 * 1024;
 const SETTINGS_NAME = 'settings-v1.json';
 const PACKAGE_FOLDER_NAME = 'SCHDK';
@@ -36,9 +43,14 @@ interface DriveFile {
   id: string;
 }
 
-export class GoogleDriveClient implements DrivePackageStorage {
+export class GoogleDriveClient
+  implements DrivePackageStorage, DriveAIQuestionStorage
+{
   private readonly appData = new GoogleDriveAppData((input, init) =>
     this.request(input, init),
+  );
+  private readonly aiQuestions = new GoogleDriveAIQuestionStorage(
+    (input, init) => this.request(input, init),
   );
   constructor(private readonly getAccessToken: () => Promise<string>) {}
 
@@ -62,23 +74,21 @@ export class GoogleDriveClient implements DrivePackageStorage {
   }
 
   async loadAiApiKey(): Promise<string | null> {
-    const value = await this.appData.load(AI_CREDENTIALS_NAME);
-    if (value === null) return null;
-    if (
-      typeof value !== 'object' ||
-      (value as { schemaVersion?: unknown }).schemaVersion !== 1
-    ) {
-      throw new TypeError('Invalid AI credentials');
-    }
-    return this.normalizeAiApiKey((value as { apiKey?: unknown }).apiKey);
+    return loadStoredAiApiKey(this.appData);
   }
 
   async saveAiApiKey(apiKey: string | null): Promise<void> {
-    await this.appData.save(AI_CREDENTIALS_NAME, {
-      schemaVersion: 1,
-      apiKey: this.normalizeAiApiKey(apiKey),
-    });
+    await saveStoredAiApiKey(this.appData, apiKey);
   }
+
+  createAIQuestion = (value: DriveAIQuestionWrite) =>
+    this.aiQuestions.createAIQuestion(value);
+  updateAIQuestion = (fileId: string, value: DriveAIQuestionWrite) =>
+    this.aiQuestions.updateAIQuestion(fileId, value);
+  deleteAIQuestion = (fileId: string) =>
+    this.aiQuestions.deleteAIQuestion(fileId);
+  listAIQuestions = () => this.aiQuestions.listAIQuestions();
+  loadAIQuestion = (fileId: string) => this.aiQuestions.loadAIQuestion(fileId);
 
   createGamePackage(value: DriveGamePackageWrite) {
     return this.uploadGamePackage(value);
@@ -225,16 +235,6 @@ export class GoogleDriveClient implements DrivePackageStorage {
       throw new Error('Google Drive package folder is unavailable');
     }
     return created.id;
-  }
-
-  private normalizeAiApiKey(value: unknown) {
-    if (value === null) return null;
-    if (typeof value !== 'string') throw new TypeError('Invalid AI API key');
-    const apiKey = value.trim();
-    if (!apiKey || apiKey.length > MAX_AI_API_KEY_LENGTH) {
-      throw new TypeError('Invalid AI API key');
-    }
-    return apiKey;
   }
 
   private async request(input: string, init: RequestInit = {}) {

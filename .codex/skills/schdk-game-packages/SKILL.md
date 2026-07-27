@@ -1,6 +1,6 @@
 ---
 name: schdk-game-packages
-description: Maintain or diagnose the SCHDK .schdk file contract in @schdk/common. Use for game-package types, question fields, ZIP encoding, parsing, serialization, readiness validation, clipboard question JSON, compatibility, malformed files, or docs/GAME_PACKAGE.md changes.
+description: Maintain or diagnose the SCHDK .schdk and .aiquestion file contracts in @schdk/common. Use for game-package or AI-question types, ZIP encoding, parsing, serialization, readiness validation, clipboard question JSON, compatibility, malformed files, or portable-format documentation changes.
 ---
 
 # SCHDK Game Packages
@@ -14,6 +14,10 @@ description: Maintain or diagnose the SCHDK .schdk file contract in @schdk/commo
    Store music-break bytes in their fixed ZIP entries, not in `game.json`.
 3. Update implementation and `docs/GAME_PACKAGE.md` together for contract changes.
 4. Rebuild affected consumers when exported types or behavior change.
+5. For `.aiquestion` changes, keep `packages/common/src/ai-question.ts` and
+   `docs/AI_QUESTION.md` synchronized. Require a ZIP archive containing the
+   canonical `ai-question.json` entry; do not duplicate its parser in Drive or
+   UI consumers.
 
 ## Checks
 
