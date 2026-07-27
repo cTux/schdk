@@ -23,6 +23,7 @@ export interface GoogleDriveBridge
   disconnect(): Promise<void>;
   hasAiApiKey(): Promise<boolean>;
   saveAiApiKey(apiKey: string | null): Promise<void>;
+  renewToken?(): Promise<void>;
   generateAiQuestion(
     request: GameQuestionGenerationRequest,
   ): Promise<GameQuestion>;

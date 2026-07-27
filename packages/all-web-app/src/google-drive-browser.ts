@@ -154,6 +154,11 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
     return this.client.saveAiApiKey(apiKey);
   }
 
+  renewToken() {
+    this.lastTokenRefreshAttempt = Date.now();
+    return this.requestToken('', this.account?.emailAddress);
+  }
+
   async generateAiQuestion(request: GameQuestionGenerationRequest) {
     const apiKey = await this.client.loadAiApiKey();
     if (!apiKey) throw new Error('AI API key is not configured');

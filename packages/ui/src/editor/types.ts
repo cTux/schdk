@@ -18,6 +18,7 @@ export interface AiQuestionGenerationOptions {
   apiKeyConfigured: boolean;
   templates: AIQuestion[];
   packages: AIQuestionsPackage[];
+  onGenerationStart?(): Promise<void>;
   getPromptPreview?(template: AIQuestion, context: string): string;
   onGenerate(template: AIQuestion, context: string): Promise<GameQuestion>;
 }

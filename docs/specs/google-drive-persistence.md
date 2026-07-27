@@ -27,8 +27,8 @@ preserving recoverable local state during temporary Drive failures.
 - **DRV-8:** Browser login starts only from explicit user action, keeps a
   validated short-lived access token in per-tab session storage, renews the
   current account's token from an active click when no more than 20 minutes
-  remain, throttles failed renewal attempts to once per five minutes, and
-  requires reconnection after expiry.
+  remain or immediately before package generation, throttles failed renewal
+  attempts to once per five minutes, and requires reconnection after expiry.
 - **DRV-9:** Desktop login uses the system browser, PKCE S256, random state, a
   loopback callback, and encrypted refresh-token persistence.
 - **DRV-10:** Disconnect clears the active authorization state and hides tools
