@@ -10,8 +10,8 @@ import {
   toDrivePackageReference,
   type DrivePackageStorage,
 } from '@schdk/google-drive';
-import type { RecentPackageItem } from '@schdk/ui/editor';
-import type { LocalizationCopy } from '@schdk/ui/localization';
+import { showEditorToast, type RecentPackageItem } from '@schdk/ui/editor';
+import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
 import { useRef, useState } from 'react';
 import { replaceBrowserPackageDeepLink } from './browser-deep-link';
 
@@ -19,6 +19,7 @@ interface PackageOpeningOptions {
   confirm(message: string): Promise<boolean>;
   copy: LocalizationCopy;
   drive?: DrivePackageStorage;
+  locale: AppLocale;
   applyOpenedPackage(
     content: Uint8Array,
     fileName: string,
@@ -44,6 +45,7 @@ export function usePackageOpeningActions({
   confirm,
   copy,
   drive,
+  locale,
   applyOpenedPackage,
   refreshRecentPackages,
   onDriveFailure,
@@ -83,6 +85,7 @@ export function usePackageOpeningActions({
       applyOpenedPackage(content, saved.name, saved.id);
       replaceBrowserPackageDeepLink(toDrivePackageReference(saved.id), 0);
       await refreshRecentPackages();
+      showEditorToast('imported', locale);
     } catch {
       onDriveFailure?.();
       setMessage(copy.editor.saveFailed);
@@ -102,6 +105,7 @@ export function usePackageOpeningActions({
       applyOpenedPackage(opened.content, opened.name, opened.id);
       replaceBrowserPackageDeepLink(toDrivePackageReference(opened.id), 0);
       await refreshRecentPackages();
+      showEditorToast('opened', locale);
     } catch {
       onDriveFailure?.();
       setMessage(copy.editor.recentOpenFailed);
@@ -121,10 +125,15 @@ export function usePackageOpeningActions({
         throw new Error('Google Drive is unavailable');
       const opened = await drive.loadGamePackage(driveFileId);
       if (window.desktop) {
-        await window.desktop.saveGamePackage(opened.name, opened.content);
+        const savedPath = await window.desktop.saveGamePackage(
+          opened.name,
+          opened.content,
+        );
+        if (!savedPath) return;
       } else {
         downloadPackage(opened.name, opened.content);
       }
+      showEditorToast('downloaded', locale);
     } catch {
       onDriveFailure?.();
       setMessage(copy.editor.downloadFailed);
@@ -149,6 +158,7 @@ export function usePackageOpeningActions({
         throw new Error('Google Drive is unavailable');
       await drive.deleteGamePackage(driveFileId);
       await refreshRecentPackages();
+      showEditorToast('deleted', locale);
     } catch {
       onDriveFailure?.();
       setMessage(copy.shared.deletePackageFailed);
