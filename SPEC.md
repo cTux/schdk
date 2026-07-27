@@ -57,6 +57,7 @@ V21|Every multiline text input uses the shared non-resizable `Textarea` control.
 V22|Every personal or global AI question rule is parsed from its own `.aiquestion` ZIP archive and persisted through its assigned Google Drive folder.
 V23|Global AI question writes require an allowlisted account and remain confined to the configured shared Drive folder.
 V24|At most one global AI question rule is marked as general, only an allowlisted administrator can change it, and generation applies it to every selected template.
+V25|Only an allowlisted administrator can preview the exact system and user prompt text used for AI question generation.
 
 ## §T
 
@@ -116,3 +117,5 @@ B46|2026-07-27|AI question collections rendered blank while their rules loaded|R
 B47|2026-07-27|Skeleton markup used literal multi-class JSX strings outside the component composition contract|Use the existing `classNames` pattern; the repository workflow test covers recurrence.
 B48|2026-07-27|The form's generic label layout overrode the general-rule switch and stretched it into a large circle below its title|Scope field-label layout to direct form children so the switch stays beside its title as specified by `docs/specs/unified-shell.md`.
 B49|2026-07-27|General-rule cards exposed the ordinary favorite action and the form switch floated awkwardly beside its heading|Show a disabled lock on general-rule cards and place the editable switch in its own settings row as specified by `docs/specs/unified-shell.md`.
+B50|2026-07-27|The prompt-panel state class used a BEM separator outside the enforced selector naming contract|Use the existing kebab-case selector convention; no new invariant is needed for this mechanical failure.
+B51|2026-07-27|The prompt-panel conditional class bypassed the repository's component composition contract|Use the existing `classNames` pattern; the repository workflow test covers recurrence.
