@@ -28,7 +28,14 @@
   the official Pages artifact and deployment actions.
 - In pull requests, load the production unified web shell in headless Chrome
   and require its Google login view to render.
-- Create Windows releases only from `main` through the manual release workflow.
-  Require a SemVer version and a matching Ukrainian `CHANGELOG.md` section,
-  require the Windows certificate secrets, then publish only Authenticode-valid
-  versioned x64 NSIS installer and portable executable assets.
+- Create cross-platform releases only from `main` through the manual release
+  workflow. Require a SemVer version and matching Ukrainian `CHANGELOG.md`
+  section, run shared checks once, package on native Windows, macOS, and Ubuntu
+  runners, and publish only after every platform artifact validates.
+- GitHub Releases contain Authenticode-valid Windows x64 installer and portable
+  executables, macOS x64/arm64 ZIPs containing signed and notarized apps,
+  signed and notarized PKGs, and a metadata-validated Debian x64 package. Never
+  publish a partial release.
+- Route requests to prepare, publish, repair, or verify a GitHub Release through
+  `$schdk-release`; it owns the changelog, checked release-preparation pull
+  request, merge, workflow dispatch, wait, and final release verification.

@@ -37,3 +37,5 @@ description: Implement, debug, refactor, review, or document changes anywhere in
 - Use `$schdk-web-shell` for web entry points, navigation, lazy loading, or options.
 - Use `$schdk-electron` for IPC, desktop windows, close handling, or packaging.
 - Use `$schdk-quality` for repository verification and distributable builds.
+- Use `$schdk-release` when asked to prepare, publish, repair, or verify a
+  versioned GitHub Release.

@@ -1,0 +1,4 @@
+interface:
+  display_name: 'SCHDK Release'
+  short_description: 'Prepare, publish, and verify SCHDK releases'
+  default_prompt: 'Use $schdk-release to make a complete SCHDK release.'
