@@ -114,3 +114,4 @@ B44|2026-07-27|Global AI question wiring pushed three source files beyond the en
 B45|2026-07-27|The account-rule add action lived in the page header instead of beside its collection heading|Keep each add action in its collection header as specified by `docs/specs/unified-shell.md`.
 B46|2026-07-27|AI question collections rendered blank while their rules loaded|Render card skeletons for each loading collection as specified by `docs/specs/unified-shell.md`.
 B47|2026-07-27|Skeleton markup used literal multi-class JSX strings outside the component composition contract|Use the existing `classNames` pattern; the repository workflow test covers recurrence.
+B48|2026-07-27|The form's generic label layout overrode the general-rule switch and stretched it into a large circle below its title|Scope field-label layout to direct form children so the switch stays beside its title as specified by `docs/specs/unified-shell.md`.
