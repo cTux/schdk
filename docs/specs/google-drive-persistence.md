@@ -45,6 +45,10 @@ preserving recoverable local state during temporary Drive failures.
   packages beyond the first page.
 - **DRV-15:** Package loads validate Drive metadata against the canonical
   package-size limit before downloading package media.
+- **DRV-16:** Every AI question rule is a separate visible `.aiquestion` ZIP
+  file in the current account's app-marked `SCHDK` folder. Rule listing,
+  loading, creation, renaming, updating, and trashing use the shared Drive
+  adapter on web and desktop without local-storage persistence.
 
 ## Invariants
 
@@ -59,6 +63,8 @@ preserving recoverable local state during temporary Drive failures.
 - Package-folder discovery and restorable editor/host state remain scoped to
   the connected Google account.
 - Transient Drive failures do not revoke or hide an authorized session.
+- AI question archives are parsed through the canonical shared format before
+  their rules are used.
 
 ## Acceptance
 
@@ -84,3 +90,6 @@ preserving recoverable local state during temporary Drive failures.
    and observe the mounted tools remain available with their local state.
 10. Open an oversized Drive package and observe it rejected before its media
     body is downloaded.
+11. Add, edit, favorite, disable, reload, and delete an AI question rule on web
+    and desktop; observe one renamed `.aiquestion` ZIP file in the current
+    account's `SCHDK` folder and no browser-local rule copy.

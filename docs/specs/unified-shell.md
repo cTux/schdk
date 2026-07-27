@@ -34,13 +34,14 @@ package authoring, hosting, settings, and account state.
   answers, and answer comments.
 - **SHL-10:** Before authorization, only the localized Google login screen is
   visible; account status and disconnect remain available after connection.
-- **SHL-11:** The Artificial intelligence page lists locally persisted
-  `AIQuestion` rules and opens a form for adding another rule. Every rule has a
-  name, detailed generation description, and optional good and bad question
-  examples. Name and description are required before saving. Rules render as
-  bounded-width cards with icon actions to edit, enable or disable, favorite or
-  unfavorite, and delete after confirmation. The favorite action and state stay
-  in the card's top-right action area, and every change persists locally.
+- **SHL-11:** The Artificial intelligence page fills the available workspace
+  width, lists Drive-backed `AIQuestion` rules, and opens a form for adding
+  another rule. Every rule has a name, detailed generation description, and
+  optional good and bad question examples. Name and description are required
+  before saving. Each narrow card shows its name in a separate top panel, a
+  clipped text preview, and a bottom icon bar ordered favorite, edit,
+  enable/disable, and delete. Deletion requires confirmation. Every change
+  persists as the rule's `.aiquestion` ZIP file in Google Drive.
 - **SHL-12:** Artificial intelligence settings expose separate provider and
   model dropdowns plus a user API key. The dropdowns use the models.dev catalog
   for the OpenAI, Anthropic, and Google providers supported by `@schdk/ai`,
@@ -85,7 +86,8 @@ package authoring, hosting, settings, and account state.
 5. Open the Artificial intelligence route directly, add a rule with its
    required name and description plus optional good and bad examples, then edit,
    disable, favorite, reload, and delete it; confirm each state persists and the
-   rule stays in a bounded-width card.
+   rule stays in a narrow card with the specified top, preview, and bottom
+   panels while the page uses the available workspace width.
 6. Configure an AI model and API key; reload and confirm both remain for the
    same Google account, then switch accounts and confirm the previous key is
    not exposed.

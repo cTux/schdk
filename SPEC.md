@@ -16,6 +16,7 @@ C4|Keep renderer access to desktop and Google services narrow and validated.
 C5|Keep user-visible unified application copy localized in Ukrainian and English.
 C6|Keep unfinished packages editable and recoverable without silent destination changes.
 C7|Keep user AI API keys in separate, account-scoped Google Drive app data and out of synchronized settings or local browser persistence.
+C8|Keep AI question rules as individually parseable, account-scoped Google Drive files.
 
 ## §I
 
@@ -26,6 +27,7 @@ I.web|Unified browser application|`@schdk/all-web-app`
 I.desktop|Windows, macOS, and Linux application|`@schdk/all-desktop-app`
 I.drive|Package and settings persistence|Google Drive
 I.ai|Structured question generation|`@schdk/ai`
+I.aiquestion|Portable AI question rule|`.aiquestion`
 I.pages|Hosted browser application|GitHub Pages
 I.release|Versioned Windows distribution|GitHub Releases
 
@@ -52,6 +54,7 @@ V18|Pull requests execute the production browser shell and packaged Electron ren
 V19|The browser warns before unloading a package whose current changes are not saved.
 V20|AI output is validated as a complete game question before it can replace editor fields.
 V21|Every multiline text input uses the shared non-resizable `Textarea` control.
+V22|Every AI question rule is parsed from its own `.aiquestion` ZIP archive and persisted only through the current Google Drive account.
 
 ## §T
 
@@ -100,3 +103,4 @@ B35|2026-07-26|The new NodeNext desktop consumer exposed extensionless relative 
 B36|2026-07-26|OpenAI rejected handout discriminator schemas without an explicit JSON type|Provider-bound discriminator schemas declare both `type` and `enum`; a live Responses API request covers recurrence.
 B37|2026-07-26|The packaged desktop application omitted the AI SDK's `zod` peer dependency and crashed before its smoke test could run|Declare `zod` as a direct `@schdk/ai` runtime dependency; V18's packaged Electron smoke test covers recurrence.
 B38|2026-07-26|The packaged AI runtime resolved `@schdk/common` to TypeScript source under `node_modules`|Expose the built JavaScript as the package's default export while preserving source exports for types and development; V18 covers recurrence.
+B39|2026-07-27|The AI question card stylesheet referenced a nonexistent large-font token and failed Sass compilation|Use the one-off font size directly; the required UI and root builds catch this mechanical regression.

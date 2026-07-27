@@ -2,8 +2,9 @@
 
 ## Package boundaries
 
-- `@schdk/common` owns the game-package types, constants, parser, serializer,
-  and readiness validation. It must not depend on UI or platform code.
+- `@schdk/common` owns the game-package and AI-question file types, constants,
+  parsers, serializers, and game readiness validation. It must not depend on
+  UI or platform code.
 - `@schdk/ai` owns provider setup, localized generation prompts, structured
   response validation, and conversion to the canonical game-question type.
 - `@schdk/ui` owns components, composed views, styles, design tokens, UI
@@ -42,6 +43,8 @@
 - Editor and host applications may consume the platform-neutral package
   storage contract from `@schdk/google-drive`; they must not own authorization
   or tokens.
+- The unified shell consumes the platform-neutral AI-question storage contract
+  from `@schdk/google-drive`; it must not own authorization or tokens.
 - Browser and Electron generation adapters call `@schdk/ai`; they load the
   account-scoped key internally and never expose it as renderer state or IPC
   output.

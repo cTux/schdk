@@ -1,80 +1,119 @@
-import type { AIQuestion } from '@schdk/common';
-import { useState } from 'react';
+import {
+  parseAIQuestionArchive,
+  serializeAIQuestion,
+  type AIQuestion,
+} from '@schdk/common';
+import { createAIQuestionFilename } from '@schdk/google-drive';
+import { useEffect, useState } from 'react';
+import type { GoogleDriveBridge } from './google-drive-types';
 
-const STORAGE_KEY = 'schdk.ai-questions';
+interface StoredAIQuestion {
+  fileId: string;
+  question: AIQuestion;
+}
 
-function parseAIQuestion(value: unknown): AIQuestion | null {
-  if (!value || typeof value !== 'object') return null;
-  const question = value as Record<string, unknown>;
-  if (
-    typeof question.name === 'string' &&
-    Boolean(question.name.trim()) &&
-    typeof question.description === 'string' &&
-    Boolean(question.description.trim()) &&
-    typeof question.goodExamples === 'string' &&
-    typeof question.badExamples === 'string'
-  ) {
-    return {
-      name: question.name,
-      description: question.description,
-      goodExamples: question.goodExamples,
-      badExamples: question.badExamples,
-      enabled: question.enabled !== false,
-      favorite: question.favorite === true,
+export function useAIQuestions(
+  bridge: GoogleDriveBridge | null,
+  accountId?: string,
+) {
+  const [items, setItems] = useState<StoredAIQuestion[]>([]);
+  const [failed, setFailed] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    setItems([]);
+    setFailed(false);
+    setLoading(Boolean(bridge && accountId));
+    if (!bridge || !accountId) return;
+    void bridge
+      .listAIQuestions()
+      .then((files) =>
+        Promise.all(
+          files.map(async ({ id }) => {
+            try {
+              const file = await bridge.loadAIQuestion(id);
+              return {
+                fileId: id,
+                question: parseAIQuestionArchive(file.content),
+              };
+            } catch {
+              return null;
+            }
+          }),
+        ),
+      )
+      .then((loaded) => {
+        if (active) {
+          setFailed(loaded.some((item) => item === null));
+          setItems(
+            loaded.filter((item): item is StoredAIQuestion => item !== null),
+          );
+        }
+      })
+      .catch(() => active && setFailed(true))
+      .finally(() => active && setLoading(false));
+    return () => {
+      active = false;
     };
-  }
-  return null;
-}
+  }, [accountId, bridge]);
 
-function loadAIQuestions(storage: Storage): AIQuestion[] {
-  try {
-    const value: unknown = JSON.parse(storage.getItem(STORAGE_KEY) ?? '[]');
-    return Array.isArray(value)
-      ? value.map(parseAIQuestion).filter((question) => question !== null)
-      : [];
-  } catch {
-    return [];
-  }
-}
-
-function saveAIQuestions(storage: Storage, questions: AIQuestion[]): boolean {
-  try {
-    storage.setItem(STORAGE_KEY, JSON.stringify(questions));
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-export function useAIQuestions(storage: Storage) {
-  const [questions, setQuestions] = useState<AIQuestion[]>(() =>
-    loadAIQuestions(storage),
-  );
-
-  function addQuestion(question: AIQuestion): boolean {
-    const nextQuestions = [...questions, question];
-    if (!saveAIQuestions(storage, nextQuestions)) return false;
-    setQuestions(nextQuestions);
-    return true;
+  async function addQuestion(question: AIQuestion): Promise<boolean> {
+    if (!bridge) return false;
+    try {
+      const file = await bridge.createAIQuestion({
+        name: createAIQuestionFilename(question.name),
+        content: serializeAIQuestion(question),
+      });
+      setItems((current) => [{ fileId: file.id, question }, ...current]);
+      return true;
+    } catch {
+      return false;
+    }
   }
 
-  function updateQuestion(index: number, question: AIQuestion): boolean {
-    const nextQuestions = questions.map((current, itemIndex) =>
-      itemIndex === index ? question : current,
-    );
-    if (!saveAIQuestions(storage, nextQuestions)) return false;
-    setQuestions(nextQuestions);
-    return true;
+  async function updateQuestion(
+    index: number,
+    question: AIQuestion,
+  ): Promise<boolean> {
+    const item = items[index];
+    if (!bridge || !item) return false;
+    try {
+      await bridge.updateAIQuestion(item.fileId, {
+        name: createAIQuestionFilename(question.name),
+        content: serializeAIQuestion(question),
+      });
+      setItems((current) =>
+        current.map((stored) =>
+          stored.fileId === item.fileId ? { ...stored, question } : stored,
+        ),
+      );
+      return true;
+    } catch {
+      return false;
+    }
   }
 
-  function removeQuestion(index: number): boolean {
-    const nextQuestions = questions.filter(
-      (_, itemIndex) => itemIndex !== index,
-    );
-    if (!saveAIQuestions(storage, nextQuestions)) return false;
-    setQuestions(nextQuestions);
-    return true;
+  async function removeQuestion(index: number): Promise<boolean> {
+    const item = items[index];
+    if (!bridge || !item) return false;
+    try {
+      await bridge.deleteAIQuestion(item.fileId);
+      setItems((current) =>
+        current.filter(({ fileId }) => fileId !== item.fileId),
+      );
+      return true;
+    } catch {
+      return false;
+    }
   }
 
-  return { questions, addQuestion, updateQuestion, removeQuestion };
+  return {
+    questions: items.map(({ question }) => question),
+    loading,
+    failed,
+    addQuestion,
+    updateQuestion,
+    removeQuestion,
+  };
 }

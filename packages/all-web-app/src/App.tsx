@@ -80,7 +80,6 @@ export function App() {
   const { connection } = googleDrive;
   const connected = connection.state === 'connected';
   const { ai, aiQuestions, aiGeneration } = useAiQuestionTools(
-    localStorage,
     googleDrive.bridge ?? null,
     connection,
     locale,

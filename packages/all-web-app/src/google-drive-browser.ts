@@ -233,6 +233,12 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
   loadGamePackage(fileId: string) {
     return this.client.loadGamePackage(fileId);
   }
+
+  createAIQuestion = this.client.createAIQuestion.bind(this.client);
+  updateAIQuestion = this.client.updateAIQuestion.bind(this.client);
+  deleteAIQuestion = this.client.deleteAIQuestion.bind(this.client);
+  listAIQuestions = this.client.listAIQuestions.bind(this.client);
+  loadAIQuestion = this.client.loadAIQuestion.bind(this.client);
 }
 import {
   generateGameQuestion,

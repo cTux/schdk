@@ -17,6 +17,10 @@
   references. Keep the package title in Drive file metadata so recents can show
   it without downloading package contents, and keep the Drive filename
   synchronized as the filesystem-safe title plus `.schdk`.
+- Store every AI question rule as its own visible `.aiquestion` ZIP archive in
+  the same `SCHDK` Drive folder. Mark it with private app identity metadata,
+  keep its filename synchronized as the filesystem-safe rule name plus
+  `.aiquestion`, and parse its archive through `@schdk/common` before use.
 - Discover the current account's existing app-marked package folder instead of
   retaining a folder ID across authorization changes. Scope restorable editor
   and host state by account, and remount it only when the connected account
@@ -29,6 +33,8 @@
   to the same Drive file ID. Editor and Host recents list and load only those
   Drive packages across every Drive API result page. Never fall back to browser
   storage or desktop paths.
+- List, create, update, and delete AI question rules through the active
+  account's Drive adapter. Never persist those rules in browser local storage.
 - Reject package metadata above the canonical package-size limit before
   downloading its media body.
 - Treat a local `.schdk` selection only as an import: validate it, upload it to

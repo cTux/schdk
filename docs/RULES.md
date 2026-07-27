@@ -28,6 +28,8 @@ Read only the areas touched by the task:
   contracts.
 - [GAME_PACKAGE.md](GAME_PACKAGE.md) is the user-facing `.schdk` format
   contract.
+- [AI_QUESTION.md](AI_QUESTION.md) is the user-facing `.aiquestion` format
+  contract.
 - [../README.md](../README.md) is the short Ukrainian project overview and
   benefits page.
 - [README.md](README.md) indexes the detailed Ukrainian topic guides under
