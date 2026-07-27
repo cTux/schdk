@@ -1,0 +1,36 @@
+@use '../AIQuestionsPage/styles';
+@use '../../styles/tokens' as *;
+
+.ai-package-contexts,
+.ai-package-context {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.ai-package-contexts {
+  border: 0;
+  padding: 0;
+}
+
+.ai-package-contexts > legend {
+  margin-bottom: $space-3;
+  font-weight: 700;
+}
+
+.ai-package-context {
+  border: 1px solid $border;
+  border-radius: $radius-control;
+  padding: $space-4;
+}
+
+.ai-package-context > label {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  font-weight: 650;
+}
+
+.ai-package-context .ui-dropdown {
+  width: 100%;
+}

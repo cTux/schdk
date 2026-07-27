@@ -25,6 +25,7 @@ export interface QuestionEditorProps {
   onAlternativeAnswerBlur(index: number): void;
   onWrongAnswerBlur(index: number): void;
   onChange(change: Partial<GameQuestion>): void;
+  onGenerated(question: GameQuestion): void;
   onCopy(): void;
   onPaste(): void;
   onSelectQuestion(index: number): void;
@@ -42,6 +43,7 @@ export function QuestionEditor({
   onAlternativeAnswerBlur,
   onWrongAnswerBlur,
   onChange,
+  onGenerated,
   onCopy,
   onPaste,
   onSelectQuestion,
@@ -65,7 +67,7 @@ export function QuestionEditor({
       <QuestionEditorHeader
         aiGeneration={aiGeneration}
         questionNumber={selectedIndex + 1}
-        onGenerated={onChange}
+        onGenerated={onGenerated}
         onCopy={onCopy}
         onPaste={onPaste}
       />

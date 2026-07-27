@@ -17,9 +17,9 @@ export const SUPPORTED_AI_PROVIDER_IDS = [
 type SupportedAiProvider = (typeof SUPPORTED_AI_PROVIDER_IDS)[number];
 type GeneratedQuestion = Omit<
   GameQuestion,
-  'answerComment' | 'comment' | 'handout' | 'hostNotes'
+  'comment' | 'handout' | 'hostNotes'
 > & {
-  answerComment: string | null;
+  answerComment: string;
   comment: string | null;
   handout: GameQuestion['handout'] | null;
   hostNotes: string | null;
@@ -60,8 +60,9 @@ const generatedQuestionSchema = jsonSchema<GameQuestion>(
       },
       answer: { type: 'string', description: 'Required main answer.' },
       answerComment: {
-        ...nullableString(),
-        description: 'Optional answer explanation; null when absent.',
+        type: 'string',
+        minLength: 1,
+        description: 'Required answer explanation.',
       },
       alternativeAnswers: {
         type: 'array',
@@ -124,13 +125,13 @@ const generatedQuestionSchema = jsonSchema<GameQuestion>(
     validate(value) {
       try {
         const generated = value as GeneratedQuestion;
+        if (!generated.answerComment.trim()) {
+          throw new Error('Answer comment is required');
+        }
         return {
           success: true,
           value: parseGameQuestion({
             ...generated,
-            ...(generated.answerComment === null
-              ? { answerComment: undefined }
-              : {}),
             ...(generated.comment === null ? { comment: undefined } : {}),
             ...(generated.handout === null ? { handout: undefined } : {}),
             ...(generated.hostNotes === null ? { hostNotes: undefined } : {}),
@@ -205,8 +206,8 @@ export function createGameQuestionPrompt(input: GameQuestionGenerationRequest) {
   return {
     system:
       input.locale === 'uk'
-        ? 'Створи питання для гри «Що? Де? Коли?» за обраним шаблоном. Заповни всі поля формату відповіді; для необов’язкових полів без значення поверни null, а для списків — порожній список.'
-        : 'Create a What? Where? When? game question from the selected template. Fill every response field; use null for absent optional fields and empty arrays for absent lists.',
+        ? 'Створи питання для гри «Що? Де? Коли?» за обраним шаблоном. Коментар до відповіді є обов’язковим: коротко поясни правильну відповідь. Заповни всі поля формату відповіді; для інших необов’язкових полів без значення поверни null, а для списків — порожній список.'
+        : 'Create a What? Where? When? game question from the selected template. The answer comment is required: briefly explain the correct answer. Fill every response field; use null for other absent optional fields and empty arrays for absent lists.',
     prompt: prompt(input),
   };
 }

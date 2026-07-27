@@ -2,7 +2,9 @@ import { useLocalization } from '../../localization';
 import { EditorBrand } from '../EditorBrand';
 import { PackageTitleField } from '../PackageTitleField';
 import { SaveStatus } from '../SaveStatus';
-import type { EditorSaveStatus } from '../types';
+import { PackageGenerationDialog } from '../PackageGenerationDialog';
+import type { GamePackage, GameQuestion } from '@schdk/common';
+import type { AiQuestionGenerationOptions, EditorSaveStatus } from '../types';
 
 export interface EditorHeaderProps {
   hasPackage: boolean;
@@ -11,6 +13,10 @@ export interface EditorHeaderProps {
   showValidation: boolean;
   onBack(): void;
   onTitleChange(value: string): void;
+  aiGeneration?: AiQuestionGenerationOptions;
+  gamePackage: GamePackage;
+  onQuestionGenerated(index: number, question: GameQuestion): void;
+  onSelectQuestion(index: number): void;
 }
 
 export function EditorHeader({
@@ -20,6 +26,10 @@ export function EditorHeader({
   showValidation,
   onBack,
   onTitleChange,
+  aiGeneration,
+  gamePackage,
+  onQuestionGenerated,
+  onSelectQuestion,
 }: EditorHeaderProps) {
   const { copy } = useLocalization();
 
@@ -33,6 +43,14 @@ export function EditorHeader({
             value={packageTitle}
             onChange={onTitleChange}
           />
+          {aiGeneration && (
+            <PackageGenerationDialog
+              {...aiGeneration}
+              gamePackage={gamePackage}
+              onGenerated={onQuestionGenerated}
+              onSelectQuestion={onSelectQuestion}
+            />
+          )}
           <SaveStatus
             label={copy.editor.saveStatus[saveStatus]}
             status={saveStatus}

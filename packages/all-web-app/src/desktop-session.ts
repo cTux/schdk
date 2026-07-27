@@ -12,6 +12,7 @@ function isShellViewName(value: string | null): value is ShellViewName {
     value === 'editor' ||
     value === 'visualEditor' ||
     value === 'artificialIntelligence' ||
+    value === 'packageRules' ||
     value === 'options'
   );
 }

@@ -2,6 +2,7 @@ import type { GameQuestionGenerationRequest } from '@schdk/ai';
 import type { GameQuestion } from '@schdk/common';
 import type {
   DriveAccount,
+  DriveAIQuestionsPackageStorage,
   DriveAIQuestionStorage,
   DriveGlobalAIQuestionStorage,
   DrivePackageStorage,
@@ -11,6 +12,7 @@ import type {
 export interface GoogleDriveBridge
   extends
     DrivePackageStorage,
+    DriveAIQuestionsPackageStorage,
     DriveAIQuestionStorage,
     DriveGlobalAIQuestionStorage {
   status(): Promise<{

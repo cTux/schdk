@@ -1,9 +1,14 @@
 import { parseDriveAccount, type DriveAccount } from './account.js';
+import { GoogleDriveAIQuestionsPackageStorage } from './ai-questions-package-client.js';
 import { GoogleDriveAIQuestionStorage } from './ai-question-client.js';
 import {
   loadAiApiKey as loadStoredAiApiKey,
   saveAiApiKey as saveStoredAiApiKey,
 } from './ai-credentials.js';
+import type {
+  DriveAIQuestionsPackageStorage,
+  DriveAIQuestionsPackageWrite,
+} from './ai-questions-packages.js';
 import type {
   DriveAIQuestionStorage,
   DriveAIQuestionWrite,
@@ -33,7 +38,10 @@ export type { DriveAccount } from './account.js';
 export class GoogleDriveAuthorizationError extends Error {}
 
 export class GoogleDriveClient
-  implements DrivePackageStorage, DriveAIQuestionStorage
+  implements
+    DrivePackageStorage,
+    DriveAIQuestionStorage,
+    DriveAIQuestionsPackageStorage
 {
   private readonly appData = new GoogleDriveAppData((input, init) =>
     this.request(input, init),
@@ -41,6 +49,10 @@ export class GoogleDriveClient
   private readonly aiQuestions = new GoogleDriveAIQuestionStorage(
     (input, init) => this.request(input, init),
   );
+  private readonly aiQuestionsPackages =
+    new GoogleDriveAIQuestionsPackageStorage((input, init) =>
+      this.request(input, init),
+    );
   private readonly globalAiQuestions = new GoogleDriveAIQuestionStorage(
     (input, init) => this.request(input, init),
     GLOBAL_AI_QUESTION_FOLDER_ID,
@@ -103,6 +115,18 @@ export class GoogleDriveClient
     await this.assertGlobalAIQuestionAdmin();
     return this.globalAiQuestions.deleteAIQuestion(fileId);
   };
+  createAIQuestionsPackage = (value: DriveAIQuestionsPackageWrite) =>
+    this.aiQuestionsPackages.createAIQuestionsPackage(value);
+  updateAIQuestionsPackage = (
+    fileId: string,
+    value: DriveAIQuestionsPackageWrite,
+  ) => this.aiQuestionsPackages.updateAIQuestionsPackage(fileId, value);
+  deleteAIQuestionsPackage = (fileId: string) =>
+    this.aiQuestionsPackages.deleteAIQuestionsPackage(fileId);
+  listAIQuestionsPackages = () =>
+    this.aiQuestionsPackages.listAIQuestionsPackages();
+  loadAIQuestionsPackage = (fileId: string) =>
+    this.aiQuestionsPackages.loadAIQuestionsPackage(fileId);
 
   createGamePackage = (value: DriveGamePackageWrite) =>
     this.packages.createGamePackage(value);

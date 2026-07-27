@@ -1,6 +1,9 @@
 import { ukrainian } from './ukrainian';
 import { englishSettings } from './english-settings';
 import { aiQuestionsCopy, questionGenerationCopy } from './ai-questions';
+import { aiPackageRulesCopy } from './ai-package-rules';
+import { packageGenerationCopy } from './package-generation';
+import { englishAllWeb, englishMeta } from './english-misc';
 export const english: typeof ukrainian = {
   shared: {
     confirmation: 'Confirm action',
@@ -29,12 +32,7 @@ export const english: typeof ukrainian = {
     zoomOut: 'Zoom out',
     zoomIn: 'Zoom in',
   },
-  meta: {
-    title: 'What? Where? When?',
-    description: 'What? Where? When? tools',
-    editorTitle: (fileName) =>
-      fileName ? `${fileName} — WWW Editor` : 'What? Where? When? — Editor',
-  },
+  meta: englishMeta,
   shell: {
     brand: 'What? Where? When?',
     toolsLabel: 'Tools',
@@ -69,9 +67,15 @@ export const english: typeof ukrainian = {
       label: 'Artificial intelligence',
       description: 'Configure question-generation rules.',
     },
+    packageRules: {
+      label: aiPackageRulesCopy.en.navigationLabel,
+      description: aiPackageRulesCopy.en.navigationDescription,
+    },
   },
   aiQuestions: aiQuestionsCopy.en,
+  aiPackageRules: aiPackageRulesCopy.en,
   questionGeneration: questionGenerationCopy.en,
+  packageGeneration: packageGenerationCopy.en,
   settings: englishSettings,
   editor: {
     brandEyebrow: 'Package editor',
@@ -244,10 +248,5 @@ export const english: typeof ukrainian = {
     gameLayout: 'Game screen layout',
     hidden: 'Hidden',
   },
-  allWeb: {
-    saveVisualsFailed:
-      'Could not save the layout. Remove extra images and try again.',
-    importVisualsFailed: 'Could not import the layout template.',
-    exportVisualsFailed: 'Could not export the layout template.',
-  },
+  allWeb: englishAllWeb,
 };

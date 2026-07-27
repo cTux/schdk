@@ -231,6 +231,7 @@ export function App({
         }
         onPasteQuestion={() => void questions.pasteQuestion()}
         onQuestionChange={questions.updateQuestion}
+        onQuestionGenerated={questions.replaceQuestion}
         onQuestionTextBlur={questions.correctQuestionText}
         onSelectQuestion={setSelectedIndex}
         onSwapQuestions={questions.swapQuestionPositions}

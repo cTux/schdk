@@ -194,6 +194,19 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
   }
 
   createAIQuestion = this.client.createAIQuestion.bind(this.client);
+  createAIQuestionsPackage = this.client.createAIQuestionsPackage.bind(
+    this.client,
+  );
+  updateAIQuestionsPackage = this.client.updateAIQuestionsPackage.bind(
+    this.client,
+  );
+  deleteAIQuestionsPackage = this.client.deleteAIQuestionsPackage.bind(
+    this.client,
+  );
+  listAIQuestionsPackages = this.client.listAIQuestionsPackages.bind(
+    this.client,
+  );
+  loadAIQuestionsPackage = this.client.loadAIQuestionsPackage.bind(this.client);
   updateAIQuestion = this.client.updateAIQuestion.bind(this.client);
   deleteAIQuestion = this.client.deleteAIQuestion.bind(this.client);
   listAIQuestions = this.client.listAIQuestions.bind(this.client);

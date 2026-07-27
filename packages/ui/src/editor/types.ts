@@ -1,4 +1,9 @@
-import type { AIQuestion, GamePackage, GameQuestion } from '@schdk/common';
+import type {
+  AIQuestion,
+  AIQuestionsPackage,
+  GamePackage,
+  GameQuestion,
+} from '@schdk/common';
 
 export type EditorSaveStatus = 'saved' | 'pending' | 'saving' | 'error';
 
@@ -12,6 +17,7 @@ export interface RecentPackageItem {
 export interface AiQuestionGenerationOptions {
   apiKeyConfigured: boolean;
   templates: AIQuestion[];
+  packages: AIQuestionsPackage[];
   getPromptPreview?(template: AIQuestion, context: string): string;
   onGenerate(template: AIQuestion, context: string): Promise<GameQuestion>;
 }
@@ -42,6 +48,7 @@ export interface EditorViewProps {
   onOpenRecentPackage(recent: RecentPackageItem): void;
   onPasteQuestion(): void;
   onQuestionChange(change: Partial<GameQuestion>): void;
+  onQuestionGenerated(index: number, question: GameQuestion): void;
   onQuestionTextBlur(index: number): void;
   onSelectQuestion(index: number): void;
   onSwapQuestions(sourceIndex: number, targetIndex: number): void;

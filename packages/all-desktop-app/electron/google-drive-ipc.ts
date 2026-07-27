@@ -1,6 +1,7 @@
 import {
   GoogleDriveClient,
   isDriveFileId,
+  parseDriveAIQuestionsPackageWrite,
   parseDriveAIQuestionWrite,
   parseDriveSettingsDocument,
   parseDriveGamePackageWrite,
@@ -102,6 +103,41 @@ export function registerGoogleDriveIpc() {
       throw new TypeError('Invalid Google Drive file');
     return client.deleteAIQuestion(fileId);
   });
+  ipcMain.handle('list-google-drive-ai-questions-packages', () =>
+    client.listAIQuestionsPackages(),
+  );
+  ipcMain.handle('load-google-drive-ai-questions-package', (_event, fileId) => {
+    if (!isDriveFileId(fileId))
+      throw new TypeError('Invalid Google Drive file');
+    return client.loadAIQuestionsPackage(fileId);
+  });
+  ipcMain.handle(
+    'create-google-drive-ai-questions-package',
+    (_event, value) => {
+      const item = parseDriveAIQuestionsPackageWrite(value);
+      if (!item)
+        throw new TypeError('Invalid Google Drive AI questions package');
+      return client.createAIQuestionsPackage(item);
+    },
+  );
+  ipcMain.handle(
+    'update-google-drive-ai-questions-package',
+    (_event, fileId, value) => {
+      const item = parseDriveAIQuestionsPackageWrite(value);
+      if (!isDriveFileId(fileId) || !item) {
+        throw new TypeError('Invalid Google Drive AI questions package');
+      }
+      return client.updateAIQuestionsPackage(fileId, item);
+    },
+  );
+  ipcMain.handle(
+    'delete-google-drive-ai-questions-package',
+    (_event, fileId) => {
+      if (!isDriveFileId(fileId))
+        throw new TypeError('Invalid Google Drive file');
+      return client.deleteAIQuestionsPackage(fileId);
+    },
+  );
   ipcMain.handle('list-global-ai-questions', () =>
     client.listGlobalAIQuestions(),
   );

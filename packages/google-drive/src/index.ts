@@ -39,3 +39,15 @@ export type {
   DriveSettingsDocument,
   TimedSection,
 } from './settings.js';
+export {
+  createAIQuestionsPackageFilename,
+  isDriveAIQuestionsPackageName,
+  parseDriveAIQuestionsPackageFile,
+  parseDriveAIQuestionsPackageWrite,
+} from './ai-questions-packages.js';
+export type {
+  DriveAIQuestionsPackage,
+  DriveAIQuestionsPackageFile,
+  DriveAIQuestionsPackageStorage,
+  DriveAIQuestionsPackageWrite,
+} from './ai-questions-packages.js';

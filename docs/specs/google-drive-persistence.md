@@ -53,6 +53,10 @@ preserving recoverable local state during temporary Drive failures.
   from the configured shared Drive folder. Only allowlisted administrators can
   create, rename, update, trash, or select the single general shared rule;
   Drive folder permissions enforce the same boundary.
+- **DRV-18:** Every personal AI question package is a separate visible
+  `.aiquestionpackage` ZIP file in the current account's app-marked `SCHDK`
+  folder. Listing, loading, creation, renaming, updating, and trashing use the
+  shared Drive adapter on web and desktop without browser-local persistence.
 
 ## Invariants
 
@@ -70,6 +74,8 @@ preserving recoverable local state during temporary Drive failures.
 - Transient Drive failures do not revoke or hide an authorized session.
 - AI question archives are parsed through the canonical shared format before
   their rules are used.
+- AI question package archives are parsed through the canonical shared format
+  before generation uses them.
 
 ## Acceptance
 
@@ -102,3 +108,6 @@ preserving recoverable local state during temporary Drive failures.
     controls; connect as an allowlisted administrator and create, edit, and
     delete a global rule in the configured shared folder. Select two rules as
     general in turn and observe only the latest selection remains set.
+13. Create, edit, reload, rename, and delete an AI question package on web and
+    desktop; observe one `.aiquestionpackage` ZIP file in the current account's
+    `SCHDK` folder and no browser-local copy.

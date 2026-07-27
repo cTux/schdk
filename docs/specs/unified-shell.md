@@ -10,8 +10,9 @@ package authoring, hosting, settings, and account state.
 ## Requirements
 
 - **SHL-1:** Fixed navigation groups Visual editor, Question creation rules,
-  Edit question packages, and Host a game under SCHDK, in that order, with
-  Settings at the bottom. The Ukrainian question-rules label is
+  Package creation rules, Edit question packages, and Host a game under SCHDK,
+  in that order, with Settings at the bottom. The Ukrainian question-rules
+  label is
   `Правила створення питань`.
 - **SHL-2:** Application chunks load lazily on first selection and remain
   mounted afterward so navigation preserves state.
@@ -70,6 +71,12 @@ package authoring, hosting, settings, and account state.
   and require the Google login view to render.
 - **SHL-16:** Every multiline shell field uses the shared non-resizable control
   with the same chrome and interaction states as dropdowns.
+- **SHL-17:** Package creation rules use a page visually consistent with
+  question creation rules and show only the current account's packages. Each
+  package edits a required name and shared context plus zero or more
+  question-number contexts with an optional enabled AI question-rule type.
+  Enable, favorite, edit, delete, loading, and error states use the existing
+  rule-card patterns.
 
 ## Invariants
 
@@ -114,3 +121,6 @@ package authoring, hosting, settings, and account state.
    headless Chrome.
 10. Open the Artificial intelligence form and confirm every multiline field
     matches the shared dropdown styling without a resize handle.
+11. Open Package creation rules directly, create a package with shared and
+    per-question context, reload, edit its enabled and favorite states, and
+    delete it. Confirm no global collection appears.

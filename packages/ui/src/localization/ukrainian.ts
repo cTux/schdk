@@ -2,6 +2,9 @@ export type AppLocale = 'uk' | 'en';
 
 import { ukrainianSettings } from './ukrainian-settings';
 import { aiQuestionsCopy, questionGenerationCopy } from './ai-questions';
+import { aiPackageRulesCopy } from './ai-package-rules';
+import { packageGenerationCopy } from './package-generation';
+import { ukrainianAllWeb, ukrainianMeta } from './ukrainian-misc';
 export const ukrainian = {
   shared: {
     confirmation: 'Підтвердження дії',
@@ -30,12 +33,7 @@ export const ukrainian = {
     zoomOut: 'Зменшити',
     zoomIn: 'Збільшити',
   },
-  meta: {
-    title: 'Що? Де? Коли?',
-    description: 'Інструменти Що? Де? Коли?',
-    editorTitle: (fileName?: string | null) =>
-      fileName ? `${fileName} — Редактор ЩДК` : 'Що? Де? Коли? — Редактор',
-  },
+  meta: ukrainianMeta,
   shell: {
     brand: 'Що? Де? Коли?',
     toolsLabel: 'Інструменти',
@@ -70,9 +68,15 @@ export const ukrainian = {
       label: 'Правила створення питань',
       description: 'Налаштовуйте правила створення запитань.',
     },
+    packageRules: {
+      label: aiPackageRulesCopy.uk.navigationLabel,
+      description: aiPackageRulesCopy.uk.navigationDescription,
+    },
   },
   aiQuestions: aiQuestionsCopy.uk,
+  aiPackageRules: aiPackageRulesCopy.uk,
   questionGeneration: questionGenerationCopy.uk,
+  packageGeneration: packageGenerationCopy.uk,
   settings: ukrainianSettings,
   editor: {
     brandEyebrow: 'Редактор пакетів',
@@ -247,10 +251,5 @@ export const ukrainian = {
     gameLayout: 'Макет екрана гри',
     hidden: 'Приховано',
   },
-  allWeb: {
-    saveVisualsFailed:
-      'Не вдалося зберегти оформлення. Видаліть зайві зображення та спробуйте ще раз.',
-    importVisualsFailed: 'Не вдалося імпортувати шаблон оформлення.',
-    exportVisualsFailed: 'Не вдалося експортувати шаблон оформлення.',
-  },
+  allWeb: ukrainianAllWeb,
 };
