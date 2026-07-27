@@ -111,3 +111,4 @@ B41|2026-07-27|AI question cards used a minimum height and unconstrained centere
 B42|2026-07-27|The new release-secret guide used an unformatted Markdown table|Apply the repository formatter; no new invariant is needed for this mechanical failure.
 B43|2026-07-27|The signed cross-platform release contract required unavailable signing credentials and blocked publication|V16
 B44|2026-07-27|Global AI question wiring pushed three source files beyond the enforced line limit|Split token storage, Drive package storage, and the collection view; the existing repository workflow test covers recurrence.
+B45|2026-07-27|The account-rule add action lived in the page header instead of beside its collection heading|Keep each add action in its collection header as specified by `docs/specs/unified-shell.md`.
