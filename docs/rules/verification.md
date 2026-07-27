@@ -13,6 +13,8 @@
 - Prefer unit and integration tests, and use stable snapshots to catch UI
   regressions. Reserve fast end-to-end tests for critical flows that must never
   fail.
+- Use `$schdk-technical-review` for project technical audits. Report only
+  evidenced P0-P2 issues in a priority-sorted table.
 - Keep pure logic outside React/Electron objects when that makes it directly
   testable.
 - Run formatting, linting, typechecking, and tests in the pull-request `tests`
