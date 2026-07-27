@@ -1,10 +1,9 @@
-import './styles.scss';
+import '../QuestionGenerationDialog/styles.scss';
 
 import { Dialog } from '@base-ui/react/dialog';
 import { faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { Button } from '../../atoms/Button';
-import { Checkbox } from '../../atoms/Checkbox';
 import { Dropdown } from '../../atoms/Dropdown';
 import { IconButton } from '../../atoms/IconButton';
 import { useLocalization } from '../../localization';
@@ -24,7 +23,7 @@ export function PackageGenerationDialog({
   const { copy } = useLocalization();
   const [open, setOpen] = useState(false);
   const [scope, setScope] = useState<Scope>('missing');
-  const [selected, setSelected] = useState<number[]>([]);
+  const [selected, setSelected] = useState<number | null>(null);
   const [thinking, setThinking] = useState(false);
   const [failed, setFailed] = useState(false);
   const [progress, setProgress] = useState<[number, number] | null>(null);
@@ -33,21 +32,20 @@ export function PackageGenerationDialog({
   function reset() {
     setOpen(false);
     setScope('missing');
-    setSelected([]);
+    setSelected(null);
     setThinking(false);
     setFailed(false);
     setProgress(null);
   }
 
   function show() {
-    setSelected(activePackages.map((_, index) => index));
+    setSelected(activePackages.length ? 0 : null);
     setOpen(true);
   }
 
   async function generate() {
-    const selectedPackages = selected.flatMap((index) =>
-      activePackages[index] ? [activePackages[index]] : [],
-    );
+    const selectedPackage =
+      selected === null ? undefined : activePackages[selected];
     const targets = gamePackage.questions.flatMap((question, index) =>
       scope === 'all' ||
       !question.answer.trim() ||
@@ -55,7 +53,7 @@ export function PackageGenerationDialog({
         ? [index]
         : [],
     );
-    if (!selectedPackages.length || !templates.length || !targets.length) {
+    if (!selectedPackage || !templates.length || !targets.length) {
       return;
     }
     setThinking(true);
@@ -64,10 +62,8 @@ export function PackageGenerationDialog({
       for (const [position, index] of targets.entries()) {
         setProgress([position + 1, targets.length]);
         onSelectQuestion(index);
-        const additions = selectedPackages.flatMap((item) =>
-          item.questions.filter(
-            (question) => question.questionNumber === index + 1,
-          ),
+        const additions = selectedPackage.questions.filter(
+          (question) => question.questionNumber === index + 1,
         );
         const requestedType = additions.find(
           (question) => question.questionType,
@@ -75,8 +71,7 @@ export function PackageGenerationDialog({
         const template =
           templates.find((item) => item.name === requestedType) ??
           templates[index % templates.length]!;
-        const context = selectedPackages
-          .map((item) => `${item.name}:\n${item.context}`)
+        const context = [`${selectedPackage.name}:\n${selectedPackage.context}`]
           .concat(additions.map((item) => item.context))
           .join('\n\n');
         onGenerated(index, await onGenerate(template, context));
@@ -138,26 +133,24 @@ export function PackageGenerationDialog({
                   <option value="all">{copy.packageGeneration.all}</option>
                 </Dropdown>
               </label>
-              <fieldset className="package-generation-rules">
-                <legend>{copy.packageGeneration.rules}</legend>
-                {activePackages.map((item, index) => (
-                  <label key={`${item.name}-${index}`}>
-                    <Checkbox
-                      checked={selected.includes(index)}
-                      disabled={thinking}
-                      onChange={(event) =>
-                        setSelected((current) =>
-                          event.target.checked
-                            ? [...current, index]
-                            : current.filter((item) => item !== index),
-                        )
-                      }
-                    />
-                    {item.name}
-                  </label>
-                ))}
-              </fieldset>
-              {!activePackages.length && (
+              {activePackages.length ? (
+                <label>
+                  {copy.packageGeneration.rules}
+                  <Dropdown
+                    value={selected ?? ''}
+                    disabled={thinking}
+                    onChange={(event) =>
+                      setSelected(Number(event.target.value))
+                    }
+                  >
+                    {activePackages.map((item, index) => (
+                      <option key={`${item.name}-${index}`} value={index}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </Dropdown>
+                </label>
+              ) : (
                 <p className="question-generation-message">
                   {copy.packageGeneration.noRules}
                 </p>
@@ -192,7 +185,7 @@ export function PackageGenerationDialog({
                   aria-busy={thinking}
                   disabled={
                     thinking ||
-                    !selected.length ||
+                    selected === null ||
                     !templates.length ||
                     (scope === 'missing' && !targetsMissing)
                   }

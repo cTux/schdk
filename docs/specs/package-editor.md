@@ -59,9 +59,9 @@ without losing in-progress work.
   focus, and disabled states.
 - **EDT-18:** AI generation requires a non-empty answer comment. An AI icon
   beside the editable package title opens a modal that selects missing
-  questions or the whole package and one or more enabled AI question packages.
-  Only a missing question part or answer makes a question missing; optional
-  fields do not.
+  questions or the whole package and one enabled AI question package from a
+  dropdown. Only a missing question part or answer makes a question missing;
+  optional fields do not.
   It selects each target slot behind the modal, waits for a validated provider
   response, joins overflow text into the last part allowed by the declared
   question type, replaces the complete question record, and continues sequentially.
@@ -101,10 +101,10 @@ without losing in-progress work.
 11. Open generation as an allowlisted administrator, expand the prompt panel,
     and confirm its read-only text follows changes to the selected template and
     context. Confirm the control is absent for other accounts.
-12. Generate only missing slots and then the whole package from one or more AI
-    question packages. Observe each target slot selected in order, every
-    generated record replaced completely, and prior successful results retained
-    when a later request fails.
+12. Generate only missing slots and then the whole package after selecting one
+    AI question package from the rules dropdown. Observe each target slot
+    selected in order, every generated record replaced completely, and prior
+    successful results retained when a later request fails.
 13. Clear a populated question from its trailing heading action, then use
     `Ctrl+C` and `Ctrl+V` anywhere in the open editor and observe the same copy
     and confirmed paste behavior as the heading actions. Confirm each
