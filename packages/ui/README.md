@@ -20,3 +20,15 @@ Read only the areas touched by the task:
   settings tabs.
 
 The project-wide index is [`docs/RULES.md`](../../docs/RULES.md).
+
+## Storybook
+
+Run `pnpm --filter @schdk/ui storybook` from the repository root. The toolbar
+switches the locale and theme globally, while each generated story exposes its
+component props through Storybook Controls.
+
+Stories are generated from exported React function components. Keep new
+components and changed props compatible with
+`.storybook/generate-stories.mjs`, and update `.storybook/story-args.tsx` or
+`.storybook/story-fixtures.ts` when a renderable default needs new data. Verify
+component or prop changes with `pnpm --filter @schdk/ui build:storybook`.

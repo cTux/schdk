@@ -37,3 +37,9 @@ directions in [architecture.md](architecture.md).
 - Existing flat components are migration debt. Apply this structure when they
   are explicitly reorganized; do not expand an unrelated prompt into a
   repository-wide move.
+- Keep every exported React UI component discoverable in `@schdk/ui`
+  Storybook. The Storybook generator must pick up new components and changed
+  props, and its default args must keep each generated story renderable.
+- Run `pnpm --filter @schdk/ui build:storybook` after adding a UI component or
+  changing its props. Commit Storybook configuration and fixtures, never the
+  generated stories or `dist/storybook`.

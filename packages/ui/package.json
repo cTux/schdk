@@ -14,7 +14,10 @@
   },
   "scripts": {
     "build": "vite build",
+    "build:storybook": "pnpm --filter @schdk/common build && pnpm storybook:generate && tsc -p tsconfig.storybook.json && storybook build -o dist/storybook",
     "lint": "oxlint -c ../../.oxlintrc.json src vite.config.ts && stylelint \"src/**/*.scss\"",
+    "storybook": "pnpm --filter @schdk/common build && pnpm storybook:generate && storybook dev -p 6006",
+    "storybook:generate": "node .storybook/generate-stories.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests"
   },
@@ -28,9 +31,13 @@
     "react": "catalog:"
   },
   "devDependencies": {
+    "@storybook/addon-docs": "10.5.5",
+    "@storybook/react-vite": "10.5.5",
     "@types/react": "catalog:",
     "oxlint": "^1.75.0",
+    "react-dom": "catalog:",
     "sass": "catalog:",
+    "storybook": "10.5.5",
     "stylelint": "catalog:",
     "stylelint-config-standard-scss": "catalog:",
     "typescript": "catalog:",

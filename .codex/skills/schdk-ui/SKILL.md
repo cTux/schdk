@@ -23,7 +23,10 @@ description: Build, refactor, or review SCHDK React UI components and SCSS in @s
    reusable icon-only actions.
 10. Put Ukrainian and English user-visible copy in the shared localization
     module and consume it through the locale context.
-11. Visually smoke-test the affected flow at narrow and normal widths.
+11. Keep each exported component and its current props available in Storybook;
+    update Storybook fixtures when required and run
+    `pnpm --filter @schdk/ui build:storybook`.
+12. Visually smoke-test the affected flow at narrow and normal widths.
 
 ## Checks
 
@@ -31,6 +34,7 @@ description: Build, refactor, or review SCHDK React UI components and SCSS in @s
 pnpm --filter @schdk/ui lint
 pnpm --filter @schdk/ui typecheck
 pnpm --filter @schdk/ui test
+pnpm --filter @schdk/ui build:storybook
 pnpm --filter @schdk/all-web-app build
 ```
 

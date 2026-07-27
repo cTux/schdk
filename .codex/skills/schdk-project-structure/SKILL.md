@@ -31,5 +31,8 @@ ComponentName/
    empty directory, and placeholder files and tests are forbidden.
 7. Export only the component's consumer-facing component, types, and applicable constants from `index.ts`; update package entry points only when consumers need them.
 8. Use `classnames` for conditional class composition. If the touched component needs it and `@schdk/ui` does not yet declare it, add it with pnpm; do not add an unused dependency.
-9. Run `$schdk-quality` checks for the affected package and consumers. The
-   repository workflow test enforces the 256-line source limit.
+9. For every new exported UI component or changed component prop, confirm the
+   Storybook generator discovers it, update Storybook default args when
+   needed, and run `pnpm --filter @schdk/ui build:storybook`.
+10. Run `$schdk-quality` checks for the affected package and consumers. The
+    repository workflow test enforces the 256-line source limit.
