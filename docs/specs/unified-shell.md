@@ -9,9 +9,10 @@ package authoring, hosting, settings, and account state.
 
 ## Requirements
 
-- **SHL-1:** Fixed navigation groups Visual editor, Artificial intelligence,
+- **SHL-1:** Fixed navigation groups Visual editor, Question creation rules,
   Edit question packages, and Host a game under SCHDK, in that order, with
-  Settings at the bottom.
+  Settings at the bottom. The Ukrainian question-rules label is
+  `Правила створення питань`.
 - **SHL-2:** Application chunks load lazily on first selection and remain
   mounted afterward so navigation preserves state.
 - **SHL-3:** Active view persists locally and in the validated `view` query

@@ -1,7 +1,7 @@
 # Shell UI
 
 - Keep the sidebar fixed while application content scrolls.
-- Group, in this order, `Візуальний редактор`, `Штучний інтелект`,
+- Group, in this order, `Візуальний редактор`, `Правила створення питань`,
   `Редагувати пакети питань`, and `Провести гру` under `ЩДК`. Keep
   `Налаштування` in a separate group at the bottom.
 - Organize settings under an accessible primary `ЩДК` tab with always-visible
