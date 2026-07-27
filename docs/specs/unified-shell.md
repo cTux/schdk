@@ -38,10 +38,11 @@ package authoring, hosting, settings, and account state.
   width, lists Drive-backed `AIQuestion` rules, and opens a form for adding
   another rule. Every rule has a name, detailed generation description, and
   optional good and bad question examples. Name and description are required
-  before saving. Each narrow card shows its name in a separate top panel, a
-  clipped text preview, and a bottom icon bar ordered favorite, edit,
-  enable/disable, and delete. Deletion requires confirmation. Every change
-  persists as the rule's `.aiquestion` ZIP file in Google Drive.
+  before saving. Each narrow card has one shared background and border, with
+  its name at the top, centered text, and a bottom icon row ordered favorite,
+  edit, enable/disable, and delete. The inner sections have no separate
+  backgrounds or borders. Deletion requires confirmation. Every change persists
+  as the rule's `.aiquestion` ZIP file in Google Drive.
 - **SHL-12:** Artificial intelligence settings expose separate provider and
   model dropdowns plus a user API key. The dropdowns use the models.dev catalog
   for the OpenAI, Anthropic, and Google providers supported by `@schdk/ai`,
@@ -86,8 +87,9 @@ package authoring, hosting, settings, and account state.
 5. Open the Artificial intelligence route directly, add a rule with its
    required name and description plus optional good and bad examples, then edit,
    disable, favorite, reload, and delete it; confirm each state persists and the
-   rule stays in a narrow card with the specified top, preview, and bottom
-   panels while the page uses the available workspace width.
+   rule stays in a narrow card with one outer background and border, an
+   unframed title, centered text, and unframed bottom actions while the page
+   uses the available workspace width.
 6. Configure an AI model and API key; reload and confirm both remain for the
    same Google account, then switch accounts and confirm the previous key is
    not exposed.
