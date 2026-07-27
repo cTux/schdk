@@ -24,8 +24,8 @@
   pending. Successful structured output replaces every question field, resets
   the modal, and closes it.
 - Put the package-generation icon beside the editable package title. Its modal
-  chooses missing questions or the whole package and one or more enabled AI
-  question packages. Generate slots sequentially, select the active slot
+  chooses missing questions or the whole package and one enabled AI question
+  package from a dropdown. Generate slots sequentially, select the active slot
   behind the modal, wait for each provider response, replace the complete
   question record, and continue to the next slot.
 - Label optional fields. A non-empty unresolved remark keeps a question
