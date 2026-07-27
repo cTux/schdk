@@ -3,6 +3,7 @@ import {
   faPalette,
 } from '@fortawesome/free-solid-svg-icons';
 import { ActionToolbarPopover } from '../../../atoms/ActionToolbar';
+import { Checkbox } from '../../../atoms/Checkbox';
 import { Dropdown } from '../../../atoms/Dropdown';
 import { RangeInput } from '../../../atoms/RangeInput';
 import {
@@ -64,8 +65,7 @@ export function TextSettings({
       </label>
       <label>
         {copy.visualEditor.fitHeight}
-        <input
-          type="checkbox"
+        <Checkbox
           checked={position.fitTextToHeight}
           onChange={(event) =>
             onUpdate(selection, { fitTextToHeight: event.target.checked })

@@ -1,3 +1,5 @@
+import { Checkbox } from '../../atoms/Checkbox';
+
 export interface OptionToggleProps {
   checked: boolean;
   description: string;
@@ -17,8 +19,7 @@ export function OptionToggle({
         <strong>{label}</strong>
         <small>{description}</small>
       </span>
-      <input
-        type="checkbox"
+      <Checkbox
         checked={checked}
         onChange={(event) => onChange(event.target.checked)}
       />

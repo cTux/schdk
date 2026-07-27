@@ -42,6 +42,9 @@ package authoring, hosting, settings, and account state.
   layout without enable/disable controls or large internal gaps. Name and
   description are required before saving, deletion requires confirmation, and
   every change persists as the rule's `.aiquestion` ZIP file in Google Drive.
+  A global-rule form shows administrators a shared checkbox beside its title;
+  selecting it makes that rule the only global rule applied to every question
+  generation.
 - **SHL-12:** Artificial intelligence settings expose separate provider and
   model dropdowns plus a user API key. The dropdowns use the models.dev catalog
   for the OpenAI, Anthropic, and Google providers supported by `@schdk/ai`,
@@ -88,7 +91,8 @@ package authoring, hosting, settings, and account state.
    each sorted by name. Confirm cards show only name, description, and
    applicable favorite, edit, and delete actions without large internal gaps.
    Verify a regular account cannot mutate global rules and an allowlisted
-   administrator can add, edit, and delete them.
+   administrator can add, edit, and delete them. As an administrator, select a
+   general rule and verify selecting another clears the previous selection.
 6. Configure an AI model and API key; reload and confirm both remain for the
    same Google account, then switch accounts and confirm the previous key is
    not exposed.

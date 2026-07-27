@@ -127,52 +127,6 @@
   line-height: 1.45;
 }
 
-.option-toggle input {
-  position: relative;
-  width: 42px;
-  height: 24px;
-  flex: 0 0 42px;
-  appearance: none;
-  border: 1px solid $border-strong;
-  border-radius: 999px;
-  outline: none;
-  background: $surface-raised;
-  cursor: pointer;
-  transition:
-    border-color $motion-fast ease,
-    background-color $motion-fast ease;
-}
-
-.option-toggle input::after {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: $muted;
-  content: '';
-  transition:
-    background-color $motion-fast ease,
-    transform $motion-standard cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.option-toggle input:checked {
-  border-color: rgba($accent-rgb, 0.7);
-  background: rgba($accent-rgb, 0.18);
-}
-
-.option-toggle input:checked::after {
-  background: $accent-hover;
-  box-shadow: 0 0 14px rgba($accent-rgb, 0.34);
-  transform: translateX(18px);
-}
-
-.option-toggle input:focus-visible {
-  outline: 2px solid rgba($accent-rgb, 0.8);
-  outline-offset: 3px;
-}
-
 .option-select .ui-dropdown {
   min-width: min(240px, 40vw);
 }

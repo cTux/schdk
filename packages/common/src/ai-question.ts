@@ -7,6 +7,7 @@ export interface AIQuestion {
   badExamples: string;
   enabled: boolean;
   favorite: boolean;
+  generalRule: boolean;
 }
 
 const AI_QUESTION_ENTRY = 'ai-question.json';
@@ -23,7 +24,9 @@ export function parseAIQuestion(value: unknown): AIQuestion | null {
     typeof question.goodExamples === 'string' &&
     typeof question.badExamples === 'string' &&
     typeof question.enabled === 'boolean' &&
-    typeof question.favorite === 'boolean'
+    typeof question.favorite === 'boolean' &&
+    (question.generalRule === undefined ||
+      typeof question.generalRule === 'boolean')
     ? {
         name: question.name,
         description: question.description,
@@ -31,6 +34,7 @@ export function parseAIQuestion(value: unknown): AIQuestion | null {
         badExamples: question.badExamples,
         enabled: question.enabled,
         favorite: question.favorite,
+        generalRule: question.generalRule ?? false,
       }
     : null;
 }
