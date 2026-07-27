@@ -1,11 +1,17 @@
 import '../QuestionGenerationDialog/styles.scss';
 
 import { Dialog } from '@base-ui/react/dialog';
-import { faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons';
+import {
+  faChevronLeft,
+  faChevronRight,
+  faWandMagicSparkles,
+} from '@fortawesome/free-solid-svg-icons';
+import classNames from 'classnames';
 import { useState } from 'react';
 import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';
 import { IconButton } from '../../atoms/IconButton';
+import { Textarea } from '../../atoms/Textarea';
 import { useLocalization } from '../../localization';
 import type { PackageGenerationDialogProps } from './types';
 
@@ -17,6 +23,7 @@ export function PackageGenerationDialog({
   packages,
   gamePackage,
   onGenerationStart,
+  getPromptPreview,
   onGenerate,
   onGenerated,
   onSelectQuestion,
@@ -28,7 +35,17 @@ export function PackageGenerationDialog({
   const [thinking, setThinking] = useState(false);
   const [failed, setFailed] = useState(false);
   const [progress, setProgress] = useState<[number, number] | null>(null);
+  const [promptOpen, setPromptOpen] = useState(false);
   const activePackages = packages.filter((item) => item.enabled);
+  const selectedPackage =
+    selected === null ? undefined : activePackages[selected];
+  const targets = gamePackage.questions.flatMap((question, index) =>
+    scope === 'all' ||
+    !question.answer.trim() ||
+    question.questionParts.some((part) => !part.trim())
+      ? [index]
+      : [],
+  );
 
   function reset() {
     setOpen(false);
@@ -37,52 +54,29 @@ export function PackageGenerationDialog({
     setThinking(false);
     setFailed(false);
     setProgress(null);
+    setPromptOpen(false);
   }
 
   function show() {
     setSelected(activePackages.length ? 0 : null);
     setOpen(true);
   }
-
-  async function generate() {
-    const selectedPackage =
-      selected === null ? undefined : activePackages[selected];
-    const targets = gamePackage.questions.flatMap((question, index) =>
-      scope === 'all' ||
-      !question.answer.trim() ||
-      question.questionParts.some((part) => !part.trim())
-        ? [index]
-        : [],
+  function getGenerationInput(index: number) {
+    if (!selectedPackage || !templates.length) return null;
+    const additions = selectedPackage.questions.filter(
+      (question) => question.questionNumber === index + 1,
     );
-    if (!selectedPackage || !templates.length || !targets.length) {
-      return;
-    }
-    setThinking(true);
-    setFailed(false);
-    try {
-      await onGenerationStart?.();
-      for (const [position, index] of targets.entries()) {
-        setProgress([position + 1, targets.length]);
-        onSelectQuestion(index);
-        const additions = selectedPackage.questions.filter(
-          (question) => question.questionNumber === index + 1,
-        );
-        const requestedType = additions.find(
-          (question) => question.questionType,
-        )?.questionType;
-        const template =
-          templates.find((item) => item.name === requestedType) ??
-          templates[index % templates.length]!;
-        const context = [`${selectedPackage.name}:\n${selectedPackage.context}`]
-          .concat(additions.map((item) => item.context))
-          .join('\n\n');
-        onGenerated(index, await onGenerate(template, context));
-      }
-      reset();
-    } catch {
-      setThinking(false);
-      setFailed(true);
-    }
+    const requestedType = additions.find(
+      (question) => question.questionType,
+    )?.questionType;
+    return {
+      template:
+        templates.find((item) => item.name === requestedType) ??
+        templates[index % templates.length]!,
+      context: [`${selectedPackage.name}:\n${selectedPackage.context}`]
+        .concat(additions.map((item) => item.context))
+        .join('\n\n'),
+    };
   }
 
   const targetsMissing = gamePackage.questions.some(
@@ -90,6 +84,28 @@ export function PackageGenerationDialog({
       !question.answer.trim() ||
       question.questionParts.some((part) => !part.trim()),
   );
+  const previewIndex = targets[progress ? progress[0] - 1 : 0];
+  const previewInput =
+    previewIndex === undefined ? null : getGenerationInput(previewIndex);
+  async function generate() {
+    if (!selectedPackage || !templates.length || !targets.length) return;
+    setThinking(true);
+    setFailed(false);
+    try {
+      await onGenerationStart?.();
+      for (const [position, index] of targets.entries()) {
+        const input = getGenerationInput(index);
+        if (!input) throw new Error('Missing generation input');
+        setProgress([position + 1, targets.length]);
+        onSelectQuestion(index);
+        onGenerated(index, await onGenerate(input.template, input.context));
+      }
+      reset();
+    } catch {
+      setThinking(false);
+      setFailed(true);
+    }
+  }
 
   return (
     <>
@@ -115,86 +131,121 @@ export function PackageGenerationDialog({
         <Dialog.Portal>
           <Dialog.Backdrop className="question-generation-backdrop" />
           <Dialog.Viewport className="question-generation-viewport">
-            <Dialog.Popup className="question-generation-popup">
-              <Dialog.Title className="question-generation-title">
-                {copy.packageGeneration.title}
-              </Dialog.Title>
-              <Dialog.Description className="question-generation-description">
-                {copy.packageGeneration.description}
-              </Dialog.Description>
-              <label>
-                {copy.packageGeneration.scope}
-                <Dropdown
-                  value={scope}
-                  disabled={thinking}
-                  onChange={(event) => setScope(event.target.value as Scope)}
-                >
-                  <option value="missing">
-                    {copy.packageGeneration.missing}
-                  </option>
-                  <option value="all">{copy.packageGeneration.all}</option>
-                </Dropdown>
-              </label>
-              {activePackages.length ? (
-                <label>
-                  {copy.packageGeneration.rules}
-                  <Dropdown
-                    value={selected ?? ''}
-                    disabled={thinking}
-                    onChange={(event) =>
-                      setSelected(Number(event.target.value))
+            <Dialog.Popup
+              className={classNames('question-generation-popup', {
+                'question-generation-popup-prompt': promptOpen,
+              })}
+            >
+              <div className="question-generation-title-row">
+                <Dialog.Title className="question-generation-title">
+                  {copy.packageGeneration.title}
+                </Dialog.Title>
+                {getPromptPreview && (
+                  <IconButton
+                    icon={promptOpen ? faChevronLeft : faChevronRight}
+                    label={
+                      promptOpen
+                        ? copy.questionGeneration.hidePrompt
+                        : copy.questionGeneration.showPrompt
                     }
-                  >
-                    {activePackages.map((item, index) => (
-                      <option key={`${item.name}-${index}`} value={index}>
-                        {item.name}
+                    onClick={() => setPromptOpen((value) => !value)}
+                  />
+                )}
+              </div>
+              <div className="question-generation-body">
+                <div className="question-generation-form">
+                  <Dialog.Description className="question-generation-description">
+                    {copy.packageGeneration.description}
+                  </Dialog.Description>
+                  <label>
+                    {copy.packageGeneration.scope}
+                    <Dropdown
+                      value={scope}
+                      disabled={thinking}
+                      onChange={(event) =>
+                        setScope(event.target.value as Scope)
+                      }
+                    >
+                      <option value="missing">
+                        {copy.packageGeneration.missing}
                       </option>
-                    ))}
-                  </Dropdown>
-                </label>
-              ) : (
-                <p className="question-generation-message">
-                  {copy.packageGeneration.noRules}
-                </p>
-              )}
-              {scope === 'missing' && !targetsMissing && (
-                <p className="question-generation-message">
-                  {copy.packageGeneration.nothingMissing}
-                </p>
-              )}
-              {progress && (
-                <p className="question-generation-message" role="status">
-                  {copy.packageGeneration.progress(...progress)}
-                </p>
-              )}
-              {failed && (
-                <p className="question-generation-error" role="alert">
-                  {copy.packageGeneration.failed}
-                </p>
-              )}
-              <div className="question-generation-actions">
-                <Button
-                  type="button"
-                  variant="secondary"
-                  disabled={thinking}
-                  onClick={reset}
-                >
-                  {copy.shared.cancel}
-                </Button>
-                <Button
-                  type="button"
-                  variant="primary"
-                  aria-busy={thinking}
-                  disabled={
-                    thinking ||
-                    selected === null ||
-                    !templates.length ||
-                    (scope === 'missing' && !targetsMissing)
-                  }
-                  onClick={() => void generate()}
-                >
-                  {copy.packageGeneration.generate}
-                </Button>
+                      <option value="all">{copy.packageGeneration.all}</option>
+                    </Dropdown>
+                  </label>
+                  {activePackages.length ? (
+                    <label>
+                      {copy.packageGeneration.rules}
+                      <Dropdown
+                        value={selected ?? ''}
+                        disabled={thinking}
+                        onChange={(event) =>
+                          setSelected(Number(event.target.value))
+                        }
+                      >
+                        {activePackages.map((item, index) => (
+                          <option key={`${item.name}-${index}`} value={index}>
+                            {item.name}
+                          </option>
+                        ))}
+                      </Dropdown>
+                    </label>
+                  ) : (
+                    <p className="question-generation-message">
+                      {copy.packageGeneration.noRules}
+                    </p>
+                  )}
+                  {scope === 'missing' && !targetsMissing && (
+                    <p className="question-generation-message">
+                      {copy.packageGeneration.nothingMissing}
+                    </p>
+                  )}
+                  {progress && (
+                    <p className="question-generation-message" role="status">
+                      {copy.packageGeneration.progress(...progress)}
+                    </p>
+                  )}
+                  {failed && (
+                    <p className="question-generation-error" role="alert">
+                      {copy.packageGeneration.failed}
+                    </p>
+                  )}
+                  <div className="question-generation-actions">
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      disabled={thinking}
+                      onClick={reset}
+                    >
+                      {copy.shared.cancel}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="primary"
+                      aria-busy={thinking}
+                      disabled={
+                        thinking ||
+                        selected === null ||
+                        !templates.length ||
+                        (scope === 'missing' && !targetsMissing)
+                      }
+                      onClick={() => void generate()}
+                    >
+                      {copy.packageGeneration.generate}
+                    </Button>
+                  </div>
+                </div>
+                {promptOpen && previewInput && getPromptPreview && (
+                  <label className="question-generation-prompt">
+                    {copy.questionGeneration.prompt}
+                    <Textarea
+                      readOnly
+                      value={getPromptPreview(
+                        previewInput.template,
+                        previewInput.context,
+                      )}
+                    />
+                  </label>
+                )}
               </div>
             </Dialog.Popup>
           </Dialog.Viewport>
