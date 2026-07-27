@@ -5,6 +5,8 @@ export * from './atoms/ConfirmationDialog';
 export * from './atoms/Dropdown';
 export * from './atoms/FileButton';
 export * from './atoms/IconButton';
+export * from './atoms/Input';
+export * from './atoms/RangeInput';
 export * from './atoms/StatusMessage';
 export * from './atoms/TextAreaField';
 export * from './atoms/Textarea';

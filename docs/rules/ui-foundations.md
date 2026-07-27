@@ -26,6 +26,10 @@
 - Render every multiline text input through the shared `Textarea` atom. Keep
   its dropdown-aligned chrome and focus states consistent across surfaces and
   do not expose native resize handles.
+- Render single-line text and password fields through the shared `Input` atom,
+  and range controls through `RangeInput`.
+- Render reusable icon-only actions through `IconButton`; configure its shared
+  tooltip instead of rebuilding the button, icon, and tooltip locally.
 - Define the complete light and dark color palettes in `styles/light.scss` and
   `styles/dark.scss`. Other SCSS files must consume those theme variables
   instead of declaring color values.

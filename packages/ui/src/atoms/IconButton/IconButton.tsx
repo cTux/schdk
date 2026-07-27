@@ -4,7 +4,7 @@ import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { ButtonHTMLAttributes } from 'react';
 import { Button, type ButtonVariant } from '../Button';
-import { Tooltip } from '../Tooltip';
+import { Tooltip, type TooltipProps } from '../Tooltip';
 
 export interface IconButtonProps extends Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
@@ -13,6 +13,7 @@ export interface IconButtonProps extends Omit<
   icon: IconDefinition;
   label: string;
   tooltipLabel?: string;
+  tooltipSide?: TooltipProps['side'];
   variant?: ButtonVariant;
 }
 
@@ -20,6 +21,7 @@ export function IconButton({
   icon,
   label,
   tooltipLabel = label,
+  tooltipSide,
   disabled,
   ...props
 }: IconButtonProps) {
@@ -36,6 +38,7 @@ export function IconButton({
   return (
     <Tooltip
       label={tooltipLabel}
+      side={tooltipSide}
       trigger={
         disabled ? (
           <span

@@ -4,10 +4,9 @@ import {
   faFont,
   faImage,
 } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { useRef } from 'react';
-import { Tooltip } from '../../../atoms/Tooltip';
+import { IconButton } from '../../../atoms/IconButton';
 import type { VisualEditorSidebarProps } from './types';
 
 export function VisualEditorSidebar({
@@ -23,19 +22,13 @@ export function VisualEditorSidebar({
     onClick: () => void,
     className = 'visual-editor-add-button',
   ) => (
-    <Tooltip
+    <IconButton
+      className={className}
+      icon={icon}
       label={label}
-      side="right"
-      trigger={
-        <button
-          className={className}
-          type="button"
-          aria-label={label}
-          onClick={onClick}
-        >
-          <FontAwesomeIcon icon={icon} aria-hidden="true" />
-        </button>
-      }
+      tooltipSide="right"
+      type="button"
+      onClick={onClick}
     />
   );
 

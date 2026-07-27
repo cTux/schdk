@@ -7,6 +7,7 @@ import {
   ConfirmationDialog,
   useConfirmationDialog,
 } from '../../atoms/ConfirmationDialog';
+import { Input } from '../../atoms/Input';
 import { TextAreaField } from '../../atoms/TextAreaField';
 import { useLocalization } from '../../localization';
 import { AIQuestionCard } from '../AIQuestionCard';
@@ -116,7 +117,7 @@ export function AIQuestionsPage({
           </h2>
           <label>
             {copy.aiQuestions.name}
-            <input
+            <Input
               autoFocus
               disabled={formSaving}
               required

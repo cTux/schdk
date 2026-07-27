@@ -12,6 +12,7 @@ import {
   ActionToolbarPopover,
   ActionToolbarSeparator,
 } from '../../../atoms/ActionToolbar';
+import { RangeInput } from '../../../atoms/RangeInput';
 import { Textarea } from '../../../atoms/Textarea';
 import type { GameLayoutElementId } from '../../../options/types';
 import { ImagePositionSettings, TextSettings } from '../PositionSettings';
@@ -59,8 +60,7 @@ export function VisualEditorToolbar({
           <h2>{copy.visualEditor.backgroundOpacity}</h2>
           <label>
             {copy.visualEditor.opacity}
-            <input
-              type="range"
+            <RangeInput
               min="0"
               max="100"
               disabled={!game.backgroundImage}

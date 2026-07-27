@@ -1,3 +1,4 @@
+import { RangeInput } from '../../atoms/RangeInput';
 import type { OptionSliderProps } from './types';
 
 export function OptionSlider({
@@ -14,8 +15,7 @@ export function OptionSlider({
         <strong>{label}</strong>
         <small>{description}</small>
       </span>
-      <input
-        type="range"
+      <RangeInput
         min="0"
         max="100"
         value={percentage}

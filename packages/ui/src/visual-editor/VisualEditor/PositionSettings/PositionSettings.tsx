@@ -4,6 +4,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { ActionToolbarPopover } from '../../../atoms/ActionToolbar';
 import { Dropdown } from '../../../atoms/Dropdown';
+import { RangeInput } from '../../../atoms/RangeInput';
 import {
   GAME_IMAGE_POSITIONS,
   type GameLayoutPosition,
@@ -25,8 +26,7 @@ export function TextSettings({
       <h2>{copy.visualEditor.textFormatting}</h2>
       <label>
         {copy.visualEditor.size}
-        <input
-          type="range"
+        <RangeInput
           min="50"
           max="200"
           value={Math.round(position.fontScale * 100)}

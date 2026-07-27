@@ -3,6 +3,7 @@ import './styles.scss';
 import { useState } from 'react';
 import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';
+import { Input } from '../../atoms/Input';
 import { useLocalization } from '../../localization';
 import type { AiOptionsPanelProps } from './types';
 
@@ -92,7 +93,7 @@ export function AiOptionsPanel({
           </small>
         </span>
         <div className="ai-api-key-control">
-          <input
+          <Input
             type="password"
             value={apiKey}
             placeholder={
