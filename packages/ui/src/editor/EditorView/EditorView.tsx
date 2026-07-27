@@ -56,6 +56,15 @@ export function EditorView({
       if (!event.ctrlKey || event.altKey || event.shiftKey || event.repeat) {
         return;
       }
+      const target = event.target;
+      if (
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement ||
+        (target instanceof HTMLElement && target.isContentEditable)
+      ) {
+        return;
+      }
 
       const action =
         event.key.toLowerCase() === 'c'
