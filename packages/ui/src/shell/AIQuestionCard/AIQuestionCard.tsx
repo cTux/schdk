@@ -1,6 +1,11 @@
 import './styles.scss';
 
-import { faPen, faStar, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import {
+  faLock,
+  faPen,
+  faStar,
+  faTrashCan,
+} from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { IconButton } from '../../atoms/IconButton';
 import { useLocalization } from '../../localization';
@@ -33,22 +38,30 @@ export function AIQuestionCard({
       </div>
       {onUpdate && onEdit && onDelete && (
         <div className="ai-question-card-actions">
-          <IconButton
-            className="ai-question-favorite"
-            aria-pressed={question.favorite}
-            disabled={pending}
-            icon={faStar}
-            label={
-              question.favorite
-                ? copy.aiQuestions.removeFavorite
-                : copy.aiQuestions.favorite
-            }
-            onClick={() =>
-              void run(() =>
-                onUpdate({ ...question, favorite: !question.favorite }),
-              )
-            }
-          />
+          {question.generalRule ? (
+            <IconButton
+              disabled
+              icon={faLock}
+              label={copy.aiQuestions.generalRule}
+            />
+          ) : (
+            <IconButton
+              className="ai-question-favorite"
+              aria-pressed={question.favorite}
+              disabled={pending}
+              icon={faStar}
+              label={
+                question.favorite
+                  ? copy.aiQuestions.removeFavorite
+                  : copy.aiQuestions.favorite
+              }
+              onClick={() =>
+                void run(() =>
+                  onUpdate({ ...question, favorite: !question.favorite }),
+                )
+              }
+            />
+          )}
           <IconButton
             disabled={pending}
             icon={faPen}
