@@ -7,7 +7,7 @@ export const aiQuestionsCopy = {
     title: 'Правила створення питань',
     description:
       'Опишіть види питань, які штучний інтелект має вміти створювати.',
-    add: 'Додати вид питання',
+    add: 'Додати мій вид',
     newQuestion: 'Новий вид питання',
     editQuestion: 'Редагування виду питання',
     generalRule: 'Загальне правило для генерації питань',
@@ -34,7 +34,7 @@ export const aiQuestionsCopy = {
     title: 'Question-generation rules',
     description:
       'Describe the kinds of questions that artificial intelligence should be able to create.',
-    add: 'Add question kind',
+    add: 'Add my kind',
     newQuestion: 'New question kind',
     editQuestion: 'Edit question kind',
     generalRule: 'General rule for question generation',

@@ -79,19 +79,6 @@ export function AIQuestionsPage({
           <h1>{copy.aiQuestions.title}</h1>
           <p>{copy.aiQuestions.description}</p>
         </div>
-        {!formOpen && (
-          <Button
-            variant="primary"
-            onClick={() => {
-              setDraft(EMPTY_QUESTION);
-              setEditingIndex(null);
-              setEditingGlobal(false);
-              setFormOpen(true);
-            }}
-          >
-            {copy.aiQuestions.add}
-          </Button>
-        )}
       </header>
       {formOpen && (
         <form
@@ -211,6 +198,13 @@ export function AIQuestionsPage({
         questions={questions}
         loading={loading || formOpen}
         editable
+        addLabel={!formOpen ? copy.aiQuestions.add : undefined}
+        onAdd={() => {
+          setDraft(EMPTY_QUESTION);
+          setEditingIndex(null);
+          setEditingGlobal(false);
+          setFormOpen(true);
+        }}
         onEdit={editQuestion}
         onRemove={onRemove}
         onSaveFailed={() => setSaveFailed(true)}
