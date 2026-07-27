@@ -32,3 +32,10 @@ minimumReleaseAgeExclude:
   - '@opencode-ai/models@0.0.24'
   - brace-expansion@5.0.8
   - tar@7.5.22
+  - '@storybook/addon-docs@10.5.5'
+  - '@storybook/builder-vite@10.5.5'
+  - '@storybook/csf-plugin@10.5.5'
+  - '@storybook/react-dom-shim@10.5.5'
+  - '@storybook/react-vite@10.5.5'
+  - '@storybook/react@10.5.5'
+  - storybook@10.5.5

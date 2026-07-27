@@ -8,3 +8,4 @@ coverage
 *.log
 *.tsbuildinfo
 packages/all-desktop-app/build/google-oauth-client.json
+packages/ui/.storybook/generated/
