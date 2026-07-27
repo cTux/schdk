@@ -51,8 +51,8 @@ preserving recoverable local state during temporary Drive failures.
   adapter on web and desktop without local-storage persistence.
 - **DRV-17:** The AI page also loads individually parsed `.aiquestion` archives
   from the configured shared Drive folder. Only allowlisted administrators can
-  create, rename, update, or trash shared rules; Drive folder permissions
-  enforce the same boundary.
+  create, rename, update, trash, or select the single general shared rule;
+  Drive folder permissions enforce the same boundary.
 
 ## Invariants
 
@@ -100,4 +100,5 @@ preserving recoverable local state during temporary Drive failures.
     account's `SCHDK` folder and no browser-local rule copy.
 12. Connect as a regular account and load global rules without global mutation
     controls; connect as an allowlisted administrator and create, edit, and
-    delete a global rule in the configured shared folder.
+    delete a global rule in the configured shared folder. Select two rules as
+    general in turn and observe only the latest selection remains set.

@@ -44,7 +44,9 @@ without losing in-progress work.
   an account or global `AIQuestion` template selector and context field. Without
   a saved key the icon is disabled with an explanatory custom tooltip. Generation
   disables the complete modal, shows a thinking state, and on success replaces
-  every generated question field before the modal resets and closes.
+  every generated question field before the modal resets and closes. The one
+  global rule marked as general is excluded from the selector and prepended to
+  every selected template's generation instructions and examples.
 - **EDT-17:** Every multiline package and generation field uses the same
   non-resizable shared control with dropdown-aligned borders, surfaces, hover,
   focus, and disabled states.

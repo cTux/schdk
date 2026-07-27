@@ -71,6 +71,9 @@ function useAIQuestionCollection(
   async function addQuestion(question: AIQuestion): Promise<boolean> {
     if (!bridge) return false;
     try {
+      if (global && question.generalRule) {
+        await clearGeneralRules();
+      }
       const value = {
         name: createAIQuestionFilename(question.name),
         content: serializeAIQuestion(question),
@@ -94,6 +97,9 @@ function useAIQuestionCollection(
     const item = items[index];
     if (!bridge || !item) return false;
     try {
+      if (global && question.generalRule) {
+        await clearGeneralRules(item.fileId);
+      }
       const value = {
         name: createAIQuestionFilename(question.name),
         content: serializeAIQuestion(question),
@@ -128,6 +134,33 @@ function useAIQuestionCollection(
     } catch {
       return false;
     }
+  }
+
+  async function clearGeneralRules(exceptFileId?: string) {
+    if (!bridge) return;
+    await Promise.all(
+      items
+        .filter(
+          ({ fileId, question }) =>
+            fileId !== exceptFileId && question.generalRule,
+        )
+        .map(({ fileId, question }) =>
+          bridge.updateGlobalAIQuestion(fileId, {
+            name: createAIQuestionFilename(question.name),
+            content: serializeAIQuestion({ ...question, generalRule: false }),
+          }),
+        ),
+    );
+    setItems((current) =>
+      current.map((stored) =>
+        stored.fileId !== exceptFileId && stored.question.generalRule
+          ? {
+              ...stored,
+              question: { ...stored.question, generalRule: false },
+            }
+          : stored,
+      ),
+    );
   }
 
   return {

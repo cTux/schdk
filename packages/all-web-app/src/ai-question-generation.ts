@@ -15,14 +15,17 @@ export function createAiQuestionGeneration(
   options: AiOptions,
   templates: AIQuestion[],
   locale: AppLocale,
+  generalRule?: AIQuestion,
 ): AiQuestionGenerationOptions {
   return {
     apiKeyConfigured: options.apiKeyConfigured,
-    templates: [...templates].sort(
-      (left, right) =>
-        Number(right.favorite) - Number(left.favorite) ||
-        left.name.localeCompare(right.name),
-    ),
+    templates: templates
+      .filter((template) => !template.generalRule)
+      .sort(
+        (left, right) =>
+          Number(right.favorite) - Number(left.favorite) ||
+          left.name.localeCompare(right.name),
+      ),
     onGenerate(template, context) {
       if (!bridge) {
         return Promise.reject(new Error('Google Drive is disconnected'));
@@ -31,7 +34,18 @@ export function createAiQuestionGeneration(
         provider: options.provider,
         model: options.model,
         locale,
-        template,
+        template: generalRule
+          ? {
+              ...template,
+              description: `${generalRule.description}\n\n${template.description}`,
+              goodExamples: [generalRule.goodExamples, template.goodExamples]
+                .filter(Boolean)
+                .join('\n\n'),
+              badExamples: [generalRule.badExamples, template.badExamples]
+                .filter(Boolean)
+                .join('\n\n'),
+            }
+          : template,
         context,
       });
     },
@@ -70,6 +84,7 @@ export function useAiQuestionTools(
       ai.options,
       [...aiQuestions.questions, ...aiQuestions.globalQuestions],
       locale,
+      aiQuestions.globalQuestions.find((question) => question.generalRule),
     ),
   };
 }

@@ -56,6 +56,7 @@ V20|AI output is validated as a complete game question before it can replace edi
 V21|Every multiline text input uses the shared non-resizable `Textarea` control.
 V22|Every personal or global AI question rule is parsed from its own `.aiquestion` ZIP archive and persisted through its assigned Google Drive folder.
 V23|Global AI question writes require an allowlisted account and remain confined to the configured shared Drive folder.
+V24|At most one global AI question rule is marked as general, only an allowlisted administrator can change it, and generation applies it to every selected template.
 
 ## §T
 

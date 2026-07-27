@@ -3,6 +3,7 @@ import './styles.scss';
 import type { AIQuestion } from '@schdk/common';
 import { useState } from 'react';
 import { Button } from '../../atoms/Button';
+import { Checkbox } from '../../atoms/Checkbox';
 import { Input } from '../../atoms/Input';
 import { TextAreaField } from '../../atoms/TextAreaField';
 import { useLocalization } from '../../localization';
@@ -16,6 +17,7 @@ const EMPTY_QUESTION: AIQuestion = {
   badExamples: '',
   enabled: true,
   favorite: false,
+  generalRule: false,
 };
 
 export function AIQuestionsPage({
@@ -104,6 +106,7 @@ export function AIQuestionsPage({
               badExamples: draft.badExamples.trim(),
               enabled: draft.enabled,
               favorite: draft.favorite,
+              generalRule: editingGlobal && draft.generalRule,
             };
             setFormSaving(true);
             const saved = await (
@@ -118,11 +121,28 @@ export function AIQuestionsPage({
             else setSaveFailed(true);
           }}
         >
-          <h2>
-            {editingIndex === null
-              ? copy.aiQuestions.newQuestion
-              : copy.aiQuestions.editQuestion}
-          </h2>
+          <div className="ai-question-form-title">
+            <h2>
+              {editingIndex === null
+                ? copy.aiQuestions.newQuestion
+                : copy.aiQuestions.editQuestion}
+            </h2>
+            {editingGlobal && isGlobalAdmin && (
+              <label>
+                {copy.aiQuestions.generalRule}
+                <Checkbox
+                  checked={draft.generalRule}
+                  disabled={formSaving}
+                  onChange={(event) =>
+                    setDraft((current) => ({
+                      ...current,
+                      generalRule: event.target.checked,
+                    }))
+                  }
+                />
+              </label>
+            )}
+          </div>
           <label>
             {copy.aiQuestions.name}
             <Input

@@ -12,7 +12,10 @@ and these fields:
 - `goodExamples`: optional good-question examples;
 - `badExamples`: optional bad-question examples;
 - `enabled`: whether the rule is available during generation;
-- `favorite`: whether the rule is sorted before non-favorites.
+- `favorite`: whether the rule is sorted before non-favorites;
+- `generalRule`: whether this global rule is applied to every generated
+  question instead of appearing as a selectable template. Missing values from
+  older archives are treated as `false`.
 
 Archives larger than 1 MiB and `ai-question.json` entries larger than 512 KiB
 are rejected. Duplicate recognized entries are rejected. Unrecognized ZIP

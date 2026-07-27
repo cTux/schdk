@@ -19,7 +19,8 @@ description: Build, refactor, or review SCHDK React UI components and SCSS in @s
 8. Use the shared `Button` `primary` variant for amber primary actions; do not
    duplicate its visual states in area or application styles.
 9. Use `Input` for single-line text and password fields, `RangeInput` for
-   range controls, and `IconButton` for reusable icon-only actions.
+   range controls, `Checkbox` for checkbox controls, and `IconButton` for
+   reusable icon-only actions.
 10. Put Ukrainian and English user-visible copy in the shared localization
     module and consume it through the locale context.
 11. Visually smoke-test the affected flow at narrow and normal widths.
