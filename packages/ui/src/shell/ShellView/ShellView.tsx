@@ -25,11 +25,18 @@ export interface ShellViewProps {
   aiOptions: AiOptions;
   aiQuestions: {
     questions: AIQuestion[];
+    globalQuestions: AIQuestion[];
     failed: boolean;
+    globalFailed: boolean;
     loading: boolean;
+    globalLoading: boolean;
+    isGlobalAdmin: boolean;
     addQuestion(question: AIQuestion): Promise<boolean>;
+    addGlobalQuestion(question: AIQuestion): Promise<boolean>;
     removeQuestion(index: number): Promise<boolean>;
+    removeGlobalQuestion(index: number): Promise<boolean>;
     updateQuestion(index: number, question: AIQuestion): Promise<boolean>;
+    updateGlobalQuestion(index: number, question: AIQuestion): Promise<boolean>;
   };
   editorApp: ReactNode;
   hostApp: ReactNode;
@@ -124,11 +131,18 @@ export function ShellView({
           <div hidden={view !== 'artificialIntelligence'}>
             <AIQuestionsPage
               questions={aiQuestions.questions}
+              globalQuestions={aiQuestions.globalQuestions}
               failed={aiQuestions.failed}
+              globalFailed={aiQuestions.globalFailed}
               loading={aiQuestions.loading}
+              globalLoading={aiQuestions.globalLoading}
+              isGlobalAdmin={aiQuestions.isGlobalAdmin}
               onAdd={aiQuestions.addQuestion}
+              onAddGlobal={aiQuestions.addGlobalQuestion}
               onRemove={aiQuestions.removeQuestion}
+              onRemoveGlobal={aiQuestions.removeGlobalQuestion}
               onUpdate={aiQuestions.updateQuestion}
+              onUpdateGlobal={aiQuestions.updateGlobalQuestion}
             />
           </div>
           {loadedApps.host && (

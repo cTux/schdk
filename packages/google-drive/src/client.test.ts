@@ -76,6 +76,24 @@ describe('GoogleDriveClient', () => {
     );
   });
 
+  it('rejects global writes from non-admin accounts', async () => {
+    const fetchMock = vi.fn(async () =>
+      jsonResponse({
+        user: { displayName: 'Player', emailAddress: 'player@example.com' },
+      }),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+    const client = new GoogleDriveClient(async () => 'token');
+
+    await expect(
+      client.createGlobalAIQuestion({
+        name: 'Global question',
+        content: Uint8Array.from([1]),
+      }),
+    ).rejects.toBeInstanceOf(GoogleDriveAuthorizationError);
+    expect(fetchMock).toHaveBeenCalledOnce();
+  });
+
   it('lists every page of packages', async () => {
     vi.stubGlobal(
       'fetch',

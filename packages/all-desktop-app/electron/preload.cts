@@ -73,6 +73,15 @@ const editorApi = {
       ipcRenderer.invoke('update-google-drive-ai-question', fileId, value),
     deleteAIQuestion: (fileId: string) =>
       ipcRenderer.invoke('delete-google-drive-ai-question', fileId),
+    listGlobalAIQuestions: () => ipcRenderer.invoke('list-global-ai-questions'),
+    loadGlobalAIQuestion: (fileId: string) =>
+      ipcRenderer.invoke('load-global-ai-question', fileId),
+    createGlobalAIQuestion: (value: unknown) =>
+      ipcRenderer.invoke('create-global-ai-question', value),
+    updateGlobalAIQuestion: (fileId: string, value: unknown) =>
+      ipcRenderer.invoke('update-global-ai-question', fileId, value),
+    deleteGlobalAIQuestion: (fileId: string) =>
+      ipcRenderer.invoke('delete-global-ai-question', fileId),
   },
 };
 

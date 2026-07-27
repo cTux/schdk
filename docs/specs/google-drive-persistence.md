@@ -49,13 +49,18 @@ preserving recoverable local state during temporary Drive failures.
   file in the current account's app-marked `SCHDK` folder. Rule listing,
   loading, creation, renaming, updating, and trashing use the shared Drive
   adapter on web and desktop without local-storage persistence.
+- **DRV-17:** The AI page also loads individually parsed `.aiquestion` archives
+  from the configured shared Drive folder. Only allowlisted administrators can
+  create, rename, update, or trash shared rules; Drive folder permissions
+  enforce the same boundary.
 
 ## Invariants
 
 - Browser tokens never enter localStorage or persisted settings.
 - Desktop tokens remain in the Electron main process and never cross renderer
   IPC.
-- Drive uses only `drive.file` and `drive.appdata` scopes.
+- Drive uses `drive` and `drive.appdata` scopes; the fixed shared folder cannot
+  be discovered through per-file authorization.
 - A failed package write keeps the same file open and requires retry or
   reconnection.
 - Settings conflicts resolve per section, not by replacing the whole document.
@@ -93,3 +98,6 @@ preserving recoverable local state during temporary Drive failures.
 11. Add, edit, favorite, disable, reload, and delete an AI question rule on web
     and desktop; observe one renamed `.aiquestion` ZIP file in the current
     account's `SCHDK` folder and no browser-local rule copy.
+12. Connect as a regular account and load global rules without global mutation
+    controls; connect as an allowlisted administrator and create, edit, and
+    delete a global rule in the configured shared folder.

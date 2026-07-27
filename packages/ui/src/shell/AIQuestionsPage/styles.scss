@@ -20,14 +20,12 @@
   font-size: clamp(2rem, 4vw, 3rem);
 }
 
-.ai-questions-page > header > div > p:last-child,
-.ai-question-empty {
+.ai-questions-page > header > div > p:last-child {
   color: $muted;
   line-height: 1.6;
 }
 
-.ai-question-form,
-.ai-question-empty {
+.ai-question-form {
   border: 1px solid $border;
   border-radius: $radius-panel;
   background: rgba($surface-rgb, 0.82);
@@ -85,19 +83,6 @@
   display: flex;
   justify-content: flex-end;
   gap: $space-2;
-}
-
-.ai-question-list {
-  display: flex;
-  flex-flow: row wrap;
-  gap: $space-4;
-  margin-top: $space-8;
-}
-
-.ai-question-empty {
-  margin-top: $space-8;
-  padding: $space-6;
-  text-align: center;
 }
 
 @media (width <= 640px) {

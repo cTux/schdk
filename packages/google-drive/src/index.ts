@@ -6,6 +6,9 @@ export {
 export type { DriveAccount } from './client.js';
 export {
   createAIQuestionFilename,
+  GLOBAL_AI_QUESTION_ADMIN_EMAILS,
+  GLOBAL_AI_QUESTION_FOLDER_ID,
+  isGlobalAIQuestionAdmin,
   isDriveAIQuestionName,
   parseDriveAIQuestionFile,
   parseDriveAIQuestionWrite,
@@ -15,6 +18,7 @@ export type {
   DriveAIQuestionFile,
   DriveAIQuestionStorage,
   DriveAIQuestionWrite,
+  DriveGlobalAIQuestionStorage,
 } from './ai-questions.js';
 export {
   createGamePackageFilename,

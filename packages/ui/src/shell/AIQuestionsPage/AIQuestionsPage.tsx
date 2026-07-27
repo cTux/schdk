@@ -3,14 +3,10 @@ import './styles.scss';
 import type { AIQuestion } from '@schdk/common';
 import { useState } from 'react';
 import { Button } from '../../atoms/Button';
-import {
-  ConfirmationDialog,
-  useConfirmationDialog,
-} from '../../atoms/ConfirmationDialog';
 import { Input } from '../../atoms/Input';
 import { TextAreaField } from '../../atoms/TextAreaField';
 import { useLocalization } from '../../localization';
-import { AIQuestionCard } from '../AIQuestionCard';
+import { AIQuestionCollection } from '../AIQuestionCollection';
 import type { AIQuestionsPageProps } from './types';
 
 const EMPTY_QUESTION: AIQuestion = {
@@ -24,16 +20,23 @@ const EMPTY_QUESTION: AIQuestion = {
 
 export function AIQuestionsPage({
   questions,
+  globalQuestions,
   failed,
+  globalFailed,
   loading,
+  globalLoading,
+  isGlobalAdmin,
   onAdd,
+  onAddGlobal,
   onRemove,
+  onRemoveGlobal,
   onUpdate,
+  onUpdateGlobal,
 }: AIQuestionsPageProps) {
   const { copy } = useLocalization();
-  const deleteDialog = useConfirmationDialog();
   const [draft, setDraft] = useState(EMPTY_QUESTION);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingGlobal, setEditingGlobal] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
   const [formSaving, setFormSaving] = useState(false);
   const [saveFailed, setSaveFailed] = useState(false);
@@ -48,21 +51,23 @@ export function AIQuestionsPage({
   function closeForm() {
     setDraft(EMPTY_QUESTION);
     setEditingIndex(null);
+    setEditingGlobal(false);
     setSaveFailed(false);
     setFormSaving(false);
     setFormOpen(false);
   }
 
-  function editQuestion(question: AIQuestion, index: number) {
+  function editQuestion(question: AIQuestion, index: number, global = false) {
     setDraft(question);
     setEditingIndex(index);
+    setEditingGlobal(global);
     setSaveFailed(false);
     setFormOpen(true);
   }
 
-  function updateQuestion(index: number, question: AIQuestion) {
+  function updateQuestion(index: number, question: AIQuestion, global = false) {
     setSaveFailed(false);
-    return onUpdate(index, question);
+    return global ? onUpdateGlobal(index, question) : onUpdate(index, question);
   }
   return (
     <section className="ai-questions-page">
@@ -78,6 +83,7 @@ export function AIQuestionsPage({
             onClick={() => {
               setDraft(EMPTY_QUESTION);
               setEditingIndex(null);
+              setEditingGlobal(false);
               setFormOpen(true);
             }}
           >
@@ -102,8 +108,10 @@ export function AIQuestionsPage({
             setFormSaving(true);
             const saved = await (
               editingIndex === null
-                ? onAdd(question)
-                : onUpdate(editingIndex, question)
+                ? editingGlobal
+                  ? onAddGlobal(question)
+                  : onAdd(question)
+                : updateQuestion(editingIndex, question, editingGlobal)
             ).catch(() => false);
             setFormSaving(false);
             if (saved) closeForm();
@@ -177,36 +185,42 @@ export function AIQuestionsPage({
           </div>
         </form>
       )}
-      {questions.length ? (
-        <div className="ai-question-list">
-          {questions.map((question, index) => (
-            <AIQuestionCard
-              key={`${question.name}-${index}`}
-              question={question}
-              onDelete={async () => {
-                const confirmed = await deleteDialog.confirm(
-                  copy.aiQuestions.deleteConfirmation(question.name),
-                );
-                return !confirmed || onRemove(index);
-              }}
-              onEdit={() => editQuestion(question, index)}
-              onSaveFailed={() => setSaveFailed(true)}
-              onUpdate={(nextQuestion) => updateQuestion(index, nextQuestion)}
-            />
-          ))}
-        </div>
-      ) : (
-        !formOpen &&
-        !loading && (
-          <p className="ai-question-empty">{copy.aiQuestions.empty}</p>
-        )
-      )}
-      {!formOpen && (failed || saveFailed) && (
+      <AIQuestionCollection
+        title={copy.aiQuestions.myQuestions}
+        emptyLabel={copy.aiQuestions.empty}
+        questions={questions}
+        loading={loading || formOpen}
+        editable
+        onEdit={editQuestion}
+        onRemove={onRemove}
+        onSaveFailed={() => setSaveFailed(true)}
+        onUpdate={updateQuestion}
+      />
+      <AIQuestionCollection
+        title={copy.aiQuestions.globalQuestions}
+        emptyLabel={copy.aiQuestions.globalEmpty}
+        questions={globalQuestions}
+        loading={globalLoading || formOpen}
+        editable={isGlobalAdmin}
+        addLabel={
+          isGlobalAdmin && !formOpen ? copy.aiQuestions.addGlobal : undefined
+        }
+        onAdd={() => {
+          setDraft(EMPTY_QUESTION);
+          setEditingIndex(null);
+          setEditingGlobal(true);
+          setFormOpen(true);
+        }}
+        onEdit={(question, index) => editQuestion(question, index, true)}
+        onRemove={onRemoveGlobal}
+        onSaveFailed={() => setSaveFailed(true)}
+        onUpdate={(index, question) => updateQuestion(index, question, true)}
+      />
+      {!formOpen && (failed || globalFailed || saveFailed) && (
         <p className="ai-question-save-error" role="alert">
           {copy.aiQuestions.saveFailed}
         </p>
       )}
-      <ConfirmationDialog {...deleteDialog.dialogProps} />
     </section>
   );
 }

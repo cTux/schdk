@@ -3,9 +3,10 @@
 .ai-question-card {
   display: flex;
   width: min(100%, 360px);
-  height: 440px;
+  min-width: 0;
   flex: 0 1 360px;
   flex-direction: column;
+  gap: $space-3;
   border: 1px solid $border;
   border-radius: $radius-panel;
   background: rgba($surface-rgb, 0.82);
@@ -17,12 +18,9 @@
   align-self: center;
 }
 
-.ai-question-card h2,
-.ai-question-card h3 {
-  margin: 0;
-}
-
 .ai-question-card h2 {
+  width: 100%;
+  margin: 0;
   overflow: hidden;
   font-size: 1.15rem;
   text-overflow: ellipsis;
@@ -30,17 +28,11 @@
 }
 
 .ai-question-card-body {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: center;
   overflow: hidden;
-  padding: $space-4 0;
   text-align: left;
 }
 
-.ai-question-card-body > p,
-.ai-question-card section p {
+.ai-question-card-body > p {
   display: -webkit-box;
   overflow: hidden;
   margin: 0;
@@ -48,17 +40,6 @@
   -webkit-line-clamp: 6;
   line-height: 1.6;
   white-space: pre-wrap;
-}
-
-.ai-question-card section {
-  margin-top: $space-4;
-}
-
-.ai-question-card h3 {
-  margin-bottom: $space-2;
-  color: $muted;
-  font-size: $font-size-sm;
-  text-transform: uppercase;
 }
 
 .ai-question-card-actions {
@@ -76,12 +57,4 @@
 
 .ai-question-favorite[aria-pressed='true'] {
   color: $accent;
-}
-
-.ai-question-card[data-disabled='true'] .ai-question-card-body {
-  opacity: 0.48;
-}
-
-.ai-question-card[data-disabled='true'] {
-  border-style: dashed;
 }

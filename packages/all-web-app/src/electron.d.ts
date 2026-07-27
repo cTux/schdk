@@ -3,6 +3,7 @@ import type { GameQuestion } from '@schdk/common';
 import type {
   DriveAccount,
   DriveAIQuestionStorage,
+  DriveGlobalAIQuestionStorage,
   DrivePackageStorage,
   DriveSettingsDocument,
 } from '@schdk/google-drive';
@@ -12,7 +13,8 @@ export {};
 declare global {
   interface SchdkDesktopApi {
     googleDrive?: DrivePackageStorage &
-      DriveAIQuestionStorage & {
+      DriveAIQuestionStorage &
+      DriveGlobalAIQuestionStorage & {
         status(): Promise<{
           state: 'unavailable' | 'disconnected' | 'connected';
           account?: DriveAccount;
