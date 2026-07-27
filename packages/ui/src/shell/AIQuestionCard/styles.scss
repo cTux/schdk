@@ -3,7 +3,7 @@
 .ai-question-card {
   display: flex;
   width: min(100%, 360px);
-  min-height: 440px;
+  height: 440px;
   flex: 0 1 360px;
   flex-direction: column;
   border: 1px solid $border;
@@ -36,12 +36,16 @@
   justify-content: center;
   overflow: hidden;
   padding: $space-4 0;
-  text-align: center;
+  text-align: left;
 }
 
 .ai-question-card-body > p,
 .ai-question-card section p {
+  display: -webkit-box;
+  overflow: hidden;
   margin: 0;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
   line-height: 1.6;
   white-space: pre-wrap;
 }
@@ -80,10 +84,4 @@
 
 .ai-question-card[data-disabled='true'] {
   border-style: dashed;
-}
-
-@media (width <= 640px) {
-  .ai-question-card {
-    min-height: 400px;
-  }
 }
