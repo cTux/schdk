@@ -1,4 +1,5 @@
 import type { AIQuestion } from '@schdk/common';
+import { isGlobalAIQuestionAdmin } from '@schdk/google-drive';
 import type { AiQuestionGenerationOptions } from '@schdk/ui/editor';
 import type { AppLocale } from '@schdk/ui/localization';
 import type { AiOptions } from '@schdk/ui/options';
@@ -17,9 +18,11 @@ export function createAiQuestionGeneration(
 ): AiQuestionGenerationOptions {
   return {
     apiKeyConfigured: options.apiKeyConfigured,
-    templates: templates
-      .filter(({ enabled }) => enabled)
-      .sort((left, right) => Number(right.favorite) - Number(left.favorite)),
+    templates: [...templates].sort(
+      (left, right) =>
+        Number(right.favorite) - Number(left.favorite) ||
+        left.name.localeCompare(right.name),
+    ),
     onGenerate(template, context) {
       if (!bridge) {
         return Promise.reject(new Error('Google Drive is disconnected'));
@@ -44,7 +47,17 @@ export function useAiQuestionTools(
     connection.state === 'connected'
       ? connection.account.emailAddress
       : undefined;
-  const aiQuestions = useAIQuestions(bridge, accountId);
+  const aiQuestionCollections = useAIQuestions(bridge, accountId);
+  const aiQuestions = {
+    ...aiQuestionCollections.personal,
+    globalQuestions: aiQuestionCollections.global.questions,
+    globalFailed: aiQuestionCollections.global.failed,
+    globalLoading: aiQuestionCollections.global.loading,
+    addGlobalQuestion: aiQuestionCollections.global.addQuestion,
+    updateGlobalQuestion: aiQuestionCollections.global.updateQuestion,
+    removeGlobalQuestion: aiQuestionCollections.global.removeQuestion,
+    isGlobalAdmin: isGlobalAIQuestionAdmin(accountId),
+  };
   const ai = useAiSettings(
     connection.state === 'connected' ? bridge : null,
     accountId,
@@ -55,7 +68,7 @@ export function useAiQuestionTools(
     aiGeneration: createAiQuestionGeneration(
       bridge,
       ai.options,
-      aiQuestions.questions,
+      [...aiQuestions.questions, ...aiQuestions.globalQuestions],
       locale,
     ),
   };

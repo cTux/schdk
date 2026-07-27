@@ -3,12 +3,16 @@ import type { GameQuestion } from '@schdk/common';
 import type {
   DriveAccount,
   DriveAIQuestionStorage,
+  DriveGlobalAIQuestionStorage,
   DrivePackageStorage,
   DriveSettingsDocument,
 } from '@schdk/google-drive';
 
 export interface GoogleDriveBridge
-  extends DrivePackageStorage, DriveAIQuestionStorage {
+  extends
+    DrivePackageStorage,
+    DriveAIQuestionStorage,
+    DriveGlobalAIQuestionStorage {
   status(): Promise<{
     state: 'unavailable' | 'disconnected' | 'connected';
     account?: DriveAccount;

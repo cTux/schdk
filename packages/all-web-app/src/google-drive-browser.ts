@@ -11,56 +11,14 @@ import {
   type TokenResponse,
 } from './google-oauth-browser';
 import type { GoogleDriveBridge } from './google-drive-types';
-
-interface StoredToken {
-  accessToken: string;
-  clientId: string;
-  expiresAt: number;
-}
-
-const TOKEN_KEY = 'schdk:google-drive-token';
+import {
+  clearLegacyGoogleDriveToken,
+  clearStoredGoogleDriveToken,
+  loadStoredGoogleDriveToken,
+  storeGoogleDriveToken,
+} from './google-drive-token-storage';
 const TOKEN_REFRESH_WINDOW = 20 * 60_000;
 const TOKEN_REFRESH_RETRY_INTERVAL = 5 * 60_000;
-
-function clearStoredToken() {
-  try {
-    sessionStorage.removeItem(TOKEN_KEY);
-  } catch {
-    // The in-memory token still works when session storage is unavailable.
-  }
-}
-
-function loadStoredToken(clientId: string): StoredToken | null {
-  try {
-    const value = JSON.parse(
-      sessionStorage.getItem(TOKEN_KEY) ?? 'null',
-    ) as Partial<StoredToken> | null;
-    if (
-      value &&
-      typeof value.accessToken === 'string' &&
-      value.accessToken.length > 0 &&
-      value.accessToken.length <= 4096 &&
-      value.clientId === clientId &&
-      typeof value.expiresAt === 'number' &&
-      Number.isFinite(value.expiresAt) &&
-      value.expiresAt > Date.now()
-    ) {
-      return value as StoredToken;
-    }
-  } catch {
-    // Invalid or unavailable storage behaves like a signed-out session.
-  }
-  clearStoredToken();
-  return null;
-}
-
-function storeToken(token: StoredToken) {
-  try {
-    sessionStorage.setItem(TOKEN_KEY, JSON.stringify(token));
-  } catch {
-    // The access token remains usable in memory for the current page.
-  }
-}
 
 export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
   private accessToken = '';
@@ -77,7 +35,8 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
   });
 
   constructor(private readonly clientId: string) {
-    const token = loadStoredToken(clientId);
+    clearLegacyGoogleDriveToken();
+    const token = loadStoredGoogleDriveToken(clientId);
     if (token) {
       this.accessToken = token.accessToken;
       this.expiresAt = token.expiresAt;
@@ -111,7 +70,7 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
     this.accessToken = '';
     this.expiresAt = 0;
     this.account = undefined;
-    clearStoredToken();
+    clearStoredGoogleDriveToken();
   }
 
   private hasValidToken() {
@@ -152,7 +111,7 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
     }
     this.accessToken = response.access_token;
     this.expiresAt = Date.now() + (response.expires_in ?? 3600) * 1000;
-    storeToken({
+    storeGoogleDriveToken({
       accessToken: this.accessToken,
       clientId: this.clientId,
       expiresAt: this.expiresAt,
@@ -239,6 +198,11 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
   deleteAIQuestion = this.client.deleteAIQuestion.bind(this.client);
   listAIQuestions = this.client.listAIQuestions.bind(this.client);
   loadAIQuestion = this.client.loadAIQuestion.bind(this.client);
+  createGlobalAIQuestion = this.client.createGlobalAIQuestion.bind(this.client);
+  updateGlobalAIQuestion = this.client.updateGlobalAIQuestion.bind(this.client);
+  deleteGlobalAIQuestion = this.client.deleteGlobalAIQuestion.bind(this.client);
+  listGlobalAIQuestions = this.client.listGlobalAIQuestions.bind(this.client);
+  loadGlobalAIQuestion = this.client.loadGlobalAIQuestion.bind(this.client);
 }
 import {
   generateGameQuestion,

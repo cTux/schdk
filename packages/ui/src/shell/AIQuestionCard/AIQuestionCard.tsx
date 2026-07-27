@@ -1,12 +1,6 @@
 import './styles.scss';
 
-import {
-  faEye,
-  faEyeSlash,
-  faPen,
-  faStar,
-  faTrashCan,
-} from '@fortawesome/free-solid-svg-icons';
+import { faPen, faStar, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { IconButton } from '../../atoms/IconButton';
 import { useLocalization } from '../../localization';
@@ -30,73 +24,45 @@ export function AIQuestionCard({
   }
 
   return (
-    <article
-      className="ai-question-card"
-      data-disabled={question.enabled ? undefined : true}
-    >
+    <article className="ai-question-card">
       <header>
         <h2>{question.name}</h2>
       </header>
       <div className="ai-question-card-body">
         <p>{question.description}</p>
-        {question.goodExamples && (
-          <section>
-            <h3>{copy.aiQuestions.goodExamples}</h3>
-            <p>{question.goodExamples}</p>
-          </section>
-        )}
-        {question.badExamples && (
-          <section>
-            <h3>{copy.aiQuestions.badExamples}</h3>
-            <p>{question.badExamples}</p>
-          </section>
-        )}
       </div>
-      <div className="ai-question-card-actions">
-        <IconButton
-          className="ai-question-favorite"
-          aria-pressed={question.favorite}
-          disabled={pending}
-          icon={faStar}
-          label={
-            question.favorite
-              ? copy.aiQuestions.removeFavorite
-              : copy.aiQuestions.favorite
-          }
-          onClick={() =>
-            void run(() =>
-              onUpdate({ ...question, favorite: !question.favorite }),
-            )
-          }
-        />
-        <IconButton
-          disabled={pending}
-          icon={faPen}
-          label={copy.aiQuestions.edit}
-          onClick={onEdit}
-        />
-        <IconButton
-          aria-pressed={question.enabled}
-          disabled={pending}
-          icon={question.enabled ? faEye : faEyeSlash}
-          label={
-            question.enabled
-              ? copy.aiQuestions.disable
-              : copy.aiQuestions.enable
-          }
-          onClick={() =>
-            void run(() =>
-              onUpdate({ ...question, enabled: !question.enabled }),
-            )
-          }
-        />
-        <IconButton
-          disabled={pending}
-          icon={faTrashCan}
-          label={copy.aiQuestions.delete}
-          onClick={() => void run(onDelete)}
-        />
-      </div>
+      {onUpdate && onEdit && onDelete && (
+        <div className="ai-question-card-actions">
+          <IconButton
+            className="ai-question-favorite"
+            aria-pressed={question.favorite}
+            disabled={pending}
+            icon={faStar}
+            label={
+              question.favorite
+                ? copy.aiQuestions.removeFavorite
+                : copy.aiQuestions.favorite
+            }
+            onClick={() =>
+              void run(() =>
+                onUpdate({ ...question, favorite: !question.favorite }),
+              )
+            }
+          />
+          <IconButton
+            disabled={pending}
+            icon={faPen}
+            label={copy.aiQuestions.edit}
+            onClick={onEdit}
+          />
+          <IconButton
+            disabled={pending}
+            icon={faTrashCan}
+            label={copy.aiQuestions.delete}
+            onClick={() => void run(onDelete)}
+          />
+        </div>
+      )}
     </article>
   );
 }

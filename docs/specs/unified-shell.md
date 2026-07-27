@@ -35,15 +35,13 @@ package authoring, hosting, settings, and account state.
 - **SHL-10:** Before authorization, only the localized Google login screen is
   visible; account status and disconnect remain available after connection.
 - **SHL-11:** The Artificial intelligence page fills the available workspace
-  width, lists Drive-backed `AIQuestion` rules, and opens a form for adding
-  another rule. Every rule has a name, detailed generation description, and
-  optional good and bad question examples. Name and description are required
-  before saving. Each narrow card has one shared background and border, with
-  a fixed height, its name at the top, left-aligned text clamped with an
-  ellipsis, and a bottom icon row ordered favorite, edit, enable/disable, and
-  delete. The inner sections have no separate backgrounds or borders. Deletion
-  requires confirmation. Every change persists as the rule's `.aiquestion` ZIP
-  file in Google Drive.
+  width and lists name-sorted account rules followed by name-sorted global
+  rules. The existing form creates account rules; allowlisted administrators
+  can also create, edit, and delete global rules. Cards show only the name,
+  description, and applicable favorite, edit, and delete actions in a compact
+  layout without enable/disable controls or large internal gaps. Name and
+  description are required before saving, deletion requires confirmation, and
+  every change persists as the rule's `.aiquestion` ZIP file in Google Drive.
 - **SHL-12:** Artificial intelligence settings expose separate provider and
   model dropdowns plus a user API key. The dropdowns use the models.dev catalog
   for the OpenAI, Anthropic, and Google providers supported by `@schdk/ai`,
@@ -85,12 +83,12 @@ package authoring, hosting, settings, and account state.
    preserved state.
 4. Disconnect Google and verify mounted tools become inaccessible until
    reconnection.
-5. Open the Artificial intelligence route directly, add a rule with its
-   required name and description plus optional good and bad examples, then edit,
-   disable, favorite, reload, and delete it; confirm each state persists and the
-   rule stays in a fixed-height narrow card with one outer background and
-   border, an unframed title, left-aligned text clamped with an ellipsis, and
-   unframed bottom actions while the page uses the available workspace width.
+5. Open the Artificial intelligence route directly, add rules with required
+   names and descriptions, and observe account rules followed by global rules,
+   each sorted by name. Confirm cards show only name, description, and
+   applicable favorite, edit, and delete actions without large internal gaps.
+   Verify a regular account cannot mutate global rules and an allowlisted
+   administrator can add, edit, and delete them.
 6. Configure an AI model and API key; reload and confirm both remain for the
    same Google account, then switch accounts and confirm the previous key is
    not exposed.

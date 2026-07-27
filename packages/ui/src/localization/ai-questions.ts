@@ -1,5 +1,9 @@
 export const aiQuestionsCopy = {
   uk: {
+    myQuestions: 'Мої види питань',
+    globalQuestions: 'Глобальні види питань',
+    addGlobal: 'Додати глобальний вид',
+    globalEmpty: 'Ще не додано жодного глобального виду питання.',
     title: 'Правила створення питань',
     description:
       'Опишіть види питань, які штучний інтелект має вміти створювати.',
@@ -22,6 +26,10 @@ export const aiQuestionsCopy = {
     empty: 'Ще не додано жодного виду питання.',
   },
   en: {
+    myQuestions: 'My question kinds',
+    globalQuestions: 'Global question kinds',
+    addGlobal: 'Add global kind',
+    globalEmpty: 'No global question kinds have been added yet.',
     title: 'Question-generation rules',
     description:
       'Describe the kinds of questions that artificial intelligence should be able to create.',

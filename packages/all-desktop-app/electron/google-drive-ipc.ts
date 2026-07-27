@@ -102,6 +102,31 @@ export function registerGoogleDriveIpc() {
       throw new TypeError('Invalid Google Drive file');
     return client.deleteAIQuestion(fileId);
   });
+  ipcMain.handle('list-global-ai-questions', () =>
+    client.listGlobalAIQuestions(),
+  );
+  ipcMain.handle('load-global-ai-question', (_event, fileId) => {
+    if (!isDriveFileId(fileId))
+      throw new TypeError('Invalid Google Drive file');
+    return client.loadGlobalAIQuestion(fileId);
+  });
+  ipcMain.handle('create-global-ai-question', (_event, value) => {
+    const question = parseDriveAIQuestionWrite(value);
+    if (!question) throw new TypeError('Invalid global AI question');
+    return client.createGlobalAIQuestion(question);
+  });
+  ipcMain.handle('update-global-ai-question', (_event, fileId, value) => {
+    const question = parseDriveAIQuestionWrite(value);
+    if (!isDriveFileId(fileId) || !question) {
+      throw new TypeError('Invalid global AI question');
+    }
+    return client.updateGlobalAIQuestion(fileId, question);
+  });
+  ipcMain.handle('delete-global-ai-question', (_event, fileId) => {
+    if (!isDriveFileId(fileId))
+      throw new TypeError('Invalid Google Drive file');
+    return client.deleteGlobalAIQuestion(fileId);
+  });
 }
 import {
   generateGameQuestion,

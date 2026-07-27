@@ -12,9 +12,16 @@ interface StoredAIQuestion {
   question: AIQuestion;
 }
 
-export function useAIQuestions(
+function sortItems(items: StoredAIQuestion[]) {
+  return [...items].sort((left, right) =>
+    left.question.name.localeCompare(right.question.name),
+  );
+}
+
+function useAIQuestionCollection(
   bridge: GoogleDriveBridge | null,
   accountId?: string,
+  global = false,
 ) {
   const [items, setItems] = useState<StoredAIQuestion[]>([]);
   const [failed, setFailed] = useState(false);
@@ -26,13 +33,14 @@ export function useAIQuestions(
     setFailed(false);
     setLoading(Boolean(bridge && accountId));
     if (!bridge || !accountId) return;
-    void bridge
-      .listAIQuestions()
+    void (global ? bridge.listGlobalAIQuestions() : bridge.listAIQuestions())
       .then((files) =>
         Promise.all(
           files.map(async ({ id }) => {
             try {
-              const file = await bridge.loadAIQuestion(id);
+              const file = await (global
+                ? bridge.loadGlobalAIQuestion(id)
+                : bridge.loadAIQuestion(id));
               return {
                 fileId: id,
                 question: parseAIQuestionArchive(file.content),
@@ -47,7 +55,9 @@ export function useAIQuestions(
         if (active) {
           setFailed(loaded.some((item) => item === null));
           setItems(
-            loaded.filter((item): item is StoredAIQuestion => item !== null),
+            sortItems(
+              loaded.filter((item): item is StoredAIQuestion => item !== null),
+            ),
           );
         }
       })
@@ -56,16 +66,21 @@ export function useAIQuestions(
     return () => {
       active = false;
     };
-  }, [accountId, bridge]);
+  }, [accountId, bridge, global]);
 
   async function addQuestion(question: AIQuestion): Promise<boolean> {
     if (!bridge) return false;
     try {
-      const file = await bridge.createAIQuestion({
+      const value = {
         name: createAIQuestionFilename(question.name),
         content: serializeAIQuestion(question),
-      });
-      setItems((current) => [{ fileId: file.id, question }, ...current]);
+      };
+      const file = await (global
+        ? bridge.createGlobalAIQuestion(value)
+        : bridge.createAIQuestion(value));
+      setItems((current) =>
+        sortItems([...current, { fileId: file.id, question }]),
+      );
       return true;
     } catch {
       return false;
@@ -79,13 +94,18 @@ export function useAIQuestions(
     const item = items[index];
     if (!bridge || !item) return false;
     try {
-      await bridge.updateAIQuestion(item.fileId, {
+      const value = {
         name: createAIQuestionFilename(question.name),
         content: serializeAIQuestion(question),
-      });
+      };
+      await (global
+        ? bridge.updateGlobalAIQuestion(item.fileId, value)
+        : bridge.updateAIQuestion(item.fileId, value));
       setItems((current) =>
-        current.map((stored) =>
-          stored.fileId === item.fileId ? { ...stored, question } : stored,
+        sortItems(
+          current.map((stored) =>
+            stored.fileId === item.fileId ? { ...stored, question } : stored,
+          ),
         ),
       );
       return true;
@@ -98,7 +118,9 @@ export function useAIQuestions(
     const item = items[index];
     if (!bridge || !item) return false;
     try {
-      await bridge.deleteAIQuestion(item.fileId);
+      await (global
+        ? bridge.deleteGlobalAIQuestion(item.fileId)
+        : bridge.deleteAIQuestion(item.fileId));
       setItems((current) =>
         current.filter(({ fileId }) => fileId !== item.fileId),
       );
@@ -115,5 +137,15 @@ export function useAIQuestions(
     addQuestion,
     updateQuestion,
     removeQuestion,
+  };
+}
+
+export function useAIQuestions(
+  bridge: GoogleDriveBridge | null,
+  accountId?: string,
+) {
+  return {
+    personal: useAIQuestionCollection(bridge, accountId),
+    global: useAIQuestionCollection(bridge, accountId, true),
   };
 }

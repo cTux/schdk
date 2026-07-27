@@ -31,6 +31,8 @@ let tokens: OAuthTokens | undefined;
 let storedRefreshTokenLoaded = false;
 
 const tokenPath = () =>
+  join(app.getPath('userData'), 'google-drive-refresh-token-v2.bin');
+const legacyTokenPath = () =>
   join(app.getPath('userData'), 'google-drive-refresh-token.bin');
 
 function canPersistToken() {
@@ -47,6 +49,7 @@ async function loadRefreshToken() {
   if (storedRefreshTokenLoaded) return tokens?.refreshToken;
   storedRefreshTokenLoaded = true;
   if (!canPersistToken()) return undefined;
+  await rm(legacyTokenPath(), { force: true });
   try {
     const refreshToken = safeStorage.decryptString(await readFile(tokenPath()));
     if (refreshToken) {
@@ -61,6 +64,7 @@ async function loadRefreshToken() {
 
 async function persistRefreshToken(refreshToken: string) {
   if (!canPersistToken()) return;
+  await rm(legacyTokenPath(), { force: true });
   await writeFile(tokenPath(), safeStorage.encryptString(refreshToken));
 }
 
@@ -220,7 +224,10 @@ export async function disconnectGoogleDrive() {
   const token = tokens?.accessToken || tokens?.refreshToken;
   tokens = undefined;
   storedRefreshTokenLoaded = true;
-  await rm(tokenPath(), { force: true });
+  await Promise.all([
+    rm(tokenPath(), { force: true }),
+    rm(legacyTokenPath(), { force: true }),
+  ]);
   if (token) {
     await fetch(`${REVOCATION_ENDPOINT}?${new URLSearchParams({ token })}`, {
       method: 'POST',

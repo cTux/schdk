@@ -6,8 +6,10 @@
 - Keep local storage as the immediate source and fallback. Merge remote
   settings per section by `updatedAt`, debounce uploads for one second, and
   retain local changes when Drive is unavailable.
-- Store `settings-v1.json` in `appDataFolder` using only the non-sensitive
-  `drive.file` and `drive.appdata` scopes.
+- Store `settings-v1.json` in `appDataFolder`. Request `drive` and
+  `drive.appdata`; fixed-folder global listing requires the restricted `drive`
+  scope because `drive.file` cannot discover files that users did not
+  explicitly open with the app.
 - Store a user AI API key separately in `ai-credentials-v1.json` in the current
   account's `appDataFolder`. Never copy it into the settings document or its
   local cache, and never reuse one account's configured status for another.
@@ -21,6 +23,10 @@
   the same `SCHDK` Drive folder. Mark it with private app identity metadata,
   keep its filename synchronized as the filesystem-safe rule name plus
   `.aiquestion`, and parse its archive through `@schdk/common` before use.
+- Load global AI question rules from the fixed shared Drive folder configured
+  in `@schdk/google-drive`, after the current account's rules. Keep the admin
+  email allowlist centralized and unobfuscated there; Drive folder permissions
+  remain the security boundary for global writes.
 - Discover the current account's existing app-marked package folder instead of
   retaining a folder ID across authorization changes. Scope restorable editor
   and host state by account, and remount it only when the connected account
@@ -34,7 +40,9 @@
   Drive packages across every Drive API result page. Never fall back to browser
   storage or desktop paths.
 - List, create, update, and delete AI question rules through the active
-  account's Drive adapter. Never persist those rules in browser local storage.
+  account's Drive adapter. Route global rules through the same narrow adapter,
+  require an allowlisted account for global writes, and never persist either
+  collection in browser local storage.
 - Reject package metadata above the canonical package-size limit before
   downloading its media body.
 - Treat a local `.schdk` selection only as an import: validate it, upload it to

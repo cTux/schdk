@@ -16,7 +16,7 @@ C4|Keep renderer access to desktop and Google services narrow and validated.
 C5|Keep user-visible unified application copy localized in Ukrainian and English.
 C6|Keep unfinished packages editable and recoverable without silent destination changes.
 C7|Keep user AI API keys in separate, account-scoped Google Drive app data and out of synchronized settings or local browser persistence.
-C8|Keep AI question rules as individually parseable, account-scoped Google Drive files.
+C8|Keep personal and global AI question rules as individually parseable Google Drive files with folder-scoped ownership.
 
 ## §I
 
@@ -54,7 +54,8 @@ V18|Pull requests execute the production browser shell and packaged Electron ren
 V19|The browser warns before unloading a package whose current changes are not saved.
 V20|AI output is validated as a complete game question before it can replace editor fields.
 V21|Every multiline text input uses the shared non-resizable `Textarea` control.
-V22|Every AI question rule is parsed from its own `.aiquestion` ZIP archive and persisted only through the current Google Drive account.
+V22|Every personal or global AI question rule is parsed from its own `.aiquestion` ZIP archive and persisted through its assigned Google Drive folder.
+V23|Global AI question writes require an allowlisted account and remain confined to the configured shared Drive folder.
 
 ## §T
 
@@ -108,3 +109,4 @@ B40|2026-07-27|AI question card sections each rendered their own background and 
 B41|2026-07-27|AI question cards used a minimum height and unconstrained centered text, so long content stretched cards indefinitely|Fix the card height and clamp left-aligned content with an ellipsis; `docs/specs/unified-shell.md` covers recurrence.
 B42|2026-07-27|The new release-secret guide used an unformatted Markdown table|Apply the repository formatter; no new invariant is needed for this mechanical failure.
 B43|2026-07-27|The signed cross-platform release contract required unavailable signing credentials and blocked publication|V16
+B44|2026-07-27|Global AI question wiring pushed three source files beyond the enforced line limit|Split token storage, Drive package storage, and the collection view; the existing repository workflow test covers recurrence.

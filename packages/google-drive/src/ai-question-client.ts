@@ -23,7 +23,10 @@ const PACKAGE_FOLDER_NAME = 'SCHDK';
 type DriveRequest = (input: string, init?: RequestInit) => Promise<Response>;
 
 export class GoogleDriveAIQuestionStorage implements DriveAIQuestionStorage {
-  constructor(private readonly request: DriveRequest) {}
+  constructor(
+    private readonly request: DriveRequest,
+    private readonly folderId?: string,
+  ) {}
 
   createAIQuestion(value: DriveAIQuestionWrite) {
     return this.uploadAIQuestion(value);
@@ -49,9 +52,9 @@ export class GoogleDriveAIQuestionStorage implements DriveAIQuestionStorage {
     const folderId = await this.ensurePackageFolder();
     const query = new URLSearchParams({
       spaces: 'drive',
-      q: `'${folderId}' in parents and trashed = false and appProperties has { key='${DRIVE_APP_KIND_KEY}' and value='${DRIVE_AI_QUESTION_KIND}' }`,
+      q: `'${folderId}' in parents and trashed = false${this.folderId ? ` and name contains '.aiquestion'` : ` and appProperties has { key='${DRIVE_APP_KIND_KEY}' and value='${DRIVE_AI_QUESTION_KIND}' }`}`,
       fields: 'nextPageToken,files(id,name,modifiedTime,appProperties)',
-      orderBy: 'modifiedTime desc',
+      orderBy: 'name_natural',
       pageSize: '100',
     });
     const files: DriveAIQuestionFile[] = [];
@@ -65,7 +68,7 @@ export class GoogleDriveAIQuestionStorage implements DriveAIQuestionStorage {
       };
       files.push(
         ...(value.files ?? []).flatMap((file) => {
-          const parsed = parseDriveAIQuestionFile(file);
+          const parsed = this.parseFile(file);
           return parsed ? [parsed] : [];
         }),
       );
@@ -94,10 +97,10 @@ export class GoogleDriveAIQuestionStorage implements DriveAIQuestionStorage {
       throw new TypeError('Invalid Google Drive file');
     }
     const response = await this.request(
-      `${DRIVE_API}/files/${encodeURIComponent(fileId)}?fields=id,name,modifiedTime,appProperties${includeSize ? ',size' : ''}`,
+      `${DRIVE_API}/files/${encodeURIComponent(fileId)}?fields=id,name,modifiedTime,appProperties,parents${includeSize ? ',size' : ''}`,
     );
     const value = (await response.json()) as Record<string, unknown>;
-    const file = parseDriveAIQuestionFile(value);
+    const file = this.parseFile(value, true);
     const size = Number(value.size);
     return {
       file,
@@ -148,6 +151,7 @@ export class GoogleDriveAIQuestionStorage implements DriveAIQuestionStorage {
   }
 
   private async ensurePackageFolder() {
+    if (this.folderId) return this.folderId;
     const query = new URLSearchParams({
       spaces: 'drive',
       q: `mimeType = '${DRIVE_FOLDER_MIME_TYPE}' and trashed = false and appProperties has { key='${DRIVE_APP_KIND_KEY}' and value='${DRIVE_FOLDER_KIND}' }`,
@@ -172,5 +176,26 @@ export class GoogleDriveAIQuestionStorage implements DriveAIQuestionStorage {
       throw new Error('Google Drive package folder is unavailable');
     }
     return file.id;
+  }
+
+  private parseFile(
+    value: unknown,
+    requireFolder = false,
+  ): DriveAIQuestionFile | null {
+    if (!this.folderId) return parseDriveAIQuestionFile(value);
+    if (!value || typeof value !== 'object') return null;
+    const file = value as Record<string, unknown>;
+    return isDriveFileId(file.id) &&
+      isDriveAIQuestionName(file.name) &&
+      typeof file.modifiedTime === 'string' &&
+      Number.isFinite(Date.parse(file.modifiedTime)) &&
+      (!requireFolder ||
+        (Array.isArray(file.parents) && file.parents.includes(this.folderId)))
+      ? {
+          id: file.id,
+          name: file.name,
+          modifiedTime: file.modifiedTime,
+        }
+      : null;
   }
 }

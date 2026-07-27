@@ -2,6 +2,8 @@ import { isDriveFileId } from './settings.js';
 
 const AI_QUESTION_EXTENSION = '.aiquestion';
 const MAX_DRIVE_FILE_NAME_LENGTH = 256;
+export const GLOBAL_AI_QUESTION_FOLDER_ID = '1qigJtM0zAQl2Yk8C2xjeragcGDybUVR1';
+export const GLOBAL_AI_QUESTION_ADMIN_EMAILS = ['ccctux@gmail.com'] as const;
 export const DRIVE_AI_QUESTION_KIND = 'ai-question';
 export const DRIVE_AI_QUESTION_MIME_TYPE = 'application/vnd.schdk.ai-question';
 
@@ -29,6 +31,19 @@ export interface DriveAIQuestionStorage {
   deleteAIQuestion(fileId: string): Promise<void>;
   listAIQuestions(): Promise<DriveAIQuestionFile[]>;
   loadAIQuestion(fileId: string): Promise<DriveAIQuestion>;
+}
+
+export interface DriveGlobalAIQuestionStorage {
+  createGlobalAIQuestion(
+    value: DriveAIQuestionWrite,
+  ): Promise<DriveAIQuestionFile>;
+  updateGlobalAIQuestion(
+    fileId: string,
+    value: DriveAIQuestionWrite,
+  ): Promise<DriveAIQuestionFile>;
+  deleteGlobalAIQuestion(fileId: string): Promise<void>;
+  listGlobalAIQuestions(): Promise<DriveAIQuestionFile[]>;
+  loadGlobalAIQuestion(fileId: string): Promise<DriveAIQuestion>;
 }
 
 export function createAIQuestionFilename(name: string) {
@@ -79,4 +94,10 @@ export function parseDriveAIQuestionFile(
         modifiedTime: file.modifiedTime,
       }
     : null;
+}
+
+export function isGlobalAIQuestionAdmin(emailAddress?: string) {
+  return GLOBAL_AI_QUESTION_ADMIN_EMAILS.some(
+    (email) => email === emailAddress?.toLowerCase(),
+  );
 }
