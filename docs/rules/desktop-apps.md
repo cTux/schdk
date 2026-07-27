@@ -58,13 +58,8 @@
   x64, macOS x64/arm64, and Debian x64 artifacts on native runners. Keep
   unsigned artifact names explicit; macOS uploads use ZIP transport for the
   `.app` bundle plus `.pkg`, and Linux uploads use `.deb`.
-- Sign every Windows GitHub Release executable through electron-builder and
-  verify its Authenticode signature before upload. Sign and notarize both macOS
-  app architectures and their PKGs, preserve each app in electron-builder's
-  ZIP, and verify them with codesign, Gatekeeper, pkgutil, and stapler before
-  upload. Local unpacked packaging may remain unsigned.
-- Publish version-matched Windows x64, macOS x64/arm64, and Debian x64 assets in
-  one GitHub Release only after every native packaging job succeeds.
+- Publish exactly one unsigned, version-matched Windows x64 NSIS installer in
+  each GitHub Release after the shared checks and Windows packaging succeed.
 - Include compiled Electron files, the package manifest, required build assets,
   and the matching web build as an extra resource.
 

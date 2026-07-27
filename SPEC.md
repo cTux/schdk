@@ -29,7 +29,7 @@ I.drive|Package and settings persistence|Google Drive
 I.ai|Structured question generation|`@schdk/ai`
 I.aiquestion|Portable AI question rule|`.aiquestion`
 I.pages|Hosted browser application|GitHub Pages
-I.release|Versioned Windows, macOS, and Linux distribution|GitHub Releases
+I.release|Versioned unsigned Windows installer|GitHub Releases
 
 ## §V
 
@@ -48,7 +48,7 @@ V12|Amber primary actions keep their visual treatment stable across pointer hove
 V13|Local package and visual-template imports enforce canonical limits before whole-file reads or ZIP extraction.
 V14|Drive package recents traverse every API result page.
 V15|Browser entry points deny unlisted scripts, connections, frames, objects, and form targets through CSP.
-V16|Windows GitHub Releases contain only Authenticode-valid executables.
+V16|Each GitHub Release contains exactly one unsigned version-matched Windows x64 installer.
 V17|Third-party GitHub Actions execute only from reviewed immutable commit SHAs.
 V18|Pull requests execute the production browser shell and packaged Electron renderer before their required checks pass.
 V19|The browser warns before unloading a package whose current changes are not saved.
@@ -84,7 +84,7 @@ B16|2026-07-26|Local package and visual-template imports allocated complete over
 B17|2026-07-26|Adding a template size guard pushed the shell component past the enforced source-file limit|Use bounded native `File.slice`; the existing repository structure test covers recurrence.
 B18|2026-07-26|Drive package recents stopped after the first 20 files|V14
 B19|2026-07-26|Application CSP restricted only image sources and left executable and network capabilities unconstrained|V15
-B20|2026-07-26|Windows release packaging explicitly disabled executable signing|V16
+B20|2026-07-26|Windows release packaging explicitly disabled executable signing|Superseded by B43.
 B21|2026-07-26|GitHub workflows referenced mutable major-version action tags|V17
 B22|2026-07-26|Pull-request CI built browser and Electron artifacts without executing either runtime|V18
 B23|2026-07-26|Every Drive request failure was treated as lost authorization and hid the mounted tools|Keep authorized sessions mounted through transient Drive failures.
@@ -107,3 +107,4 @@ B39|2026-07-27|The AI question card stylesheet referenced a nonexistent large-fo
 B40|2026-07-27|AI question card sections each rendered their own background and border instead of forming one card|Keep chrome on the outer card and leave its title, centered text, and bottom actions unframed; `docs/specs/unified-shell.md` covers recurrence.
 B41|2026-07-27|AI question cards used a minimum height and unconstrained centered text, so long content stretched cards indefinitely|Fix the card height and clamp left-aligned content with an ellipsis; `docs/specs/unified-shell.md` covers recurrence.
 B42|2026-07-27|The new release-secret guide used an unformatted Markdown table|Apply the repository formatter; no new invariant is needed for this mechanical failure.
+B43|2026-07-27|The signed cross-platform release contract required unavailable signing credentials and blocked publication|V16
