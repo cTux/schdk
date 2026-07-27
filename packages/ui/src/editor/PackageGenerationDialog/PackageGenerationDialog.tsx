@@ -16,6 +16,7 @@ export function PackageGenerationDialog({
   templates,
   packages,
   gamePackage,
+  onGenerationStart,
   onGenerate,
   onGenerated,
   onSelectQuestion,
@@ -59,6 +60,7 @@ export function PackageGenerationDialog({
     setThinking(true);
     setFailed(false);
     try {
+      await onGenerationStart?.();
       for (const [position, index] of targets.entries()) {
         setProgress([position + 1, targets.length]);
         onSelectQuestion(index);

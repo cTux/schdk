@@ -64,6 +64,7 @@ export function createAiQuestionGeneration(
           Number(right.favorite) - Number(left.favorite) ||
           left.name.localeCompare(right.name),
       ),
+    onGenerationStart: bridge?.renewToken?.bind(bridge),
     getPromptPreview: isAdmin
       ? (template, context) => {
           const { system, prompt } = createGameQuestionPrompt(

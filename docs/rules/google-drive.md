@@ -62,8 +62,9 @@
   the popup-based token flow during startup, page refresh, autosave, or other
   background work. While connected, use an active user click to renew the
   current account's token with no more than 20 minutes remaining, and throttle
-  failed renewal attempts to once per five minutes. After token expiry, require
-  explicit reconnection.
+  failed renewal attempts to once per five minutes. Renew immediately from the
+  package-generation confirmation click before sequential generation starts.
+  After token expiry, require explicit reconnection.
 - Desktop authorization uses the system browser, PKCE S256, a random-state
   loopback callback on `127.0.0.1`, and refresh tokens encrypted with Electron
   `safeStorage`. Never persist a refresh token through Linux `basic_text`.
