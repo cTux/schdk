@@ -67,7 +67,7 @@ export const ukrainian = {
       description: 'Створюйте власний макет екрана проведення гри.',
     },
     artificialIntelligence: {
-      label: 'Штучний інтелект',
+      label: 'Правила створення питань',
       description: 'Налаштовуйте правила створення запитань.',
     },
   },
