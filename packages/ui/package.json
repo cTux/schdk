@@ -28,7 +28,8 @@
     "@fortawesome/react-fontawesome": "^3.5.0",
     "@schdk/common": "workspace:*",
     "classnames": "^2.5.1",
-    "react": "catalog:"
+    "react": "catalog:",
+    "react-toastify": "^11.1.0"
   },
   "devDependencies": {
     "@storybook/addon-docs": "10.5.5",

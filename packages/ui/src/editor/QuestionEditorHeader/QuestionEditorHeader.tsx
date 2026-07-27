@@ -1,4 +1,4 @@
-import { faCopy, faPaste } from '@fortawesome/free-solid-svg-icons';
+import { faCopy, faPaste, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import type { GameQuestion } from '@schdk/common';
 import { IconButton } from '../../atoms/IconButton';
 import { useLocalization } from '../../localization';
@@ -9,6 +9,7 @@ export interface QuestionEditorHeaderProps {
   aiGeneration?: AiQuestionGenerationOptions;
   questionNumber: number;
   onGenerated(question: GameQuestion): void;
+  onClear(): void;
   onCopy(): void;
   onPaste(): void;
 }
@@ -17,6 +18,7 @@ export function QuestionEditorHeader({
   aiGeneration,
   questionNumber,
   onGenerated,
+  onClear,
   onCopy,
   onPaste,
 }: QuestionEditorHeaderProps) {
@@ -41,6 +43,11 @@ export function QuestionEditorHeader({
           icon={faPaste}
           label={copy.editor.pasteQuestion}
           onClick={onPaste}
+        />
+        <IconButton
+          icon={faTrashCan}
+          label={copy.shared.remove}
+          onClick={onClear}
         />
       </div>
     </div>

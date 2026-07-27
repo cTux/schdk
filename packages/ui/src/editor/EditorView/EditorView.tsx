@@ -1,7 +1,11 @@
 import './styles.scss';
 
+import { useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
 import { StatusMessage } from '../../atoms/StatusMessage';
 import { TooltipProvider } from '../../atoms/Tooltip';
+import { editorToastCopy } from '../../localization/editor-toast';
+import { useLocalization } from '../../localization';
 import { EditorHeader } from '../EditorHeader';
 import { PackageStart } from '../PackageStart';
 import { QuestionEditor } from '../QuestionEditor';
@@ -42,6 +46,42 @@ export function EditorView({
   onSwapQuestions,
   onTitleChange,
 }: EditorViewProps) {
+  const { locale } = useLocalization();
+  const toastCopy = editorToastCopy[locale];
+
+  useEffect(() => {
+    if (!hasPackage) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (!event.ctrlKey || event.altKey || event.shiftKey || event.repeat) {
+        return;
+      }
+      const target = event.target;
+      if (
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement ||
+        (target instanceof HTMLElement && target.isContentEditable)
+      ) {
+        return;
+      }
+
+      const action =
+        event.key.toLowerCase() === 'c'
+          ? onCopyQuestion
+          : event.key.toLowerCase() === 'v'
+            ? onPasteQuestion
+            : undefined;
+      if (!action) return;
+
+      event.preventDefault();
+      action();
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [hasPackage, onCopyQuestion, onPasteQuestion]);
+
   return (
     <TooltipProvider>
       <main className="editor-app">
@@ -98,6 +138,17 @@ export function EditorView({
           />
         </div>
         {message && <StatusMessage>{message}</StatusMessage>}
+        <ToastContainer
+          aria-label={toastCopy.notifications}
+          autoClose={2500}
+          closeButton={false}
+          closeOnClick
+          limit={2}
+          newestOnTop
+          pauseOnHover
+          position="bottom-right"
+          toastClassName="editor-toast"
+        />
       </main>
     </TooltipProvider>
   );

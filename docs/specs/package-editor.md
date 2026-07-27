@@ -18,8 +18,12 @@ without losing in-progress work.
 - **EDT-4:** Authors can add, replace, and remove text or validated image
   handouts and the two between-round audio files. Invalid handouts and
   oversized audio selections never mutate package state.
-- **EDT-5:** Authors can copy a complete question as JSON and replace another
-  question from parsed clipboard JSON after confirmation.
+- **EDT-5:** Authors can copy a complete question as JSON, replace another
+  question from parsed clipboard JSON after confirmation, and clear every
+  field of the selected question. `Ctrl+C` and `Ctrl+V` invoke the same copy
+  and paste actions while the editor is open and no editable field has focus.
+  A successful copy or paste shows a localized site-themed toast; cancellation
+  or failure does not.
 - **EDT-6:** Dragging one question number onto another swaps the complete
   question records and keeps the moved question selected.
 - **EDT-7:** Question navigation shows readiness, unresolved remarks, and a
@@ -100,3 +104,9 @@ without losing in-progress work.
     question packages. Observe each target slot selected in order, every
     generated record replaced completely, and prior successful results retained
     when a later request fails.
+13. Clear a populated question from its trailing heading action, then use
+    `Ctrl+C` and `Ctrl+V` anywhere in the open editor and observe the same copy
+    and confirmed paste behavior as the heading actions. Confirm each
+    successful action shows its matching toast and cancellation or failure
+    shows none. Focus each editable field and confirm the shortcuts keep the
+    browser's native field-level copy and paste behavior instead.

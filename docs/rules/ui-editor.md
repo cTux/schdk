@@ -10,9 +10,13 @@
 - Place the optional image-or-text handout before question text. Show no image
   filename, put remove below the image thumbnail or text field, and open a
   100–400% zoomable, pannable full-size modal from the thumbnail.
-- Put Font Awesome copy and paste actions beside the question heading. Copy all
-  question fields as JSON; confirm before parsing clipboard JSON and replacing
-  the selected question.
+- Put Font Awesome copy, paste, and trailing clear actions beside the question
+  heading. Copy all question fields as JSON; confirm before parsing clipboard
+  JSON and replacing the selected question. While the editor is open,
+  `Ctrl+C` and `Ctrl+V` invoke those same question actions only when no input,
+  textarea, select, or editable element has focus. After a successful copy or
+  paste, show the corresponding localized `react-toastify` success toast styled
+  with the current SCHDK theme.
 - Put the AI generation icon beside the question heading. Disable it when no
   API key is configured and explain the disabled state with the shared custom
   tooltip. Its modal dims the background, selects an enabled `AIQuestion`
