@@ -21,7 +21,8 @@ without losing in-progress work.
 - **EDT-5:** Authors can copy a complete question as JSON, replace another
   question from parsed clipboard JSON after confirmation, and clear every
   field of the selected question. `Ctrl+C` and `Ctrl+V` invoke the same copy
-  and paste actions while the editor is open.
+  and paste actions while the editor is open. A successful copy or paste shows
+  a localized site-themed toast; cancellation or failure does not.
 - **EDT-6:** Dragging one question number onto another swaps the complete
   question records and keeps the moved question selected.
 - **EDT-7:** Question navigation shows readiness, unresolved remarks, and a
@@ -104,4 +105,6 @@ without losing in-progress work.
     when a later request fails.
 13. Clear a populated question from its trailing heading action, then use
     `Ctrl+C` and `Ctrl+V` anywhere in the open editor and observe the same copy
-    and confirmed paste behavior as the heading actions.
+    and confirmed paste behavior as the heading actions. Confirm each
+    successful action shows its matching toast and cancellation or failure
+    shows none.

@@ -128,6 +128,7 @@ export function App({
     confirm,
     copy,
     gamePackage,
+    locale,
     selectedIndex,
     textOptions,
     setGamePackage,

@@ -3,8 +3,11 @@ import {
   type GamePackage,
   type GameQuestion,
 } from '@schdk/common';
-import type { EditorSaveStatus } from '@schdk/ui/editor';
-import type { LocalizationCopy } from '@schdk/ui/localization';
+import {
+  showQuestionActionToast,
+  type EditorSaveStatus,
+} from '@schdk/ui/editor';
+import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
 import type { EditorTextOptions } from '@schdk/ui/options';
 import type { Dispatch, SetStateAction } from 'react';
 import { getSelectedIndexAfterSwap, swapQuestions } from './question-order';
@@ -14,6 +17,7 @@ interface QuestionActionsOptions {
   confirm(message: string): Promise<boolean>;
   copy: LocalizationCopy;
   gamePackage: GamePackage;
+  locale: AppLocale;
   selectedIndex: number;
   textOptions: EditorTextOptions;
   setGamePackage: Dispatch<SetStateAction<GamePackage>>;
@@ -26,6 +30,7 @@ export function useQuestionActions({
   confirm,
   copy,
   gamePackage,
+  locale,
   selectedIndex,
   textOptions,
   setGamePackage,
@@ -99,6 +104,7 @@ export function useQuestionActions({
       await navigator.clipboard.writeText(
         JSON.stringify(gamePackage.questions[selectedIndex], null, 2),
       );
+      showQuestionActionToast('copied', locale);
     } catch {
       setMessage(copy.editor.copyFailed);
     }
@@ -118,6 +124,7 @@ export function useQuestionActions({
         ),
       }));
       setSaveStatus('pending');
+      showQuestionActionToast('pasted', locale);
     } catch {
       setMessage(copy.editor.pasteFailed);
     }

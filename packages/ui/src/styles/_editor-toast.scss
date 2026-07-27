@@ -1,0 +1,17 @@
+@use './tokens' as *;
+
+.editor-app {
+  --toastify-color-success: #{$success};
+  --toastify-icon-color-success: #{$success};
+  --toastify-toast-background: #{$surface-raised};
+  --toastify-toast-bd-radius: #{$radius-panel};
+  --toastify-toast-shadow: #{$shadow-overlay};
+  --toastify-text-color-light: #{$text};
+  --toastify-font-family: inherit;
+
+  .editor-toast {
+    border: 1px solid $border;
+    color: $text;
+    backdrop-filter: blur(16px);
+  }
+}

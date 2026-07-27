@@ -1,8 +1,11 @@
 import './styles.scss';
 
 import { useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
 import { StatusMessage } from '../../atoms/StatusMessage';
 import { TooltipProvider } from '../../atoms/Tooltip';
+import { editorToastCopy } from '../../localization/editor-toast';
+import { useLocalization } from '../../localization';
 import { EditorHeader } from '../EditorHeader';
 import { PackageStart } from '../PackageStart';
 import { QuestionEditor } from '../QuestionEditor';
@@ -43,6 +46,9 @@ export function EditorView({
   onSwapQuestions,
   onTitleChange,
 }: EditorViewProps) {
+  const { locale } = useLocalization();
+  const toastCopy = editorToastCopy[locale];
+
   useEffect(() => {
     if (!hasPackage) return;
 
@@ -123,6 +129,17 @@ export function EditorView({
           />
         </div>
         {message && <StatusMessage>{message}</StatusMessage>}
+        <ToastContainer
+          aria-label={toastCopy.notifications}
+          autoClose={2500}
+          closeButton={false}
+          closeOnClick
+          limit={2}
+          newestOnTop
+          pauseOnHover
+          position="bottom-right"
+          toastClassName="editor-toast"
+        />
       </main>
     </TooltipProvider>
   );

@@ -13,7 +13,9 @@
 - Put Font Awesome copy, paste, and trailing clear actions beside the question
   heading. Copy all question fields as JSON; confirm before parsing clipboard
   JSON and replacing the selected question. While the editor is open,
-  `Ctrl+C` and `Ctrl+V` invoke those same question actions.
+  `Ctrl+C` and `Ctrl+V` invoke those same question actions. After a successful
+  copy or paste, show the corresponding localized `react-toastify` success
+  toast styled with the current SCHDK theme.
 - Put the AI generation icon beside the question heading. Disable it when no
   API key is configured and explain the disabled state with the shared custom
   tooltip. Its modal dims the background, selects an enabled `AIQuestion`
