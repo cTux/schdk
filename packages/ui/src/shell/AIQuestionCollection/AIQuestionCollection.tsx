@@ -7,6 +7,7 @@ import {
 } from '../../atoms/ConfirmationDialog';
 import { useLocalization } from '../../localization';
 import { AIQuestionCard } from '../AIQuestionCard';
+import classNames from 'classnames';
 import type { AIQuestionCollectionProps } from './types';
 
 export function AIQuestionCollection({
@@ -26,7 +27,7 @@ export function AIQuestionCollection({
   const deleteDialog = useConfirmationDialog();
 
   return (
-    <section className="ai-question-collection">
+    <section className="ai-question-collection" aria-busy={loading}>
       <header>
         <h2>{title}</h2>
         {addLabel && onAdd && (
@@ -35,7 +36,27 @@ export function AIQuestionCollection({
           </Button>
         )}
       </header>
-      {questions.length ? (
+      {loading ? (
+        <div className="ai-question-list">
+          {Array.from({ length: 2 }, (_, index) => (
+            <div
+              className={classNames('ai-question-card', 'ai-question-skeleton')}
+              aria-hidden="true"
+              key={index}
+            >
+              <span className="ai-question-skeleton-title" />
+              <span className="ai-question-skeleton-line" />
+              <span
+                className={classNames(
+                  'ai-question-skeleton-line',
+                  'ai-question-skeleton-line-short',
+                )}
+              />
+              <span className="ai-question-skeleton-actions" />
+            </div>
+          ))}
+        </div>
+      ) : questions.length ? (
         <div className="ai-question-list">
           {questions.map((question, index) => (
             <AIQuestionCard
@@ -62,7 +83,7 @@ export function AIQuestionCollection({
           ))}
         </div>
       ) : (
-        !loading && <p className="ai-question-empty">{emptyLabel}</p>
+        <p className="ai-question-empty">{emptyLabel}</p>
       )}
       <ConfirmationDialog {...deleteDialog.dialogProps} />
     </section>

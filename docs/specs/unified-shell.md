@@ -41,11 +41,12 @@ package authoring, hosting, settings, and account state.
   description, and applicable favorite, edit, and delete actions in a compact
   layout without enable/disable controls or large internal gaps. The localized
   add action for each editable collection appears beside that collection's
-  heading. Name and description are required before saving, deletion requires
-  confirmation, and every change persists as the rule's `.aiquestion` ZIP file
-  in Google Drive. A global-rule form shows administrators a shared checkbox
-  beside its title; selecting it makes that rule the only global rule applied
-  to every question generation.
+  heading. Account and global collections independently show card skeletons
+  while their rules load. Name and description are required before saving,
+  deletion requires confirmation, and every change persists as the rule's
+  `.aiquestion` ZIP file in Google Drive. A global-rule form shows
+  administrators a shared checkbox beside its title; selecting it makes that
+  rule the only global rule applied to every question generation.
 - **SHL-12:** Artificial intelligence settings expose separate provider and
   model dropdowns plus a user API key. The dropdowns use the models.dev catalog
   for the OpenAI, Anthropic, and Google providers supported by `@schdk/ai`,
@@ -92,6 +93,8 @@ package authoring, hosting, settings, and account state.
    each sorted by name. Confirm cards show only name, description, and
    applicable favorite, edit, and delete actions without large internal gaps.
    Confirm each available add action sits beside its collection heading.
+   Reload and confirm both collections show card skeletons until their
+   respective rules finish loading.
    Verify a regular account cannot mutate global rules and an allowlisted
    administrator can add, edit, and delete them. As an administrator, select a
    general rule and verify selecting another clears the previous selection.
