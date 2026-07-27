@@ -4,6 +4,7 @@ import { createOpenAI } from '@ai-sdk/openai';
 import { createProviderRegistry, generateText, jsonSchema, Output } from 'ai';
 import {
   parseGameQuestion,
+  QUESTION_TYPE_CONFIG,
   type AIQuestion,
   type GameQuestion,
 } from '@schdk/common';
@@ -56,7 +57,8 @@ const generatedQuestionSchema = jsonSchema<GameQuestion>(
         items: { type: 'string' },
         minItems: 1,
         maxItems: 3,
-        description: 'Required question text parts.',
+        description:
+          'Required question text parts: 1 for standard, 2 for blitz-2x30, and 3 for blitz-3x20.',
       },
       answer: { type: 'string', description: 'Required main answer.' },
       answerComment: {
@@ -128,10 +130,19 @@ const generatedQuestionSchema = jsonSchema<GameQuestion>(
         if (!generated.answerComment.trim()) {
           throw new Error('Answer comment is required');
         }
+        const partCount = QUESTION_TYPE_CONFIG[generated.type].partCount;
+        const questionParts =
+          generated.questionParts.length > partCount
+            ? [
+                ...generated.questionParts.slice(0, partCount - 1),
+                generated.questionParts.slice(partCount - 1).join('\n\n'),
+              ]
+            : generated.questionParts;
         return {
           success: true,
           value: parseGameQuestion({
             ...generated,
+            questionParts,
             ...(generated.comment === null ? { comment: undefined } : {}),
             ...(generated.handout === null ? { handout: undefined } : {}),
             ...(generated.hostNotes === null ? { hostNotes: undefined } : {}),

@@ -126,3 +126,4 @@ B52|2026-07-27|Generated questions were merged into existing records, leaving st
 B53|2026-07-27|The shared rules page width excluded its own padding and overflowed narrow viewports|Keep the page border-box sized; `docs/specs/unified-shell.md` covers recurrence.
 B54|2026-07-27|A redundant editor action label pushed the Ukrainian locale module past the enforced source-file limit|Reuse the existing shared remove label; the repository workflow test covers recurrence.
 B55|2026-07-27|Global editor clipboard hotkeys intercepted native copy and paste while an editable field had focus|Ignore keyboard events from input, textarea, select, and contenteditable targets; `docs/specs/package-editor.md` covers recurrence.
+B56|2026-07-28|The provider schema allowed more question parts than the generated question type accepted locally|V20
