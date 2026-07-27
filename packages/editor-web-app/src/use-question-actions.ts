@@ -44,6 +44,17 @@ export function useQuestionActions({
     setMessage('');
   }
 
+  function replaceQuestion(index: number, question: GameQuestion) {
+    setGamePackage((current) => ({
+      ...current,
+      questions: current.questions.map((item, itemIndex) =>
+        itemIndex === index ? question : item,
+      ),
+    }));
+    setSaveStatus('pending');
+    setMessage('');
+  }
+
   const correct = (
     enabled: boolean,
     value: string,
@@ -177,6 +188,7 @@ export function useQuestionActions({
     correctWrongAnswer: (index: number) =>
       correctListedAnswer('wrongAnswers', index),
     pasteQuestion,
+    replaceQuestion,
     swapQuestionPositions,
     updateQuestion,
   };

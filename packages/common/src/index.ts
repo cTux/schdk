@@ -7,6 +7,16 @@ import {
 } from './game-question.js';
 
 export {
+  MAX_AI_QUESTIONS_PACKAGE_BYTES,
+  parseAIQuestionsPackage,
+  parseAIQuestionsPackageArchive,
+  serializeAIQuestionsPackage,
+} from './ai-questions-package.js';
+export type {
+  AIQuestionsPackage,
+  AIQuestionsPackageQuestion,
+} from './ai-questions-package.js';
+export {
   MAX_AI_QUESTION_BYTES,
   parseAIQuestion,
   parseAIQuestionArchive,

@@ -21,7 +21,9 @@ Project-wide goals, constraints, invariants, and bug history live in
 - Update the affected specification whenever shipped behavior changes.
 - Keep requirements observable and platform-neutral unless a platform is part
   of the feature.
-- Keep format details canonical in [`../GAME_PACKAGE.md`](../GAME_PACKAGE.md);
-  feature specifications link to that contract instead of copying its schema.
+- Keep format details canonical in [`../GAME_PACKAGE.md`](../GAME_PACKAGE.md),
+  [`../AI_QUESTION.md`](../AI_QUESTION.md), and
+  [`../AI_QUESTION_PACKAGE.md`](../AI_QUESTION_PACKAGE.md); feature
+  specifications link to those contracts instead of copying their schemas.
 - Keep architecture, security, and contributor workflow in
   [`../RULES.md`](../RULES.md), not in product requirements.

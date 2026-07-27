@@ -36,6 +36,7 @@ export function EditorView({
   onOpenRecentPackage,
   onPasteQuestion,
   onQuestionChange,
+  onQuestionGenerated,
   onQuestionTextBlur,
   onSelectQuestion,
   onSwapQuestions,
@@ -51,6 +52,10 @@ export function EditorView({
           showValidation={showValidation}
           onBack={onBack}
           onTitleChange={onTitleChange}
+          aiGeneration={aiGeneration}
+          gamePackage={gamePackage}
+          onQuestionGenerated={onQuestionGenerated}
+          onSelectQuestion={onSelectQuestion}
         />
         <PackageStart
           hidden={hasPackage}
@@ -79,6 +84,9 @@ export function EditorView({
             showValidation={showValidation}
             onAddHandout={onAddHandout}
             onChange={onQuestionChange}
+            onGenerated={(question) =>
+              onQuestionGenerated(selectedIndex, question)
+            }
             onAnswerBlur={onAnswerBlur}
             onAnswerCommentBlur={onAnswerCommentBlur}
             onAlternativeAnswerBlur={onAlternativeAnswerBlur}

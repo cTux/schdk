@@ -38,6 +38,8 @@
 - Generate questions through the current Drive bridge. The bridge loads the
   saved key only for the selected provider call and returns a canonical
   validated game question, never the key.
+- Keep personal AI question packages in Drive as `.aiquestionpackage` archives
+  and expose their page immediately after question-generation rules.
 - Show a localized Google login screen before mounting the unified tools.
   Authentication is mandatory on web and desktop; reconnect before restoring
   access after authorization expires.

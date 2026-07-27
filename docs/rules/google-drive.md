@@ -23,6 +23,10 @@
   the same `SCHDK` Drive folder. Mark it with private app identity metadata,
   keep its filename synchronized as the filesystem-safe rule name plus
   `.aiquestion`, and parse its archive through `@schdk/common` before use.
+- Store every personal AI question package as its own visible
+  `.aiquestionpackage` ZIP archive in the same `SCHDK` Drive folder. Mark it
+  with private app identity metadata, synchronize its filename with its
+  display name, and parse it through `@schdk/common` before use.
 - Load global AI question rules from the fixed shared Drive folder configured
   in `@schdk/google-drive`, after the current account's rules. Keep the admin
   email allowlist centralized and unobfuscated there; Drive folder permissions
@@ -39,10 +43,10 @@
   to the same Drive file ID. Editor and Host recents list and load only those
   Drive packages across every Drive API result page. Never fall back to browser
   storage or desktop paths.
-- List, create, update, and delete AI question rules through the active
-  account's Drive adapter. Route global rules through the same narrow adapter,
-  require an allowlisted account for global writes, and never persist either
-  collection in browser local storage.
+- List, create, update, and delete AI question rules and personal AI question
+  packages through the active account's Drive adapter. Route global rules
+  through the same narrow adapter, require an allowlisted account for global
+  writes, and never persist these collections in browser local storage.
 - Reject package metadata above the canonical package-size limit before
   downloading its media body.
 - Treat a local `.schdk` selection only as an import: validate it, upload it to
@@ -64,9 +68,10 @@
   loopback callback on `127.0.0.1`, and refresh tokens encrypted with Electron
   `safeStorage`. Never persist a refresh token through Linux `basic_text`.
 - Expose only status, connect, disconnect, settings, AI-key status/write,
-  validated AI generation, and validated package create/update/delete/list/load
-  operations through Electron IPC. Tokens, stored AI keys, and generic
-  authenticated requests never cross into the renderer.
+  validated AI generation, and validated game-package, AI-question-rule, and
+  AI-question-package create/update/delete/list/load operations through
+  Electron IPC. Tokens, stored AI keys, and generic authenticated requests
+  never cross into the renderer.
 - Bundle the production Web application client ID in the browser application.
   Allow `VITE_GOOGLE_WEB_CLIENT_ID` to override it for development.
 - Bundle the production Desktop application client ID and installed-app client

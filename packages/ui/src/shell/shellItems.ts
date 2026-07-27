@@ -3,6 +3,7 @@ import {
   faBrain,
   faHouse,
   faObjectGroup,
+  faLayerGroup,
   faPen,
   faPlay,
 } from '@fortawesome/free-solid-svg-icons';
@@ -14,6 +15,7 @@ export type ShellViewName =
   | 'editor'
   | 'visualEditor'
   | 'artificialIntelligence'
+  | 'packageRules'
   | 'options';
 
 export interface ShellItem {
@@ -40,6 +42,11 @@ export function getShellContent(copy: LocalizationCopy) {
       id: 'artificialIntelligence',
       icon: faBrain,
       ...shell.artificialIntelligence,
+    },
+    {
+      id: 'packageRules',
+      icon: faLayerGroup,
+      ...shell.packageRules,
     },
     { id: 'editor', icon: faPen, ...shell.editor },
     { id: 'host', icon: faPlay, ...shell.host },

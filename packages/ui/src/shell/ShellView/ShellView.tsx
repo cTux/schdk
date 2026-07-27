@@ -17,7 +17,8 @@ import type {
 import { VisualEditor } from '../../visual-editor/VisualEditor';
 import { TooltipProvider } from '../../atoms/Tooltip';
 import { AIQuestionsPage } from '../AIQuestionsPage';
-import type { AIQuestion } from '@schdk/common';
+import { AIQuestionsPackagesPage } from '../AIQuestionsPackagesPage';
+import type { AIQuestion, AIQuestionsPackage } from '@schdk/common';
 
 export type { ShellViewName } from '../shellItems';
 
@@ -37,6 +38,14 @@ export interface ShellViewProps {
     removeGlobalQuestion(index: number): Promise<boolean>;
     updateQuestion(index: number, question: AIQuestion): Promise<boolean>;
     updateGlobalQuestion(index: number, question: AIQuestion): Promise<boolean>;
+  };
+  aiQuestionsPackages: {
+    packages: AIQuestionsPackage[];
+    failed: boolean;
+    loading: boolean;
+    addPackage(item: AIQuestionsPackage): Promise<boolean>;
+    removePackage(index: number): Promise<boolean>;
+    updatePackage(index: number, item: AIQuestionsPackage): Promise<boolean>;
   };
   editorApp: ReactNode;
   hostApp: ReactNode;
@@ -66,6 +75,7 @@ export interface ShellViewProps {
 export function ShellView({
   aiOptions,
   aiQuestions,
+  aiQuestionsPackages,
   editorApp,
   hostApp,
   loadedApps,
@@ -143,6 +153,20 @@ export function ShellView({
               onRemoveGlobal={aiQuestions.removeGlobalQuestion}
               onUpdate={aiQuestions.updateQuestion}
               onUpdateGlobal={aiQuestions.updateGlobalQuestion}
+            />
+          </div>
+          <div hidden={view !== 'packageRules'}>
+            <AIQuestionsPackagesPage
+              packages={aiQuestionsPackages.packages}
+              questionRules={[
+                ...aiQuestions.questions,
+                ...aiQuestions.globalQuestions,
+              ].filter((question) => question.enabled && !question.generalRule)}
+              failed={aiQuestionsPackages.failed}
+              loading={aiQuestionsPackages.loading}
+              onAdd={aiQuestionsPackages.addPackage}
+              onRemove={aiQuestionsPackages.removePackage}
+              onUpdate={aiQuestionsPackages.updatePackage}
             />
           </div>
           {loadedApps.host && (

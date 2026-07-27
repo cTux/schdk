@@ -53,6 +53,14 @@ without losing in-progress work.
 - **EDT-17:** Every multiline package and generation field uses the same
   non-resizable shared control with dropdown-aligned borders, surfaces, hover,
   focus, and disabled states.
+- **EDT-18:** AI generation requires a non-empty answer comment. An AI icon
+  beside the editable package title opens a modal that selects missing
+  questions or the whole package and one or more enabled AI question packages.
+  Only a missing question part or answer makes a question missing; optional
+  fields do not.
+  It selects each target slot behind the modal, waits for a validated provider
+  response, replaces the complete question record, and continues sequentially.
+  A failed request keeps questions generated before the failure.
 
 ## Invariants
 
@@ -88,3 +96,7 @@ without losing in-progress work.
 11. Open generation as an allowlisted administrator, expand the prompt panel,
     and confirm its read-only text follows changes to the selected template and
     context. Confirm the control is absent for other accounts.
+12. Generate only missing slots and then the whole package from one or more AI
+    question packages. Observe each target slot selected in order, every
+    generated record replaced completely, and prior successful results retained
+    when a later request fails.

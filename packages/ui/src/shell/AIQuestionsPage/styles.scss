@@ -1,6 +1,7 @@
 @use '../../styles/tokens' as *;
 
 .ai-questions-page {
+  box-sizing: border-box;
   width: 100%;
   padding: clamp(40px, 7vh, 72px) clamp(20px, 4vw, 64px);
 }

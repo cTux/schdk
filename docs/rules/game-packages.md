@@ -23,3 +23,6 @@ compatibility contract. Do not duplicate its schema here.
 - Any format, validation, serialization, or compatibility change must update
   `@schdk/common` and `docs/GAME_PACKAGE.md` together. Add related round-trip
   and malformed-input tests only through `$schdk-add-missing-tests`.
+- Store each AI question package as a ZIP `.aiquestionpackage` containing the
+  canonical `ai-questions-package.json` entry. Parse and serialize it only
+  through `@schdk/common`, and keep `docs/AI_QUESTION_PACKAGE.md` synchronized.

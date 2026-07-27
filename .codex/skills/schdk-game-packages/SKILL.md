@@ -1,6 +1,6 @@
 ---
 name: schdk-game-packages
-description: Maintain or diagnose the SCHDK .schdk and .aiquestion file contracts in @schdk/common. Use for game-package or AI-question types, ZIP encoding, parsing, serialization, readiness validation, clipboard question JSON, compatibility, malformed files, or portable-format documentation changes.
+description: Maintain or diagnose the SCHDK .schdk, .aiquestion, and .aiquestionpackage file contracts in @schdk/common. Use for game-package, AI-question, or AI-question-package types, ZIP encoding, parsing, serialization, readiness validation, clipboard question JSON, compatibility, malformed files, or portable-format documentation changes.
 ---
 
 # SCHDK Game Packages
@@ -18,6 +18,11 @@ description: Maintain or diagnose the SCHDK .schdk and .aiquestion file contract
    `docs/AI_QUESTION.md` synchronized. Require a ZIP archive containing the
    canonical `ai-question.json` entry; do not duplicate its parser in Drive or
    UI consumers.
+6. For `.aiquestionpackage` changes, keep
+   `packages/common/src/ai-questions-package.ts` and
+   `docs/AI_QUESTION_PACKAGE.md` synchronized. Require a ZIP archive containing
+   the canonical `ai-questions-package.json` entry and validate it before
+   Drive-backed use.
 
 ## Checks
 

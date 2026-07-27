@@ -17,6 +17,7 @@ C5|Keep user-visible unified application copy localized in Ukrainian and English
 C6|Keep unfinished packages editable and recoverable without silent destination changes.
 C7|Keep user AI API keys in separate, account-scoped Google Drive app data and out of synchronized settings or local browser persistence.
 C8|Keep personal and global AI question rules as individually parseable Google Drive files with folder-scoped ownership.
+C9|Keep personal AI question packages as individually parseable Google Drive files and out of browser-local persistence.
 
 ## §I
 
@@ -28,6 +29,7 @@ I.desktop|Windows, macOS, and Linux application|`@schdk/all-desktop-app`
 I.drive|Package and settings persistence|Google Drive
 I.ai|Structured question generation|`@schdk/ai`
 I.aiquestion|Portable AI question rule|`.aiquestion`
+I.aiquestionpackage|Portable AI question package|`.aiquestionpackage`
 I.pages|Hosted browser application|GitHub Pages
 I.release|Versioned unsigned Windows installer|GitHub Releases
 
@@ -58,6 +60,7 @@ V22|Every personal or global AI question rule is parsed from its own `.aiquestio
 V23|Global AI question writes require an allowlisted account and remain confined to the configured shared Drive folder.
 V24|At most one global AI question rule is marked as general, only an allowlisted administrator can change it, and generation applies it to every selected template.
 V25|Only an allowlisted administrator can preview the exact system and user prompt text used for AI question generation.
+V26|Every personal AI question package is parsed from its own `.aiquestionpackage` ZIP archive before use and persisted through the current account's Google Drive folder.
 
 ## §T
 
@@ -119,3 +122,5 @@ B48|2026-07-27|The form's generic label layout overrode the general-rule switch 
 B49|2026-07-27|General-rule cards exposed the ordinary favorite action and the form switch floated awkwardly beside its heading|Show a disabled lock on general-rule cards and place the editable switch in its own settings row as specified by `docs/specs/unified-shell.md`.
 B50|2026-07-27|The prompt-panel state class used a BEM separator outside the enforced selector naming contract|Use the existing kebab-case selector convention; no new invariant is needed for this mechanical failure.
 B51|2026-07-27|The prompt-panel conditional class bypassed the repository's component composition contract|Use the existing `classNames` pattern; the repository workflow test covers recurrence.
+B52|2026-07-27|Generated questions were merged into existing records, leaving stale optional fields when the provider omitted them|V20
+B53|2026-07-27|The shared rules page width excluded its own padding and overflowed narrow viewports|Keep the page border-box sized; `docs/specs/unified-shell.md` covers recurrence.

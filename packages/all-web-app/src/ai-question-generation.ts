@@ -1,4 +1,4 @@
-import type { AIQuestion } from '@schdk/common';
+import type { AIQuestion, AIQuestionsPackage } from '@schdk/common';
 import {
   createGameQuestionPrompt,
   type GameQuestionGenerationRequest,
@@ -8,6 +8,7 @@ import type { AiQuestionGenerationOptions } from '@schdk/ui/editor';
 import type { AppLocale } from '@schdk/ui/localization';
 import type { AiOptions } from '@schdk/ui/options';
 import { useAIQuestions } from './ai-question-storage';
+import { useAIQuestionsPackages } from './ai-questions-package-storage';
 import type {
   GoogleDriveBridge,
   GoogleDriveConnection,
@@ -18,6 +19,7 @@ export function createAiQuestionGeneration(
   bridge: GoogleDriveBridge | null,
   options: AiOptions,
   templates: AIQuestion[],
+  packages: AIQuestionsPackage[],
   locale: AppLocale,
   isAdmin: boolean,
   generalRule?: AIQuestion,
@@ -48,8 +50,15 @@ export function createAiQuestionGeneration(
 
   return {
     apiKeyConfigured: options.apiKeyConfigured,
+    packages: packages
+      .filter((item) => item.enabled)
+      .sort(
+        (left, right) =>
+          Number(right.favorite) - Number(left.favorite) ||
+          left.name.localeCompare(right.name),
+      ),
     templates: templates
-      .filter((template) => !template.generalRule)
+      .filter((template) => template.enabled && !template.generalRule)
       .sort(
         (left, right) =>
           Number(right.favorite) - Number(left.favorite) ||
@@ -82,6 +91,7 @@ export function useAiQuestionTools(
       ? connection.account.emailAddress
       : undefined;
   const aiQuestionCollections = useAIQuestions(bridge, accountId);
+  const aiQuestionsPackages = useAIQuestionsPackages(bridge, accountId);
   const aiQuestions = {
     ...aiQuestionCollections.personal,
     globalQuestions: aiQuestionCollections.global.questions,
@@ -99,10 +109,12 @@ export function useAiQuestionTools(
   return {
     ai,
     aiQuestions,
+    aiQuestionsPackages,
     aiGeneration: createAiQuestionGeneration(
       bridge,
       ai.options,
       [...aiQuestions.questions, ...aiQuestions.globalQuestions],
+      aiQuestionsPackages.packages,
       locale,
       isGlobalAIQuestionAdmin(accountId),
       aiQuestions.globalQuestions.find((question) => question.generalRule),
