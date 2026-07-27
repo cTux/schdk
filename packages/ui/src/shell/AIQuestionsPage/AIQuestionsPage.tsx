@@ -114,22 +114,22 @@ export function AIQuestionsPage({
                 ? copy.aiQuestions.newQuestion
                 : copy.aiQuestions.editQuestion}
             </h2>
-            {editingGlobal && isGlobalAdmin && (
-              <label>
-                {copy.aiQuestions.generalRule}
-                <Checkbox
-                  checked={draft.generalRule}
-                  disabled={formSaving}
-                  onChange={(event) =>
-                    setDraft((current) => ({
-                      ...current,
-                      generalRule: event.target.checked,
-                    }))
-                  }
-                />
-              </label>
-            )}
           </div>
+          {editingGlobal && isGlobalAdmin && (
+            <label className="ai-question-general-rule">
+              <span>{copy.aiQuestions.generalRule}</span>
+              <Checkbox
+                checked={draft.generalRule}
+                disabled={formSaving}
+                onChange={(event) =>
+                  setDraft((current) => ({
+                    ...current,
+                    generalRule: event.target.checked,
+                  }))
+                }
+              />
+            </label>
+          )}
           <label>
             {copy.aiQuestions.name}
             <Input
