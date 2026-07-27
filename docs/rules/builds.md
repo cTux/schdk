@@ -18,8 +18,12 @@
   build sequentially.
 - Do not edit or commit `node_modules`, `dist`, `.turbo`, `.playwright-cli`,
   logs, coverage, or TypeScript build-info files.
-- Keep Electron output Windows-compatible and web output usable through
-  relative `file:` URLs.
+- Keep Electron output native to Windows, macOS, and Linux while web output
+  remains usable through relative `file:` URLs.
+- Run the manually dispatched `Desktop builds` workflow on native Windows,
+  macOS, and Ubuntu runners after one shared verification job. Upload unsigned
+  Windows x64, macOS x64/arm64, and Debian x64 artifacts separately; never
+  attach them to a GitHub Release.
 - Deploy `@schdk/all-web-app` to GitHub Pages after every push to `main` through
   the official Pages artifact and deployment actions.
 - In pull requests, load the production unified web shell in headless Chrome

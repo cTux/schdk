@@ -24,6 +24,10 @@
   renderer. The Electron check must also confirm the preload bridge is exposed.
 - Build workspace dependencies before testing their consumers so fresh clones
   can resolve packages that intentionally export compiled output.
+- For cross-platform desktop packaging, verify native unpacked output and each
+  requested installer or package before artifact upload. Inspect DEB identity
+  and maintainer fields with `dpkg-deb`; preserve macOS `.app` bundles through
+  electron-builder's ZIP target.
 - Before committing, run `pnpm fmt:check`, `pnpm lint`, `pnpm typecheck`,
   `pnpm test`, and affected builds. Run root `pnpm build` for complete workspace
   build verification.

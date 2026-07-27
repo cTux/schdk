@@ -1,6 +1,6 @@
 # Cross-platform desktop builds
 
-Status: proposed
+Status: partially implemented
 
 Related documents:
 
@@ -56,9 +56,9 @@ Windows packaging design:
   },
   "scripts": {
     "build": "tsc && electron-builder --dir",
-    "build:win": "tsc && electron-builder --win --x64",
-    "build:mac": "tsc && electron-builder --mac --x64 --arm64",
-    "build:linux": "tsc && electron-builder --linux --x64"
+    "package:win": "electron-builder --win --x64",
+    "package:mac": "electron-builder --mac --x64 --arm64",
+    "package:linux": "electron-builder --linux --x64"
   },
   "build": {
     "electronLanguages": ["uk", "en-US"],
@@ -124,11 +124,11 @@ from `packages/all-desktop-app/dist/release`.
 
 Add `.github/workflows/desktop-builds.yml` with three native jobs:
 
-| Job       | Runner           | Command                                            |
-| --------- | ---------------- | -------------------------------------------------- |
-| `windows` | `windows-latest` | `pnpm --filter @schdk/all-desktop-app build:win`   |
-| `macos`   | `macos-latest`   | `pnpm --filter @schdk/all-desktop-app build:mac`   |
-| `linux`   | `ubuntu-latest`  | `pnpm --filter @schdk/all-desktop-app build:linux` |
+| Job       | Runner           | Command                                              |
+| --------- | ---------------- | ---------------------------------------------------- |
+| `windows` | `windows-latest` | `pnpm --filter @schdk/all-desktop-app package:win`   |
+| `macos`   | `macos-latest`   | `pnpm --filter @schdk/all-desktop-app package:mac`   |
+| `linux`   | `ubuntu-latest`  | `pnpm --filter @schdk/all-desktop-app package:linux` |
 
 Trigger the workflow with `workflow_dispatch` during rollout. Add version-tag
 triggers only after all artifacts pass native smoke tests. Do not run these

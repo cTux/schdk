@@ -2,6 +2,10 @@
   "name": "@schdk/all-desktop-app",
   "version": "0.1.0",
   "description": "Unified desktop app for SCHDK tools.",
+  "author": {
+    "name": "Viacheslav Miroshko",
+    "email": "ccctux@gmail.com"
+  },
   "private": true,
   "type": "module",
   "main": "./dist/electron/main.js",
@@ -11,6 +15,8 @@
     "prepackage": "node scripts/prepare-google-oauth-client.mjs",
     "package": "electron-builder --dir",
     "package:win": "node scripts/prepare-google-oauth-client.mjs && electron-builder --win --x64",
+    "package:mac": "node scripts/prepare-google-oauth-client.mjs && electron-builder --mac --x64 --arm64",
+    "package:linux": "node scripts/prepare-google-oauth-client.mjs && electron-builder --linux --x64",
     "lint": "oxlint -c ../../.oxlintrc.json electron",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
@@ -60,6 +66,33 @@
     },
     "portable": {
       "artifactName": "schdk-${version}-windows-${arch}-portable.${ext}"
+    },
+    "mac": {
+      "icon": "build/owl.png",
+      "category": "public.app-category.games",
+      "target": [
+        "dir",
+        "zip",
+        "pkg"
+      ],
+      "artifactName": "schdk-${version}-macos-${arch}.${ext}"
+    },
+    "pkg": {
+      "installLocation": "/Applications"
+    },
+    "linux": {
+      "icon": "build/owl.png",
+      "category": "Game",
+      "executableName": "schdk",
+      "target": [
+        "dir",
+        "deb"
+      ],
+      "artifactName": "schdk-${version}-linux-${arch}.${ext}"
+    },
+    "deb": {
+      "packageName": "schdk",
+      "synopsis": "SCHDK game package editor and host"
     }
   }
 }
