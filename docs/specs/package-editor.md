@@ -22,8 +22,8 @@ without losing in-progress work.
   question from parsed clipboard JSON after confirmation, and clear every
   field of the selected question. `Ctrl+C` and `Ctrl+V` invoke the same copy
   and paste actions while the editor is open and no editable field has focus.
-  A successful copy or paste shows a localized site-themed toast; cancellation
-  or failure does not.
+  A successful copy or paste shows a localized toast using the active
+  application palette for two seconds; cancellation or failure does not.
 - **EDT-6:** Dragging one question number onto another swaps the complete
   question records and keeps the moved question selected.
 - **EDT-7:** Question navigation shows readiness, unresolved remarks, and a
@@ -108,6 +108,7 @@ without losing in-progress work.
 13. Clear a populated question from its trailing heading action, then use
     `Ctrl+C` and `Ctrl+V` anywhere in the open editor and observe the same copy
     and confirmed paste behavior as the heading actions. Confirm each
-    successful action shows its matching toast and cancellation or failure
-    shows none. Focus each editable field and confirm the shortcuts keep the
-    browser's native field-level copy and paste behavior instead.
+    successful action shows its matching localized toast in the active theme
+    for two seconds and cancellation or failure shows none. Focus each editable
+    field and confirm the shortcuts keep the browser's native field-level copy
+    and paste behavior instead.

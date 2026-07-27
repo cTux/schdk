@@ -3,7 +3,7 @@
 .editor-app {
   --toastify-color-success: #{$success};
   --toastify-icon-color-success: #{$success};
-  --toastify-toast-background: #{$surface-raised};
+  --toastify-color-light: #{$surface-raised};
   --toastify-toast-bd-radius: #{$radius-panel};
   --toastify-toast-shadow: #{$shadow-overlay};
   --toastify-text-color-light: #{$text};
