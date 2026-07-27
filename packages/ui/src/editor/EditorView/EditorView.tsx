@@ -1,3 +1,4 @@
+import 'react-toastify/dist/ReactToastify.css';
 import './styles.scss';
 
 import { useEffect } from 'react';
@@ -140,7 +141,7 @@ export function EditorView({
         {message && <StatusMessage>{message}</StatusMessage>}
         <ToastContainer
           aria-label={toastCopy.notifications}
-          autoClose={2500}
+          autoClose={2000}
           closeButton={false}
           closeOnClick
           limit={2}
