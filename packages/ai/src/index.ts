@@ -184,7 +184,7 @@ function assertInput(input: GenerateGameQuestionInput) {
   }
 }
 
-function prompt(input: GenerateGameQuestionInput) {
+function prompt(input: GameQuestionGenerationRequest) {
   const examples = input.locale === 'uk' ? 'Приклади' : 'Examples';
   const context = input.locale === 'uk' ? 'Контекст' : 'Context';
   return [
@@ -201,6 +201,16 @@ function prompt(input: GenerateGameQuestionInput) {
     .join('\n\n');
 }
 
+export function createGameQuestionPrompt(input: GameQuestionGenerationRequest) {
+  return {
+    system:
+      input.locale === 'uk'
+        ? 'Створи питання для гри «Що? Де? Коли?» за обраним шаблоном. Заповни всі поля формату відповіді; для необов’язкових полів без значення поверни null, а для списків — порожній список.'
+        : 'Create a What? Where? When? game question from the selected template. Fill every response field; use null for absent optional fields and empty arrays for absent lists.',
+    prompt: prompt(input),
+  };
+}
+
 export async function generateGameQuestion(
   input: GenerateGameQuestionInput,
 ): Promise<GameQuestion> {
@@ -214,10 +224,7 @@ export async function generateGameQuestion(
     }),
     google: createGoogleGenerativeAI({ apiKey: input.apiKey }),
   });
-  const system =
-    input.locale === 'uk'
-      ? 'Створи питання для гри «Що? Де? Коли?» за обраним шаблоном. Заповни всі поля формату відповіді; для необов’язкових полів без значення поверни null, а для списків — порожній список.'
-      : 'Create a What? Where? When? game question from the selected template. Fill every response field; use null for absent optional fields and empty arrays for absent lists.';
+  const { system, prompt: userPrompt } = createGameQuestionPrompt(input);
   const result = await generateText({
     model: registry.languageModel(`${provider}:${input.model}`),
     output: Output.object({
@@ -227,7 +234,7 @@ export async function generateGameQuestion(
       schema: generatedQuestionSchema,
     }),
     system,
-    prompt: prompt(input),
+    prompt: userPrompt,
   });
   return result.output;
 }

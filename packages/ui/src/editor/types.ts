@@ -12,6 +12,7 @@ export interface RecentPackageItem {
 export interface AiQuestionGenerationOptions {
   apiKeyConfigured: boolean;
   templates: AIQuestion[];
+  getPromptPreview?(template: AIQuestion, context: string): string;
   onGenerate(template: AIQuestion, context: string): Promise<GameQuestion>;
 }
 

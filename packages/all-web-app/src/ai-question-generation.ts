@@ -1,4 +1,8 @@
 import type { AIQuestion } from '@schdk/common';
+import {
+  createGameQuestionPrompt,
+  type GameQuestionGenerationRequest,
+} from '@schdk/ai';
 import { isGlobalAIQuestionAdmin } from '@schdk/google-drive';
 import type { AiQuestionGenerationOptions } from '@schdk/ui/editor';
 import type { AppLocale } from '@schdk/ui/localization';
@@ -15,8 +19,33 @@ export function createAiQuestionGeneration(
   options: AiOptions,
   templates: AIQuestion[],
   locale: AppLocale,
+  isAdmin: boolean,
   generalRule?: AIQuestion,
 ): AiQuestionGenerationOptions {
+  function createRequest(
+    template: AIQuestion,
+    context: string,
+  ): GameQuestionGenerationRequest {
+    return {
+      provider: options.provider,
+      model: options.model,
+      locale,
+      template: generalRule
+        ? {
+            ...template,
+            description: `${generalRule.description}\n\n${template.description}`,
+            goodExamples: [generalRule.goodExamples, template.goodExamples]
+              .filter(Boolean)
+              .join('\n\n'),
+            badExamples: [generalRule.badExamples, template.badExamples]
+              .filter(Boolean)
+              .join('\n\n'),
+          }
+        : template,
+      context,
+    };
+  }
+
   return {
     apiKeyConfigured: options.apiKeyConfigured,
     templates: templates
@@ -26,28 +55,19 @@ export function createAiQuestionGeneration(
           Number(right.favorite) - Number(left.favorite) ||
           left.name.localeCompare(right.name),
       ),
+    getPromptPreview: isAdmin
+      ? (template, context) => {
+          const { system, prompt } = createGameQuestionPrompt(
+            createRequest(template, context),
+          );
+          return `${system}\n\n${prompt}`;
+        }
+      : undefined,
     onGenerate(template, context) {
       if (!bridge) {
         return Promise.reject(new Error('Google Drive is disconnected'));
       }
-      return bridge.generateAiQuestion({
-        provider: options.provider,
-        model: options.model,
-        locale,
-        template: generalRule
-          ? {
-              ...template,
-              description: `${generalRule.description}\n\n${template.description}`,
-              goodExamples: [generalRule.goodExamples, template.goodExamples]
-                .filter(Boolean)
-                .join('\n\n'),
-              badExamples: [generalRule.badExamples, template.badExamples]
-                .filter(Boolean)
-                .join('\n\n'),
-            }
-          : template,
-        context,
-      });
+      return bridge.generateAiQuestion(createRequest(template, context));
     },
   };
 }
@@ -84,6 +104,7 @@ export function useAiQuestionTools(
       ai.options,
       [...aiQuestions.questions, ...aiQuestions.globalQuestions],
       locale,
+      isGlobalAIQuestionAdmin(accountId),
       aiQuestions.globalQuestions.find((question) => question.generalRule),
     ),
   };

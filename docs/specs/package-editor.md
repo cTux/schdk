@@ -46,7 +46,10 @@ without losing in-progress work.
   disables the complete modal, shows a thinking state, and on success replaces
   every generated question field before the modal resets and closes. The one
   global rule marked as general is excluded from the selector and prepended to
-  every selected template's generation instructions and examples.
+  every selected template's generation instructions and examples. An
+  allowlisted administrator can expand the modal beside its title to inspect
+  the exact system and user prompt text in a read-only field; the wider
+  two-column layout stacks vertically on narrow screens.
 - **EDT-17:** Every multiline package and generation field uses the same
   non-resizable shared control with dropdown-aligned borders, surfaces, hover,
   focus, and disabled states.
@@ -82,3 +85,6 @@ without losing in-progress work.
    question.
 10. Inspect every multiline editor and generation field at normal and narrow
     widths; confirm consistent shared styling and no native resize handle.
+11. Open generation as an allowlisted administrator, expand the prompt panel,
+    and confirm its read-only text follows changes to the selected template and
+    context. Confirm the control is absent for other accounts.

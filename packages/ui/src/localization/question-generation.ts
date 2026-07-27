@@ -10,6 +10,9 @@ export const questionGenerationCopy = {
     context: 'Контекст',
     contextPlaceholder: 'Наприклад, щось про фінал чемпіонату з футболу',
     generate: 'Згенерувати',
+    showPrompt: 'Показати промпт до AI провайдера',
+    hidePrompt: 'Сховати промпт до AI провайдера',
+    prompt: 'Промпт до AI провайдера',
     thinking: 'Думаю…',
     failed:
       'Не вдалося згенерувати питання. Перевірте провайдера, модель і API-ключ.',
@@ -26,6 +29,9 @@ export const questionGenerationCopy = {
     context: 'Context',
     contextPlaceholder: 'For example, something about a football final',
     generate: 'Generate',
+    showPrompt: 'Show AI provider prompt',
+    hidePrompt: 'Hide AI provider prompt',
+    prompt: 'AI provider prompt',
     thinking: 'Thinking…',
     failed:
       'Could not generate the question. Check the provider, model, and API key.',
