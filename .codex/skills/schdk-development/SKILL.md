@@ -9,7 +9,7 @@ description: Implement, debug, refactor, review, or document changes anywhere in
 
 1. Read `AGENTS.md`, `docs/RULES.md`, and every linked rule area touched by the task.
 2. Trace the current flow and all callers before editing. Respect ownership: data in `common`, AI provider logic in `ai`, visuals in `ui`, browser behavior in web apps, and OS integration in desktop apps.
-3. Reuse existing helpers and native APIs before adding code, dependencies, abstractions, or packages.
+3. Reuse existing helpers and native APIs before adding code, dependencies, abstractions, or packages. Prefer `async`/`await` for asynchronous control flow and avoid nested callback chains.
 4. Make the smallest complete change. Add tests only for the exact prompt `add missing tests`, using `$schdk-add-missing-tests`.
 5. Run `$schdk-sync-specs` after implementation. It creates or updates the
    matching feature contract and root `SPEC.md` entries when required, or

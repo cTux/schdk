@@ -56,3 +56,10 @@
   controls.
 - Do not add an abstraction, package, or dependency for hypothetical future
   use. Reuse existing helpers and native platform APIs first.
+
+## Asynchronous control flow
+
+- Prefer `async`/`await` for Promise-based asynchronous code. Avoid nested
+  callback chains; keep callbacks only where an API or simple synchronous
+  iteration naturally requires them, and wrap callback-only APIs at the
+  integration boundary when practical.
