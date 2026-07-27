@@ -63,7 +63,8 @@ without losing in-progress work.
   Only a missing question part or answer makes a question missing; optional
   fields do not.
   It selects each target slot behind the modal, waits for a validated provider
-  response, replaces the complete question record, and continues sequentially.
+  response, joins overflow text into the last part allowed by the declared
+  question type, replaces the complete question record, and continues sequentially.
   A failed request keeps questions generated before the failure.
 
 ## Invariants
