@@ -71,9 +71,17 @@
 
   .package-title {
     display: block;
+    min-width: 0;
+    flex: 1;
     color: $muted;
     font-size: $font-size-xs;
     letter-spacing: 0.035em;
+  }
+
+  .package-title-row {
+    display: flex;
+    align-items: flex-end;
+    gap: $space-2;
   }
 
   .package-title input {

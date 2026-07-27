@@ -58,7 +58,7 @@ without losing in-progress work.
   non-resizable shared control with dropdown-aligned borders, surfaces, hover,
   focus, and disabled states.
 - **EDT-18:** AI generation requires a non-empty answer comment. An AI icon
-  beside the editable package title opens a modal that selects missing
+  aligned with the title field on its right opens a modal that selects missing
   questions or the whole package and one or more enabled AI question packages.
   Only a missing question part or answer makes a question missing; optional
   fields do not.
@@ -101,9 +101,10 @@ without losing in-progress work.
     and confirm its read-only text follows changes to the selected template and
     context. Confirm the control is absent for other accounts.
 12. Generate only missing slots and then the whole package from one or more AI
-    question packages. Observe each target slot selected in order, every
-    generated record replaced completely, and prior successful results retained
-    when a later request fails.
+    question packages. Confirm the icon is aligned to the right of the title
+    field, observe each target slot selected in order, every generated record
+    replaced completely, and prior successful results retained when a later
+    request fails.
 13. Clear a populated question from its trailing heading action, then use
     `Ctrl+C` and `Ctrl+V` anywhere in the open editor and observe the same copy
     and confirmed paste behavior as the heading actions. Confirm each

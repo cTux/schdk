@@ -38,19 +38,21 @@ export function EditorHeader({
       <EditorBrand showBackButton={hasPackage} onBack={onBack} />
       {hasPackage && (
         <div className="package-header">
-          <PackageTitleField
-            invalid={showValidation && !packageTitle.trim()}
-            value={packageTitle}
-            onChange={onTitleChange}
-          />
-          {aiGeneration && (
-            <PackageGenerationDialog
-              {...aiGeneration}
-              gamePackage={gamePackage}
-              onGenerated={onQuestionGenerated}
-              onSelectQuestion={onSelectQuestion}
+          <div className="package-title-row">
+            <PackageTitleField
+              invalid={showValidation && !packageTitle.trim()}
+              value={packageTitle}
+              onChange={onTitleChange}
             />
-          )}
+            {aiGeneration && (
+              <PackageGenerationDialog
+                {...aiGeneration}
+                gamePackage={gamePackage}
+                onGenerated={onQuestionGenerated}
+                onSelectQuestion={onSelectQuestion}
+              />
+            )}
+          </div>
           <SaveStatus
             label={copy.editor.saveStatus[saveStatus]}
             status={saveStatus}
