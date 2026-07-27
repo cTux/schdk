@@ -29,7 +29,7 @@ I.drive|Package and settings persistence|Google Drive
 I.ai|Structured question generation|`@schdk/ai`
 I.aiquestion|Portable AI question rule|`.aiquestion`
 I.pages|Hosted browser application|GitHub Pages
-I.release|Versioned Windows distribution|GitHub Releases
+I.release|Versioned Windows, macOS, and Linux distribution|GitHub Releases
 
 ## §V
 

@@ -36,11 +36,12 @@ application with native save and presenter-window integration.
   or request validated question generation, but never read the stored value.
   Generation runs in Electron main; a legacy `safeStorage` value migrates once
   after Drive connection.
-- **DSK-13:** Each Windows GitHub Release contains version-matched x64 NSIS
-  installer and portable executable assets plus release notes sourced from the
-  matching Ukrainian changelog section.
-- **DSK-14:** Every executable published in a Windows GitHub Release has a
-  valid Authenticode signature.
+- **DSK-13:** Each GitHub Release contains version-matched Windows x64 NSIS and
+  portable executables, macOS x64/arm64 app ZIPs and PKGs, and a Debian x64
+  package plus release notes sourced from the matching Ukrainian changelog
+  section.
+- **DSK-14:** Every Windows release executable has a valid Authenticode
+  signature, and every macOS release app and PKG is signed and notarized.
 - **DSK-15:** Pull requests launch the packaged Windows renderer and verify its
   root UI and preload bridge before the build check passes.
 - **DSK-16:** A manually dispatched native build produces unsigned Windows x64,
@@ -72,9 +73,9 @@ application with native save and presenter-window integration.
    a question, and verify only configured status and the validated question
    cross into the renderer. Then switch Google accounts and verify the prior
    account's key is not exposed.
-6. Create a release from `main`; verify its tag, Ukrainian notes, installer,
-   portable executable, embedded application versions, and Authenticode
-   signatures all match.
+6. Create a release from `main`; verify its tag, Ukrainian notes, all seven
+   platform assets, embedded application versions, Windows signatures, and
+   macOS signatures and notarization all match.
 7. Run pull-request checks and observe the packaged renderer smoke test exit
    successfully.
 8. Dispatch `Desktop builds`; verify both macOS architectures preserve their
