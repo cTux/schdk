@@ -55,232 +55,52 @@ jobs:
           node-version: 24.18.0
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Prepare credentials
+      - name: Prepare desktop Google credentials
         env:
           GOOGLE_DESKTOP_CREDENTIALS_JSON: ${{ secrets.GOOGLE_DESKTOP_CREDENTIALS_JSON }}
-          WINDOWS_CERTIFICATE_BASE64: ${{ secrets.WINDOWS_CERTIFICATE_BASE64 }}
-          WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
         run: |
-          if ([string]::IsNullOrWhiteSpace($env:GOOGLE_DESKTOP_CREDENTIALS_JSON) -or
-              [string]::IsNullOrWhiteSpace($env:WINDOWS_CERTIFICATE_BASE64) -or
-              [string]::IsNullOrWhiteSpace($env:WINDOWS_CERTIFICATE_PASSWORD)) {
-            throw 'Windows release credentials are required.'
+          if ([string]::IsNullOrWhiteSpace($env:GOOGLE_DESKTOP_CREDENTIALS_JSON)) {
+            throw 'GOOGLE_DESKTOP_CREDENTIALS_JSON is required.'
           }
           $google = Join-Path $env:RUNNER_TEMP 'google-oauth-client.json'
-          $certificate = Join-Path $env:RUNNER_TEMP 'windows-signing.pfx'
           [IO.File]::WriteAllText($google, $env:GOOGLE_DESKTOP_CREDENTIALS_JSON)
-          [IO.File]::WriteAllBytes(
-            $certificate,
-            [Convert]::FromBase64String($env:WINDOWS_CERTIFICATE_BASE64)
-          )
           "GOOGLE_DESKTOP_CREDENTIALS_PATH=$google" >> $env:GITHUB_ENV
-          "WINDOWS_SIGNING_CERTIFICATE_PATH=$certificate" >> $env:GITHUB_ENV
       - run: pnpm turbo build --filter=@schdk/all-desktop-app
-      - name: Package
+      - name: Package unsigned installer
         env:
-          CSC_LINK: ${{ env.WINDOWS_SIGNING_CERTIFICATE_PATH }}
-          CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
         run: >
-          pnpm --filter @schdk/all-desktop-app package:win --
+          pnpm --filter @schdk/all-desktop-app package:win
           --config.extraMetadata.version=$env:RELEASE_VERSION
+          --config.win.target=nsis
       - name: Verify
         run: |
-          $root = 'packages/all-desktop-app/dist/release'
-          $assets = @(
-            "$root/win-unpacked/ЩДК.exe"
-            "$root/schdk-$env:RELEASE_VERSION-windows-x64-installer.exe"
-            "$root/schdk-$env:RELEASE_VERSION-windows-x64-portable.exe"
-          )
-          foreach ($asset in $assets) {
-            if (!(Test-Path -LiteralPath $asset)) {
-              throw "Missing release asset: $asset"
-            }
-            $signature = Get-AuthenticodeSignature -FilePath $asset
-            if ($signature.Status -ne 'Valid') {
-              throw "Invalid signature for ${asset}: $($signature.Status)"
-            }
+          $asset = "packages/all-desktop-app/dist/release/schdk-$env:RELEASE_VERSION-windows-x64-installer.exe"
+          if (!(Test-Path -LiteralPath $asset)) {
+            throw "Missing release asset: $asset"
+          }
+          if ((Get-Item -LiteralPath $asset).Length -eq 0) {
+            throw "Empty release asset: $asset"
+          }
+          $signature = Get-AuthenticodeSignature -FilePath $asset
+          if ($signature.Status -ne 'NotSigned') {
+            throw "Expected unsigned release asset, got: $($signature.Status)"
           }
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: release-windows-x64
-          path: packages/all-desktop-app/dist/release/schdk-${{ inputs.version }}-windows-x64-*.exe
+          name: release-windows-x64-installer
+          path: packages/all-desktop-app/dist/release/schdk-${{ inputs.version }}-windows-x64-installer.exe
           if-no-files-found: error
-      - name: Remove credentials
+      - name: Remove desktop Google credentials
         if: always()
         run: |
           if ($env:GOOGLE_DESKTOP_CREDENTIALS_PATH) {
             Remove-Item -LiteralPath $env:GOOGLE_DESKTOP_CREDENTIALS_PATH -Force -ErrorAction SilentlyContinue
           }
-          if ($env:WINDOWS_SIGNING_CERTIFICATE_PATH) {
-            Remove-Item -LiteralPath $env:WINDOWS_SIGNING_CERTIFICATE_PATH -Force -ErrorAction SilentlyContinue
-          }
-
-  macos:
-    name: macOS x64 and arm64
-    needs: checks
-    runs-on: macos-latest
-    timeout-minutes: 45
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
-        with:
-          version: 11.17.0
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: 24.18.0
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - name: Prepare credentials
-        shell: bash
-        env:
-          GOOGLE_DESKTOP_CREDENTIALS_JSON: ${{ secrets.GOOGLE_DESKTOP_CREDENTIALS_JSON }}
-          MACOS_APPLICATION_CERTIFICATE_BASE64: ${{ secrets.MACOS_APPLICATION_CERTIFICATE_BASE64 }}
-          MACOS_APPLICATION_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_APPLICATION_CERTIFICATE_PASSWORD }}
-          MACOS_INSTALLER_CERTIFICATE_BASE64: ${{ secrets.MACOS_INSTALLER_CERTIFICATE_BASE64 }}
-          MACOS_INSTALLER_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_INSTALLER_CERTIFICATE_PASSWORD }}
-          APPLE_API_KEY: ${{ secrets.APPLE_API_KEY }}
-          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
-          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
-        run: |
-          node --input-type=module <<'NODE'
-          import { appendFileSync, writeFileSync } from 'node:fs';
-          import { join } from 'node:path';
-
-          const required = [
-            'GOOGLE_DESKTOP_CREDENTIALS_JSON',
-            'MACOS_APPLICATION_CERTIFICATE_BASE64',
-            'MACOS_APPLICATION_CERTIFICATE_PASSWORD',
-            'MACOS_INSTALLER_CERTIFICATE_BASE64',
-            'MACOS_INSTALLER_CERTIFICATE_PASSWORD',
-            'APPLE_API_KEY',
-            'APPLE_API_KEY_ID',
-            'APPLE_API_ISSUER',
-          ];
-          const missing = required.filter((name) => !process.env[name]?.trim());
-          if (missing.length) throw new Error(`Missing release secrets: ${missing.join(', ')}`);
-
-          const files = {
-            GOOGLE_DESKTOP_CREDENTIALS_PATH: ['google-oauth-client.json', process.env.GOOGLE_DESKTOP_CREDENTIALS_JSON],
-            MACOS_APPLICATION_CERTIFICATE_PATH: ['macos-application.p12', Buffer.from(process.env.MACOS_APPLICATION_CERTIFICATE_BASE64, 'base64')],
-            MACOS_INSTALLER_CERTIFICATE_PATH: ['macos-installer.p12', Buffer.from(process.env.MACOS_INSTALLER_CERTIFICATE_BASE64, 'base64')],
-            APPLE_API_KEY_PATH: ['AuthKey.p8', process.env.APPLE_API_KEY],
-          };
-          for (const [name, [filename, content]] of Object.entries(files)) {
-            const path = join(process.env.RUNNER_TEMP, filename);
-            writeFileSync(path, content);
-            appendFileSync(process.env.GITHUB_ENV, `${name}=${path}\n`);
-          }
-          NODE
-      - run: pnpm turbo build --filter=@schdk/all-desktop-app
-      - name: Package, sign, and notarize
-        env:
-          CSC_LINK: ${{ env.MACOS_APPLICATION_CERTIFICATE_PATH }}
-          CSC_KEY_PASSWORD: ${{ secrets.MACOS_APPLICATION_CERTIFICATE_PASSWORD }}
-          CSC_INSTALLER_LINK: ${{ env.MACOS_INSTALLER_CERTIFICATE_PATH }}
-          CSC_INSTALLER_KEY_PASSWORD: ${{ secrets.MACOS_INSTALLER_CERTIFICATE_PASSWORD }}
-          APPLE_API_KEY: ${{ env.APPLE_API_KEY_PATH }}
-          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
-          APPLE_API_ISSUER: ${{ secrets.APPLE_API_ISSUER }}
-        run: >
-          pnpm --filter @schdk/all-desktop-app package:mac --
-          --config.extraMetadata.version="$RELEASE_VERSION"
-          --config.forceCodeSigning=true
-          --config.mac.hardenedRuntime=true
-          --config.mac.notarize=true
-      - name: Verify
-        shell: bash
-        run: |
-          root=packages/all-desktop-app/dist/release
-          codesign --verify --deep --strict "$root/mac/ЩДК.app"
-          codesign --verify --deep --strict "$root/mac-arm64/ЩДК.app"
-          spctl --assess --type execute "$root/mac/ЩДК.app"
-          spctl --assess --type execute "$root/mac-arm64/ЩДК.app"
-          for arch in x64 arm64; do
-            zip="$root/schdk-$RELEASE_VERSION-macos-$arch.zip"
-            pkg="$root/schdk-$RELEASE_VERSION-macos-$arch.pkg"
-            test -s "$zip"
-            test -s "$pkg"
-            pkgutil --check-signature "$pkg"
-            xcrun stapler validate "$pkg"
-          done
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: release-macos
-          path: |
-            packages/all-desktop-app/dist/release/schdk-${{ inputs.version }}-macos-x64.zip
-            packages/all-desktop-app/dist/release/schdk-${{ inputs.version }}-macos-x64.pkg
-            packages/all-desktop-app/dist/release/schdk-${{ inputs.version }}-macos-arm64.zip
-            packages/all-desktop-app/dist/release/schdk-${{ inputs.version }}-macos-arm64.pkg
-          if-no-files-found: error
-      - name: Remove credentials
-        if: always()
-        shell: bash
-        run: |
-          rm -f \
-            "${GOOGLE_DESKTOP_CREDENTIALS_PATH:-}" \
-            "${MACOS_APPLICATION_CERTIFICATE_PATH:-}" \
-            "${MACOS_INSTALLER_CERTIFICATE_PATH:-}" \
-            "${APPLE_API_KEY_PATH:-}"
-
-  linux:
-    name: Debian x64
-    needs: checks
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
-        with:
-          version: 11.17.0
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: 24.18.0
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - name: Prepare desktop Google credentials
-        shell: bash
-        env:
-          GOOGLE_DESKTOP_CREDENTIALS_JSON: ${{ secrets.GOOGLE_DESKTOP_CREDENTIALS_JSON }}
-        run: |
-          node --input-type=module -e '
-            import { appendFileSync, writeFileSync } from "node:fs";
-            import { join } from "node:path";
-            const raw = process.env.GOOGLE_DESKTOP_CREDENTIALS_JSON;
-            if (!raw?.trim()) throw new Error("GOOGLE_DESKTOP_CREDENTIALS_JSON is required.");
-            const path = join(process.env.RUNNER_TEMP, "google-oauth-client.json");
-            writeFileSync(path, raw);
-            appendFileSync(process.env.GITHUB_ENV, `GOOGLE_DESKTOP_CREDENTIALS_PATH=${path}\n`);
-          '
-      - run: pnpm turbo build --filter=@schdk/all-desktop-app
-      - name: Package
-        run: >
-          pnpm --filter @schdk/all-desktop-app package:linux --
-          --config.extraMetadata.version="$RELEASE_VERSION"
-      - name: Verify
-        shell: bash
-        run: |
-          deb="packages/all-desktop-app/dist/release/schdk-$RELEASE_VERSION-linux-x64.deb"
-          test -s "$deb"
-          test "$(dpkg-deb --field "$deb" Package)" = schdk
-          test "$(dpkg-deb --field "$deb" Architecture)" = amd64
-          test "$(dpkg-deb --field "$deb" Version)" = "$RELEASE_VERSION"
-          test -n "$(dpkg-deb --field "$deb" Maintainer)"
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: release-linux-x64
-          path: packages/all-desktop-app/dist/release/schdk-${{ inputs.version }}-linux-x64.deb
-          if-no-files-found: error
-      - name: Remove credentials
-        if: always()
-        shell: bash
-        run: rm -f "${GOOGLE_DESKTOP_CREDENTIALS_PATH:-}"
 
   publish:
     name: Publish GitHub Release
-    needs:
-      - windows
-      - macos
-      - linux
+    needs: windows
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -292,25 +112,15 @@ jobs:
           node-version: 24.18.0
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
         with:
-          pattern: release-*
+          name: release-windows-x64-installer
           path: release-assets
-          merge-multiple: true
       - run: node scripts/release-notes.mjs "$RELEASE_VERSION" release-notes.md
       - name: Verify release assets
         shell: bash
         run: |
-          for asset in \
-            "schdk-$RELEASE_VERSION-windows-x64-installer.exe" \
-            "schdk-$RELEASE_VERSION-windows-x64-portable.exe" \
-            "schdk-$RELEASE_VERSION-macos-x64.zip" \
-            "schdk-$RELEASE_VERSION-macos-x64.pkg" \
-            "schdk-$RELEASE_VERSION-macos-arm64.zip" \
-            "schdk-$RELEASE_VERSION-macos-arm64.pkg" \
-            "schdk-$RELEASE_VERSION-linux-x64.deb"
-          do
-            test -s "release-assets/$asset"
-          done
-          test "$(find release-assets -maxdepth 1 -type f | wc -l)" -eq 7
+          asset="release-assets/schdk-$RELEASE_VERSION-windows-x64-installer.exe"
+          test -s "$asset"
+          test "$(find release-assets -maxdepth 1 -type f | wc -l)" -eq 1
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
