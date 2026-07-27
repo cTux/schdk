@@ -14,7 +14,7 @@ Project-wide goals, constraints, invariants, and bug history live in
 | Presentation       | [Visual editor](visual-editor.md)                       | Layout, custom elements, backgrounds, templates                                  |
 | Cloud              | [Google Drive persistence](google-drive-persistence.md) | Authorization, package storage, settings sync, recovery                          |
 | Application shell  | [Unified shell](unified-shell.md)                       | Navigation, localization, themes, settings, deep links, GitHub Pages             |
-| Native application | [Desktop application](desktop-application.md)           | Windows shell, presenter notes, close safety, native export, release artifacts   |
+| Native application | [Desktop application](desktop-application.md)           | Cross-platform shell, presenter notes, close safety, native export, artifacts    |
 
 ## Maintenance
 

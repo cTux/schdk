@@ -4,8 +4,8 @@ Status: implemented
 
 ## Goal
 
-Deliver the unified SCHDK experience as a safe Windows application with native
-save and presenter-window integration.
+Deliver the unified SCHDK experience as a safe Windows, macOS, and Linux
+application with native save and presenter-window integration.
 
 ## Requirements
 
@@ -43,6 +43,11 @@ save and presenter-window integration.
   valid Authenticode signature.
 - **DSK-15:** Pull requests launch the packaged Windows renderer and verify its
   root UI and preload bridge before the build check passes.
+- **DSK-16:** A manually dispatched native build produces unsigned Windows x64,
+  macOS x64/arm64 app ZIP and PKG, and Debian x64 artifacts after shared checks
+  pass.
+- **DSK-17:** Every cross-platform artifact includes version and architecture;
+  DEB metadata identifies `schdk`, `amd64`, and a non-empty maintainer.
 
 ## Invariants
 
@@ -72,3 +77,5 @@ save and presenter-window integration.
    signatures all match.
 7. Run pull-request checks and observe the packaged renderer smoke test exit
    successfully.
+8. Dispatch `Desktop builds`; verify both macOS architectures preserve their
+   `.app` bundles in ZIPs, each PKG exists, and the DEB metadata matches DSK-17.

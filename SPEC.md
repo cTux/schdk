@@ -5,7 +5,7 @@ Feature contracts: `docs/specs/README.md`
 
 ## §G
 
-G1|Create, store, edit, and host portable «Що? Де? Коли?» games on web and Windows.
+G1|Create, store, edit, and host portable «Що? Де? Коли?» games on web and desktop.
 
 ## §C
 
@@ -23,7 +23,7 @@ I.specs|Feature acceptance contracts|`docs/specs/README.md`
 I.package|Portable game file|`.schdk`
 I.template|Portable visual layout|`.schdk-template`
 I.web|Unified browser application|`@schdk/all-web-app`
-I.desktop|Windows application|`@schdk/all-desktop-app`
+I.desktop|Windows, macOS, and Linux application|`@schdk/all-desktop-app`
 I.drive|Package and settings persistence|Google Drive
 I.ai|Structured question generation|`@schdk/ai`
 I.pages|Hosted browser application|GitHub Pages

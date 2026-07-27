@@ -51,9 +51,13 @@
   generation operations to the renderer. Run generation in Electron main and
   return only the parsed question; migrate and remove a legacy `safeStorage`
   key only after a successful Drive write.
-- Keep local Windows packaging on electron-builder's unpacked `dir` target
-  under `dist/release/win-unpacked`. Release packaging produces versioned x64
-  NSIS installer and portable executable assets.
+- Keep normal local packaging on electron-builder's unpacked `dir` target for
+  the current host. Use `package:win`, `package:mac`, and `package:linux` only
+  on their native operating systems.
+- The manually dispatched `Desktop builds` workflow produces unsigned Windows
+  x64, macOS x64/arm64, and Debian x64 artifacts on native runners. Keep
+  unsigned artifact names explicit; macOS uploads use ZIP transport for the
+  `.app` bundle plus `.pkg`, and Linux uploads use `.deb`.
 - Sign every Windows GitHub Release executable through electron-builder and
   verify its Authenticode signature before upload. Local unpacked packaging may
   remain unsigned.

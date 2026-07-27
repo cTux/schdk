@@ -28,8 +28,12 @@ description: Build, debug, secure, or package SCHDK Electron applications. Use f
    Release notes come from the matching Ukrainian `CHANGELOG.md` section.
    Require the PFX certificate secrets and verify every release executable's
    Authenticode signature before upload; local unpacked builds may be unsigned.
-9. Keep the packaged-renderer smoke mode limited to CI startup validation: load
-   bundled web assets, confirm root UI and the preload bridge, then exit.
+9. Use `package:mac` on macOS for separate x64 and arm64 app ZIP and PKG
+   artifacts, and `package:linux` on Linux for the x64 DEB. Keep manually
+   dispatched cross-platform artifacts explicitly unsigned and separate from
+   signed GitHub Releases.
+10. Keep the packaged-renderer smoke mode limited to CI startup validation: load
+    bundled web assets, confirm root UI and the preload bridge, then exit.
 
 ## Checks
 
@@ -43,3 +47,5 @@ pnpm turbo package --filter @schdk/all-desktop-app
 Close running packaged executables before rebuilding locked Windows output.
 For release-packaging changes, also run
 `pnpm --filter @schdk/all-desktop-app package:win`.
+Run `package:mac` and `package:linux` only on their matching native hosts; use
+the manually dispatched `Desktop builds` workflow to verify every platform.

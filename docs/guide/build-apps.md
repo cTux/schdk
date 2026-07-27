@@ -28,5 +28,19 @@ pnpm turbo package --filter @schdk/all-desktop-app
 вебзалежність. Коренева команда `pnpm build` і всі десктопні `dev`-скрипти вже
 враховують порядок залежностей.
 
+Інсталятори й пакети потрібно створювати на відповідній операційній системі:
+
+```powershell
+pnpm turbo build --filter=@schdk/all-desktop-app
+pnpm --filter @schdk/all-desktop-app package:win
+pnpm --filter @schdk/all-desktop-app package:mac
+pnpm --filter @schdk/all-desktop-app package:linux
+```
+
+`package:win` створює x64-інсталятор і портативний `.exe`; `package:mac` —
+окремі x64 та arm64 ZIP із `.app` і `.pkg`; `package:linux` — x64 `.deb`.
+Workflow `Desktop builds` запускає ці команди вручну на нативних GitHub
+runner-ах і зберігає результати як явно непідписані артефакти.
+
 Версійний інсталятор і портативний `.exe` створює GitHub workflow `Release`.
 Порядок випуску описано в розділі [«Релізи та вебверсія»](releases.md).

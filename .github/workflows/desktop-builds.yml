@@ -1,0 +1,148 @@
+name: Desktop builds
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+        with:
+          version: 11.17.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24.18.0
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm fmt:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+
+  package:
+    name: package (${{ matrix.platform }})
+    needs: checks
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: windows
+            runner: windows-latest
+            command: package:win
+          - platform: macos
+            runner: macos-latest
+            command: package:mac
+          - platform: linux
+            runner: ubuntu-latest
+            command: package:linux
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+        with:
+          version: 11.17.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24.18.0
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Prepare desktop Google credentials
+        shell: bash
+        env:
+          GOOGLE_DESKTOP_CREDENTIALS_JSON: ${{ secrets.GOOGLE_DESKTOP_CREDENTIALS_JSON }}
+        run: |
+          node --input-type=module -e '
+            import { appendFileSync, writeFileSync } from "node:fs";
+            import { join } from "node:path";
+            const raw = process.env.GOOGLE_DESKTOP_CREDENTIALS_JSON;
+            const credentials = JSON.parse(raw ?? "null");
+            if (!credentials?.installed?.client_id || !credentials.installed.client_secret) {
+              throw new Error("GOOGLE_DESKTOP_CREDENTIALS_JSON is invalid.");
+            }
+            const path = join(process.env.RUNNER_TEMP, "google-oauth-client.json");
+            writeFileSync(path, raw);
+            appendFileSync(process.env.GITHUB_ENV, `GOOGLE_DESKTOP_CREDENTIALS_PATH=${path}\n`);
+          '
+      - run: pnpm turbo build --filter=@schdk/all-desktop-app
+      - run: pnpm --filter @schdk/all-desktop-app ${{ matrix.command }}
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: ${{ matrix.platform == 'macos' && 'false' || '' }}
+      - name: Verify Windows output
+        if: matrix.platform == 'windows'
+        shell: pwsh
+        run: |
+          $release = 'packages/all-desktop-app/dist/release'
+          Resolve-Path "$release/win-unpacked/ЩДК.exe"
+          Resolve-Path "$release/schdk-*-windows-x64-installer.exe"
+          Resolve-Path "$release/schdk-*-windows-x64-portable.exe"
+      - name: Verify macOS output
+        if: matrix.platform == 'macos'
+        shell: bash
+        run: |
+          release=packages/all-desktop-app/dist/release
+          test -d "$release/mac/ЩДК.app"
+          test -d "$release/mac-arm64/ЩДК.app"
+          test "$(find "$release" -maxdepth 1 -name 'schdk-*-macos-x64.zip' | wc -l)" -eq 1
+          test "$(find "$release" -maxdepth 1 -name 'schdk-*-macos-x64.pkg' | wc -l)" -eq 1
+          test "$(find "$release" -maxdepth 1 -name 'schdk-*-macos-arm64.zip' | wc -l)" -eq 1
+          test "$(find "$release" -maxdepth 1 -name 'schdk-*-macos-arm64.pkg' | wc -l)" -eq 1
+      - name: Verify Linux output
+        if: matrix.platform == 'linux'
+        shell: bash
+        run: |
+          release=packages/all-desktop-app/dist/release
+          test -x "$release/linux-unpacked/schdk"
+          deb=$(find "$release" -maxdepth 1 -name 'schdk-*-linux-x64.deb')
+          test "$(dpkg-deb --field "$deb" Package)" = schdk
+          test "$(dpkg-deb --field "$deb" Architecture)" = amd64
+          test -n "$(dpkg-deb --field "$deb" Maintainer)"
+      - name: Upload Windows artifacts
+        if: matrix.platform == 'windows'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: schdk-windows-x64-unsigned
+          path: packages/all-desktop-app/dist/release/schdk-*-windows-x64-*.exe
+          if-no-files-found: error
+      - name: Upload macOS x64 artifacts
+        if: matrix.platform == 'macos'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: schdk-macos-x64-unsigned
+          path: |
+            packages/all-desktop-app/dist/release/schdk-*-macos-x64.zip
+            packages/all-desktop-app/dist/release/schdk-*-macos-x64.pkg
+          if-no-files-found: error
+      - name: Upload macOS arm64 artifacts
+        if: matrix.platform == 'macos'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: schdk-macos-arm64-unsigned
+          path: |
+            packages/all-desktop-app/dist/release/schdk-*-macos-arm64.zip
+            packages/all-desktop-app/dist/release/schdk-*-macos-arm64.pkg
+          if-no-files-found: error
+      - name: Upload Linux artifacts
+        if: matrix.platform == 'linux'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: schdk-linux-x64
+          path: packages/all-desktop-app/dist/release/schdk-*-linux-x64.deb
+          if-no-files-found: error
+      - name: Remove desktop Google credentials
+        if: always()
+        shell: bash
+        run: |
+          node --input-type=module -e '
+            import { rmSync } from "node:fs";
+            if (process.env.GOOGLE_DESKTOP_CREDENTIALS_PATH) {
+              rmSync(process.env.GOOGLE_DESKTOP_CREDENTIALS_PATH, { force: true });
+            }
+          '
