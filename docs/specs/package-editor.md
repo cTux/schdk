@@ -56,7 +56,8 @@ without losing in-progress work.
 - **EDT-18:** AI generation requires a non-empty answer comment. An AI icon
   beside the editable package title opens a modal that selects missing
   questions or the whole package and one or more enabled AI question packages.
-  A question without an answer comment counts as missing.
+  Only a missing question part or answer makes a question missing; optional
+  fields do not.
   It selects each target slot behind the modal, waits for a validated provider
   response, replaces the complete question record, and continues sequentially.
   A failed request keeps questions generated before the failure.

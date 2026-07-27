@@ -51,7 +51,6 @@ export function PackageGenerationDialog({
     const targets = gamePackage.questions.flatMap((question, index) =>
       scope === 'all' ||
       !question.answer.trim() ||
-      !question.answerComment?.trim() ||
       question.questionParts.some((part) => !part.trim())
         ? [index]
         : [],
@@ -92,7 +91,6 @@ export function PackageGenerationDialog({
   const targetsMissing = gamePackage.questions.some(
     (question) =>
       !question.answer.trim() ||
-      !question.answerComment?.trim() ||
       question.questionParts.some((part) => !part.trim()),
   );
 
