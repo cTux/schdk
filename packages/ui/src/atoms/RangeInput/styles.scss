@@ -1,0 +1,16 @@
+@use '../../styles/tokens' as *;
+
+.ui-range-input {
+  accent-color: $accent;
+  cursor: pointer;
+}
+
+.ui-range-input:focus-visible {
+  outline: $focus-width solid rgba($accent-rgb, 0.75);
+  outline-offset: $focus-offset;
+}
+
+.ui-range-input:disabled {
+  cursor: default;
+  opacity: 0.35;
+}

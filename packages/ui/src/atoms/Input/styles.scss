@@ -1,0 +1,31 @@
+@use '../../styles/tokens' as *;
+
+.ui-input {
+  width: 100%;
+  min-height: $control-normal;
+  border: 1px solid $border;
+  border-radius: $radius-control;
+  background: $surface-raised;
+  padding: 9px 11px;
+  color: $text;
+  font: inherit;
+  transition:
+    border-color $motion-fast ease,
+    background-color $motion-fast ease,
+    color $motion-fast ease;
+}
+
+.ui-input:hover:not(:disabled) {
+  border-color: $border-strong;
+  background: $surface-hover;
+}
+
+.ui-input:focus-visible {
+  outline: $focus-width solid rgba($accent-rgb, 0.75);
+  outline-offset: $focus-offset;
+}
+
+.ui-input:disabled {
+  cursor: default;
+  opacity: 0.35;
+}

@@ -1,6 +1,7 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '../../atoms/Button';
+import { Input } from '../../atoms/Input';
 import { useLocalization } from '../../localization';
 
 export interface AnswerListFieldProps {
@@ -27,7 +28,7 @@ export function AnswerListField({
       </legend>
       {answers.map((answer, index) => (
         <div className="alternative" key={index}>
-          <input
+          <Input
             value={answer}
             onChange={(event) =>
               onChange(
