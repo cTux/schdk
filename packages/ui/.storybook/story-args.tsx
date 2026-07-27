@@ -88,6 +88,10 @@ const callbacksReturningConfirmation = new Set([
 function getValue(component: string, prop: string): unknown {
   const componentValue = componentValues[component]?.[prop];
   if (componentValue !== undefined) return componentValue;
+  if (prop === 'getPromptPreview') {
+    return () => 'System prompt\n\nUser prompt';
+  }
+  if (prop === 'apiKeyConfigured') return true;
   if (
     prop.startsWith('on') ||
     prop === 'addElement' ||
@@ -104,6 +108,16 @@ function getValue(component: string, prop: string): unknown {
   if (arrays.has(prop)) {
     if (prop === 'questions' || prop === 'globalQuestions') return [aiQuestion];
     if (prop === 'templates') return [aiQuestion];
+    if (prop === 'packages') {
+      return [
+        {
+          name: 'Standard',
+          context: 'Package context',
+          questions: [],
+          enabled: true,
+        },
+      ];
+    }
     if (prop === 'parts') return ['Перша частина', 'Друга частина'];
     return [];
   }

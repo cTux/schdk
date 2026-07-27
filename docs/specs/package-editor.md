@@ -67,7 +67,9 @@ without losing in-progress work.
   question type, replaces the complete question record, and continues sequentially.
   Browser generation renews Google authorization from the confirmation click
   before the sequence starts. A failed request keeps questions generated before
-  the failure.
+  the failure. An allowlisted administrator can expand the modal beside its
+  title to inspect the exact read-only prompt for the first target before
+  generation and the current target while generation advances.
 
 ## Invariants
 
@@ -107,7 +109,9 @@ without losing in-progress work.
     AI question package from the rules dropdown. Observe each target slot
     selected in order, every generated record replaced completely, and prior
     successful results retained when a later request fails. In the browser,
-    confirm that generation starts with renewed Google authorization.
+    confirm that generation starts with renewed Google authorization. As an
+    allowlisted administrator, expand the prompt panel and confirm its read-only
+    text follows the first pending target and each target being generated.
 13. Clear a populated question from its trailing heading action, then use
     `Ctrl+C` and `Ctrl+V` anywhere in the open editor and observe the same copy
     and confirmed paste behavior as the heading actions. Confirm each
