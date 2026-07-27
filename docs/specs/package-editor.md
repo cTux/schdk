@@ -70,6 +70,10 @@ without losing in-progress work.
   the failure. An allowlisted administrator can expand the modal beside its
   title to inspect the exact read-only prompt for the first target before
   generation and the current target while generation advances.
+- **EDT-19:** Successful package creation, import, recent opening, current
+  autosave, explicit download, and confirmed deletion show a localized toast
+  using the active application palette for two seconds. Canceled or failed
+  actions and stale writes completed before newer edits show no success toast.
 
 ## Invariants
 
@@ -119,3 +123,7 @@ without losing in-progress work.
     for two seconds and cancellation or failure shows none. Focus each editable
     field and confirm the shortcuts keep the browser's native field-level copy
     and paste behavior instead.
+14. Create, import, reopen, edit, download, and delete packages and confirm
+    each completed action shows its matching localized toast for two seconds.
+    Cancel the desktop download, fail an action, and complete a stale autosave
+    while a newer edit remains pending; confirm none shows a success toast.

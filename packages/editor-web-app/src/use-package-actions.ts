@@ -8,8 +8,8 @@ import {
   toDrivePackageReference,
   type DrivePackageStorage,
 } from '@schdk/google-drive';
-import type { EditorSaveStatus } from '@schdk/ui/editor';
-import type { LocalizationCopy } from '@schdk/ui/localization';
+import { showEditorToast, type EditorSaveStatus } from '@schdk/ui/editor';
+import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
 import type { Dispatch, SetStateAction } from 'react';
 import { replaceBrowserPackageDeepLink } from './browser-deep-link';
 import { usePackageOpeningActions } from './use-package-opening-actions';
@@ -19,6 +19,7 @@ interface PackageActionsOptions {
   copy: LocalizationCopy;
   drive?: DrivePackageStorage;
   driveFileId: string | null;
+  locale: AppLocale;
   saveStatus: EditorSaveStatus;
   applyOpenedPackage(
     content: Uint8Array,
@@ -45,6 +46,7 @@ export function usePackageActions(options: PackageActionsOptions) {
     copy,
     drive,
     driveFileId,
+    locale,
     saveStatus,
     applyOpenedPackage,
     createLocalizedPackage,
@@ -64,6 +66,7 @@ export function usePackageActions(options: PackageActionsOptions) {
     confirm,
     copy,
     drive,
+    locale,
     applyOpenedPackage,
     refreshRecentPackages,
     onDriveFailure,
@@ -94,6 +97,7 @@ export function usePackageActions(options: PackageActionsOptions) {
       setShowValidation(false);
       replaceBrowserPackageDeepLink(toDrivePackageReference(saved.id), 0);
       await refreshRecentPackages();
+      showEditorToast('created', locale);
     } catch {
       onDriveFailure?.();
       setMessage(copy.editor.saveFailed);

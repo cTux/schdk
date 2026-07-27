@@ -3,10 +3,7 @@ import {
   type GamePackage,
   type GameQuestion,
 } from '@schdk/common';
-import {
-  showQuestionActionToast,
-  type EditorSaveStatus,
-} from '@schdk/ui/editor';
+import { showEditorToast, type EditorSaveStatus } from '@schdk/ui/editor';
 import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
 import type { EditorTextOptions } from '@schdk/ui/options';
 import type { Dispatch, SetStateAction } from 'react';
@@ -104,7 +101,7 @@ export function useQuestionActions({
       await navigator.clipboard.writeText(
         JSON.stringify(gamePackage.questions[selectedIndex], null, 2),
       );
-      showQuestionActionToast('copied', locale);
+      showEditorToast('copied', locale);
     } catch {
       setMessage(copy.editor.copyFailed);
     }
@@ -124,7 +121,7 @@ export function useQuestionActions({
         ),
       }));
       setSaveStatus('pending');
-      showQuestionActionToast('pasted', locale);
+      showEditorToast('pasted', locale);
     } catch {
       setMessage(copy.editor.pasteFailed);
     }

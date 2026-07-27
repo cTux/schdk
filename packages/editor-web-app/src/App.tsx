@@ -141,6 +141,7 @@ export function App({
     copy,
     drive,
     driveFileId,
+    locale,
     saveStatus,
     applyOpenedPackage,
     createLocalizedPackage,

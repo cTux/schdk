@@ -7,7 +7,7 @@ import {
   createGamePackageFilename,
   type DrivePackageStorage,
 } from '@schdk/google-drive';
-import type { EditorSaveStatus } from '@schdk/ui/editor';
+import { showEditorToast, type EditorSaveStatus } from '@schdk/ui/editor';
 import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
 import {
   useCallback,
@@ -100,9 +100,11 @@ export function useEditorPersistence({
     try {
       const saved = await save;
       setFileName(saved.name);
-      setSaveStatus(
-        saveStatusAfterWrite(gamePackage === currentPackage.current),
+      const nextSaveStatus = saveStatusAfterWrite(
+        gamePackage === currentPackage.current,
       );
+      setSaveStatus(nextSaveStatus);
+      if (nextSaveStatus === 'saved') showEditorToast('saved', locale);
     } catch (error) {
       setSaveStatus('error');
       onDriveFailure?.();
@@ -115,6 +117,7 @@ export function useEditorPersistence({
     driveFileId,
     fileName,
     gamePackage,
+    locale,
     onDriveFailure,
     saveQueue,
     setFileName,

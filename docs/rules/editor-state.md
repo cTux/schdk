@@ -9,8 +9,9 @@
   trailing periods from main and alternative answers while preserving other
   punctuation.
 - Preserve `saved`, `pending`, `saving`, and `error` states.
-- Keep the visible status indicator, but no transient save, cancel, or download
-  success messages. Show actionable validation and file-operation errors.
+- Keep the visible status indicator and show localized success toasts after
+  completed package actions. Canceled and failed actions show no success toast;
+  keep actionable validation and file-operation errors.
 - A new package needs a destination before entering the editor. Canceling the
   save dialog leaves the start screen unchanged.
 - Validate selected image handouts and their generated data URLs before
