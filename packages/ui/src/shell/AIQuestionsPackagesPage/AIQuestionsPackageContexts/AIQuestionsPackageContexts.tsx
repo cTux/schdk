@@ -1,6 +1,6 @@
 import '../styles.scss';
 
-import { QUESTION_COUNT } from '@schdk/common';
+import { compareFavoriteItemsByName, QUESTION_COUNT } from '@schdk/common';
 import { Button } from '../../../atoms/Button';
 import { Dropdown } from '../../../atoms/Dropdown';
 import { Input } from '../../../atoms/Input';
@@ -14,6 +14,9 @@ export function AIQuestionsPackageContexts({
   onChange,
 }: AIQuestionsPackageContextsProps) {
   const { copy } = useLocalization();
+  const sortedQuestionRules = [...questionRules].sort(
+    compareFavoriteItemsByName,
+  );
   const sortedQuestions = value
     .map((question, index) => ({ question, index }))
     .sort(
@@ -81,8 +84,9 @@ export function AIQuestionsPackageContexts({
               }
             >
               <option value="">{copy.shared.optional}</option>
-              {questionRules.map((rule) => (
+              {sortedQuestionRules.map((rule) => (
                 <option key={rule.name} value={rule.name}>
+                  {rule.favorite ? '⭐ ' : ''}
                   {rule.name}
                 </option>
               ))}

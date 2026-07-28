@@ -106,8 +106,8 @@ export function createGameQuestionPrompt(input: GameQuestionGenerationRequest) {
   return {
     system:
       input.locale === 'uk'
-        ? 'Створи питання для гри «Що? Де? Коли?» за обраним шаблоном. Коментар до відповіді є обов’язковим: коротко поясни правильну відповідь. Заповни всі поля формату відповіді; для інших необов’язкових полів без значення поверни null, а для списків — порожній список.'
-        : 'Create a What? Where? When? game question from the selected template. The answer comment is required: briefly explain the correct answer. Fill every response field; use null for other absent optional fields and empty arrays for absent lists.',
+        ? 'Створи питання для гри «Що? Де? Коли?» за обраним шаблоном. Коментар до відповіді є обов’язковим: коротко поясни правильну відповідь. Якщо шаблон або контекст вимагає роздатковий матеріал, додай його як текст; інакше поверни handout: null. Не вигадуй зображення або data URL. Заповни всі поля формату відповіді; для інших необов’язкових полів без значення поверни null, а для списків — порожній список.'
+        : 'Create a What? Where? When? game question from the selected template. The answer comment is required: briefly explain the correct answer. If the template or context requires a handout, include it as text; otherwise return handout: null. Do not invent images or data URLs. Fill every response field; use null for other absent optional fields and empty arrays for absent lists.',
     prompt,
   };
 }

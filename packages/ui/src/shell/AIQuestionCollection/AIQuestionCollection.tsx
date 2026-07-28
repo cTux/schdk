@@ -58,29 +58,34 @@ export function AIQuestionCollection({
         </div>
       ) : questions.length ? (
         <div className="ai-question-list">
-          {questions.map((question, index) => (
-            <AIQuestionCard
-              key={`${question.name}-${index}`}
-              question={question}
-              onDelete={
-                editable
-                  ? async () => {
-                      const confirmed = await deleteDialog.confirm(
-                        copy.aiQuestions.deleteConfirmation(question.name),
-                      );
-                      return !confirmed || onRemove(index);
-                    }
-                  : undefined
-              }
-              onEdit={editable ? () => onEdit(question, index) : undefined}
-              onSaveFailed={onSaveFailed}
-              onUpdate={
-                editable
-                  ? (nextQuestion) => onUpdate(index, nextQuestion)
-                  : undefined
-              }
-            />
-          ))}
+          {questions
+            .map((question, index) => ({ question, index }))
+            .sort((left, right) =>
+              left.question.name.localeCompare(right.question.name),
+            )
+            .map(({ question, index }) => (
+              <AIQuestionCard
+                key={`${question.name}-${index}`}
+                question={question}
+                onDelete={
+                  editable
+                    ? async () => {
+                        const confirmed = await deleteDialog.confirm(
+                          copy.aiQuestions.deleteConfirmation(question.name),
+                        );
+                        return !confirmed || onRemove(index);
+                      }
+                    : undefined
+                }
+                onEdit={editable ? () => onEdit(question, index) : undefined}
+                onSaveFailed={onSaveFailed}
+                onUpdate={
+                  editable
+                    ? (nextQuestion) => onUpdate(index, nextQuestion)
+                    : undefined
+                }
+              />
+            ))}
         </div>
       ) : (
         <p className="ai-question-empty">{emptyLabel}</p>

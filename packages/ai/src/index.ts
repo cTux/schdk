@@ -88,20 +88,9 @@ const generatedQuestionSchema = jsonSchema<GameQuestion>(
             },
             required: ['kind', 'text'],
           },
-          {
-            type: 'object',
-            additionalProperties: false,
-            properties: {
-              kind: { type: 'string', enum: ['image'] },
-              name: { type: 'string' },
-              mimeType: { type: 'string' },
-              dataUrl: { type: 'string' },
-            },
-            required: ['kind', 'name', 'mimeType', 'dataUrl'],
-          },
           { type: 'null' },
         ],
-        description: 'Optional handout; null when absent.',
+        description: 'Optional text handout; null when absent.',
       },
       comment: {
         ...nullableString(),

@@ -1,7 +1,8 @@
-import type {
-  AIQuestion,
-  AIQuestionDifficulty,
-  AIQuestionsPackage,
+import {
+  compareFavoriteItemsByName,
+  type AIQuestion,
+  type AIQuestionDifficulty,
+  type AIQuestionsPackage,
 } from '@schdk/common';
 import {
   createGameQuestionPrompt,
@@ -60,18 +61,10 @@ export function createAiQuestionGeneration(
     apiKeyConfigured: options.apiKeyConfigured,
     packages: packages
       .filter((item) => item.enabled)
-      .sort(
-        (left, right) =>
-          Number(right.favorite) - Number(left.favorite) ||
-          left.name.localeCompare(right.name),
-      ),
+      .sort(compareFavoriteItemsByName),
     templates: templates
       .filter((template) => template.enabled && !template.generalRule)
-      .sort(
-        (left, right) =>
-          Number(right.favorite) - Number(left.favorite) ||
-          left.name.localeCompare(right.name),
-      ),
+      .sort(compareFavoriteItemsByName),
     onGenerationStart: bridge?.renewToken?.bind(bridge),
     getPromptPreview: isAdmin
       ? (template, context, excludedAnswers = [], difficulty = 'medium') => {

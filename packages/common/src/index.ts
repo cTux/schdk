@@ -19,6 +19,7 @@ export type {
 } from './ai-questions-package.js';
 export {
   AI_QUESTION_DIFFICULTIES,
+  compareFavoriteItemsByName,
   MAX_AI_QUESTION_BYTES,
   parseAIQuestion,
   parseAIQuestionArchive,

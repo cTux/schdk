@@ -6,17 +6,24 @@ import {
   faChevronRight,
   faWandMagicSparkles,
 } from '@fortawesome/free-solid-svg-icons';
-import { getGameQuestionAnswers } from '@schdk/common';
+import {
+  compareFavoriteItemsByName,
+  getGameQuestionAnswers,
+} from '@schdk/common';
 import classNames from 'classnames';
 import { useState } from 'react';
 import { Button } from '../../atoms/Button';
-import { Dropdown } from '../../atoms/Dropdown';
 import { IconButton } from '../../atoms/IconButton';
 import { Textarea } from '../../atoms/Textarea';
 import { useLocalization } from '../../localization';
+import { PackageGenerationOptions } from '../PackageGenerationOptions';
 import {
   getPackageGenerationInput,
+  getPackageGenerationPreviewInput,
+  getPackageGenerationTemplates,
   getPackageGenerationTargets,
+  type PackageGenerationInput,
+  type PackageGenerationRuleSet,
   type PackageGenerationScope,
 } from './generation-input';
 import type { PackageGenerationDialogProps } from './types';
@@ -35,13 +42,19 @@ export function PackageGenerationDialog({
   const { copy } = useLocalization();
   const [open, setOpen] = useState(false);
   const [scope, setScope] = useState<PackageGenerationScope>('missing');
+  const [ruleSet, setRuleSet] = useState<PackageGenerationRuleSet>('all');
   const [selected, setSelected] = useState<number | null>(null);
   const [thinking, setThinking] = useState(false);
   const [failed, setFailed] = useState(false);
   const [progress, setProgress] = useState<[number, number] | null>(null);
   const [promptOpen, setPromptOpen] = useState(false);
   const [excludedAnswers, setExcludedAnswers] = useState<string[]>([]);
-  const activePackages = packages.filter((item) => item.enabled);
+  const [currentInput, setCurrentInput] =
+    useState<PackageGenerationInput | null>(null);
+  const activePackages = packages
+    .filter((item) => item.enabled)
+    .sort(compareFavoriteItemsByName);
+  const randomTemplates = getPackageGenerationTemplates(templates, ruleSet);
   const selectedPackage =
     selected === null ? undefined : activePackages[selected];
   const targets = getPackageGenerationTargets(gamePackage, scope);
@@ -52,12 +65,14 @@ export function PackageGenerationDialog({
   function reset() {
     setOpen(false);
     setScope('missing');
+    setRuleSet('all');
     setSelected(null);
     setThinking(false);
     setFailed(false);
     setProgress(null);
     setPromptOpen(false);
     setExcludedAnswers([]);
+    setCurrentInput(null);
   }
 
   function show() {
@@ -71,11 +86,15 @@ export function PackageGenerationDialog({
   );
   const previewIndex = targets[progress ? progress[0] - 1 : 0];
   const previewInput =
-    previewIndex === undefined
-      ? null
-      : getPackageGenerationInput(selectedPackage, templates, previewIndex);
+    currentInput ??
+    getPackageGenerationPreviewInput(
+      selectedPackage,
+      templates,
+      previewIndex,
+      ruleSet,
+    );
   async function generate() {
-    if (!selectedPackage || !templates.length || !targets.length) return;
+    if (!selectedPackage || !randomTemplates.length || !targets.length) return;
     setThinking(true);
     setFailed(false);
     try {
@@ -86,8 +105,10 @@ export function PackageGenerationDialog({
           selectedPackage,
           templates,
           index,
+          ruleSet,
         );
         if (!input) throw new Error('Missing generation input');
+        setCurrentInput(input);
         setProgress([position + 1, targets.length]);
         setExcludedAnswers([...usedAnswers]);
         onSelectQuestion(index);
@@ -156,48 +177,27 @@ export function PackageGenerationDialog({
                   <Dialog.Description className="question-generation-description">
                     {copy.packageGeneration.description}
                   </Dialog.Description>
-                  <label>
-                    {copy.packageGeneration.scope}
-                    <Dropdown
-                      value={scope}
-                      disabled={thinking}
-                      onChange={(event) =>
-                        setScope(event.target.value as PackageGenerationScope)
-                      }
-                    >
-                      <option value="missing">
-                        {copy.packageGeneration.missing}
-                      </option>
-                      <option value="all">{copy.packageGeneration.all}</option>
-                    </Dropdown>
-                  </label>
-                  {activePackages.length ? (
-                    <label>
-                      {copy.packageGeneration.rules}
-                      <Dropdown
-                        value={selected ?? ''}
-                        disabled={thinking}
-                        onChange={(event) =>
-                          setSelected(Number(event.target.value))
-                        }
-                      >
-                        {activePackages.map((item, index) => (
-                          <option key={`${item.name}-${index}`} value={index}>
-                            {item.name}
-                          </option>
-                        ))}
-                      </Dropdown>
-                    </label>
-                  ) : (
-                    <p className="question-generation-message">
-                      {copy.packageGeneration.noRules}
-                    </p>
-                  )}
-                  {scope === 'missing' && !targetsMissing && (
-                    <p className="question-generation-message">
-                      {copy.packageGeneration.nothingMissing}
-                    </p>
-                  )}
+                  <PackageGenerationOptions
+                    activePackages={activePackages}
+                    hasRandomTemplates={Boolean(randomTemplates.length)}
+                    ruleSet={ruleSet}
+                    scope={scope}
+                    selected={selected}
+                    targetsMissing={targetsMissing}
+                    thinking={thinking}
+                    onPackageChange={(index) => {
+                      setSelected(index);
+                      setCurrentInput(null);
+                    }}
+                    onRuleSetChange={(nextRuleSet) => {
+                      setRuleSet(nextRuleSet);
+                      setCurrentInput(null);
+                    }}
+                    onScopeChange={(nextScope) => {
+                      setScope(nextScope);
+                      setCurrentInput(null);
+                    }}
+                  />
                   {progress && (
                     <p className="question-generation-message" role="status">
                       {copy.packageGeneration.progress(...progress)}
@@ -224,7 +224,7 @@ export function PackageGenerationDialog({
                       disabled={
                         thinking ||
                         selected === null ||
-                        !templates.length ||
+                        !randomTemplates.length ||
                         (scope === 'missing' && !targetsMissing)
                       }
                       onClick={() => void generate()}
