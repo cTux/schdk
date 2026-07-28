@@ -30,7 +30,7 @@
     "@types/node": "catalog:",
     "electron": "catalog:",
     "electron-builder": "catalog:",
-    "oxlint": "^1.75.0",
+    "oxlint": "^1.76.0",
     "typescript": "catalog:",
     "vitest": "catalog:"
   },

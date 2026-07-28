@@ -35,7 +35,7 @@
     "@storybook/addon-docs": "10.5.5",
     "@storybook/react-vite": "10.5.5",
     "@types/react": "catalog:",
-    "oxlint": "^1.75.0",
+    "oxlint": "^1.76.0",
     "react-dom": "catalog:",
     "sass": "catalog:",
     "storybook": "10.5.5",

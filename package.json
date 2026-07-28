@@ -26,8 +26,8 @@
     "test": "turbo test && node --test scripts/repository-workflows.test.mjs"
   },
   "devDependencies": {
-    "npm-check-updates": "^22.2.9",
-    "oxfmt": "^0.60.0",
-    "turbo": "^2.10.6"
+    "npm-check-updates": "^23.0.0",
+    "oxfmt": "^0.61.0",
+    "turbo": "^2.10.7"
   }
 }
