@@ -19,8 +19,17 @@ export interface AiQuestionGenerationOptions {
   templates: AIQuestion[];
   packages: AIQuestionsPackage[];
   onGenerationStart?(): Promise<void>;
-  getPromptPreview?(template: AIQuestion, context: string): string;
-  onGenerate(template: AIQuestion, context: string): Promise<GameQuestion>;
+  getPromptPreview?(
+    template: AIQuestion,
+    context: string,
+    excludedAnswers?: string[],
+  ): string;
+  onGenerate(
+    template: AIQuestion,
+    context: string,
+    excludedAnswers?: string[],
+  ): Promise<GameQuestion>;
+  excludedAnswers?: string[];
 }
 
 export interface EditorViewProps {

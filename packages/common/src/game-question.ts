@@ -32,6 +32,18 @@ export interface GameQuestion {
   hostNotes?: string;
 }
 
+export function normalizeGameAnswer(answer: string) {
+  return answer.normalize('NFKC').trim().replace(/\s+/g, ' ').toLowerCase();
+}
+
+export function getGameQuestionAnswers(
+  question: Pick<GameQuestion, 'answer' | 'alternativeAnswers'>,
+) {
+  return [question.answer, ...question.alternativeAnswers].filter((answer) =>
+    answer.trim(),
+  );
+}
+
 function isHandout(value: unknown): value is Handout {
   if (!value || typeof value !== 'object') return false;
   if ('kind' in value && value.kind === 'text') {

@@ -3,11 +3,24 @@ import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { createOpenAI } from '@ai-sdk/openai';
 import { createProviderRegistry, generateText, jsonSchema, Output } from 'ai';
 import {
+  getGameQuestionAnswers,
+  normalizeGameAnswer,
   parseGameQuestion,
   QUESTION_TYPE_CONFIG,
-  type AIQuestion,
   type GameQuestion,
 } from '@schdk/common';
+import {
+  assertGameQuestionGenerationInput,
+  createGameQuestionPrompt,
+  type GenerateGameQuestionInput,
+} from './game-question-prompt.js';
+import { hasDiverseAnswer } from './answer-diversity.js';
+
+export { createGameQuestionPrompt } from './game-question-prompt.js';
+export type {
+  GameQuestionGenerationRequest,
+  GenerateGameQuestionInput,
+} from './game-question-prompt.js';
 
 export const SUPPORTED_AI_PROVIDER_IDS = [
   'openai',
@@ -25,18 +38,6 @@ type GeneratedQuestion = Omit<
   handout: GameQuestion['handout'] | null;
   hostNotes: string | null;
 };
-
-export interface GameQuestionGenerationRequest {
-  provider: string;
-  model: string;
-  locale: 'uk' | 'en';
-  template: AIQuestion;
-  context: string;
-}
-
-export interface GenerateGameQuestionInput extends GameQuestionGenerationRequest {
-  apiKey: string;
-}
 
 const nullableString = () => ({
   anyOf: [{ type: 'string' as const }, { type: 'null' as const }],
@@ -171,62 +172,10 @@ function parseProvider(value: string): SupportedAiProvider {
   return value as SupportedAiProvider;
 }
 
-function assertInput(input: GenerateGameQuestionInput) {
-  if (
-    typeof input.provider !== 'string' ||
-    typeof input.model !== 'string' ||
-    typeof input.apiKey !== 'string' ||
-    (input.locale !== 'uk' && input.locale !== 'en') ||
-    !input.template ||
-    typeof input.template.name !== 'string' ||
-    typeof input.template.description !== 'string' ||
-    typeof input.template.goodExamples !== 'string' ||
-    typeof input.template.badExamples !== 'string' ||
-    typeof input.context !== 'string' ||
-    !input.apiKey.trim() ||
-    input.apiKey.length > 16_384 ||
-    !input.model.trim() ||
-    input.model.length > 256 ||
-    !input.context.trim() ||
-    input.context.length > 20_000 ||
-    !input.template.name.trim() ||
-    !input.template.description.trim()
-  ) {
-    throw new TypeError('Invalid AI generation input');
-  }
-}
-
-function prompt(input: GameQuestionGenerationRequest) {
-  const examples = input.locale === 'uk' ? 'Приклади' : 'Examples';
-  const context = input.locale === 'uk' ? 'Контекст' : 'Context';
-  return [
-    `${input.template.name}: ${input.template.description}`,
-    input.template.goodExamples
-      ? `${examples} (${input.locale === 'uk' ? 'вдалі' : 'good'}): ${input.template.goodExamples}`
-      : '',
-    input.template.badExamples
-      ? `${examples} (${input.locale === 'uk' ? 'невдалі' : 'bad'}): ${input.template.badExamples}`
-      : '',
-    `${context}: ${input.context}`,
-  ]
-    .filter(Boolean)
-    .join('\n\n');
-}
-
-export function createGameQuestionPrompt(input: GameQuestionGenerationRequest) {
-  return {
-    system:
-      input.locale === 'uk'
-        ? 'Створи питання для гри «Що? Де? Коли?» за обраним шаблоном. Коментар до відповіді є обов’язковим: коротко поясни правильну відповідь. Заповни всі поля формату відповіді; для інших необов’язкових полів без значення поверни null, а для списків — порожній список.'
-        : 'Create a What? Where? When? game question from the selected template. The answer comment is required: briefly explain the correct answer. Fill every response field; use null for other absent optional fields and empty arrays for absent lists.',
-    prompt: prompt(input),
-  };
-}
-
 export async function generateGameQuestion(
   input: GenerateGameQuestionInput,
 ): Promise<GameQuestion> {
-  assertInput(input);
+  assertGameQuestionGenerationInput(input);
   const provider = parseProvider(input.provider);
   const registry = createProviderRegistry({
     openai: createOpenAI({ apiKey: input.apiKey }),
@@ -237,16 +186,43 @@ export async function generateGameQuestion(
     google: createGoogleGenerativeAI({ apiKey: input.apiKey }),
   });
   const { system, prompt: userPrompt } = createGameQuestionPrompt(input);
-  const result = await generateText({
-    model: registry.languageModel(`${provider}:${input.model}`),
-    output: Output.object({
-      name: 'game_question',
-      description:
-        'A complete game question with required and optional fields.',
-      schema: generatedQuestionSchema,
-    }),
-    system,
-    prompt: userPrompt,
-  });
-  return result.output;
+  const excludedAnswers = new Set(
+    input.excludedAnswers.map(normalizeGameAnswer),
+  );
+  const model = registry.languageModel(`${provider}:${input.model}`);
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    const result = await generateText({
+      model,
+      output: Output.object({
+        name: 'game_question',
+        description:
+          'A complete game question with required and optional fields.',
+        schema: generatedQuestionSchema,
+      }),
+      system,
+      prompt:
+        attempt === 0
+          ? userPrompt
+          : `${userPrompt}\n\n${
+              input.locale === 'uk'
+                ? 'Попередня спроба не пройшла перевірку унікальності та різноманітності. Обери іншу сутність, тип і форму відповіді.'
+                : 'The previous attempt failed the uniqueness and diversity review. Choose a different entity, type, and answer form.'
+            }`,
+    });
+    const repeatsAnswer = getGameQuestionAnswers(result.output).some((answer) =>
+      excludedAnswers.has(normalizeGameAnswer(answer)),
+    );
+    if (
+      !repeatsAnswer &&
+      (await hasDiverseAnswer(
+        model,
+        input.locale,
+        result.output,
+        input.excludedAnswers,
+      ))
+    ) {
+      return result.output;
+    }
+  }
+  throw new Error('AI generated a duplicate answer');
 }

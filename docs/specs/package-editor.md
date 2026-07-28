@@ -74,6 +74,15 @@ without losing in-progress work.
   autosave, explicit download, and confirmed deletion show a localized toast
   using the active application palette for two seconds. Canceled or failed
   actions and stale writes completed before newer edits show no success toast.
+- **EDT-20:** AI generation includes the answers already used by other retained
+  package questions in the provider prompt. Package generation adds each
+  accepted result to that set before generating the next target. Exact
+  normalized duplicates are rejected locally; every other candidate undergoes
+  a structured provider review that rejects aliases, synonyms, translations,
+  qualifications, or descriptive names of the same entity and answer choices
+  that worsen package variety by overusing one entity type or answer form. A
+  rejected candidate is retried once; a second rejection fails without
+  replacing the target question.
 
 ## Invariants
 
@@ -127,3 +136,9 @@ without losing in-progress work.
     each completed action shows its matching localized toast for two seconds.
     Cancel the desktop download, fail an action, and complete a stale autosave
     while a newer edit remains pending; confirm none shows a success toast.
+15. Generate one question and a complete package whose existing slots already
+    contain answers. Confirm every provider prompt excludes retained and
+    accepted answers. Return an exact duplicate, an alias or descriptive name
+    of an existing entity, and an answer that worsens an overrepresented type
+    or form; confirm each is rejected, one rejection is retried, and a second
+    rejection leaves its target unchanged.
