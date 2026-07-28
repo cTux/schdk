@@ -150,3 +150,4 @@ B65|2026-07-28|The first route split let a collection index reach a boolean edit
 B66|2026-07-28|The base icon-button color overrode the update button's green state|Use the combined update-button selector; `docs/specs/unified-shell.md` covers recurrence.
 B67|2026-07-28|The AI schema left host notes underspecified and package generation exposed no remarked-question scope|V33,V34
 B68|2026-07-28|Adding remarked-question generation pushed its dialog past the enforced source-file limit|Move excluded-answer calculation into the existing pure generation-input module; the repository workflow test covers recurrence.
+B69|2026-07-28|Text handouts used proportional fonts, so character-based diagrams lost alignment between editing and gameplay|Use monospace fonts on text handouts in both surfaces; `docs/specs/package-editor.md` and `docs/specs/game-hosting.md` cover recurrence.
