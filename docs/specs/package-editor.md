@@ -82,7 +82,8 @@ without losing in-progress work.
   response, joins overflow text into the last part allowed by the declared
   question type, replaces the complete question record, and continues sequentially.
   The selected difficulty is sent for every question. The visible cancel action
-  closes the modal during generation and ignores any unfinished provider result.
+  asks for confirmation, then closes the modal and ignores any unfinished
+  provider result only after confirmation.
   While generation runs, the modal shows the current question, its
   package-generation percentage, and an animated progress indicator that respects
   reduced-motion preferences.
@@ -155,8 +156,10 @@ without losing in-progress work.
     selected only from that set, while explicitly configured per-question types
     still win. Observe each target slot selected in order, every generated
     record replaced completely, and prior successful results retained when a
-    later request fails. Cancel during an unfinished request and confirm its
-    ignored. Confirm the progress percentage matches the current target position,
+    request fails. Start cancellation during an unfinished request, dismiss its
+    confirmation, and verify generation continues. Confirm cancellation and
+    verify the unfinished result is ignored. Confirm the progress percentage
+    matches the current target position,
     its activity indicator remains visibly animated between responses, and
     reduced-motion mode removes that animation. In the browser, confirm that
     generation starts with renewed Google authorization. As an allowlisted

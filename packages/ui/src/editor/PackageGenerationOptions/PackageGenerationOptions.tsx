@@ -2,6 +2,7 @@ import {
   AI_QUESTION_DIFFICULTIES,
   type AIQuestionDifficulty,
 } from '@schdk/common';
+import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';
 import { useLocalization } from '../../localization';
 import type { PackageGenerationRuleSet } from '../PackageGenerationDialog/generation-input';
@@ -12,6 +13,7 @@ import './styles.scss';
 
 export function PackageGenerationOptions({
   activePackages,
+  canGenerate,
   difficulty,
   hasRandomTemplates,
   progress,
@@ -22,10 +24,12 @@ export function PackageGenerationOptions({
   thinking,
   checkQuestionDatabase,
   onCheckQuestionDatabaseChange,
+  onCancel,
   onDifficultyChange,
   onPackageChange,
   onRuleSetChange,
   onScopeChange,
+  onGenerate,
 }: PackageGenerationOptionsProps) {
   const { copy } = useLocalization();
   return (
@@ -128,6 +132,20 @@ export function PackageGenerationOptions({
           />
         </div>
       )}
+      <div className="question-generation-actions">
+        <Button type="button" variant="secondary" onClick={onCancel}>
+          {copy.packageGeneration.cancel}
+        </Button>
+        <Button
+          type="button"
+          variant="primary"
+          aria-busy={thinking}
+          disabled={thinking || !canGenerate}
+          onClick={onGenerate}
+        >
+          {copy.packageGeneration.generate}
+        </Button>
+      </div>
     </>
   );
 }

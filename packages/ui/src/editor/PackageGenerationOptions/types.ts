@@ -6,6 +6,7 @@ import type {
 
 export interface PackageGenerationOptionsProps {
   activePackages: AIQuestionsPackage[];
+  canGenerate: boolean;
   difficulty: AIQuestionDifficulty;
   hasRandomTemplates: boolean;
   progress: [number, number] | null;
@@ -16,8 +17,10 @@ export interface PackageGenerationOptionsProps {
   thinking: boolean;
   checkQuestionDatabase: boolean;
   onCheckQuestionDatabaseChange(checked: boolean): void;
+  onCancel(): void;
   onDifficultyChange(difficulty: AIQuestionDifficulty): void;
   onPackageChange(index: number): void;
   onRuleSetChange(ruleSet: PackageGenerationRuleSet): void;
   onScopeChange(scope: PackageGenerationScope): void;
+  onGenerate(): void;
 }

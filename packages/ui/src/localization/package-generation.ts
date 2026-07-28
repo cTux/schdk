@@ -21,6 +21,7 @@ export const packageGenerationCopy = {
     progress: (current: number, total: number) =>
       `Питання ${current} із ${total}`,
     cancel: 'Відмінити',
+    cancelConfirmation: 'Ви дійсно хочете відмінити генерацію пакету питань?',
     generate: 'Згенерувати',
     failed:
       'Не вдалося згенерувати пакет. Збережено питання, створені до помилки.',
@@ -50,6 +51,8 @@ export const packageGenerationCopy = {
     progress: (current: number, total: number) =>
       `Question ${current} of ${total}`,
     cancel: 'Cancel',
+    cancelConfirmation:
+      'Are you sure you want to cancel question package generation?',
     generate: 'Generate',
     failed:
       'Could not generate the package. Questions created before the error were kept.',

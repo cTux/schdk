@@ -8,7 +8,10 @@ import {
 import * as common from '@schdk/common';
 import classNames from 'classnames';
 import { useRef, useState } from 'react';
-import { Button } from '../../atoms/Button';
+import {
+  ConfirmationDialog,
+  useConfirmationDialog,
+} from '../../atoms/ConfirmationDialog';
 import { IconButton } from '../../atoms/IconButton';
 import { Textarea } from '../../atoms/Textarea';
 import { useLocalization } from '../../localization';
@@ -29,6 +32,7 @@ export function PackageGenerationDialog({
   onSelectQuestion,
 }: PackageGenerationDialogProps) {
   const { copy } = useLocalization();
+  const cancelDialog = useConfirmationDialog();
   const [open, setOpen] = useState(false);
   const [scope, setScope] = useState<gen.PackageGenerationScope>('missing');
   const [ruleSet, setRuleSet] = useState<gen.PackageGenerationRuleSet>('all');
@@ -79,6 +83,12 @@ export function PackageGenerationDialog({
   function show() {
     setSelected(activePackages.length ? 0 : null);
     setOpen(true);
+  }
+  async function cancel() {
+    const confirmed = await cancelDialog.confirm(
+      copy.packageGeneration.cancelConfirmation,
+    );
+    if (confirmed) reset();
   }
   async function generate() {
     if (!selectedPackage || !randomTemplates.length || !targets.length) return;
@@ -170,6 +180,11 @@ export function PackageGenerationDialog({
                   </Dialog.Description>
                   <PackageGenerationOptions
                     activePackages={activePackages}
+                    canGenerate={
+                      selected !== null &&
+                      Boolean(randomTemplates.length) &&
+                      Boolean(targets.length)
+                    }
                     difficulty={difficulty}
                     hasRandomTemplates={Boolean(randomTemplates.length)}
                     progress={progress}
@@ -180,6 +195,7 @@ export function PackageGenerationDialog({
                     thinking={thinking}
                     checkQuestionDatabase={checkQuestionDatabase}
                     onCheckQuestionDatabaseChange={setCheckQuestionDatabase}
+                    onCancel={() => void cancel()}
                     onDifficultyChange={setDifficulty}
                     onPackageChange={(index) => {
                       setSelected(index);
@@ -193,31 +209,13 @@ export function PackageGenerationDialog({
                       setScope(nextScope);
                       setCurrentInput(null);
                     }}
+                    onGenerate={() => void generate()}
                   />
                   {failed && (
                     <p className="question-generation-error" role="alert">
                       {copy.packageGeneration.failed}
                     </p>
                   )}
-                  <div className="question-generation-actions">
-                    <Button type="button" variant="secondary" onClick={reset}>
-                      {copy.packageGeneration.cancel}
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="primary"
-                      aria-busy={thinking}
-                      disabled={
-                        thinking ||
-                        selected === null ||
-                        !randomTemplates.length ||
-                        !targets.length
-                      }
-                      onClick={() => void generate()}
-                    >
-                      {copy.packageGeneration.generate}
-                    </Button>
-                  </div>
                 </div>
                 {promptOpen && previewInput && getPromptPreview && (
                   <label className="question-generation-prompt">
@@ -238,6 +236,7 @@ export function PackageGenerationDialog({
           </Dialog.Viewport>
         </Dialog.Portal>
       </Dialog.Root>
+      <ConfirmationDialog {...cancelDialog.dialogProps} />
     </>
   );
 }

@@ -109,6 +109,7 @@ export const componentValues: Record<string, Record<string, unknown>> = {
         favorite: false,
       },
     ],
+    canGenerate: true,
     difficulty: 'medium',
     hasRandomTemplates: true,
     progress: [3, 36],
