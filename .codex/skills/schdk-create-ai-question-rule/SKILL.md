@@ -19,7 +19,11 @@ description: Analyze the construction of a supplied quiz question, answer, and o
    - whether the answer is unique and the wording is fair.
 4. Name the type only after tracing the clue path. Describe the reusable
    mechanism, not the example's topic.
-5. Create one `AIQuestion` object:
+5. Search the [shared Google Drive rules folder](https://drive.google.com/drive/folders/1qigJtM0zAQl2Yk8C2xjeragcGDybUVR1)
+   for an `.aiquestion` with the same reusable mechanism. If one exists, extend
+   it with only the new instructions or non-duplicate examples that improve
+   the rule instead of creating a competing file.
+6. Create or update one `AIQuestion` object:
    - `name`: concise Ukrainian type name;
    - `description`: imperative generation instructions with construction,
      uniqueness, fairness, handout, and answer-comment requirements;
@@ -28,9 +32,9 @@ description: Analyze the construction of a supplied quiz question, answer, and o
      associations, duplicated clues, and non-unique answers;
    - `enabled: true`, `favorite: false`, `generalRule: false`, unless requested
      otherwise.
-6. Serialize through `serializeAIQuestion` from `@schdk/common`; never
+7. Serialize through `serializeAIQuestion` from `@schdk/common`; never
    handcraft the ZIP contract. Name the file `<name>.aiquestion`.
-7. Parse the written file with `parseAIQuestionArchive` and compare every
+8. Parse the written file with `parseAIQuestionArchive` and compare every
    parsed field with the intended object.
 
 ## Generation Standard
