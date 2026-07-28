@@ -38,6 +38,12 @@ export interface GameQuestionGenerationRequest {
   context: string;
   difficulty: AIQuestionDifficulty;
   excludedAnswers: string[];
+  existingQuestions: ExistingQuestionReference[];
+}
+
+export interface ExistingQuestionReference {
+  question: string;
+  answers: string[];
 }
 
 export interface GenerateGameQuestionInput extends GameQuestionGenerationRequest {
@@ -68,6 +74,26 @@ export function assertGameQuestionGenerationInput(
       (length, answer) => length + answer.length,
       0,
     ) > 20_000 ||
+    !Array.isArray(input.existingQuestions) ||
+    input.existingQuestions.length > 10_000 ||
+    input.existingQuestions.some(
+      (question) =>
+        !question ||
+        typeof question.question !== 'string' ||
+        question.question.length > 20_000 ||
+        !Array.isArray(question.answers) ||
+        question.answers.length > 100 ||
+        question.answers.some(
+          (answer) => typeof answer !== 'string' || answer.length > 1_000,
+        ),
+    ) ||
+    input.existingQuestions.reduce(
+      (total, question) =>
+        total +
+        question.question.length +
+        question.answers.reduce((length, answer) => length + answer.length, 0),
+      0,
+    ) > 5_000_000 ||
     !input.apiKey.trim() ||
     input.apiKey.length > 16_384 ||
     !input.model.trim() ||

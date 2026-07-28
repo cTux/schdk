@@ -24,9 +24,15 @@ import {
   type DrivePackageStorage,
 } from './game-packages.js';
 import type { DriveSettingsDocument } from './settings.js';
+import {
+  parseQuestionDatabaseDocument,
+  type DriveQuestionDatabaseStorage,
+  type QuestionDatabaseDocument,
+} from './question-database.js';
 
 const DRIVE_API = 'https://www.googleapis.com/drive/v3';
 const SETTINGS_NAME = 'settings-v1.json';
+const QUESTION_DATABASE_NAME = 'question-database-v1.json';
 
 export const GOOGLE_DRIVE_SCOPES = [
   'https://www.googleapis.com/auth/drive',
@@ -41,7 +47,8 @@ export class GoogleDriveClient
   implements
     DrivePackageStorage,
     DriveAIQuestionStorage,
-    DriveAIQuestionsPackageStorage
+    DriveAIQuestionsPackageStorage,
+    DriveQuestionDatabaseStorage
 {
   private readonly appData = new GoogleDriveAppData((input, init) =>
     this.request(input, init),
@@ -79,6 +86,18 @@ export class GoogleDriveClient
 
   async saveSettings(settings: DriveSettingsDocument): Promise<void> {
     await this.appData.save(SETTINGS_NAME, settings);
+  }
+
+  async loadQuestionDatabase(): Promise<QuestionDatabaseDocument | null> {
+    return parseQuestionDatabaseDocument(
+      await this.appData.load(QUESTION_DATABASE_NAME),
+    );
+  }
+
+  async saveQuestionDatabase(value: QuestionDatabaseDocument): Promise<void> {
+    const parsed = parseQuestionDatabaseDocument(value);
+    if (!parsed) throw new TypeError('Invalid question database');
+    await this.appData.save(QUESTION_DATABASE_NAME, parsed);
   }
 
   async loadAiApiKey(): Promise<string | null> {

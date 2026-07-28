@@ -17,6 +17,8 @@ export const questionGenerationCopy = {
     },
     context: 'Контекст',
     contextPlaceholder: 'Наприклад, щось про фінал чемпіонату з футболу',
+    checkDatabase:
+      'Перевірити схожість із моєю базою питань і перегенерувати за потреби',
     generate: 'Згенерувати',
     showPrompt: 'Показати промпт до AI провайдера',
     hidePrompt: 'Сховати промпт до AI провайдера',
@@ -44,6 +46,8 @@ export const questionGenerationCopy = {
     },
     context: 'Context',
     contextPlaceholder: 'For example, something about a football final',
+    checkDatabase:
+      'Check similarity against my question database and regenerate if needed',
     generate: 'Generate',
     showPrompt: 'Show AI provider prompt',
     hidePrompt: 'Hide AI provider prompt',

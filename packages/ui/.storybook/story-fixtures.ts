@@ -24,6 +24,14 @@ export const aiQuestion: AIQuestion = {
   favorite: false,
   generalRule: false,
 };
+const questionDatabaseRows = Array.from({ length: 120 }, (_, index) => ({
+  fileId: `storybook-package-${Math.floor(index / 36)}`,
+  packageTitle: `Storybook package ${Math.floor(index / 36) + 1}`,
+  number: (index % 36) + 1,
+  question: `Storybook question ${index + 1}`,
+  answer: `Storybook answer ${index + 1}`,
+  alternativeAnswers: [],
+}));
 export const position = DEFAULT_GAME_LAYOUT.question;
 export const customElement = {
   id: 'story-element',
@@ -120,10 +128,22 @@ export const componentValues: Record<string, Record<string, unknown>> = {
   MusicBreakField: { musicBreak: null },
   ShellView: {
     game: DEFAULT_GAME_OPTIONS,
+    questionDatabase: {
+      failed: false,
+      loading: false,
+      progress: { current: 1, total: 1 },
+      rows: questionDatabaseRows,
+    },
     googleDriveAccount: {
       displayName: 'Storybook',
       emailAddress: 'storybook@example.com',
     },
+  },
+  QuestionDatabasePage: {
+    failed: false,
+    loading: false,
+    progress: { current: 1, total: 1 },
+    rows: questionDatabaseRows,
   },
   VisualEditorToolbar: {
     selected: { kind: 'built-in', id: 'question' },

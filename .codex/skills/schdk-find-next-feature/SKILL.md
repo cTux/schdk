@@ -19,7 +19,9 @@ Inspect the sources below in order. As soon as one candidate is confirmed action
    - Stop when the first remaining candidate is actionable.
    - After implementing a task selected from `docs/TODO.md`, remove that item from
      `docs/TODO.md` as part of the same change.
-2. Inspect `docs/research` and `docs/tech-design` in path order.
+2. Inspect `docs/POTENTIAL_IMPROVEMENTS.md`, then `docs/research` and
+   `docs/tech-design` in path order. Skip a potential improvement until its
+   documented activation conditions are observable in the current project.
    - Never open files ending in `-implemented.md`.
    - Treat an unsuffixed document's first unimplemented outcome as the candidate.
    - When all outcomes from a document are implemented, rename it to `*-implemented.md` as part of that implementation task so future searches skip it.

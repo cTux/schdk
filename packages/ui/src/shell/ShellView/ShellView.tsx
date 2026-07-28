@@ -20,6 +20,8 @@ import { AIQuestionsPage } from '../AIQuestionsPage';
 import { AIQuestionsPackagesPage } from '../AIQuestionsPackagesPage';
 import type { AIQuestion, AIQuestionsPackage } from '@schdk/common';
 import type { ShellEditTarget } from './types';
+import { QuestionDatabasePage } from '../QuestionDatabasePage';
+import type { QuestionDatabasePageProps } from '../QuestionDatabasePage';
 
 export type { ShellViewName } from '../shellItems';
 
@@ -52,6 +54,7 @@ export interface ShellViewProps {
   editorApp: ReactNode;
   hostApp: ReactNode;
   loadedApps: { host: boolean; editor: boolean };
+  questionDatabase: Omit<QuestionDatabasePageProps, 'hidden'>;
   editorOptions: EditorTextOptions;
   gameOptions: GameOptions;
   gameOptionsError: string;
@@ -84,6 +87,7 @@ export function ShellView({
   editorApp,
   hostApp,
   loadedApps,
+  questionDatabase,
   editorOptions,
   gameOptions,
   gameOptionsError,
@@ -118,6 +122,10 @@ export function ShellView({
         />
         <section className="workspace">
           <ShellHome hidden={view !== 'home'} onOpen={onShowView} />
+          <QuestionDatabasePage
+            {...questionDatabase}
+            hidden={view !== 'questionDatabase'}
+          />
           <OptionsPage
             ai={aiOptions}
             hidden={view !== 'options'}

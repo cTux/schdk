@@ -12,6 +12,8 @@ export interface PackageGenerationOptionsProps {
   selected: number | null;
   targetsMissing: boolean;
   thinking: boolean;
+  checkQuestionDatabase: boolean;
+  onCheckQuestionDatabaseChange(checked: boolean): void;
   onPackageChange(index: number): void;
   onRuleSetChange(ruleSet: PackageGenerationRuleSet): void;
   onScopeChange(scope: PackageGenerationScope): void;

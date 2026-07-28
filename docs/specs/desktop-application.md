@@ -53,6 +53,9 @@ application with native save and presenter-window integration.
   immediately and every minute. When its version differs, it shows the shared
   fixed green update button; activating it opens the latest release page in the
   system browser.
+- **DSK-19:** The preload exposes only validated question-database load and
+  write operations; Electron main parses the complete document before saving
+  it to the connected account's Drive app data.
 
 ## Invariants
 
@@ -87,3 +90,6 @@ application with native save and presenter-window integration.
 9. Run an older packaged version while a newer GitHub Release exists; wait at
    most one minute, activate the update button, and verify the latest release
    page opens in the system browser.
+10. Load and save a valid personal question index through the desktop bridge,
+    reject a malformed document, and confirm no token or generic Drive request
+    crosses renderer IPC.

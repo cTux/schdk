@@ -59,6 +59,9 @@ const editorApi = {
     loadSettings: () => ipcRenderer.invoke('load-google-drive-settings'),
     saveSettings: (settings: unknown) =>
       ipcRenderer.invoke('save-google-drive-settings', settings),
+    loadQuestionDatabase: () => ipcRenderer.invoke('load-question-database'),
+    saveQuestionDatabase: (value: unknown) =>
+      ipcRenderer.invoke('save-question-database', value),
     listGamePackages: () =>
       ipcRenderer.invoke('list-google-drive-game-packages'),
     loadGamePackage: (fileId: string) =>

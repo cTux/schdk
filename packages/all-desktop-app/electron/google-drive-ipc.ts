@@ -5,6 +5,7 @@ import {
   parseDriveAIQuestionWrite,
   parseDriveSettingsDocument,
   parseDriveGamePackageWrite,
+  parseQuestionDatabaseDocument,
 } from '@schdk/google-drive';
 import { ipcMain } from 'electron';
 import {
@@ -49,6 +50,12 @@ export function registerGoogleDriveIpc() {
     const settings = parseDriveSettingsDocument(value);
     if (!settings) throw new TypeError('Invalid Google Drive settings');
     await client.saveSettings(settings);
+  });
+  ipcMain.handle('load-question-database', () => client.loadQuestionDatabase());
+  ipcMain.handle('save-question-database', async (_event, value) => {
+    const database = parseQuestionDatabaseDocument(value);
+    if (!database) throw new TypeError('Invalid question database');
+    await client.saveQuestionDatabase(database);
   });
   ipcMain.handle('list-google-drive-game-packages', () =>
     client.listGamePackages(),

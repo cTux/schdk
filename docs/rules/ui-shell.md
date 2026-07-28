@@ -1,10 +1,14 @@
 # Shell UI
 
 - Keep the sidebar fixed while application content scrolls.
-- Group, in this order, `Візуальний редактор`, `Правила створення питань`,
-  `Правила створення пакету`, `Редагувати пакети питань`, and `Провести гру`
-  under `ЩДК`. Keep
+- Group, in this order, `База питань`, `Візуальний редактор`,
+  `Правила створення питань`, `Правила створення пакету`,
+  `Редагувати пакети питань`, and `Провести гру` under `ЩДК`. Keep
   `Налаштування` in a separate group at the bottom.
+- Explain on the question-database page that it contains only the current
+  user's Drive packages. Keep question and answer search, sortable question
+  and answer columns, windowed rows, and a bottom action that loads the next
+  result batch.
 - Organize settings under an accessible primary `ЩДК` tab with always-visible
   `Проведення гри` and `Редагування питань` fieldsets.
 - Keep the active primary settings tab controlled by the web shell so its URL

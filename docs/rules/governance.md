@@ -35,6 +35,10 @@
   speculative skills for features or packages that do not exist yet.
 - Rename completed task documents under `docs/research` and `docs/tech-design`
   with an `-implemented.md` suffix so task discovery can skip them.
+- When research identifies a credible scalable solution that is not yet
+  justified, preserve it in `docs/POTENTIAL_IMPROVEMENTS.md` with its purpose,
+  tradeoffs, and measurable activation conditions instead of implementing it
+  prematurely or losing the finding.
 
 ## Documentation and language
 

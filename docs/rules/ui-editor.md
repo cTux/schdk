@@ -30,6 +30,11 @@
   package from a dropdown. Generate slots sequentially, select the active slot
   behind the modal, wait for each provider response, replace the complete
   question record, and continue to the next slot.
+- Keep a similarity-check toggle in both question and package generation
+  modals. Default it to off each time the modal opens. When enabled, refresh
+  the current account's question database, reject semantically similar
+  generated questions or answers, and regenerate once before reporting
+  failure.
 - Label optional fields. A non-empty unresolved remark keeps a question
   unfinished. Give question, remark, answer, and answer-comment text areas the
   same default height.

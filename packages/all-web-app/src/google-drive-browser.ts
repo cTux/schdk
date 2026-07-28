@@ -173,6 +173,16 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
     return this.client.saveSettings(settings);
   }
 
+  loadQuestionDatabase() {
+    return this.client.loadQuestionDatabase();
+  }
+
+  saveQuestionDatabase(
+    value: Parameters<GoogleDriveClient['saveQuestionDatabase']>[0],
+  ) {
+    return this.client.saveQuestionDatabase(value);
+  }
+
   createGamePackage(
     value: Parameters<GoogleDriveClient['createGamePackage']>[0],
   ) {

@@ -88,6 +88,12 @@
   font-weight: 700;
 }
 
+.question-generation-popup .question-generation-check {
+  align-items: center;
+  flex-direction: row;
+  font-weight: 400;
+}
+
 .question-generation-popup .ui-dropdown,
 .question-generation-popup .ui-dropdown-select {
   width: 100%;

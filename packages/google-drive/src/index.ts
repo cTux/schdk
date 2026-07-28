@@ -51,3 +51,15 @@ export type {
   DriveAIQuestionsPackageStorage,
   DriveAIQuestionsPackageWrite,
 } from './ai-questions-packages.js';
+export {
+  createQuestionDatabasePackage,
+  flattenQuestionDatabase,
+  parseQuestionDatabaseDocument,
+} from './question-database.js';
+export type {
+  DriveQuestionDatabaseStorage,
+  QuestionDatabaseDocument,
+  QuestionDatabaseEntry,
+  QuestionDatabasePackage,
+  QuestionDatabaseQuestion,
+} from './question-database.js';

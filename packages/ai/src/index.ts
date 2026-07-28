@@ -15,9 +15,11 @@ import {
   type GenerateGameQuestionInput,
 } from './game-question-prompt.js';
 import { hasDiverseAnswer } from './answer-diversity.js';
+import { findSimilarQuestionCandidates } from './question-similarity.js';
 
 export { createGameQuestionPrompt } from './game-question-prompt.js';
 export type {
+  ExistingQuestionReference,
   GameQuestionGenerationRequest,
   GenerateGameQuestionInput,
 } from './game-question-prompt.js';
@@ -176,9 +178,13 @@ export async function generateGameQuestion(
   });
   const { system, prompt: userPrompt } = createGameQuestionPrompt(input);
   const excludedAnswers = new Set(
-    input.excludedAnswers.map(normalizeGameAnswer),
+    [
+      ...input.excludedAnswers,
+      ...input.existingQuestions.flatMap((question) => question.answers),
+    ].map(normalizeGameAnswer),
   );
   const model = registry.languageModel(`${provider}:${input.model}`);
+  let rejectedQuestions: typeof input.existingQuestions = [];
   for (let attempt = 0; attempt < 2; attempt += 1) {
     const result = await generateText({
       model,
@@ -196,8 +202,12 @@ export async function generateGameQuestion(
               input.locale === 'uk'
                 ? 'Попередня спроба не пройшла перевірку унікальності та різноманітності. Обери іншу сутність, тип і форму відповіді.'
                 : 'The previous attempt failed the uniqueness and diversity review. Choose a different entity, type, and answer form.'
-            }`,
+            }\n\n${JSON.stringify(rejectedQuestions.slice(0, 5))}`,
     });
+    const similarQuestions = findSimilarQuestionCandidates(
+      result.output,
+      input.existingQuestions,
+    );
     const repeatsAnswer = getGameQuestionAnswers(result.output).some((answer) =>
       excludedAnswers.has(normalizeGameAnswer(answer)),
     );
@@ -208,10 +218,12 @@ export async function generateGameQuestion(
         input.locale,
         result.output,
         input.excludedAnswers,
+        similarQuestions,
       ))
     ) {
       return result.output;
     }
+    rejectedQuestions = similarQuestions;
   }
   throw new Error('AI generated a duplicate answer');
 }

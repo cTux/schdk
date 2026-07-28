@@ -9,6 +9,7 @@ type SessionStorage = Pick<Storage, 'getItem' | 'setItem'>;
 function isShellViewName(value: string | null): value is ShellViewName {
   return (
     value === 'home' ||
+    value === 'questionDatabase' ||
     value === 'host' ||
     value === 'editor' ||
     value === 'visualEditor' ||
