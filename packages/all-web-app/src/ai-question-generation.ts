@@ -1,4 +1,8 @@
-import type { AIQuestion, AIQuestionsPackage } from '@schdk/common';
+import type {
+  AIQuestion,
+  AIQuestionDifficulty,
+  AIQuestionsPackage,
+} from '@schdk/common';
 import {
   createGameQuestionPrompt,
   type GameQuestionGenerationRequest,
@@ -28,6 +32,7 @@ export function createAiQuestionGeneration(
     template: AIQuestion,
     context: string,
     excludedAnswers: string[],
+    difficulty: AIQuestionDifficulty = 'medium',
   ): GameQuestionGenerationRequest {
     return {
       provider: options.provider,
@@ -46,6 +51,7 @@ export function createAiQuestionGeneration(
           }
         : template,
       context,
+      difficulty,
       excludedAnswers,
     };
   }
@@ -68,19 +74,19 @@ export function createAiQuestionGeneration(
       ),
     onGenerationStart: bridge?.renewToken?.bind(bridge),
     getPromptPreview: isAdmin
-      ? (template, context, excludedAnswers = []) => {
+      ? (template, context, excludedAnswers = [], difficulty = 'medium') => {
           const { system, prompt } = createGameQuestionPrompt(
-            createRequest(template, context, excludedAnswers),
+            createRequest(template, context, excludedAnswers, difficulty),
           );
           return `${system}\n\n${prompt}`;
         }
       : undefined,
-    onGenerate(template, context, excludedAnswers = []) {
+    onGenerate(template, context, excludedAnswers = [], difficulty = 'medium') {
       if (!bridge) {
         return Promise.reject(new Error('Google Drive is disconnected'));
       }
       return bridge.generateAiQuestion(
-        createRequest(template, context, excludedAnswers),
+        createRequest(template, context, excludedAnswers, difficulty),
       );
     },
   };

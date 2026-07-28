@@ -7,6 +7,14 @@ export const questionGenerationCopy = {
     template: 'Шаблон питання',
     noTemplates:
       'Немає активних шаблонів. Додайте або увімкніть шаблон у розділі штучного інтелекту.',
+    difficulty: 'Складність',
+    difficulties: {
+      'very-easy': 'Дуже легке',
+      easy: 'Легке',
+      medium: 'Середнє',
+      hard: 'Важке',
+      'very-hard': 'Дуже важке',
+    },
     context: 'Контекст',
     contextPlaceholder: 'Наприклад, щось про фінал чемпіонату з футболу',
     generate: 'Згенерувати',
@@ -26,6 +34,14 @@ export const questionGenerationCopy = {
     template: 'Question template',
     noTemplates:
       'There are no active templates. Add or enable one in Artificial intelligence.',
+    difficulty: 'Difficulty',
+    difficulties: {
+      'very-easy': 'Very easy',
+      easy: 'Easy',
+      medium: 'Medium',
+      hard: 'Hard',
+      'very-hard': 'Very hard',
+    },
     context: 'Context',
     contextPlaceholder: 'For example, something about a football final',
     generate: 'Generate',

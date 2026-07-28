@@ -1,5 +1,6 @@
 import type {
   AIQuestion,
+  AIQuestionDifficulty,
   AIQuestionsPackage,
   GamePackage,
   GameQuestion,
@@ -23,11 +24,13 @@ export interface AiQuestionGenerationOptions {
     template: AIQuestion,
     context: string,
     excludedAnswers?: string[],
+    difficulty?: AIQuestionDifficulty,
   ): string;
   onGenerate(
     template: AIQuestion,
     context: string,
     excludedAnswers?: string[],
+    difficulty?: AIQuestionDifficulty,
   ): Promise<GameQuestion>;
   excludedAnswers?: string[];
 }

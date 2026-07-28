@@ -1,5 +1,15 @@
 import { strFromU8, strToU8, unzipSync, zipSync } from 'fflate';
 
+export const AI_QUESTION_DIFFICULTIES = [
+  'very-easy',
+  'easy',
+  'medium',
+  'hard',
+  'very-hard',
+] as const;
+
+export type AIQuestionDifficulty = (typeof AI_QUESTION_DIFFICULTIES)[number];
+
 export interface AIQuestion {
   name: string;
   description: string;

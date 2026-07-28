@@ -8,6 +8,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames';
 import { useState } from 'react';
+import {
+  AI_QUESTION_DIFFICULTIES,
+  type AIQuestionDifficulty,
+} from '@schdk/common';
 import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';
 import { IconButton } from '../../atoms/IconButton';
@@ -27,6 +31,7 @@ export function QuestionGenerationDialog({
   const { copy } = useLocalization();
   const [open, setOpen] = useState(false);
   const [templateIndex, setTemplateIndex] = useState('0');
+  const [difficulty, setDifficulty] = useState<AIQuestionDifficulty>('medium');
   const [context, setContext] = useState('');
   const [thinking, setThinking] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -37,6 +42,7 @@ export function QuestionGenerationDialog({
   function reset() {
     setOpen(false);
     setTemplateIndex('0');
+    setDifficulty('medium');
     setContext('');
     setThinking(false);
     setFailed(false);
@@ -52,6 +58,7 @@ export function QuestionGenerationDialog({
         selectedTemplate,
         context.trim(),
         excludedAnswers,
+        difficulty,
       );
       onGenerated(question);
       reset();
@@ -130,6 +137,24 @@ export function QuestionGenerationDialog({
                       {copy.questionGeneration.noTemplates}
                     </p>
                   )}
+                  <label>
+                    {copy.questionGeneration.difficulty}
+                    <Dropdown
+                      value={difficulty}
+                      disabled={thinking}
+                      onChange={(event) =>
+                        setDifficulty(
+                          event.target.value as AIQuestionDifficulty,
+                        )
+                      }
+                    >
+                      {AI_QUESTION_DIFFICULTIES.map((value) => (
+                        <option key={value} value={value}>
+                          {copy.questionGeneration.difficulties[value]}
+                        </option>
+                      ))}
+                    </Dropdown>
+                  </label>
                   <TextAreaField
                     label={copy.questionGeneration.context}
                     placeholder={copy.questionGeneration.contextPlaceholder}
@@ -176,6 +201,7 @@ export function QuestionGenerationDialog({
                         selectedTemplate,
                         context.trim(),
                         excludedAnswers,
+                        difficulty,
                       )}
                     />
                   </label>
