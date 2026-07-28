@@ -35,6 +35,9 @@
   [shared Drive folder](https://drive.google.com/drive/folders/1qigJtM0zAQl2Yk8C2xjeragcGDybUVR1)
   for the same reusable mechanism. Extend an existing `.aiquestion` with
   material new instructions or examples instead of creating a duplicate rule.
+  Automated creation or extension must keep at most three good examples and
+  three bad examples, retaining the most useful non-duplicate examples in each
+  category.
 - Discover the current account's existing app-marked package folder instead of
   retaining a folder ID across authorization changes. Scope restorable editor
   and host state by account, and remount it only when the connected account
