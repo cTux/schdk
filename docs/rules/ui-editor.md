@@ -20,9 +20,11 @@
 - Put the AI generation icon beside the question heading. Disable it when no
   API key is configured and explain the disabled state with the shared custom
   tooltip. Its modal dims the background, selects an enabled `AIQuestion`
-  template, accepts context, and disables every control while generation is
-  pending. Successful structured output replaces every question field, resets
-  the modal, and closes it.
+  template and a very easy, easy, medium, hard, or very hard difficulty,
+  accepts context, and disables every control while generation is pending.
+  Pass the selected difficulty into the provider prompt; default generation
+  flows without an explicit selector to medium. Successful structured output
+  replaces every question field, resets the modal, and closes it.
 - Put the package-generation icon beside the editable package title. Its modal
   chooses missing questions or the whole package and one enabled AI question
   package from a dropdown. Generate slots sequentially, select the active slot

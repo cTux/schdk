@@ -1,4 +1,34 @@
-import type { AIQuestion } from '@schdk/common';
+import {
+  AI_QUESTION_DIFFICULTIES,
+  type AIQuestion,
+  type AIQuestionDifficulty,
+} from '@schdk/common';
+
+const difficultyInstructions: Record<
+  AIQuestionDifficulty,
+  Record<'uk' | 'en', string>
+> = {
+  'very-easy': {
+    uk: 'Дуже легке: 0–1 очевидний бар’єр розв’язання; загальновідомі факти й майже пряме прочитання.',
+    en: 'Very easy: 0–1 obvious solving barrier; common knowledge and an almost direct reading.',
+  },
+  easy: {
+    uk: 'Легке: 1–2 прості бар’єри розв’язання; знайомий факт або очевидна асоціація та сильна перевірочна підказка.',
+    en: 'Easy: 1–2 simple solving barriers; a familiar fact or obvious association and a strong confirming clue.',
+  },
+  medium: {
+    uk: 'Середнє: 2–3 помірні бар’єри розв’язання; один небуквальний перехід або доступний, але не миттєво згадуваний факт.',
+    en: 'Medium: 2–3 moderate solving barriers; one non-literal step or an accessible fact that is not recalled immediately.',
+  },
+  hard: {
+    uk: 'Важке: 3–4 взаємозалежні бар’єри розв’язання; складний перехід між темами або спеціалізований, але справедливо підказаний факт.',
+    en: 'Hard: 3–4 interdependent solving barriers; a difficult cross-topic step or a specialized but fairly clued fact.',
+  },
+  'very-hard': {
+    uk: 'Дуже важке: щонайменше 4 бар’єри або 2 складні переходи; усі потрібні опори мають бути присутні, а відповідь — однозначна.',
+    en: 'Very hard: at least 4 barriers or 2 difficult transitions; every required clue must be present and the answer unambiguous.',
+  },
+};
 
 export interface GameQuestionGenerationRequest {
   provider: string;
@@ -6,6 +36,7 @@ export interface GameQuestionGenerationRequest {
   locale: 'uk' | 'en';
   template: AIQuestion;
   context: string;
+  difficulty: AIQuestionDifficulty;
   excludedAnswers: string[];
 }
 
@@ -27,6 +58,7 @@ export function assertGameQuestionGenerationInput(
     typeof input.template.goodExamples !== 'string' ||
     typeof input.template.badExamples !== 'string' ||
     typeof input.context !== 'string' ||
+    !AI_QUESTION_DIFFICULTIES.includes(input.difficulty) ||
     !Array.isArray(input.excludedAnswers) ||
     input.excludedAnswers.length > 1_000 ||
     input.excludedAnswers.some(
@@ -52,6 +84,7 @@ export function assertGameQuestionGenerationInput(
 export function createGameQuestionPrompt(input: GameQuestionGenerationRequest) {
   const examples = input.locale === 'uk' ? 'Приклади' : 'Examples';
   const context = input.locale === 'uk' ? 'Контекст' : 'Context';
+  const difficulty = input.locale === 'uk' ? 'Складність' : 'Difficulty';
   const excludedAnswers =
     input.locale === 'uk' ? 'Заборонені відповіді' : 'Forbidden answers';
   const prompt = [
@@ -62,6 +95,7 @@ export function createGameQuestionPrompt(input: GameQuestionGenerationRequest) {
     input.template.badExamples
       ? `${examples} (${input.locale === 'uk' ? 'невдалі' : 'bad'}): ${input.template.badExamples}`
       : '',
+    `${difficulty}: ${difficultyInstructions[input.difficulty][input.locale]}`,
     `${context}: ${input.context}`,
     input.excludedAnswers.length
       ? `${excludedAnswers} (${input.locale === 'uk' ? 'кожен рядок позначає вже використану сутність; обери іншу сутність, а не її синонім, псевдонім, переклад, уточнення чи описову назву; урізноманітнюй людей, місця, події, предмети, твори, поняття та форму відповідей' : 'each string denotes an already used entity; choose a different entity, not its synonym, alias, translation, qualification, or descriptive name; vary people, places, events, objects, works, concepts, and answer forms'}): ${JSON.stringify(input.excludedAnswers)}`

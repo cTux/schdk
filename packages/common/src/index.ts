@@ -18,12 +18,13 @@ export type {
   AIQuestionsPackageQuestion,
 } from './ai-questions-package.js';
 export {
+  AI_QUESTION_DIFFICULTIES,
   MAX_AI_QUESTION_BYTES,
   parseAIQuestion,
   parseAIQuestionArchive,
   serializeAIQuestion,
 } from './ai-question.js';
-export type { AIQuestion } from './ai-question.js';
+export type { AIQuestion, AIQuestionDifficulty } from './ai-question.js';
 export const QUESTION_COUNT = 36;
 export const QUESTIONS_PER_ROUND = 12;
 export const MAX_GAME_PACKAGE_BYTES = 160 * 1024 * 1024;

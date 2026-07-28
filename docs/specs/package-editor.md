@@ -45,15 +45,17 @@ without losing in-progress work.
 - **EDT-15:** The browser warns before unloading an open package with pending,
   saving, or failed changes and stops warning after the package is saved.
 - **EDT-16:** An AI icon beside the selected question opens a dimmed modal with
-  an account or global `AIQuestion` template selector and context field. Without
-  a saved key the icon is disabled with an explanatory custom tooltip. Generation
-  disables the complete modal, shows a thinking state, and on success replaces
-  every generated question field before the modal resets and closes. The one
-  global rule marked as general is excluded from the selector and prepended to
-  every selected template's generation instructions and examples. An
-  allowlisted administrator can expand the modal beside its title to inspect
-  the exact system and user prompt text in a read-only field; the wider
-  two-column layout stacks vertically on narrow screens.
+  an account or global `AIQuestion` template selector, a difficulty selector
+  from very easy through very hard, and a context field. Medium is selected by
+  default. Without a saved key the icon is disabled with an explanatory custom
+  tooltip. Generation disables the complete modal, sends the selected
+  difficulty definition in the provider prompt, and shows a thinking state; on
+  success it replaces every generated question field before the modal resets
+  and closes. The one global rule marked as general is excluded from the
+  selector and prepended to every selected template's generation instructions
+  and examples. An allowlisted administrator can expand the modal beside its
+  title to inspect the exact system and user prompt text in a read-only field;
+  the wider two-column layout stacks vertically on narrow screens.
 - **EDT-17:** Every multiline package and generation field uses the same
   non-resizable shared control with dropdown-aligned borders, surfaces, hover,
   focus, and disabled states.
@@ -116,8 +118,8 @@ without losing in-progress work.
 10. Inspect every multiline editor and generation field at normal and narrow
     widths; confirm consistent shared styling and no native resize handle.
 11. Open generation as an allowlisted administrator, expand the prompt panel,
-    and confirm its read-only text follows changes to the selected template and
-    context. Confirm the control is absent for other accounts.
+    and confirm its read-only text follows changes to the selected template,
+    difficulty, and context. Confirm the control is absent for other accounts.
 12. Generate only missing slots and then the whole package after selecting one
     AI question package from the rules dropdown. Observe each target slot
     selected in order, every generated record replaced completely, and prior
