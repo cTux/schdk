@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Analyze and Create AI Question Rule'
+  short_description: 'Analyze questions and create .aiquestion rules'
+  default_prompt: 'Use $schdk-create-ai-question-rule to analyze this question and create a reusable .aiquestion rule.'
