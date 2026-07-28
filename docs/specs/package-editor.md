@@ -68,7 +68,9 @@ without losing in-progress work.
   questions, questions with unresolved author remarks, or the whole package
   and one enabled AI question package from a dropdown. Remarked questions are
   regenerated from the current question and remark, and a resolved result
-  clears the remark. Favorite packages appear first with a star and each
+  clears the remark. The modal also selects a difficulty from very easy through
+  very hard with medium selected by default. Favorite packages appear first
+  with a star and each
   favorite and non-favorite group is name-sorted. The modal also selects all,
   favorite, or non-favorite enabled non-general question rules; each question
   without an explicitly configured type uses a random rule from that set. An
@@ -79,6 +81,8 @@ without losing in-progress work.
   It selects each target slot behind the modal, waits for a validated provider
   response, joins overflow text into the last part allowed by the declared
   question type, replaces the complete question record, and continues sequentially.
+  The selected difficulty is sent for every question. The visible cancel action
+  closes the modal during generation and ignores any unfinished provider result.
   Browser generation renews Google authorization from the confirmation click
   before the sequence starts. A failed request keeps questions generated before
   the failure. An allowlisted administrator can expand the modal beside its
@@ -142,12 +146,14 @@ without losing in-progress work.
 12. Generate only missing slots, questions with unresolved remarks, and then
     the whole package after selecting one AI question package from the
     favorite-first rules dropdown and each available question-rule set in turn.
+    Select each difficulty and confirm it reaches every provider prompt.
     Confirm remarked-question prompts include the current question and remark
     and accepted results clear the remark. Confirm fallback rules are randomly
     selected only from that set, while explicitly configured per-question types
     still win. Observe each target slot selected in order, every generated
     record replaced completely, and prior successful results retained when a
-    later request fails. In the browser, confirm that generation starts with
+    later request fails. Cancel during an unfinished request and confirm its
+    result is ignored. In the browser, confirm that generation starts with
     renewed Google authorization. As an allowlisted administrator, expand the
     prompt panel and confirm its read-only text follows the first pending target
     and each target being generated.

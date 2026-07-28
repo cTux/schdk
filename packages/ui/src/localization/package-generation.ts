@@ -20,6 +20,7 @@ export const packageGenerationCopy = {
       'Немає активних правил створення пакету. Додайте або увімкніть правило.',
     progress: (current: number, total: number) =>
       `Генерується питання ${current} із ${total}…`,
+    cancel: 'Відмінити',
     generate: 'Згенерувати',
     failed:
       'Не вдалося згенерувати пакет. Збережено питання, створені до помилки.',
@@ -48,6 +49,7 @@ export const packageGenerationCopy = {
     noRules: 'There are no active package-generation rules. Add or enable one.',
     progress: (current: number, total: number) =>
       `Generating question ${current} of ${total}…`,
+    cancel: 'Cancel',
     generate: 'Generate',
     failed:
       'Could not generate the package. Questions created before the error were kept.',

@@ -1,3 +1,7 @@
+import {
+  AI_QUESTION_DIFFICULTIES,
+  type AIQuestionDifficulty,
+} from '@schdk/common';
 import { Dropdown } from '../../atoms/Dropdown';
 import { useLocalization } from '../../localization';
 import type { PackageGenerationRuleSet } from '../PackageGenerationDialog/generation-input';
@@ -6,6 +10,7 @@ import type { PackageGenerationOptionsProps } from './types';
 
 export function PackageGenerationOptions({
   activePackages,
+  difficulty,
   hasRandomTemplates,
   ruleSet,
   scope,
@@ -14,6 +19,7 @@ export function PackageGenerationOptions({
   thinking,
   checkQuestionDatabase,
   onCheckQuestionDatabaseChange,
+  onDifficultyChange,
   onPackageChange,
   onRuleSetChange,
   onScopeChange,
@@ -33,6 +39,22 @@ export function PackageGenerationOptions({
           <option value="missing">{copy.packageGeneration.missing}</option>
           <option value="commented">{copy.packageGeneration.commented}</option>
           <option value="all">{copy.packageGeneration.all}</option>
+        </Dropdown>
+      </label>
+      <label>
+        {copy.questionGeneration.difficulty}
+        <Dropdown
+          value={difficulty}
+          disabled={thinking}
+          onChange={(event) =>
+            onDifficultyChange(event.target.value as AIQuestionDifficulty)
+          }
+        >
+          {AI_QUESTION_DIFFICULTIES.map((value) => (
+            <option key={value} value={value}>
+              {copy.questionGeneration.difficulties[value]}
+            </option>
+          ))}
         </Dropdown>
       </label>
       {activePackages.length ? (
