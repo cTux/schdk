@@ -5,6 +5,7 @@ import {
   serializeGameQuestion,
   type GameQuestion,
 } from './game-question.js';
+import { validateGamePackageReadiness } from './game-package-validation.js';
 
 export {
   MAX_AI_QUESTIONS_PACKAGE_BYTES,
@@ -34,6 +35,8 @@ const MAX_GAME_JSON_BYTES = 16 * 1024 * 1024;
 export {
   QUESTION_TYPE_CONFIG,
   createEmptyGameQuestion,
+  getGameQuestionAnswers,
+  normalizeGameAnswer,
   parseGameQuestion,
 } from './game-question.js';
 export type {
@@ -69,32 +72,7 @@ export function createEmptyGamePackage(): GamePackage {
 }
 
 export function validateGamePackage(gamePackage: GamePackage): string[] {
-  const errors: string[] = [];
-
-  if (!gamePackage.title.trim()) errors.push('Вкажіть назву пакета.');
-  if (gamePackage.questions.length !== QUESTION_COUNT) {
-    errors.push(`Пакет має містити рівно ${QUESTION_COUNT} питань.`);
-    return errors;
-  }
-
-  gamePackage.questions.forEach((question, index) => {
-    const number = index + 1;
-    question.questionParts.forEach((part, partIndex) => {
-      if (!part.trim()) {
-        const suffix =
-          question.questionParts.length === 1
-            ? ''
-            : `, частина ${partIndex + 1}`;
-        errors.push(`Питання ${number}${suffix}: немає тексту.`);
-      }
-    });
-    if (!question.answer.trim())
-      errors.push(`Питання ${number}: немає відповіді.`);
-    if (question.comment?.trim())
-      errors.push(`Питання ${number}: є невирішений коментар.`);
-  });
-
-  return errors;
+  return validateGamePackageReadiness(gamePackage, QUESTION_COUNT);
 }
 
 function serializeGamePackageJson(gamePackage: GamePackage): string {

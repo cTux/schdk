@@ -6,6 +6,7 @@ import {
   faChevronRight,
   faWandMagicSparkles,
 } from '@fortawesome/free-solid-svg-icons';
+import { getGameQuestionAnswers } from '@schdk/common';
 import classNames from 'classnames';
 import { useState } from 'react';
 import { Button } from '../../atoms/Button';
@@ -13,9 +14,12 @@ import { Dropdown } from '../../atoms/Dropdown';
 import { IconButton } from '../../atoms/IconButton';
 import { Textarea } from '../../atoms/Textarea';
 import { useLocalization } from '../../localization';
+import {
+  getPackageGenerationInput,
+  getPackageGenerationTargets,
+  type PackageGenerationScope,
+} from './generation-input';
 import type { PackageGenerationDialogProps } from './types';
-
-type Scope = 'missing' | 'all';
 
 export function PackageGenerationDialog({
   apiKeyConfigured,
@@ -30,23 +34,21 @@ export function PackageGenerationDialog({
 }: PackageGenerationDialogProps) {
   const { copy } = useLocalization();
   const [open, setOpen] = useState(false);
-  const [scope, setScope] = useState<Scope>('missing');
+  const [scope, setScope] = useState<PackageGenerationScope>('missing');
   const [selected, setSelected] = useState<number | null>(null);
   const [thinking, setThinking] = useState(false);
   const [failed, setFailed] = useState(false);
   const [progress, setProgress] = useState<[number, number] | null>(null);
   const [promptOpen, setPromptOpen] = useState(false);
+  const [excludedAnswers, setExcludedAnswers] = useState<string[]>([]);
   const activePackages = packages.filter((item) => item.enabled);
   const selectedPackage =
     selected === null ? undefined : activePackages[selected];
-  const targets = gamePackage.questions.flatMap((question, index) =>
-    scope === 'all' ||
-    !question.answer.trim() ||
-    question.questionParts.some((part) => !part.trim())
-      ? [index]
-      : [],
+  const targets = getPackageGenerationTargets(gamePackage, scope);
+  const initialExcludedAnswers = gamePackage.questions.flatMap(
+    (question, index) =>
+      targets.includes(index) ? [] : getGameQuestionAnswers(question),
   );
-
   function reset() {
     setOpen(false);
     setScope('missing');
@@ -55,30 +57,13 @@ export function PackageGenerationDialog({
     setFailed(false);
     setProgress(null);
     setPromptOpen(false);
+    setExcludedAnswers([]);
   }
 
   function show() {
     setSelected(activePackages.length ? 0 : null);
     setOpen(true);
   }
-  function getGenerationInput(index: number) {
-    if (!selectedPackage || !templates.length) return null;
-    const additions = selectedPackage.questions.filter(
-      (question) => question.questionNumber === index + 1,
-    );
-    const requestedType = additions.find(
-      (question) => question.questionType,
-    )?.questionType;
-    return {
-      template:
-        templates.find((item) => item.name === requestedType) ??
-        templates[index % templates.length]!,
-      context: [`${selectedPackage.name}:\n${selectedPackage.context}`]
-        .concat(additions.map((item) => item.context))
-        .join('\n\n'),
-    };
-  }
-
   const targetsMissing = gamePackage.questions.some(
     (question) =>
       !question.answer.trim() ||
@@ -86,19 +71,33 @@ export function PackageGenerationDialog({
   );
   const previewIndex = targets[progress ? progress[0] - 1 : 0];
   const previewInput =
-    previewIndex === undefined ? null : getGenerationInput(previewIndex);
+    previewIndex === undefined
+      ? null
+      : getPackageGenerationInput(selectedPackage, templates, previewIndex);
   async function generate() {
     if (!selectedPackage || !templates.length || !targets.length) return;
     setThinking(true);
     setFailed(false);
     try {
       await onGenerationStart?.();
+      const usedAnswers = [...initialExcludedAnswers];
       for (const [position, index] of targets.entries()) {
-        const input = getGenerationInput(index);
+        const input = getPackageGenerationInput(
+          selectedPackage,
+          templates,
+          index,
+        );
         if (!input) throw new Error('Missing generation input');
         setProgress([position + 1, targets.length]);
+        setExcludedAnswers([...usedAnswers]);
         onSelectQuestion(index);
-        onGenerated(index, await onGenerate(input.template, input.context));
+        const question = await onGenerate(
+          input.template,
+          input.context,
+          usedAnswers,
+        );
+        onGenerated(index, question);
+        usedAnswers.push(...getGameQuestionAnswers(question));
       }
       reset();
     } catch {
@@ -163,7 +162,7 @@ export function PackageGenerationDialog({
                       value={scope}
                       disabled={thinking}
                       onChange={(event) =>
-                        setScope(event.target.value as Scope)
+                        setScope(event.target.value as PackageGenerationScope)
                       }
                     >
                       <option value="missing">
@@ -242,6 +241,7 @@ export function PackageGenerationDialog({
                       value={getPromptPreview(
                         previewInput.template,
                         previewInput.context,
+                        progress ? excludedAnswers : initialExcludedAnswers,
                       )}
                     />
                   </label>

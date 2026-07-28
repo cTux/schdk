@@ -27,6 +27,7 @@ export function createAiQuestionGeneration(
   function createRequest(
     template: AIQuestion,
     context: string,
+    excludedAnswers: string[],
   ): GameQuestionGenerationRequest {
     return {
       provider: options.provider,
@@ -45,6 +46,7 @@ export function createAiQuestionGeneration(
           }
         : template,
       context,
+      excludedAnswers,
     };
   }
 
@@ -66,18 +68,20 @@ export function createAiQuestionGeneration(
       ),
     onGenerationStart: bridge?.renewToken?.bind(bridge),
     getPromptPreview: isAdmin
-      ? (template, context) => {
+      ? (template, context, excludedAnswers = []) => {
           const { system, prompt } = createGameQuestionPrompt(
-            createRequest(template, context),
+            createRequest(template, context, excludedAnswers),
           );
           return `${system}\n\n${prompt}`;
         }
       : undefined,
-    onGenerate(template, context) {
+    onGenerate(template, context, excludedAnswers = []) {
       if (!bridge) {
         return Promise.reject(new Error('Google Drive is disconnected'));
       }
-      return bridge.generateAiQuestion(createRequest(template, context));
+      return bridge.generateAiQuestion(
+        createRequest(template, context, excludedAnswers),
+      );
     },
   };
 }

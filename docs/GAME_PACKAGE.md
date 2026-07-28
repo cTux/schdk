@@ -17,6 +17,9 @@ recognized entries. Unrecognized ZIP entries are ignored without extraction.
 - An answer comment is an optional string and does not affect question
   readiness.
 - Alternative answers are an optional list of strings.
+- A ready package cannot reuse a main or alternative answer in another
+  question. Readiness comparison normalizes Unicode, letter case, surrounding
+  whitespace, and repeated whitespace.
 - Wrong answers are an optional list of strings.
 - A handout is optional. It can be text or an image embedded in the same file
   as a base64 `data:image/*` URL matching its declared MIME type. External

@@ -21,6 +21,7 @@ export function QuestionGenerationDialog({
   templates,
   getPromptPreview,
   onGenerate,
+  excludedAnswers = [],
   onGenerated,
 }: QuestionGenerationDialogProps) {
   const { copy } = useLocalization();
@@ -47,7 +48,11 @@ export function QuestionGenerationDialog({
     setThinking(true);
     setFailed(false);
     try {
-      const question = await onGenerate(selectedTemplate, context.trim());
+      const question = await onGenerate(
+        selectedTemplate,
+        context.trim(),
+        excludedAnswers,
+      );
       onGenerated(question);
       reset();
     } catch {
@@ -167,7 +172,11 @@ export function QuestionGenerationDialog({
                     {copy.questionGeneration.prompt}
                     <Textarea
                       readOnly
-                      value={getPromptPreview(selectedTemplate, context.trim())}
+                      value={getPromptPreview(
+                        selectedTemplate,
+                        context.trim(),
+                        excludedAnswers,
+                      )}
                     />
                   </label>
                 )}

@@ -30,6 +30,8 @@ three-round game, including presentation media.
   by `.schdk`, truncated when needed to remain a valid Drive package name.
 - **PKG-10:** Package parsing enforces the canonical archive and entry size
   limits before extracting ZIP content.
+- **PKG-11:** Readiness validation rejects a main or alternative answer reused
+  by another question after Unicode, case, and whitespace normalization.
 
 ## Invariants
 
@@ -54,5 +56,7 @@ three-round game, including presentation media.
 5. A matching embedded image handout opens, while an external or MIME-mismatched
    image URL is rejected before rendering.
 6. An oversized compressed entry is rejected before decompression.
+7. A package remains unfinished when two questions share a normalized main or
+   alternative answer.
 
 Canonical format: [`../GAME_PACKAGE.md`](../GAME_PACKAGE.md).

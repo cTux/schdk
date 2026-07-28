@@ -70,6 +70,11 @@ without losing in-progress work.
   the failure. An allowlisted administrator can expand the modal beside its
   title to inspect the exact read-only prompt for the first target before
   generation and the current target while generation advances.
+- **EDT-20:** AI generation includes the answers already used by other retained
+  package questions in the provider prompt. Package generation adds each
+  accepted result to that set before generating the next target.
+  A generated main or alternative answer that repeats the set is retried once;
+  a second repeated result fails without replacing the target question.
 - **EDT-19:** Successful package creation, import, recent opening, current
   autosave, explicit download, and confirmed deletion show a localized toast
   using the active application palette for two seconds. Canceled or failed
@@ -127,3 +132,7 @@ without losing in-progress work.
     each completed action shows its matching localized toast for two seconds.
     Cancel the desktop download, fail an action, and complete a stale autosave
     while a newer edit remains pending; confirm none shows a success toast.
+15. Generate one question and a complete package whose existing slots already
+    contain answers. Confirm every provider prompt excludes retained and
+    accepted answers, one repeated result is retried, and a second repeated
+    result leaves its target unchanged.

@@ -1,6 +1,7 @@
 import 'react-toastify/dist/ReactToastify.css';
 import './styles.scss';
 
+import { getGameQuestionAnswers } from '@schdk/common';
 import { useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { StatusMessage } from '../../atoms/StatusMessage';
@@ -49,6 +50,12 @@ export function EditorView({
 }: EditorViewProps) {
   const { locale } = useLocalization();
   const toastCopy = editorToastCopy[locale];
+  const questionGeneration = aiGeneration && {
+    ...aiGeneration,
+    excludedAnswers: gamePackage.questions.flatMap((question, index) =>
+      index === selectedIndex ? [] : getGameQuestionAnswers(question),
+    ),
+  };
 
   useEffect(() => {
     if (!hasPackage) return;
@@ -119,7 +126,7 @@ export function EditorView({
             onMusicBreakChange={onMusicBreakChange}
           />
           <QuestionEditor
-            aiGeneration={aiGeneration}
+            aiGeneration={questionGeneration}
             question={gamePackage.questions[selectedIndex]!}
             selectedIndex={selectedIndex}
             showValidation={showValidation}

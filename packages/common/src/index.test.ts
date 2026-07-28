@@ -17,9 +17,9 @@ describe('game package rules', () => {
     expect(gamePackage.musicBreaks).toEqual([null, null]);
 
     gamePackage.title = 'Тестовий пакет';
-    gamePackage.questions.forEach((question) => {
+    gamePackage.questions.forEach((question, index) => {
       question.questionParts = ['Питання'];
-      question.answer = 'Відповідь';
+      question.answer = `Відповідь ${index + 1}`;
     });
     expect(validateGamePackage(gamePackage)).toEqual([]);
 
