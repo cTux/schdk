@@ -58,6 +58,10 @@
         "to": "google-oauth-client.json"
       }
     ],
+    "electronLanguages": [
+      "uk",
+      "en-US"
+    ],
     "win": {
       "icon": "build/owl.png",
       "target": [
