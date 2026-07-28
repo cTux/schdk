@@ -13,7 +13,7 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@opencode-ai/models": "^0.0.24",
+    "@opencode-ai/models": "^0.0.26",
     "@schdk/ai": "workspace:*",
     "@schdk/common": "workspace:*",
     "@schdk/editor-web-app": "workspace:*",
@@ -29,7 +29,7 @@
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
-    "oxlint": "^1.75.0",
+    "oxlint": "^1.76.0",
     "sass": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
