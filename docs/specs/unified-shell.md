@@ -92,11 +92,13 @@ package authoring, hosting, settings, and account state.
   a localized tooltip and reloads the page when activated.
 - **SHL-19:** Question database is the first SCHDK page and explicitly states
   that it contains only the connected user's questions, not a global
-  collection. It shows package, number, question, and answer columns; filters
-  normalized text across questions, answers, or both; sorts by question or
+  collection. It groups identical questions into question, answer, and
+  included-packages columns; filters normalized text across questions,
+  answers, or both only after two entered characters; sorts by question or
   answer in either direction; renders only a window around the scroll
   position; and loads at most 100 additional filtered rows from a bottom
-  action.
+  action. On desktop, the table consumes the remaining workspace height and
+  scrolls without creating a second full-page scrollbar.
 
 ## Invariants
 
@@ -154,7 +156,9 @@ package authoring, hosting, settings, and account state.
     wait at most one minute, and verify the localized green update button
     appears and reloads the page.
 13. Open Question database and confirm it is first in SCHDK navigation and
-    identifies the collection as personal. Search question and answer text
-    separately and together, reverse both sortable columns, scroll a batch
-    without rendering the complete result set, and load the next batch from the
-    bottom action.
+    identifies the collection as personal. Confirm duplicate questions list
+    all containing packages in one row. Enter one and then two search
+    characters, search question and answer text separately and together,
+    reverse both sortable columns, scroll the dynamically sized desktop table
+    without scrolling the whole page or rendering the complete result set, and
+    load the next batch from the bottom action.

@@ -11,7 +11,11 @@ const packageFile = {
   id: 'package-id',
   name: 'Test.schdk',
   modifiedTime: '2026-07-26T00:00:00.000Z',
-  appProperties: { schdkType: 'game-package', ready: 'false' },
+  appProperties: {
+    schdkType: 'game-package',
+    ready: 'false',
+    hasRemarks: 'false',
+  },
 };
 
 afterEach(() => {
@@ -51,6 +55,7 @@ describe('GoogleDriveClient', () => {
       title: 'Test',
       content: Uint8Array.from([1]),
       ready: false,
+      hasRemarks: false,
     };
 
     await client.createGamePackage(value);

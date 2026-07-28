@@ -14,8 +14,9 @@ preserving recoverable local state during temporary Drive failures.
   remain mounted through transient Drive failures.
 - **DRV-2:** App-created packages live in a visible `SCHDK` Drive folder and
   carry private app identity metadata.
-- **DRV-3:** Package title, filename, readiness, and modified time are available
-  for recents without downloading package contents.
+- **DRV-3:** Package title, filename, readiness, unresolved-remark status, and
+  modified time are available for recents without downloading package
+  contents.
 - **DRV-4:** Create, import, autosave, recent-open, delete, and host flows use a
   stable Drive file ID represented externally as `drive:<fileId>`.
 - **DRV-5:** Local package selection is import-to-Drive; explicit download is
@@ -123,3 +124,5 @@ preserving recoverable local state during temporary Drive failures.
     packages, then edit and delete packages and observe only the changed
     projection replaced or removed. Switch accounts and confirm no prior
     account rows appear.
+15. Save a package with and without unresolved remarks and confirm recents show
+    the matching metadata tag without downloading the package.

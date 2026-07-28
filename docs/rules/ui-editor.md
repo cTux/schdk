@@ -28,6 +28,11 @@
   Pass the selected difficulty into the provider prompt; default generation
   flows without an explicit selector to medium. Successful structured output
   replaces every question field, resets the modal, and closes it.
+- Put personal question-database search beside the question heading. Search
+  question and answer text after two entered characters and show the shared
+  question, answer, and included-packages table. Selecting a result loads the
+  complete source question immediately when the current slot is empty and
+  requires confirmation before replacing a populated slot.
 - Put the package-generation icon beside the editable package title. Its modal
   chooses missing questions, questions with unresolved author remarks, or the
   whole package and one enabled AI question package from a dropdown. When
@@ -58,7 +63,8 @@
   below it and show non-interactive skeleton rows while Drive recents load.
 - In recents, show only the package title and fall back to the filename without
   `.schdk` for legacy entries. Show `Готовий` only when shared validation finds
-  no missing fields or unresolved remarks. Give every recent row separate
+  no missing fields or unresolved remarks. Show `Має зауваження` when any
+  question has an unresolved author remark. Give every recent row separate
   icon-only download and red cloud-delete buttons with localized accessible
   names. Confirm deletion and move the package to Google Drive trash. While a
   recent package opens or deletes, animate that row and disable all other

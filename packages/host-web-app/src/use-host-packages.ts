@@ -130,6 +130,7 @@ export function useHostPackages({
         title: gamePackage.title,
         content,
         ready: true,
+        hasRemarks: false,
       });
       await acceptPackage(
         content,

@@ -9,6 +9,10 @@ interface ValidatableGamePackage {
   questions: GameQuestion[];
 }
 
+export function hasGamePackageRemarks(gamePackage: ValidatableGamePackage) {
+  return gamePackage.questions.some((question) => question.comment?.trim());
+}
+
 export function validateGamePackageReadiness(
   gamePackage: ValidatableGamePackage,
   questionCount: number,

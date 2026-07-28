@@ -5,7 +5,10 @@ import {
   serializeGameQuestion,
   type GameQuestion,
 } from './game-question.js';
-import { validateGamePackageReadiness } from './game-package-validation.js';
+import {
+  hasGamePackageRemarks,
+  validateGamePackageReadiness,
+} from './game-package-validation.js';
 
 export {
   MAX_AI_QUESTIONS_PACKAGE_BYTES,
@@ -76,6 +79,8 @@ export function createEmptyGamePackage(): GamePackage {
 export function validateGamePackage(gamePackage: GamePackage): string[] {
   return validateGamePackageReadiness(gamePackage, QUESTION_COUNT);
 }
+
+export { hasGamePackageRemarks };
 
 function serializeGamePackageJson(gamePackage: GamePackage): string {
   return JSON.stringify(

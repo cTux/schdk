@@ -219,6 +219,17 @@
     font-weight: 700;
   }
 
+  .recent-package-remarks {
+    flex: 0 0 auto;
+    border: 1px solid rgba($danger-rgb, 0.45);
+    border-radius: 999px;
+    padding: 2px 7px;
+    background: rgba($danger-rgb, 0.12);
+    color: $danger-text;
+    font-size: 0.65rem;
+    font-weight: 700;
+  }
+
   .recent-package-arrow {
     color: $muted;
     font-size: 1rem;

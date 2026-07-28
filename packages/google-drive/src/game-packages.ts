@@ -15,6 +15,7 @@ export interface DriveGamePackageFile {
   modifiedTime: string;
   title?: string;
   ready?: boolean;
+  hasRemarks?: boolean;
 }
 
 export interface DriveGamePackage extends DriveGamePackageFile {
@@ -26,6 +27,7 @@ export interface DriveGamePackageWrite {
   title: string;
   content: Uint8Array;
   ready: boolean;
+  hasRemarks: boolean;
 }
 
 export interface DrivePackageStorage {
@@ -66,12 +68,14 @@ export function parseDriveGamePackageWrite(
   return isDriveGamePackageName(candidate.name) &&
     typeof candidate.title === 'string' &&
     candidate.content instanceof Uint8Array &&
-    typeof candidate.ready === 'boolean'
+    typeof candidate.ready === 'boolean' &&
+    typeof candidate.hasRemarks === 'boolean'
     ? {
         name: candidate.name,
         title: candidate.title,
         content: candidate.content,
         ready: candidate.ready,
+        hasRemarks: candidate.hasRemarks,
       }
     : null;
 }
@@ -105,6 +109,11 @@ export function parseDriveGamePackageFile(
       ? { ready: true }
       : properties.ready === 'false'
         ? { ready: false }
+        : {}),
+    ...(properties.hasRemarks === 'true'
+      ? { hasRemarks: true }
+      : properties.hasRemarks === 'false'
+        ? { hasRemarks: false }
         : {}),
   };
 }

@@ -1,6 +1,6 @@
 export interface QuestionDatabaseRow {
   fileId: string;
-  packageTitle: string;
+  packageTitles: string[];
   number: number;
   question: string;
   answer: string;

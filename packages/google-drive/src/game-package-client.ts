@@ -119,6 +119,7 @@ export class GoogleDrivePackageStorage implements DrivePackageStorage {
       appProperties: {
         [DRIVE_APP_KIND_KEY]: DRIVE_PACKAGE_KIND,
         ready: String(value.ready),
+        hasRemarks: String(value.hasRemarks),
       },
       ...(fileId ? {} : { parents: [await this.ensurePackageFolder()] }),
     };

@@ -50,6 +50,11 @@ export function RecentPackageButton({
             {recent.ready && (
               <span className="recent-package-ready">{copy.shared.ready}</span>
             )}
+            {recent.hasRemarks && (
+              <span className="recent-package-remarks">
+                {copy.questionDatabase.hasRemarks}
+              </span>
+            )}
           </span>
         </span>
         <span className="recent-package-arrow" aria-hidden="true">
