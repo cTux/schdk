@@ -70,15 +70,19 @@ without losing in-progress work.
   the failure. An allowlisted administrator can expand the modal beside its
   title to inspect the exact read-only prompt for the first target before
   generation and the current target while generation advances.
-- **EDT-20:** AI generation includes the answers already used by other retained
-  package questions in the provider prompt. Package generation adds each
-  accepted result to that set before generating the next target.
-  A generated main or alternative answer that repeats the set is retried once;
-  a second repeated result fails without replacing the target question.
 - **EDT-19:** Successful package creation, import, recent opening, current
   autosave, explicit download, and confirmed deletion show a localized toast
   using the active application palette for two seconds. Canceled or failed
   actions and stale writes completed before newer edits show no success toast.
+- **EDT-20:** AI generation includes the answers already used by other retained
+  package questions in the provider prompt. Package generation adds each
+  accepted result to that set before generating the next target. Exact
+  normalized duplicates are rejected locally; every other candidate undergoes
+  a structured provider review that rejects aliases, synonyms, translations,
+  qualifications, or descriptive names of the same entity and answer choices
+  that worsen package variety by overusing one entity type or answer form. A
+  rejected candidate is retried once; a second rejection fails without
+  replacing the target question.
 
 ## Invariants
 
@@ -134,5 +138,7 @@ without losing in-progress work.
     while a newer edit remains pending; confirm none shows a success toast.
 15. Generate one question and a complete package whose existing slots already
     contain answers. Confirm every provider prompt excludes retained and
-    accepted answers, one repeated result is retried, and a second repeated
-    result leaves its target unchanged.
+    accepted answers. Return an exact duplicate, an alias or descriptive name
+    of an existing entity, and an answer that worsens an overrepresented type
+    or form; confirm each is rejected, one rejection is retried, and a second
+    rejection leaves its target unchanged.

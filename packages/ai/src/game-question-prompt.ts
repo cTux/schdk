@@ -64,7 +64,7 @@ export function createGameQuestionPrompt(input: GameQuestionGenerationRequest) {
       : '',
     `${context}: ${input.context}`,
     input.excludedAnswers.length
-      ? `${excludedAnswers} (${input.locale === 'uk' ? 'не використовуй їх або еквівалентні формулювання як основну чи альтернативну відповідь' : 'do not use them or equivalent wording as the main or an alternative answer'}): ${JSON.stringify(input.excludedAnswers)}`
+      ? `${excludedAnswers} (${input.locale === 'uk' ? 'кожен рядок позначає вже використану сутність; обери іншу сутність, а не її синонім, псевдонім, переклад, уточнення чи описову назву; урізноманітнюй людей, місця, події, предмети, твори, поняття та форму відповідей' : 'each string denotes an already used entity; choose a different entity, not its synonym, alias, translation, qualification, or descriptive name; vary people, places, events, objects, works, concepts, and answer forms'}): ${JSON.stringify(input.excludedAnswers)}`
       : '',
   ]
     .filter(Boolean)

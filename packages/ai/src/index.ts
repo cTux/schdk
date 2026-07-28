@@ -14,6 +14,7 @@ import {
   createGameQuestionPrompt,
   type GenerateGameQuestionInput,
 } from './game-question-prompt.js';
+import { hasDiverseAnswer } from './answer-diversity.js';
 
 export { createGameQuestionPrompt } from './game-question-prompt.js';
 export type {
@@ -188,9 +189,10 @@ export async function generateGameQuestion(
   const excludedAnswers = new Set(
     input.excludedAnswers.map(normalizeGameAnswer),
   );
+  const model = registry.languageModel(`${provider}:${input.model}`);
   for (let attempt = 0; attempt < 2; attempt += 1) {
     const result = await generateText({
-      model: registry.languageModel(`${provider}:${input.model}`),
+      model,
       output: Output.object({
         name: 'game_question',
         description:
@@ -203,14 +205,21 @@ export async function generateGameQuestion(
           ? userPrompt
           : `${userPrompt}\n\n${
               input.locale === 'uk'
-                ? 'Попередня спроба повторила заборонену відповідь. Обери іншу.'
-                : 'The previous attempt repeated a forbidden answer. Choose another.'
+                ? 'Попередня спроба не пройшла перевірку унікальності та різноманітності. Обери іншу сутність, тип і форму відповіді.'
+                : 'The previous attempt failed the uniqueness and diversity review. Choose a different entity, type, and answer form.'
             }`,
     });
+    const repeatsAnswer = getGameQuestionAnswers(result.output).some((answer) =>
+      excludedAnswers.has(normalizeGameAnswer(answer)),
+    );
     if (
-      !getGameQuestionAnswers(result.output).some((answer) =>
-        excludedAnswers.has(normalizeGameAnswer(answer)),
-      )
+      !repeatsAnswer &&
+      (await hasDiverseAnswer(
+        model,
+        input.locale,
+        result.output,
+        input.excludedAnswers,
+      ))
     ) {
       return result.output;
     }
