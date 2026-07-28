@@ -1,6 +1,6 @@
 ---
 name: schdk-quality
-description: Verify SCHDK changes and produce local build artifacts. Use for pre-commit checks, repository health audits, test or build failures, package-level validation, browser smoke tests, Electron build verification, or confirming that a change is ready to commit.
+description: Verify SCHDK changes and produce local build artifacts. Use for pre-commit checks, repository health audits, test or build failures, package-level validation, browser smoke tests and Google Drive file uploads in the already-open Brave browser, Electron build verification, or confirming that a change is ready to commit.
 ---
 
 # SCHDK Quality
@@ -39,9 +39,8 @@ pnpm build
 
 Do not commit `dist`, `node_modules`, `.turbo`, `.playwright-cli`, logs, coverage, or build-info files.
 
-## Browser Smoke Tests
+## Brave Browser Tasks
 
-1. Use `$chrome:control-chrome` and its browser-provided `tab.playwright` API when available; reuse the current browser connection.
-2. Do not launch installed Chrome through standalone Playwright or add Playwright test code for a manual smoke test.
-3. If Chrome control is unavailable, use `$playwright` with its bundled Chromium, not an installed Chrome channel.
-4. Keep browser setup and fallback details internal. Report them only when verification cannot continue or requires user action.
+1. Use `$computer-use:computer-use` to control the user's already-open Brave window.
+2. Reuse that Brave window and its current session for manual smoke tests and Google Drive file uploads; do not launch another browser or add Playwright test code for a manual smoke test.
+3. If no controllable Brave window is open, report that browser work is blocked and ask the user to open Brave.
