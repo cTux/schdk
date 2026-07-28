@@ -24,7 +24,8 @@
   narrow Drive and explicit-download bridges exposed to the trusted unified
   renderer.
 - `@schdk/google-drive` owns the platform-neutral Drive REST client and opaque
-  settings envelope, package-storage types, and Drive reference helpers.
+  settings envelope, package-storage types, the derived per-account question
+  database contract, and Drive reference helpers.
   Browser authorization stays in `@schdk/all-web-app`; installed-app
   authorization and OAuth credential storage stay in
   `@schdk/all-desktop-app`; user AI credentials stay in account-scoped Drive
@@ -45,6 +46,9 @@
   or tokens.
 - The unified shell consumes the platform-neutral AI-question storage contract
   from `@schdk/google-drive`; it must not own authorization or tokens.
+- The unified shell rebuilds and searches the current account's derived
+  question database through `@schdk/google-drive`; `.schdk` packages remain
+  the source of truth.
 - Browser and Electron generation adapters call `@schdk/ai`; they load the
   account-scoped key internally and never expose it as renderer state or IPC
   output.

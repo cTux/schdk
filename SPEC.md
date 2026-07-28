@@ -18,6 +18,7 @@ C6|Keep unfinished packages editable and recoverable without silent destination 
 C7|Keep user AI API keys in separate, account-scoped Google Drive app data and out of synchronized settings or local browser persistence.
 C8|Keep personal and global AI question rules as individually parseable Google Drive files with folder-scoped ownership.
 C9|Keep personal AI question packages as individually parseable Google Drive files and out of browser-local persistence.
+C10|Keep the personal question database a rebuildable account-scoped projection; `.schdk` packages remain canonical.
 
 ## §I
 
@@ -30,6 +31,7 @@ I.drive|Package and settings persistence|Google Drive
 I.ai|Structured question generation|`@schdk/ai`
 I.aiquestion|Portable AI question rule|`.aiquestion`
 I.aiquestionpackage|Portable AI question package|`.aiquestionpackage`
+I.questiondatabase|Personal question search index|`question-database-v1.json`
 I.pages|Hosted browser application|GitHub Pages
 I.release|Versioned unsigned Windows installer|GitHub Releases
 I.version|Published browser version|`packages/all-web-app/version.json`
@@ -66,6 +68,8 @@ V27|A ready package never reuses a normalized main or alternative answer across 
 V28|Every non-initial AI answer candidate undergoes semantic review for entity uniqueness and package-wide type and form diversity before replacing editor state.
 V29|Editing an existing question kind or package-creation rule occupies a dedicated deep-linkable shell page restored by reload and browser history.
 V30|Web and desktop clients surface a newer published application version within one minute without granting the renderer generic network or navigation access.
+V31|Question-database rows derive only from parsed packages owned by the connected account and never become canonical package data.
+V32|Question-database similarity checking defaults off; when enabled, a semantically similar generated question or answer is rejected and regenerated once before failure.
 
 ## §T
 

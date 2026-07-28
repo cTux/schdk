@@ -9,10 +9,10 @@ package authoring, hosting, settings, and account state.
 
 ## Requirements
 
-- **SHL-1:** Fixed navigation groups Visual editor, Question creation rules,
-  Package creation rules, Edit question packages, and Host a game under SCHDK,
-  in that order, with Settings at the bottom. The Ukrainian question-rules
-  label is
+- **SHL-1:** Fixed navigation groups Question database, Visual editor, Question
+  creation rules, Package creation rules, Edit question packages, and Host a
+  game under SCHDK, in that order, with Settings at the bottom. The Ukrainian
+  question-rules label is
   `Правила створення питань`.
 - **SHL-2:** Application chunks load lazily on first selection and remain
   mounted afterward so navigation preserves state.
@@ -90,6 +90,13 @@ package authoring, hosting, settings, and account state.
   browser checks it immediately and every minute; when its version differs from
   the loaded build, a fixed green update icon appears at the bottom right with
   a localized tooltip and reloads the page when activated.
+- **SHL-19:** Question database is the first SCHDK page and explicitly states
+  that it contains only the connected user's questions, not a global
+  collection. It shows package, number, question, and answer columns; filters
+  normalized text across questions, answers, or both; sorts by question or
+  answer in either direction; renders only a window around the scroll
+  position; and loads at most 100 additional filtered rows from a bottom
+  action.
 
 ## Invariants
 
@@ -146,3 +153,8 @@ package authoring, hosting, settings, and account state.
 12. Keep a deployed browser build open, publish a different `version.json`,
     wait at most one minute, and verify the localized green update button
     appears and reloads the page.
+13. Open Question database and confirm it is first in SCHDK navigation and
+    identifies the collection as personal. Search question and answer text
+    separately and together, reverse both sortable columns, scroll a batch
+    without rendering the complete result set, and load the next batch from the
+    bottom action.

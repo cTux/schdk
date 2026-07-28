@@ -12,8 +12,8 @@ Project-wide goals, constraints, invariants, and bug history live in
 | Authoring          | [Package editor](package-editor.md)                     | Create, edit, AI generation, reorder, import, autosave, recents, export          |
 | Gameplay           | [Game hosting](game-hosting.md)                         | Pre-game summary, stages, timers, audio, navigation, restoration                 |
 | Presentation       | [Visual editor](visual-editor.md)                       | Layout, custom elements, backgrounds, templates                                  |
-| Cloud              | [Google Drive persistence](google-drive-persistence.md) | Authorization, package and AI-rule storage, settings sync, recovery              |
-| Application shell  | [Unified shell](unified-shell.md)                       | Navigation, localization, themes, settings, deep links, GitHub Pages             |
+| Cloud              | [Google Drive persistence](google-drive-persistence.md) | Authorization, packages, question index, AI rules, settings sync, recovery       |
+| Application shell  | [Unified shell](unified-shell.md)                       | Navigation, question search, localization, themes, settings, deep links          |
 | Native application | [Desktop application](desktop-application.md)           | Cross-platform shell, presenter notes, close safety, native export, artifacts    |
 
 ## Maintenance

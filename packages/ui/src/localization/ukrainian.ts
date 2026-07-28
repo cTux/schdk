@@ -1,10 +1,9 @@
-export type AppLocale = 'uk' | 'en';
-
 import { ukrainianSettings } from './ukrainian-settings';
 import { aiQuestionsCopy, questionGenerationCopy } from './ai-questions';
 import { aiPackageRulesCopy } from './ai-package-rules';
 import { packageGenerationCopy } from './package-generation';
 import { ukrainianAllWeb, ukrainianMeta } from './ukrainian-misc';
+import { questionDatabaseCopy } from './question-database';
 export const ukrainian = {
   shared: {
     confirmation: 'Підтвердження дії',
@@ -72,7 +71,9 @@ export const ukrainian = {
       label: aiPackageRulesCopy.uk.navigationLabel,
       description: aiPackageRulesCopy.uk.navigationDescription,
     },
+    questionDatabase: questionDatabaseCopy.uk.navigation,
   },
+  questionDatabase: questionDatabaseCopy.uk,
   aiQuestions: aiQuestionsCopy.uk,
   aiPackageRules: aiPackageRulesCopy.uk,
   questionGeneration: questionGenerationCopy.uk,

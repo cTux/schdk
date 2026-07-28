@@ -13,6 +13,10 @@
 - Store a user AI API key separately in `ai-credentials-v1.json` in the current
   account's `appDataFolder`. Never copy it into the settings document or its
   local cache, and never reuse one account's configured status for another.
+- Store the current account's rebuildable question index in
+  `question-database-v1.json` in `appDataFolder`. Derive it only from parsed
+  app-marked `.schdk` packages, compare package IDs and modification times
+  before downloading media, and never treat the index as the source of truth.
 - Store app-created `.schdk` files in a visible `SCHDK` Drive folder. Mark the
   folder and packages with private app properties, and expose package identity
   to browser deep links and sessions through validated `drive:<fileId>`
@@ -76,10 +80,11 @@
   loopback callback on `127.0.0.1`, and refresh tokens encrypted with Electron
   `safeStorage`. Never persist a refresh token through Linux `basic_text`.
 - Expose only status, connect, disconnect, settings, AI-key status/write,
-  validated AI generation, and validated game-package, AI-question-rule, and
-  AI-question-package create/update/delete/list/load operations through
-  Electron IPC. Tokens, stored AI keys, and generic authenticated requests
-  never cross into the renderer.
+  question-database load/write, validated AI generation, and validated
+  game-package, AI-question-rule, and AI-question-package
+  create/update/delete/list/load operations through Electron IPC. Validate the
+  complete question-database document before writing it. Tokens, stored AI
+  keys, and generic authenticated requests never cross into the renderer.
 - Bundle the production Web application client ID in the browser application.
   Allow `VITE_GOOGLE_WEB_CLIENT_ID` to override it for development.
 - Bundle the production Desktop application client ID and installed-app client

@@ -1,5 +1,6 @@
 import { getGameQuestionAnswers, type GameQuestion } from '@schdk/common';
 import { generateText, jsonSchema, Output, type LanguageModel } from 'ai';
+import type { ExistingQuestionReference } from './game-question-prompt.js';
 
 const answerDiversitySchema = jsonSchema<{ acceptable: boolean }>({
   type: 'object',
@@ -8,7 +9,7 @@ const answerDiversitySchema = jsonSchema<{ acceptable: boolean }>({
     acceptable: {
       type: 'boolean',
       description:
-        'Whether the candidate is a genuinely different entity and preserves answer diversity.',
+        'Whether the candidate differs semantically from the supplied questions and answers.',
     },
   },
   required: ['acceptable'],
@@ -19,22 +20,28 @@ export async function hasDiverseAnswer(
   locale: 'uk' | 'en',
   question: GameQuestion,
   excludedAnswers: string[],
+  existingQuestions: ExistingQuestionReference[] = [],
 ) {
-  if (!excludedAnswers.length) return true;
+  if (!excludedAnswers.length && !existingQuestions.length) return true;
   const result = await generateText({
     model,
     output: Output.object({
-      name: 'answer_diversity_review',
-      description: 'Semantic uniqueness and answer-diversity review.',
+      name: 'question_diversity_review',
+      description: 'Semantic question and answer uniqueness review.',
       schema: answerDiversitySchema,
     }),
     system:
       locale === 'uk'
-        ? 'Перевір відповідь нового питання. Вона неприйнятна, якщо позначає ту саму сутність, що й будь-яка використана відповідь, зокрема через синонім, псевдонім, переклад, уточнення або описову назву. Вона також неприйнятна, якщо погіршує різноманітність пакета повторенням уже надмірно представленого типу сутності чи форми відповіді. Не вимагай, щоб усі 36 відповідей мали унікальні типи.'
-        : 'Review a new question answer. Reject it when it denotes the same entity as any used answer, including through a synonym, alias, translation, qualification, or descriptive name. Also reject it when it reduces package diversity by repeating an already overrepresented entity type or answer form. Do not require all 36 answers to have unique types.',
+        ? 'Перевір нове питання та відповідь. Відхили його, якщо відповідь позначає ту саму сутність, що й використана відповідь, або якщо питання повторює центральний факт, логіку чи суттєву послідовність підказок наявного питання, навіть іншими словами. Також відхили надмірне повторення типу сутності чи форми відповіді.'
+        : 'Review the new question and answer. Reject it when the answer denotes the same entity as a used answer, or when the question repeats the central fact, logic, or material clue sequence of an existing question even with different wording. Also reject excessive repetition of an entity type or answer form.',
     prompt: `${locale === 'uk' ? 'Використані відповіді' : 'Used answers'}: ${JSON.stringify(excludedAnswers)}
 
-${locale === 'uk' ? 'Нова основна та альтернативні відповіді' : 'New main and alternative answers'}: ${JSON.stringify(getGameQuestionAnswers(question))}`,
+${locale === 'uk' ? 'Схожі наявні питання' : 'Similar existing questions'}: ${JSON.stringify(existingQuestions)}
+
+${locale === 'uk' ? 'Нове питання' : 'New question'}: ${JSON.stringify({
+      question: question.questionParts,
+      answers: getGameQuestionAnswers(question),
+    })}`,
   });
   return result.output.acceptable;
 }

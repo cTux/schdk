@@ -21,6 +21,7 @@ import { AppUpdateButton } from './AppUpdateButton';
 import { useGoogleDriveSettings } from './use-google-drive-settings';
 import { useShellNavigation } from './use-shell-navigation';
 import { useSettingsDeepLink } from './use-settings-deep-link';
+import { useQuestionDatabase } from './use-question-database';
 
 const HostApp = lazy(() =>
   import('@schdk/host-web-app/app').then(({ App }) => ({ default: App })),
@@ -52,8 +53,18 @@ export function App() {
   });
   const { connection } = googleDrive;
   const connected = connection.state === 'connected';
+  const accountId = connected ? connection.account.emailAddress : undefined;
+  const questionDatabase = useQuestionDatabase(
+    googleDrive.bridge ?? null,
+    accountId,
+  );
   const { ai, aiQuestions, aiQuestionsPackages, aiGeneration } =
-    useAiQuestionTools(googleDrive.bridge ?? null, connection, locale);
+    useAiQuestionTools(
+      googleDrive.bridge ?? null,
+      connection,
+      locale,
+      questionDatabase,
+    );
   const loginState = googleDrive.statusReady ? connection.state : 'connecting';
   const [unlocked, setUnlocked] = useState(connected);
   useEffect(() => setUnlocked((current) => current || connected), [connected]);
@@ -166,6 +177,12 @@ export function App() {
               </Suspense>
             }
             loadedApps={navigation.loadedApps}
+            questionDatabase={{
+              failed: questionDatabase.failed,
+              loading: questionDatabase.loading,
+              progress: questionDatabase.progress,
+              rows: questionDatabase.entries,
+            }}
             aiOptions={ai.options}
             aiQuestions={aiQuestions}
             aiQuestionsPackages={aiQuestionsPackages}

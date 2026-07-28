@@ -19,7 +19,7 @@ export interface AiQuestionGenerationOptions {
   apiKeyConfigured: boolean;
   templates: AIQuestion[];
   packages: AIQuestionsPackage[];
-  onGenerationStart?(): Promise<void>;
+  onGenerationStart?(checkQuestionDatabase?: boolean): Promise<void>;
   getPromptPreview?(
     template: AIQuestion,
     context: string,
@@ -31,6 +31,7 @@ export interface AiQuestionGenerationOptions {
     context: string,
     excludedAnswers?: string[],
     difficulty?: AIQuestionDifficulty,
+    checkQuestionDatabase?: boolean,
   ): Promise<GameQuestion>;
   excludedAnswers?: string[];
 }

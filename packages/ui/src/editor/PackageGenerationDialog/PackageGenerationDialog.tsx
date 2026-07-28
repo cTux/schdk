@@ -4,7 +4,6 @@ import { Dialog } from '@base-ui/react/dialog';
 import {
   faChevronLeft,
   faChevronRight,
-  faWandMagicSparkles,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   compareFavoriteItemsByName,
@@ -16,6 +15,7 @@ import { Button } from '../../atoms/Button';
 import { IconButton } from '../../atoms/IconButton';
 import { Textarea } from '../../atoms/Textarea';
 import { useLocalization } from '../../localization';
+import { PackageGenerationOpenButton } from '../PackageGenerationOpenButton';
 import { PackageGenerationOptions } from '../PackageGenerationOptions';
 import {
   getPackageGenerationInput,
@@ -51,13 +51,18 @@ export function PackageGenerationDialog({
   const [excludedAnswers, setExcludedAnswers] = useState<string[]>([]);
   const [currentInput, setCurrentInput] =
     useState<PackageGenerationInput | null>(null);
+  const [checkQuestionDatabase, setCheckQuestionDatabase] = useState(false);
   const activePackages = packages
     .filter((item) => item.enabled)
     .sort(compareFavoriteItemsByName);
   const randomTemplates = getPackageGenerationTemplates(templates, ruleSet);
   const selectedPackage =
     selected === null ? undefined : activePackages[selected];
-  const targets = getPackageGenerationTargets(gamePackage, scope);
+  const missingTargets = getPackageGenerationTargets(gamePackage, 'missing');
+  const targets =
+    scope === 'missing'
+      ? missingTargets
+      : getPackageGenerationTargets(gamePackage, scope);
   const initialExcludedAnswers = gamePackage.questions.flatMap(
     (question, index) =>
       targets.includes(index) ? [] : getGameQuestionAnswers(question),
@@ -73,17 +78,14 @@ export function PackageGenerationDialog({
     setPromptOpen(false);
     setExcludedAnswers([]);
     setCurrentInput(null);
+    setCheckQuestionDatabase(false);
   }
 
   function show() {
     setSelected(activePackages.length ? 0 : null);
     setOpen(true);
   }
-  const targetsMissing = gamePackage.questions.some(
-    (question) =>
-      !question.answer.trim() ||
-      question.questionParts.some((part) => !part.trim()),
-  );
+  const targetsMissing = Boolean(missingTargets.length);
   const previewIndex = targets[progress ? progress[0] - 1 : 0];
   const previewInput =
     currentInput ??
@@ -98,7 +100,7 @@ export function PackageGenerationDialog({
     setThinking(true);
     setFailed(false);
     try {
-      await onGenerationStart?.();
+      await onGenerationStart?.(checkQuestionDatabase);
       const usedAnswers = [...initialExcludedAnswers];
       for (const [position, index] of targets.entries()) {
         const input = getPackageGenerationInput(
@@ -116,6 +118,8 @@ export function PackageGenerationDialog({
           input.template,
           input.context,
           usedAnswers,
+          undefined,
+          checkQuestionDatabase,
         );
         onGenerated(index, question);
         usedAnswers.push(...getGameQuestionAnswers(question));
@@ -129,15 +133,8 @@ export function PackageGenerationDialog({
 
   return (
     <>
-      <IconButton
-        icon={faWandMagicSparkles}
-        label={copy.packageGeneration.open}
-        tooltipLabel={
-          apiKeyConfigured
-            ? copy.packageGeneration.open
-            : copy.questionGeneration.apiKeyMissing
-        }
-        disabled={!apiKeyConfigured}
+      <PackageGenerationOpenButton
+        apiKeyConfigured={apiKeyConfigured}
         onClick={show}
       />
       <Dialog.Root
@@ -185,6 +182,8 @@ export function PackageGenerationDialog({
                     selected={selected}
                     targetsMissing={targetsMissing}
                     thinking={thinking}
+                    checkQuestionDatabase={checkQuestionDatabase}
+                    onCheckQuestionDatabaseChange={setCheckQuestionDatabase}
                     onPackageChange={(index) => {
                       setSelected(index);
                       setCurrentInput(null);

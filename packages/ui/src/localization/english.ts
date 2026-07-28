@@ -4,6 +4,7 @@ import { aiQuestionsCopy, questionGenerationCopy } from './ai-questions';
 import { aiPackageRulesCopy } from './ai-package-rules';
 import { packageGenerationCopy } from './package-generation';
 import { englishAllWeb, englishMeta } from './english-misc';
+import { questionDatabaseCopy } from './question-database';
 export const english: typeof ukrainian = {
   shared: {
     confirmation: 'Confirm action',
@@ -71,7 +72,9 @@ export const english: typeof ukrainian = {
       label: aiPackageRulesCopy.en.navigationLabel,
       description: aiPackageRulesCopy.en.navigationDescription,
     },
+    questionDatabase: questionDatabaseCopy.en.navigation,
   },
+  questionDatabase: questionDatabaseCopy.en,
   aiQuestions: aiQuestionsCopy.en,
   aiPackageRules: aiPackageRulesCopy.en,
   questionGeneration: questionGenerationCopy.en,

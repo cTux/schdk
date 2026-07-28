@@ -57,6 +57,12 @@ preserving recoverable local state during temporary Drive failures.
   `.aiquestionpackage` ZIP file in the current account's app-marked `SCHDK`
   folder. Listing, loading, creation, renaming, updating, and trashing use the
   shared Drive adapter on web and desktop without browser-local persistence.
+- **DRV-19:** `question-database-v1.json` in the connected account's
+  `appDataFolder` stores a validated, rebuildable projection of non-empty
+  questions and answers from parsed app-marked `.schdk` packages. Refresh
+  compares file IDs and modification times, downloads only new or changed
+  packages, removes missing packages, and reports packages that cannot be
+  indexed without discarding a previous usable projection.
 
 ## Invariants
 
@@ -76,6 +82,8 @@ preserving recoverable local state during temporary Drive failures.
   their rules are used.
 - AI question package archives are parsed through the canonical shared format
   before generation uses them.
+- The question database never crosses accounts and never replaces canonical
+  `.schdk` content.
 
 ## Acceptance
 
@@ -111,3 +119,7 @@ preserving recoverable local state during temporary Drive failures.
 13. Create, edit, reload, rename, and delete an AI question package on web and
     desktop; observe one `.aiquestionpackage` ZIP file in the current account's
     `SCHDK` folder and no browser-local copy.
+14. Build the question database, reopen it without downloading unchanged
+    packages, then edit and delete packages and observe only the changed
+    projection replaced or removed. Switch accounts and confirm no prior
+    account rows appear.

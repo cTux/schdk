@@ -8,7 +8,10 @@ import {
   createGameQuestionPrompt,
   type GameQuestionGenerationRequest,
 } from '@schdk/ai';
-import { isGlobalAIQuestionAdmin } from '@schdk/google-drive';
+import {
+  isGlobalAIQuestionAdmin,
+  type QuestionDatabaseEntry,
+} from '@schdk/google-drive';
 import type { AiQuestionGenerationOptions } from '@schdk/ui/editor';
 import type { AppLocale } from '@schdk/ui/localization';
 import type { AiOptions } from '@schdk/ui/options';
@@ -20,6 +23,11 @@ import type {
 } from './google-drive-types';
 import { useAiSettings } from './use-ai-settings';
 
+interface QuestionDatabaseAccess {
+  getEntries(): QuestionDatabaseEntry[];
+  refresh(): Promise<QuestionDatabaseEntry[]>;
+}
+
 export function createAiQuestionGeneration(
   bridge: GoogleDriveBridge | null,
   options: AiOptions,
@@ -27,6 +35,7 @@ export function createAiQuestionGeneration(
   packages: AIQuestionsPackage[],
   locale: AppLocale,
   isAdmin: boolean,
+  questionDatabase: QuestionDatabaseAccess,
   generalRule?: AIQuestion,
 ): AiQuestionGenerationOptions {
   function createRequest(
@@ -34,6 +43,7 @@ export function createAiQuestionGeneration(
     context: string,
     excludedAnswers: string[],
     difficulty: AIQuestionDifficulty = 'medium',
+    checkQuestionDatabase = false,
   ): GameQuestionGenerationRequest {
     return {
       provider: options.provider,
@@ -54,6 +64,12 @@ export function createAiQuestionGeneration(
       context,
       difficulty,
       excludedAnswers,
+      existingQuestions: checkQuestionDatabase
+        ? questionDatabase.getEntries().map((question) => ({
+            question: question.question,
+            answers: [question.answer, ...question.alternativeAnswers],
+          }))
+        : [],
     };
   }
 
@@ -65,7 +81,10 @@ export function createAiQuestionGeneration(
     templates: templates
       .filter((template) => template.enabled && !template.generalRule)
       .sort(compareFavoriteItemsByName),
-    onGenerationStart: bridge?.renewToken?.bind(bridge),
+    async onGenerationStart(checkQuestionDatabase = false) {
+      await bridge?.renewToken?.();
+      if (checkQuestionDatabase) await questionDatabase.refresh();
+    },
     getPromptPreview: isAdmin
       ? (template, context, excludedAnswers = [], difficulty = 'medium') => {
           const { system, prompt } = createGameQuestionPrompt(
@@ -74,12 +93,24 @@ export function createAiQuestionGeneration(
           return `${system}\n\n${prompt}`;
         }
       : undefined,
-    onGenerate(template, context, excludedAnswers = [], difficulty = 'medium') {
+    onGenerate(
+      template,
+      context,
+      excludedAnswers = [],
+      difficulty = 'medium',
+      checkQuestionDatabase = false,
+    ) {
       if (!bridge) {
         return Promise.reject(new Error('Google Drive is disconnected'));
       }
       return bridge.generateAiQuestion(
-        createRequest(template, context, excludedAnswers, difficulty),
+        createRequest(
+          template,
+          context,
+          excludedAnswers,
+          difficulty,
+          checkQuestionDatabase,
+        ),
       );
     },
   };
@@ -89,6 +120,7 @@ export function useAiQuestionTools(
   bridge: GoogleDriveBridge | null,
   connection: GoogleDriveConnection,
   locale: AppLocale,
+  questionDatabase: QuestionDatabaseAccess,
 ) {
   const accountId =
     connection.state === 'connected'
@@ -121,6 +153,7 @@ export function useAiQuestionTools(
       aiQuestionsPackages.packages,
       locale,
       isGlobalAIQuestionAdmin(accountId),
+      questionDatabase,
       aiQuestions.globalQuestions.find((question) => question.generalRule),
     ),
   };

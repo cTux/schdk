@@ -19,11 +19,13 @@ import { IconButton } from '../../atoms/IconButton';
 import { TextAreaField } from '../../atoms/TextAreaField';
 import { Textarea } from '../../atoms/Textarea';
 import { useLocalization } from '../../localization';
+import { QuestionDatabaseCheck } from '../QuestionDatabaseCheck';
 import type { QuestionGenerationDialogProps } from './types';
 
 export function QuestionGenerationDialog({
   apiKeyConfigured,
   templates,
+  onGenerationStart,
   getPromptPreview,
   onGenerate,
   excludedAnswers = [],
@@ -37,6 +39,7 @@ export function QuestionGenerationDialog({
   const [thinking, setThinking] = useState(false);
   const [failed, setFailed] = useState(false);
   const [promptOpen, setPromptOpen] = useState(false);
+  const [checkQuestionDatabase, setCheckQuestionDatabase] = useState(false);
   const sortedTemplates = [...templates].sort(compareFavoriteItemsByName);
   const selectedTemplate =
     sortedTemplates[Number(templateIndex)] ?? sortedTemplates[0] ?? null;
@@ -49,6 +52,7 @@ export function QuestionGenerationDialog({
     setThinking(false);
     setFailed(false);
     setPromptOpen(false);
+    setCheckQuestionDatabase(false);
   }
 
   async function generate() {
@@ -56,11 +60,13 @@ export function QuestionGenerationDialog({
     setThinking(true);
     setFailed(false);
     try {
+      await onGenerationStart?.(checkQuestionDatabase);
       const question = await onGenerate(
         selectedTemplate,
         context.trim(),
         excludedAnswers,
         difficulty,
+        checkQuestionDatabase,
       );
       onGenerated(question);
       reset();
@@ -165,6 +171,12 @@ export function QuestionGenerationDialog({
                     value={context}
                     disabled={thinking}
                     onValueChange={setContext}
+                  />
+                  <QuestionDatabaseCheck
+                    checked={checkQuestionDatabase}
+                    disabled={thinking}
+                    label={copy.questionGeneration.checkDatabase}
+                    onChange={setCheckQuestionDatabase}
                   />
                   {failed && (
                     <p className="question-generation-error" role="alert">

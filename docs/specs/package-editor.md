@@ -94,6 +94,12 @@ without losing in-progress work.
   that worsen package variety by overusing one entity type or answer form. A
   rejected candidate is retried once; a second rejection fails without
   replacing the target question.
+- **EDT-21:** Question and package generation modals each show a similarity
+  toggle that resets to off whenever the modal closes. When enabled, generation
+  refreshes the connected account's question database, rejects exact answers
+  locally, shortlists lexically related questions, asks the selected provider
+  to reject the same entity, central fact, logic, or material clue sequence,
+  and regenerates one rejected draft before failing.
 
 ## Invariants
 
@@ -157,3 +163,7 @@ without losing in-progress work.
     of an existing entity, and an answer that worsens an overrepresented type
     or form; confirm each is rejected, one rejection is retried, and a second
     rejection leaves its target unchanged.
+16. Open each generation modal and confirm its database toggle defaults off.
+    Enable it, return an answer and then a paraphrased question already present
+    in another indexed package, and confirm each first draft is rejected and
+    regenerated once. Close and reopen the modal and confirm the toggle is off.

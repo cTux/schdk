@@ -6,6 +6,7 @@ import type {
   DriveAIQuestionsPackageStorage,
   DriveGlobalAIQuestionStorage,
   DrivePackageStorage,
+  DriveQuestionDatabaseStorage,
   DriveSettingsDocument,
 } from '@schdk/google-drive';
 
@@ -21,6 +22,8 @@ declare global {
       DriveAIQuestionStorage &
       DriveAIQuestionsPackageStorage &
       DriveGlobalAIQuestionStorage & {
+        loadQuestionDatabase: DriveQuestionDatabaseStorage['loadQuestionDatabase'];
+        saveQuestionDatabase: DriveQuestionDatabaseStorage['saveQuestionDatabase'];
         status(): Promise<{
           state: 'unavailable' | 'disconnected' | 'connected';
           account?: DriveAccount;

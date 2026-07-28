@@ -6,6 +6,7 @@ import type {
   DriveAIQuestionStorage,
   DriveGlobalAIQuestionStorage,
   DrivePackageStorage,
+  DriveQuestionDatabaseStorage,
   DriveSettingsDocument,
 } from '@schdk/google-drive';
 
@@ -14,7 +15,8 @@ export interface GoogleDriveBridge
     DrivePackageStorage,
     DriveAIQuestionsPackageStorage,
     DriveAIQuestionStorage,
-    DriveGlobalAIQuestionStorage {
+    DriveGlobalAIQuestionStorage,
+    DriveQuestionDatabaseStorage {
   status(): Promise<{
     state: 'unavailable' | 'disconnected' | 'connected';
     account?: DriveAccount;

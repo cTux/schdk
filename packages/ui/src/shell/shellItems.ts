@@ -1,6 +1,7 @@
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import {
   faBrain,
+  faDatabase,
   faHouse,
   faObjectGroup,
   faLayerGroup,
@@ -11,6 +12,7 @@ import type { LocalizationCopy } from '../localization';
 
 export type ShellViewName =
   | 'home'
+  | 'questionDatabase'
   | 'host'
   | 'editor'
   | 'visualEditor'
@@ -33,6 +35,11 @@ export function getShellContent(copy: LocalizationCopy) {
     ...shell.home,
   };
   const items: readonly ShellItem[] = [
+    {
+      id: 'questionDatabase',
+      icon: faDatabase,
+      ...shell.questionDatabase,
+    },
     {
       id: 'visualEditor',
       icon: faObjectGroup,

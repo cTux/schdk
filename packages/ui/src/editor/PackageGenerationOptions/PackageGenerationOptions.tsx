@@ -1,6 +1,7 @@
 import { Dropdown } from '../../atoms/Dropdown';
 import { useLocalization } from '../../localization';
 import type { PackageGenerationRuleSet } from '../PackageGenerationDialog/generation-input';
+import { QuestionDatabaseCheck } from '../QuestionDatabaseCheck';
 import type { PackageGenerationOptionsProps } from './types';
 
 export function PackageGenerationOptions({
@@ -11,6 +12,8 @@ export function PackageGenerationOptions({
   selected,
   targetsMissing,
   thinking,
+  checkQuestionDatabase,
+  onCheckQuestionDatabaseChange,
   onPackageChange,
   onRuleSetChange,
   onScopeChange,
@@ -80,6 +83,12 @@ export function PackageGenerationOptions({
           {copy.packageGeneration.nothingMissing}
         </p>
       )}
+      <QuestionDatabaseCheck
+        checked={checkQuestionDatabase}
+        disabled={thinking}
+        label={copy.packageGeneration.checkDatabase}
+        onChange={onCheckQuestionDatabaseChange}
+      />
     </>
   );
 }
