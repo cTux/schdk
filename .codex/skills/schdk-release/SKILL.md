@@ -21,8 +21,10 @@ workflow, and verify the published GitHub Release.
 3. Use an explicitly requested SemVer version. Otherwise increment the patch
    component of the highest stable SemVer release or tag. Treat `X.Y.Z` and
    `vX.Y.Z` as the same version and publish the canonical tag `vX.Y.Z`.
-4. Build concise Ukrainian changelog notes from user-visible commits since the
-   previous release. Preserve existing non-empty notes.
+4. Build concise Ukrainian changelog notes from commits since the previous
+   release. Separate `### Продуктові рішення` from `### Технічні рішення` and
+   prefix every item with `[NEW]`, `[CHANGE]`, `[FIX]`, `[DELETE]`, or
+   `[SECURITY]`. Preserve existing non-empty notes.
 5. Require `GOOGLE_DESKTOP_CREDENTIALS_JSON` in GitHub Actions. Never expose its
    value or commit it.
 6. Put preparation changes on a prompt-based `codex/` branch. Run
@@ -49,7 +51,8 @@ Run formatting, linting, typechecking, and tests once. Package on
 Pass the version with `--config.extraMetadata.version=X.Y.Z`, disable signing
 identity discovery, and verify the installer is non-empty and unsigned. Use
 `scripts/release-notes.mjs X.Y.Z release-notes.md` as the changelog and SemVer
-gate. Materialize Google desktop credentials only under the runner temporary
+gate; it must reject missing decision sections, empty sections, and unprefixed
+items. Materialize Google desktop credentials only under the runner temporary
 directory and remove them in an `if: always()` step. Keep third-party actions
 pinned to full commit SHAs.
 

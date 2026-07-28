@@ -29,8 +29,10 @@
 - In pull requests, load the production unified web shell in headless Chrome
   and require its Google login view to render.
 - Create releases only from `main` through the manual release workflow. Require
-  a SemVer version and matching Ukrainian `CHANGELOG.md` section, run shared
-  checks once, and package on a native Windows runner.
+  a SemVer version and matching Ukrainian `CHANGELOG.md` section with separate
+  product and technical decision lists. Prefix every list item with `[NEW]`,
+  `[CHANGE]`, `[FIX]`, `[DELETE]`, or `[SECURITY]`, run shared checks once, and
+  package on a native Windows runner.
 - GitHub Releases contain exactly one non-empty, unsigned, version-matched
   Windows x64 NSIS installer.
 - Route requests to prepare, publish, repair, or verify a GitHub Release through

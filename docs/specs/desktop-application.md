@@ -38,7 +38,8 @@ application with native save and presenter-window integration.
   after Drive connection.
 - **DSK-13:** Each GitHub Release contains exactly one version-matched unsigned
   Windows x64 NSIS installer plus release notes sourced from the matching
-  Ukrainian changelog section.
+  Ukrainian changelog section. The notes separate product decisions from
+  technical decisions, and every item has a change-type prefix.
 - **DSK-14:** The release workflow verifies that the installer is non-empty and
   unsigned before publication.
 - **DSK-15:** Pull requests launch the packaged Windows renderer and verify its
@@ -72,8 +73,9 @@ application with native save and presenter-window integration.
    a question, and verify only configured status and the validated question
    cross into the renderer. Then switch Google accounts and verify the prior
    account's key is not exposed.
-6. Create a release from `main`; verify its tag, Ukrainian notes, and single
-   unsigned version-matched Windows x64 installer.
+6. Create a release from `main`; verify its tag, Ukrainian product and technical
+   notes with change-type prefixes, and single unsigned version-matched Windows
+   x64 installer.
 7. Run pull-request checks and observe the packaged renderer smoke test exit
    successfully.
 8. Dispatch `Desktop builds`; verify both macOS architectures preserve their
