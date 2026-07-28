@@ -65,12 +65,18 @@
   }
 
   .package-header {
+    display: flex;
     width: min(430px, 45%);
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 0 8px;
     margin-left: auto;
   }
 
   .package-title {
     display: block;
+    min-width: 0;
+    flex: 1;
     color: $muted;
     font-size: $font-size-xs;
     letter-spacing: 0.035em;
@@ -83,6 +89,7 @@
   }
 
   .save-status {
+    width: 100%;
     min-height: 16px;
     gap: 7px;
     margin-top: 6px;
