@@ -75,8 +75,10 @@ package authoring, hosting, settings, and account state.
   question creation rules and show only the current account's packages. Each
   package edits a required name and shared context plus zero or more
   question-number contexts with an optional enabled AI question-rule type.
-  Enable, favorite, edit, delete, loading, and error states use the existing
-  rule-card patterns.
+  Per-question contexts render as compact rows with two dropdowns and a
+  single-line context field, stay sorted by question number, and do not allow
+  duplicate question numbers. Enable, favorite, edit, delete, loading, and
+  error states use the existing rule-card patterns.
 
 ## Invariants
 
@@ -122,5 +124,6 @@ package authoring, hosting, settings, and account state.
 10. Open the Artificial intelligence form and confirm every multiline field
     matches the shared dropdown styling without a resize handle.
 11. Open Package creation rules directly, create a package with shared and
-    per-question context, reload, edit its enabled and favorite states, and
-    delete it. Confirm no global collection appears.
+    per-question context, and confirm its compact rows stay number-sorted and
+    prevent duplicate question numbers. Reload, edit its enabled and favorite
+    states, and delete it. Confirm no global collection appears.
