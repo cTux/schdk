@@ -86,6 +86,10 @@ package authoring, hosting, settings, and account state.
   and remaining rules. Enable, favorite, edit, delete, loading, and error states
   use the existing rule-card patterns. Editing an existing package rule hides
   its collection until the editor is saved or canceled.
+- **SHL-18:** The GitHub Pages build publishes `version.json` at its root. The
+  browser checks it immediately and every minute; when its version differs from
+  the loaded build, a fixed green update icon appears at the bottom right with
+  a localized tooltip and reloads the page when activated.
 
 ## Invariants
 
@@ -139,3 +143,6 @@ package authoring, hosting, settings, and account state.
     and delete it. Confirm editing hides the collection and its copied URL
     restores the same editor after reload and through browser history. Confirm
     no global collection appears.
+12. Keep a deployed browser build open, publish a different `version.json`,
+    wait at most one minute, and verify the localized green update button
+    appears and reloads the page.

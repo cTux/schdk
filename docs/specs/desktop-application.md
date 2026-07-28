@@ -49,6 +49,10 @@ application with native save and presenter-window integration.
   pass.
 - **DSK-17:** Every cross-platform artifact includes version and architecture;
   DEB metadata identifies `schdk`, `amd64`, and a non-empty maintainer.
+- **DSK-18:** The packaged application checks GitHub's latest SCHDK Release
+  immediately and every minute. When its version differs, it shows the shared
+  fixed green update button; activating it opens the latest release page in the
+  system browser.
 
 ## Invariants
 
@@ -80,3 +84,6 @@ application with native save and presenter-window integration.
    successfully.
 8. Dispatch `Desktop builds`; verify both macOS architectures preserve their
    `.app` bundles in ZIPs, each PKG exists, and the DEB metadata matches DSK-17.
+9. Run an older packaged version while a newer GitHub Release exists; wait at
+   most one minute, activate the update button, and verify the latest release
+   page opens in the system browser.

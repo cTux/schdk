@@ -1,6 +1,7 @@
 import { app, BrowserWindow, dialog, ipcMain, Menu } from 'electron';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { registerAppUpdateIpc } from './app-update.js';
 import { registerGamePackageIpc } from './game-package-ipc.js';
 import {
   closePresenterNotes,
@@ -30,7 +31,7 @@ function attachSmokeTest(window: BrowserWindow) {
   window.webContents.once('did-finish-load', async () => {
     try {
       const passed = await window.webContents.executeJavaScript(
-        "Boolean(document.querySelector('#root')?.childElementCount && window.desktop?.googleDrive?.status)",
+        "Boolean(document.querySelector('#root')?.childElementCount && window.desktop?.googleDrive?.status && window.desktop?.updates?.check)",
       );
       if (!passed) throw new Error('Renderer or preload bridge is unavailable');
       clearTimeout(timeout);
@@ -145,6 +146,7 @@ ipcMain.on('set-editor-package-open', (event, open) => {
 registerGamePackageIpc();
 registerGoogleDriveIpc();
 registerPresenterNotesIpc(() => mainWindow);
+registerAppUpdateIpc();
 
 app.whenReady().then(() => {
   Menu.setApplicationMenu(null);

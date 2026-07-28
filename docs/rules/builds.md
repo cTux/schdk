@@ -25,14 +25,16 @@
   Windows x64, macOS x64/arm64, and Debian x64 artifacts separately; never
   attach them to a GitHub Release.
 - Deploy `@schdk/all-web-app` to GitHub Pages after every push to `main` through
-  the official Pages artifact and deployment actions.
+  the official Pages artifact and deployment actions, including its root
+  `version.json`.
 - In pull requests, load the production unified web shell in headless Chrome
   and require its Google login view to render.
 - Create releases only from `main` through the manual release workflow. Require
-  a SemVer version and matching Ukrainian `CHANGELOG.md` section with separate
-  product and technical decision lists. Prefix every list item with `[NEW]`,
-  `[CHANGE]`, `[FIX]`, `[DELETE]`, or `[SECURITY]`, run shared checks once, and
-  package on a native Windows runner.
+  a SemVer version matching `packages/all-web-app/version.json` and the
+  Ukrainian `CHANGELOG.md` section with separate product and technical decision
+  lists. Prefix every list item with `[NEW]`, `[CHANGE]`, `[FIX]`, `[DELETE]`,
+  or `[SECURITY]`, run shared checks once, and package on a native Windows
+  runner.
 - GitHub Releases contain exactly one non-empty, unsigned, version-matched
   Windows x64 NSIS installer.
 - Route requests to prepare, publish, repair, or verify a GitHub Release through

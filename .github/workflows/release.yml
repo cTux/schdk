@@ -35,6 +35,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: node scripts/release-notes.mjs "$RELEASE_VERSION" release-notes.md
+      - name: Verify application version
+        run: node -e "const { version } = require('./packages/all-web-app/version.json'); if (version !== process.env.RELEASE_VERSION) throw new Error('version.json must match the release version.');"
       - run: pnpm fmt:check
       - run: pnpm lint
       - run: pnpm typecheck

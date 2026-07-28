@@ -43,6 +43,9 @@
   validated game question, never the key.
 - Keep personal AI question packages in Drive as `.aiquestionpackage` archives
   and expose their page immediately after question-generation rules.
+- Publish `packages/all-web-app/version.json` at the GitHub Pages root and
+  compare it with the version embedded in the loaded browser build once per
+  minute.
 - Show a localized Google login screen before mounting the unified tools.
   Authentication is mandatory on web and desktop; reconnect before restoring
   access after authorization expires.
