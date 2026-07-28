@@ -36,6 +36,7 @@ export function EditorView({
   onBack,
   onCopyQuestion,
   onCreatePackage,
+  onDeletePackage,
   onDeleteRecentPackage,
   onDownloadRecentPackage,
   onOpenPackage,
@@ -99,6 +100,7 @@ export function EditorView({
           saveStatus={saveStatus}
           showValidation={showValidation}
           onBack={onBack}
+          onDeletePackage={onDeletePackage}
           onTitleChange={onTitleChange}
           aiGeneration={aiGeneration}
           gamePackage={gamePackage}

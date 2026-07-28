@@ -132,6 +132,15 @@ function getValue(component: string, prop: string): unknown {
     aiGeneration: {
       apiKeyConfigured: true,
       templates: [aiQuestion],
+      packages: [
+        {
+          name: 'Standard',
+          context: 'Package context',
+          questions: [],
+          enabled: true,
+          favorite: true,
+        },
+      ],
       onGenerate: async () => gameQuestion,
     },
     aiOptions,

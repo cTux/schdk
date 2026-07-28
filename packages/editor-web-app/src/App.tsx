@@ -221,6 +221,7 @@ export function App({
         onBack={() => void packages.closePackage()}
         onCopyQuestion={() => void questions.copyQuestion()}
         onCreatePackage={() => void packages.createPackage()}
+        onDeletePackage={() => void packages.deletePackage(gamePackage.title)}
         onDeleteRecentPackage={(recent) =>
           void packages.deleteRecentPackage(recent)
         }

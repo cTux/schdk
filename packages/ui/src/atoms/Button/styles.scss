@@ -67,3 +67,15 @@
 .ui-button.ghost {
   border-color: transparent;
 }
+
+.ui-button.danger {
+  border-color: rgba($danger-rgb, 0.32);
+  background: rgba($danger-rgb, 0.12);
+  color: $danger;
+}
+
+.ui-button.danger:hover:not(:disabled) {
+  border-color: rgba($danger-rgb, 0.48);
+  background: rgba($danger-rgb, 0.22);
+  color: $danger-text;
+}

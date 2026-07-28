@@ -48,6 +48,7 @@ export function QuestionEditorHeader({
           icon={faTrashCan}
           label={copy.shared.remove}
           onClick={onClear}
+          variant="danger"
         />
       </div>
     </div>
