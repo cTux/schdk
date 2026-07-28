@@ -24,6 +24,8 @@
   OpenAI, Anthropic, and Google generation endpoints; standalone tools remain
   same-origin except for embedded image and media content.
 - Deny new-window requests and block navigation from all desktop renderers.
+- Open the fixed SCHDK GitHub Releases page through Electron main; do not expose
+  a generic external-URL opener or GitHub request bridge to the renderer.
 - The unified application bundles only trusted first-party host, editor, and
   shell code in one renderer. Expose the same narrow, validated editor bridge
   to that renderer; never expose Node or unrestricted IPC primitives.

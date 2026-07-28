@@ -2,6 +2,7 @@ import './styles.scss';
 
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classNames from 'classnames';
 import type { ButtonHTMLAttributes } from 'react';
 import { Button, type ButtonVariant } from '../Button';
 import { Tooltip, type TooltipProps } from '../Tooltip';
@@ -23,11 +24,12 @@ export function IconButton({
   tooltipLabel = label,
   tooltipSide,
   disabled,
+  className,
   ...props
 }: IconButtonProps) {
   const button = (
     <Button
-      className="icon-button"
+      className={classNames('icon-button', className)}
       aria-label={label}
       disabled={disabled}
       {...props}

@@ -15,16 +15,18 @@ workflow, and verify the published GitHub Release.
    `docs/rules/verification.md`, `docs/rules/desktop-apps.md`,
    `docs/rules/security.md`, `docs/guide/releases.md`, `CHANGELOG.md`,
    `.github/workflows/release.yml`, `scripts/release-notes.mjs`, and
-   `packages/all-desktop-app/package.json`.
+   `packages/all-desktop-app/package.json`, and
+   `packages/all-web-app/version.json`.
 2. Fetch `origin main --tags`; inspect releases, tags, open pull requests, and
    recent release runs. Release only commits merged into `main`.
 3. Use an explicitly requested SemVer version. Otherwise increment the patch
    component of the highest stable SemVer release or tag. Treat `X.Y.Z` and
    `vX.Y.Z` as the same version and publish the canonical tag `vX.Y.Z`.
-4. Build concise Ukrainian changelog notes from commits since the previous
-   release. Separate `### Продуктові рішення` from `### Технічні рішення` and
-   prefix every item with `[NEW]`, `[CHANGE]`, `[FIX]`, `[DELETE]`, or
-   `[SECURITY]`. Preserve existing non-empty notes.
+4. Set `packages/all-web-app/version.json` to the selected version. Build
+   concise Ukrainian changelog notes from commits since the previous release.
+   Separate `### Продуктові рішення` from `### Технічні рішення` and prefix
+   every item with `[NEW]`, `[CHANGE]`, `[FIX]`, `[DELETE]`, or `[SECURITY]`.
+   Preserve existing non-empty notes.
 5. Require `GOOGLE_DESKTOP_CREDENTIALS_JSON` in GitHub Actions. Never expose its
    value or commit it.
 6. Put preparation changes on a prompt-based `codex/` branch. Run
@@ -51,10 +53,10 @@ Run formatting, linting, typechecking, and tests once. Package on
 Pass the version with `--config.extraMetadata.version=X.Y.Z`, disable signing
 identity discovery, and verify the installer is non-empty and unsigned. Use
 `scripts/release-notes.mjs X.Y.Z release-notes.md` as the changelog and SemVer
-gate; it must reject missing decision sections, empty sections, and unprefixed
-items. Materialize Google desktop credentials only under the runner temporary
-directory and remove them in an `if: always()` step. Keep third-party actions
-pinned to full commit SHAs.
+gate; it must reject missing decision sections, empty sections, unprefixed
+items, and a mismatched `packages/all-web-app/version.json`. Materialize Google
+desktop credentials only under the runner temporary directory and remove them
+in an `if: always()` step. Keep third-party actions pinned to full commit SHAs.
 
 ## Existing or Failed Releases
 

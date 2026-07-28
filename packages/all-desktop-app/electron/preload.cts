@@ -14,6 +14,11 @@ const closeApi = {
 };
 
 const editorApi = {
+  updates: {
+    check: (): Promise<boolean> => ipcRenderer.invoke('check-app-update'),
+    openReleasePage: (): Promise<void> =>
+      ipcRenderer.invoke('open-app-release-page'),
+  },
   saveGamePackage: (
     filename: string,
     content: Uint8Array,

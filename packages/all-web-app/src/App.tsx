@@ -17,6 +17,7 @@ import {
   saveShellTheme,
 } from './shell-preferences';
 import { useAiQuestionTools } from './ai-question-generation';
+import { AppUpdateButton } from './AppUpdateButton';
 import { useGoogleDriveSettings } from './use-google-drive-settings';
 import { useShellNavigation } from './use-shell-navigation';
 import { useSettingsDeepLink } from './use-settings-deep-link';
@@ -196,6 +197,7 @@ export function App() {
           />
         </div>
       )}
+      <AppUpdateButton />
     </LocaleProvider>
   );
 }

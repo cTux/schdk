@@ -60,6 +60,9 @@
   `.app` bundle plus `.pkg`, and Linux uploads use `.deb`.
 - Publish exactly one unsigned, version-matched Windows x64 NSIS installer in
   each GitHub Release after the shared checks and Windows packaging succeed.
+- Check the fixed SCHDK latest-release URL in Electron main and expose only
+  update availability and the fixed external release-page action to the
+  renderer.
 - Include compiled Electron files, the package manifest, required build assets,
   and the matching web build as an extra resource.
 

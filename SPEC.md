@@ -32,6 +32,7 @@ I.aiquestion|Portable AI question rule|`.aiquestion`
 I.aiquestionpackage|Portable AI question package|`.aiquestionpackage`
 I.pages|Hosted browser application|GitHub Pages
 I.release|Versioned unsigned Windows installer|GitHub Releases
+I.version|Published browser version|`packages/all-web-app/version.json`
 
 ## §V
 
@@ -64,6 +65,7 @@ V26|Every personal AI question package is parsed from its own `.aiquestionpackag
 V27|A ready package never reuses a normalized main or alternative answer across questions, and AI generation never accepts such a duplicate.
 V28|Every non-initial AI answer candidate undergoes semantic review for entity uniqueness and package-wide type and form diversity before replacing editor state.
 V29|Editing an existing question kind or package-creation rule occupies a dedicated deep-linkable shell page restored by reload and browser history.
+V30|Web and desktop clients surface a newer published application version within one minute without granting the renderer generic network or navigation access.
 
 ## §T
 
@@ -139,3 +141,4 @@ B62|2026-07-28|The readiness test fixture assigned the same answer to every ques
 B63|2026-07-28|Answer uniqueness logic pushed three source files beyond the enforced 256-line limit|Split prompt, readiness-validation, and package-generation input helpers; the existing workflow test covers recurrence.
 B64|2026-07-28|Rule-editor deep-link wiring pushed two source files beyond the enforced 256-line limit|Split URL-state handling and the question-form constant by cohesive responsibility; the existing workflow test covers recurrence.
 B65|2026-07-28|The first route split let a collection index reach a boolean edit helper and left duplicate popstate ownership in App|Adapt the callback explicitly and consolidate shell view and editor navigation; linting and typechecking cover recurrence.
+B66|2026-07-28|The base icon-button color overrode the update button's green state|Use the combined update-button selector; `docs/specs/unified-shell.md` covers recurrence.

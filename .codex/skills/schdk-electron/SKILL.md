@@ -31,6 +31,9 @@ description: Build, debug, secure, or package SCHDK Electron applications. Use f
    dispatched cross-platform artifacts separate from GitHub Releases.
 10. Keep the packaged-renderer smoke mode limited to CI startup validation: load
     bundled web assets, confirm root UI and the preload bridge, then exit.
+11. Check the fixed SCHDK latest-release URL in Electron main and expose only
+    update availability plus the fixed external release-page action to the
+    renderer.
 
 ## Checks
 

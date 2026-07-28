@@ -13,6 +13,10 @@ export {};
 
 declare global {
   interface SchdkDesktopApi {
+    updates?: {
+      check(): Promise<boolean>;
+      openReleasePage(): Promise<void>;
+    };
     googleDrive?: DrivePackageStorage &
       DriveAIQuestionStorage &
       DriveAIQuestionsPackageStorage &

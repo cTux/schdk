@@ -27,6 +27,8 @@ description: Maintain SCHDK browser applications and the unified @schdk/all-web-
 9. Keep the production Vite base relative and deploy
    `packages/all-web-app/dist` through the GitHub Pages workflow after pushes to
    `main`.
+10. Keep `packages/all-web-app/version.json` embedded in the browser build and
+    published at the Pages root so the shell can poll it once per minute.
 
 ## Checks
 
