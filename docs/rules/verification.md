@@ -37,5 +37,6 @@
   `codex/` branch, commit all verified task changes, push the branch to `origin`,
   and create a GitHub pull request. Preserve unrelated user changes, confirm the
   worktree is clean, and keep changes local only when the user explicitly asks.
-- Visually smoke-test changed UI in a real browser. Build the affected Electron
+- Visually smoke-test changed UI in the user's already-open Brave browser; do
+  not launch a separate browser for manual checks. Build the affected Electron
   package for preload, main-process, packaging, icon, or web-resource changes.
