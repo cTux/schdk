@@ -40,6 +40,10 @@
     "directories": {
       "output": "dist/release"
     },
+    "electronLanguages": [
+      "uk",
+      "en-US"
+    ],
     "files": [
       "dist/electron/**/*",
       "package.json"
