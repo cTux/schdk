@@ -19,7 +19,10 @@ package authoring, hosting, settings, and account state.
 - **SHL-3:** Active view persists locally and in the validated `view` query
   parameter. The active primary settings group persists in the validated
   `settings` query parameter while settings are open. Browser back, forward,
-  and deep links restore both values.
+  and deep links restore both values. Editing an existing question kind or
+  package-creation rule uses a dedicated page identified by the validated
+  `edit` query parameter; direct links and browser history restore the editor
+  or collection.
 - **SHL-4:** A valid browser `package` query opens the editor and restores the
   referenced Drive package and selected question.
 - **SHL-5:** Ukrainian is the default locale; explicit Ukrainian or English
@@ -50,7 +53,8 @@ package authoring, hosting, settings, and account state.
   administrators a shared checkbox in a dedicated settings row; selecting it
   makes that rule the only global rule applied to every question generation.
   Its card replaces the favorite action with a disabled lock indicator, so the
-  general-rule state changes only through editing.
+  general-rule state changes only through editing. Editing an existing account
+  or global rule hides both collections until the editor is saved or canceled.
 - **SHL-12:** Artificial intelligence settings expose separate provider and
   model dropdowns plus a user API key. The dropdowns use the models.dev catalog
   for the OpenAI, Anthropic, and Google providers supported by `@schdk/ai`,
@@ -80,7 +84,8 @@ package authoring, hosting, settings, and account state.
   duplicate question numbers. The rule collections are name-sorted. Question
   type dropdowns put starred favorites first and name-sort both the favorite
   and remaining rules. Enable, favorite, edit, delete, loading, and error states
-  use the existing rule-card patterns.
+  use the existing rule-card patterns. Editing an existing package rule hides
+  its collection until the editor is saved or canceled.
 
 ## Invariants
 
@@ -113,7 +118,8 @@ package authoring, hosting, settings, and account state.
    administrator can add, edit, and delete them. As an administrator, select a
    general rule and verify its card shows a disabled lock instead of a favorite
    action. Edit another rule, select it as general, and verify the previous
-   selection clears.
+   selection clears. Confirm editing hides both collections, copy the URL,
+   reload it, and use browser back/forward to restore the editor and collection.
 6. Configure an AI model and API key; reload and confirm both remain for the
    same Google account, then switch accounts and confirm the previous key is
    not exposed.
@@ -130,4 +136,6 @@ package authoring, hosting, settings, and account state.
     prevent duplicate question numbers, and offer favorite-first starred
     question types with each group sorted by name. Confirm the package-rule
     collection is name-sorted. Reload, edit its enabled and favorite states,
-    and delete it. Confirm no global collection appears.
+    and delete it. Confirm editing hides the collection and its copied URL
+    restores the same editor after reload and through browser history. Confirm
+    no global collection appears.

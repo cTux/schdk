@@ -1,18 +1,7 @@
-import { getDeepLinkedPackageName } from '@schdk/editor-web-app/deep-link';
 import type { EditorTextOptions, GameOptions } from '@schdk/ui/options';
 import { LOCALIZATION_COPY, LocaleProvider } from '@schdk/ui/localization';
-import {
-  GoogleLoginView,
-  ShellView,
-  type ShellViewName,
-} from '@schdk/ui/shell';
+import { GoogleLoginView, ShellView } from '@schdk/ui/shell';
 import { lazy, Suspense, useEffect, useState } from 'react';
-import {
-  getDeepLinkedShellView,
-  getShellDeepLink,
-  loadDesktopShellView,
-  saveDesktopShellView,
-} from './desktop-session';
 import {
   loadEditorTextOptions,
   loadGameOptions,
@@ -29,6 +18,7 @@ import {
 } from './shell-preferences';
 import { useAiQuestionTools } from './ai-question-generation';
 import { useGoogleDriveSettings } from './use-google-drive-settings';
+import { useShellNavigation } from './use-shell-navigation';
 import { useSettingsDeepLink } from './use-settings-deep-link';
 
 const HostApp = lazy(() =>
@@ -38,32 +28,14 @@ const EditorApp = lazy(() =>
   import('@schdk/editor-web-app/app').then(({ App }) => ({ default: App })),
 );
 
-function getLinkedView(): ShellViewName | null {
-  const url = new URL(window.location.href);
-  const linkedView =
-    getDeepLinkedShellView(url.href) ??
-    (url.searchParams.has('hostPackage') ? 'host' : null) ??
-    (getDeepLinkedPackageName(url.href) ? 'editor' : null);
-  return linkedView;
-}
-
 export function App() {
   const sessionScope = window.location.pathname;
   const [locale, setLocale] = useState(loadShellLocale);
   const [theme, setTheme] = useState(loadShellTheme);
   const copy = LOCALIZATION_COPY[locale];
-  const [view, setView] = useState<ShellViewName>(() => {
-    return (
-      getLinkedView() ??
-      loadDesktopShellView(localStorage, sessionScope) ??
-      'home'
-    );
-  });
+  const navigation = useShellNavigation(sessionScope);
+  const { view } = navigation;
   const settings = useSettingsDeepLink(view);
-  const [loadedApps, setLoadedApps] = useState({
-    host: view === 'host',
-    editor: view === 'editor',
-  });
   const [editorOptions, setEditorOptionsState] = useState<EditorTextOptions>(
     () => loadEditorTextOptions(localStorage),
   );
@@ -110,22 +82,6 @@ export function App() {
   }, [theme]);
 
   useEffect(() => {
-    saveDesktopShellView(localStorage, sessionScope, view);
-    const deepLink = getShellDeepLink(window.location.href, view);
-    if (deepLink !== window.location.href) {
-      window.history.replaceState(window.history.state, '', deepLink);
-    }
-  }, [sessionScope, view]);
-
-  useEffect(() => {
-    function restoreDeepLinkedView() {
-      showView(getLinkedView() ?? 'home', false);
-    }
-    window.addEventListener('popstate', restoreDeepLinkedView);
-    return () => window.removeEventListener('popstate', restoreDeepLinkedView);
-  }, []);
-
-  useEffect(() => {
     saveEditorTextOptions(localStorage, editorOptions);
   }, [editorOptions]);
 
@@ -136,17 +92,6 @@ export function App() {
         : copy.allWeb.saveVisualsFailed,
     );
   }, [copy, gameOptions]);
-
-  function showView(nextView: ShellViewName, pushHistory = true) {
-    if (nextView === 'host' || nextView === 'editor') {
-      setLoadedApps((current) => ({ ...current, [nextView]: true }));
-    }
-    if (pushHistory) {
-      const deepLink = getShellDeepLink(window.location.href, nextView);
-      window.history.pushState(window.history.state, '', deepLink);
-    }
-    setView(nextView);
-  }
 
   async function importVisualEditorTemplate(file: File) {
     try {
@@ -219,10 +164,11 @@ export function App() {
                 />
               </Suspense>
             }
-            loadedApps={loadedApps}
+            loadedApps={navigation.loadedApps}
             aiOptions={ai.options}
             aiQuestions={aiQuestions}
             aiQuestionsPackages={aiQuestionsPackages}
+            editTarget={navigation.editTarget}
             editorOptions={editorOptions}
             gameOptions={gameOptions}
             gameOptionsError={gameOptionsError}
@@ -242,7 +188,9 @@ export function App() {
             onGoogleDriveDisconnect={() => void googleDrive.disconnect()}
             onImportVisualEditorTemplate={importVisualEditorTemplate}
             onExportVisualEditorTemplate={exportVisualEditorTemplate}
-            onShowView={(nextView) => showView(nextView)}
+            onCloseEditor={navigation.closeEditor}
+            onShowEditor={navigation.showEditor}
+            onShowView={navigation.showView}
             onSettingsGroupChange={settings.showGroup}
             onThemeChange={setTheme}
           />

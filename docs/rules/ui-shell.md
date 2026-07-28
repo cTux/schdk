@@ -9,6 +9,9 @@
   `Проведення гри` and `Редагування питань` fieldsets.
 - Keep the active primary settings tab controlled by the web shell so its URL
   deep link and browser history remain authoritative.
+- Hide rule collections while an existing question kind or package-creation
+  rule is edited on its dedicated page. Keep edit selection controlled by the
+  web shell so direct links and browser history remain authoritative.
 - Keep the native Ukrainian/English language control in the first `App`
   settings tab. Keep `WWW` as the second primary tab with its host/editor
   fieldsets and `Штучний інтелект` as the third primary tab.

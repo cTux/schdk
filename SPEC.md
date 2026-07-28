@@ -63,6 +63,7 @@ V25|Only an allowlisted administrator can preview the exact system and user prom
 V26|Every personal AI question package is parsed from its own `.aiquestionpackage` ZIP archive before use and persisted through the current account's Google Drive folder.
 V27|A ready package never reuses a normalized main or alternative answer across questions, and AI generation never accepts such a duplicate.
 V28|Every non-initial AI answer candidate undergoes semantic review for entity uniqueness and package-wide type and form diversity before replacing editor state.
+V29|Editing an existing question kind or package-creation rule occupies a dedicated deep-linkable shell page restored by reload and browser history.
 
 ## §T
 
@@ -136,3 +137,5 @@ B60|2026-07-28|The compact context-row breakpoint used legacy media-query syntax
 B61|2026-07-28|A timed-out root build overlapped its retry and both packagers wrote the same Electron output directory|Wait for the first packager to stop before retrying; no product invariant is needed.
 B62|2026-07-28|The readiness test fixture assigned the same answer to every question after uniqueness became a package invariant|Give each fixture question a distinct answer; V27 covers product recurrence.
 B63|2026-07-28|Answer uniqueness logic pushed three source files beyond the enforced 256-line limit|Split prompt, readiness-validation, and package-generation input helpers; the existing workflow test covers recurrence.
+B64|2026-07-28|Rule-editor deep-link wiring pushed two source files beyond the enforced 256-line limit|Split URL-state handling and the question-form constant by cohesive responsibility; the existing workflow test covers recurrence.
+B65|2026-07-28|The first route split let a collection index reach a boolean edit helper and left duplicate popstate ownership in App|Adapt the callback explicitly and consolidate shell view and editor navigation; linting and typechecking cover recurrence.

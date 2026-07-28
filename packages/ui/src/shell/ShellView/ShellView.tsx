@@ -19,6 +19,7 @@ import { TooltipProvider } from '../../atoms/Tooltip';
 import { AIQuestionsPage } from '../AIQuestionsPage';
 import { AIQuestionsPackagesPage } from '../AIQuestionsPackagesPage';
 import type { AIQuestion, AIQuestionsPackage } from '@schdk/common';
+import type { ShellEditTarget } from './types';
 
 export type { ShellViewName } from '../shellItems';
 
@@ -47,6 +48,7 @@ export interface ShellViewProps {
     removePackage(index: number): Promise<boolean>;
     updatePackage(index: number, item: AIQuestionsPackage): Promise<boolean>;
   };
+  editTarget: ShellEditTarget | null;
   editorApp: ReactNode;
   hostApp: ReactNode;
   loadedApps: { host: boolean; editor: boolean };
@@ -67,6 +69,8 @@ export interface ShellViewProps {
   onGoogleDriveDisconnect(): void;
   onImportVisualEditorTemplate(file: File): void;
   onExportVisualEditorTemplate(): void;
+  onCloseEditor(): void;
+  onShowEditor(target: ShellEditTarget): void;
   onShowView(view: ShellViewName): void;
   onSettingsGroupChange(group: SettingsGroup): void;
   onThemeChange(theme: AppTheme): void;
@@ -76,6 +80,7 @@ export function ShellView({
   aiOptions,
   aiQuestions,
   aiQuestionsPackages,
+  editTarget,
   editorApp,
   hostApp,
   loadedApps,
@@ -96,6 +101,8 @@ export function ShellView({
   onGoogleDriveDisconnect,
   onImportVisualEditorTemplate,
   onExportVisualEditorTemplate,
+  onCloseEditor,
+  onShowEditor,
   onShowView,
   onSettingsGroupChange,
   onThemeChange,
@@ -151,6 +158,9 @@ export function ShellView({
               onAddGlobal={aiQuestions.addGlobalQuestion}
               onRemove={aiQuestions.removeQuestion}
               onRemoveGlobal={aiQuestions.removeGlobalQuestion}
+              editTarget={editTarget?.kind === 'question' ? editTarget : null}
+              onCloseEditor={onCloseEditor}
+              onShowEditor={onShowEditor}
               onUpdate={aiQuestions.updateQuestion}
               onUpdateGlobal={aiQuestions.updateGlobalQuestion}
             />
@@ -164,8 +174,11 @@ export function ShellView({
               ].filter((question) => question.enabled && !question.generalRule)}
               failed={aiQuestionsPackages.failed}
               loading={aiQuestionsPackages.loading}
+              editTarget={editTarget?.kind === 'package' ? editTarget : null}
               onAdd={aiQuestionsPackages.addPackage}
+              onCloseEditor={onCloseEditor}
               onRemove={aiQuestionsPackages.removePackage}
+              onShowEditor={onShowEditor}
               onUpdate={aiQuestionsPackages.updatePackage}
             />
           </div>

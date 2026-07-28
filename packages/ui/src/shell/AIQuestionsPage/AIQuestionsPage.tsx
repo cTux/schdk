@@ -1,24 +1,15 @@
 import './styles.scss';
 
 import type { AIQuestion } from '@schdk/common';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '../../atoms/Button';
 import { Checkbox } from '../../atoms/Checkbox';
 import { Input } from '../../atoms/Input';
 import { TextAreaField } from '../../atoms/TextAreaField';
 import { useLocalization } from '../../localization';
 import { AIQuestionCollection } from '../AIQuestionCollection';
+import { EMPTY_QUESTION } from './constants';
 import type { AIQuestionsPageProps } from './types';
-
-const EMPTY_QUESTION: AIQuestion = {
-  name: '',
-  description: '',
-  goodExamples: '',
-  badExamples: '',
-  enabled: true,
-  favorite: false,
-  generalRule: false,
-};
 
 export function AIQuestionsPage({
   questions,
@@ -28,10 +19,13 @@ export function AIQuestionsPage({
   loading,
   globalLoading,
   isGlobalAdmin,
+  editTarget,
   onAdd,
   onAddGlobal,
   onRemove,
   onRemoveGlobal,
+  onCloseEditor,
+  onShowEditor,
   onUpdate,
   onUpdateGlobal,
 }: AIQuestionsPageProps) {
@@ -43,6 +37,24 @@ export function AIQuestionsPage({
   const [formSaving, setFormSaving] = useState(false);
   const [saveFailed, setSaveFailed] = useState(false);
 
+  useEffect(() => {
+    if (!editTarget) {
+      setEditingIndex(null);
+      setEditingGlobal(false);
+      setFormOpen(false);
+      return;
+    }
+    if (editTarget.global && !isGlobalAdmin) return;
+    const source = editTarget.global ? globalQuestions : questions;
+    const index = source.findIndex(({ name }) => name === editTarget.name);
+    if (index < 0) return;
+    setDraft(source[index]!);
+    setEditingIndex(index);
+    setEditingGlobal(editTarget.global);
+    setSaveFailed(false);
+    setFormOpen(true);
+  }, [editTarget, globalQuestions, isGlobalAdmin, questions]);
+
   function updateDraft(
     field: 'name' | 'description' | 'goodExamples' | 'badExamples',
     value: string,
@@ -51,25 +63,23 @@ export function AIQuestionsPage({
   }
 
   function closeForm() {
+    const wasEditing = editingIndex !== null;
     setDraft(EMPTY_QUESTION);
     setEditingIndex(null);
     setEditingGlobal(false);
     setSaveFailed(false);
     setFormSaving(false);
     setFormOpen(false);
-  }
-
-  function editQuestion(question: AIQuestion, index: number, global = false) {
-    setDraft(question);
-    setEditingIndex(index);
-    setEditingGlobal(global);
-    setSaveFailed(false);
-    setFormOpen(true);
+    if (wasEditing) onCloseEditor();
   }
 
   function updateQuestion(index: number, question: AIQuestion, global = false) {
     setSaveFailed(false);
     return global ? onUpdateGlobal(index, question) : onUpdate(index, question);
+  }
+
+  function showEditor(question: AIQuestion, global = false) {
+    onShowEditor({ kind: 'question', global, name: question.name });
   }
   return (
     <section className="ai-questions-page">
@@ -192,44 +202,50 @@ export function AIQuestionsPage({
           </div>
         </form>
       )}
-      <AIQuestionCollection
-        title={copy.aiQuestions.myQuestions}
-        emptyLabel={copy.aiQuestions.empty}
-        questions={questions}
-        loading={loading || formOpen}
-        editable
-        addLabel={!formOpen ? copy.aiQuestions.add : undefined}
-        onAdd={() => {
-          setDraft(EMPTY_QUESTION);
-          setEditingIndex(null);
-          setEditingGlobal(false);
-          setFormOpen(true);
-        }}
-        onEdit={editQuestion}
-        onRemove={onRemove}
-        onSaveFailed={() => setSaveFailed(true)}
-        onUpdate={updateQuestion}
-      />
-      <AIQuestionCollection
-        title={copy.aiQuestions.globalQuestions}
-        emptyLabel={copy.aiQuestions.globalEmpty}
-        questions={globalQuestions}
-        loading={globalLoading || formOpen}
-        editable={isGlobalAdmin}
-        addLabel={
-          isGlobalAdmin && !formOpen ? copy.aiQuestions.addGlobal : undefined
-        }
-        onAdd={() => {
-          setDraft(EMPTY_QUESTION);
-          setEditingIndex(null);
-          setEditingGlobal(true);
-          setFormOpen(true);
-        }}
-        onEdit={(question, index) => editQuestion(question, index, true)}
-        onRemove={onRemoveGlobal}
-        onSaveFailed={() => setSaveFailed(true)}
-        onUpdate={(index, question) => updateQuestion(index, question, true)}
-      />
+      {editingIndex === null && (
+        <>
+          <AIQuestionCollection
+            title={copy.aiQuestions.myQuestions}
+            emptyLabel={copy.aiQuestions.empty}
+            questions={questions}
+            loading={loading || formOpen}
+            editable
+            addLabel={!formOpen ? copy.aiQuestions.add : undefined}
+            onAdd={() => {
+              setDraft(EMPTY_QUESTION);
+              setEditingGlobal(false);
+              setFormOpen(true);
+            }}
+            onEdit={(question) => showEditor(question)}
+            onRemove={onRemove}
+            onSaveFailed={() => setSaveFailed(true)}
+            onUpdate={updateQuestion}
+          />
+          <AIQuestionCollection
+            title={copy.aiQuestions.globalQuestions}
+            emptyLabel={copy.aiQuestions.globalEmpty}
+            questions={globalQuestions}
+            loading={globalLoading || formOpen}
+            editable={isGlobalAdmin}
+            addLabel={
+              isGlobalAdmin && !formOpen
+                ? copy.aiQuestions.addGlobal
+                : undefined
+            }
+            onAdd={() => {
+              setDraft(EMPTY_QUESTION);
+              setEditingGlobal(true);
+              setFormOpen(true);
+            }}
+            onEdit={(question) => showEditor(question, true)}
+            onRemove={onRemoveGlobal}
+            onSaveFailed={() => setSaveFailed(true)}
+            onUpdate={(index, question) =>
+              updateQuestion(index, question, true)
+            }
+          />
+        </>
+      )}
       {!formOpen && (failed || globalFailed || saveFailed) && (
         <p className="ai-question-save-error" role="alert">
           {copy.aiQuestions.saveFailed}
