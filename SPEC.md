@@ -129,3 +129,6 @@ B55|2026-07-27|Global editor clipboard hotkeys intercepted native copy and paste
 B56|2026-07-28|The provider schema allowed more question parts than the generated question type accepted locally|V20
 B57|2026-07-28|Editor toasts omitted React-Toastify's base CSS, used its obsolete background variable, and kept a 2.5-second timeout|Load the base styles, use the active SCHDK surface palette, and close automatically after two seconds; `docs/specs/package-editor.md` covers recurrence.
 B58|2026-07-28|Rebase conflict resolution combined package-generation changes beyond the enforced source-file limit|Compact the existing icon import; the repository workflow test covers recurrence.
+B59|2026-07-28|Adding every per-question context with number 1 allowed duplicate unsorted rows|Choose the first free number, disable occupied choices, and keep rows number-sorted as specified by `docs/specs/unified-shell.md`.
+B60|2026-07-28|The compact context-row breakpoint used legacy media-query syntax rejected by the existing stylesheet policy|Use the required context range notation; linting already covers recurrence.
+B61|2026-07-28|A timed-out root build overlapped its retry and both packagers wrote the same Electron output directory|Wait for the first packager to stop before retrying; no product invariant is needed.

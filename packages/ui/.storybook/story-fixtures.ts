@@ -77,6 +77,13 @@ export const componentValues: Record<string, Record<string, unknown>> = {
     questions: [aiQuestion],
     globalQuestions: [aiQuestion],
   },
+  AIQuestionsPackageContexts: {
+    questionRules: [aiQuestion],
+    value: [
+      { questionNumber: 11, context: 'Футбольне питання' },
+      { questionNumber: 2, context: 'Питання про Київ' },
+    ],
+  },
   GameMusicBreak: {
     musicBreak: {
       name: 'Музична пауза',
