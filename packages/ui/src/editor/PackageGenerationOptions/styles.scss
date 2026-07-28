@@ -1,0 +1,57 @@
+@use '../../styles/tokens' as *;
+
+.question-generation-progress {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  color: $muted;
+  font-weight: 700;
+}
+
+.question-generation-progress strong {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: $text;
+}
+
+.question-generation-progress progress {
+  width: 100%;
+  height: 12px;
+  overflow: hidden;
+  appearance: none;
+  border: 1px solid $border-strong;
+  border-radius: 999px;
+  background: $surface;
+}
+
+.question-generation-progress progress::-webkit-progress-bar {
+  background: $surface;
+}
+
+.question-generation-progress progress::-webkit-progress-value,
+.question-generation-progress progress::-moz-progress-bar {
+  border-radius: 999px;
+  animation: question-generation-progress-flow 700ms linear infinite;
+  background: repeating-linear-gradient(
+    135deg,
+    $accent 0 10px,
+    $accent-hover 10px 20px
+  );
+  background-size: 28px 28px;
+  box-shadow: 0 0 12px rgba($accent-rgb, 0.42);
+}
+
+@keyframes question-generation-progress-flow {
+  to {
+    background-position: 28px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .question-generation-progress progress::-webkit-progress-value,
+  .question-generation-progress progress::-moz-progress-bar {
+    animation: none;
+  }
+}

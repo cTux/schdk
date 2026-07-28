@@ -111,6 +111,7 @@ export const componentValues: Record<string, Record<string, unknown>> = {
     ],
     difficulty: 'medium',
     hasRandomTemplates: true,
+    progress: [3, 36],
     ruleSet: 'all',
     scope: 'missing',
     selected: 0,

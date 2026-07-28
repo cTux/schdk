@@ -8,6 +8,7 @@ export interface PackageGenerationOptionsProps {
   activePackages: AIQuestionsPackage[];
   difficulty: AIQuestionDifficulty;
   hasRandomTemplates: boolean;
+  progress: [number, number] | null;
   ruleSet: PackageGenerationRuleSet;
   scope: PackageGenerationScope;
   selected: number | null;

@@ -83,6 +83,9 @@ without losing in-progress work.
   question type, replaces the complete question record, and continues sequentially.
   The selected difficulty is sent for every question. The visible cancel action
   closes the modal during generation and ignores any unfinished provider result.
+  While generation runs, the modal shows the current question, its
+  package-generation percentage, and an animated progress indicator that respects
+  reduced-motion preferences.
   Browser generation renews Google authorization from the confirmation click
   before the sequence starts. A failed request keeps questions generated before
   the failure. An allowlisted administrator can expand the modal beside its
@@ -153,10 +156,12 @@ without losing in-progress work.
     still win. Observe each target slot selected in order, every generated
     record replaced completely, and prior successful results retained when a
     later request fails. Cancel during an unfinished request and confirm its
-    result is ignored. In the browser, confirm that generation starts with
-    renewed Google authorization. As an allowlisted administrator, expand the
-    prompt panel and confirm its read-only text follows the first pending target
-    and each target being generated.
+    ignored. Confirm the progress percentage matches the current target position,
+    its activity indicator remains visibly animated between responses, and
+    reduced-motion mode removes that animation. In the browser, confirm that
+    generation starts with renewed Google authorization. As an allowlisted
+    administrator, expand the prompt panel and confirm its read-only text follows
+    the first pending target and each target being generated.
 13. Clear a populated question from its trailing heading action, then use
     `Ctrl+C` and `Ctrl+V` anywhere in the open editor and observe the same copy
     and confirmed paste behavior as the heading actions. Confirm each

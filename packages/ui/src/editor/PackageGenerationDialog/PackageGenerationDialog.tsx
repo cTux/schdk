@@ -172,6 +172,7 @@ export function PackageGenerationDialog({
                     activePackages={activePackages}
                     difficulty={difficulty}
                     hasRandomTemplates={Boolean(randomTemplates.length)}
+                    progress={progress}
                     ruleSet={ruleSet}
                     scope={scope}
                     selected={selected}
@@ -193,11 +194,6 @@ export function PackageGenerationDialog({
                       setCurrentInput(null);
                     }}
                   />
-                  {progress && (
-                    <p className="question-generation-message" role="status">
-                      {copy.packageGeneration.progress(...progress)}
-                    </p>
-                  )}
                   {failed && (
                     <p className="question-generation-error" role="alert">
                       {copy.packageGeneration.failed}

@@ -8,10 +8,13 @@ import type { PackageGenerationRuleSet } from '../PackageGenerationDialog/genera
 import { QuestionDatabaseCheck } from '../QuestionDatabaseCheck';
 import type { PackageGenerationOptionsProps } from './types';
 
+import './styles.scss';
+
 export function PackageGenerationOptions({
   activePackages,
   difficulty,
   hasRandomTemplates,
+  progress,
   ruleSet,
   scope,
   selected,
@@ -114,6 +117,17 @@ export function PackageGenerationOptions({
         label={copy.packageGeneration.checkDatabase}
         onChange={onCheckQuestionDatabaseChange}
       />
+      {progress && (
+        <div className="question-generation-progress" role="status">
+          <span>{copy.packageGeneration.progress(...progress)}</span>
+          <strong>{Math.round((progress[0] / progress[1]) * 100)}%</strong>
+          <progress
+            aria-label={copy.packageGeneration.progress(...progress)}
+            max={progress[1]}
+            value={progress[0]}
+          />
+        </div>
+      )}
     </>
   );
 }
