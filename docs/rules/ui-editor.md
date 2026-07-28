@@ -26,18 +26,24 @@
   flows without an explicit selector to medium. Successful structured output
   replaces every question field, resets the modal, and closes it.
 - Put the package-generation icon beside the editable package title. Its modal
-  chooses missing questions or the whole package and one enabled AI question
-  package from a dropdown. Generate slots sequentially, select the active slot
-  behind the modal, wait for each provider response, replace the complete
-  question record, and continue to the next slot.
+  chooses missing questions, questions with unresolved author remarks, or the
+  whole package and one enabled AI question package from a dropdown. When
+  regenerating remarked questions, include the current question and remark in
+  the prompt and clear the remark after resolving it. Generate slots
+  sequentially, select the active slot behind the modal, wait for each provider
+  response, replace the complete question record, and continue to the next
+  slot.
 - Keep a similarity-check toggle in both question and package generation
   modals. Default it to off each time the modal opens. When enabled, refresh
   the current account's question database, reject semantically similar
   generated questions or answers, and regenerate once before reporting
   failure.
 - Label optional fields. A non-empty unresolved remark keeps a question
-  unfinished. Give question, remark, answer, and answer-comment text areas the
-  same default height.
+  unfinished. Host notes contain only delivery instructions visible to the
+  host while reading the question, such as pronunciation, omitted text,
+  audible punctuation, pauses, or cues; they are not answer-review notes.
+  Give question, remark, answer, and answer-comment text areas the same default
+  height.
 - Let authors add optional alternative and wrong answer lists.
 - Let each package slot select `Звичайне`, `Бліц 2×30`, or `Бліц 3×20`.
   Standard questions have one text part; blitz questions have two or three

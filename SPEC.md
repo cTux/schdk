@@ -70,6 +70,8 @@ V29|Editing an existing question kind or package-creation rule occupies a dedica
 V30|Web and desktop clients surface a newer published application version within one minute without granting the renderer generic network or navigation access.
 V31|Question-database rows derive only from parsed packages owned by the connected account and never become canonical package data.
 V32|Question-database similarity checking defaults off; when enabled, a semantically similar generated question or answer is rejected and regenerated once before failure.
+V33|Host notes contain only delivery instructions visible while the host reads a question and never contain answer-review or quality-analysis notes.
+V34|AI package regeneration of remarked questions includes the current question and author remark and clears the remark only after successful replacement.
 
 ## §T
 
@@ -146,3 +148,5 @@ B63|2026-07-28|Answer uniqueness logic pushed three source files beyond the enfo
 B64|2026-07-28|Rule-editor deep-link wiring pushed two source files beyond the enforced 256-line limit|Split URL-state handling and the question-form constant by cohesive responsibility; the existing workflow test covers recurrence.
 B65|2026-07-28|The first route split let a collection index reach a boolean edit helper and left duplicate popstate ownership in App|Adapt the callback explicitly and consolidate shell view and editor navigation; linting and typechecking cover recurrence.
 B66|2026-07-28|The base icon-button color overrode the update button's green state|Use the combined update-button selector; `docs/specs/unified-shell.md` covers recurrence.
+B67|2026-07-28|The AI schema left host notes underspecified and package generation exposed no remarked-question scope|V33,V34
+B68|2026-07-28|Adding remarked-question generation pushed its dialog past the enforced source-file limit|Move excluded-answer calculation into the existing pure generation-input module; the repository workflow test covers recurrence.

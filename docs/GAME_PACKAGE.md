@@ -28,7 +28,10 @@ recognized entries. Unrecognized ZIP entries are ignored without extraction.
   `kind: "text"` with a `text` string.
 - A comment is an optional string. A question remains unfinished while it has
   an unresolved comment.
-- Host notes are an optional string and do not affect question readiness.
+- Host notes are optional delivery instructions visible to the host while
+  reading the question, such as pronunciation, text to omit, audible
+  punctuation, pauses, or cues. They are not answer-review notes and do not
+  affect question readiness.
 - A package may contain one music break after round 1 and one after round 2.
   Each break keeps its original filename and MIME type in `game.json`, while
   its bytes are stored directly in the matching `audio/break-*` ZIP entry.

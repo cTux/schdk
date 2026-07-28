@@ -15,7 +15,7 @@ three-round game, including presentation media.
   exactly the number of text parts required by its type.
 - **PKG-3:** A question supports one main answer, alternative answers, wrong
   answers, an optional answer comment, an optional unresolved remark, and
-  private host notes.
+  private host notes limited to question-delivery instructions.
 - **PKG-4:** A question supports either a text handout or an embedded base64
   image handout that never loads an external image URL.
 - **PKG-5:** Current files are ZIP archives with `game.json` and optional

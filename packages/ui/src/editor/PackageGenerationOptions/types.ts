@@ -10,7 +10,7 @@ export interface PackageGenerationOptionsProps {
   ruleSet: PackageGenerationRuleSet;
   scope: PackageGenerationScope;
   selected: number | null;
-  targetsMissing: boolean;
+  hasTargets: boolean;
   thinking: boolean;
   checkQuestionDatabase: boolean;
   onCheckQuestionDatabaseChange(checked: boolean): void;

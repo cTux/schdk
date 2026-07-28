@@ -96,11 +96,13 @@ const generatedQuestionSchema = jsonSchema<GameQuestion>(
       },
       comment: {
         ...nullableString(),
-        description: 'Optional unresolved author remark; null when absent.',
+        description:
+          'Human-authored unresolved revision remark; never invent one and use null when absent or resolved.',
       },
       hostNotes: {
         ...nullableString(),
-        description: 'Optional host notes; null when absent.',
+        description:
+          'Optional delivery-only instructions shown to the host while reading the question, such as pronunciation, audible quotation marks, text to omit, pauses, or cues. Never include answer-checking guidance, difficulty estimates, or quality analysis; use null when absent.',
       },
     },
     required: [

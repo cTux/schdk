@@ -10,7 +10,7 @@ export function PackageGenerationOptions({
   ruleSet,
   scope,
   selected,
-  targetsMissing,
+  hasTargets,
   thinking,
   checkQuestionDatabase,
   onCheckQuestionDatabaseChange,
@@ -31,6 +31,7 @@ export function PackageGenerationOptions({
           }
         >
           <option value="missing">{copy.packageGeneration.missing}</option>
+          <option value="commented">{copy.packageGeneration.commented}</option>
           <option value="all">{copy.packageGeneration.all}</option>
         </Dropdown>
       </label>
@@ -78,9 +79,11 @@ export function PackageGenerationOptions({
           {copy.packageGeneration.noTemplates}
         </p>
       )}
-      {scope === 'missing' && !targetsMissing && (
+      {scope !== 'all' && !hasTargets && (
         <p className="question-generation-message">
-          {copy.packageGeneration.nothingMissing}
+          {scope === 'missing'
+            ? copy.packageGeneration.nothingMissing
+            : copy.packageGeneration.nothingCommented}
         </p>
       )}
       <QuestionDatabaseCheck
