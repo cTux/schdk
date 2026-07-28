@@ -10,6 +10,7 @@ import classNames from 'classnames';
 import { useState } from 'react';
 import {
   AI_QUESTION_DIFFICULTIES,
+  compareFavoriteItemsByName,
   type AIQuestionDifficulty,
 } from '@schdk/common';
 import { Button } from '../../atoms/Button';
@@ -36,8 +37,9 @@ export function QuestionGenerationDialog({
   const [thinking, setThinking] = useState(false);
   const [failed, setFailed] = useState(false);
   const [promptOpen, setPromptOpen] = useState(false);
+  const sortedTemplates = [...templates].sort(compareFavoriteItemsByName);
   const selectedTemplate =
-    templates[Number(templateIndex)] ?? templates[0] ?? null;
+    sortedTemplates[Number(templateIndex)] ?? sortedTemplates[0] ?? null;
 
   function reset() {
     setOpen(false);
@@ -122,17 +124,18 @@ export function QuestionGenerationDialog({
                     {copy.questionGeneration.template}
                     <Dropdown
                       value={templateIndex}
-                      disabled={thinking || templates.length === 0}
+                      disabled={thinking || sortedTemplates.length === 0}
                       onChange={(event) => setTemplateIndex(event.target.value)}
                     >
-                      {templates.map((template, index) => (
+                      {sortedTemplates.map((template, index) => (
                         <option key={`${template.name}-${index}`} value={index}>
+                          {template.favorite ? '⭐ ' : ''}
                           {template.name}
                         </option>
                       ))}
                     </Dropdown>
                   </label>
-                  {templates.length === 0 && (
+                  {sortedTemplates.length === 0 && (
                     <p className="question-generation-message">
                       {copy.questionGeneration.noTemplates}
                     </p>

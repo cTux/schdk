@@ -47,23 +47,32 @@ without losing in-progress work.
 - **EDT-16:** An AI icon beside the selected question opens a dimmed modal with
   an account or global `AIQuestion` template selector, a difficulty selector
   from very easy through very hard, and a context field. Medium is selected by
-  default. Without a saved key the icon is disabled with an explanatory custom
-  tooltip. Generation disables the complete modal, sends the selected
-  difficulty definition in the provider prompt, and shows a thinking state; on
-  success it replaces every generated question field before the modal resets
-  and closes. The one global rule marked as general is excluded from the
-  selector and prepended to every selected template's generation instructions
-  and examples. An allowlisted administrator can expand the modal beside its
-  title to inspect the exact system and user prompt text in a read-only field;
-  the wider two-column layout stacks vertically on narrow screens.
+  default. Favorite templates appear first, carry a star, and are name-sorted
+  before the name-sorted remainder. Without a saved key the icon is disabled
+  with an explanatory custom tooltip. Generation disables the complete modal,
+  sends the selected difficulty definition in the provider prompt, and shows a
+  thinking state; on success it replaces every generated question field before
+  the modal resets and closes. The prompt requests a text handout when the
+  selected rule or context requires one, returns no handout otherwise, and
+  never asks the text model to invent an image or data URL. The one global rule
+  marked as general is excluded from the selector and prepended to every
+  selected template's generation instructions and examples. An allowlisted
+  administrator can expand the modal beside its title to inspect the exact
+  system and user prompt text in a read-only field; the wider two-column layout
+  stacks vertically on narrow screens.
 - **EDT-17:** Every multiline package and generation field uses the same
   non-resizable shared control with dropdown-aligned borders, surfaces, hover,
   focus, and disabled states.
 - **EDT-18:** AI generation requires a non-empty answer comment. An AI icon
   beside the editable package title opens a modal that selects missing
   questions or the whole package and one enabled AI question package from a
-  dropdown. Only a missing question part or answer makes a question missing;
-  optional fields do not.
+  dropdown. Favorite packages appear first with a star and each favorite and
+  non-favorite group is name-sorted. The modal also selects all, favorite, or
+  non-favorite enabled non-general question rules; each question without an
+  explicitly configured type uses a random rule from that set. An explicitly
+  configured per-question type still takes priority, while the general rule is
+  applied separately to every generated question. Only a missing question part
+  or answer makes a question missing; optional fields do not.
   It selects each target slot behind the modal, waits for a validated provider
   response, joins overflow text into the last part allowed by the declared
   question type, replaces the complete question record, and continues sequentially.
@@ -112,21 +121,25 @@ without losing in-progress work.
 8. Fail restoration for one account and observe its stale session cleared
    without changing another account's session.
 9. With and without an AI key, inspect the generation icon and tooltip. With a
-   key, generate from an enabled template and context, observe the blocked
-   thinking state, and confirm every returned field replaces the selected
-   question.
+   key, confirm favorite templates are starred and listed before the
+   name-sorted remainder. Generate from an enabled template and context that
+   requests a text handout, observe the blocked thinking state, and confirm
+   every returned field, including the handout, replaces the selected question.
 10. Inspect every multiline editor and generation field at normal and narrow
     widths; confirm consistent shared styling and no native resize handle.
 11. Open generation as an allowlisted administrator, expand the prompt panel,
     and confirm its read-only text follows changes to the selected template,
     difficulty, and context. Confirm the control is absent for other accounts.
 12. Generate only missing slots and then the whole package after selecting one
-    AI question package from the rules dropdown. Observe each target slot
-    selected in order, every generated record replaced completely, and prior
-    successful results retained when a later request fails. In the browser,
-    confirm that generation starts with renewed Google authorization. As an
-    allowlisted administrator, expand the prompt panel and confirm its read-only
-    text follows the first pending target and each target being generated.
+    AI question package from the favorite-first rules dropdown and each
+    available question-rule set in turn. Confirm fallback rules are randomly
+    selected only from that set, while explicitly configured per-question types
+    still win. Observe each target slot selected in order, every generated
+    record replaced completely, and prior successful results retained when a
+    later request fails. In the browser, confirm that generation starts with
+    renewed Google authorization. As an allowlisted administrator, expand the
+    prompt panel and confirm its read-only text follows the first pending target
+    and each target being generated.
 13. Clear a populated question from its trailing heading action, then use
     `Ctrl+C` and `Ctrl+V` anywhere in the open editor and observe the same copy
     and confirmed paste behavior as the heading actions. Confirm each

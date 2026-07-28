@@ -20,6 +20,16 @@ export interface AIQuestion {
   generalRule: boolean;
 }
 
+export function compareFavoriteItemsByName(
+  left: Pick<AIQuestion, 'favorite' | 'name'>,
+  right: Pick<AIQuestion, 'favorite' | 'name'>,
+) {
+  return (
+    Number(right.favorite) - Number(left.favorite) ||
+    left.name.localeCompare(right.name)
+  );
+}
+
 const AI_QUESTION_ENTRY = 'ai-question.json';
 export const MAX_AI_QUESTION_BYTES = 1024 * 1024;
 const MAX_AI_QUESTION_JSON_BYTES = 512 * 1024;

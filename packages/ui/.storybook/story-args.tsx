@@ -115,6 +115,7 @@ function getValue(component: string, prop: string): unknown {
           context: 'Package context',
           questions: [],
           enabled: true,
+          favorite: true,
         },
       ];
     }

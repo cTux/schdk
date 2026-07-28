@@ -8,6 +8,13 @@ export const packageGenerationCopy = {
     missing: 'Тільки відсутні питання',
     all: 'Увесь пакет',
     rules: 'Правила створення пакету',
+    ruleSet: 'Набір правил для випадкового вибору',
+    ruleSets: {
+      all: 'Усі правила',
+      favorites: 'Улюблені правила',
+      nonFavorites: 'Неулюблені правила',
+    },
+    noTemplates: 'У вибраному наборі немає активних правил.',
     noRules:
       'Немає активних правил створення пакету. Додайте або увімкніть правило.',
     progress: (current: number, total: number) =>
@@ -26,6 +33,13 @@ export const packageGenerationCopy = {
     missing: 'Missing questions only',
     all: 'Entire package',
     rules: 'Package-generation rules',
+    ruleSet: 'Rule set for random selection',
+    ruleSets: {
+      all: 'All rules',
+      favorites: 'Favorite rules',
+      nonFavorites: 'Non-favorite rules',
+    },
+    noTemplates: 'The selected set has no active rules.',
     noRules: 'There are no active package-generation rules. Add or enable one.',
     progress: (current: number, total: number) =>
       `Generating question ${current} of ${total}…`,

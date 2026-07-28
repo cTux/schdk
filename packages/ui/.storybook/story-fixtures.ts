@@ -84,6 +84,30 @@ export const componentValues: Record<string, Record<string, unknown>> = {
       { questionNumber: 2, context: 'Питання про Київ' },
     ],
   },
+  PackageGenerationOptions: {
+    activePackages: [
+      {
+        name: 'Улюблений пакет',
+        context: 'Улюблений контекст',
+        questions: [],
+        enabled: true,
+        favorite: true,
+      },
+      {
+        name: 'Звичайний пакет',
+        context: 'Звичайний контекст',
+        questions: [],
+        enabled: true,
+        favorite: false,
+      },
+    ],
+    hasRandomTemplates: true,
+    ruleSet: 'all',
+    scope: 'missing',
+    selected: 0,
+    targetsMissing: true,
+    thinking: false,
+  },
   GameMusicBreak: {
     musicBreak: {
       name: 'Музична пауза',

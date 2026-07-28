@@ -77,8 +77,10 @@ package authoring, hosting, settings, and account state.
   question-number contexts with an optional enabled AI question-rule type.
   Per-question contexts render as compact rows with two dropdowns and a
   single-line context field, stay sorted by question number, and do not allow
-  duplicate question numbers. Enable, favorite, edit, delete, loading, and
-  error states use the existing rule-card patterns.
+  duplicate question numbers. The rule collections are name-sorted. Question
+  type dropdowns put starred favorites first and name-sort both the favorite
+  and remaining rules. Enable, favorite, edit, delete, loading, and error states
+  use the existing rule-card patterns.
 
 ## Invariants
 
@@ -124,6 +126,8 @@ package authoring, hosting, settings, and account state.
 10. Open the Artificial intelligence form and confirm every multiline field
     matches the shared dropdown styling without a resize handle.
 11. Open Package creation rules directly, create a package with shared and
-    per-question context, and confirm its compact rows stay number-sorted and
-    prevent duplicate question numbers. Reload, edit its enabled and favorite
-    states, and delete it. Confirm no global collection appears.
+    per-question context, and confirm its compact rows stay number-sorted,
+    prevent duplicate question numbers, and offer favorite-first starred
+    question types with each group sorted by name. Confirm the package-rule
+    collection is name-sorted. Reload, edit its enabled and favorite states,
+    and delete it. Confirm no global collection appears.
