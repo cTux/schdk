@@ -27,6 +27,25 @@ const notes = lines
 if (headingIndex === -1 || !notes) {
   throw new Error(`CHANGELOG.md has no notes for version ${version}.`);
 }
+const noteLines = notes.split('\n');
+const technicalHeadingIndex = noteLines.indexOf('### Технічні рішення');
+const productNotes = noteLines.slice(1, technicalHeadingIndex).filter(Boolean);
+const technicalNotes = noteLines
+  .slice(technicalHeadingIndex + 1)
+  .filter(Boolean);
+const notePattern = /^- \[(?:NEW|CHANGE|FIX|DELETE|SECURITY)\] \S/u;
+
+if (
+  noteLines[0] !== '### Продуктові рішення' ||
+  technicalHeadingIndex === -1 ||
+  !productNotes.length ||
+  !technicalNotes.length ||
+  [...productNotes, ...technicalNotes].some((line) => !notePattern.test(line))
+) {
+  throw new Error(
+    `Release notes for ${version} must separate product and technical decisions and prefix every item.`,
+  );
+}
 if (!/[А-ЩЬЮЯЄІЇҐа-щьюяєіїґ]/u.test(notes)) {
   throw new Error(`Release notes for ${version} must be written in Ukrainian.`);
 }
