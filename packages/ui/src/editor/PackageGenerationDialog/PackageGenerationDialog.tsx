@@ -19,9 +19,8 @@ import { PackageGenerationOpenButton } from '../PackageGenerationOpenButton';
 import { PackageGenerationOptions } from '../PackageGenerationOptions';
 import {
   getPackageGenerationInput,
-  getPackageGenerationPreviewInput,
+  getPackageGenerationState,
   getPackageGenerationTemplates,
-  getPackageGenerationTargets,
   type PackageGenerationInput,
   type PackageGenerationRuleSet,
   type PackageGenerationScope,
@@ -58,15 +57,16 @@ export function PackageGenerationDialog({
   const randomTemplates = getPackageGenerationTemplates(templates, ruleSet);
   const selectedPackage =
     selected === null ? undefined : activePackages[selected];
-  const missingTargets = getPackageGenerationTargets(gamePackage, 'missing');
-  const targets =
-    scope === 'missing'
-      ? missingTargets
-      : getPackageGenerationTargets(gamePackage, scope);
-  const initialExcludedAnswers = gamePackage.questions.flatMap(
-    (question, index) =>
-      targets.includes(index) ? [] : getGameQuestionAnswers(question),
-  );
+  const { targets, initialExcludedAnswers, previewInput } =
+    getPackageGenerationState(
+      gamePackage,
+      scope,
+      selectedPackage,
+      templates,
+      ruleSet,
+      progress,
+      currentInput,
+    );
   function reset() {
     setOpen(false);
     setScope('missing');
@@ -85,16 +85,6 @@ export function PackageGenerationDialog({
     setSelected(activePackages.length ? 0 : null);
     setOpen(true);
   }
-  const targetsMissing = Boolean(missingTargets.length);
-  const previewIndex = targets[progress ? progress[0] - 1 : 0];
-  const previewInput =
-    currentInput ??
-    getPackageGenerationPreviewInput(
-      selectedPackage,
-      templates,
-      previewIndex,
-      ruleSet,
-    );
   async function generate() {
     if (!selectedPackage || !randomTemplates.length || !targets.length) return;
     setThinking(true);
@@ -108,6 +98,7 @@ export function PackageGenerationDialog({
           templates,
           index,
           ruleSet,
+          scope === 'commented' ? gamePackage.questions[index] : undefined,
         );
         if (!input) throw new Error('Missing generation input');
         setCurrentInput(input);
@@ -121,7 +112,11 @@ export function PackageGenerationDialog({
           undefined,
           checkQuestionDatabase,
         );
-        onGenerated(index, question);
+        const generatedQuestion =
+          scope === 'commented'
+            ? { ...question, comment: undefined }
+            : question;
+        onGenerated(index, generatedQuestion);
         usedAnswers.push(...getGameQuestionAnswers(question));
       }
       reset();
@@ -180,7 +175,7 @@ export function PackageGenerationDialog({
                     ruleSet={ruleSet}
                     scope={scope}
                     selected={selected}
-                    targetsMissing={targetsMissing}
+                    hasTargets={Boolean(targets.length)}
                     thinking={thinking}
                     checkQuestionDatabase={checkQuestionDatabase}
                     onCheckQuestionDatabaseChange={setCheckQuestionDatabase}
@@ -224,7 +219,7 @@ export function PackageGenerationDialog({
                         thinking ||
                         selected === null ||
                         !randomTemplates.length ||
-                        (scope === 'missing' && !targetsMissing)
+                        !targets.length
                       }
                       onClick={() => void generate()}
                     >

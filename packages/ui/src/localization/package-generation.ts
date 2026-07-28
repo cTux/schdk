@@ -6,6 +6,7 @@ export const packageGenerationCopy = {
       'Оберіть питання для створення та правила, за якими треба згенерувати пакет.',
     scope: 'Які питання генерувати',
     missing: 'Тільки відсутні питання',
+    commented: 'Питання з зауваженнями',
     all: 'Увесь пакет',
     rules: 'Правила створення пакету',
     ruleSet: 'Набір правил для випадкового вибору',
@@ -25,6 +26,7 @@ export const packageGenerationCopy = {
     nothingMissing: 'Усі питання пакету вже заповнені.',
     checkDatabase:
       'Перевіряти схожість із моєю базою питань і перегенеровувати за потреби',
+    nothingCommented: 'У пакеті немає питань із зауваженнями.',
   },
   en: {
     open: 'Generate package',
@@ -33,6 +35,7 @@ export const packageGenerationCopy = {
       'Choose which questions to create and the rules for generating the package.',
     scope: 'Questions to generate',
     missing: 'Missing questions only',
+    commented: 'Questions with remarks',
     all: 'Entire package',
     rules: 'Package-generation rules',
     ruleSet: 'Rule set for random selection',
@@ -51,5 +54,6 @@ export const packageGenerationCopy = {
     nothingMissing: 'Every package question is already complete.',
     checkDatabase:
       'Check similarity against my question database and regenerate if needed',
+    nothingCommented: 'The package has no questions with remarks.',
   },
 };

@@ -65,14 +65,17 @@ without losing in-progress work.
   focus, and disabled states.
 - **EDT-18:** AI generation requires a non-empty answer comment. An AI icon
   beside the editable package title opens a modal that selects missing
-  questions or the whole package and one enabled AI question package from a
-  dropdown. Favorite packages appear first with a star and each favorite and
-  non-favorite group is name-sorted. The modal also selects all, favorite, or
-  non-favorite enabled non-general question rules; each question without an
-  explicitly configured type uses a random rule from that set. An explicitly
-  configured per-question type still takes priority, while the general rule is
-  applied separately to every generated question. Only a missing question part
-  or answer makes a question missing; optional fields do not.
+  questions, questions with unresolved author remarks, or the whole package
+  and one enabled AI question package from a dropdown. Remarked questions are
+  regenerated from the current question and remark, and a resolved result
+  clears the remark. Favorite packages appear first with a star and each
+  favorite and non-favorite group is name-sorted. The modal also selects all,
+  favorite, or non-favorite enabled non-general question rules; each question
+  without an explicitly configured type uses a random rule from that set. An
+  explicitly configured per-question type still takes priority, while the
+  general rule is applied separately to every generated question. Only a
+  missing question part or answer makes a question missing; optional fields do
+  not.
   It selects each target slot behind the modal, waits for a validated provider
   response, joins overflow text into the last part allowed by the declared
   question type, replaces the complete question record, and continues sequentially.
@@ -136,9 +139,11 @@ without losing in-progress work.
 11. Open generation as an allowlisted administrator, expand the prompt panel,
     and confirm its read-only text follows changes to the selected template,
     difficulty, and context. Confirm the control is absent for other accounts.
-12. Generate only missing slots and then the whole package after selecting one
-    AI question package from the favorite-first rules dropdown and each
-    available question-rule set in turn. Confirm fallback rules are randomly
+12. Generate only missing slots, questions with unresolved remarks, and then
+    the whole package after selecting one AI question package from the
+    favorite-first rules dropdown and each available question-rule set in turn.
+    Confirm remarked-question prompts include the current question and remark
+    and accepted results clear the remark. Confirm fallback rules are randomly
     selected only from that set, while explicitly configured per-question types
     still win. Observe each target slot selected in order, every generated
     record replaced completely, and prior successful results retained when a

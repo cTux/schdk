@@ -1,10 +1,12 @@
-import type {
-  AIQuestion,
-  AIQuestionsPackage,
-  GamePackage,
+import {
+  getGameQuestionAnswers,
+  type AIQuestion,
+  type AIQuestionsPackage,
+  type GamePackage,
+  type GameQuestion,
 } from '@schdk/common';
 
-export type PackageGenerationScope = 'missing' | 'all';
+export type PackageGenerationScope = 'missing' | 'commented' | 'all';
 export type PackageGenerationRuleSet = 'all' | 'favorites' | 'non-favorites';
 export interface PackageGenerationInput {
   template: AIQuestion;
@@ -29,11 +31,53 @@ export function getPackageGenerationTargets(
 ) {
   return gamePackage.questions.flatMap((question, index) =>
     scope === 'all' ||
-    !question.answer.trim() ||
-    question.questionParts.some((part) => !part.trim())
+    (scope === 'commented'
+      ? Boolean(question.comment?.trim())
+      : !question.answer.trim() ||
+        question.questionParts.some((part) => !part.trim()))
       ? [index]
       : [],
   );
+}
+
+function getPackageGenerationExcludedAnswers(
+  gamePackage: GamePackage,
+  targets: number[],
+) {
+  return gamePackage.questions.flatMap((question, index) =>
+    targets.includes(index) ? [] : getGameQuestionAnswers(question),
+  );
+}
+
+export function getPackageGenerationState(
+  gamePackage: GamePackage,
+  scope: PackageGenerationScope,
+  selectedPackage: AIQuestionsPackage | undefined,
+  templates: AIQuestion[],
+  ruleSet: PackageGenerationRuleSet,
+  progress: [number, number] | null,
+  currentInput: PackageGenerationInput | null,
+) {
+  const targets = getPackageGenerationTargets(gamePackage, scope);
+  const previewIndex = targets[progress ? progress[0] - 1 : 0];
+  return {
+    targets,
+    initialExcludedAnswers: getPackageGenerationExcludedAnswers(
+      gamePackage,
+      targets,
+    ),
+    previewInput:
+      currentInput ??
+      getPackageGenerationPreviewInput(
+        selectedPackage,
+        templates,
+        previewIndex,
+        ruleSet,
+        scope === 'commented' && previewIndex !== undefined
+          ? gamePackage.questions[previewIndex]
+          : undefined,
+      ),
+  };
 }
 
 export function getPackageGenerationInput(
@@ -41,6 +85,7 @@ export function getPackageGenerationInput(
   templates: AIQuestion[],
   index: number,
   ruleSet: PackageGenerationRuleSet = 'all',
+  currentQuestion?: GameQuestion,
   random = Math.random,
 ): PackageGenerationInput | null {
   const randomTemplates = getPackageGenerationTemplates(templates, ruleSet);
@@ -59,6 +104,13 @@ export function getPackageGenerationInput(
       ) ?? randomTemplates[Math.floor(random() * randomTemplates.length)]!,
     context: [`${selectedPackage.name}:\n${selectedPackage.context}`]
       .concat(additions.map((item) => item.context))
+      .concat(
+        currentQuestion?.comment?.trim()
+          ? [
+              `Existing question to revise:\n${JSON.stringify(currentQuestion)}\n\nAuthor remark that must be resolved:\n${currentQuestion.comment.trim()}`,
+            ]
+          : [],
+      )
       .join('\n\n'),
   };
 }
@@ -68,6 +120,7 @@ export function getPackageGenerationPreviewInput(
   templates: AIQuestion[],
   index: number | undefined,
   ruleSet: PackageGenerationRuleSet,
+  currentQuestion?: GameQuestion,
 ) {
   return index === undefined
     ? null
@@ -76,6 +129,7 @@ export function getPackageGenerationPreviewInput(
         templates,
         index,
         ruleSet,
+        currentQuestion,
         () => 0,
       );
 }
