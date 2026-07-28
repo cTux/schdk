@@ -29,6 +29,7 @@ export function App({
   drive,
   driveActive = false,
   manageDocumentTitle = true,
+  questionDatabaseRows = [],
   sessionScope = window.location.pathname,
   textOptions = DEFAULT_EDITOR_TEXT_OPTIONS,
   onDriveFailure,
@@ -127,10 +128,12 @@ export function App({
   const questions = useQuestionActions({
     confirm,
     copy,
+    drive,
     gamePackage,
     locale,
     selectedIndex,
     textOptions,
+    onDriveFailure,
     setGamePackage,
     setMessage,
     setSaveStatus,
@@ -166,6 +169,7 @@ export function App({
         gamePackage={gamePackage}
         hasPackage={hasPackage}
         message={message}
+        questionDatabaseRows={questionDatabaseRows}
         openingRecentPackageId={packages.openingRecentPackageId}
         recentPackages={recentPackages}
         recentPackagesLoading={recentPackagesLoading}
@@ -234,6 +238,7 @@ export function App({
         }
         onPasteQuestion={() => void questions.pasteQuestion()}
         onQuestionChange={questions.updateQuestion}
+        onDatabaseQuestionSelect={questions.selectDatabaseQuestion}
         onQuestionGenerated={questions.replaceQuestion}
         onQuestionTextBlur={questions.correctQuestionText}
         onSelectQuestion={setSelectedIndex}

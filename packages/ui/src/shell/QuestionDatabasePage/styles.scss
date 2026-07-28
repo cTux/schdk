@@ -1,6 +1,8 @@
 .question-database-page {
   display: flex;
+  height: 100%;
   min-width: 0;
+  min-height: 0;
   flex-direction: column;
   gap: 1rem;
   padding: 1.5rem;
@@ -33,71 +35,7 @@
 }
 
 .question-database-viewport {
-  height: 520px;
-  overflow: auto;
-  border: 1px solid var(--schdk-border);
-  border-radius: 0.75rem;
-  background: var(--schdk-surface);
-
-  table {
-    width: 100%;
-    min-width: 760px;
-    table-layout: fixed;
-    border-collapse: collapse;
-  }
-
-  th {
-    position: sticky;
-    z-index: 1;
-    top: 0;
-    background: var(--schdk-surface-raised);
-    text-align: left;
-  }
-
-  th,
-  td {
-    padding: 0.7rem;
-    border-bottom: 1px solid var(--schdk-border);
-    vertical-align: top;
-  }
-
-  th:first-child {
-    width: 16%;
-  }
-
-  th:nth-child(2) {
-    width: 3.5rem;
-  }
-
-  th button {
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: inherit;
-    font: inherit;
-    font-weight: 700;
-    cursor: pointer;
-  }
-
-  tbody tr:not(.question-database-spacer) {
-    height: 76px;
-  }
-
-  td {
-    line-height: 1.35;
-  }
-
-  td span {
-    display: -webkit-box;
-    overflow: hidden;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-  }
-}
-
-.question-database-spacer td {
-  padding: 0;
-  border: 0;
+  flex: 1 1 0;
 }
 
 .question-database-error {
@@ -111,11 +49,17 @@
 
 @media (width <= 600px) {
   .question-database-page {
+    height: auto;
     padding: 1rem;
 
     footer {
       align-items: stretch;
       flex-direction: column;
     }
+  }
+
+  .question-database-viewport {
+    height: 520px;
+    flex: none;
   }
 }

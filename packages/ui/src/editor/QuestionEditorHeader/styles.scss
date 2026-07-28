@@ -1,0 +1,12 @@
+.editor-app {
+  .question-heading > .ui-input {
+    min-width: min(100%, 16rem);
+    max-width: 36rem;
+    flex: 1 1 20rem;
+  }
+
+  .question-editor > .question-database-viewport {
+    height: 320px;
+    margin-bottom: 20px;
+  }
+}

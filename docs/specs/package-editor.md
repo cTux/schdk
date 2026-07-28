@@ -38,7 +38,8 @@ without losing in-progress work.
 - **EDT-11:** The start screen opens local `.schdk` files through a visible
   chooser or drag-and-drop, validates them, and imports them to Drive.
 - **EDT-12:** Recents show Drive packages, readiness, download, and confirmed
-  cloud deletion. Opening or deleting one row blocks conflicting start actions.
+  cloud deletion. Packages with unresolved author remarks carry a separate
+  status tag. Opening or deleting one row blocks conflicting start actions.
 - **EDT-13:** Explicit download exports the latest Drive copy without changing
   the editor's backing file.
 - **EDT-14:** The selected Drive package and question restore after refresh or
@@ -117,6 +118,11 @@ without losing in-progress work.
   after package generation. After confirmation it moves the active Drive
   package to trash, clears the editor state, returns to the package list, and
   refreshes recents.
+- **EDT-23:** A question-and-answer search beside the selected question heading
+  starts after two entered characters and shows the same question, answer, and
+  included-packages table as the personal question database. Selecting a row
+  loads the complete canonical source question into an empty slot immediately.
+  A populated slot is replaced only after explicit confirmation.
 
 ## Invariants
 
@@ -196,3 +202,8 @@ without losing in-progress work.
     and confirm both use the shared red danger treatment. Delete the active
     package, confirm the dialog, and observe it disappear from Drive recents as
     the editor returns to the package list.
+18. Search beside an empty question heading with one and then two characters.
+    Select a grouped database row and confirm the complete source question is
+    loaded. Repeat with a populated slot, cancel replacement, then confirm it.
+    Reopen recents and confirm packages with unresolved remarks carry their
+    separate status tag.

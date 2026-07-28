@@ -23,6 +23,8 @@
   references. Keep the package title in Drive file metadata so recents can show
   it without downloading package contents, and keep the Drive filename
   synchronized as the filesystem-safe title plus `.schdk`.
+  Keep readiness and unresolved-remark status in private package properties so
+  recents can show both tags without downloading package content.
 - Store every AI question rule as its own visible `.aiquestion` ZIP archive in
   the same `SCHDK` Drive folder. Mark it with private app identity metadata,
   keep its filename synchronized as the filesystem-safe rule name plus

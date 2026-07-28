@@ -1,4 +1,5 @@
 import {
+  hasGamePackageRemarks,
   serializeGamePackage,
   validateGamePackage,
   type GamePackage,
@@ -94,6 +95,7 @@ export function useEditorPersistence({
           title: gamePackage.title,
           content,
           ready: validateGamePackage(gamePackage).length === 0,
+          hasRemarks: hasGamePackageRemarks(gamePackage),
         }),
       );
     saveQueue.current = save.then(() => undefined);

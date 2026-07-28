@@ -5,6 +5,7 @@ import type {
   GamePackage,
   GameQuestion,
 } from '@schdk/common';
+import type { QuestionDatabaseRow } from '../shell/QuestionDatabasePage';
 
 export type EditorSaveStatus = 'saved' | 'pending' | 'saving' | 'error';
 
@@ -13,6 +14,7 @@ export interface RecentPackageItem {
   name: string;
   title?: string;
   ready?: boolean;
+  hasRemarks?: boolean;
 }
 
 export interface AiQuestionGenerationOptions {
@@ -41,6 +43,7 @@ export interface EditorViewProps {
   gamePackage: GamePackage;
   hasPackage: boolean;
   message: string;
+  questionDatabaseRows: QuestionDatabaseRow[];
   openingRecentPackageId?: string | null;
   recentPackages: RecentPackageItem[];
   recentPackagesLoading?: boolean;
@@ -63,6 +66,7 @@ export interface EditorViewProps {
   onOpenRecentPackage(recent: RecentPackageItem): void;
   onPasteQuestion(): void;
   onQuestionChange(change: Partial<GameQuestion>): void;
+  onDatabaseQuestionSelect(row: QuestionDatabaseRow): Promise<boolean>;
   onQuestionGenerated(index: number, question: GameQuestion): void;
   onQuestionTextBlur(index: number): void;
   onSelectQuestion(index: number): void;

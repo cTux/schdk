@@ -1,5 +1,8 @@
 import type { DrivePackageStorage } from '@schdk/google-drive';
-import type { AiQuestionGenerationOptions } from '@schdk/ui/editor';
+import type {
+  AiQuestionGenerationOptions,
+  EditorViewProps,
+} from '@schdk/ui/editor';
 import type { EditorTextOptions } from '@schdk/ui/options';
 
 export interface AppProps {
@@ -7,6 +10,7 @@ export interface AppProps {
   drive?: DrivePackageStorage;
   driveActive?: boolean;
   manageDocumentTitle?: boolean;
+  questionDatabaseRows?: EditorViewProps['questionDatabaseRows'];
   sessionScope?: string;
   textOptions?: EditorTextOptions;
   onDriveFailure?(): void;

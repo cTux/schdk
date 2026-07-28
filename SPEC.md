@@ -72,6 +72,7 @@ V31|Question-database rows derive only from parsed packages owned by the connect
 V32|Question-database similarity checking defaults off; when enabled, a semantically similar generated question or answer is rejected and regenerated once before failure.
 V33|Host notes contain only delivery instructions visible while the host reads a question and never contain answer-review or quality-analysis notes.
 V34|AI package regeneration of remarked questions includes the current question and author remark and clears the remark only after successful replacement.
+V35|Selecting a personal-database result loads the complete canonical source question and never replaces a populated editor slot without explicit confirmation.
 
 ## §T
 
@@ -152,3 +153,4 @@ B67|2026-07-28|The AI schema left host notes underspecified and package generati
 B68|2026-07-28|Adding remarked-question generation pushed its dialog past the enforced source-file limit|Move excluded-answer calculation into the existing pure generation-input module; the repository workflow test covers recurrence.
 B69|2026-07-28|Text handouts used proportional fonts, so character-based diagrams lost alignment between editing and gameplay|Use monospace fonts on text handouts in both surfaces; `docs/specs/package-editor.md` and `docs/specs/game-hosting.md` cover recurrence.
 B70|2026-07-28|The block-level package title forced its generation action onto a separate row|Keep the title field and generation action in one flex row as specified by `docs/specs/package-editor.md`.
+B71|2026-07-28|Question-database editor wiring pushed four existing source files beyond the enforced 256-line limit|Move selection behavior and component-specific styles into their owning modules and keep new copy in the question-database localization module; the existing workflow test covers recurrence.

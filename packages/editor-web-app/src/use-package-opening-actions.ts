@@ -1,4 +1,5 @@
 import {
+  hasGamePackageRemarks,
   MAX_GAME_PACKAGE_BYTES,
   parseGamePackage,
   validateGamePackage,
@@ -81,6 +82,7 @@ export function usePackageOpeningActions({
         title: gamePackage.title,
         content,
         ready: validateGamePackage(gamePackage).length === 0,
+        hasRemarks: hasGamePackageRemarks(gamePackage),
       });
       applyOpenedPackage(content, saved.name, saved.id);
       replaceBrowserPackageDeepLink(toDrivePackageReference(saved.id), 0);

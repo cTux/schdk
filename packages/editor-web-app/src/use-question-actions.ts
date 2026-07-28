@@ -1,9 +1,15 @@
 import {
+  parseGamePackage,
   parseGameQuestion,
   type GamePackage,
   type GameQuestion,
 } from '@schdk/common';
-import { showEditorToast, type EditorSaveStatus } from '@schdk/ui/editor';
+import type { DrivePackageStorage } from '@schdk/google-drive';
+import {
+  showEditorToast,
+  type EditorSaveStatus,
+  type EditorViewProps,
+} from '@schdk/ui/editor';
 import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
 import type { EditorTextOptions } from '@schdk/ui/options';
 import type { Dispatch, SetStateAction } from 'react';
@@ -13,10 +19,12 @@ import { correctAnswer, correctSentence } from './text-correction';
 interface QuestionActionsOptions {
   confirm(message: string): Promise<boolean>;
   copy: LocalizationCopy;
+  drive?: DrivePackageStorage;
   gamePackage: GamePackage;
   locale: AppLocale;
   selectedIndex: number;
   textOptions: EditorTextOptions;
+  onDriveFailure?(): void;
   setGamePackage: Dispatch<SetStateAction<GamePackage>>;
   setMessage: Dispatch<SetStateAction<string>>;
   setSaveStatus: Dispatch<SetStateAction<EditorSaveStatus>>;
@@ -26,10 +34,12 @@ interface QuestionActionsOptions {
 export function useQuestionActions({
   confirm,
   copy,
+  drive,
   gamePackage,
   locale,
   selectedIndex,
   textOptions,
+  onDriveFailure,
   setGamePackage,
   setMessage,
   setSaveStatus,
@@ -127,6 +137,42 @@ export function useQuestionActions({
     }
   }
 
+  async function selectDatabaseQuestion(
+    row: EditorViewProps['questionDatabaseRows'][number],
+  ) {
+    const current = gamePackage.questions[selectedIndex]!;
+    const empty =
+      current.questionParts.every((part) => !part.trim()) &&
+      !current.answer.trim() &&
+      current.alternativeAnswers.every((answer) => !answer.trim()) &&
+      current.wrongAnswers.every((answer) => !answer.trim()) &&
+      !current.answerComment?.trim() &&
+      !current.comment?.trim() &&
+      !current.hostNotes?.trim() &&
+      !current.handout;
+    if (
+      !empty &&
+      !(await confirm(
+        copy.questionDatabase.confirmReplacement(selectedIndex + 1),
+      ))
+    ) {
+      return false;
+    }
+    try {
+      if (!drive) throw new Error('Google Drive is unavailable');
+      const source = parseGamePackage(
+        (await drive.loadGamePackage(row.fileId)).content,
+      ).questions[row.number - 1];
+      if (!source) throw new Error('Question is unavailable');
+      replaceQuestion(selectedIndex, source);
+      return true;
+    } catch {
+      onDriveFailure?.();
+      setMessage(copy.questionDatabase.loadQuestionFailed);
+      return false;
+    }
+  }
+
   function swapQuestionPositions(sourceIndex: number, targetIndex: number) {
     setGamePackage((current) => ({
       ...current,
@@ -193,6 +239,7 @@ export function useQuestionActions({
       correctListedAnswer('wrongAnswers', index),
     pasteQuestion,
     replaceQuestion,
+    selectDatabaseQuestion,
     swapQuestionPositions,
     updateQuestion,
   };

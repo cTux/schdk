@@ -1,4 +1,5 @@
 import {
+  hasGamePackageRemarks,
   serializeGamePackage,
   validateGamePackage,
   type GamePackage,
@@ -99,6 +100,7 @@ export function usePackageActions(options: PackageActionsOptions) {
         title: emptyPackage.title,
         content: serializeGamePackage(emptyPackage),
         ready: validateGamePackage(emptyPackage).length === 0,
+        hasRemarks: hasGamePackageRemarks(emptyPackage),
       });
       setDriveFileId(saved.id);
       setFileName(saved.name);

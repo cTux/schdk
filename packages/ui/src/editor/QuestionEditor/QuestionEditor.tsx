@@ -7,6 +7,7 @@ import {
 import { Dropdown } from '../../atoms/Dropdown';
 import { TextAreaField } from '../../atoms/TextAreaField';
 import { useLocalization } from '../../localization';
+import type { QuestionDatabaseRow } from '../../shell/QuestionDatabasePage';
 import { AnswerListField } from '../AnswerListField';
 import { HostNotesField } from '../HostNotesField';
 import { QuestionEditorHeader } from '../QuestionEditorHeader';
@@ -18,6 +19,7 @@ import type { AiQuestionGenerationOptions } from '../types';
 export interface QuestionEditorProps {
   aiGeneration?: AiQuestionGenerationOptions;
   question: GameQuestion;
+  questionDatabaseRows: QuestionDatabaseRow[];
   selectedIndex: number;
   showValidation: boolean;
   onAddHandout(file: File): void;
@@ -26,6 +28,7 @@ export interface QuestionEditorProps {
   onAlternativeAnswerBlur(index: number): void;
   onWrongAnswerBlur(index: number): void;
   onChange(change: Partial<GameQuestion>): void;
+  onDatabaseQuestionSelect(row: QuestionDatabaseRow): Promise<boolean>;
   onGenerated(question: GameQuestion): void;
   onCopy(): void;
   onPaste(): void;
@@ -36,6 +39,7 @@ export interface QuestionEditorProps {
 export function QuestionEditor({
   aiGeneration,
   question,
+  questionDatabaseRows,
   selectedIndex,
   showValidation,
   onAddHandout,
@@ -44,6 +48,7 @@ export function QuestionEditor({
   onAlternativeAnswerBlur,
   onWrongAnswerBlur,
   onChange,
+  onDatabaseQuestionSelect,
   onGenerated,
   onCopy,
   onPaste,
@@ -67,7 +72,9 @@ export function QuestionEditor({
     <section className="question-editor">
       <QuestionEditorHeader
         aiGeneration={aiGeneration}
+        questionDatabaseRows={questionDatabaseRows}
         questionNumber={selectedIndex + 1}
+        onDatabaseQuestionSelect={onDatabaseQuestionSelect}
         onGenerated={onGenerated}
         onClear={() => onChange(createEmptyGameQuestion())}
         onCopy={onCopy}

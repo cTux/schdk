@@ -21,6 +21,7 @@ export function EditorView({
   gamePackage,
   hasPackage,
   message,
+  questionDatabaseRows,
   openingRecentPackageId = null,
   recentPackages,
   recentPackagesLoading = false,
@@ -43,6 +44,7 @@ export function EditorView({
   onOpenRecentPackage,
   onPasteQuestion,
   onQuestionChange,
+  onDatabaseQuestionSelect,
   onQuestionGenerated,
   onQuestionTextBlur,
   onSelectQuestion,
@@ -130,10 +132,12 @@ export function EditorView({
           <QuestionEditor
             aiGeneration={questionGeneration}
             question={gamePackage.questions[selectedIndex]!}
+            questionDatabaseRows={questionDatabaseRows}
             selectedIndex={selectedIndex}
             showValidation={showValidation}
             onAddHandout={onAddHandout}
             onChange={onQuestionChange}
+            onDatabaseQuestionSelect={onDatabaseQuestionSelect}
             onGenerated={(question) =>
               onQuestionGenerated(selectedIndex, question)
             }

@@ -6,9 +6,11 @@
   `Редагувати пакети питань`, and `Провести гру` under `ЩДК`. Keep
   `Налаштування` in a separate group at the bottom.
 - Explain on the question-database page that it contains only the current
-  user's Drive packages. Keep question and answer search, sortable question
-  and answer columns, windowed rows, and a bottom action that loads the next
-  result batch.
+  user's Drive packages. Group identical questions into question, answer, and
+  included-packages columns. Start question and answer search after two entered
+  characters, keep question and answer columns sortable, window rows, and keep
+  a bottom action that loads the next result batch. On desktop, let the table
+  consume remaining workspace height instead of scrolling the whole page.
 - Organize settings under an accessible primary `ЩДК` tab with always-visible
   `Проведення гри` and `Редагування питань` fieldsets.
 - Keep the active primary settings tab controlled by the web shell so its URL

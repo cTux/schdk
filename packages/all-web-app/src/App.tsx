@@ -154,6 +154,7 @@ export function App() {
                   driveActive={connected}
                   manageDocumentTitle={false}
                   onDriveFailure={() => void googleDrive.reportFailure()}
+                  questionDatabaseRows={questionDatabase.entries}
                   sessionScope={`${window.location.pathname}:${googleDrive.accountId}`}
                   textOptions={editorOptions}
                 />

@@ -1,26 +1,20 @@
 import './styles.scss';
 
-import { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
+import { useDeferredValue, useEffect, useMemo, useState } from 'react';
 import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';
 import { Input } from '../../atoms/Input';
 import { useLocalization } from '../../localization';
-import type { QuestionDatabasePageProps, QuestionDatabaseRow } from './types';
+import {
+  QuestionDatabaseTable,
+  searchQuestionDatabaseRows,
+  sortQuestionDatabaseRows,
+  type QuestionDatabaseSearchField,
+  type QuestionDatabaseSort,
+} from '../QuestionDatabaseTable';
+import type { QuestionDatabasePageProps } from './types';
 
 const BATCH_SIZE = 100;
-const ROW_HEIGHT = 76;
-const VIEWPORT_HEIGHT = 520;
-const OVERSCAN = 5;
-type SearchField = 'all' | 'question' | 'answer';
-type SortKey = 'question' | 'answer';
-
-function normalize(value: string) {
-  return value.normalize('NFKC').toLocaleLowerCase().trim();
-}
-
-function getAnswerText(row: QuestionDatabaseRow) {
-  return [row.answer, ...row.alternativeAnswers].join(' · ');
-}
 
 export function QuestionDatabasePage({
   failed,
@@ -31,51 +25,26 @@ export function QuestionDatabasePage({
 }: QuestionDatabasePageProps) {
   const { copy, locale } = useLocalization();
   const databaseCopy = copy.questionDatabase;
-  const viewport = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState('');
   const deferredQuery = useDeferredValue(query);
-  const [field, setField] = useState<SearchField>('all');
-  const [sort, setSort] = useState<SortKey>('question');
+  const [field, setField] = useState<QuestionDatabaseSearchField>('all');
+  const [sort, setSort] = useState<QuestionDatabaseSort>('question');
   const [ascending, setAscending] = useState(true);
   const [limit, setLimit] = useState(BATCH_SIZE);
-  const [scrollTop, setScrollTop] = useState(0);
   const filteredRows = useMemo(() => {
-    const needle = normalize(deferredQuery);
-    const result = needle
-      ? rows.filter((row) => {
-          const question = normalize(row.question);
-          const answer = normalize(getAnswerText(row));
-          return field === 'question'
-            ? question.includes(needle)
-            : field === 'answer'
-              ? answer.includes(needle)
-              : question.includes(needle) || answer.includes(needle);
-        })
-      : [...rows];
-    return result.sort((left, right) => {
-      const comparison =
-        sort === 'question'
-          ? left.question.localeCompare(right.question, locale)
-          : getAnswerText(left).localeCompare(getAnswerText(right), locale);
-      return ascending ? comparison : -comparison;
-    });
+    const result = searchQuestionDatabaseRows(rows, deferredQuery, field);
+    return sortQuestionDatabaseRows(result, sort, ascending, locale);
   }, [ascending, deferredQuery, field, locale, rows, sort]);
-  const loadedRows = filteredRows.slice(0, limit);
-  const start = Math.min(
-    loadedRows.length,
-    Math.max(0, Math.floor(scrollTop / ROW_HEIGHT) - OVERSCAN),
+  const loadedRows = useMemo(
+    () => filteredRows.slice(0, limit),
+    [filteredRows, limit],
   );
-  const count = Math.ceil(VIEWPORT_HEIGHT / ROW_HEIGHT) + OVERSCAN * 2;
-  const end = Math.min(loadedRows.length, start + count);
-  const visibleRows = loadedRows.slice(start, end);
 
   useEffect(() => {
     setLimit(BATCH_SIZE);
-    setScrollTop(0);
-    viewport.current?.scrollTo({ top: 0 });
   }, [deferredQuery, field, sort, ascending]);
 
-  function changeSort(nextSort: SortKey) {
+  function changeSort(nextSort: QuestionDatabaseSort) {
     if (sort === nextSort) setAscending((value) => !value);
     else {
       setSort(nextSort);
@@ -103,7 +72,9 @@ export function QuestionDatabasePage({
           {databaseCopy.searchField}
           <Dropdown
             value={field}
-            onChange={(event) => setField(event.target.value as SearchField)}
+            onChange={(event) =>
+              setField(event.target.value as QuestionDatabaseSearchField)
+            }
           >
             <option value="all">{databaseCopy.fields.all}</option>
             <option value="question">{databaseCopy.fields.question}</option>
@@ -119,71 +90,12 @@ export function QuestionDatabasePage({
       {failed && (
         <p className="question-database-error">{databaseCopy.failed}</p>
       )}
-      <div
-        ref={viewport}
-        className="question-database-viewport"
-        onScroll={(event) => setScrollTop(event.currentTarget.scrollTop)}
-      >
-        <table>
-          <thead>
-            <tr>
-              <th>{databaseCopy.package}</th>
-              <th>{databaseCopy.number}</th>
-              <th>
-                <button
-                  type="button"
-                  aria-label={databaseCopy.sortQuestion}
-                  onClick={() => changeSort('question')}
-                >
-                  {databaseCopy.question}
-                  {sort === 'question' ? (ascending ? ' ↑' : ' ↓') : ''}
-                </button>
-              </th>
-              <th>
-                <button
-                  type="button"
-                  aria-label={databaseCopy.sortAnswer}
-                  onClick={() => changeSort('answer')}
-                >
-                  {databaseCopy.answer}
-                  {sort === 'answer' ? (ascending ? ' ↑' : ' ↓') : ''}
-                </button>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {start > 0 && (
-              <tr aria-hidden="true" className="question-database-spacer">
-                <td colSpan={4} style={{ height: start * ROW_HEIGHT }} />
-              </tr>
-            )}
-            {visibleRows.map((row) => (
-              <tr key={`${row.fileId}-${row.number}`}>
-                <td>
-                  <span>{row.packageTitle}</span>
-                </td>
-                <td>
-                  <span>{row.number}</span>
-                </td>
-                <td>
-                  <span>{row.question}</span>
-                </td>
-                <td>
-                  <span>{getAnswerText(row)}</span>
-                </td>
-              </tr>
-            ))}
-            {end < loadedRows.length && (
-              <tr aria-hidden="true" className="question-database-spacer">
-                <td
-                  colSpan={4}
-                  style={{ height: (loadedRows.length - end) * ROW_HEIGHT }}
-                />
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+      <QuestionDatabaseTable
+        ascending={ascending}
+        rows={loadedRows}
+        sort={sort}
+        onSort={changeSort}
+      />
       {!loading && filteredRows.length === 0 && (
         <p className="question-database-empty">{databaseCopy.empty}</p>
       )}

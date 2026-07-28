@@ -15,6 +15,7 @@ import {
   gameQuestion,
   noop,
   position,
+  questionDatabaseRows,
   recent,
 } from './story-fixtures';
 
@@ -201,6 +202,7 @@ function getValue(component: string, prop: string): unknown {
     packageDetails: null,
     position,
     question: gameQuestion,
+    questionDatabaseRows,
     recent,
     remark: 'Коментар редактора',
     saveStatus: 'saved',

@@ -24,9 +24,9 @@ export const aiQuestion: AIQuestion = {
   favorite: false,
   generalRule: false,
 };
-const questionDatabaseRows = Array.from({ length: 120 }, (_, index) => ({
+export const questionDatabaseRows = Array.from({ length: 120 }, (_, index) => ({
   fileId: `storybook-package-${Math.floor(index / 36)}`,
-  packageTitle: `Storybook package ${Math.floor(index / 36) + 1}`,
+  packageTitles: [`Storybook package ${Math.floor(index / 36) + 1}`],
   number: (index % 36) + 1,
   question: `Storybook question ${index + 1}`,
   answer: `Storybook answer ${index + 1}`,
@@ -74,6 +74,7 @@ export const recent = {
   name: 'example.schdk',
   title: 'Приклад гри',
   ready: true,
+  hasRemarks: true,
 };
 export const noop = () => undefined;
 export const confirm = async () => true;
