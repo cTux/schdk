@@ -32,6 +32,9 @@ description: Analyze the construction of a supplied quiz question, answer, and o
      associations, duplicated clues, and non-unique answers;
    - `enabled: true`, `favorite: false`, `generalRule: false`, unless requested
      otherwise.
+     Keep at most three good examples and three bad examples. When updating an
+     existing rule, retain the most useful non-duplicate examples within each
+     limit.
 7. Serialize through `serializeAIQuestion` from `@schdk/common`; never
    handcraft the ZIP contract. Name the file `<name>.aiquestion`.
 8. Parse the written file with `parseAIQuestionArchive` and compare every
