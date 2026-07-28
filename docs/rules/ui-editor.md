@@ -10,6 +10,8 @@
 - Place the optional image-or-text handout before question text. Show no image
   filename, put remove below the image thumbnail or text field, and open a
   100–400% zoomable, pannable full-size modal from the thumbnail.
+- Render text handouts in the editor with a monospace font so character
+  alignment stays stable.
 - Put Font Awesome copy, paste, and trailing clear actions beside the question
   heading. Copy all question fields as JSON; confirm before parsing clipboard
   JSON and replacing the selected question. While the editor is open,

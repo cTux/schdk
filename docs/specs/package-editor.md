@@ -16,8 +16,9 @@ without losing in-progress work.
 - **EDT-3:** Question type selection exposes one, two, or three question parts
   for standard, 2×30 blitz, or 3×20 blitz respectively.
 - **EDT-4:** Authors can add, replace, and remove text or validated image
-  handouts and the two between-round audio files. Invalid handouts and
-  oversized audio selections never mutate package state.
+  handouts and the two between-round audio files. Text handouts use a monospace
+  font while editing. Invalid handouts and oversized audio selections never
+  mutate package state.
 - **EDT-5:** Authors can copy a complete question as JSON, replace another
   question from parsed clipboard JSON after confirmation, and clear every
   field of the selected question. `Ctrl+C` and `Ctrl+V` invoke the same copy
