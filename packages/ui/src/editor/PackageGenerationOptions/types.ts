@@ -1,4 +1,4 @@
-import type { AIQuestionsPackage } from '@schdk/common';
+import type { AIQuestionDifficulty, AIQuestionsPackage } from '@schdk/common';
 import type {
   PackageGenerationRuleSet,
   PackageGenerationScope,
@@ -6,7 +6,10 @@ import type {
 
 export interface PackageGenerationOptionsProps {
   activePackages: AIQuestionsPackage[];
+  canGenerate: boolean;
+  difficulty: AIQuestionDifficulty;
   hasRandomTemplates: boolean;
+  progress: [number, number] | null;
   ruleSet: PackageGenerationRuleSet;
   scope: PackageGenerationScope;
   selected: number | null;
@@ -14,7 +17,10 @@ export interface PackageGenerationOptionsProps {
   thinking: boolean;
   checkQuestionDatabase: boolean;
   onCheckQuestionDatabaseChange(checked: boolean): void;
+  onCancel(): void;
+  onDifficultyChange(difficulty: AIQuestionDifficulty): void;
   onPackageChange(index: number): void;
   onRuleSetChange(ruleSet: PackageGenerationRuleSet): void;
   onScopeChange(scope: PackageGenerationScope): void;
+  onGenerate(): void;
 }

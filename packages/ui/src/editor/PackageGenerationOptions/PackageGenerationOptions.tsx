@@ -1,12 +1,22 @@
+import {
+  AI_QUESTION_DIFFICULTIES,
+  type AIQuestionDifficulty,
+} from '@schdk/common';
+import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';
 import { useLocalization } from '../../localization';
 import type { PackageGenerationRuleSet } from '../PackageGenerationDialog/generation-input';
 import { QuestionDatabaseCheck } from '../QuestionDatabaseCheck';
 import type { PackageGenerationOptionsProps } from './types';
 
+import './styles.scss';
+
 export function PackageGenerationOptions({
   activePackages,
+  canGenerate,
+  difficulty,
   hasRandomTemplates,
+  progress,
   ruleSet,
   scope,
   selected,
@@ -14,9 +24,12 @@ export function PackageGenerationOptions({
   thinking,
   checkQuestionDatabase,
   onCheckQuestionDatabaseChange,
+  onCancel,
+  onDifficultyChange,
   onPackageChange,
   onRuleSetChange,
   onScopeChange,
+  onGenerate,
 }: PackageGenerationOptionsProps) {
   const { copy } = useLocalization();
   return (
@@ -33,6 +46,22 @@ export function PackageGenerationOptions({
           <option value="missing">{copy.packageGeneration.missing}</option>
           <option value="commented">{copy.packageGeneration.commented}</option>
           <option value="all">{copy.packageGeneration.all}</option>
+        </Dropdown>
+      </label>
+      <label>
+        {copy.questionGeneration.difficulty}
+        <Dropdown
+          value={difficulty}
+          disabled={thinking}
+          onChange={(event) =>
+            onDifficultyChange(event.target.value as AIQuestionDifficulty)
+          }
+        >
+          {AI_QUESTION_DIFFICULTIES.map((value) => (
+            <option key={value} value={value}>
+              {copy.questionGeneration.difficulties[value]}
+            </option>
+          ))}
         </Dropdown>
       </label>
       {activePackages.length ? (
@@ -92,6 +121,31 @@ export function PackageGenerationOptions({
         label={copy.packageGeneration.checkDatabase}
         onChange={onCheckQuestionDatabaseChange}
       />
+      {progress && (
+        <div className="question-generation-progress" role="status">
+          <span>{copy.packageGeneration.progress(...progress)}</span>
+          <strong>{Math.round((progress[0] / progress[1]) * 100)}%</strong>
+          <progress
+            aria-label={copy.packageGeneration.progress(...progress)}
+            max={progress[1]}
+            value={progress[0]}
+          />
+        </div>
+      )}
+      <div className="question-generation-actions">
+        <Button type="button" variant="secondary" onClick={onCancel}>
+          {copy.packageGeneration.cancel}
+        </Button>
+        <Button
+          type="button"
+          variant="primary"
+          aria-busy={thinking}
+          disabled={thinking || !canGenerate}
+          onClick={onGenerate}
+        >
+          {copy.packageGeneration.generate}
+        </Button>
+      </div>
     </>
   );
 }

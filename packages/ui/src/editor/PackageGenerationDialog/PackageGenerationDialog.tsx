@@ -5,26 +5,19 @@ import {
   faChevronLeft,
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
-import {
-  compareFavoriteItemsByName,
-  getGameQuestionAnswers,
-} from '@schdk/common';
+import * as common from '@schdk/common';
 import classNames from 'classnames';
-import { useState } from 'react';
-import { Button } from '../../atoms/Button';
+import { useRef, useState } from 'react';
+import {
+  ConfirmationDialog,
+  useConfirmationDialog,
+} from '../../atoms/ConfirmationDialog';
 import { IconButton } from '../../atoms/IconButton';
 import { Textarea } from '../../atoms/Textarea';
 import { useLocalization } from '../../localization';
 import { PackageGenerationOpenButton } from '../PackageGenerationOpenButton';
 import { PackageGenerationOptions } from '../PackageGenerationOptions';
-import {
-  getPackageGenerationInput,
-  getPackageGenerationState,
-  getPackageGenerationTemplates,
-  type PackageGenerationInput,
-  type PackageGenerationRuleSet,
-  type PackageGenerationScope,
-} from './generation-input';
+import * as gen from './generation-input';
 import type { PackageGenerationDialogProps } from './types';
 
 export function PackageGenerationDialog({
@@ -39,9 +32,12 @@ export function PackageGenerationDialog({
   onSelectQuestion,
 }: PackageGenerationDialogProps) {
   const { copy } = useLocalization();
+  const cancelDialog = useConfirmationDialog();
   const [open, setOpen] = useState(false);
-  const [scope, setScope] = useState<PackageGenerationScope>('missing');
-  const [ruleSet, setRuleSet] = useState<PackageGenerationRuleSet>('all');
+  const [scope, setScope] = useState<gen.PackageGenerationScope>('missing');
+  const [ruleSet, setRuleSet] = useState<gen.PackageGenerationRuleSet>('all');
+  const [difficulty, setDifficulty] =
+    useState<common.AIQuestionDifficulty>('medium');
   const [selected, setSelected] = useState<number | null>(null);
   const [thinking, setThinking] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -49,16 +45,17 @@ export function PackageGenerationDialog({
   const [promptOpen, setPromptOpen] = useState(false);
   const [excludedAnswers, setExcludedAnswers] = useState<string[]>([]);
   const [currentInput, setCurrentInput] =
-    useState<PackageGenerationInput | null>(null);
+    useState<gen.PackageGenerationInput | null>(null);
   const [checkQuestionDatabase, setCheckQuestionDatabase] = useState(false);
+  const generationId = useRef(0);
   const activePackages = packages
     .filter((item) => item.enabled)
-    .sort(compareFavoriteItemsByName);
-  const randomTemplates = getPackageGenerationTemplates(templates, ruleSet);
+    .sort(common.compareFavoriteItemsByName);
+  const randomTemplates = gen.getPackageGenerationTemplates(templates, ruleSet);
   const selectedPackage =
     selected === null ? undefined : activePackages[selected];
   const { targets, initialExcludedAnswers, previewInput } =
-    getPackageGenerationState(
+    gen.getPackageGenerationState(
       gamePackage,
       scope,
       selectedPackage,
@@ -68,9 +65,11 @@ export function PackageGenerationDialog({
       currentInput,
     );
   function reset() {
+    generationId.current += 1;
     setOpen(false);
     setScope('missing');
     setRuleSet('all');
+    setDifficulty('medium');
     setSelected(null);
     setThinking(false);
     setFailed(false);
@@ -85,15 +84,23 @@ export function PackageGenerationDialog({
     setSelected(activePackages.length ? 0 : null);
     setOpen(true);
   }
+  async function cancel() {
+    const confirmed = await cancelDialog.confirm(
+      copy.packageGeneration.cancelConfirmation,
+    );
+    if (confirmed) reset();
+  }
   async function generate() {
     if (!selectedPackage || !randomTemplates.length || !targets.length) return;
+    const currentGenerationId = ++generationId.current;
     setThinking(true);
     setFailed(false);
     try {
       await onGenerationStart?.(checkQuestionDatabase);
+      if (currentGenerationId !== generationId.current) return;
       const usedAnswers = [...initialExcludedAnswers];
       for (const [position, index] of targets.entries()) {
-        const input = getPackageGenerationInput(
+        const input = gen.getPackageGenerationInput(
           selectedPackage,
           templates,
           index,
@@ -109,18 +116,20 @@ export function PackageGenerationDialog({
           input.template,
           input.context,
           usedAnswers,
-          undefined,
+          difficulty,
           checkQuestionDatabase,
         );
+        if (currentGenerationId !== generationId.current) return;
         const generatedQuestion =
           scope === 'commented'
             ? { ...question, comment: undefined }
             : question;
         onGenerated(index, generatedQuestion);
-        usedAnswers.push(...getGameQuestionAnswers(question));
+        usedAnswers.push(...common.getGameQuestionAnswers(question));
       }
       reset();
     } catch {
+      if (currentGenerationId !== generationId.current) return;
       setThinking(false);
       setFailed(true);
     }
@@ -171,7 +180,14 @@ export function PackageGenerationDialog({
                   </Dialog.Description>
                   <PackageGenerationOptions
                     activePackages={activePackages}
+                    canGenerate={
+                      selected !== null &&
+                      Boolean(randomTemplates.length) &&
+                      Boolean(targets.length)
+                    }
+                    difficulty={difficulty}
                     hasRandomTemplates={Boolean(randomTemplates.length)}
+                    progress={progress}
                     ruleSet={ruleSet}
                     scope={scope}
                     selected={selected}
@@ -179,6 +195,8 @@ export function PackageGenerationDialog({
                     thinking={thinking}
                     checkQuestionDatabase={checkQuestionDatabase}
                     onCheckQuestionDatabaseChange={setCheckQuestionDatabase}
+                    onCancel={() => void cancel()}
+                    onDifficultyChange={setDifficulty}
                     onPackageChange={(index) => {
                       setSelected(index);
                       setCurrentInput(null);
@@ -191,41 +209,13 @@ export function PackageGenerationDialog({
                       setScope(nextScope);
                       setCurrentInput(null);
                     }}
+                    onGenerate={() => void generate()}
                   />
-                  {progress && (
-                    <p className="question-generation-message" role="status">
-                      {copy.packageGeneration.progress(...progress)}
-                    </p>
-                  )}
                   {failed && (
                     <p className="question-generation-error" role="alert">
                       {copy.packageGeneration.failed}
                     </p>
                   )}
-                  <div className="question-generation-actions">
-                    <Button
-                      type="button"
-                      variant="secondary"
-                      disabled={thinking}
-                      onClick={reset}
-                    >
-                      {copy.shared.cancel}
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="primary"
-                      aria-busy={thinking}
-                      disabled={
-                        thinking ||
-                        selected === null ||
-                        !randomTemplates.length ||
-                        !targets.length
-                      }
-                      onClick={() => void generate()}
-                    >
-                      {copy.packageGeneration.generate}
-                    </Button>
-                  </div>
                 </div>
                 {promptOpen && previewInput && getPromptPreview && (
                   <label className="question-generation-prompt">
@@ -236,6 +226,7 @@ export function PackageGenerationDialog({
                         previewInput.template,
                         previewInput.context,
                         progress ? excludedAnswers : initialExcludedAnswers,
+                        difficulty,
                       )}
                     />
                   </label>
@@ -245,6 +236,7 @@ export function PackageGenerationDialog({
           </Dialog.Viewport>
         </Dialog.Portal>
       </Dialog.Root>
+      <ConfirmationDialog {...cancelDialog.dialogProps} />
     </>
   );
 }
