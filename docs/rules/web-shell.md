@@ -20,6 +20,9 @@
 - Reflect the active primary settings group in the validated `settings` URL
   query parameter while `view=options`; restore it through browser
   back/forward and remove it when leaving settings.
+- Reflect the active question-kind or package-rule editor in the validated
+  `edit` URL query parameter. Editing an existing rule occupies its own page;
+  direct links and browser back/forward restore the editor or collection.
 - Persist validated visual-editor custom elements and background settings with
   the other game options.
 - Default the unified application to Ukrainian when no locale was selected.

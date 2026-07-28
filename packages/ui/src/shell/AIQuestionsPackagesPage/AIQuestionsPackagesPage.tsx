@@ -1,7 +1,7 @@
 import './styles.scss';
 
 import { type AIQuestion, type AIQuestionsPackage } from '@schdk/common';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '../../atoms/Button';
 import { Input } from '../../atoms/Input';
 import { TextAreaField } from '../../atoms/TextAreaField';
@@ -33,8 +33,11 @@ export function AIQuestionsPackagesPage({
   questionRules,
   failed,
   loading,
+  editTarget,
   onAdd,
+  onCloseEditor,
   onRemove,
+  onShowEditor,
   onUpdate,
 }: AIQuestionsPackagesPageProps) {
   const { copy } = useLocalization();
@@ -44,12 +47,28 @@ export function AIQuestionsPackagesPage({
   const [saving, setSaving] = useState(false);
   const [saveFailed, setSaveFailed] = useState(false);
 
+  useEffect(() => {
+    if (!editTarget) {
+      setEditingIndex(null);
+      setFormOpen(false);
+      return;
+    }
+    const index = packages.findIndex(({ name }) => name === editTarget.name);
+    if (index < 0) return;
+    setDraft(packages[index]!);
+    setEditingIndex(index);
+    setSaveFailed(false);
+    setFormOpen(true);
+  }, [editTarget, packages]);
+
   function closeForm() {
+    const wasEditing = editingIndex !== null;
     setDraft(EMPTY_PACKAGE);
     setEditingIndex(null);
     setSaving(false);
     setSaveFailed(false);
     setFormOpen(false);
+    if (wasEditing) onCloseEditor();
   }
 
   function openForm(item = EMPTY_PACKAGE, index: number | null = null) {
@@ -163,25 +182,29 @@ export function AIQuestionsPackagesPage({
           </div>
         </form>
       )}
-      <AIQuestionCollection
-        title={copy.aiPackageRules.myRules}
-        emptyLabel={copy.aiPackageRules.empty}
-        questions={packages.map(asQuestion)}
-        loading={loading || formOpen}
-        editable
-        addLabel={!formOpen ? copy.aiPackageRules.add : undefined}
-        onAdd={() => openForm()}
-        onEdit={(_, index) => openForm(packages[index], index)}
-        onRemove={onRemove}
-        onSaveFailed={() => setSaveFailed(true)}
-        onUpdate={(index, question) =>
-          onUpdate(index, {
-            ...packages[index]!,
-            enabled: question.enabled,
-            favorite: question.favorite,
-          })
-        }
-      />
+      {editingIndex === null && (
+        <AIQuestionCollection
+          title={copy.aiPackageRules.myRules}
+          emptyLabel={copy.aiPackageRules.empty}
+          questions={packages.map(asQuestion)}
+          loading={loading || formOpen}
+          editable
+          addLabel={!formOpen ? copy.aiPackageRules.add : undefined}
+          onAdd={() => openForm()}
+          onEdit={(_, index) =>
+            onShowEditor({ kind: 'package', name: packages[index]!.name })
+          }
+          onRemove={onRemove}
+          onSaveFailed={() => setSaveFailed(true)}
+          onUpdate={(index, question) =>
+            onUpdate(index, {
+              ...packages[index]!,
+              enabled: question.enabled,
+              favorite: question.favorite,
+            })
+          }
+        />
+      )}
       {!formOpen && (failed || saveFailed) && (
         <p className="ai-question-save-error" role="alert">
           {copy.aiPackageRules.saveFailed}
