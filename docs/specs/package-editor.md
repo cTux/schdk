@@ -21,10 +21,11 @@ without losing in-progress work.
   mutate package state.
 - **EDT-5:** Authors can copy a complete question as JSON, replace another
   question from parsed clipboard JSON after confirmation, and clear every
-  field of the selected question. `Ctrl+C` and `Ctrl+V` invoke the same copy
-  and paste actions while the editor is open and no editable field has focus.
-  A successful copy or paste shows a localized toast using the active
-  application palette for two seconds; cancellation or failure does not.
+  field of the selected question from its red trailing action. `Ctrl+C` and
+  `Ctrl+V` invoke the same copy and paste actions while the editor is open and
+  no editable field has focus. A successful copy or paste shows a localized
+  toast using the active application palette for two seconds; cancellation or
+  failure does not.
 - **EDT-6:** Dragging one question number onto another swaps the complete
   question records and keeps the moved question selected.
 - **EDT-7:** Question navigation shows readiness, unresolved remarks, and a
@@ -112,6 +113,10 @@ without losing in-progress work.
   locally, shortlists lexically related questions, asks the selected provider
   to reject the same entity, central fact, logic, or material clue sequence,
   and regenerates one rejected draft before failing.
+- **EDT-22:** The editable package-title row ends with a red delete action
+  after package generation. After confirmation it moves the active Drive
+  package to trash, clears the editor state, returns to the package list, and
+  refreshes recents.
 
 ## Invariants
 
@@ -187,3 +192,7 @@ without losing in-progress work.
     Enable it, return an answer and then a paraphrased question already present
     in another indexed package, and confirm each first draft is rejected and
     regenerated once. Close and reopen the modal and confirm the toggle is off.
+17. Inspect the selected-question clear action and active-package delete action
+    and confirm both use the shared red danger treatment. Delete the active
+    package, confirm the dialog, and observe it disappear from Drive recents as
+    the editor returns to the package list.

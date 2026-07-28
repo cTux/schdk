@@ -73,6 +73,18 @@ export function usePackageActions(options: PackageActionsOptions) {
     setMessage,
   });
 
+  function resetPackage() {
+    setGamePackage(createLocalizedPackage());
+    setHasPackage(false);
+    setDriveFileId(null);
+    setFileName(null);
+    setSaveStatus('saved');
+    setSelectedIndex(0);
+    setShowValidation(false);
+    setMessage('');
+    replaceBrowserPackageDeepLink(null);
+  }
+
   async function createPackage() {
     const emptyPackage = createLocalizedPackage();
     const filename = createGamePackageFilename(
@@ -107,20 +119,29 @@ export function usePackageActions(options: PackageActionsOptions) {
   async function closePackage() {
     try {
       if (driveFileId && saveStatus !== 'saved') await saveCurrentPackage();
-      setGamePackage(createLocalizedPackage());
-      setHasPackage(false);
-      setDriveFileId(null);
-      setFileName(null);
-      setSaveStatus('saved');
-      setSelectedIndex(0);
-      setShowValidation(false);
-      setMessage('');
-      replaceBrowserPackageDeepLink(null);
+      resetPackage();
     } catch {
       onDriveFailure?.();
       setMessage(copy.editor.autoSaveFailed);
     }
   }
 
-  return { closePackage, createPackage, ...opening };
+  async function deletePackage(title: string) {
+    if (!(await confirm(copy.shared.deletePackageConfirmation(title)))) return;
+
+    setMessage('');
+    try {
+      if (!drive || !driveFileId)
+        throw new Error('Google Drive is unavailable');
+      await drive.deleteGamePackage(driveFileId);
+      resetPackage();
+      await refreshRecentPackages();
+      showEditorToast('deleted', locale);
+    } catch {
+      onDriveFailure?.();
+      setMessage(copy.shared.deletePackageFailed);
+    }
+  }
+
+  return { closePackage, createPackage, deletePackage, ...opening };
 }

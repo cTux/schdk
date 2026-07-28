@@ -13,8 +13,9 @@
 - Render text handouts in the editor with a monospace font so character
   alignment stays stable.
 - Put Font Awesome copy, paste, and trailing clear actions beside the question
-  heading. Copy all question fields as JSON; confirm before parsing clipboard
-  JSON and replacing the selected question. While the editor is open,
+  heading. Render the clear action as a red danger button. Copy all question
+  fields as JSON; confirm before parsing clipboard JSON and replacing the
+  selected question. While the editor is open,
   `Ctrl+C` and `Ctrl+V` invoke those same question actions only when no input,
   textarea, select, or editable element has focus. After a successful copy or
   paste, show the corresponding localized `react-toastify` success toast styled
@@ -35,6 +36,9 @@
   sequentially, select the active slot behind the modal, wait for each provider
   response, replace the complete question record, and continue to the next
   slot.
+- Put a red cloud-delete button after package generation in the editable
+  package-title row. Confirm it before moving the active package to Google Drive
+  trash and returning to the package list.
 - Keep a similarity-check toggle in both question and package generation
   modals. Default it to off each time the modal opens. When enabled, refresh
   the current account's question database, reject semantically similar

@@ -1,10 +1,12 @@
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import type { GamePackage, GameQuestion } from '@schdk/common';
+import { IconButton } from '../../atoms/IconButton';
 import { useLocalization } from '../../localization';
 import { EditorBrand } from '../EditorBrand';
+import type { AiQuestionGenerationOptions, EditorSaveStatus } from '../types';
+import { PackageGenerationDialog } from '../PackageGenerationDialog';
 import { PackageTitleField } from '../PackageTitleField';
 import { SaveStatus } from '../SaveStatus';
-import { PackageGenerationDialog } from '../PackageGenerationDialog';
-import type { GamePackage, GameQuestion } from '@schdk/common';
-import type { AiQuestionGenerationOptions, EditorSaveStatus } from '../types';
 
 export interface EditorHeaderProps {
   hasPackage: boolean;
@@ -12,6 +14,7 @@ export interface EditorHeaderProps {
   saveStatus: EditorSaveStatus;
   showValidation: boolean;
   onBack(): void;
+  onDeletePackage(): void;
   onTitleChange(value: string): void;
   aiGeneration?: AiQuestionGenerationOptions;
   gamePackage: GamePackage;
@@ -25,6 +28,7 @@ export function EditorHeader({
   saveStatus,
   showValidation,
   onBack,
+  onDeletePackage,
   onTitleChange,
   aiGeneration,
   gamePackage,
@@ -51,6 +55,12 @@ export function EditorHeader({
               onSelectQuestion={onSelectQuestion}
             />
           )}
+          <IconButton
+            icon={faTrashCan}
+            label={copy.shared.deletePackage}
+            onClick={onDeletePackage}
+            variant="danger"
+          />
           <SaveStatus
             label={copy.editor.saveStatus[saveStatus]}
             status={saveStatus}
