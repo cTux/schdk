@@ -174,3 +174,4 @@ B85|2026-07-29|Generation passed labeled template guidance without explicitly se
 B86|2026-07-29|Standard control heights and spacing made sticky question navigation taller than short desktop viewports|Use compact controls and spacing as specified by `docs/specs/package-editor.md`.
 B87|2026-07-29|Compact navigation styling pushed an existing SCSS partial past the enforced source-file limit|Merge adjacent selectors; the existing repository workflow test covers recurrence.
 B88|2026-07-29|Inline answer-list actions pushed the shared question-editor SCSS partial past the enforced source-file limit|Move the component-specific rules to `AnswerListField/styles.scss`; the existing repository workflow test covers recurrence.
+B89|2026-07-29|The generated-question selector used chained simple `:not()` notation rejected by the stylesheet policy|Use the required complex `:not()` notation; linting covers recurrence.

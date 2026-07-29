@@ -154,6 +154,8 @@ without losing in-progress work.
 - **EDT-25:** The host-notes textarea appears directly below the answer row
   without a separate section title. Alternative- and wrong-answer add actions
   appear inline with their respective list titles.
+- **EDT-26:** Question navigation marks AI-generated questions blue while
+  preserving higher-priority invalid and unresolved-remark states.
 
 ## Invariants
 
@@ -259,3 +261,6 @@ without losing in-progress work.
     host-notes field appears directly below the answer row, with no separate
     host-notes heading, and each answer-list add action stays inline with its
     list title.
+22. Generate a question and confirm its navigation number turns blue. Add an
+    unresolved remark or invalidate it and confirm the red state takes
+    priority; select it and confirm the selected border remains visible.

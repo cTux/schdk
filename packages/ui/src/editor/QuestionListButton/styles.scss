@@ -1,0 +1,6 @@
+@use '../../styles/tokens' as *;
+
+.editor-app .question-grid .generated:not(.invalid, .remark) {
+  background: rgba($saving-rgb, 0.16);
+  color: $saving;
+}

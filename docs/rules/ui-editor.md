@@ -91,7 +91,9 @@
   start-screen actions until the Drive request settles.
 - On question-number hover or focus, show completed question and answer text in
   a tooltip that stays within the layout. Show unresolved remarks below the
-  question in red and mark their number dark red without a red border.
+  question in red and mark their number dark red without a red border. Mark
+  AI-generated questions blue unless an invalid or unresolved-remark state
+  takes priority.
 - Question-number hover and selection may change only its 2 px border. Hide
   tooltips while pressing or dragging.
 - Dragging one question number onto another swaps complete records while the
