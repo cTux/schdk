@@ -73,6 +73,7 @@ V32|Question-database similarity checking defaults off; when enabled, a semantic
 V33|Host notes contain only delivery instructions visible while the host reads a question and never contain answer-review or quality-analysis notes.
 V34|AI package regeneration of remarked questions includes the current question and author remark and clears the remark only after successful replacement.
 V35|Selecting a personal-database result loads the complete canonical source question and never replaces a populated editor slot without explicit confirmation.
+V36|Initial Drive recents loading issues one files request for its first result page even when editor and host are mounted.
 
 ## §T
 
@@ -155,3 +156,4 @@ B69|2026-07-28|Text handouts used proportional fonts, so character-based diagram
 B70|2026-07-28|The block-level package title forced its generation action onto a separate row|Keep the title field and generation action in one flex row as specified by `docs/specs/package-editor.md`.
 B71|2026-07-28|Question-database editor wiring pushed four existing source files beyond the enforced 256-line limit|Move selection behavior and component-specific styles into their owning modules and keep new copy in the question-database localization module; the existing workflow test covers recurrence.
 B72|2026-07-29|A repeated editor action reused an active toast ID without restarting its lifetime, so the latest notification could disappear immediately|Update the active toast and restart its two-second timeout; `docs/specs/package-editor.md` covers recurrence.
+B73|2026-07-29|Unstable failure callbacks, separate editor and host loads, and package-folder discovery multiplied the initial recents request|V36

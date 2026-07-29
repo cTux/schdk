@@ -1,5 +1,11 @@
 import type { EditorTextOptions, GameOptions } from '@schdk/ui/options';
-import { useEffect, useEffectEvent, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useRef,
+  useState,
+} from 'react';
 import {
   initializeDriveSettings,
   loadLocalDriveSettings,
@@ -71,7 +77,7 @@ export function useGoogleDriveSettings({
     await bridge.saveSettings(merged);
   }
 
-  async function handleSyncFailure() {
+  const handleSyncFailure = useCallback(async () => {
     const account =
       connection.state === 'connected' ? connection.account : undefined;
     if (!account) return;
@@ -83,7 +89,7 @@ export function useGoogleDriveSettings({
     } catch {
       // Keep the authorized session mounted through transient Drive failures.
     }
-  }
+  }, [bridge, connection]);
 
   function enqueueSync() {
     syncQueue.current = syncQueue.current

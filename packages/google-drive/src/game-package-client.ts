@@ -21,6 +21,8 @@ const PACKAGE_FOLDER_NAME = 'SCHDK';
 type DriveRequest = (input: string, init?: RequestInit) => Promise<Response>;
 
 export class GoogleDrivePackageStorage implements DrivePackageStorage {
+  private listRequest: Promise<DriveGamePackageFile[]> | null = null;
+
   constructor(private readonly request: DriveRequest) {}
 
   createGamePackage(value: DriveGamePackageWrite) {
@@ -48,11 +50,16 @@ export class GoogleDrivePackageStorage implements DrivePackageStorage {
     });
   }
 
-  async listGamePackages(): Promise<DriveGamePackageFile[]> {
-    const folderId = await this.ensurePackageFolder();
+  listGamePackages(): Promise<DriveGamePackageFile[]> {
+    return (this.listRequest ??= this.fetchGamePackages().finally(() => {
+      this.listRequest = null;
+    }));
+  }
+
+  private async fetchGamePackages(): Promise<DriveGamePackageFile[]> {
     const query = new URLSearchParams({
       spaces: 'drive',
-      q: `'${folderId}' in parents and trashed = false and appProperties has { key='${DRIVE_APP_KIND_KEY}' and value='${DRIVE_PACKAGE_KIND}' }`,
+      q: `trashed = false and appProperties has { key='${DRIVE_APP_KIND_KEY}' and value='${DRIVE_PACKAGE_KIND}' }`,
       fields:
         'nextPageToken,files(id,name,description,modifiedTime,appProperties)',
       orderBy: 'modifiedTime desc',
