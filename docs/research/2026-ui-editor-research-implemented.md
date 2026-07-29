@@ -1,5 +1,7 @@
 # 2026 UI and visual-editor research
 
+Status: implemented
+
 Date: 2026-07-25
 
 ## Executive decision
