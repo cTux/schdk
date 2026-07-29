@@ -3,13 +3,14 @@
 .editor-app .music-break-field {
   display: flex;
   min-width: 0;
+  flex: 0 0 100%;
   align-items: center;
-  gap: 8px;
-  margin-top: 9px;
+  gap: 6px;
+  margin-top: 6px;
   border: 1px solid $border;
   border-radius: $radius-control;
   background: rgba($surface-raised-rgb, 0.55);
-  padding: 9px;
+  padding: 6px;
   color: $muted;
   font-size: $font-size-xs;
 }
@@ -19,7 +20,7 @@
   min-width: 0;
   flex: 1 1 auto;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .editor-app .music-break-summary > svg {

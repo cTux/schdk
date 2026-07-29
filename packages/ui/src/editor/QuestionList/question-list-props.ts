@@ -6,5 +6,6 @@ export interface QuestionListProps {
   showValidation: boolean;
   onSelectQuestion(index: number): void;
   onSwapQuestions(sourceIndex: number, targetIndex: number): void;
+  onTourPhraseChange(index: number, value: string): void;
   onMusicBreakChange(index: number, file: File | null): void;
 }

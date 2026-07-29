@@ -71,5 +71,5 @@ export const ukrainianSettings = {
   signalVolume: 'Гучність звукових сигналів',
   signalVolumeDescription: 'Головний сигнал і попередження таймера.',
   musicVolume: 'Гучність музики',
-  musicVolumeDescription: 'Музика під час пауз між раундами.',
+  musicVolumeDescription: 'Музика під час пауз між турами.',
 };

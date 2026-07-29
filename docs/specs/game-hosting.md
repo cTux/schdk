@@ -11,7 +11,7 @@ content hidden until the correct stage.
 
 - **HST-1:** Host opens a ready package from Drive recents or imports a local
   package through a visible chooser or drag-and-drop.
-- **HST-2:** Before start, the app shows only title, filename, aggregate round,
+- **HST-2:** Before start, the app shows only title, filename, aggregate tour,
   question, and handout counts, plus start and back actions.
 - **HST-3:** Standard questions advance through intro, optional handout,
   question, 60-second timer, optional answer comment, and answer. Text
@@ -35,6 +35,8 @@ content hidden until the correct stage.
   to games exits fullscreen and restores package selection.
 - **HST-13:** Every recent Drive package offers an explicit download that does
   not select or change the package.
+- **HST-14:** Before questions 1, 13, and 25, the host shows a dedicated static
+  slide with the tour number and its optional smaller phrase.
 
 ## Invariants
 
@@ -50,3 +52,5 @@ content hidden until the correct stage.
 3. Host a package with and without handouts, comments, and music breaks.
 4. Deny fullscreen and complete the game using viewport fallback and keyboard
    controls.
+5. Move forward and backward through all three tour slides, with empty and
+   populated tour phrases and with or without music breaks.

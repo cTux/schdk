@@ -25,7 +25,9 @@
   source.
 - Render every multiline text input through the shared `Textarea` atom. Keep
   its dropdown-aligned chrome and focus states consistent across surfaces and
-  do not expose native resize handles.
+  do not expose native resize handles. For labeled multiline fields, use the
+  label text as the placeholder while empty; once populated, show that label
+  inside the textarea at its bottom-right edge.
 - Render single-line text and password fields through the shared `Input` atom,
   checkbox controls through `Checkbox`, and range controls through
   `RangeInput`.

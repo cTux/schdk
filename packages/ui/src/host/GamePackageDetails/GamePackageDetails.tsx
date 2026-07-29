@@ -18,7 +18,7 @@ function GamePackageDetails({
       </div>
       <dl className="game-package-stats">
         <div>
-          <dt>{copy.host.rounds}</dt>
+          <dt>{copy.host.tours}</dt>
           <dd>{details.roundCount}</dd>
         </div>
         <div>

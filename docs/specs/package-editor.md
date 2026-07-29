@@ -11,14 +11,20 @@ without losing in-progress work.
 
 - **EDT-1:** Starting a new package creates 36 question slots and obtains a
   Google Drive destination before opening the editor.
-- **EDT-2:** Authors can edit the package title and every field defined by the
+- **EDT-2:** Authors can edit the package title, each optional tour phrase
+  through a single-line field beside the tour heading, with its name as the
+  placeholder and no separate visible label, and every field defined by the
   [game-package specification](game-package.md).
+- **EDT-2a:** Sticky question navigation uses compact controls and spacing so
+  all three tours remain visible on short desktop viewports.
 - **EDT-3:** Question type selection exposes one, two, or three question parts
   for standard, 2×30 blitz, or 3×20 blitz respectively.
 - **EDT-4:** Authors can add, replace, and remove text or validated image
-  handouts and the two between-round audio files. Text handouts use a monospace
-  font while editing. Invalid handouts and oversized audio selections never
-  mutate package state.
+  handouts and the two between-tour audio files. Text handouts use a monospace
+  font while editing. The handout editor has no separate heading: its hatched
+  image action stays left of the text field, and both match the dimensions of
+  the question and answer-comment fields. Invalid handouts and oversized audio
+  selections never mutate package state.
 - **EDT-5:** Authors can copy a complete question as JSON, replace another
   question from parsed clipboard JSON after confirmation, and clear every
   field of the selected question from its red trailing action. `Ctrl+C` and
@@ -73,12 +79,16 @@ without losing in-progress work.
   stacks vertically on narrow screens.
 - **EDT-17:** Every multiline package and generation field uses the same
   non-resizable shared control with dropdown-aligned borders, surfaces, hover,
-  focus, and disabled states.
+  focus, and disabled states. Its label appears as the placeholder while empty
+  and moves inside the populated textarea at the bottom right without changing
+  the control's height. Adjacent question-editor fields use the same horizontal
+  and vertical gap.
 - **EDT-18:** AI generation phrases each question naturally as if written by a
   human rather than AI and requires a non-empty answer comment that explains
   only why the answer is correct, never why the question was generated or
   phrased that way. Question text and answer comments never expose internal
-  template headings, construction techniques, paths, or stages. An AI icon
+  template headings, construction techniques, paths, stages, or stock
+  meta-commentary such as "Both clues independently point to". An AI icon
   beside the editable package title opens a panel docked to the editor's right
   that selects missing
   questions, questions with unresolved author remarks, or the whole package
@@ -146,6 +156,11 @@ without losing in-progress work.
   They survive package saving, reopening, and complete-question clipboard
   copying; manually created and legacy questions show no generation-parameter
   block.
+- **EDT-25:** The host-notes textarea appears directly below the answer row
+  without a separate section title. Alternative- and wrong-answer add actions
+  appear inline with their respective list titles.
+- **EDT-26:** Question navigation marks AI-generated questions blue while
+  preserving higher-priority invalid and unresolved-remark states.
 
 ## Invariants
 
@@ -178,7 +193,9 @@ without losing in-progress work.
    requests a text handout, observe the blocked thinking state, and confirm
    every returned field, including the handout, replaces the selected question.
 10. Inspect every multiline editor and generation field at normal and narrow
-    widths; confirm consistent shared styling and no native resize handle.
+    widths; confirm consistent shared styling, no native resize handle, label
+    text as the empty placeholder, and the label inside the populated textarea
+    at the bottom right.
 11. Open generation as an allowlisted administrator, expand the prompt panel,
     and confirm its read-only text follows changes to the selected template,
     difficulty, recognizability, and context. Confirm the control is absent for
@@ -245,3 +262,17 @@ without losing in-progress work.
 20. Generate from a rule whose description or examples name internal
     construction paths. Confirm neither the question text nor the answer
     comment repeats those labels and both read as natural player-facing prose.
+21. Inspect the answer area at normal and narrow widths. Confirm only the
+    host-notes field appears directly below the answer row, with no separate
+    host-notes heading, and each answer-list add action stays inline with its
+    list title.
+22. Generate a question and confirm its navigation number turns blue. Add an
+    unresolved remark or invalidate it and confirm the red state takes
+    priority; select it and confirm the selected border remains visible.
+23. Inspect an empty handout at normal and narrow widths. Confirm there is no
+    separate handout heading, the hatched image action stays left of the text
+    field, both match the corresponding question-row field dimensions, and the
+    question and remark fields match each other. Confirm every horizontal and
+    vertical gap between the handout, question, remark, answer, answer comment,
+    and host-notes fields is equal, and that filling any textarea does not
+    change its height.

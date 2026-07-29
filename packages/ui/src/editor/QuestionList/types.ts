@@ -1,1 +1,1 @@
-export type { QuestionListProps } from './QuestionList';
+export type { QuestionListProps } from './question-list-props';

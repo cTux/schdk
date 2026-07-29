@@ -1,4 +1,4 @@
-import { type GamePackage } from '@schdk/common';
+import { QUESTIONS_PER_ROUND, type GamePackage } from '@schdk/common';
 import { type GamePosition } from './game-position';
 import { getMusicBreak } from './get-music-break';
 import { getQuestionPositions } from './get-question-positions';
@@ -7,6 +7,13 @@ export function isValidGamePosition(
   gamePackage: GamePackage,
   position: GamePosition,
 ) {
+  if (position.stage === 'tour') {
+    return (
+      position.questionPartIndex === 0 &&
+      position.questionIndex % QUESTIONS_PER_ROUND === 0 &&
+      Boolean(gamePackage.questions[position.questionIndex])
+    );
+  }
   if (position.stage === 'musicBreak') {
     return (
       position.questionPartIndex === 0 &&

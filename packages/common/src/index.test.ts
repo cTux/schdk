@@ -14,6 +14,7 @@ describe('game package rules', () => {
 
     expect(gamePackage.title).toBe('Без назви');
     expect(gamePackage.questions).toHaveLength(36);
+    expect(gamePackage.tourPhrases).toEqual(['', '', '']);
     expect(gamePackage.musicBreaks).toEqual([null, null]);
 
     gamePackage.title = 'Тестовий пакет';
@@ -38,6 +39,7 @@ describe('game package rules', () => {
     unfinished.questions[0]!.answerComment = 'Пояснення після відповіді';
     unfinished.questions[0]!.comment = 'Перевірити джерело';
     unfinished.questions[0]!.hostNotes = 'Показати роздатку після сигналу';
+    unfinished.tourPhrases[0] = 'Музика нас поєднала';
 
     const content = serializeGamePackage(unfinished);
     expect(content.slice(0, 2)).toEqual(Uint8Array.from([0x50, 0x4b]));

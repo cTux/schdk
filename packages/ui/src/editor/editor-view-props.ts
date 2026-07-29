@@ -37,5 +37,6 @@ export interface EditorViewProps {
   onQuestionTextBlur(index: number): void;
   onSelectQuestion(index: number): void;
   onSwapQuestions(sourceIndex: number, targetIndex: number): void;
+  onTourPhraseChange(index: number, value: string): void;
   onTitleChange(value: string): void;
 }

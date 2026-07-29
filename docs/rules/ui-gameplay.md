@@ -1,7 +1,7 @@
 # Gameplay UI
 
 - Keep the pre-game summary spoiler-free: title, filename, aggregate
-  round/question/handout counts, and start/back actions only.
+  tour/question/handout counts, and start/back actions only.
 - Keep gameplay projector-first and fullscreen: centered animated intro;
   full-screen handout shrinking to the upper right; gradient question above a
   stable timer; comment below; answer at the bottom.
@@ -13,8 +13,10 @@
   configured hotkeys in the controls.
 - Keep separate signal-volume and music-volume sliders with current percentages
   in Game options.
-- Render configured between-round audio on a dedicated music-break slide with
+- Render configured between-tour audio on a dedicated music-break slide with
   native controls.
+- Render a dedicated static tour slide before questions 1, 13, and 25, with the
+  optional tour phrase smaller than the tour title.
 - Give image and text handouts the answer gradient and a soft black shadow
   without a border. Align images bottom-right and center text.
 - Render text handouts with a monospace font so character alignment stays

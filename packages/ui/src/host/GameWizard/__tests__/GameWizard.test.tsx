@@ -13,6 +13,8 @@ const game: HostGameView = {
   },
   questionNumber: 1,
   questionCount: 36,
+  tourNumber: 1,
+  tourPhrase: '',
   currentQuestionPartIndex: 0,
   currentStage: 'intro',
   visibleStages: ['intro'],

@@ -177,6 +177,11 @@ function QuestionEditor({
           />
         </div>
 
+        <HostNotesField
+          value={question.hostNotes ?? ''}
+          onChange={(value) => onChange({ hostNotes: value })}
+        />
+
         <AnswerListField
           answers={question.alternativeAnswers}
           answerLabel={copy.editor.alternativeAnswer}
@@ -190,11 +195,6 @@ function QuestionEditor({
           legend={copy.editor.wrongAnswers}
           onBlur={onWrongAnswerBlur}
           onChange={(wrongAnswers) => onChange({ wrongAnswers })}
-        />
-
-        <HostNotesField
-          value={question.hostNotes ?? ''}
-          onChange={(value) => onChange({ hostNotes: value })}
         />
       </fieldset>
 

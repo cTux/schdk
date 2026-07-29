@@ -1,3 +1,5 @@
+import './styles.scss';
+
 import classNames from 'classnames';
 import { Button } from '../../atoms/Button';
 import { LOCALIZATION_COPY } from '../../localization';
@@ -30,6 +32,7 @@ function QuestionListButton({
       className={classNames({
         selected,
         complete: item.complete,
+        generated: Boolean(question.aiGeneration),
         invalid: item.invalid,
         remark: item.remark,
         dragging,

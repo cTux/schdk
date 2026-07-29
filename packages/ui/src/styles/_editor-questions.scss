@@ -25,24 +25,21 @@
     top: 16px;
     width: 220px;
     flex: 0 0 220px;
-    padding: 15px;
+    padding: 12px;
   }
 
   .question-editor {
     flex: 1 1 auto;
     min-width: 0;
-  }
-
-  .question-editor {
     animation-delay: 60ms;
   }
 
   .question-list section + section {
-    margin-top: 18px;
+    margin-top: 12px;
   }
 
   .question-list h2 {
-    margin-bottom: 9px;
+    margin: 0 0 6px;
     color: $muted;
     font-size: 0.7rem;
     letter-spacing: 0.08em;
@@ -52,14 +49,15 @@
   .question-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 5px;
   }
 
   .question-grid button {
     position: relative;
-    flex: 0 0 calc((100% - 18px) / 4);
+    min-height: $control-compact;
+    flex: 0 0 calc((100% - 15px) / 4);
     min-width: 0;
-    padding: 7px 0;
+    padding: 4px 0;
     border-width: 2px;
     border-color: transparent;
     background: rgba($surface-raised-rgb, 0.92);
@@ -183,14 +181,14 @@
 
   .question-editor-fields > label {
     display: block;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
   }
 
   .question-pair {
     display: flex;
     align-items: flex-start;
     gap: 16px;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
   }
 
   .question-pair > label,

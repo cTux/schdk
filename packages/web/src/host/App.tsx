@@ -190,6 +190,12 @@ function App({
           question: wizard.question,
           questionNumber: wizard.position.questionIndex + 1,
           questionCount: selectedPackage.questions.length,
+          tourNumber:
+            Math.floor(wizard.position.questionIndex / QUESTIONS_PER_ROUND) + 1,
+          tourPhrase:
+            selectedPackage.tourPhrases[
+              Math.floor(wizard.position.questionIndex / QUESTIONS_PER_ROUND)
+            ] ?? '',
           currentQuestionPartIndex: wizard.position.questionPartIndex,
           currentStage: wizard.position.stage,
           visibleStages: wizard.visibleStages,

@@ -7,6 +7,8 @@ export interface HostGameView {
   question: GameQuestion;
   questionNumber: number;
   questionCount: number;
+  tourNumber: number;
+  tourPhrase: string;
   currentQuestionPartIndex: number;
   currentStage: HostQuestionStage;
   visibleStages: HostQuestionStage[];

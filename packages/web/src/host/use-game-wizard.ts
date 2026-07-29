@@ -23,7 +23,7 @@ const ENTER_DURATION_MS = 680;
 const INITIAL_POSITION: GamePosition = {
   questionIndex: 0,
   questionPartIndex: 0,
-  stage: 'intro',
+  stage: 'tour',
 };
 
 type Direction = 'forward' | 'backward';
@@ -123,6 +123,8 @@ function useGameWizard(
       const questionChanging =
         !target ||
         target.questionIndex !== position.questionIndex ||
+        target.stage === 'tour' ||
+        position.stage === 'tour' ||
         target.stage === 'musicBreak' ||
         position.stage === 'musicBreak';
       setTransition({
@@ -193,7 +195,7 @@ function useGameWizard(
     : QUESTION_TIME_SECONDS;
   const visibleStages = useMemo<HostQuestionStage[]>(
     () =>
-      question ? getVisibleQuestionStages(question, position.stage) : ['intro'],
+      question ? getVisibleQuestionStages(question, position.stage) : ['tour'],
     [position.stage, question],
   );
   const timerVisible = active && !finished && visibleStages.includes('timer');

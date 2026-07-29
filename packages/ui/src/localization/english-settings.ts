@@ -74,5 +74,5 @@ export const englishSettings: typeof ukrainianSettings = {
   signalVolume: 'Signal volume',
   signalVolumeDescription: 'Main signal and timer warning.',
   musicVolume: 'Music volume',
-  musicVolumeDescription: 'Music during breaks between rounds.',
+  musicVolumeDescription: 'Music during breaks between tours.',
 };

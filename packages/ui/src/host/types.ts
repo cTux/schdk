@@ -2,6 +2,7 @@ import { type HostGameTransition } from './host-game-transition';
 import { type HostGameView } from './host-game-view';
 
 type HostQuestionStage =
+  | 'tour'
   | 'intro'
   | 'handout'
   | 'question'

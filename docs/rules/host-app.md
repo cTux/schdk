@@ -18,7 +18,8 @@
 - Exit an active game with `Alt+Q` after explicit confirmation.
 - Play the main signal when the timer starts and expires and the pre-alarm with
   10 seconds remaining.
-- After questions 12 and 24, show a music-break slide when the package contains
+- Before questions 1, 13, and 25, show the tour number and optional tour phrase.
+  After questions 12 and 24, show a music-break slide when the package contains
   the matching audio file. Start it with native audio controls and use the
   separately persisted music volume.
 - In the desktop application, publish the current question number and host notes

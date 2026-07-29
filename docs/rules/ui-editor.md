@@ -7,9 +7,12 @@
   header's right. Do not restore the completion counter. Show localized
   success toasts for completed editor actions, but not for canceled or failed
   actions; keep actionable validation and file errors.
-- Place the optional image-or-text handout before question text. Show no image
-  filename, put remove below the image thumbnail or text field, and open a
-  100–400% zoomable, pannable full-size modal from the thumbnail.
+- Place the optional image-or-text handout before question text without a
+  separate handout heading. Keep the hatched image action on the left and the
+  text field on the right, matching the question and answer-comment field
+  dimensions respectively. Show no image filename, put remove below the image
+  thumbnail or text field, and open a 100–400% zoomable, pannable full-size
+  modal from the thumbnail.
 - Render text handouts in the editor with a monospace font so character
   alignment stays stable.
 - Put Font Awesome copy, paste, and trailing clear actions beside the question
@@ -32,9 +35,10 @@
   recognizability into the provider prompt; default generation flows without
   explicit selectors to medium difficulty and easy recognizability. Successful
   structured output keeps question text and answer comments natural and free
-  of template construction labels, replaces every question field, records the
-  selected rule name, difficulty, and recognizability on the question, resets
-  the panel, and closes it. While
+  of template construction labels or stock meta-commentary such as "Both clues
+  independently point to", replaces every question field, records the selected
+  rule name, difficulty, and recognizability on the question, resets the panel,
+  and closes it. While
   generation runs, keep only its target question disabled until completion;
   ready questions remain editable. Show read-only generation parameters in the
   editor whenever they are present.
@@ -68,9 +72,14 @@
   unfinished. Host notes contain only delivery instructions visible to the
   host while reading the question, such as pronunciation, omitted text,
   audible punctuation, pauses, or cues; they are not answer-review notes.
+  Show only the host-notes field directly below the answer row, without a
+  separate section title.
   Give question, remark, answer, and answer-comment text areas the same default
-  height.
-- Let authors add optional alternative and wrong answer lists.
+  height whether empty or populated. Keep the gap between adjacent editor
+  fields equal in both directions.
+- Let authors add optional alternative and wrong answer lists. Keep each add
+  action inline with its list title instead of rendering a separate button
+  below the list.
 - Let each package slot select `Звичайне`, `Бліц 2×30`, or `Бліц 3×20`.
   Standard questions have one text part; blitz questions have two or three
   separate text parts and still share one answer.
@@ -87,10 +96,16 @@
   start-screen actions until the Drive request settles.
 - On question-number hover or focus, show completed question and answer text in
   a tooltip that stays within the layout. Show unresolved remarks below the
-  question in red and mark their number dark red without a red border.
+  question in red and mark their number dark red without a red border. Mark
+  AI-generated questions blue unless an invalid or unresolved-remark state
+  takes priority.
 - Question-number hover and selection may change only its 2 px border. Hide
   tooltips while pressing or dragging.
 - Dragging one question number onto another swaps complete records while the
   selection follows the same question.
-- Between rounds 1–2 and 2–3, let the author add, replace, or remove one audio
-  file. Offer `audio/*` and reject files the native player cannot play.
+- Give each tour an optional single-line field whose placeholder is
+  `Фраза туру` / `Tour phrase`, without a separate visible label, and keep it
+  on the same row as `Тур N` / `Tour N`. Between tours 1–2 and 2–3, let the
+  author add, replace, or remove one audio file. Offer `audio/*` and reject
+  files the native player cannot play. Keep the sticky question navigation
+  vertically compact enough to remain visible on short desktop viewports.

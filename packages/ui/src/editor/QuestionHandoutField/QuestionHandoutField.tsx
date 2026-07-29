@@ -14,15 +14,12 @@ function QuestionHandoutField({
   const { copy } = useLocalization();
   const textHandout = handout?.kind === 'text' ? handout : undefined;
   return (
-    <fieldset>
-      <legend>
-        {copy.shared.handout} <span>{copy.shared.optional}</span>
-      </legend>
+    <div className="question-handout-field">
       {handout && handout.kind !== 'text' ? (
         <HandoutPreview handout={handout} onRemove={onRemove} />
       ) : (
         <div className="handout-text-editor">
-          {!textHandout && (
+          <div className="handout-inputs">
             <FileButton
               accept="image/*"
               onChange={(event) => {
@@ -33,13 +30,13 @@ function QuestionHandoutField({
             >
               {copy.editor.addImage}
             </FileButton>
-          )}
-          <TextAreaField
-            label={copy.editor.orEnterText}
-            rows={4}
-            value={textHandout?.text ?? ''}
-            onValueChange={onTextChange}
-          />
+            <TextAreaField
+              label={copy.editor.orEnterText}
+              rows={7}
+              value={textHandout?.text ?? ''}
+              onValueChange={onTextChange}
+            />
+          </div>
           {textHandout && (
             <Button className="handout-remove" type="button" onClick={onRemove}>
               {copy.shared.remove}
@@ -47,7 +44,7 @@ function QuestionHandoutField({
           )}
         </div>
       )}
-    </fieldset>
+    </div>
   );
 }
 

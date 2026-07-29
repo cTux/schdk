@@ -1,16 +1,20 @@
+import './styles.scss';
+
 import { QUESTIONS_PER_ROUND } from '@schdk/common';
 import { useState, type DragEvent } from 'react';
+import { Input } from '../../atoms/Input';
 import { useLocalization } from '../../localization';
 import { MusicBreakField } from '../MusicBreakField';
 import { QuestionListButton } from '../QuestionListButton';
 import { type QuestionListProps } from './question-list-props';
 
-function QuestionList({
+export function QuestionList({
   gamePackage,
   selectedIndex,
   showValidation,
   onSelectQuestion,
   onSwapQuestions,
+  onTourPhraseChange,
   onMusicBreakChange,
 }: QuestionListProps) {
   const { copy } = useLocalization();
@@ -32,12 +36,19 @@ function QuestionList({
 
   return (
     <nav className="question-list" aria-label={copy.editor.packageQuestions}>
-      {[0, 1, 2].map((round) => (
-        <section key={round}>
-          <h2>{copy.editor.round(round + 1)}</h2>
+      {[0, 1, 2].map((tour) => (
+        <section key={tour}>
+          <h2>{copy.editor.tour(tour + 1)}</h2>
+          <Input
+            aria-label={copy.editor.tourPhrase}
+            className="tour-phrase-field"
+            placeholder={copy.editor.tourPhrase}
+            value={gamePackage.tourPhrases[tour]}
+            onChange={(event) => onTourPhraseChange(tour, event.target.value)}
+          />
           <div className="question-grid">
             {Array.from({ length: QUESTIONS_PER_ROUND }, (_, offset) => {
-              const index = round * QUESTIONS_PER_ROUND + offset;
+              const index = tour * QUESTIONS_PER_ROUND + offset;
               const question = gamePackage.questions[index]!;
               return (
                 <QuestionListButton
@@ -73,10 +84,10 @@ function QuestionList({
               );
             })}
           </div>
-          {round < 2 && (
+          {tour < 2 && (
             <MusicBreakField
-              musicBreak={gamePackage.musicBreaks[round]}
-              onChange={(file) => onMusicBreakChange(round, file)}
+              musicBreak={gamePackage.musicBreaks[tour]}
+              onChange={(file) => onMusicBreakChange(tour, file)}
             />
           )}
         </section>
@@ -84,5 +95,3 @@ function QuestionList({
     </nav>
   );
 }
-
-export { type QuestionListProps, QuestionList };

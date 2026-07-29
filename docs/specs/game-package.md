@@ -5,12 +5,12 @@ Status: implemented
 ## Goal
 
 Provide one portable `.schdk` file containing a complete or in-progress
-three-round game, including presentation media.
+three-tour game, including presentation media.
 
 ## Requirements
 
-- **PKG-1:** A package has a title, exactly 36 ordered question slots, and two
-  optional music-break slots.
+- **PKG-1:** A package has a title, exactly 36 ordered question slots, three
+  optional tour phrases, and two optional music-break slots.
 - **PKG-2:** A question is `standard`, `blitz-2x30`, or `blitz-3x20` and has
   exactly the number of text parts required by its type.
 - **PKG-3:** A question supports one main answer, alternative answers, wrong
@@ -24,8 +24,8 @@ three-round game, including presentation media.
   saveable.
 - **PKG-7:** Readiness validation reports missing required content and
   unresolved remarks separately from structural parsing.
-- **PKG-8:** Legacy plain-JSON, version 1, and version 2 packages open and are
-  normalized to the current format on the next save.
+- **PKG-8:** Legacy plain-JSON and version 1–3 packages open and are normalized
+  to the current format on the next save.
 - **PKG-9:** The default filename is the filesystem-safe package title followed
   by `.schdk`, truncated when needed to remain a valid Drive package name.
 - **PKG-10:** Package parsing enforces the canonical archive and entry size
@@ -40,7 +40,7 @@ three-round game, including presentation media.
 
 - Imported content is parsed before use; the extension alone is not trusted.
 - Clipboard question JSON is parsed before it can replace a question.
-- Array order determines question numbers and music-break positions.
+- Array order determines tour, question, and music-break positions.
 - Audio bytes are ZIP entries, never JSON data URLs.
 - Image handouts are embedded data URLs matching their declared image MIME
   type.
@@ -51,8 +51,8 @@ three-round game, including presentation media.
 
 1. A new empty package can be serialized, reopened, edited, and saved while
    incomplete.
-2. A ready package round-trips without losing question fields, handouts, or
-   music.
+2. A ready package round-trips without losing tour phrases, question fields,
+   handouts, or music.
 3. Each supported legacy format opens and saves as the current ZIP format.
 4. Malformed files and malformed clipboard questions are rejected without
    replacing current editor state.
