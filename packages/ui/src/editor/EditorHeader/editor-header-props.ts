@@ -12,5 +12,9 @@ export interface EditorHeaderProps {
   aiGeneration?: AiQuestionGenerationOptions;
   gamePackage: GamePackage;
   onQuestionGenerated(index: number, question: GameQuestion): void;
+  onPackageGenerationStateChange(
+    pendingIndexes: number[],
+    docked: boolean,
+  ): void;
   onSelectQuestion(index: number): void;
 }

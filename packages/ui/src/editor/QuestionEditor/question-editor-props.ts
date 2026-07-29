@@ -6,6 +6,7 @@ export interface QuestionEditorProps {
   aiGeneration?: AiQuestionGenerationOptions;
   question: GameQuestion;
   questionDatabaseRows: QuestionDatabaseRow[];
+  disabled?: boolean;
   selectedIndex: number;
   showValidation: boolean;
   onAddHandout(file: File): void;

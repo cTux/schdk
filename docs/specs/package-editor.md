@@ -94,6 +94,11 @@ without losing in-progress work.
   While generation runs, the modal shows the current question, its
   package-generation percentage, and an animated progress indicator that respects
   reduced-motion preferences.
+  Its `Generate in background` action changes the modal into a non-modal panel
+  docked to the editor's right while the same sequence continues. Questions
+  still awaiting generation are disabled; each completed question becomes
+  editable immediately. The docked panel closes after the final question
+  succeeds, just as the foreground modal does.
   Browser generation renews Google authorization from the confirmation click
   before the sequence starts. A failed request keeps questions generated before
   the failure. An allowlisted administrator can expand the modal beside its

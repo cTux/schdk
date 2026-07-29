@@ -45,6 +45,11 @@
   sequentially, select the active slot behind the modal, wait for each provider
   response, replace the complete question record with its selected rule,
   difficulty, and recognizability metadata, and continue to the next slot.
+  While generation runs, offer `Generate in background`; it turns the modal
+  into a non-modal panel docked to the editor's right without interrupting the
+  generation sequence. Keep unfinished target questions disabled, unlock each
+  generated question for editing immediately, and close the panel after the
+  final question succeeds.
 - Put a red cloud-delete button after package generation in the editable
   package-title row. Confirm it before moving the active package to Google Drive
   trash and returning to the package list.

@@ -181,7 +181,7 @@
     gap: 8px;
   }
 
-  .question-editor > label {
+  .question-editor-fields > label {
     display: block;
     margin-bottom: 18px;
   }
@@ -217,6 +217,13 @@
     border: 0;
     border-top: 1px solid $border;
     padding: 17px 0 0;
+  }
+
+  .question-editor-fields {
+    min-width: 0;
+    margin: 0;
+    border: 0;
+    padding: 0;
   }
 
   legend {

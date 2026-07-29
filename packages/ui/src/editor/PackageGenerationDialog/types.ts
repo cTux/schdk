@@ -4,5 +4,6 @@ import type { AiQuestionGenerationOptions } from '../types';
 export interface PackageGenerationDialogProps extends AiQuestionGenerationOptions {
   gamePackage: GamePackage;
   onGenerated(index: number, question: GameQuestion): void;
+  onGenerationStateChange(pendingIndexes: number[], docked: boolean): void;
   onSelectQuestion(index: number): void;
 }

@@ -74,6 +74,7 @@ V33|Host notes contain only delivery instructions visible while the host reads a
 V34|AI package regeneration of remarked questions includes the current question and author remark and clears the remark only after successful replacement.
 V35|Selecting a personal-database result loads the complete canonical source question and never replaces a populated editor slot without explicit confirmation.
 V36|Initial Drive recents loading issues one files request for its first result page even when editor and host are mounted.
+V37|Background package generation stays non-modal, locks only unfinished target questions, unlocks each completed question immediately, and closes its dock after the final success.
 
 ## §T
 

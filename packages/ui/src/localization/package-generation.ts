@@ -21,6 +21,7 @@ export const packageGenerationCopy = {
     progress: (current: number, total: number) =>
       `Питання ${current} із ${total}`,
     cancel: 'Відмінити',
+    background: 'Генерувати на фоні',
     cancelConfirmation: 'Ви дійсно хочете відмінити генерацію пакету питань?',
     generate: 'Згенерувати',
     failed:
@@ -51,6 +52,7 @@ export const packageGenerationCopy = {
     progress: (current: number, total: number) =>
       `Question ${current} of ${total}`,
     cancel: 'Cancel',
+    background: 'Generate in background',
     cancelConfirmation:
       'Are you sure you want to cancel question package generation?',
     generate: 'Generate',
