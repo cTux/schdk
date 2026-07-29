@@ -6,7 +6,7 @@ export const questionDatabaseCopy = {
     },
     title: 'База питань',
     description:
-      'Це база питань поточного користувача з його пакетів SCHDK на Google Диску. Вона не є загальною базою інших користувачів.',
+      'Це ваша база питань з ваших пакетів на Google Drive. Вона не є загальною базою інших користувачів.',
     search: 'Пошук',
     searchPlaceholder: 'Введіть текст питання або відповіді',
     questionSearchPlaceholder: 'Пошук питань і відповідей',
