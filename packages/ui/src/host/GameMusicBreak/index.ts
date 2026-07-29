@@ -1,2 +1,4 @@
-export { GameMusicBreak } from './GameMusicBreak';
-export type { GameMusicBreakProps } from './types';
+import { GameMusicBreak } from './GameMusicBreak';
+import { type GameMusicBreakProps } from './types';
+
+export { GameMusicBreak, type GameMusicBreakProps };

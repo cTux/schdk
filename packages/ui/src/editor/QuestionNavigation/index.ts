@@ -1,2 +1,4 @@
-export { QuestionNavigation } from './QuestionNavigation';
-export type * from './types';
+import { QuestionNavigation } from './QuestionNavigation';
+import { type QuestionNavigationProps } from './types';
+
+export { QuestionNavigation, type QuestionNavigationProps };

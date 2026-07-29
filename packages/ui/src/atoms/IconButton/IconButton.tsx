@@ -1,24 +1,11 @@
 import './styles.scss';
-
-import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import type { ButtonHTMLAttributes } from 'react';
-import { Button, type ButtonVariant } from '../Button';
-import { Tooltip, type TooltipProps } from '../Tooltip';
+import { Button } from '../Button';
+import { Tooltip } from '../Tooltip';
+import { type IconButtonProps } from './icon-button-props';
 
-export interface IconButtonProps extends Omit<
-  ButtonHTMLAttributes<HTMLButtonElement>,
-  'aria-label' | 'children'
-> {
-  icon: IconDefinition;
-  label: string;
-  tooltipLabel?: string;
-  tooltipSide?: TooltipProps['side'];
-  variant?: ButtonVariant;
-}
-
-export function IconButton({
+function IconButton({
   icon,
   label,
   tooltipLabel = label,
@@ -57,3 +44,5 @@ export function IconButton({
     />
   );
 }
+
+export { type IconButtonProps, IconButton };

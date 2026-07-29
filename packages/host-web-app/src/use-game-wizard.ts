@@ -14,9 +14,12 @@ import {
   getTimerSignal,
   QUESTION_TIME_SECONDS,
 } from './game-timer';
+import { type GameWizardSnapshot } from './game-wizard-snapshot';
 
 const EXIT_DURATION_MS = 280;
+
 const ENTER_DURATION_MS = 680;
+
 const INITIAL_POSITION: GamePosition = {
   questionIndex: 0,
   questionPartIndex: 0,
@@ -24,11 +27,6 @@ const INITIAL_POSITION: GamePosition = {
 };
 
 type Direction = 'forward' | 'backward';
-
-export interface GameWizardSnapshot {
-  finished: boolean;
-  position: GamePosition;
-}
 
 function idleTransition(): HostGameTransition {
   return {
@@ -38,7 +36,7 @@ function idleTransition(): HostGameTransition {
   };
 }
 
-export function useGameWizard(
+function useGameWizard(
   gamePackage: GamePackage | null,
   active: boolean,
   restoredState: GameWizardSnapshot | null = null,
@@ -252,3 +250,5 @@ export function useGameWizard(
     goNext: () => move('forward'),
   };
 }
+
+export { type GameWizardSnapshot, useGameWizard };

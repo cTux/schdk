@@ -8,18 +8,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { Button } from '../../atoms/Button';
 import { useLocalization } from '../../localization';
-import type { RecentPackageItem } from '../types';
+import { type RecentPackageButtonProps } from './recent-package-button-props';
 
-export interface RecentPackageButtonProps {
-  disabled?: boolean;
-  opening?: boolean;
-  recent: RecentPackageItem;
-  onDelete?(): void;
-  onDownload?(): void;
-  onOpen(): void;
-}
-
-export function RecentPackageButton({
+function RecentPackageButton({
   disabled = false,
   opening = false,
   recent,
@@ -94,3 +85,5 @@ export function RecentPackageButton({
     </div>
   );
 }
+
+export { type RecentPackageButtonProps, RecentPackageButton };

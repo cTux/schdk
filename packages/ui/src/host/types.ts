@@ -1,7 +1,7 @@
-import type { GameQuestion } from '@schdk/common';
-import type { MusicBreak } from '@schdk/common';
+import { type HostGameTransition } from './host-game-transition';
+import { type HostGameView } from './host-game-view';
 
-export type HostQuestionStage =
+type HostQuestionStage =
   | 'intro'
   | 'handout'
   | 'question'
@@ -10,23 +10,4 @@ export type HostQuestionStage =
   | 'answer'
   | 'musicBreak';
 
-export interface HostGameTransition {
-  phase: 'idle' | 'exit' | 'enter';
-  direction: 'forward' | 'backward';
-  questionChanging: boolean;
-}
-
-export interface HostGameView {
-  question: GameQuestion;
-  questionNumber: number;
-  questionCount: number;
-  currentQuestionPartIndex: number;
-  currentStage: HostQuestionStage;
-  visibleStages: HostQuestionStage[];
-  remainingSeconds: number;
-  transition: HostGameTransition;
-  controlsDisabled: boolean;
-  canGoBack: boolean;
-  musicBreak: MusicBreak | null;
-  musicVolume: number;
-}
+export { type HostQuestionStage, type HostGameTransition, type HostGameView };

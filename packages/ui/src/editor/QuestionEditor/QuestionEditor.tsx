@@ -1,42 +1,20 @@
 import {
   QUESTION_TYPE_CONFIG,
   createEmptyGameQuestion,
-  type GameQuestion,
   type GameQuestionType,
 } from '@schdk/common';
 import { Dropdown } from '../../atoms/Dropdown';
 import { TextAreaField } from '../../atoms/TextAreaField';
 import { useLocalization } from '../../localization';
-import type { QuestionDatabaseRow } from '../../shell/QuestionDatabasePage';
 import { AnswerListField } from '../AnswerListField';
 import { HostNotesField } from '../HostNotesField';
 import { QuestionEditorHeader } from '../QuestionEditorHeader';
 import { QuestionHandoutField } from '../QuestionHandoutField';
 import { QuestionNavigation } from '../QuestionNavigation';
 import { QuestionRemarkField } from '../QuestionRemarkField';
-import type { AiQuestionGenerationOptions } from '../types';
+import { type QuestionEditorProps } from './question-editor-props';
 
-export interface QuestionEditorProps {
-  aiGeneration?: AiQuestionGenerationOptions;
-  question: GameQuestion;
-  questionDatabaseRows: QuestionDatabaseRow[];
-  selectedIndex: number;
-  showValidation: boolean;
-  onAddHandout(file: File): void;
-  onAnswerBlur(): void;
-  onAnswerCommentBlur(): void;
-  onAlternativeAnswerBlur(index: number): void;
-  onWrongAnswerBlur(index: number): void;
-  onChange(change: Partial<GameQuestion>): void;
-  onDatabaseQuestionSelect(row: QuestionDatabaseRow): Promise<boolean>;
-  onGenerated(question: GameQuestion): void;
-  onCopy(): void;
-  onPaste(): void;
-  onSelectQuestion(index: number): void;
-  onQuestionTextBlur(index: number): void;
-}
-
-export function QuestionEditor({
+function QuestionEditor({
   aiGeneration,
   question,
   questionDatabaseRows,
@@ -222,3 +200,5 @@ export function QuestionEditor({
     </section>
   );
 }
+
+export { type QuestionEditorProps, QuestionEditor };

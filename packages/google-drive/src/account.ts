@@ -1,10 +1,6 @@
-export interface DriveAccount {
-  displayName: string;
-  emailAddress: string;
-  photoLink?: string;
-}
+import { type DriveAccount } from './drive-account.js';
 
-export function parseDriveAccount(value: unknown): DriveAccount | null {
+function parseDriveAccount(value: unknown): DriveAccount | null {
   const user =
     value && typeof value === 'object'
       ? (value as { user?: Partial<DriveAccount> }).user
@@ -23,3 +19,5 @@ export function parseDriveAccount(value: unknown): DriveAccount | null {
       : {}),
   };
 }
+
+export { type DriveAccount, parseDriveAccount };

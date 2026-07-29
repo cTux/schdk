@@ -1,2 +1,4 @@
-export { QuestionRemarkField } from './QuestionRemarkField';
-export type * from './types';
+import { QuestionRemarkField } from './QuestionRemarkField';
+import { type QuestionRemarkFieldProps } from './types';
+
+export { QuestionRemarkField, type QuestionRemarkFieldProps };

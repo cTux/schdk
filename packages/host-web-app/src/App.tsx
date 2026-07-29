@@ -18,9 +18,7 @@ import { useHostPackages } from './use-host-packages';
 import { usePresenterNotes } from './use-presenter-notes';
 import type { AppProps } from './types';
 
-export type { AppProps } from './types';
-
-export function App({
+function App({
   autoFullscreen = true,
   backgroundImage = null,
   backgroundOpacity = 1,
@@ -242,3 +240,5 @@ export function App({
     </>
   );
 }
+
+export { App, type AppProps };

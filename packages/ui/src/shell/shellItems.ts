@@ -1,4 +1,3 @@
-import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import {
   faBrain,
   faDatabase,
@@ -9,25 +8,10 @@ import {
   faPlay,
 } from '@fortawesome/free-solid-svg-icons';
 import type { LocalizationCopy } from '../localization';
+import { type ShellItem } from './shell-item';
+import { type ShellViewName } from './shell-view-name';
 
-export type ShellViewName =
-  | 'home'
-  | 'questionDatabase'
-  | 'host'
-  | 'editor'
-  | 'visualEditor'
-  | 'artificialIntelligence'
-  | 'packageRules'
-  | 'options';
-
-export interface ShellItem {
-  id: ShellViewName;
-  icon: IconDefinition;
-  label: string;
-  description: string;
-}
-
-export function getShellContent(copy: LocalizationCopy) {
+function getShellContent(copy: LocalizationCopy) {
   const shell = copy.shell;
   const homeItem: ShellItem = {
     id: 'home',
@@ -61,3 +45,5 @@ export function getShellContent(copy: LocalizationCopy) {
 
   return { ...shell, homeItem, items };
 }
+
+export { type ShellViewName, type ShellItem, getShellContent };

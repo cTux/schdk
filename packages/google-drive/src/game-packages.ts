@@ -1,132 +1,34 @@
-import { isDriveFileId } from './settings.js';
+import { DRIVE_PACKAGE_MIME_TYPE } from './drive-package-mime-type.js';
+import { DRIVE_APP_KIND_KEY } from './drive-app-kind-key.js';
+import { DRIVE_PACKAGE_KIND } from './drive-package-kind.js';
+import { DRIVE_FOLDER_KIND } from './drive-folder-kind.js';
+import { type DriveGamePackageFile } from './drive-game-package-file.js';
+import { type DriveGamePackage } from './drive-game-package.js';
+import { type DriveGamePackageWrite } from './drive-game-package-write.js';
+import { type DrivePackageStorage } from './drive-package-storage.js';
+import { isDriveGamePackageName } from './is-drive-game-package-name.js';
+import { createGamePackageFilename } from './create-game-package-filename.js';
+import { parseDriveGamePackageWrite } from './parse-drive-game-package-write.js';
+import { parseDriveGamePackageFile } from './parse-drive-game-package-file.js';
+import { toDrivePackageReference } from './to-drive-package-reference.js';
+import { parseDrivePackageReference } from './parse-drive-package-reference.js';
 
-const DRIVE_REFERENCE_PREFIX = 'drive:';
-const DRIVE_PACKAGE_EXTENSION = '.schdk';
-const MAX_DRIVE_PACKAGE_NAME_LENGTH = 256;
-export const DRIVE_FOLDER_MIME_TYPE = 'application/vnd.google-apps.folder';
-export const DRIVE_PACKAGE_MIME_TYPE = 'application/vnd.schdk.game-package';
-export const DRIVE_APP_KIND_KEY = 'schdkType';
-export const DRIVE_PACKAGE_KIND = 'game-package';
-export const DRIVE_FOLDER_KIND = 'package-folder';
+const DRIVE_FOLDER_MIME_TYPE = 'application/vnd.google-apps.folder';
 
-export interface DriveGamePackageFile {
-  id: string;
-  name: string;
-  modifiedTime: string;
-  title?: string;
-  ready?: boolean;
-  hasRemarks?: boolean;
-}
-
-export interface DriveGamePackage extends DriveGamePackageFile {
-  content: Uint8Array;
-}
-
-export interface DriveGamePackageWrite {
-  name: string;
-  title: string;
-  content: Uint8Array;
-  ready: boolean;
-  hasRemarks: boolean;
-}
-
-export interface DrivePackageStorage {
-  createGamePackage(
-    value: DriveGamePackageWrite,
-  ): Promise<DriveGamePackageFile>;
-  updateGamePackage(
-    fileId: string,
-    value: DriveGamePackageWrite,
-  ): Promise<DriveGamePackageFile>;
-  deleteGamePackage(fileId: string): Promise<void>;
-  listGamePackages(): Promise<DriveGamePackageFile[]>;
-  loadGamePackage(fileId: string): Promise<DriveGamePackage>;
-}
-
-export function isDriveGamePackageName(value: unknown): value is string {
-  return (
-    typeof value === 'string' &&
-    value.length > 0 &&
-    value.length <= MAX_DRIVE_PACKAGE_NAME_LENGTH &&
-    /\.schdk$/iu.test(value)
-  );
-}
-
-export function createGamePackageFilename(title: string, fallback: string) {
-  const safeTitle =
-    title.replace(/[\p{Cc}<>:"/\\|?*]/gu, '-').trim() || fallback;
-  return `${safeTitle
-    .slice(0, MAX_DRIVE_PACKAGE_NAME_LENGTH - DRIVE_PACKAGE_EXTENSION.length)
-    .trimEnd()}${DRIVE_PACKAGE_EXTENSION}`;
-}
-
-export function parseDriveGamePackageWrite(
-  value: unknown,
-): DriveGamePackageWrite | null {
-  if (!value || typeof value !== 'object') return null;
-  const candidate = value as Record<string, unknown>;
-  return isDriveGamePackageName(candidate.name) &&
-    typeof candidate.title === 'string' &&
-    candidate.content instanceof Uint8Array &&
-    typeof candidate.ready === 'boolean' &&
-    typeof candidate.hasRemarks === 'boolean'
-    ? {
-        name: candidate.name,
-        title: candidate.title,
-        content: candidate.content,
-        ready: candidate.ready,
-        hasRemarks: candidate.hasRemarks,
-      }
-    : null;
-}
-
-export function parseDriveGamePackageFile(
-  value: unknown,
-): DriveGamePackageFile | null {
-  if (!value || typeof value !== 'object') return null;
-  const file = value as Record<string, unknown>;
-  const properties =
-    file.appProperties && typeof file.appProperties === 'object'
-      ? (file.appProperties as Record<string, unknown>)
-      : {};
-  if (
-    !isDriveFileId(file.id) ||
-    !isDriveGamePackageName(file.name) ||
-    properties[DRIVE_APP_KIND_KEY] !== DRIVE_PACKAGE_KIND ||
-    typeof file.modifiedTime !== 'string' ||
-    !Number.isFinite(Date.parse(file.modifiedTime))
-  ) {
-    return null;
-  }
-  return {
-    id: file.id,
-    name: file.name,
-    modifiedTime: file.modifiedTime,
-    ...(typeof file.description === 'string'
-      ? { title: file.description }
-      : {}),
-    ...(properties.ready === 'true'
-      ? { ready: true }
-      : properties.ready === 'false'
-        ? { ready: false }
-        : {}),
-    ...(properties.hasRemarks === 'true'
-      ? { hasRemarks: true }
-      : properties.hasRemarks === 'false'
-        ? { hasRemarks: false }
-        : {}),
-  };
-}
-
-export function toDrivePackageReference(fileId: string) {
-  if (!isDriveFileId(fileId)) throw new TypeError('Invalid Google Drive file');
-  return `${DRIVE_REFERENCE_PREFIX}${fileId}`;
-}
-
-export function parseDrivePackageReference(value: unknown): string | null {
-  if (typeof value !== 'string' || !value.startsWith(DRIVE_REFERENCE_PREFIX)) {
-    return null;
-  }
-  const fileId = value.slice(DRIVE_REFERENCE_PREFIX.length);
-  return isDriveFileId(fileId) ? fileId : null;
-}
+export {
+  DRIVE_FOLDER_MIME_TYPE,
+  DRIVE_PACKAGE_MIME_TYPE,
+  DRIVE_APP_KIND_KEY,
+  DRIVE_PACKAGE_KIND,
+  DRIVE_FOLDER_KIND,
+  type DriveGamePackageFile,
+  type DriveGamePackage,
+  type DriveGamePackageWrite,
+  type DrivePackageStorage,
+  isDriveGamePackageName,
+  createGamePackageFilename,
+  parseDriveGamePackageWrite,
+  parseDriveGamePackageFile,
+  toDrivePackageReference,
+  parseDrivePackageReference,
+};

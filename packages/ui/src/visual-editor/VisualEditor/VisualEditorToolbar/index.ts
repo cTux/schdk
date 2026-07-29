@@ -1,2 +1,4 @@
-export { VisualEditorToolbar } from './VisualEditorToolbar';
-export type { VisualEditorToolbarProps } from './types';
+import { VisualEditorToolbar } from './VisualEditorToolbar';
+import { type VisualEditorToolbarProps } from './types';
+
+export { VisualEditorToolbar, type VisualEditorToolbarProps };

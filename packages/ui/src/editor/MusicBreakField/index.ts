@@ -1,2 +1,4 @@
-export { MusicBreakField } from './MusicBreakField';
-export type { MusicBreakFieldProps } from './types';
+import { MusicBreakField } from './MusicBreakField';
+import { type MusicBreakFieldProps } from './types';
+
+export { MusicBreakField, type MusicBreakFieldProps };

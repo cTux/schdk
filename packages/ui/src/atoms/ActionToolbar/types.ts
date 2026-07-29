@@ -1,22 +1,14 @@
-import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import type { ReactNode } from 'react';
+import { type ActionToolbarButtonProps } from './action-toolbar-button-props';
+import { type ActionToolbarPopoverProps } from './action-toolbar-popover-props';
 
-export interface ActionToolbarProps {
+interface ActionToolbarProps {
   label: string;
   children: ReactNode;
 }
 
-export interface ActionToolbarButtonProps {
-  icon: IconDefinition;
-  label: string;
-  pressed?: boolean;
-  danger?: boolean;
-  disabled?: boolean;
-  onClick(): void;
-}
-
-export interface ActionToolbarPopoverProps {
-  icon: IconDefinition;
-  label: string;
-  children: ReactNode;
-}
+export {
+  type ActionToolbarProps,
+  type ActionToolbarButtonProps,
+  type ActionToolbarPopoverProps,
+};

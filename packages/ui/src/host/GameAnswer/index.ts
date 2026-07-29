@@ -1,0 +1,1 @@
+export { GameAnswer } from './GameAnswer';

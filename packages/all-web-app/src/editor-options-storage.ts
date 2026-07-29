@@ -2,13 +2,12 @@ import {
   DEFAULT_EDITOR_TEXT_OPTIONS,
   type EditorTextOptions,
 } from '@schdk/ui/options';
+import { type OptionsStorage } from './options-storage-type';
+import { normalizeEditorTextOptions } from './normalize-editor-text-options';
+import { OPTIONS_KEY } from './options-key';
+import { saveEditorTextOptions } from './save-editor-text-options';
 
-const OPTIONS_KEY = 'schdk:editor-text-options';
-type OptionsStorage = Pick<Storage, 'getItem' | 'setItem'>;
-
-export function loadEditorTextOptions(
-  storage: OptionsStorage,
-): EditorTextOptions {
+function loadEditorTextOptions(storage: OptionsStorage): EditorTextOptions {
   try {
     return (
       normalizeEditorTextOptions(
@@ -20,32 +19,8 @@ export function loadEditorTextOptions(
   }
 }
 
-export function normalizeEditorTextOptions(
-  value: unknown,
-): EditorTextOptions | null {
-  if (!value || typeof value !== 'object') return null;
-  const candidate = value as Partial<EditorTextOptions>;
-  if (
-    typeof candidate.correctQuestionText !== 'boolean' ||
-    typeof candidate.correctAnswers !== 'boolean' ||
-    typeof candidate.correctAnswerComment !== 'boolean'
-  ) {
-    return null;
-  }
-  return {
-    correctQuestionText: candidate.correctQuestionText,
-    correctAnswers: candidate.correctAnswers,
-    correctAnswerComment: candidate.correctAnswerComment,
-  };
-}
-
-export function saveEditorTextOptions(
-  storage: OptionsStorage,
-  options: EditorTextOptions,
-) {
-  try {
-    storage.setItem(OPTIONS_KEY, JSON.stringify(options));
-  } catch {
-    // Preferences are optional and must not prevent the shell from loading.
-  }
-}
+export {
+  loadEditorTextOptions,
+  normalizeEditorTextOptions,
+  saveEditorTextOptions,
+};

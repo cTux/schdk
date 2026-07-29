@@ -1,18 +1,8 @@
 import { useLocalization } from '../../localization';
 import { RecentPackageButton } from '../RecentPackageButton';
-import type { RecentPackageItem } from '../types';
+import { type RecentPackagesProps } from './recent-packages-props';
 
-export interface RecentPackagesProps {
-  hidden: boolean;
-  loading?: boolean;
-  openingPackageId?: string | null;
-  packages: RecentPackageItem[];
-  onDelete?(recent: RecentPackageItem): void;
-  onDownload?(recent: RecentPackageItem): void;
-  onOpen(recent: RecentPackageItem): void;
-}
-
-export function RecentPackages({
+function RecentPackages({
   hidden,
   loading = false,
   openingPackageId = null,
@@ -56,3 +46,5 @@ export function RecentPackages({
     </section>
   );
 }
+
+export { type RecentPackagesProps, RecentPackages };

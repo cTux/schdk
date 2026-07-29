@@ -1,2 +1,4 @@
-export { TextAreaField } from './TextAreaField';
-export type * from './types';
+import { TextAreaField } from './TextAreaField';
+import { type TextAreaFieldProps } from './types';
+
+export { TextAreaField, type TextAreaFieldProps };

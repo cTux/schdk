@@ -1,19 +1,11 @@
-import { QUESTIONS_PER_ROUND, type GamePackage } from '@schdk/common';
+import { QUESTIONS_PER_ROUND } from '@schdk/common';
 import { useState, type DragEvent } from 'react';
 import { useLocalization } from '../../localization';
 import { MusicBreakField } from '../MusicBreakField';
 import { QuestionListButton } from '../QuestionListButton';
+import { type QuestionListProps } from './question-list-props';
 
-export interface QuestionListProps {
-  gamePackage: GamePackage;
-  selectedIndex: number;
-  showValidation: boolean;
-  onSelectQuestion(index: number): void;
-  onSwapQuestions(sourceIndex: number, targetIndex: number): void;
-  onMusicBreakChange(index: number, file: File | null): void;
-}
-
-export function QuestionList({
+function QuestionList({
   gamePackage,
   selectedIndex,
   showValidation,
@@ -92,3 +84,5 @@ export function QuestionList({
     </nav>
   );
 }
+
+export { type QuestionListProps, QuestionList };

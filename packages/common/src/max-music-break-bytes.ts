@@ -1,0 +1,1 @@
+export const MAX_MUSIC_BREAK_BYTES = 64 * 1024 * 1024;

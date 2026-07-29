@@ -12,11 +12,13 @@ import { EditorHeader } from '../EditorHeader';
 import { PackageStart } from '../PackageStart';
 import { QuestionEditor } from '../QuestionEditor';
 import { QuestionList } from '../QuestionList';
-import type { EditorViewProps } from '../types';
+import type {
+  EditorSaveStatus,
+  EditorViewProps,
+  RecentPackageItem,
+} from '../types';
 
-export type { EditorSaveStatus, RecentPackageItem } from '../types';
-
-export function EditorView({
+function EditorView({
   aiGeneration,
   gamePackage,
   hasPackage,
@@ -166,3 +168,5 @@ export function EditorView({
     </TooltipProvider>
   );
 }
+
+export { EditorView, type EditorSaveStatus, type RecentPackageItem };

@@ -1,0 +1,1 @@
+export const MAX_DRIVE_FILE_NAME_LENGTH = 256;

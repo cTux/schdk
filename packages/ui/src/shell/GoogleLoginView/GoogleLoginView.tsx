@@ -1,16 +1,10 @@
 import './styles.scss';
-
 import { AppIcon } from '../../atoms/AppIcon';
 import { Button } from '../../atoms/Button';
 import { useLocalization } from '../../localization';
-import type { GoogleDriveState } from '../../options/OptionsPage';
+import { type GoogleLoginViewProps } from './google-login-view-props';
 
-export interface GoogleLoginViewProps {
-  state: GoogleDriveState;
-  onConnect(): void;
-}
-
-export function GoogleLoginView({ state, onConnect }: GoogleLoginViewProps) {
+function GoogleLoginView({ state, onConnect }: GoogleLoginViewProps) {
   const { copy } = useLocalization();
   const unavailable = state === 'unavailable';
   const connecting = state === 'connecting';
@@ -44,3 +38,5 @@ export function GoogleLoginView({ state, onConnect }: GoogleLoginViewProps) {
     </main>
   );
 }
+
+export { type GoogleLoginViewProps, GoogleLoginView };

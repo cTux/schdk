@@ -1,0 +1,1 @@
+export const MAX_CUSTOM_GAME_ELEMENTS = 20;

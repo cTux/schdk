@@ -1,2 +1,4 @@
-export { AnswerListField } from './AnswerListField';
-export type * from './types';
+import { AnswerListField } from './AnswerListField';
+import { type AnswerListFieldProps } from './types';
+
+export { AnswerListField, type AnswerListFieldProps };

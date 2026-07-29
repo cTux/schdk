@@ -1,2 +1,4 @@
-export { VisualLayoutItem } from './VisualLayoutItem';
-export type { VisualLayoutItemProps } from './types';
+import { VisualLayoutItem } from './VisualLayoutItem';
+import { type VisualLayoutItemProps } from './types';
+
+export { VisualLayoutItem, type VisualLayoutItemProps };

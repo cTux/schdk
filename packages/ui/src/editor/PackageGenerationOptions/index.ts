@@ -1,2 +1,4 @@
-export { PackageGenerationOptions } from './PackageGenerationOptions';
-export type { PackageGenerationOptionsProps } from './types';
+import { PackageGenerationOptions } from './PackageGenerationOptions';
+import { type PackageGenerationOptionsProps } from './types';
+
+export { PackageGenerationOptions, type PackageGenerationOptionsProps };

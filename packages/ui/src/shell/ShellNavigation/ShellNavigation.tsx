@@ -3,22 +3,11 @@ import { faGear, faUser } from '@fortawesome/free-solid-svg-icons';
 import { AppIcon } from '../../atoms/AppIcon';
 import { Button } from '../../atoms/Button';
 import { useLocalization } from '../../localization';
-import { getShellContent, type ShellViewName } from '../shellItems';
+import { getShellContent } from '../shellItems';
+import { type ShellNavigationProps } from './shell-navigation-props';
+import { type ShellAccount } from './shell-account';
 
-export interface ShellNavigationProps {
-  account?: ShellAccount;
-  connected: boolean;
-  view: ShellViewName;
-  onSelect(view: ShellViewName): void;
-}
-
-export interface ShellAccount {
-  displayName: string;
-  emailAddress: string;
-  photoLink?: string;
-}
-
-export function ShellNavigation({
+function ShellNavigation({
   account,
   connected,
   view,
@@ -124,3 +113,5 @@ export function ShellNavigation({
     </aside>
   );
 }
+
+export { type ShellNavigationProps, type ShellAccount, ShellNavigation };

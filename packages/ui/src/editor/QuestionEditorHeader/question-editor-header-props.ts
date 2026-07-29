@@ -1,0 +1,14 @@
+import type { GameQuestion } from '@schdk/common';
+import type { QuestionDatabaseRow } from '../../shell/QuestionDatabasePage';
+import type { AiQuestionGenerationOptions } from '../types';
+
+export interface QuestionEditorHeaderProps {
+  aiGeneration?: AiQuestionGenerationOptions;
+  questionDatabaseRows: QuestionDatabaseRow[];
+  questionNumber: number;
+  onDatabaseQuestionSelect(row: QuestionDatabaseRow): Promise<boolean>;
+  onGenerated(question: GameQuestion): void;
+  onClear(): void;
+  onCopy(): void;
+  onPaste(): void;
+}

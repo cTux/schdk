@@ -1,2 +1,4 @@
-export { GameFinished } from './GameFinished';
-export type * from './types';
+import { GameFinished } from './GameFinished';
+import { type GameFinishedProps } from './types';
+
+export { GameFinished, type GameFinishedProps };

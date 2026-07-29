@@ -1,2 +1,4 @@
-export { AppUpdateButton } from './AppUpdateButton';
-export type { AppUpdateButtonProps } from './types';
+import { AppUpdateButton } from './AppUpdateButton';
+import { type AppUpdateButtonProps } from './types';
+
+export { AppUpdateButton, type AppUpdateButtonProps };

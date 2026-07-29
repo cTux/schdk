@@ -22,9 +22,7 @@ import { usePackageActions } from './use-package-actions';
 import { useQuestionActions } from './use-question-actions';
 import type { AppProps } from './types';
 
-export type { AppProps } from './types';
-
-export function App({
+function App({
   aiGeneration,
   drive,
   driveActive = false,
@@ -253,3 +251,5 @@ export function App({
     </>
   );
 }
+
+export { App, type AppProps };

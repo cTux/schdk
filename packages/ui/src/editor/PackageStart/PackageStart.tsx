@@ -1,20 +1,8 @@
 import { PackageDropZone } from '../PackageDropZone';
 import { RecentPackages } from '../RecentPackages';
-import type { RecentPackageItem } from '../types';
+import { type PackageStartProps } from './package-start-props';
 
-export interface PackageStartProps {
-  hidden: boolean;
-  openingRecentPackageId?: string | null;
-  recentPackages: RecentPackageItem[];
-  recentPackagesLoading?: boolean;
-  onCreatePackage?(): void;
-  onDeleteRecentPackage?(recent: RecentPackageItem): void;
-  onDownloadRecentPackage?(recent: RecentPackageItem): void;
-  onOpenPackage(file: File): void;
-  onOpenRecentPackage(recent: RecentPackageItem): void;
-}
-
-export function PackageStart({
+function PackageStart({
   hidden,
   openingRecentPackageId = null,
   recentPackages,
@@ -47,3 +35,5 @@ export function PackageStart({
     </>
   );
 }
+
+export { type PackageStartProps, PackageStart };

@@ -1,10 +1,9 @@
-export interface ConfirmationDialogProps {
+import { type ConfirmationDialogController } from './confirmation-dialog-controller';
+
+interface ConfirmationDialogProps {
   message: string;
   open: boolean;
   onClose(confirmed: boolean): void;
 }
 
-export interface ConfirmationDialogController {
-  confirm(message: string): Promise<boolean>;
-  dialogProps: ConfirmationDialogProps;
-}
+export { type ConfirmationDialogProps, type ConfirmationDialogController };

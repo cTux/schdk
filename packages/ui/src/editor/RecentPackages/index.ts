@@ -1,2 +1,4 @@
-export { RecentPackages } from './RecentPackages';
-export type * from './types';
+import { RecentPackages } from './RecentPackages';
+import { type RecentPackagesProps } from './types';
+
+export { RecentPackages, type RecentPackagesProps };

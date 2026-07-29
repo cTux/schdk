@@ -1,13 +1,7 @@
 import { Checkbox } from '../../atoms/Checkbox';
+import { type OptionToggleProps } from './option-toggle-props';
 
-export interface OptionToggleProps {
-  checked: boolean;
-  description: string;
-  label: string;
-  onChange(checked: boolean): void;
-}
-
-export function OptionToggle({
+function OptionToggle({
   checked,
   description,
   label,
@@ -26,3 +20,5 @@ export function OptionToggle({
     </label>
   );
 }
+
+export { type OptionToggleProps, OptionToggle };

@@ -1,28 +1,9 @@
-export interface TokenResponse {
-  access_token?: string;
-  error?: string;
-  expires_in?: number;
-  scope?: string;
-}
-
-interface TokenClient {
-  requestAccessToken(config?: { prompt?: string }): void;
-}
-
-export interface GoogleOauth {
-  initTokenClient(config: {
-    client_id: string;
-    scope: string;
-    callback(response: TokenResponse): void;
-    error_callback(error: { type?: string }): void;
-    login_hint?: string;
-  }): TokenClient;
-  revoke(token: string, callback: () => void): void;
-}
+import { type GoogleOauth } from './google-oauth';
+import { type TokenResponse } from './token-response';
 
 let googleScript: Promise<GoogleOauth> | undefined;
 
-export function loadGoogleOauth(): Promise<GoogleOauth> {
+function loadGoogleOauth(): Promise<GoogleOauth> {
   googleScript ??= new Promise((resolve, reject) => {
     const current = (
       window as unknown as {
@@ -51,3 +32,5 @@ export function loadGoogleOauth(): Promise<GoogleOauth> {
   });
   return googleScript;
 }
+
+export { type TokenResponse, type GoogleOauth, loadGoogleOauth };

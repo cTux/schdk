@@ -1,8 +1,21 @@
-export { QuestionDatabaseTable } from './QuestionDatabaseTable';
-export {
+import { QuestionDatabaseTable } from './QuestionDatabaseTable';
+import {
   getQuestionDatabaseAnswer,
   searchQuestionDatabaseRows,
   sortQuestionDatabaseRows,
+  type QuestionDatabaseSearchField,
 } from './constants';
-export type { QuestionDatabaseSearchField } from './constants';
-export type { QuestionDatabaseSort, QuestionDatabaseTableProps } from './types';
+import {
+  type QuestionDatabaseSort,
+  type QuestionDatabaseTableProps,
+} from './types';
+
+export {
+  QuestionDatabaseTable,
+  getQuestionDatabaseAnswer,
+  searchQuestionDatabaseRows,
+  sortQuestionDatabaseRows,
+  type QuestionDatabaseSearchField,
+  type QuestionDatabaseSort,
+  type QuestionDatabaseTableProps,
+};

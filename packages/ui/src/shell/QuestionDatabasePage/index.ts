@@ -1,2 +1,11 @@
-export { QuestionDatabasePage } from './QuestionDatabasePage';
-export type { QuestionDatabasePageProps, QuestionDatabaseRow } from './types';
+import { QuestionDatabasePage } from './QuestionDatabasePage';
+import {
+  type QuestionDatabasePageProps,
+  type QuestionDatabaseRow,
+} from './types';
+
+export {
+  QuestionDatabasePage,
+  type QuestionDatabasePageProps,
+  type QuestionDatabaseRow,
+};

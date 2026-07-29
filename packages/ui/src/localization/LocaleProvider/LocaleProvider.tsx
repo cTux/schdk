@@ -1,24 +1,10 @@
-import { createContext, useContext, useMemo } from 'react';
-import {
-  LOCALIZATION_COPY,
-  type AppLocale,
-  type LocalizationCopy,
-} from '../copy';
+import { useMemo } from 'react';
+import { LOCALIZATION_COPY } from '../copy';
 import type { LocaleProviderProps } from './types';
+import { LocaleContext } from './locale-context';
+import { useLocalization } from './use-localization';
 
-interface LocaleContextValue {
-  copy: LocalizationCopy;
-  locale: AppLocale;
-  onLocaleChange(locale: AppLocale): void;
-}
-
-const LocaleContext = createContext<LocaleContextValue>({
-  copy: LOCALIZATION_COPY.uk,
-  locale: 'uk',
-  onLocaleChange: () => undefined,
-});
-
-export function LocaleProvider({
+function LocaleProvider({
   children,
   locale,
   onLocaleChange,
@@ -35,6 +21,4 @@ export function LocaleProvider({
   return <LocaleContext value={value}>{children}</LocaleContext>;
 }
 
-export function useLocalization() {
-  return useContext(LocaleContext);
-}
+export { LocaleProvider, useLocalization };

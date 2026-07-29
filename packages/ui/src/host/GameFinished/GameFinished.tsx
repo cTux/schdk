@@ -1,11 +1,8 @@
 import { Button } from '../../atoms/Button';
 import { useLocalization } from '../../localization';
+import { type GameFinishedProps } from './game-finished-props';
 
-export interface GameFinishedProps {
-  onReturn(): void;
-}
-
-export function GameFinished({ onReturn }: GameFinishedProps) {
+function GameFinished({ onReturn }: GameFinishedProps) {
   const { copy } = useLocalization();
 
   return (
@@ -17,3 +14,5 @@ export function GameFinished({ onReturn }: GameFinishedProps) {
     </section>
   );
 }
+
+export { type GameFinishedProps, GameFinished };

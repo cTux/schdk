@@ -1,2 +1,4 @@
-export { ImagePositionSettings, TextSettings } from './PositionSettings';
-export type { PositionSettingsProps } from './types';
+import { ImagePositionSettings, TextSettings } from './PositionSettings';
+import { type PositionSettingsProps } from './types';
+
+export { ImagePositionSettings, TextSettings, type PositionSettingsProps };

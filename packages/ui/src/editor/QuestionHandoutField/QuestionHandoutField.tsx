@@ -1,18 +1,11 @@
-import type { Handout } from '@schdk/common';
 import { Button } from '../../atoms/Button';
 import { FileButton } from '../../atoms/FileButton';
 import { TextAreaField } from '../../atoms/TextAreaField';
 import { useLocalization } from '../../localization';
 import { HandoutPreview } from '../HandoutPreview';
+import { type QuestionHandoutFieldProps } from './question-handout-field-props';
 
-export interface QuestionHandoutFieldProps {
-  handout?: Handout;
-  onAdd(file: File): void;
-  onRemove(): void;
-  onTextChange(text: string): void;
-}
-
-export function QuestionHandoutField({
+function QuestionHandoutField({
   handout,
   onAdd,
   onRemove,
@@ -57,3 +50,5 @@ export function QuestionHandoutField({
     </fieldset>
   );
 }
+
+export { type QuestionHandoutFieldProps, QuestionHandoutField };

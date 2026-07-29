@@ -1,0 +1,1 @@
+export { GameCustomElement } from './GameCustomElement';

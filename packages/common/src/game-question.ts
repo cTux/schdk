@@ -1,32 +1,16 @@
-export interface ImageHandout {
-  kind?: 'image';
-  name: string;
-  mimeType: string;
-  dataUrl: string;
-}
+import { type GameQuestionType } from './game-question-type.js';
+import { type Handout } from './handout.js';
+import { type AIQuestionGenerationMetadata } from './ai-question-generation-metadata.js';
+import { type ImageHandout } from './image-handout.js';
+import { type TextHandout } from './text-handout.js';
+import { QUESTION_TYPE_CONFIG } from './question-type-config.js';
+import { normalizeGameAnswer } from './normalize-game-answer.js';
+import { getGameQuestionAnswers } from './get-game-question-answers.js';
+import { createEmptyGameQuestion } from './create-empty-game-question.js';
+import { parseGameQuestion } from './parse-game-question.js';
+import { serializeGameQuestion } from './serialize-game-question.js';
 
-export interface TextHandout {
-  kind: 'text';
-  text: string;
-}
-
-export type Handout = ImageHandout | TextHandout;
-
-export const QUESTION_TYPE_CONFIG = {
-  standard: { partCount: 1, seconds: 60 },
-  'blitz-2x30': { partCount: 2, seconds: 30 },
-  'blitz-3x20': { partCount: 3, seconds: 20 },
-} as const;
-
-export type GameQuestionType = keyof typeof QUESTION_TYPE_CONFIG;
-
-export interface AIQuestionGenerationMetadata {
-  rule: string;
-  difficulty: AIQuestionDifficulty;
-  recognizability: AIQuestionRecognizability;
-}
-
-export interface GameQuestion {
+interface GameQuestion {
   type: GameQuestionType;
   questionParts: string[];
   answer: string;
@@ -39,189 +23,17 @@ export interface GameQuestion {
   aiGeneration?: AIQuestionGenerationMetadata;
 }
 
-export function normalizeGameAnswer(answer: string) {
-  return answer.normalize('NFKC').trim().replace(/\s+/g, ' ').toLowerCase();
-}
-
-export function getGameQuestionAnswers(
-  question: Pick<GameQuestion, 'answer' | 'alternativeAnswers'>,
-) {
-  return [question.answer, ...question.alternativeAnswers].filter((answer) =>
-    answer.trim(),
-  );
-}
-
-function isHandout(value: unknown): value is Handout {
-  if (!value || typeof value !== 'object') return false;
-  if ('kind' in value && value.kind === 'text') {
-    return 'text' in value && typeof value.text === 'string';
-  }
-  const mimeType = 'mimeType' in value ? value.mimeType : undefined;
-  const dataUrl = 'dataUrl' in value ? value.dataUrl : undefined;
-  return (
-    (!('kind' in value) || value.kind === 'image') &&
-    'name' in value &&
-    typeof value.name === 'string' &&
-    typeof mimeType === 'string' &&
-    mimeType.startsWith('image/') &&
-    typeof dataUrl === 'string' &&
-    dataUrl.startsWith(`data:${mimeType};base64,`)
-  );
-}
-
-function isQuestionType(value: unknown): value is GameQuestionType {
-  return typeof value === 'string' && value in QUESTION_TYPE_CONFIG;
-}
-
-function isAIQuestionGenerationMetadata(
-  value: unknown,
-): value is AIQuestionGenerationMetadata {
-  return (
-    !!value &&
-    typeof value === 'object' &&
-    'rule' in value &&
-    typeof value.rule === 'string' &&
-    !!value.rule.trim() &&
-    'difficulty' in value &&
-    typeof value.difficulty === 'string' &&
-    AI_QUESTION_DIFFICULTIES.includes(
-      value.difficulty as AIQuestionDifficulty,
-    ) &&
-    'recognizability' in value &&
-    typeof value.recognizability === 'string' &&
-    AI_QUESTION_RECOGNIZABILITIES.includes(
-      value.recognizability as AIQuestionRecognizability,
-    )
-  );
-}
-
-function parseQuestionParts(value: object): {
-  type: GameQuestionType;
-  questionParts: string[];
-} {
-  if (
-    'type' in value &&
-    isQuestionType(value.type) &&
-    'questionParts' in value &&
-    Array.isArray(value.questionParts) &&
-    value.questionParts.length === QUESTION_TYPE_CONFIG[value.type].partCount &&
-    value.questionParts.every((part: unknown) => typeof part === 'string')
-  ) {
-    return { type: value.type, questionParts: value.questionParts };
-  }
-  if (
-    !('type' in value) &&
-    'question' in value &&
-    typeof value.question === 'string'
-  ) {
-    return { type: 'standard', questionParts: [value.question] };
-  }
-  throw new Error('Invalid game question');
-}
-
-export function createEmptyGameQuestion(): GameQuestion {
-  return {
-    type: 'standard',
-    questionParts: [''],
-    answer: '',
-    alternativeAnswers: [],
-    wrongAnswers: [],
-  };
-}
-
-export function parseGameQuestion(value: unknown): GameQuestion {
-  if (
-    !value ||
-    typeof value !== 'object' ||
-    !('answer' in value) ||
-    typeof value.answer !== 'string' ||
-    !('alternativeAnswers' in value) ||
-    !Array.isArray(value.alternativeAnswers) ||
-    !value.alternativeAnswers.every(
-      (answer: unknown) => typeof answer === 'string',
-    )
-  ) {
-    throw new Error('Invalid game question');
-  }
-
-  const { type, questionParts } = parseQuestionParts(value);
-  const handout = 'handout' in value ? value.handout : undefined;
-  const answerComment =
-    'answerComment' in value ? value.answerComment : undefined;
-  const wrongAnswers = 'wrongAnswers' in value ? value.wrongAnswers : [];
-  const comment = 'comment' in value ? value.comment : undefined;
-  const hostNotes = 'hostNotes' in value ? value.hostNotes : undefined;
-  const aiGeneration = 'aiGeneration' in value ? value.aiGeneration : undefined;
-  if (handout !== undefined && !isHandout(handout)) {
-    throw new Error('Invalid game question');
-  }
-  if (
-    (answerComment !== undefined && typeof answerComment !== 'string') ||
-    !Array.isArray(wrongAnswers) ||
-    !wrongAnswers.every((answer: unknown) => typeof answer === 'string') ||
-    (comment !== undefined && typeof comment !== 'string') ||
-    (hostNotes !== undefined && typeof hostNotes !== 'string') ||
-    (aiGeneration !== undefined &&
-      !isAIQuestionGenerationMetadata(aiGeneration))
-  ) {
-    throw new Error('Invalid game question');
-  }
-
-  return {
-    type,
-    questionParts,
-    answer: value.answer,
-    ...(answerComment !== undefined ? { answerComment } : {}),
-    alternativeAnswers: value.alternativeAnswers,
-    wrongAnswers,
-    ...(handout ? { handout } : {}),
-    ...(comment !== undefined ? { comment } : {}),
-    ...(hostNotes !== undefined ? { hostNotes } : {}),
-    ...(aiGeneration !== undefined ? { aiGeneration } : {}),
-  };
-}
-
-export function serializeGameQuestion(question: GameQuestion) {
-  const handout =
-    question.handout?.kind === 'text'
-      ? {
-          kind: 'text' as const,
-          text: question.handout.text.trim(),
-        }
-      : question.handout;
-  return {
-    type: question.type,
-    questionParts: question.questionParts.map((part) => part.trim()),
-    answer: question.answer.trim(),
-    ...(question.answerComment?.trim()
-      ? { answerComment: question.answerComment.trim() }
-      : {}),
-    alternativeAnswers: question.alternativeAnswers
-      .map((answer) => answer.trim())
-      .filter(Boolean),
-    wrongAnswers: question.wrongAnswers
-      .map((answer) => answer.trim())
-      .filter(Boolean),
-    ...(handout && (handout.kind !== 'text' || handout.text)
-      ? { handout }
-      : {}),
-    ...(question.comment?.trim() ? { comment: question.comment.trim() } : {}),
-    ...(question.hostNotes?.trim()
-      ? { hostNotes: question.hostNotes.trim() }
-      : {}),
-    ...(question.aiGeneration?.rule.trim()
-      ? {
-          aiGeneration: {
-            ...question.aiGeneration,
-            rule: question.aiGeneration.rule.trim(),
-          },
-        }
-      : {}),
-  };
-}
-import {
-  AI_QUESTION_DIFFICULTIES,
-  AI_QUESTION_RECOGNIZABILITIES,
-  type AIQuestionDifficulty,
-  type AIQuestionRecognizability,
-} from './ai-question.js';
+export {
+  type ImageHandout,
+  type TextHandout,
+  type Handout,
+  QUESTION_TYPE_CONFIG,
+  type GameQuestionType,
+  type AIQuestionGenerationMetadata,
+  type GameQuestion,
+  normalizeGameAnswer,
+  getGameQuestionAnswers,
+  createEmptyGameQuestion,
+  parseGameQuestion,
+  serializeGameQuestion,
+};

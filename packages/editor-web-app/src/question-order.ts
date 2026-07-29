@@ -1,6 +1,7 @@
 import type { GameQuestion } from '@schdk/common';
+import { getSelectedIndexAfterSwap } from './get-selected-index-after-swap';
 
-export function swapQuestions(
+function swapQuestions(
   questions: readonly GameQuestion[],
   sourceIndex: number,
   targetIndex: number,
@@ -15,12 +16,4 @@ export function swapQuestions(
   return swapped;
 }
 
-export function getSelectedIndexAfterSwap(
-  selectedIndex: number,
-  sourceIndex: number,
-  targetIndex: number,
-) {
-  if (selectedIndex === sourceIndex) return targetIndex;
-  if (selectedIndex === targetIndex) return sourceIndex;
-  return selectedIndex;
-}
+export { swapQuestions, getSelectedIndexAfterSwap };

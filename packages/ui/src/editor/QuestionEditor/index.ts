@@ -1,2 +1,4 @@
-export { QuestionEditor } from './QuestionEditor';
-export type * from './types';
+import { QuestionEditor } from './QuestionEditor';
+import { type QuestionEditorProps } from './types';
+
+export { QuestionEditor, type QuestionEditorProps };

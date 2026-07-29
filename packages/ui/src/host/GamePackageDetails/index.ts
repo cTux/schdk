@@ -1,2 +1,4 @@
-export { GamePackageDetails } from './GamePackageDetails';
-export type * from './types';
+import { GamePackageDetails } from './GamePackageDetails';
+import { type GamePackageDetailsProps } from './types';
+
+export { GamePackageDetails, type GamePackageDetailsProps };

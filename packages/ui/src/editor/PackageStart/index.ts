@@ -1,2 +1,4 @@
-export { PackageStart } from './PackageStart';
-export type * from './types';
+import { PackageStart } from './PackageStart';
+import { type PackageStartProps } from './types';
+
+export { PackageStart, type PackageStartProps };

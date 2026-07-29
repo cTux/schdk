@@ -1,2 +1,4 @@
-export { RangeInput } from './RangeInput';
-export type { RangeInputProps } from './types';
+import { RangeInput } from './RangeInput';
+import { type RangeInputProps } from './types';
+
+export { RangeInput, type RangeInputProps };

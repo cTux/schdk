@@ -1,2 +1,17 @@
-export { VisualEditor } from './VisualEditor';
-export type * from './types';
+import { VisualEditor } from './VisualEditor';
+import {
+  type GamePoint,
+  type ResizeHandle,
+  type ElementSelection,
+  type VisualEditorProps,
+  type VisualEditorController,
+} from './types';
+
+export {
+  VisualEditor,
+  type GamePoint,
+  type ResizeHandle,
+  type ElementSelection,
+  type VisualEditorProps,
+  type VisualEditorController,
+};

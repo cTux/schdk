@@ -1,11 +1,5 @@
-import type { QuestionDatabaseRow } from '../QuestionDatabasePage';
+import { type QuestionDatabaseTableProps } from './question-database-table-props';
 
-export type QuestionDatabaseSort = 'question' | 'answer';
+type QuestionDatabaseSort = 'question' | 'answer';
 
-export interface QuestionDatabaseTableProps {
-  ascending: boolean;
-  rows: QuestionDatabaseRow[];
-  sort: QuestionDatabaseSort;
-  onSelect?(row: QuestionDatabaseRow): void;
-  onSort(sort: QuestionDatabaseSort): void;
-}
+export { type QuestionDatabaseSort, type QuestionDatabaseTableProps };

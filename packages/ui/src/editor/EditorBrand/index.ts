@@ -1,2 +1,4 @@
-export { EditorBrand } from './EditorBrand';
-export type * from './types';
+import { EditorBrand } from './EditorBrand';
+import { type EditorBrandProps } from './types';
+
+export { EditorBrand, type EditorBrandProps };
