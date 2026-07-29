@@ -112,13 +112,13 @@ importers:
       '@schdk/ai':
         specifier: workspace:*
         version: link:../ai
-      '@schdk/all-web-app':
-        specifier: workspace:*
-        version: link:../all-web-app
       '@schdk/google-drive':
         specifier: workspace:*
         version: link:../google-drive
     devDependencies:
+      '@schdk/all-web-app':
+        specifier: workspace:*
+        version: link:../all-web-app
       '@types/node':
         specifier: 'catalog:'
         version: 26.1.2

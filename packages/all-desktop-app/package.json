@@ -23,10 +23,10 @@
   },
   "dependencies": {
     "@schdk/ai": "workspace:*",
-    "@schdk/all-web-app": "workspace:*",
     "@schdk/google-drive": "workspace:*"
   },
   "devDependencies": {
+    "@schdk/all-web-app": "workspace:*",
     "@types/node": "catalog:",
     "electron": "catalog:",
     "electron-builder": "catalog:",
