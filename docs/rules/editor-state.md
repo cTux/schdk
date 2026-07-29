@@ -14,8 +14,12 @@
   keep actionable validation and file-operation errors.
 - A new package needs a destination before entering the editor. Canceling the
   save dialog leaves the start screen unchanged.
-- Validate selected image handouts and their generated data URLs before
-  changing package state.
+- Reject oversized image handouts before reading them, validate their generated
+  data URLs, and confirm the complete candidate package remains serializable
+  before changing package state.
 - Reject oversized music breaks before reading them into memory.
+- Bind asynchronous image and AI-generation results to the package session
+  that started them; closing or switching packages invalidates unfinished
+  results.
 - Keep each filename synchronized with its filesystem-safe package title and
   the `.schdk` extension, within the Drive filename limit.

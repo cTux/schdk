@@ -15,10 +15,12 @@ description: Build, debug, secure, or package SCHDK Electron applications. Use f
    ignored credentials resource, keep it in Electron main, and never expose it
    through renderer IPC.
 5. Keep Drive package IPC limited to validated create, update, delete, list,
-   and load operations; renderer code never receives access tokens or generic
-   requests.
+   and load operations. Parse game-package bytes and verify their derived
+   metadata before writes; renderer code never receives access tokens or
+   generic requests.
 6. Keep filesystem package IPC limited to explicit downloads. Local file import
-   uses the renderer file chooser and uploads through the Drive bridge.
+   uses the renderer file chooser and uploads through the Drive bridge. Parse
+   package bytes and reject invalid filenames before opening the save dialog.
 7. Keep user AI API keys in the current Google account's separate Drive app
    data; expose only save, remove, configured-status, and validated generation
    IPC. Run generation in Electron main, return only the parsed question, and

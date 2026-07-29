@@ -12,6 +12,8 @@ description: Maintain or diagnose the SCHDK .schdk, .aiquestion, and .aiquestion
    `packages/common/src/game-question.ts` as the owner of question types and
    parsing; do not duplicate schema or validation logic in consumers.
    Store music-break bytes in their fixed ZIP entries, not in `game.json`.
+   Reuse the canonical parser for every desktop IPC or Drive write boundary and
+   verify derived metadata instead of trusting renderer-supplied flags.
 3. Update implementation and `docs/GAME_PACKAGE.md` together for contract changes.
 4. Rebuild affected consumers when exported types or behavior change.
 5. For `.aiquestion` changes, keep `packages/common/src/ai-question.ts` and

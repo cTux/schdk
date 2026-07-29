@@ -46,6 +46,9 @@
   download APIs to its trusted main renderer. Do not expose local package open,
   recent-path, or autosave IPC. Do not enable Node integration for renderer
   content or subframes.
+- Parse and validate package bytes before explicit filesystem downloads and
+  before Drive create or update operations; never trust renderer-provided
+  package metadata independently of the archive.
 - Keep user AI API keys in the current Google account's separate Drive app
   data. Expose only save, remove, configured-status, and validated question
   generation operations to the renderer. Run generation in Electron main and

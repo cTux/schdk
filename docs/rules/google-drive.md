@@ -16,7 +16,8 @@
 - Store the current account's rebuildable question index in
   `question-database-v1.json` in `appDataFolder`. Derive it only from parsed
   app-marked `.schdk` packages, compare package IDs and modification times
-  before downloading media, and never treat the index as the source of truth.
+  before downloading media, abort refresh persistence when the connected
+  account changes, and never treat the index as the source of truth.
 - Store app-created `.schdk` files in a visible `SCHDK` Drive folder. Mark the
   folder and packages with private app properties, and expose package identity
   to browser deep links and sessions through validated `drive:<fileId>`
@@ -37,6 +38,8 @@
   in `@schdk/google-drive`, after the current account's rules. Keep the admin
   email allowlist centralized and unobfuscated there; Drive folder permissions
   remain the security boundary for global writes.
+- Persist a replacement global general rule before clearing the previous
+  general flag. A failed replacement must leave the previous rule intact.
 - Before creating a rule from an analyzed question, search the
   [shared Drive folder](https://drive.google.com/drive/folders/1qigJtM0zAQl2Yk8C2xjeragcGDybUVR1)
   for the same reusable mechanism. Extend an existing `.aiquestion` with

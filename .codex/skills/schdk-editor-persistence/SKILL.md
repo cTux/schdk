@@ -15,6 +15,9 @@ description: Change or debug Drive-backed SCHDK editor state and persistence in 
 6. Trace the stable Drive file ID, reconnect retry, deep link/session
    reference, title-synchronized filename, local import upload, and explicit
    download. Do not add local package persistence or recovery fallbacks.
+7. Bind asynchronous editor mutations to the package session that started
+   them. Closing, deleting, or switching packages must invalidate unfinished
+   image reads and AI-generation results.
 
 ## Checks
 
