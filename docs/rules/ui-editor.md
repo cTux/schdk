@@ -92,6 +92,7 @@
   tooltips while pressing or dragging.
 - Dragging one question number onto another swaps complete records while the
   selection follows the same question.
-- Give each tour an optional single-line phrase field. Between tours 1–2 and
-  2–3, let the author add, replace, or remove one audio file. Offer `audio/*`
-  and reject files the native player cannot play.
+- Give each tour an optional single-line field whose placeholder is
+  `Фраза туру` / `Tour phrase`, without a separate visible label. Between tours
+  1–2 and 2–3, let the author add, replace, or remove one audio file. Offer
+  `audio/*` and reject files the native player cannot play.

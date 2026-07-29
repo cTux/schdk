@@ -52,7 +52,6 @@ export const ukrainian = {
     packageQuestions: 'Питання пакета',
     tour: (number: number) => `Тур ${number}`,
     tourPhrase: 'Фраза туру',
-    tourPhrasePlaceholder: 'Необов’язково',
     musicBreak: 'Музична пауза',
     noMusic: 'Музику не додано',
     addMusic: 'Додати музику',

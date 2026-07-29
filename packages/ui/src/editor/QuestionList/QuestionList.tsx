@@ -39,14 +39,13 @@ export function QuestionList({
       {[0, 1, 2].map((tour) => (
         <section key={tour}>
           <h2>{copy.editor.tour(tour + 1)}</h2>
-          <label className="tour-phrase-field">
-            <span>{copy.editor.tourPhrase}</span>
-            <Input
-              placeholder={copy.editor.tourPhrasePlaceholder}
-              value={gamePackage.tourPhrases[tour]}
-              onChange={(event) => onTourPhraseChange(tour, event.target.value)}
-            />
-          </label>
+          <Input
+            aria-label={copy.editor.tourPhrase}
+            className="tour-phrase-field"
+            placeholder={copy.editor.tourPhrase}
+            value={gamePackage.tourPhrases[tour]}
+            onChange={(event) => onTourPhraseChange(tour, event.target.value)}
+          />
           <div className="question-grid">
             {Array.from({ length: QUESTIONS_PER_ROUND }, (_, offset) => {
               const index = tour * QUESTIONS_PER_ROUND + offset;

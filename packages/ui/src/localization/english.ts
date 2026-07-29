@@ -53,7 +53,6 @@ export const english: typeof ukrainian = {
     packageQuestions: 'Package questions',
     tour: (number) => `Tour ${number}`,
     tourPhrase: 'Tour phrase',
-    tourPhrasePlaceholder: 'Optional',
     musicBreak: 'Music break',
     noMusic: 'No music added',
     addMusic: 'Add music',
