@@ -2,7 +2,8 @@
 
 .editor-app .tour-phrase-field {
   width: 100%;
-  margin-bottom: 9px;
-  padding: 7px 9px;
+  min-height: $control-compact;
+  margin-bottom: 6px;
+  padding: 5px 8px;
   font-size: $font-size-sm;
 }

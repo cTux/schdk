@@ -15,6 +15,8 @@ without losing in-progress work.
   through a single-line field with its name as the placeholder and no separate
   visible label, and every field defined by the
   [game-package specification](game-package.md).
+- **EDT-2a:** Sticky question navigation uses compact controls and spacing so
+  all three tours remain visible on short desktop viewports.
 - **EDT-3:** Question type selection exposes one, two, or three question parts
   for standard, 2×30 blitz, or 3×20 blitz respectively.
 - **EDT-4:** Authors can add, replace, and remove text or validated image
