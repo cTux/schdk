@@ -74,7 +74,9 @@ package authoring, hosting, settings, and account state.
 - **SHL-15:** Pull requests load the production shell in a real headless browser
   and require the Google login view to render.
 - **SHL-16:** Every multiline shell field uses the shared non-resizable control
-  with the same chrome and interaction states as dropdowns.
+  with the same chrome and interaction states as dropdowns. Its label appears
+  as the placeholder while empty and moves inside the populated textarea at
+  the bottom right.
 - **SHL-17:** Package creation rules use a page visually consistent with
   question creation rules and show only the current account's packages. Each
   package edits a required name and shared context plus zero or more
@@ -147,7 +149,9 @@ package authoring, hosting, settings, and account state.
 9. Run pull-request checks and observe the production login shell render in
    headless Chrome.
 10. Open the Artificial intelligence form and confirm every multiline field
-    matches the shared dropdown styling without a resize handle.
+    matches the shared dropdown styling without a resize handle, uses its label
+    as the empty placeholder, and shows the label inside the populated textarea
+    at the bottom right.
 11. Open Package creation rules directly, create a package with shared and
     per-question context, and confirm its compact rows stay number-sorted,
     prevent duplicate question numbers, and offer favorite-first starred

@@ -77,7 +77,8 @@ without losing in-progress work.
   stacks vertically on narrow screens.
 - **EDT-17:** Every multiline package and generation field uses the same
   non-resizable shared control with dropdown-aligned borders, surfaces, hover,
-  focus, and disabled states.
+  focus, and disabled states. Its label appears as the placeholder while empty
+  and moves inside the populated textarea at the bottom right.
 - **EDT-18:** AI generation phrases each question naturally as if written by a
   human rather than AI and requires a non-empty answer comment that explains
   only why the answer is correct, never why the question was generated or
@@ -182,7 +183,9 @@ without losing in-progress work.
    requests a text handout, observe the blocked thinking state, and confirm
    every returned field, including the handout, replaces the selected question.
 10. Inspect every multiline editor and generation field at normal and narrow
-    widths; confirm consistent shared styling and no native resize handle.
+    widths; confirm consistent shared styling, no native resize handle, label
+    text as the empty placeholder, and the label inside the populated textarea
+    at the bottom right.
 11. Open generation as an allowlisted administrator, expand the prompt panel,
     and confirm its read-only text follows changes to the selected template,
     difficulty, recognizability, and context. Confirm the control is absent for

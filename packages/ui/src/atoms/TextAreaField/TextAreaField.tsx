@@ -1,3 +1,5 @@
+import './styles.scss';
+
 import classNames from 'classnames';
 import { LOCALIZATION_COPY } from '../../localization';
 import { Textarea } from '../Textarea';
@@ -13,14 +15,24 @@ function TextAreaField({
   onValueChange,
   ...props
 }: TextAreaFieldProps) {
+  const fieldLabel = optional ? `${label} ${optionalLabel}` : label;
+
   return (
-    <label>
-      {label} {optional && <span>{optionalLabel}</span>}
+    <label
+      className={classNames('text-area-field', { 'has-value': Boolean(value) })}
+    >
+      {value && (
+        <span className="text-area-field-label" aria-hidden="true">
+          {fieldLabel}
+        </span>
+      )}
       <Textarea
         {...props}
         className={classNames(className, { invalid }) || undefined}
+        placeholder={fieldLabel}
         value={value}
         onChange={(event) => onValueChange(event.target.value)}
+        aria-label={fieldLabel}
         aria-invalid={invalid}
       />
     </label>

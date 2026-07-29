@@ -1,0 +1,25 @@
+@use '../../styles/tokens' as *;
+
+.text-area-field {
+  position: relative;
+}
+
+.text-area-field.has-value .ui-textarea {
+  padding-bottom: 30px;
+}
+
+.text-area-field-label {
+  position: absolute;
+  z-index: 1;
+  right: 11px;
+  bottom: 9px;
+  max-width: calc(100% - 22px);
+  overflow: hidden;
+  color: $muted;
+  font-size: $font-size-xs;
+  font-weight: 600;
+  line-height: 1;
+  pointer-events: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -58,7 +58,7 @@ V17|Third-party GitHub Actions execute only from reviewed immutable commit SHAs.
 V18|Pull requests execute the production browser shell and packaged Electron renderer before their required checks pass.
 V19|The browser warns before unloading a package whose current changes are not saved.
 V20|AI output is validated as a complete game question before it can replace editor fields.
-V21|Every multiline text input uses the shared non-resizable `Textarea` control.
+V21|Every multiline text input uses the shared non-resizable `Textarea` control; labeled fields show the label as an empty placeholder and inside the populated textarea at bottom right.
 V22|Every personal or global AI question rule is parsed from its own `.aiquestion` ZIP archive and persisted through its assigned Google Drive folder.
 V23|Global AI question writes require an allowlisted account and remain confined to the configured shared Drive folder.
 V24|At most one global AI question rule is marked as general, only an allowlisted administrator can change it, and generation applies it to every selected template.
