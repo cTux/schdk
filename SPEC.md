@@ -74,7 +74,7 @@ V33|Host notes contain only delivery instructions visible while the host reads a
 V34|AI package regeneration of remarked questions includes the current question and author remark and clears the remark only after successful replacement.
 V35|Selecting a personal-database result loads the complete canonical source question and never replaces a populated editor slot without explicit confirmation.
 V36|Initial Drive recents loading issues one files request for its first result page even when editor and host are mounted.
-V37|Question and package generation use a non-modal full-height right dock without a blocking backdrop, keep the editor centered in the remaining workspace, lock unfinished targets, unlock completed targets, preserve author selection, and close after final success.
+V37|Question and package generation use a non-modal full-height right dock without a blocking backdrop, keep the editor centered with equal spacing from both docks, lock unfinished targets, unlock completed targets, preserve author selection, and close after final success.
 
 ## §T
 
@@ -168,3 +168,4 @@ B80|2026-07-29|Default dock classes were composed as multi-class JSX literals ou
 B81|2026-07-29|Storybook fixtures imported component values that imported the fixtures back, leaving `gamePackage` uninitialized at runtime|Move the game-package fixture to its own acyclic module; browser smoke testing covers recurrence.
 B82|2026-07-29|Docked generation panels remained modal cards with blocking backdrops and package generation repeatedly stole question selection|V37
 B83|2026-07-29|The dock-width override replaced the editor's automatic margins and pinned it to the left navigation|V37
+B84|2026-07-29|The centered editor reserved only the dock width and omitted its standard side gutters|V37

@@ -24,8 +24,8 @@
   API key is configured and explain the disabled state with the shared custom
   tooltip. Its panel opens non-modally, docked to the editor's right with the
   same full-height chrome as the left navigation and no blocking backdrop,
-  while the editor stays centered in the space between both docks, and selects
-  an enabled `AIQuestion`
+  while the editor stays centered with equal spacing from both docks, and
+  selects an enabled `AIQuestion`
   template and a very easy, easy, medium, hard, or very hard difficulty,
   selects recognizability across the same range, accepts context, and disables
   every control while generation is pending. Pass the selected difficulty and
