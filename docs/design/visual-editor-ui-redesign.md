@@ -4,7 +4,7 @@ Status: implemented
 
 Date: 2026-07-25
 
-Research: [2026 UI and visual-editor research](../research/2026-ui-editor-research.md)
+Research: [2026 UI and visual-editor research](../research/2026-ui-editor-research-implemented.md)
 
 ## Outcome
 
