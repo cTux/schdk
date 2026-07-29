@@ -22,18 +22,21 @@
   with the current SCHDK theme.
 - Put the AI generation icon beside the question heading. Disable it when no
   API key is configured and explain the disabled state with the shared custom
-  tooltip. Its panel opens docked to the editor's right, dims the background,
+  tooltip. Its panel opens non-modally, docked to the editor's right with the
+  same full-height chrome as the left navigation and no blocking backdrop,
+  while the editor stays centered with equal spacing from both docks, and
   selects an enabled `AIQuestion`
   template and a very easy, easy, medium, hard, or very hard difficulty,
   selects recognizability across the same range, accepts context, and disables
   every control while generation is pending. Pass the selected difficulty and
   recognizability into the provider prompt; default generation flows without
-  explicit selectors to medium for both. Successful structured output replaces
-  every question field, records the selected rule name, difficulty, and
-  recognizability on the question, resets the panel, and closes it. While
-  generation runs, offer `Generate in background`; it removes the blocking
-  backdrop without interrupting generation and keeps the target question
-  disabled until completion. Show read-only generation parameters in the
+  explicit selectors to medium difficulty and easy recognizability. Successful
+  structured output keeps question text and answer comments natural and free
+  of template construction labels, replaces every question field, records the
+  selected rule name, difficulty, and recognizability on the question, resets
+  the panel, and closes it. While
+  generation runs, keep only its target question disabled until completion;
+  ready questions remain editable. Show read-only generation parameters in the
   editor whenever they are present.
 - Put personal question-database search beside the question heading. Search
   question and answer text after two entered characters and show the shared
@@ -47,13 +50,12 @@
   selects difficulty and recognizability from very easy through very hard. When
   regenerating remarked questions, include the current question and remark in
   the prompt and clear the remark after resolving it. Generate slots
-  sequentially, select the active slot behind the panel, wait for each provider
-  response, replace the complete question record with its selected rule,
-  difficulty, and recognizability metadata, and continue to the next slot.
-  While generation runs, offer `Generate in background`; it removes the
-  blocking backdrop without interrupting the generation sequence. Keep
-  unfinished target questions disabled, unlock each generated question for
-  editing immediately, and close the panel after the final question succeeds.
+  sequentially, select the first target when generation starts, wait for each
+  provider response, replace the complete question record with its selected
+  rule, difficulty, and recognizability metadata, and continue to the next
+  slot without taking selection away from the author. Keep unfinished target
+  questions disabled, unlock each generated question for editing immediately,
+  and close the panel after the final question succeeds.
 - Put a red cloud-delete button after package generation in the editable
   package-title row. Confirm it before moving the active package to Google Drive
   trash and returning to the package list.

@@ -44,13 +44,11 @@ export function QuestionGenerationDialog({
     onGenerated,
   });
   const {
-    background,
     checkQuestionDatabase,
     context,
     difficulty,
     failed,
     generate,
-    generateInBackground,
     open,
     promptOpen,
     recognizability,
@@ -82,7 +80,8 @@ export function QuestionGenerationDialog({
         onClick={show}
       />
       <Dialog.Root
-        modal={!background}
+        modal={false}
+        disablePointerDismissal
         open={open}
         onOpenChange={(nextOpen) => {
           if (thinking) return;
@@ -91,9 +90,6 @@ export function QuestionGenerationDialog({
         }}
       >
         <Dialog.Portal>
-          {!background && (
-            <Dialog.Backdrop className="question-generation-backdrop" />
-          )}
           <Dialog.Viewport className={dockedGenerationViewportClassName}>
             <Dialog.Popup
               className={classNames(
@@ -198,15 +194,6 @@ export function QuestionGenerationDialog({
                     </p>
                   )}
                   <div className="question-generation-actions">
-                    {thinking && !background && (
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        onClick={generateInBackground}
-                      >
-                        {copy.packageGeneration.background}
-                      </Button>
-                    )}
                     <Button
                       type="button"
                       variant="secondary"

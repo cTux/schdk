@@ -10,7 +10,6 @@ import type {
 
 export interface PackageGenerationOptionsProps {
   activePackages: AIQuestionsPackage[];
-  backgroundAvailable: boolean;
   canGenerate: boolean;
   difficulty: AIQuestionDifficulty;
   recognizability: AIQuestionRecognizability;
@@ -23,7 +22,6 @@ export interface PackageGenerationOptionsProps {
   thinking: boolean;
   checkQuestionDatabase: boolean;
   onCheckQuestionDatabaseChange(checked: boolean): void;
-  onBackground(): void;
   onCancel(): void;
   onDifficultyChange(difficulty: AIQuestionDifficulty): void;
   onRecognizabilityChange(recognizability: AIQuestionRecognizability): void;

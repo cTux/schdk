@@ -32,7 +32,7 @@ function createAiQuestionGeneration(
     excludedAnswers: string[],
     difficulty: AIQuestionDifficulty = 'medium',
     checkQuestionDatabase = false,
-    recognizability: AIQuestionRecognizability = 'medium',
+    recognizability: AIQuestionRecognizability = 'easy',
   ): GameQuestionGenerationRequest {
     return {
       provider: options.provider,
@@ -81,7 +81,7 @@ function createAiQuestionGeneration(
           context,
           excludedAnswers = [],
           difficulty = 'medium',
-          recognizability = 'medium',
+          recognizability = 'easy',
         ) => {
           const { system, prompt } = createGameQuestionPrompt(
             createRequest(
@@ -102,7 +102,7 @@ function createAiQuestionGeneration(
       excludedAnswers = [],
       difficulty = 'medium',
       checkQuestionDatabase = false,
-      recognizability = 'medium',
+      recognizability = 'easy',
     ) {
       if (!bridge) {
         throw new Error('Google Drive is disconnected');
