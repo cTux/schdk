@@ -154,7 +154,6 @@ export function EditorView({
         {message && <StatusMessage>{message}</StatusMessage>}
         <ToastContainer
           aria-label={toastCopy.notifications}
-          autoClose={2000}
           closeButton={false}
           closeOnClick
           limit={2}
