@@ -1,0 +1,8 @@
+@use '../../styles/tokens' as *;
+
+.app-icon {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  filter: drop-shadow(0 8px 12px rgba($accent-rgb, 0.2));
+}

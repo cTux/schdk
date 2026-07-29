@@ -1,0 +1,9 @@
+@use '../../styles/tokens' as *;
+
+.question-generation-check {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: $space-2;
+  font-weight: 400;
+}

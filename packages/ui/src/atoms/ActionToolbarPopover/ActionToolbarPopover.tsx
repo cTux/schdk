@@ -1,6 +1,7 @@
 import { Popover } from '@base-ui/react/popover';
 import { Toolbar } from '@base-ui/react/toolbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import '../../styles/_primitives.scss';
 import { Tooltip } from '../Tooltip';
 import type { ActionToolbarPopoverProps } from './types';
 

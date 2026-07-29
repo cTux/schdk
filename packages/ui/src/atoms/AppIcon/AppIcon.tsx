@@ -1,3 +1,4 @@
+import './styles.scss';
 import { type AppIconProps } from './app-icon-props';
 
 function AppIcon({ className = 'app-icon' }: AppIconProps) {

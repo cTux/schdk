@@ -1,3 +1,4 @@
+import './styles.scss';
 import { type StatusMessageProps } from './status-message-props';
 
 function StatusMessage({ children }: StatusMessageProps) {

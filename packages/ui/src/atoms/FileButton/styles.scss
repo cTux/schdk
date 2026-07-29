@@ -1,0 +1,30 @@
+@use '../../styles/tokens' as *;
+
+.file-button {
+  display: inline-flex;
+  min-height: $control-normal;
+  align-items: center;
+  border: 1px solid $border;
+  border-radius: $radius-control;
+  background: $surface-raised;
+  padding: 9px 14px;
+  color: $text;
+  cursor: pointer;
+  transition:
+    border-color $motion-fast ease,
+    background-color $motion-fast ease;
+}
+
+.file-button:hover {
+  border-color: $border-strong;
+  background: $surface-hover;
+}
+
+.file-button:focus-within {
+  outline: $focus-width solid rgba($accent-rgb, 0.75);
+  outline-offset: $focus-offset;
+}
+
+.file-button input {
+  display: none;
+}

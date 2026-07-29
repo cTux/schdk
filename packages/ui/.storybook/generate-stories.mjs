@@ -44,17 +44,33 @@ function getPropNames(parameters) {
 }
 
 function getComponents(source) {
+  const groupedExports = new Set(
+    [...source.matchAll(/export\s*\{([\s\S]*?)\};/gu)].flatMap((match) =>
+      match[1]
+        .split(',')
+        .map(
+          (name) =>
+            name
+              .trim()
+              .replace(/^type\s+/u, '')
+              .split(/\s+as\s+/u)[0],
+        )
+        .filter(Boolean),
+    ),
+  );
   const components = [];
-  const exports = /export function ([A-Z]\w*)\s*\(/gu;
+  const functions = /(export\s+)?function ([A-Z]\w*)\s*\(/gu;
   let match;
-  while ((match = exports.exec(source))) {
-    const open = exports.lastIndex - 1;
+  while ((match = functions.exec(source))) {
+    const name = match[2];
+    if (!match[1] && !groupedExports.has(name)) continue;
+    const open = functions.lastIndex - 1;
     const close = findClosingCharacter(source, open, '(', ')');
     components.push({
-      name: match[1],
+      name,
       props: getPropNames(source.slice(open + 1, close)),
     });
-    exports.lastIndex = close + 1;
+    functions.lastIndex = close + 1;
   }
   return components;
 }
@@ -63,6 +79,26 @@ function createStory(relativeSource, component) {
   const importPath = `../../src/${relativeSource.replaceAll('\\', '/').replace(/\.tsx$/u, '')}`;
   const area = relativeSource.split(path.sep)[0];
   const title = `${area[0].toUpperCase()}${area.slice(1)}/${component.name}`;
+  const areaContext = {
+    editor: {
+      wrapper: 'editor',
+      styles: ['editor'],
+    },
+    host: {
+      wrapper: 'host',
+      styles: ['host'],
+    },
+    options: {
+      styles: ['shell'],
+    },
+    shell: {
+      styles: ['shell'],
+    },
+    'visual-editor': {
+      wrapper: 'visual-editor',
+      styles: ['shell', 'host'],
+    },
+  }[area];
   const needsToolbar = [
     'ActionToolbarButton',
     'ActionToolbarPopover',
@@ -70,15 +106,20 @@ function createStory(relativeSource, component) {
     'ImagePositionSettings',
     'TextSettings',
   ].includes(component.name);
+  const needsDecorator = needsToolbar || areaContext?.wrapper;
+  const styleImports =
+    areaContext?.styles
+      .map((style) => `import '../../src/styles/${style}.scss';`)
+      .join('\n') ?? '';
   return `import type { Meta, StoryObj } from '@storybook/react-vite';
 import { getStoryArgs } from '../story-args';
-${needsToolbar ? "import { ToolbarStory } from '../story-decorators';\n" : ''}import { ${component.name} } from '${importPath}';
+${needsDecorator ? "import { ProductionStory } from '../story-decorators';\n" : ''}${styleImports ? `${styleImports}\n` : ''}import { ${component.name} } from '${importPath}';
 
 const meta = {
   title: '${title}',
   component: ${component.name},
   tags: ['autodocs'],
-${needsToolbar ? '  decorators: [(Story) => <ToolbarStory><Story /></ToolbarStory>],\n' : ''}} satisfies Meta<typeof ${component.name}>;
+${needsDecorator ? `  decorators: [(Story) => <ProductionStory${areaContext?.wrapper ? ` area="${areaContext.wrapper}"` : ''}${needsToolbar ? ' toolbar' : ''}><Story /></ProductionStory>],\n` : ''}} satisfies Meta<typeof ${component.name}>;
 
 type Story = StoryObj<typeof meta>;
 

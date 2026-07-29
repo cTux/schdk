@@ -1,3 +1,4 @@
+import './styles.scss';
 import { type FileButtonProps } from './file-button-props';
 
 function FileButton({ children, ...props }: FileButtonProps) {

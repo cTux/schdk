@@ -1,3 +1,4 @@
+import './styles.scss';
 import { Checkbox } from '../../atoms/Checkbox';
 import type { QuestionDatabaseCheckProps } from './types';
 

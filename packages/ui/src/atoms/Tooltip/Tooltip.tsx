@@ -1,4 +1,5 @@
 import { Tooltip as BaseTooltip } from '@base-ui/react/tooltip';
+import '../../styles/_primitives.scss';
 import type { TooltipProps } from './types';
 import { TooltipProvider } from '../TooltipProvider';
 
