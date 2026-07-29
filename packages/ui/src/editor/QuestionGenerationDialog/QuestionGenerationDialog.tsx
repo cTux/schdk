@@ -10,8 +10,10 @@ import classNames from 'classnames';
 import { useState } from 'react';
 import {
   AI_QUESTION_DIFFICULTIES,
+  AI_QUESTION_RECOGNIZABILITIES,
   compareFavoriteItemsByName,
   type AIQuestionDifficulty,
+  type AIQuestionRecognizability,
 } from '@schdk/common';
 import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';
@@ -35,6 +37,8 @@ export function QuestionGenerationDialog({
   const [open, setOpen] = useState(false);
   const [templateIndex, setTemplateIndex] = useState('0');
   const [difficulty, setDifficulty] = useState<AIQuestionDifficulty>('medium');
+  const [recognizability, setRecognizability] =
+    useState<AIQuestionRecognizability>('medium');
   const [context, setContext] = useState('');
   const [thinking, setThinking] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -48,6 +52,7 @@ export function QuestionGenerationDialog({
     setOpen(false);
     setTemplateIndex('0');
     setDifficulty('medium');
+    setRecognizability('medium');
     setContext('');
     setThinking(false);
     setFailed(false);
@@ -67,6 +72,7 @@ export function QuestionGenerationDialog({
         excludedAnswers,
         difficulty,
         checkQuestionDatabase,
+        recognizability,
       );
       onGenerated(question);
       reset();
@@ -164,6 +170,24 @@ export function QuestionGenerationDialog({
                       ))}
                     </Dropdown>
                   </label>
+                  <label>
+                    {copy.questionGeneration.recognizability}
+                    <Dropdown
+                      value={recognizability}
+                      disabled={thinking}
+                      onChange={(event) =>
+                        setRecognizability(
+                          event.target.value as AIQuestionRecognizability,
+                        )
+                      }
+                    >
+                      {AI_QUESTION_RECOGNIZABILITIES.map((value) => (
+                        <option key={value} value={value}>
+                          {copy.questionGeneration.recognizabilities[value]}
+                        </option>
+                      ))}
+                    </Dropdown>
+                  </label>
                   <TextAreaField
                     label={copy.questionGeneration.context}
                     placeholder={copy.questionGeneration.contextPlaceholder}
@@ -217,6 +241,7 @@ export function QuestionGenerationDialog({
                         context.trim(),
                         excludedAnswers,
                         difficulty,
+                        recognizability,
                       )}
                     />
                   </label>

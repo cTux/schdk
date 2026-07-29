@@ -24,10 +24,11 @@
   API key is configured and explain the disabled state with the shared custom
   tooltip. Its modal dims the background, selects an enabled `AIQuestion`
   template and a very easy, easy, medium, hard, or very hard difficulty,
-  accepts context, and disables every control while generation is pending.
-  Pass the selected difficulty into the provider prompt; default generation
-  flows without an explicit selector to medium. Successful structured output
-  replaces every question field, resets the modal, and closes it.
+  selects recognizability across the same range, accepts context, and disables
+  every control while generation is pending. Pass the selected difficulty and
+  recognizability into the provider prompt; default generation flows without
+  explicit selectors to medium for both. Successful structured output replaces
+  every question field, resets the modal, and closes it.
 - Put personal question-database search beside the question heading. Search
   question and answer text after two entered characters and show the shared
   question, answer, and included-packages table. Selecting a result loads the
@@ -35,7 +36,8 @@
   requires confirmation before replacing a populated slot.
 - Put the package-generation icon beside the editable package title. Its modal
   chooses missing questions, questions with unresolved author remarks, or the
-  whole package and one enabled AI question package from a dropdown. When
+  whole package and one enabled AI question package from a dropdown. It also
+  selects difficulty and recognizability from very easy through very hard. When
   regenerating remarked questions, include the current question and remark in
   the prompt and clear the remark after resolving it. Generate slots
   sequentially, select the active slot behind the modal, wait for each provider

@@ -38,6 +38,8 @@ export function PackageGenerationDialog({
   const [ruleSet, setRuleSet] = useState<gen.PackageGenerationRuleSet>('all');
   const [difficulty, setDifficulty] =
     useState<common.AIQuestionDifficulty>('medium');
+  const [recognizability, setRecognizability] =
+    useState<common.AIQuestionRecognizability>('medium');
   const [selected, setSelected] = useState<number | null>(null);
   const [thinking, setThinking] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -70,6 +72,7 @@ export function PackageGenerationDialog({
     setScope('missing');
     setRuleSet('all');
     setDifficulty('medium');
+    setRecognizability('medium');
     setSelected(null);
     setThinking(false);
     setFailed(false);
@@ -118,6 +121,7 @@ export function PackageGenerationDialog({
           usedAnswers,
           difficulty,
           checkQuestionDatabase,
+          recognizability,
         );
         if (currentGenerationId !== generationId.current) return;
         const generatedQuestion =
@@ -186,6 +190,7 @@ export function PackageGenerationDialog({
                       Boolean(targets.length)
                     }
                     difficulty={difficulty}
+                    recognizability={recognizability}
                     hasRandomTemplates={Boolean(randomTemplates.length)}
                     progress={progress}
                     ruleSet={ruleSet}
@@ -197,6 +202,7 @@ export function PackageGenerationDialog({
                     onCheckQuestionDatabaseChange={setCheckQuestionDatabase}
                     onCancel={() => void cancel()}
                     onDifficultyChange={setDifficulty}
+                    onRecognizabilityChange={setRecognizability}
                     onPackageChange={(index) => {
                       setSelected(index);
                       setCurrentInput(null);
@@ -227,6 +233,7 @@ export function PackageGenerationDialog({
                         previewInput.context,
                         progress ? excludedAnswers : initialExcludedAnswers,
                         difficulty,
+                        recognizability,
                       )}
                     />
                   </label>

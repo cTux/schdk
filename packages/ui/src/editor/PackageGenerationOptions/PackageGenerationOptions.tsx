@@ -1,6 +1,8 @@
 import {
   AI_QUESTION_DIFFICULTIES,
+  AI_QUESTION_RECOGNIZABILITIES,
   type AIQuestionDifficulty,
+  type AIQuestionRecognizability,
 } from '@schdk/common';
 import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';
@@ -15,6 +17,7 @@ export function PackageGenerationOptions({
   activePackages,
   canGenerate,
   difficulty,
+  recognizability,
   hasRandomTemplates,
   progress,
   ruleSet,
@@ -26,6 +29,7 @@ export function PackageGenerationOptions({
   onCheckQuestionDatabaseChange,
   onCancel,
   onDifficultyChange,
+  onRecognizabilityChange,
   onPackageChange,
   onRuleSetChange,
   onScopeChange,
@@ -60,6 +64,24 @@ export function PackageGenerationOptions({
           {AI_QUESTION_DIFFICULTIES.map((value) => (
             <option key={value} value={value}>
               {copy.questionGeneration.difficulties[value]}
+            </option>
+          ))}
+        </Dropdown>
+      </label>
+      <label>
+        {copy.questionGeneration.recognizability}
+        <Dropdown
+          value={recognizability}
+          disabled={thinking}
+          onChange={(event) =>
+            onRecognizabilityChange(
+              event.target.value as AIQuestionRecognizability,
+            )
+          }
+        >
+          {AI_QUESTION_RECOGNIZABILITIES.map((value) => (
+            <option key={value} value={value}>
+              {copy.questionGeneration.recognizabilities[value]}
             </option>
           ))}
         </Dropdown>

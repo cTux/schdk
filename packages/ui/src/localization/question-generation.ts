@@ -15,6 +15,14 @@ export const questionGenerationCopy = {
       hard: 'Важке',
       'very-hard': 'Дуже важке',
     },
+    recognizability: 'Впізнаваність',
+    recognizabilities: {
+      'very-easy': 'Дуже легка',
+      easy: 'Легка',
+      medium: 'Середня',
+      hard: 'Важка',
+      'very-hard': 'Дуже важка',
+    },
     context: 'Контекст',
     contextPlaceholder: 'Наприклад, щось про фінал чемпіонату з футболу',
     checkDatabase:
@@ -38,6 +46,14 @@ export const questionGenerationCopy = {
       'There are no active templates. Add or enable one in Artificial intelligence.',
     difficulty: 'Difficulty',
     difficulties: {
+      'very-easy': 'Very easy',
+      easy: 'Easy',
+      medium: 'Medium',
+      hard: 'Hard',
+      'very-hard': 'Very hard',
+    },
+    recognizability: 'Recognizability',
+    recognizabilities: {
       'very-easy': 'Very easy',
       easy: 'Easy',
       medium: 'Medium',

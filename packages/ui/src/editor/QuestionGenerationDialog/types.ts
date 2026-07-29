@@ -1,6 +1,7 @@
 import type {
   AIQuestion,
   AIQuestionDifficulty,
+  AIQuestionRecognizability,
   GameQuestion,
 } from '@schdk/common';
 
@@ -13,6 +14,7 @@ export interface QuestionGenerationDialogProps {
     context: string,
     excludedAnswers?: string[],
     difficulty?: AIQuestionDifficulty,
+    recognizability?: AIQuestionRecognizability,
   ): string;
   onGenerate(
     template: AIQuestion,
@@ -20,6 +22,7 @@ export interface QuestionGenerationDialogProps {
     excludedAnswers?: string[],
     difficulty?: AIQuestionDifficulty,
     checkQuestionDatabase?: boolean,
+    recognizability?: AIQuestionRecognizability,
   ): Promise<GameQuestion>;
   excludedAnswers?: string[];
   onGenerated(question: GameQuestion): void;
