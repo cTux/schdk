@@ -48,21 +48,25 @@ without losing in-progress work.
   account's scoped session.
 - **EDT-15:** The browser warns before unloading an open package with pending,
   saving, or failed changes and stops warning after the package is saved.
-- **EDT-16:** An AI icon beside the selected question opens a dimmed modal with
-  an account or global `AIQuestion` template selector, difficulty and
+- **EDT-16:** An AI icon beside the selected question opens a dimmed panel
+  docked to the editor's right with an account or global `AIQuestion` template
+  selector, difficulty and
   recognizability selectors from very easy through very hard, and a context
   field. Medium is selected by default for both scales. Favorite templates
   appear first, carry a star, and are name-sorted before the name-sorted
   remainder. Without a saved key the icon is disabled with an explanatory
-  custom tooltip. Generation disables the complete modal, sends the selected
+  custom tooltip. Generation disables the complete panel, sends the selected
   difficulty and recognizability definitions in the provider prompt, and shows
   a thinking state; on success it replaces every generated question field
-  before the modal resets and closes. The prompt requests a text handout when
+  before the panel resets and closes. While generation runs, the
+  `Generate in background` action removes the blocking backdrop without
+  interrupting the request, keeps the target question disabled, and lets the
+  author work elsewhere in the editor. The prompt requests a text handout when
   the selected rule or context requires one, returns no handout otherwise, and
   never asks the text model to invent an image or data URL. The one global rule
   marked as general is excluded from the selector and prepended to every
   selected template's generation instructions and examples. An allowlisted
-  administrator can expand the modal beside its title to inspect the exact
+  administrator can expand the panel beside its title to inspect the exact
   system and user prompt text in a read-only field; the wider two-column layout
   stacks vertically on narrow screens.
 - **EDT-17:** Every multiline package and generation field uses the same
@@ -71,37 +75,37 @@ without losing in-progress work.
 - **EDT-18:** AI generation phrases each question naturally as if written by a
   human rather than AI and requires a non-empty answer comment that explains
   only why the answer is correct, never why the question was generated or
-  phrased that way. An AI icon beside the editable package title opens a modal that selects missing
+  phrased that way. An AI icon beside the editable package title opens a panel
+  docked to the editor's right that selects missing
   questions, questions with unresolved author remarks, or the whole package
   and one enabled AI question package from a dropdown. Remarked questions are
   regenerated from the current question and remark, and a resolved result
-  clears the remark. The modal also selects difficulty and recognizability from
+  clears the remark. The panel also selects difficulty and recognizability from
   very easy through very hard, with medium selected by default for both scales.
   Favorite packages appear first with a star and each
-  favorite and non-favorite group is name-sorted. The modal also selects all,
+  favorite and non-favorite group is name-sorted. The panel also selects all,
   favorite, or non-favorite enabled non-general question rules; each question
   without an explicitly configured type uses a random rule from that set. An
   explicitly configured per-question type still takes priority, while the
   general rule is applied separately to every generated question. Only a
   missing question part or answer makes a question missing; optional fields do
   not.
-  It selects each target slot behind the modal, waits for a validated provider
+  It selects each target slot behind the panel, waits for a validated provider
   response, joins overflow text into the last part allowed by the declared
   question type, replaces the complete question record, and continues sequentially.
   The selected difficulty and recognizability are sent for every question. The
-  visible cancel action asks for confirmation, then closes the modal and
+  visible cancel action asks for confirmation, then closes the panel and
   ignores any unfinished provider result only after confirmation.
-  While generation runs, the modal shows the current question, its
+  While generation runs, the panel shows the current question, its
   package-generation percentage, and an animated progress indicator that respects
   reduced-motion preferences.
-  Its `Generate in background` action changes the modal into a non-modal panel
-  docked to the editor's right while the same sequence continues. Questions
-  still awaiting generation are disabled; each completed question becomes
-  editable immediately. The docked panel closes after the final question
-  succeeds, just as the foreground modal does.
+  Its `Generate in background` action removes the blocking backdrop while the
+  same sequence continues. Questions still awaiting generation are disabled;
+  each completed question becomes editable immediately. The docked panel
+  closes after the final question succeeds.
   Browser generation renews Google authorization from the confirmation click
   before the sequence starts. A failed request keeps questions generated before
-  the failure. An allowlisted administrator can expand the modal beside its
+  the failure. An allowlisted administrator can expand the panel beside its
   title to inspect the exact read-only prompt for the first target before
   generation and the current target while generation advances.
 - **EDT-19:** Successful package creation, import, recent opening, current
@@ -117,8 +121,8 @@ without losing in-progress work.
   that worsen package variety by overusing one entity type or answer form. A
   rejected candidate is retried once; a second rejection fails without
   replacing the target question.
-- **EDT-21:** Question and package generation modals each show a similarity
-  toggle that resets to off whenever the modal closes. When enabled, generation
+- **EDT-21:** Question and package generation panels each show a similarity
+  toggle that resets to off whenever the panel closes. When enabled, generation
   refreshes the connected account's question database, rejects exact answers
   locally, shortlists lexically related questions, asks the selected provider
   to reject the same entity, central fact, logic, or material clue sequence,
@@ -210,10 +214,11 @@ without losing in-progress work.
     of an existing entity, and an answer that worsens an overrepresented type
     or form; confirm each is rejected, one rejection is retried, and a second
     rejection leaves its target unchanged.
-16. Open each generation modal and confirm its database toggle defaults off.
+16. Open each generation panel and confirm it is docked to the editor's right
+    and its database toggle defaults off.
     Enable it, return an answer and then a paraphrased question already present
     in another indexed package, and confirm each first draft is rejected and
-    regenerated once. Close and reopen the modal and confirm the toggle is off.
+    regenerated once. Close and reopen the panel and confirm the toggle is off.
 17. Inspect the selected-question clear action and active-package delete action
     and confirm both use the shared red danger treatment. Delete the active
     package, confirm the dialog, and observe it disappear from Drive recents as

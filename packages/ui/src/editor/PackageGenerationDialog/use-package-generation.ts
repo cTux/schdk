@@ -26,7 +26,7 @@ function usePackageGeneration({
     useState<common.AIQuestionRecognizability>('medium');
   const [selected, setSelected] = useState<number | null>(null);
   const [thinking, setThinking] = useState(false);
-  const [docked, setDocked] = useState(false);
+  const [background, setBackground] = useState(false);
   const [failed, setFailed] = useState(false);
   const [progress, setProgress] = useState<[number, number] | null>(null);
   const [promptOpen, setPromptOpen] = useState(false);
@@ -35,7 +35,7 @@ function usePackageGeneration({
     useState<gen.PackageGenerationInput | null>(null);
   const [checkQuestionDatabase, setCheckQuestionDatabase] = useState(false);
   const generationId = useRef(0);
-  const background = useRef(false);
+  const backgroundRef = useRef(false);
   const activePackages = packages
     .filter((item) => item.enabled)
     .sort(common.compareFavoriteItemsByName);
@@ -55,7 +55,7 @@ function usePackageGeneration({
 
   function reset() {
     generationId.current += 1;
-    background.current = false;
+    backgroundRef.current = false;
     setOpen(false);
     setScope('missing');
     setRuleSet('all');
@@ -63,7 +63,7 @@ function usePackageGeneration({
     setRecognizability('medium');
     setSelected(null);
     setThinking(false);
-    setDocked(false);
+    setBackground(false);
     setFailed(false);
     setProgress(null);
     setPromptOpen(false);
@@ -76,6 +76,7 @@ function usePackageGeneration({
   function show() {
     setSelected(activePackages.length ? 0 : null);
     setOpen(true);
+    onGenerationStateChange([], true);
   }
 
   async function cancel() {
@@ -87,7 +88,7 @@ function usePackageGeneration({
   async function generate() {
     if (!selectedPackage || !randomTemplates.length || !targets.length) return;
     const currentGenerationId = ++generationId.current;
-    onGenerationStateChange(targets, false);
+    onGenerationStateChange(targets, true);
     setThinking(true);
     setFailed(false);
     try {
@@ -106,7 +107,7 @@ function usePackageGeneration({
         setCurrentInput(input);
         setProgress([position + 1, targets.length]);
         setExcludedAnswers([...usedAnswers]);
-        if (!background.current) onSelectQuestion(index);
+        if (!backgroundRef.current) onSelectQuestion(index);
         const question = await onGenerate(
           input.template,
           input.context,
@@ -122,10 +123,7 @@ function usePackageGeneration({
             ? { ...question, comment: undefined }
             : question,
         );
-        onGenerationStateChange(
-          targets.slice(position + 1),
-          background.current,
-        );
+        onGenerationStateChange(targets.slice(position + 1), true);
         usedAnswers.push(...common.getGameQuestionAnswers(question));
       }
       reset();
@@ -133,23 +131,23 @@ function usePackageGeneration({
       if (currentGenerationId !== generationId.current) return;
       setThinking(false);
       setFailed(true);
-      onGenerationStateChange([], background.current);
+      onGenerationStateChange([], true);
     }
   }
 
   function generateInBackground() {
-    background.current = true;
-    setDocked(true);
+    backgroundRef.current = true;
+    setBackground(true);
     onGenerationStateChange(targets.slice((progress?.[0] ?? 1) - 1), true);
   }
 
   return {
     activePackages,
+    background,
     cancel,
     cancelDialogProps: cancelDialog.dialogProps,
     checkQuestionDatabase,
     difficulty,
-    docked,
     excludedAnswers,
     failed,
     generate,

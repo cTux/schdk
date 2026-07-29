@@ -7,13 +7,9 @@ import {
   faWandMagicSparkles,
 } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames';
-import { useState } from 'react';
 import {
   AI_QUESTION_DIFFICULTIES,
   AI_QUESTION_RECOGNIZABILITIES,
-  compareFavoriteItemsByName,
-  type AIQuestionDifficulty,
-  type AIQuestionRecognizability,
 } from '@schdk/common';
 import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';
@@ -22,7 +18,9 @@ import { TextAreaField } from '../../atoms/TextAreaField';
 import { Textarea } from '../../atoms/Textarea';
 import { useLocalization } from '../../localization';
 import { QuestionDatabaseCheck } from '../QuestionDatabaseCheck';
+import { dockedGenerationViewportClassName } from '../docked-generation-viewport-class-name';
 import type { QuestionGenerationDialogProps } from './types';
+import { useQuestionGeneration } from './use-question-generation';
 
 export function QuestionGenerationDialog({
   apiKeyConfigured,
@@ -32,55 +30,43 @@ export function QuestionGenerationDialog({
   onGenerate,
   excludedAnswers = [],
   onGenerated,
+  onQuestionGenerationStateChange,
 }: QuestionGenerationDialogProps) {
   const { copy } = useLocalization();
-  const [open, setOpen] = useState(false);
-  const [templateIndex, setTemplateIndex] = useState('0');
-  const [difficulty, setDifficulty] = useState<AIQuestionDifficulty>('medium');
-  const [recognizability, setRecognizability] =
-    useState<AIQuestionRecognizability>('medium');
-  const [context, setContext] = useState('');
-  const [thinking, setThinking] = useState(false);
-  const [failed, setFailed] = useState(false);
-  const [promptOpen, setPromptOpen] = useState(false);
-  const [checkQuestionDatabase, setCheckQuestionDatabase] = useState(false);
-  const sortedTemplates = [...templates].sort(compareFavoriteItemsByName);
-  const selectedTemplate =
-    sortedTemplates[Number(templateIndex)] ?? sortedTemplates[0] ?? null;
-
-  function reset() {
-    setOpen(false);
-    setTemplateIndex('0');
-    setDifficulty('medium');
-    setRecognizability('medium');
-    setContext('');
-    setThinking(false);
-    setFailed(false);
-    setPromptOpen(false);
-    setCheckQuestionDatabase(false);
-  }
-
-  async function generate() {
-    if (!selectedTemplate || !context.trim()) return;
-    setThinking(true);
-    setFailed(false);
-    try {
-      await onGenerationStart?.(checkQuestionDatabase);
-      const question = await onGenerate(
-        selectedTemplate,
-        context.trim(),
-        excludedAnswers,
-        difficulty,
-        checkQuestionDatabase,
-        recognizability,
-      );
-      onGenerated(question);
-      reset();
-    } catch {
-      setThinking(false);
-      setFailed(true);
-    }
-  }
+  const generation = useQuestionGeneration({
+    apiKeyConfigured,
+    templates,
+    onGenerationStart,
+    getPromptPreview,
+    onGenerate,
+    onQuestionGenerationStateChange,
+    excludedAnswers,
+    onGenerated,
+  });
+  const {
+    background,
+    checkQuestionDatabase,
+    context,
+    difficulty,
+    failed,
+    generate,
+    generateInBackground,
+    open,
+    promptOpen,
+    recognizability,
+    reset,
+    selectedTemplate,
+    setCheckQuestionDatabase,
+    setContext,
+    setDifficulty,
+    setPromptOpen,
+    setRecognizability,
+    setTemplateIndex,
+    show,
+    sortedTemplates,
+    templateIndex,
+    thinking,
+  } = generation;
 
   return (
     <>
@@ -93,23 +79,29 @@ export function QuestionGenerationDialog({
             : copy.questionGeneration.apiKeyMissing
         }
         disabled={!apiKeyConfigured}
-        onClick={() => setOpen(true)}
+        onClick={show}
       />
       <Dialog.Root
+        modal={!background}
         open={open}
         onOpenChange={(nextOpen) => {
           if (thinking) return;
-          if (nextOpen) setOpen(true);
+          if (nextOpen) show();
           else reset();
         }}
       >
         <Dialog.Portal>
-          <Dialog.Backdrop className="question-generation-backdrop" />
-          <Dialog.Viewport className="question-generation-viewport">
+          {!background && (
+            <Dialog.Backdrop className="question-generation-backdrop" />
+          )}
+          <Dialog.Viewport className={dockedGenerationViewportClassName}>
             <Dialog.Popup
-              className={classNames('question-generation-popup', {
-                'question-generation-popup-prompt': promptOpen,
-              })}
+              className={classNames(
+                'question-generation-popup question-generation-popup-docked',
+                {
+                  'question-generation-popup-prompt': promptOpen,
+                },
+              )}
             >
               <div className="question-generation-title-row">
                 <Dialog.Title className="question-generation-title">
@@ -158,9 +150,7 @@ export function QuestionGenerationDialog({
                       value={difficulty}
                       disabled={thinking}
                       onChange={(event) =>
-                        setDifficulty(
-                          event.target.value as AIQuestionDifficulty,
-                        )
+                        setDifficulty(event.target.value as typeof difficulty)
                       }
                     >
                       {AI_QUESTION_DIFFICULTIES.map((value) => (
@@ -177,7 +167,7 @@ export function QuestionGenerationDialog({
                       disabled={thinking}
                       onChange={(event) =>
                         setRecognizability(
-                          event.target.value as AIQuestionRecognizability,
+                          event.target.value as typeof recognizability,
                         )
                       }
                     >
@@ -208,6 +198,15 @@ export function QuestionGenerationDialog({
                     </p>
                   )}
                   <div className="question-generation-actions">
+                    {thinking && !background && (
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        onClick={generateInBackground}
+                      >
+                        {copy.packageGeneration.background}
+                      </Button>
+                    )}
                     <Button
                       type="button"
                       variant="secondary"

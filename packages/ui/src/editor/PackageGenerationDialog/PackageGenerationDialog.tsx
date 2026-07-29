@@ -12,6 +12,7 @@ import { Textarea } from '../../atoms/Textarea';
 import { useLocalization } from '../../localization';
 import { PackageGenerationOpenButton } from '../PackageGenerationOpenButton';
 import { PackageGenerationOptions } from '../PackageGenerationOptions';
+import { dockedGenerationViewportClassName } from '../docked-generation-viewport-class-name';
 import type { PackageGenerationDialogProps } from './types';
 import { usePackageGeneration } from './use-package-generation';
 
@@ -42,10 +43,10 @@ export function PackageGenerationDialog({
   });
   const {
     activePackages,
+    background,
     cancel,
     checkQuestionDatabase,
     difficulty,
-    docked,
     excludedAnswers,
     failed,
     generate,
@@ -81,7 +82,7 @@ export function PackageGenerationDialog({
         onClick={show}
       />
       <Dialog.Root
-        modal={!docked}
+        modal={!background}
         open={open}
         onOpenChange={(nextOpen) => {
           if (thinking) return;
@@ -90,19 +91,17 @@ export function PackageGenerationDialog({
         }}
       >
         <Dialog.Portal>
-          {!docked && (
+          {!background && (
             <Dialog.Backdrop className="question-generation-backdrop" />
           )}
-          <Dialog.Viewport
-            className={classNames('question-generation-viewport', {
-              'question-generation-viewport-docked': docked,
-            })}
-          >
+          <Dialog.Viewport className={dockedGenerationViewportClassName}>
             <Dialog.Popup
-              className={classNames('question-generation-popup', {
-                'question-generation-popup-docked': docked,
-                'question-generation-popup-prompt': promptOpen,
-              })}
+              className={classNames(
+                'question-generation-popup question-generation-popup-docked',
+                {
+                  'question-generation-popup-prompt': promptOpen,
+                },
+              )}
             >
               <div className="question-generation-title-row">
                 <Dialog.Title className="question-generation-title">
@@ -127,7 +126,7 @@ export function PackageGenerationDialog({
                   </Dialog.Description>
                   <PackageGenerationOptions
                     activePackages={activePackages}
-                    backgroundAvailable={thinking && !docked}
+                    backgroundAvailable={thinking && !background}
                     canGenerate={
                       selected !== null &&
                       Boolean(randomTemplates.length) &&

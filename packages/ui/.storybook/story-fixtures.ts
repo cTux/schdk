@@ -1,5 +1,5 @@
-import { createEmptyGamePackage } from '@schdk/common';
 import { gameQuestion } from './game-question';
+import { gamePackage } from './game-package';
 import { aiQuestion } from './ai-question';
 import { questionDatabaseRows } from './question-database-rows';
 import { position } from './position';
@@ -9,9 +9,6 @@ import { recent } from './recent';
 import { noop } from './noop';
 import { confirm } from './confirm';
 import { componentValues } from './component-values';
-
-const gamePackage = createEmptyGamePackage();
-gamePackage.questions[1] = gameQuestion;
 
 export {
   gamePackage,

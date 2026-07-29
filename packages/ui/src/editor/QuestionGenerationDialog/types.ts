@@ -26,4 +26,5 @@ export interface QuestionGenerationDialogProps {
   ): Promise<GameQuestion>;
   excludedAnswers?: string[];
   onGenerated(question: GameQuestion): void;
+  onQuestionGenerationStateChange?(generating: boolean, docked: boolean): void;
 }

@@ -26,5 +26,6 @@ export interface AiQuestionGenerationOptions {
     checkQuestionDatabase?: boolean,
     recognizability?: AIQuestionRecognizability,
   ): Promise<GameQuestion>;
+  onQuestionGenerationStateChange?(generating: boolean, docked: boolean): void;
   excludedAnswers?: string[];
 }
