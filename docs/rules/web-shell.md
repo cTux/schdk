@@ -5,8 +5,11 @@
 - Keep host and editor roots under `packages/web/src/host` and
   `packages/web/src/editor`, and load them with `React.lazy`; do not use
   iframes or duplicate application builds.
-- Load an application chunk on first selection, then keep it mounted so
-  navigation does not discard state.
+- Load every page chunk on first selection, then keep it mounted so navigation
+  does not discard state.
+- Keep Drive-backed list hooks above lazy page boundaries so question packages,
+  personal and global AI question rules, and AI question packages preload
+  immediately after authorization.
 - Preserve keyboard-accessible navigation in the shared renderer.
 - Group the question database, visual editor, artificial intelligence, editor,
   and host pages under `ЩДК` in the fixed sidebar, with the current account's

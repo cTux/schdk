@@ -67,6 +67,9 @@ preserving recoverable local state during temporary Drive failures.
 - **DRV-20:** Initial recents loading shares concurrent editor and host work and
   lists the first Drive result page with one files request. Additional result
   pages remain traversed when present.
+- **DRV-21:** Initial question-package, personal and global AI question-rule,
+  and AI question-package listing starts after authorization without depending
+  on their pages being mounted.
 
 ## Invariants
 
@@ -132,3 +135,5 @@ preserving recoverable local state during temporary Drive failures.
 16. Open recents with editor and host mounted and observe one Drive files
     request for the first result page, followed only by requests for real
     additional pages.
+17. Connect without opening the question database or AI pages and observe
+    their Drive-backed lists begin loading.

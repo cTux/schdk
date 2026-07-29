@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGear, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faGear, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
 import { AppIcon } from '../../atoms/AppIcon';
 import { Button } from '../../atoms/Button';
 import { useLocalization } from '../../localization';
@@ -10,6 +10,7 @@ import { type ShellAccount } from './shell-account';
 function ShellNavigation({
   account,
   connected,
+  preloading,
   view,
   onSelect,
 }: ShellNavigationProps) {
@@ -20,13 +21,22 @@ function ShellNavigation({
     : copy.shell.accountDisconnected;
 
   return (
-    <aside className="sidebar">
+    <aside className="sidebar" aria-busy={preloading}>
       <div className="brand">
         <AppIcon />
         <div>
           <strong>{content.brand}</strong>
           <span>{content.toolsLabel}</span>
         </div>
+        {preloading && (
+          <span
+            className="sidebar-preloading"
+            title={copy.shell.preloading}
+            aria-hidden="true"
+          >
+            <FontAwesomeIcon icon={faSpinner} />
+          </span>
+        )}
       </div>
 
       <nav aria-label={content.toolsLabel}>
@@ -48,8 +58,22 @@ function ShellNavigation({
           role="group"
           aria-labelledby="sidebar-schdk-group"
         >
-          <span id="sidebar-schdk-group" className="sidebar-group-label">
-            {content.groupLabel}
+          <span
+            id="sidebar-schdk-group"
+            className="sidebar-group-label"
+            aria-busy={preloading}
+          >
+            <span>{content.groupLabel}</span>
+            {preloading && (
+              <span
+                className="sidebar-preloading"
+                role="status"
+                aria-label={copy.shell.preloading}
+                title={copy.shell.preloading}
+              >
+                <FontAwesomeIcon icon={faSpinner} aria-hidden="true" />
+              </span>
+            )}
           </span>
           {content.items.map((item) => (
             <Button

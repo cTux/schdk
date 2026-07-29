@@ -41,7 +41,8 @@ export interface ShellViewProps {
   editTarget: ShellEditTarget | null;
   editorApp: ReactNode;
   hostApp: ReactNode;
-  loadedApps: { host: boolean; editor: boolean };
+  loadedViews: Partial<Record<ShellViewName, true>>;
+  preloading: boolean;
   questionDatabase: Omit<QuestionDatabasePageProps, 'hidden'>;
   editorOptions: EditorTextOptions;
   gameOptions: GameOptions;

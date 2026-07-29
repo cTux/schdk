@@ -60,6 +60,9 @@
   packages through the active account's Drive adapter. Route global rules
   through the same narrow adapter, require an allowlisted account for global
   writes, and never persist these collections in browser local storage.
+- Start Drive-backed question-package, personal and global AI question-rule,
+  and AI question-package listing after authorization, independently of lazy
+  page mounting.
 - Reject package metadata above the canonical package-size limit before
   downloading its media body.
 - Treat a local `.schdk` selection only as an import: validate it, upload it to

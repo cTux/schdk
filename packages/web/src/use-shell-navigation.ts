@@ -35,10 +35,9 @@ export function useShellNavigation(sessionScope: string) {
   const [editTarget, setEditTarget] = useState<ShellEditTarget | null>(() =>
     getDeepLinkedShellEdit(window.location.href),
   );
-  const [loadedApps, setLoadedApps] = useState({
-    host: view === 'host',
-    editor: view === 'editor',
-  });
+  const [loadedViews, setLoadedViews] = useState<
+    Partial<Record<ShellViewName, true>>
+  >(() => ({ [view]: true }));
 
   useEffect(() => {
     saveDesktopShellView(localStorage, sessionScope, view);
@@ -58,9 +57,7 @@ export function useShellNavigation(sessionScope: string) {
   }, []);
 
   function activate(nextView: ShellViewName) {
-    if (nextView === 'host' || nextView === 'editor') {
-      setLoadedApps((current) => ({ ...current, [nextView]: true }));
-    }
+    setLoadedViews((current) => ({ ...current, [nextView]: true }));
     setView(nextView);
   }
 
@@ -96,7 +93,7 @@ export function useShellNavigation(sessionScope: string) {
 
   return {
     view,
-    loadedApps,
+    loadedViews,
     editTarget,
     showView,
     showEditor,

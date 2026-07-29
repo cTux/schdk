@@ -65,6 +65,12 @@ export function App() {
       locale,
       questionDatabase,
     );
+  const preloading =
+    connected &&
+    (questionDatabase.loading ||
+      aiQuestions.loading ||
+      aiQuestions.globalLoading ||
+      aiQuestionsPackages.loading);
   const loginState = googleDrive.statusReady ? connection.state : 'connecting';
   const [unlocked, setUnlocked] = useState(connected);
   useEffect(() => setUnlocked((current) => current || connected), [connected]);
@@ -177,7 +183,8 @@ export function App() {
                 />
               </Suspense>
             }
-            loadedApps={navigation.loadedApps}
+            loadedViews={navigation.loadedViews}
+            preloading={preloading}
             questionDatabase={{
               failed: questionDatabase.failed,
               loading: questionDatabase.loading,

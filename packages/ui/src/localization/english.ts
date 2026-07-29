@@ -5,6 +5,7 @@ import { aiPackageRulesCopy } from './ai-package-rules';
 import { packageGenerationCopy } from './package-generation';
 import { englishAllWeb, englishMeta } from './english-misc';
 import { questionDatabaseCopy } from './question-database';
+import { shellCopy } from './shell';
 export const english: typeof ukrainian = {
   shared: {
     confirmation: 'Confirm action',
@@ -34,46 +35,7 @@ export const english: typeof ukrainian = {
     zoomIn: 'Zoom in',
   },
   meta: englishMeta,
-  shell: {
-    brand: 'What? Where? When?',
-    toolsLabel: 'Tools',
-    groupLabel: 'WWW',
-    settingsLabel: 'Settings',
-    accountConnected: 'Connected',
-    accountDisconnected: 'Disconnected',
-    loginTitle: 'Sign in with Google',
-    loginDescription:
-      'Sign in to create, open, and save SCHDK packages in Google Drive.',
-    loginAction: 'Continue with Google',
-    homeTitle: 'Everything for the game in one place',
-    homeDescription:
-      'Set up the layout in the visual editor, then create a question package, then start the game.',
-    home: {
-      label: 'Home',
-      description: 'Tools for preparing and hosting a game.',
-    },
-    host: {
-      label: 'Host a game',
-      description: 'Open a ready package and host a game for teams.',
-    },
-    editor: {
-      label: 'Edit question packages',
-      description: 'Create and edit question packages in the .schdk format.',
-    },
-    visualEditor: {
-      label: 'Visual editor',
-      description: 'Create a custom layout for the game screen.',
-    },
-    artificialIntelligence: {
-      label: 'Artificial intelligence',
-      description: 'Configure question-generation rules.',
-    },
-    packageRules: {
-      label: aiPackageRulesCopy.en.navigationLabel,
-      description: aiPackageRulesCopy.en.navigationDescription,
-    },
-    questionDatabase: questionDatabaseCopy.en.navigation,
-  },
+  shell: shellCopy.en,
   questionDatabase: questionDatabaseCopy.en,
   aiQuestions: aiQuestionsCopy.en,
   aiPackageRules: aiPackageRulesCopy.en,

@@ -1,14 +1,38 @@
 import './styles.scss';
-import { ShellHome } from '../ShellHome';
 import { ShellNavigation } from '../ShellNavigation';
-import { OptionsPage } from '../../options/OptionsPage';
-import { VisualEditor } from '../../visual-editor/VisualEditor';
 import { TooltipProvider } from '../../atoms/Tooltip';
-import { AIQuestionsPage } from '../AIQuestionsPage';
-import { AIQuestionsPackagesPage } from '../AIQuestionsPackagesPage';
-import { QuestionDatabasePage } from '../QuestionDatabasePage';
+import { lazy, Suspense } from 'react';
 import type { ShellViewName } from '../shellItems';
 import { type ShellViewProps } from './shell-view-props';
+
+const ShellHome = lazy(() =>
+  import('../ShellHome').then(({ ShellHome }) => ({ default: ShellHome })),
+);
+const QuestionDatabasePage = lazy(() =>
+  import('../QuestionDatabasePage').then(({ QuestionDatabasePage }) => ({
+    default: QuestionDatabasePage,
+  })),
+);
+const OptionsPage = lazy(() =>
+  import('../../options/OptionsPage').then(({ OptionsPage }) => ({
+    default: OptionsPage,
+  })),
+);
+const VisualEditor = lazy(() =>
+  import('../../visual-editor/VisualEditor').then(({ VisualEditor }) => ({
+    default: VisualEditor,
+  })),
+);
+const AIQuestionsPage = lazy(() =>
+  import('../AIQuestionsPage').then(({ AIQuestionsPage }) => ({
+    default: AIQuestionsPage,
+  })),
+);
+const AIQuestionsPackagesPage = lazy(() =>
+  import('../AIQuestionsPackagesPage').then(({ AIQuestionsPackagesPage }) => ({
+    default: AIQuestionsPackagesPage,
+  })),
+);
 
 function ShellView({
   aiOptions,
@@ -17,7 +41,8 @@ function ShellView({
   editTarget,
   editorApp,
   hostApp,
-  loadedApps,
+  loadedViews,
+  preloading,
   questionDatabase,
   editorOptions,
   gameOptions,
@@ -48,89 +73,110 @@ function ShellView({
         <ShellNavigation
           account={googleDriveAccount}
           connected={googleDriveState === 'connected'}
+          preloading={preloading}
           view={view}
           onSelect={onShowView}
         />
         <section className="workspace">
-          <ShellHome hidden={view !== 'home'} onOpen={onShowView} />
-          <QuestionDatabasePage
-            {...questionDatabase}
-            hidden={view !== 'questionDatabase'}
-          />
-          <OptionsPage
-            ai={aiOptions}
-            hidden={view !== 'options'}
-            editor={editorOptions}
-            game={gameOptions}
-            googleDriveAccount={googleDriveAccount?.emailAddress}
-            googleDriveState={googleDriveState}
-            settingsGroup={settingsGroup}
-            theme={theme}
-            onAiApiKeySave={onAiApiKeySave}
-            onAiModelChange={onAiModelChange}
-            onAiProviderChange={onAiProviderChange}
-            onEditorChange={onEditorOptionsChange}
-            onGameChange={onGameOptionsChange}
-            onGoogleDriveConnect={onGoogleDriveConnect}
-            onGoogleDriveDisconnect={onGoogleDriveDisconnect}
-            onSettingsGroupChange={onSettingsGroupChange}
-            onThemeChange={onThemeChange}
-          />
-          <VisualEditor
-            message={gameOptionsError}
-            hidden={view !== 'visualEditor'}
-            game={gameOptions}
-            onChange={onGameOptionsChange}
-            onImportTemplate={onImportVisualEditorTemplate}
-            onExportTemplate={onExportVisualEditorTemplate}
-          />
-          <div hidden={view !== 'artificialIntelligence'}>
-            <AIQuestionsPage
-              questions={aiQuestions.questions}
-              globalQuestions={aiQuestions.globalQuestions}
-              failed={aiQuestions.failed}
-              globalFailed={aiQuestions.globalFailed}
-              loading={aiQuestions.loading}
-              globalLoading={aiQuestions.globalLoading}
-              isGlobalAdmin={aiQuestions.isGlobalAdmin}
-              onAdd={aiQuestions.addQuestion}
-              onAddGlobal={aiQuestions.addGlobalQuestion}
-              onRemove={aiQuestions.removeQuestion}
-              onRemoveGlobal={aiQuestions.removeGlobalQuestion}
-              editTarget={editTarget?.kind === 'question' ? editTarget : null}
-              onCloseEditor={onCloseEditor}
-              onShowEditor={onShowEditor}
-              onUpdate={aiQuestions.updateQuestion}
-              onUpdateGlobal={aiQuestions.updateGlobalQuestion}
-            />
-          </div>
-          <div hidden={view !== 'packageRules'}>
-            <AIQuestionsPackagesPage
-              packages={aiQuestionsPackages.packages}
-              questionRules={[
-                ...aiQuestions.questions,
-                ...aiQuestions.globalQuestions,
-              ].filter((question) => question.enabled && !question.generalRule)}
-              failed={aiQuestionsPackages.failed}
-              loading={aiQuestionsPackages.loading}
-              editTarget={editTarget?.kind === 'package' ? editTarget : null}
-              onAdd={aiQuestionsPackages.addPackage}
-              onCloseEditor={onCloseEditor}
-              onRemove={aiQuestionsPackages.removePackage}
-              onShowEditor={onShowEditor}
-              onUpdate={aiQuestionsPackages.updatePackage}
-            />
-          </div>
-          {loadedApps.host && (
-            <div className="embedded-app" hidden={view !== 'host'}>
-              {hostApp}
-            </div>
-          )}
-          {loadedApps.editor && (
-            <div className="embedded-app" hidden={view !== 'editor'}>
-              {editorApp}
-            </div>
-          )}
+          <Suspense fallback={null}>
+            {loadedViews.home && (
+              <ShellHome hidden={view !== 'home'} onOpen={onShowView} />
+            )}
+            {loadedViews.questionDatabase && (
+              <QuestionDatabasePage
+                {...questionDatabase}
+                hidden={view !== 'questionDatabase'}
+              />
+            )}
+            {loadedViews.options && (
+              <OptionsPage
+                ai={aiOptions}
+                hidden={view !== 'options'}
+                editor={editorOptions}
+                game={gameOptions}
+                googleDriveAccount={googleDriveAccount?.emailAddress}
+                googleDriveState={googleDriveState}
+                settingsGroup={settingsGroup}
+                theme={theme}
+                onAiApiKeySave={onAiApiKeySave}
+                onAiModelChange={onAiModelChange}
+                onAiProviderChange={onAiProviderChange}
+                onEditorChange={onEditorOptionsChange}
+                onGameChange={onGameOptionsChange}
+                onGoogleDriveConnect={onGoogleDriveConnect}
+                onGoogleDriveDisconnect={onGoogleDriveDisconnect}
+                onSettingsGroupChange={onSettingsGroupChange}
+                onThemeChange={onThemeChange}
+              />
+            )}
+            {loadedViews.visualEditor && (
+              <VisualEditor
+                message={gameOptionsError}
+                hidden={view !== 'visualEditor'}
+                game={gameOptions}
+                onChange={onGameOptionsChange}
+                onImportTemplate={onImportVisualEditorTemplate}
+                onExportTemplate={onExportVisualEditorTemplate}
+              />
+            )}
+            {loadedViews.artificialIntelligence && (
+              <div hidden={view !== 'artificialIntelligence'}>
+                <AIQuestionsPage
+                  questions={aiQuestions.questions}
+                  globalQuestions={aiQuestions.globalQuestions}
+                  failed={aiQuestions.failed}
+                  globalFailed={aiQuestions.globalFailed}
+                  loading={aiQuestions.loading}
+                  globalLoading={aiQuestions.globalLoading}
+                  isGlobalAdmin={aiQuestions.isGlobalAdmin}
+                  onAdd={aiQuestions.addQuestion}
+                  onAddGlobal={aiQuestions.addGlobalQuestion}
+                  onRemove={aiQuestions.removeQuestion}
+                  onRemoveGlobal={aiQuestions.removeGlobalQuestion}
+                  editTarget={
+                    editTarget?.kind === 'question' ? editTarget : null
+                  }
+                  onCloseEditor={onCloseEditor}
+                  onShowEditor={onShowEditor}
+                  onUpdate={aiQuestions.updateQuestion}
+                  onUpdateGlobal={aiQuestions.updateGlobalQuestion}
+                />
+              </div>
+            )}
+            {loadedViews.packageRules && (
+              <div hidden={view !== 'packageRules'}>
+                <AIQuestionsPackagesPage
+                  packages={aiQuestionsPackages.packages}
+                  questionRules={[
+                    ...aiQuestions.questions,
+                    ...aiQuestions.globalQuestions,
+                  ].filter(
+                    (question) => question.enabled && !question.generalRule,
+                  )}
+                  failed={aiQuestionsPackages.failed}
+                  loading={aiQuestionsPackages.loading}
+                  editTarget={
+                    editTarget?.kind === 'package' ? editTarget : null
+                  }
+                  onAdd={aiQuestionsPackages.addPackage}
+                  onCloseEditor={onCloseEditor}
+                  onRemove={aiQuestionsPackages.removePackage}
+                  onShowEditor={onShowEditor}
+                  onUpdate={aiQuestionsPackages.updatePackage}
+                />
+              </div>
+            )}
+            {loadedViews.host && (
+              <div className="embedded-app" hidden={view !== 'host'}>
+                {hostApp}
+              </div>
+            )}
+            {loadedViews.editor && (
+              <div className="embedded-app" hidden={view !== 'editor'}>
+                {editorApp}
+              </div>
+            )}
+          </Suspense>
         </section>
       </main>
     </TooltipProvider>

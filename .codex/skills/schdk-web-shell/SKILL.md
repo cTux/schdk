@@ -12,6 +12,8 @@ description: Maintain the @schdk/web browser application. Use for web entry poin
    Read `docs/rules/google-drive.md` for settings authorization or synchronization.
 3. Keep the unified web and desktop tools unmounted until Google authorization
    succeeds. Preserve mounted state behind the login gate after later expiry.
+   Keep Drive-backed list hooks above lazy page boundaries and expose their
+   combined preloading state in the sidebar.
 4. Keep unified locale state and persistence in `@schdk/web`; keep
    translated copy and the locale context in `@schdk/ui`.
 5. Start Google browser token requests only from an explicit login action;
@@ -19,7 +21,8 @@ description: Maintain the @schdk/web browser application. Use for web entry poin
    open OAuth from startup, refresh, or background synchronization.
 6. Keep the shell view and primary settings group in validated URL query
    state; restore both through browser back/forward.
-7. Visually smoke-test changed navigation.
+7. Lazy-load every page on first selection, keep visited pages mounted, and
+   visually smoke-test changed navigation.
 8. Keep AI provider and model as separate validated selections populated from
    models.dev with a built-in fallback. Keep AI API keys in a separate app-data
    file for the current Google account and outside local or synchronized
