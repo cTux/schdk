@@ -1,7 +1,7 @@
 import { DEFAULT_GAME_OPTIONS } from '../src/options/types';
 import { gameQuestion } from './game-question';
 import { aiQuestion } from './ai-question';
-import { gamePackage } from './story-fixtures';
+import { gamePackage } from './game-package';
 import { questionDatabaseRows } from './question-database-rows';
 
 const hostGame = {

@@ -60,11 +60,19 @@ function EditorView({
     number[]
   >([]);
   const [packageGenerationDocked, setPackageGenerationDocked] = useState(false);
+  const [questionGenerationDocked, setQuestionGenerationDocked] =
+    useState(false);
+  const [pendingQuestionGenerationIndex, setPendingQuestionGenerationIndex] =
+    useState<number | null>(null);
   const questionGeneration = aiGeneration && {
     ...aiGeneration,
     excludedAnswers: gamePackage.questions.flatMap((question, index) =>
       index === selectedIndex ? [] : getGameQuestionAnswers(question),
     ),
+    onQuestionGenerationStateChange: (generating: boolean, docked: boolean) => {
+      setPendingQuestionGenerationIndex(generating ? selectedIndex : null);
+      setQuestionGenerationDocked(docked);
+    },
   };
 
   useEffect(() => {
@@ -104,7 +112,8 @@ function EditorView({
     <TooltipProvider>
       <main
         className={classNames('editor-app', {
-          'editor-app-package-generation': packageGenerationDocked,
+          'editor-app-package-generation':
+            packageGenerationDocked || questionGenerationDocked,
         })}
       >
         <EditorHeader
@@ -146,7 +155,10 @@ function EditorView({
           />
           <QuestionEditor
             aiGeneration={questionGeneration}
-            disabled={pendingGenerationIndexes.includes(selectedIndex)}
+            disabled={
+              pendingGenerationIndexes.includes(selectedIndex) ||
+              pendingQuestionGenerationIndex === selectedIndex
+            }
             question={gamePackage.questions[selectedIndex]!}
             questionDatabaseRows={questionDatabaseRows}
             selectedIndex={selectedIndex}
