@@ -22,7 +22,11 @@ export function useQuestionDatabase(
   const entriesRef = useRef<QuestionDatabaseEntry[]>([]);
   const syncRef = useRef<Promise<QuestionDatabaseEntry[]> | null>(null);
   const accountRef = useRef(accountId);
-  accountRef.current = accountId;
+  const accountRevisionRef = useRef(0);
+  if (accountRef.current !== accountId) {
+    accountRef.current = accountId;
+    accountRevisionRef.current += 1;
+  }
   const [entries, setEntries] = useState<QuestionDatabaseEntry[]>([]);
   const [loading, setLoading] = useState(Boolean(bridge && accountId));
   const [failed, setFailed] = useState(false);
@@ -32,20 +36,26 @@ export function useQuestionDatabase(
     if (!bridge || !accountId) return [];
     if (syncRef.current) return syncRef.current;
     const activeAccount = accountId;
+    const activeRevision = accountRevisionRef.current;
+    const isActive = () =>
+      accountRevisionRef.current === activeRevision &&
+      accountRef.current === activeAccount;
     const sync = (async () => {
-      if (accountRef.current === activeAccount) {
+      if (isActive()) {
         setLoading(true);
         setFailed(false);
       }
       const files = await bridge.listGamePackages();
+      if (!isActive()) return [];
       const stored = (await bridge.loadQuestionDatabase()) ?? EMPTY_DATABASE;
+      if (!isActive()) return [];
       const previous = new Map(
         stored.packages.map((item) => [item.fileId, item]),
       );
       const packages: QuestionDatabasePackage[] = [];
       let partialFailure = false;
       for (const [index, file] of files.entries()) {
-        if (accountRef.current === activeAccount) {
+        if (isActive()) {
           setProgress({ current: index, total: files.length });
         }
         const existing = previous.get(file.id);
@@ -55,6 +65,7 @@ export function useQuestionDatabase(
         }
         try {
           const loaded = await bridge.loadGamePackage(file.id);
+          if (!isActive()) return [];
           const gamePackage = await parseGamePackage(loaded.content);
           packages.push(createQuestionDatabasePackage(file, gamePackage));
         } catch {
@@ -66,11 +77,12 @@ export function useQuestionDatabase(
         schemaVersion: 1,
         packages,
       };
+      if (!isActive()) return [];
       if (JSON.stringify(document) !== JSON.stringify(stored)) {
         await bridge.saveQuestionDatabase(document);
       }
       const nextEntries = flattenQuestionDatabase(document);
-      if (accountRef.current === activeAccount) {
+      if (isActive()) {
         documentRef.current = document;
         entriesRef.current = nextEntries;
         setEntries(nextEntries);
@@ -80,7 +92,7 @@ export function useQuestionDatabase(
       }
       return nextEntries;
     })().catch((error) => {
-      if (accountRef.current === activeAccount) {
+      if (isActive()) {
         setFailed(true);
         setLoading(false);
       }
