@@ -50,8 +50,9 @@ without losing in-progress work.
   saving, or failed changes and stops warning after the package is saved.
 - **EDT-16:** An AI icon beside the selected question opens a non-modal,
   full-height panel docked to the editor's right with the same chrome as the
-  left navigation and no blocking backdrop. It includes an account or global
-  `AIQuestion` template
+  left navigation and no blocking backdrop. The editor stays centered in the
+  workspace between the left navigation and the generation dock. It includes
+  an account or global `AIQuestion` template
   selector, difficulty and
   recognizability selectors from very easy through very hard, and a context
   field. Medium difficulty and easy recognizability are selected by default.
@@ -219,7 +220,8 @@ without losing in-progress work.
     rejection leaves its target unchanged.
 16. Open each generation panel and confirm it is a full-height right dock with
     the left navigation's chrome, no blocking backdrop, and an editor that
-    remains interactive. Confirm its database toggle defaults off.
+    remains centered in the available workspace and interactive. Confirm its
+    database toggle defaults off.
     Enable it, return an answer and then a paraphrased question already present
     in another indexed package, and confirm each first draft is rejected and
     regenerated once. Close and reopen the panel and confirm the toggle is off.

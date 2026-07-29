@@ -50,9 +50,10 @@
 }
 
 .editor-app-package-generation {
+  position: relative;
+  left: -210px;
   width: min(1180px, calc(100% - 420px));
-  margin-right: auto;
-  margin-left: 0;
+  margin: 0 auto;
 }
 
 .question-generation-popup-prompt {
@@ -153,6 +154,7 @@
 
 @media (width <= 800px) {
   .editor-app-package-generation {
+    left: 0;
     width: min(100% - 20px, 680px);
     margin: 0 auto;
   }
