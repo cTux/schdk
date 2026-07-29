@@ -18,7 +18,7 @@ function useQuestionGeneration({
   const [templateIndex, setTemplateIndex] = useState('0');
   const [difficulty, setDifficulty] = useState<AIQuestionDifficulty>('medium');
   const [recognizability, setRecognizability] =
-    useState<AIQuestionRecognizability>('medium');
+    useState<AIQuestionRecognizability>('easy');
   const [context, setContext] = useState('');
   const [thinking, setThinking] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -32,7 +32,7 @@ function useQuestionGeneration({
     setOpen(false);
     setTemplateIndex('0');
     setDifficulty('medium');
-    setRecognizability('medium');
+    setRecognizability('easy');
     setContext('');
     setThinking(false);
     setFailed(false);

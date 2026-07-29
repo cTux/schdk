@@ -29,9 +29,10 @@
   selects recognizability across the same range, accepts context, and disables
   every control while generation is pending. Pass the selected difficulty and
   recognizability into the provider prompt; default generation flows without
-  explicit selectors to medium for both. Successful structured output replaces
-  every question field, records the selected rule name, difficulty, and
-  recognizability on the question, resets the panel, and closes it. While
+  explicit selectors to medium difficulty and easy recognizability. Successful
+  structured output replaces every question field, records the selected rule
+  name, difficulty, and recognizability on the question, resets the panel, and
+  closes it. While
   generation runs, keep only its target question disabled until completion;
   ready questions remain editable. Show read-only generation parameters in the
   editor whenever they are present.

@@ -54,9 +54,9 @@ without losing in-progress work.
   `AIQuestion` template
   selector, difficulty and
   recognizability selectors from very easy through very hard, and a context
-  field. Medium is selected by default for both scales. Favorite templates
-  appear first, carry a star, and are name-sorted before the name-sorted
-  remainder. Without a saved key the icon is disabled with an explanatory
+  field. Medium difficulty and easy recognizability are selected by default.
+  Favorite templates appear first, carry a star, and are name-sorted before
+  the name-sorted remainder. Without a saved key the icon is disabled with an explanatory
   custom tooltip. Generation disables the complete panel, sends the selected
   difficulty and recognizability definitions in the provider prompt, and shows
   a thinking state; on success it replaces every generated question field
@@ -82,8 +82,8 @@ without losing in-progress work.
   and one enabled AI question package from a dropdown. Remarked questions are
   regenerated from the current question and remark, and a resolved result
   clears the remark. The panel also selects difficulty and recognizability from
-  very easy through very hard, with medium selected by default for both scales.
-  Favorite packages appear first with a star and each
+  very easy through very hard, with medium difficulty and easy recognizability
+  selected by default. Favorite packages appear first with a star and each
   favorite and non-favorite group is name-sorted. The panel also selects all,
   favorite, or non-favorite enabled non-general question rules; each question
   without an explicitly configured type uses a random rule from that set. An

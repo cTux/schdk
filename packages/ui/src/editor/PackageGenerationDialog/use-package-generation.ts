@@ -23,7 +23,7 @@ function usePackageGeneration({
   const [difficulty, setDifficulty] =
     useState<common.AIQuestionDifficulty>('medium');
   const [recognizability, setRecognizability] =
-    useState<common.AIQuestionRecognizability>('medium');
+    useState<common.AIQuestionRecognizability>('easy');
   const [selected, setSelected] = useState<number | null>(null);
   const [thinking, setThinking] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -57,7 +57,7 @@ function usePackageGeneration({
     setScope('missing');
     setRuleSet('all');
     setDifficulty('medium');
-    setRecognizability('medium');
+    setRecognizability('easy');
     setSelected(null);
     setThinking(false);
     setFailed(false);
