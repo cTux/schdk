@@ -75,7 +75,7 @@ V34|AI package regeneration of remarked questions includes the current question 
 V35|Selecting a personal-database result loads the complete canonical source question and never replaces a populated editor slot without explicit confirmation.
 V36|Initial Drive recents loading issues one files request for its first result page even when editor and host are mounted.
 V37|Question and package generation use a non-modal full-height right dock without a blocking backdrop, keep the editor centered with equal spacing from both docks, lock unfinished targets, unlock completed targets, preserve author selection, and close after final success.
-V38|AI-generated question text and answer comments contain only natural player-facing prose and never expose template construction labels, paths, stages, or techniques.
+V38|AI-generated question text and answer comments contain only natural player-facing prose without template construction labels, paths, stages, techniques, or stock meta-commentary.
 
 ## §T
 
@@ -175,3 +175,4 @@ B86|2026-07-29|Standard control heights and spacing made sticky question navigat
 B87|2026-07-29|Compact navigation styling pushed an existing SCSS partial past the enforced source-file limit|Merge adjacent selectors; the existing repository workflow test covers recurrence.
 B88|2026-07-29|Inline answer-list actions pushed the shared question-editor SCSS partial past the enforced source-file limit|Move the component-specific rules to `AnswerListField/styles.scss`; the existing repository workflow test covers recurrence.
 B89|2026-07-29|The generated-question selector used chained simple `:not()` notation rejected by the stylesheet policy|Use the required complex `:not()` notation; linting covers recurrence.
+B90|2026-07-29|The generation prompt allowed answer comments to begin with the stock phrase "Both clues independently point to"|V38

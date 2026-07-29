@@ -83,7 +83,8 @@ without losing in-progress work.
   human rather than AI and requires a non-empty answer comment that explains
   only why the answer is correct, never why the question was generated or
   phrased that way. Question text and answer comments never expose internal
-  template headings, construction techniques, paths, or stages. An AI icon
+  template headings, construction techniques, paths, stages, or stock
+  meta-commentary such as "Both clues independently point to". An AI icon
   beside the editable package title opens a panel docked to the editor's right
   that selects missing
   questions, questions with unresolved author remarks, or the whole package
