@@ -12,8 +12,8 @@ without losing in-progress work.
 - **EDT-1:** Starting a new package creates 36 question slots and obtains a
   Google Drive destination before opening the editor.
 - **EDT-2:** Authors can edit the package title, each optional tour phrase
-  through a single-line field with its name as the placeholder and no separate
-  visible label, and every field defined by the
+  through a single-line field beside the tour heading, with its name as the
+  placeholder and no separate visible label, and every field defined by the
   [game-package specification](game-package.md).
 - **EDT-2a:** Sticky question navigation uses compact controls and spacing so
   all three tours remain visible on short desktop viewports.

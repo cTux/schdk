@@ -1,9 +1,26 @@
 @use '../../styles/tokens' as *;
 
+.editor-app .question-list section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 8px;
+}
+
+.editor-app .question-list h2 {
+  flex: 0 0 auto;
+}
+
 .editor-app .tour-phrase-field {
-  width: 100%;
+  width: auto;
   min-height: $control-compact;
+  min-width: 0;
+  flex: 1 1 0;
   margin-bottom: 6px;
   padding: 5px 8px;
   font-size: $font-size-sm;
+}
+
+.editor-app .question-grid {
+  flex: 0 0 100%;
 }
