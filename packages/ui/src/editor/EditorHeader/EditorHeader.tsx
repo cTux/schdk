@@ -18,6 +18,7 @@ function EditorHeader({
   aiGeneration,
   gamePackage,
   onQuestionGenerated,
+  onPackageGenerationStateChange,
   onSelectQuestion,
 }: EditorHeaderProps) {
   const { copy } = useLocalization();
@@ -37,6 +38,7 @@ function EditorHeader({
               {...aiGeneration}
               gamePackage={gamePackage}
               onGenerated={onQuestionGenerated}
+              onGenerationStateChange={onPackageGenerationStateChange}
               onSelectQuestion={onSelectQuestion}
             />
           )}

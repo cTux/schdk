@@ -2,7 +2,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import './styles.scss';
 
 import { getGameQuestionAnswers } from '@schdk/common';
-import { useEffect } from 'react';
+import classNames from 'classnames';
+import { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { StatusMessage } from '../../atoms/StatusMessage';
 import { TooltipProvider } from '../../atoms/Tooltip';
@@ -55,6 +56,10 @@ function EditorView({
 }: EditorViewProps) {
   const { locale } = useLocalization();
   const toastCopy = editorToastCopy[locale];
+  const [pendingGenerationIndexes, setPendingGenerationIndexes] = useState<
+    number[]
+  >([]);
+  const [packageGenerationDocked, setPackageGenerationDocked] = useState(false);
   const questionGeneration = aiGeneration && {
     ...aiGeneration,
     excludedAnswers: gamePackage.questions.flatMap((question, index) =>
@@ -97,7 +102,11 @@ function EditorView({
 
   return (
     <TooltipProvider>
-      <main className="editor-app">
+      <main
+        className={classNames('editor-app', {
+          'editor-app-package-generation': packageGenerationDocked,
+        })}
+      >
         <EditorHeader
           hasPackage={hasPackage}
           packageTitle={gamePackage.title}
@@ -109,6 +118,10 @@ function EditorView({
           aiGeneration={aiGeneration}
           gamePackage={gamePackage}
           onQuestionGenerated={onQuestionGenerated}
+          onPackageGenerationStateChange={(pendingIndexes, docked) => {
+            setPendingGenerationIndexes(pendingIndexes);
+            setPackageGenerationDocked(docked);
+          }}
           onSelectQuestion={onSelectQuestion}
         />
         <PackageStart
@@ -133,6 +146,7 @@ function EditorView({
           />
           <QuestionEditor
             aiGeneration={questionGeneration}
+            disabled={pendingGenerationIndexes.includes(selectedIndex)}
             question={gamePackage.questions[selectedIndex]!}
             questionDatabaseRows={questionDatabaseRows}
             selectedIndex={selectedIndex}
