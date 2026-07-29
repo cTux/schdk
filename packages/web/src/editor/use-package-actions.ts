@@ -145,5 +145,22 @@ export function usePackageActions(options: PackageActionsOptions) {
     }
   }
 
-  return { closePackage, createPackage, deletePackage, ...opening };
+  function updateTourPhrase(index: number, value: string) {
+    setGamePackage((current) => ({
+      ...current,
+      tourPhrases: current.tourPhrases.map((phrase, phraseIndex) =>
+        phraseIndex === index ? value : phrase,
+      ) as GamePackage['tourPhrases'],
+    }));
+    setSaveStatus('pending');
+    setMessage('');
+  }
+
+  return {
+    closePackage,
+    createPackage,
+    deletePackage,
+    updateTourPhrase,
+    ...opening,
+  };
 }

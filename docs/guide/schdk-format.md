@@ -5,8 +5,9 @@
 Кореневий об'єкт містить:
 
 - `format: "schdk-game-package"`;
-- `version: 3`;
+- `version: 4`;
 - назву пакета `title`;
+- три необов’язкові фрази турів `tourPhrases`;
 - два записи музичних пауз `musicBreaks`;
 - рівно 36 упорядкованих елементів `questions`.
 

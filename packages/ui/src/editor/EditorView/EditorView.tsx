@@ -52,6 +52,7 @@ function EditorView({
   onQuestionTextBlur,
   onSelectQuestion,
   onSwapQuestions,
+  onTourPhraseChange,
   onTitleChange,
 }: EditorViewProps) {
   const { locale } = useLocalization();
@@ -151,6 +152,7 @@ function EditorView({
             showValidation={showValidation}
             onSelectQuestion={onSelectQuestion}
             onSwapQuestions={onSwapQuestions}
+            onTourPhraseChange={onTourPhraseChange}
             onMusicBreakChange={onMusicBreakChange}
           />
           <QuestionEditor

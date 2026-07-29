@@ -16,6 +16,7 @@ import {
 } from '../GameElements';
 import { GameMusicBreak } from '../GameMusicBreak';
 import { GameLayoutItem } from '../GameLayoutItem';
+import { GameTourIntro } from '../GameTourIntro';
 import { stageMotionClass } from './stage-motion';
 import { type GameWizardProps } from './game-wizard-props';
 
@@ -28,6 +29,7 @@ function GameWizard({
   onNext,
 }: GameWizardProps) {
   const visible = new Set(game.visibleStages);
+  const isTour = game.currentStage === 'tour';
   const isIntro = game.currentStage === 'intro';
   const isMusicBreak = game.currentStage === 'musicBreak';
   const isHandoutFocus = game.currentStage === 'handout';
@@ -45,7 +47,7 @@ function GameWizard({
       <GameLayoutItem id="logo" layout={layout}>
         <GameLogo />
       </GameLayoutItem>
-      {!isMusicBreak && (
+      {!isMusicBreak && !isTour && (
         <GameLayoutItem id="progress" layout={layout}>
           <GameProgress
             questionNumber={game.questionNumber}
@@ -58,7 +60,18 @@ function GameWizard({
           'is-handout-focus': isHandoutFocus,
         })}
       >
-        {isMusicBreak && game.musicBreak ? (
+        {isTour ? (
+          <GameLayoutItem id="intro" layout={layout}>
+            <GameTourIntro
+              className={classNames(
+                stageMotionClass('tour', game.currentStage, game.transition),
+                questionChangingClass,
+              )}
+              phrase={game.tourPhrase}
+              title={copy.host.tour(game.tourNumber)}
+            />
+          </GameLayoutItem>
+        ) : isMusicBreak && game.musicBreak ? (
           <GameMusicBreak
             musicBreak={game.musicBreak}
             volume={game.musicVolume}

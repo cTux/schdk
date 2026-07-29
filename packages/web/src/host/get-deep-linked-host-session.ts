@@ -21,7 +21,7 @@ export function getDeepLinkedHostSession(url: string): HostSession | null {
           Number(parameters.get(HOST_QUESTION_PARAMETER) ?? '1') - 1,
         questionPartIndex:
           Number(parameters.get(HOST_QUESTION_PART_PARAMETER) ?? '1') - 1,
-        stage: parameters.get(HOST_STAGE_PARAMETER) ?? 'intro',
+        stage: parameters.get(HOST_STAGE_PARAMETER) ?? 'tour',
       },
     });
   } catch {

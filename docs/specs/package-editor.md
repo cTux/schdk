@@ -11,12 +11,12 @@ without losing in-progress work.
 
 - **EDT-1:** Starting a new package creates 36 question slots and obtains a
   Google Drive destination before opening the editor.
-- **EDT-2:** Authors can edit the package title and every field defined by the
-  [game-package specification](game-package.md).
+- **EDT-2:** Authors can edit the package title, each optional tour phrase, and
+  every field defined by the [game-package specification](game-package.md).
 - **EDT-3:** Question type selection exposes one, two, or three question parts
   for standard, 2×30 blitz, or 3×20 blitz respectively.
 - **EDT-4:** Authors can add, replace, and remove text or validated image
-  handouts and the two between-round audio files. Text handouts use a monospace
+  handouts and the two between-tour audio files. Text handouts use a monospace
   font while editing. Invalid handouts and oversized audio selections never
   mutate package state.
 - **EDT-5:** Authors can copy a complete question as JSON, replace another

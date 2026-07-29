@@ -8,6 +8,8 @@ const hostGame = {
   question: gameQuestion,
   questionNumber: 1,
   questionCount: 36,
+  tourNumber: 1,
+  tourPhrase: 'Музика нас поєднала',
   currentQuestionPartIndex: 0,
   currentStage: 'question' as const,
   visibleStages: ['question', 'timer'] as const,
@@ -77,9 +79,17 @@ export const componentValues: Record<string, Record<string, unknown>> = {
       data: new Uint8Array(),
     },
   },
+  GameTourIntro: {
+    phrase: 'Музика нас поєднала',
+    title: 'Тур 1',
+  },
   GameWizard: { game: hostGame },
   HostView: { game: null },
   MusicBreakField: { musicBreak: null },
+  QuestionList: {
+    gamePackage,
+    selectedIndex: 1,
+  },
   ShellView: {
     game: DEFAULT_GAME_OPTIONS,
     questionDatabase: {

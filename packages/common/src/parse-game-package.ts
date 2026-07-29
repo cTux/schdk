@@ -57,7 +57,7 @@ function parseMusicBreaks(
   value: Record<string, unknown>,
   entries: Record<string, Uint8Array>,
 ): [MusicBreak | null, MusicBreak | null] {
-  if (value.version !== 3) return [null, null];
+  if (value.version !== 3 && value.version !== 4) return [null, null];
   if (!Array.isArray(value.musicBreaks) || value.musicBreaks.length !== 2) {
     throw new Error('Invalid game package');
   }
@@ -87,6 +87,20 @@ function parseMusicBreaks(
   }) as [MusicBreak | null, MusicBreak | null];
 }
 
+function parseTourPhrases(
+  value: Record<string, unknown>,
+): [string, string, string] {
+  if (value.version !== 4) return ['', '', ''];
+  if (
+    !Array.isArray(value.tourPhrases) ||
+    value.tourPhrases.length !== 3 ||
+    value.tourPhrases.some((phrase) => typeof phrase !== 'string')
+  ) {
+    throw new Error('Invalid game package');
+  }
+  return value.tourPhrases as [string, string, string];
+}
+
 export function parseGamePackage(content: string | Uint8Array): GamePackage {
   const [json, entries] = readGamePackage(content);
   const value: unknown = JSON.parse(json);
@@ -96,7 +110,10 @@ export function parseGamePackage(content: string | Uint8Array): GamePackage {
     !('format' in value) ||
     value.format !== 'schdk-game-package' ||
     !('version' in value) ||
-    (value.version !== 1 && value.version !== 2 && value.version !== 3) ||
+    (value.version !== 1 &&
+      value.version !== 2 &&
+      value.version !== 3 &&
+      value.version !== 4) ||
     !('title' in value) ||
     typeof value.title !== 'string' ||
     !('questions' in value) ||
@@ -108,18 +125,21 @@ export function parseGamePackage(content: string | Uint8Array): GamePackage {
 
   let questions: GameQuestion[];
   let musicBreaks: [MusicBreak | null, MusicBreak | null];
+  let tourPhrases: [string, string, string];
   try {
     questions = value.questions.map(parseGameQuestion);
     musicBreaks = parseMusicBreaks(value as Record<string, unknown>, entries);
+    tourPhrases = parseTourPhrases(value as Record<string, unknown>);
   } catch {
     throw new Error('Invalid game package');
   }
 
   return {
     format: value.format,
-    version: 3,
+    version: 4,
     title: value.title,
     questions,
+    tourPhrases,
     musicBreaks,
   };
 }

@@ -69,6 +69,13 @@ describe('game question flow', () => {
         questionPartIndex: 0,
         stage: 'intro',
       }),
+    ).toEqual({ questionIndex: 0, questionPartIndex: 0, stage: 'tour' });
+    expect(
+      getPreviousPosition(gamePackage, {
+        questionIndex: 0,
+        questionPartIndex: 0,
+        stage: 'tour',
+      }),
     ).toBeNull();
     expect(
       getNextPosition(gamePackage, {
@@ -104,12 +111,12 @@ describe('game question flow', () => {
         questionPartIndex: 0,
         stage: 'musicBreak',
       }),
-    ).toEqual({ questionIndex: 12, questionPartIndex: 0, stage: 'intro' });
+    ).toEqual({ questionIndex: 12, questionPartIndex: 0, stage: 'tour' });
     expect(
       getPreviousPosition(gamePackage, {
         questionIndex: 12,
         questionPartIndex: 0,
-        stage: 'intro',
+        stage: 'tour',
       }),
     ).toEqual({
       questionIndex: 11,

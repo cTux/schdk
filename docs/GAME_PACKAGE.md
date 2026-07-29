@@ -8,7 +8,8 @@ Readers and writers reject archives larger than 160 MiB, `game.json` entries
 larger than 16 MiB, music-break entries larger than 64 MiB, and duplicate
 recognized entries. Unrecognized ZIP entries are ignored without extraction.
 
-- A package has a title and exactly 36 questions: three rounds of 12.
+- A package has a title and exactly 36 questions: three tours of 12.
+- Each tour has an optional phrase shown on its opening slide.
 - Every question has a `type`, one or more required `questionParts`, and one
   required answer. Supported types are:
   - `standard`: one part with a 60-second timer;
@@ -37,17 +38,18 @@ recognized entries. Unrecognized ZIP entries are ignored without extraction.
   `recognizability` values from `very-easy`, `easy`, `medium`, `hard`, or
   `very-hard`. Manually created and legacy questions omit this object. These
   metadata do not affect question readiness.
-- A package may contain one music break after round 1 and one after round 2.
+- A package may contain one music break after tour 1 and one after tour 2.
   Each break keeps its original filename and MIME type in `game.json`, while
   its bytes are stored directly in the matching `audio/break-*` ZIP entry.
   The editor accepts every audio format supported by the current built-in
   browser player.
 
-The root object has a `format: "schdk-game-package"` marker, version `3`, a
-`title`, a `questions` array, and a two-item `musicBreaks` array. Array order
-determines question numbers and break positions. A break item is `null` or an
-object containing `name`, `mimeType`, and its fixed ZIP `entry`. The shared
-TypeScript types and rules live in `@schdk/common`.
+The root object has a `format: "schdk-game-package"` marker, version `4`, a
+`title`, a `questions` array, a three-item `tourPhrases` string array, and a
+two-item `musicBreaks` array. Array order determines tour, question, and break
+positions. A tour phrase may be empty. A break item is `null` or an object
+containing `name`, `mimeType`, and its fixed ZIP `entry`. The shared TypeScript
+types and rules live in `@schdk/common`.
 
 The editor saves new and unfinished packages to the same `.schdk` file. The
 title, questions, and answers may remain empty during editing. Structural
@@ -58,6 +60,6 @@ The filename follows the filesystem-safe package title plus `.schdk`.
 Legacy `.schdk` files containing plain JSON are still supported. The editor
 rewrites them in ZIP format on the next save.
 
-Version `1` packages with a single `question` string and version `2` packages
-without music remain readable. They are normalized to version `3` and rewritten
-on the next save.
+Version `1` packages with a single `question` string, version `2` packages
+without music, and version `3` packages without tour phrases remain readable.
+They are normalized to version `4` and rewritten on the next save.

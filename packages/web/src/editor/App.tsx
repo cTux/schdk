@@ -240,6 +240,7 @@ function App({
         onQuestionTextBlur={questions.correctQuestionText}
         onSelectQuestion={setSelectedIndex}
         onSwapQuestions={questions.swapQuestionPositions}
+        onTourPhraseChange={packages.updateTourPhrase}
         onTitleChange={(title) => {
           setGamePackage({ ...gamePackage, title });
           setSaveStatus('pending');

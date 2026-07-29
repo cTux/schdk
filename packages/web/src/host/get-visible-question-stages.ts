@@ -5,7 +5,7 @@ export function getVisibleQuestionStages(
   question: GameQuestion,
   stage: HostQuestionStage,
 ): HostQuestionStage[] {
-  if (stage === 'musicBreak') return [];
+  if (stage === 'tour' || stage === 'musicBreak') return [];
   if (stage === 'intro') return ['intro'];
   const stages: HostQuestionStage[] = [
     ...(question.handout ? (['handout'] as const) : []),

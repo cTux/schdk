@@ -1,0 +1,19 @@
+@use '../../styles/tokens' as *;
+
+.editor-app .tour-phrase-field {
+  display: block;
+  margin-bottom: 9px;
+}
+
+.editor-app .tour-phrase-field span {
+  display: block;
+  margin-bottom: 5px;
+  color: $muted;
+  font-size: $font-size-xs;
+}
+
+.editor-app .tour-phrase-field input {
+  width: 100%;
+  padding: 7px 9px;
+  font-size: $font-size-sm;
+}
