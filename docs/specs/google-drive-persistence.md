@@ -64,6 +64,9 @@ preserving recoverable local state during temporary Drive failures.
   compares file IDs and modification times, downloads only new or changed
   packages, removes missing packages, and reports packages that cannot be
   indexed without discarding a previous usable projection.
+- **DRV-20:** Initial recents loading shares concurrent editor and host work and
+  lists the first Drive result page with one files request. Additional result
+  pages remain traversed when present.
 
 ## Invariants
 
@@ -126,3 +129,6 @@ preserving recoverable local state during temporary Drive failures.
     account rows appear.
 15. Save a package with and without unresolved remarks and confirm recents show
     the matching metadata tag without downloading the package.
+16. Open recents with editor and host mounted and observe one Drive files
+    request for the first result page, followed only by requests for real
+    additional pages.

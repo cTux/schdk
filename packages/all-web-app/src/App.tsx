@@ -153,7 +153,7 @@ export function App() {
                   drive={googleDrive.bridge ?? undefined}
                   driveActive={connected}
                   manageDocumentTitle={false}
-                  onDriveFailure={() => void googleDrive.reportFailure()}
+                  onDriveFailure={googleDrive.reportFailure}
                   questionDatabaseRows={questionDatabase.entries}
                   sessionScope={`${window.location.pathname}:${googleDrive.accountId}`}
                   textOptions={editorOptions}
@@ -170,7 +170,7 @@ export function App() {
                   drive={googleDrive.bridge ?? undefined}
                   driveActive={connected}
                   layout={gameOptions.layout}
-                  onDriveFailure={() => void googleDrive.reportFailure()}
+                  onDriveFailure={googleDrive.reportFailure}
                   sessionScope={`${window.location.pathname}:${googleDrive.accountId}`}
                   soundVolume={gameOptions.soundVolume}
                   musicVolume={gameOptions.musicVolume}
