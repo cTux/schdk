@@ -68,9 +68,13 @@
   unfinished. Host notes contain only delivery instructions visible to the
   host while reading the question, such as pronunciation, omitted text,
   audible punctuation, pauses, or cues; they are not answer-review notes.
+  Show only the host-notes field directly below the answer row, without a
+  separate section title.
   Give question, remark, answer, and answer-comment text areas the same default
   height.
-- Let authors add optional alternative and wrong answer lists.
+- Let authors add optional alternative and wrong answer lists. Keep each add
+  action inline with its list title instead of rendering a separate button
+  below the list.
 - Let each package slot select `Звичайне`, `Бліц 2×30`, or `Бліц 3×20`.
   Standard questions have one text part; blitz questions have two or three
   separate text parts and still share one answer.

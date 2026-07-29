@@ -1,0 +1,29 @@
+@use '../../styles/tokens' as *;
+
+.editor-app {
+  .answer-list-heading {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-right: 0;
+  }
+
+  .answer-list-label {
+    min-width: 0;
+  }
+
+  .answer-list-label strong {
+    font-weight: 650;
+  }
+
+  .answer-list-add {
+    flex: none;
+    border-color: transparent;
+    background: transparent;
+    padding: 4px 6px;
+    color: $muted;
+    white-space: nowrap;
+  }
+}

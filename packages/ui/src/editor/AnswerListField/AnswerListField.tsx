@@ -1,3 +1,5 @@
+import './styles.scss';
+
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '../../atoms/Button';
@@ -15,9 +17,20 @@ function AnswerListField({
   const { copy } = useLocalization();
 
   return (
-    <fieldset>
-      <legend>
-        {legend} <span>{copy.shared.optional}</span>
+    <fieldset aria-label={`${legend} ${copy.shared.optional}`}>
+      <legend className="answer-list-heading">
+        <span className="answer-list-label">
+          <strong>{legend}</strong> {copy.shared.optional}
+        </span>
+        <Button
+          className="answer-list-add"
+          variant="secondary"
+          type="button"
+          onClick={() => onChange([...answers, ''])}
+        >
+          <FontAwesomeIcon icon={faPlus} aria-hidden="true" />{' '}
+          {copy.editor.addAnswer}
+        </Button>
       </legend>
       {answers.map((answer, index) => (
         <div className="alternative" key={index}>
@@ -45,14 +58,6 @@ function AnswerListField({
           </Button>
         </div>
       ))}
-      <Button
-        variant="secondary"
-        type="button"
-        onClick={() => onChange([...answers, ''])}
-      >
-        <FontAwesomeIcon icon={faPlus} aria-hidden="true" />{' '}
-        {copy.editor.addAnswer}
-      </Button>
     </fieldset>
   );
 }

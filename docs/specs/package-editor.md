@@ -151,6 +151,9 @@ without losing in-progress work.
   They survive package saving, reopening, and complete-question clipboard
   copying; manually created and legacy questions show no generation-parameter
   block.
+- **EDT-25:** The host-notes textarea appears directly below the answer row
+  without a separate section title. Alternative- and wrong-answer add actions
+  appear inline with their respective list titles.
 
 ## Invariants
 
@@ -252,3 +255,7 @@ without losing in-progress work.
 20. Generate from a rule whose description or examples name internal
     construction paths. Confirm neither the question text nor the answer
     comment repeats those labels and both read as natural player-facing prose.
+21. Inspect the answer area at normal and narrow widths. Confirm only the
+    host-notes field appears directly below the answer row, with no separate
+    host-notes heading, and each answer-list add action stays inline with its
+    list title.

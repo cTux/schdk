@@ -6,17 +6,12 @@ function HostNotesField({ value, onChange }: HostNotesFieldProps) {
   const { copy } = useLocalization();
 
   return (
-    <fieldset>
-      <legend>
-        {copy.editor.hostNotes} <span>{copy.shared.optional}</span>
-      </legend>
-      <TextAreaField
-        label={copy.editor.hostNotesLabel}
-        rows={3}
-        value={value}
-        onValueChange={onChange}
-      />
-    </fieldset>
+    <TextAreaField
+      label={copy.editor.hostNotesLabel}
+      rows={3}
+      value={value}
+      onValueChange={onChange}
+    />
   );
 }
 
