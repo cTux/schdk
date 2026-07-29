@@ -7,9 +7,12 @@
   header's right. Do not restore the completion counter. Show localized
   success toasts for completed editor actions, but not for canceled or failed
   actions; keep actionable validation and file errors.
-- Place the optional image-or-text handout before question text. Show no image
-  filename, put remove below the image thumbnail or text field, and open a
-  100–400% zoomable, pannable full-size modal from the thumbnail.
+- Place the optional image-or-text handout before question text without a
+  separate handout heading. Keep the hatched image action on the left and the
+  text field on the right, matching the question and answer-comment field
+  dimensions respectively. Show no image filename, put remove below the image
+  thumbnail or text field, and open a 100–400% zoomable, pannable full-size
+  modal from the thumbnail.
 - Render text handouts in the editor with a monospace font so character
   alignment stays stable.
 - Put Font Awesome copy, paste, and trailing clear actions beside the question

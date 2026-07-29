@@ -9,14 +9,47 @@
   }
 
   .handout-text-editor {
-    display: grid;
-    justify-items: start;
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
     gap: 10px;
-    margin-top: 10px;
+    margin-bottom: 18px;
   }
 
-  .handout-text-editor label {
-    width: min(100%, 640px);
+  .handout-inputs {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .handout-inputs > label {
+    min-width: 0;
+    flex: 0 1 calc(50% - 8px);
+  }
+
+  .handout-inputs > .file-button {
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+    margin-top: 7px;
+    border-style: dashed;
+    background: repeating-linear-gradient(
+      -45deg,
+      rgba($surface-hover-rgb, 0.5) 0 8px,
+      rgba($surface-rgb, 0.5) 8px 16px
+    );
+    padding: 11px 14px;
+    text-align: center;
+  }
+
+  .handout-inputs > .file-button:hover {
+    background: repeating-linear-gradient(
+      -45deg,
+      rgba($surface-hover-rgb, 0.8) 0 8px,
+      rgba($surface-rgb, 0.65) 8px 16px
+    );
   }
 
   .handout-text-editor .ui-textarea {

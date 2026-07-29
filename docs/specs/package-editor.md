@@ -21,8 +21,10 @@ without losing in-progress work.
   for standard, 2×30 blitz, or 3×20 blitz respectively.
 - **EDT-4:** Authors can add, replace, and remove text or validated image
   handouts and the two between-tour audio files. Text handouts use a monospace
-  font while editing. Invalid handouts and oversized audio selections never
-  mutate package state.
+  font while editing. The handout editor has no separate heading: its hatched
+  image action stays left of the text field, and both match the dimensions of
+  the question and answer-comment fields. Invalid handouts and oversized audio
+  selections never mutate package state.
 - **EDT-5:** Authors can copy a complete question as JSON, replace another
   question from parsed clipboard JSON after confirmation, and clear every
   field of the selected question from its red trailing action. `Ctrl+C` and
@@ -265,3 +267,7 @@ without losing in-progress work.
 22. Generate a question and confirm its navigation number turns blue. Add an
     unresolved remark or invalidate it and confirm the red state takes
     priority; select it and confirm the selected border remains visible.
+23. Inspect an empty handout at normal and narrow widths. Confirm there is no
+    separate handout heading, the hatched image action stays left of the text
+    field, both match the corresponding question-row field dimensions, and the
+    question and remark fields match each other.

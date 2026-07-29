@@ -176,3 +176,4 @@ B87|2026-07-29|Compact navigation styling pushed an existing SCSS partial past t
 B88|2026-07-29|Inline answer-list actions pushed the shared question-editor SCSS partial past the enforced source-file limit|Move the component-specific rules to `AnswerListField/styles.scss`; the existing repository workflow test covers recurrence.
 B89|2026-07-29|The generated-question selector used chained simple `:not()` notation rejected by the stylesheet policy|Use the required complex `:not()` notation; linting covers recurrence.
 B90|2026-07-29|The generation prompt allowed answer comments to begin with the stock phrase "Both clues independently point to"|V38
+B91|2026-07-29|The optional handout used a redundant heading and vertically stacked controls with inconsistent dimensions|Use the two-column handout layout specified by `docs/specs/package-editor.md`.
