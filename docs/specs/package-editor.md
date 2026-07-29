@@ -38,8 +38,9 @@ without losing in-progress work.
 - **EDT-11:** The start screen opens local `.schdk` files through a visible
   chooser or drag-and-drop, validates them, and imports them to Drive.
 - **EDT-12:** Recents show Drive packages, readiness, download, and confirmed
-  cloud deletion. Packages with unresolved author remarks carry a separate
-  status tag. Opening or deleting one row blocks conflicting start actions.
+  cloud deletion. Ready packages, packages with unresolved author remarks, and
+  unfinished packages without remarks carry distinct localized status tags.
+  Opening or deleting one row blocks conflicting start actions.
 - **EDT-13:** Explicit download exports the latest Drive copy without changing
   the editor's backing file.
 - **EDT-14:** The selected Drive package and question restore after refresh or
@@ -216,7 +217,8 @@ without losing in-progress work.
     Select a grouped database row and confirm the complete source question is
     loaded. Repeat with a populated slot, cancel replacement, then confirm it.
     Reopen recents and confirm packages with unresolved remarks carry their
-    separate status tag.
+    separate status tag, while unfinished packages without remarks show the
+    in-development tag.
 19. Generate one question and then a package with different rule, difficulty,
     and recognizability selections. Confirm each accepted question shows its
     actual three parameters, retains them after saving and reopening, and
