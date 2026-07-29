@@ -1,49 +1,14 @@
-import type { QuestionDatabaseRow } from '../QuestionDatabasePage';
-import type { QuestionDatabaseSort } from './types';
+import { type QuestionDatabaseSearchField } from './question-database-search-field';
+import { getQuestionDatabaseAnswer } from './get-question-database-answer';
+import { searchQuestionDatabaseRows } from './search-question-database-rows';
+import { sortQuestionDatabaseRows } from './sort-question-database-rows';
 
-export const QUESTION_DATABASE_ROW_HEIGHT = 76;
-export type QuestionDatabaseSearchField = 'all' | 'question' | 'answer';
+const QUESTION_DATABASE_ROW_HEIGHT = 76;
 
-function normalize(value: string) {
-  return value.normalize('NFKC').toLocaleLowerCase().trim();
-}
-
-export function getQuestionDatabaseAnswer(row: QuestionDatabaseRow) {
-  return [row.answer, ...row.alternativeAnswers].join(' · ');
-}
-
-export function searchQuestionDatabaseRows(
-  rows: QuestionDatabaseRow[],
-  query: string,
-  field: QuestionDatabaseSearchField = 'all',
-) {
-  const needle = normalize(query);
-  if (needle.length < 2) return [...rows];
-  return rows.filter((row) => {
-    const question = normalize(row.question);
-    const answer = normalize(getQuestionDatabaseAnswer(row));
-    return field === 'question'
-      ? question.includes(needle)
-      : field === 'answer'
-        ? answer.includes(needle)
-        : question.includes(needle) || answer.includes(needle);
-  });
-}
-
-export function sortQuestionDatabaseRows(
-  rows: QuestionDatabaseRow[],
-  sort: QuestionDatabaseSort,
-  ascending: boolean,
-  locale: string,
-) {
-  return [...rows].sort((left, right) => {
-    const comparison =
-      sort === 'question'
-        ? left.question.localeCompare(right.question, locale)
-        : getQuestionDatabaseAnswer(left).localeCompare(
-            getQuestionDatabaseAnswer(right),
-            locale,
-          );
-    return ascending ? comparison : -comparison;
-  });
-}
+export {
+  QUESTION_DATABASE_ROW_HEIGHT,
+  type QuestionDatabaseSearchField,
+  getQuestionDatabaseAnswer,
+  searchQuestionDatabaseRows,
+  sortQuestionDatabaseRows,
+};

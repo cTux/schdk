@@ -1,2 +1,4 @@
-export { ShellNavigation } from './ShellNavigation';
-export type * from './types';
+import { ShellNavigation } from './ShellNavigation';
+import { type ShellAccount, type ShellNavigationProps } from './types';
+
+export { ShellNavigation, type ShellAccount, type ShellNavigationProps };

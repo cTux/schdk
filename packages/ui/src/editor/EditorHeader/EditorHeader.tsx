@@ -1,28 +1,13 @@
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import type { GamePackage, GameQuestion } from '@schdk/common';
 import { IconButton } from '../../atoms/IconButton';
 import { useLocalization } from '../../localization';
 import { EditorBrand } from '../EditorBrand';
-import type { AiQuestionGenerationOptions, EditorSaveStatus } from '../types';
 import { PackageGenerationDialog } from '../PackageGenerationDialog';
 import { PackageTitleField } from '../PackageTitleField';
 import { SaveStatus } from '../SaveStatus';
+import { type EditorHeaderProps } from './editor-header-props';
 
-export interface EditorHeaderProps {
-  hasPackage: boolean;
-  packageTitle: string;
-  saveStatus: EditorSaveStatus;
-  showValidation: boolean;
-  onBack(): void;
-  onDeletePackage(): void;
-  onTitleChange(value: string): void;
-  aiGeneration?: AiQuestionGenerationOptions;
-  gamePackage: GamePackage;
-  onQuestionGenerated(index: number, question: GameQuestion): void;
-  onSelectQuestion(index: number): void;
-}
-
-export function EditorHeader({
+function EditorHeader({
   hasPackage,
   packageTitle,
   saveStatus,
@@ -70,3 +55,5 @@ export function EditorHeader({
     </header>
   );
 }
+
+export { type EditorHeaderProps, EditorHeader };

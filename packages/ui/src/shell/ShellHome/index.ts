@@ -1,2 +1,4 @@
-export { ShellHome } from './ShellHome';
-export type * from './types';
+import { ShellHome } from './ShellHome';
+import { type ShellHomeProps } from './types';
+
+export { ShellHome, type ShellHomeProps };

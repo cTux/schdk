@@ -1,0 +1,1 @@
+export const MAX_CUSTOM_IMAGE_DATA_LENGTH = 3 * 1024 * 1024;

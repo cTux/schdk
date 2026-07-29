@@ -1,10 +1,10 @@
-export {
+import {
   GOOGLE_DRIVE_SCOPES,
   GoogleDriveAuthorizationError,
   GoogleDriveClient,
+  type DriveAccount,
 } from './client.js';
-export type { DriveAccount } from './client.js';
-export {
+import {
   createAIQuestionFilename,
   GLOBAL_AI_QUESTION_ADMIN_EMAILS,
   GLOBAL_AI_QUESTION_FOLDER_ID,
@@ -12,54 +12,96 @@ export {
   isDriveAIQuestionName,
   parseDriveAIQuestionFile,
   parseDriveAIQuestionWrite,
+  type DriveAIQuestion,
+  type DriveAIQuestionFile,
+  type DriveAIQuestionStorage,
+  type DriveAIQuestionWrite,
+  type DriveGlobalAIQuestionStorage,
 } from './ai-questions.js';
-export type {
-  DriveAIQuestion,
-  DriveAIQuestionFile,
-  DriveAIQuestionStorage,
-  DriveAIQuestionWrite,
-  DriveGlobalAIQuestionStorage,
-} from './ai-questions.js';
-export {
+import {
   createGamePackageFilename,
   isDriveGamePackageName,
   parseDriveGamePackageWrite,
   parseDrivePackageReference,
   toDrivePackageReference,
+  type DriveGamePackage,
+  type DriveGamePackageFile,
+  type DriveGamePackageWrite,
+  type DrivePackageStorage,
 } from './game-packages.js';
-export type {
-  DriveGamePackage,
-  DriveGamePackageFile,
-  DriveGamePackageWrite,
-  DrivePackageStorage,
-} from './game-packages.js';
-export { isDriveFileId, parseDriveSettingsDocument } from './settings.js';
-export type {
-  DriveRecentPackage,
-  DriveSettingsDocument,
-  TimedSection,
+import {
+  isDriveFileId,
+  parseDriveSettingsDocument,
+  type DriveRecentPackage,
+  type DriveSettingsDocument,
+  type TimedSection,
 } from './settings.js';
-export {
+import {
   createAIQuestionsPackageFilename,
   isDriveAIQuestionsPackageName,
   parseDriveAIQuestionsPackageFile,
   parseDriveAIQuestionsPackageWrite,
+  type DriveAIQuestionsPackage,
+  type DriveAIQuestionsPackageFile,
+  type DriveAIQuestionsPackageStorage,
+  type DriveAIQuestionsPackageWrite,
 } from './ai-questions-packages.js';
-export type {
-  DriveAIQuestionsPackage,
-  DriveAIQuestionsPackageFile,
-  DriveAIQuestionsPackageStorage,
-  DriveAIQuestionsPackageWrite,
-} from './ai-questions-packages.js';
-export {
+import {
   createQuestionDatabasePackage,
   flattenQuestionDatabase,
   parseQuestionDatabaseDocument,
+  type DriveQuestionDatabaseStorage,
+  type QuestionDatabaseDocument,
+  type QuestionDatabaseEntry,
+  type QuestionDatabasePackage,
+  type QuestionDatabaseQuestion,
 } from './question-database.js';
-export type {
-  DriveQuestionDatabaseStorage,
-  QuestionDatabaseDocument,
-  QuestionDatabaseEntry,
-  QuestionDatabasePackage,
-  QuestionDatabaseQuestion,
-} from './question-database.js';
+
+export {
+  GOOGLE_DRIVE_SCOPES,
+  GoogleDriveAuthorizationError,
+  GoogleDriveClient,
+  type DriveAccount,
+  createAIQuestionFilename,
+  GLOBAL_AI_QUESTION_ADMIN_EMAILS,
+  GLOBAL_AI_QUESTION_FOLDER_ID,
+  isGlobalAIQuestionAdmin,
+  isDriveAIQuestionName,
+  parseDriveAIQuestionFile,
+  parseDriveAIQuestionWrite,
+  type DriveAIQuestion,
+  type DriveAIQuestionFile,
+  type DriveAIQuestionStorage,
+  type DriveAIQuestionWrite,
+  type DriveGlobalAIQuestionStorage,
+  createGamePackageFilename,
+  isDriveGamePackageName,
+  parseDriveGamePackageWrite,
+  parseDrivePackageReference,
+  toDrivePackageReference,
+  type DriveGamePackage,
+  type DriveGamePackageFile,
+  type DriveGamePackageWrite,
+  type DrivePackageStorage,
+  isDriveFileId,
+  parseDriveSettingsDocument,
+  type DriveRecentPackage,
+  type DriveSettingsDocument,
+  type TimedSection,
+  createAIQuestionsPackageFilename,
+  isDriveAIQuestionsPackageName,
+  parseDriveAIQuestionsPackageFile,
+  parseDriveAIQuestionsPackageWrite,
+  type DriveAIQuestionsPackage,
+  type DriveAIQuestionsPackageFile,
+  type DriveAIQuestionsPackageStorage,
+  type DriveAIQuestionsPackageWrite,
+  createQuestionDatabasePackage,
+  flattenQuestionDatabase,
+  parseQuestionDatabaseDocument,
+  type DriveQuestionDatabaseStorage,
+  type QuestionDatabaseDocument,
+  type QuestionDatabaseEntry,
+  type QuestionDatabasePackage,
+  type QuestionDatabaseQuestion,
+};

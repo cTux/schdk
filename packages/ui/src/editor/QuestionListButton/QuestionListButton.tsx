@@ -1,53 +1,11 @@
-import type { GameQuestion } from '@schdk/common';
 import classNames from 'classnames';
-import type { DragEvent } from 'react';
 import { Button } from '../../atoms/Button';
-import { LOCALIZATION_COPY, type LocalizationCopy } from '../../localization';
+import { LOCALIZATION_COPY } from '../../localization';
 import { QuestionTooltip } from '../QuestionTooltip';
+import { type QuestionListButtonProps } from './question-list-button-props';
+import { getQuestionListItem } from './get-question-list-item';
 
-export function getQuestionListItem(
-  question: GameQuestion,
-  showValidation: boolean,
-) {
-  const questionText = question.questionParts
-    .map((part) => part.trim())
-    .filter(Boolean)
-    .join(' / ');
-  const answer = question.answer.trim();
-  const remark = question.comment?.trim() ?? '';
-  const hasSummary =
-    question.questionParts.every((part) => part.trim()) && Boolean(answer);
-  const complete = hasSummary && !remark;
-
-  return {
-    answer,
-    complete,
-    hasPreview: hasSummary || Boolean(remark),
-    hasSummary,
-    invalid: showValidation && !complete,
-    questionText,
-    remark,
-  };
-}
-
-export interface QuestionListButtonProps {
-  copy?: LocalizationCopy;
-  dragging: boolean;
-  dropTarget: boolean;
-  index: number;
-  question: GameQuestion;
-  selected: boolean;
-  showTooltip: boolean;
-  showValidation: boolean;
-  onDragEnd(): void;
-  onDragEnter(): void;
-  onDragOver(event: DragEvent<HTMLButtonElement>): void;
-  onDragStart(event: DragEvent<HTMLButtonElement>): void;
-  onDrop(event: DragEvent<HTMLButtonElement>): void;
-  onSelect(): void;
-}
-
-export function QuestionListButton({
+function QuestionListButton({
   copy = LOCALIZATION_COPY.uk,
   dragging,
   dropTarget,
@@ -103,3 +61,9 @@ export function QuestionListButton({
     </Button>
   );
 }
+
+export {
+  getQuestionListItem,
+  type QuestionListButtonProps,
+  QuestionListButton,
+};

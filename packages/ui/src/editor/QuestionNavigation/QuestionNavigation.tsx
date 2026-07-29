@@ -2,13 +2,9 @@ import { QUESTION_COUNT } from '@schdk/common';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { IconButton } from '../../atoms/IconButton';
 import { useLocalization } from '../../localization';
+import { type QuestionNavigationProps } from './question-navigation-props';
 
-export interface QuestionNavigationProps {
-  selectedIndex: number;
-  onSelect(index: number): void;
-}
-
-export function QuestionNavigation({
+function QuestionNavigation({
   selectedIndex,
   onSelect,
 }: QuestionNavigationProps) {
@@ -31,3 +27,5 @@ export function QuestionNavigation({
     </div>
   );
 }
+
+export { type QuestionNavigationProps, QuestionNavigation };

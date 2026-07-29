@@ -1,3 +1,14 @@
-export { LocaleProvider, useLocalization } from './LocaleProvider';
-export { LOCALIZATION_COPY } from './copy';
-export type { AppLocale, LocalizationCopy } from './copy';
+import { LocaleProvider, useLocalization } from './LocaleProvider';
+import {
+  LOCALIZATION_COPY,
+  type AppLocale,
+  type LocalizationCopy,
+} from './copy';
+
+export {
+  LocaleProvider,
+  useLocalization,
+  LOCALIZATION_COPY,
+  type AppLocale,
+  type LocalizationCopy,
+};

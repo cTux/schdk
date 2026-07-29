@@ -9,8 +9,9 @@ import type {
   DriveQuestionDatabaseStorage,
   DriveSettingsDocument,
 } from '@schdk/google-drive';
+import { type GoogleDriveConnection } from './google-drive-connection';
 
-export interface GoogleDriveBridge
+interface GoogleDriveBridge
   extends
     DrivePackageStorage,
     DriveAIQuestionsPackageStorage,
@@ -33,10 +34,4 @@ export interface GoogleDriveBridge
   saveSettings(settings: DriveSettingsDocument): Promise<void>;
 }
 
-export type GoogleDriveConnection =
-  | { state: 'unavailable' }
-  | { state: 'disconnected' }
-  | { state: 'connecting' }
-  | { state: 'connected'; account: DriveAccount }
-  | { state: 'reauthorization-required'; account?: DriveAccount }
-  | { state: 'error'; account?: DriveAccount };
+export { type GoogleDriveBridge, type GoogleDriveConnection };

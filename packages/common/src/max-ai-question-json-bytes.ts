@@ -1,0 +1,1 @@
+export const MAX_AI_QUESTION_JSON_BYTES = 512 * 1024;

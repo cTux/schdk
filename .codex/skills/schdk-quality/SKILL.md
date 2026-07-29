@@ -25,7 +25,9 @@ description: Verify SCHDK changes and produce local build artifacts. Use for pre
    bundled-resource changes.
 6. Run root `pnpm build` for complete workspace build verification.
 7. Confirm `git diff --check` and ensure generated output remains ignored before committing.
-8. Keep the pre-commit hook limited to formatting and linting; run the remaining checks outside it.
+8. Confirm every changed source-code file has at most one top-level `export`
+   statement and that reused helpers have their own exported module.
+9. Keep the pre-commit hook limited to formatting and linting; run the remaining checks outside it.
 
 ## Full Checks
 

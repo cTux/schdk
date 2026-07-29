@@ -1,20 +1,9 @@
 import classNames from 'classnames';
 import { LOCALIZATION_COPY } from '../../localization';
-import { Textarea, type TextareaProps } from '../Textarea';
+import { Textarea } from '../Textarea';
+import { type TextAreaFieldProps } from './text-area-field-props';
 
-export interface TextAreaFieldProps extends Omit<
-  TextareaProps,
-  'onChange' | 'value'
-> {
-  invalid?: boolean;
-  label: string;
-  optional?: boolean;
-  optionalLabel?: string;
-  value: string;
-  onValueChange(value: string): void;
-}
-
-export function TextAreaField({
+function TextAreaField({
   invalid = false,
   label,
   optional = false,
@@ -37,3 +26,5 @@ export function TextAreaField({
     </label>
   );
 }
+
+export { type TextAreaFieldProps, TextAreaField };

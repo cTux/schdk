@@ -1,14 +1,9 @@
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '../../atoms/Button';
-import type { ShellItem } from '../shellItems';
+import { type ToolCardProps } from './tool-card-props';
 
-export interface ToolCardProps {
-  item: ShellItem;
-  onOpen(): void;
-}
-
-export function ToolCard({ item, onOpen }: ToolCardProps) {
+function ToolCard({ item, onOpen }: ToolCardProps) {
   return (
     <Button type="button" onClick={onOpen}>
       <span className="tool-icon" aria-hidden="true">
@@ -24,3 +19,5 @@ export function ToolCard({ item, onOpen }: ToolCardProps) {
     </Button>
   );
 }
+
+export { type ToolCardProps, ToolCard };

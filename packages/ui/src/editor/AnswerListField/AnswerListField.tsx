@@ -3,16 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '../../atoms/Button';
 import { Input } from '../../atoms/Input';
 import { useLocalization } from '../../localization';
+import { type AnswerListFieldProps } from './answer-list-field-props';
 
-export interface AnswerListFieldProps {
-  answers: string[];
-  answerLabel(number: number): string;
-  legend: string;
-  onChange(answers: string[]): void;
-  onBlur(index: number): void;
-}
-
-export function AnswerListField({
+function AnswerListField({
   answers,
   answerLabel,
   legend,
@@ -63,3 +56,5 @@ export function AnswerListField({
     </fieldset>
   );
 }
+
+export { type AnswerListFieldProps, AnswerListField };

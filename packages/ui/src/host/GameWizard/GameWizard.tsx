@@ -1,6 +1,5 @@
 import classNames from 'classnames';
-import type { CustomGameElement, GameLayout } from '../../options/types';
-import { LOCALIZATION_COPY, type LocalizationCopy } from '../../localization';
+import { LOCALIZATION_COPY } from '../../localization';
 import {
   GameAnswer,
   GameAnswerComment,
@@ -16,20 +15,11 @@ import {
   GameTimer,
 } from '../GameElements';
 import { GameMusicBreak } from '../GameMusicBreak';
-import type { HostGameView } from '../types';
 import { GameLayoutItem } from '../GameLayoutItem';
 import { stageMotionClass } from './stage-motion';
+import { type GameWizardProps } from './game-wizard-props';
 
-export interface GameWizardProps {
-  copy?: LocalizationCopy;
-  customElements?: CustomGameElement[];
-  game: HostGameView;
-  layout: GameLayout | null;
-  onBack(): void;
-  onNext(): void;
-}
-
-export function GameWizard({
+function GameWizard({
   copy = LOCALIZATION_COPY.uk,
   customElements = [],
   game,
@@ -217,3 +207,5 @@ export function GameWizard({
     </section>
   );
 }
+
+export { type GameWizardProps, GameWizard };

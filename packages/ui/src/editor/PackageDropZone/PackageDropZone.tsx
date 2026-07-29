@@ -1,15 +1,9 @@
 import { useRef, type ChangeEvent, type DragEvent } from 'react';
 import { Button } from '../../atoms/Button';
 import { useLocalization } from '../../localization';
+import { type PackageDropZoneProps } from './package-drop-zone-props';
 
-export interface PackageDropZoneProps {
-  disabled?: boolean;
-  hidden: boolean;
-  onCreate?(): void;
-  onOpen(file: File): void;
-}
-
-export function PackageDropZone({
+function PackageDropZone({
   disabled = false,
   hidden,
   onCreate,
@@ -76,3 +70,5 @@ export function PackageDropZone({
     </>
   );
 }
+
+export { type PackageDropZoneProps, PackageDropZone };

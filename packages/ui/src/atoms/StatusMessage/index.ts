@@ -1,2 +1,4 @@
-export { StatusMessage } from './StatusMessage';
-export type * from './types';
+import { StatusMessage } from './StatusMessage';
+import { type StatusMessageProps } from './types';
+
+export { StatusMessage, type StatusMessageProps };

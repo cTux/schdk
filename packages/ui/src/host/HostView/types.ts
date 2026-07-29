@@ -1,7 +1,16 @@
-export type { HostPackageDetails, HostViewProps } from './HostView';
-export type {
-  HostGameTransition,
-  HostGameView,
-  HostQuestionStage,
+import { type HostPackageDetails, type HostViewProps } from './HostView';
+import {
+  type HostGameTransition,
+  type HostGameView,
+  type HostQuestionStage,
 } from '../types';
-export type { RecentPackageItem } from '../../editor/types';
+import { type RecentPackageItem } from '../../editor/types';
+
+export {
+  type HostPackageDetails,
+  type HostViewProps,
+  type HostGameTransition,
+  type HostGameView,
+  type HostQuestionStage,
+  type RecentPackageItem,
+};

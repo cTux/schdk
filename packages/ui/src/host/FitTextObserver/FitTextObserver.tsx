@@ -1,24 +1,9 @@
 import { useLayoutEffect, useRef } from 'react';
 import { MIN_FIT_SCALE } from './constants';
 import type { FitTextObserverProps } from './types';
+import { getFitScale } from './get-fit-scale';
 
-export function getFitScale(fits: (scale: number) => boolean) {
-  if (fits(1)) return 1;
-  if (!fits(MIN_FIT_SCALE)) return MIN_FIT_SCALE;
-  let low = MIN_FIT_SCALE;
-  let high = 1;
-  for (let index = 0; index < 10; index += 1) {
-    const middle = (low + high) / 2;
-    if (fits(middle)) low = middle;
-    else high = middle;
-  }
-  return low;
-}
-
-export function FitTextObserver({
-  enabled,
-  warningLabel,
-}: FitTextObserverProps) {
+function FitTextObserver({ enabled, warningLabel }: FitTextObserverProps) {
   const markerRef = useRef<HTMLSpanElement>(null);
 
   useLayoutEffect(() => {
@@ -88,3 +73,5 @@ export function FitTextObserver({
     <span ref={markerRef} className="game-fit-observer" aria-hidden="true" />
   );
 }
+
+export { getFitScale, FitTextObserver };

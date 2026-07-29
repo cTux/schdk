@@ -1,10 +1,11 @@
 import { english } from './english';
 import { ukrainian } from './ukrainian';
+import { type AppLocale } from './app-locale';
+import { type LocalizationCopy } from './localization-copy';
 
-export type AppLocale = 'uk' | 'en';
-export type LocalizationCopy = typeof ukrainian;
-
-export const LOCALIZATION_COPY: Record<AppLocale, LocalizationCopy> = {
+const LOCALIZATION_COPY: Record<AppLocale, LocalizationCopy> = {
   uk: ukrainian,
   en: english,
 };
+
+export { type AppLocale, type LocalizationCopy, LOCALIZATION_COPY };

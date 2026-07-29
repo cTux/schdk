@@ -1,6 +1,5 @@
-export type { ShellViewProps } from './ShellView';
-export type { ShellViewName } from '../shellItems';
+import type { ShellViewProps } from './shell-view-props';
+import type { ShellViewName } from '../shellItems';
+import type { ShellEditTarget } from './shell-edit-target';
 
-export type ShellEditTarget =
-  | { kind: 'question'; global: boolean; name: string }
-  | { kind: 'package'; name: string };
+export type { ShellViewProps, ShellViewName, ShellEditTarget };

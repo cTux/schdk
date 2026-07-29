@@ -1,0 +1,1 @@
+export { GameQuestion } from './GameQuestion';

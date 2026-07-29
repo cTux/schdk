@@ -3,6 +3,12 @@ import type { CSSProperties, ReactNode } from 'react';
 import { useLocalization } from '../../localization';
 import { GameCustomElement } from '../../host/GameElements';
 import {
+  createCustomElement,
+  getDraggedPosition,
+  getNextZoom,
+  getResizedPosition,
+} from './geometry';
+import {
   GAME_LAYOUT_ELEMENT_IDS,
   type GameLayoutElementId,
 } from '../../options/types';
@@ -13,17 +19,10 @@ import { VisualLayoutItem } from './VisualLayoutItem';
 import type { ElementSelection, VisualEditorProps } from './types';
 import { useVisualEditor } from './useVisualEditor';
 
-export {
-  createCustomElement,
-  getDraggedPosition,
-  getNextZoom,
-  getResizedPosition,
-} from './geometry';
-
 const selectionKey = (selection: ElementSelection) =>
   `${selection.kind}:${selection.id}`;
 
-export function VisualEditor({
+function VisualEditor({
   hidden,
   game,
   message,
@@ -222,5 +221,13 @@ export function VisualEditor({
     </div>
   );
 }
+
+export {
+  VisualEditor,
+  createCustomElement,
+  getDraggedPosition,
+  getNextZoom,
+  getResizedPosition,
+};
 
 import './styles.scss';

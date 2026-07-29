@@ -1,21 +1,11 @@
 import { QUESTION_COUNT } from '@schdk/common';
 import { isDriveFileId, isDriveGamePackageName } from '@schdk/google-drive';
+import { type SessionStorage } from './session-storage';
+import { type DesktopEditorSession } from './desktop-editor-session';
+import { sessionKey } from './session-key';
+import { saveDesktopEditorSession } from './save-desktop-editor-session';
 
-const SESSION_KEY_PREFIX = 'schdk.desktop.editor-session:';
-
-type SessionStorage = Pick<Storage, 'getItem' | 'removeItem' | 'setItem'>;
-
-export interface DesktopEditorSession {
-  driveFileId: string;
-  fileName: string;
-  selectedIndex: number;
-}
-
-function sessionKey(scope: string) {
-  return `${SESSION_KEY_PREFIX}${scope}`;
-}
-
-export function loadDesktopEditorSession(
+function loadDesktopEditorSession(
   storage: SessionStorage,
   scope: string,
 ): DesktopEditorSession | null {
@@ -48,15 +38,8 @@ export function loadDesktopEditorSession(
   }
 }
 
-export function saveDesktopEditorSession(
-  storage: SessionStorage,
-  scope: string,
-  session: DesktopEditorSession | null,
-) {
-  try {
-    if (session) storage.setItem(sessionKey(scope), JSON.stringify(session));
-    else storage.removeItem(sessionKey(scope));
-  } catch {
-    // Session restoration is best-effort.
-  }
-}
+export {
+  type DesktopEditorSession,
+  loadDesktopEditorSession,
+  saveDesktopEditorSession,
+};

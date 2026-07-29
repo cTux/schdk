@@ -1,2 +1,4 @@
-export { OptionToggle } from './OptionToggle';
-export type * from './types';
+import { OptionToggle } from './OptionToggle';
+import { type OptionToggleProps } from './types';
+
+export { OptionToggle, type OptionToggleProps };

@@ -1,2 +1,4 @@
-export { GameLayoutItem } from './GameLayoutItem';
-export type { GameLayoutItemProps } from './types';
+import { GameLayoutItem } from './GameLayoutItem';
+import { type GameLayoutItemProps } from './types';
+
+export { GameLayoutItem, type GameLayoutItemProps };

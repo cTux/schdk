@@ -1,4 +1,6 @@
-export const aiQuestionsCopy = {
+import { questionGenerationCopy } from './question-generation';
+
+const aiQuestionsCopy = {
   uk: {
     myQuestions: 'Мої види питань',
     globalQuestions: 'Глобальні види питань',
@@ -55,4 +57,4 @@ export const aiQuestionsCopy = {
   },
 };
 
-export { questionGenerationCopy } from './question-generation';
+export { aiQuestionsCopy, questionGenerationCopy };

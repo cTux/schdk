@@ -1,2 +1,4 @@
-export { QuestionDatabaseCheck } from './QuestionDatabaseCheck';
-export type { QuestionDatabaseCheckProps } from './types';
+import { QuestionDatabaseCheck } from './QuestionDatabaseCheck';
+import { type QuestionDatabaseCheckProps } from './types';
+
+export { QuestionDatabaseCheck, type QuestionDatabaseCheckProps };

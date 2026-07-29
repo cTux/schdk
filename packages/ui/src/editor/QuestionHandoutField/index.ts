@@ -1,2 +1,4 @@
-export { QuestionHandoutField } from './QuestionHandoutField';
-export type * from './types';
+import { QuestionHandoutField } from './QuestionHandoutField';
+import { type QuestionHandoutFieldProps } from './types';
+
+export { QuestionHandoutField, type QuestionHandoutFieldProps };

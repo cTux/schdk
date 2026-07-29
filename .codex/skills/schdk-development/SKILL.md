@@ -13,7 +13,10 @@ description: Implement, debug, refactor, review, or document changes anywhere in
    When research finds a credible scalable solution that is not needed yet,
    record its purpose, tradeoffs, and activation conditions in
    `docs/POTENTIAL_IMPROVEMENTS.md`.
-4. Make the smallest complete change. Add tests only for the exact prompt `add missing tests`, using `$schdk-add-missing-tests`.
+4. Make the smallest complete change. Use `$schdk-project-structure` for every
+   changed source-code file; refactor an existing multi-export file before
+   finishing the change. Add tests only for the exact prompt
+   `add missing tests`, using `$schdk-add-missing-tests`.
 5. Run `$schdk-sync-specs` after implementation. It creates or updates the
    matching feature contract and root `SPEC.md` entries when required, or
    confirms that the change is internal-only.
@@ -30,7 +33,8 @@ description: Implement, debug, refactor, review, or document changes anywhere in
 - Use `$schdk-sync-specs` after every prompt that changes repository files.
 - Use `$schdk-update-dependencies` for pnpm, dependency, lockfile, or audit updates.
 - Use `$schdk-add-missing-tests` only for an explicit `add missing tests` prompt.
-- Use `$schdk-project-structure` for package, component, file-layout, or public-export changes.
+- Use `$schdk-project-structure` for every source-code change, including
+  package, component, file-layout, and public-export changes.
 - Use `$schdk-react-components` for React component behavior, hooks, and rendering performance.
 - Use `$schdk-find-next-feature` when asked to suggest one actionable task from the current repository.
 - Read `docs/rules/host-app.md` for host gameplay behavior without a narrower skill.

@@ -1,11 +1,8 @@
 import './styles.scss';
-
 import classNames from 'classnames';
-import type { TextareaHTMLAttributes } from 'react';
+import { type TextareaProps } from './textarea-props';
 
-export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {}
-
-export function Textarea({ className, ...props }: TextareaProps) {
+function Textarea({ className, ...props }: TextareaProps) {
   return (
     <textarea
       className={classNames('ui-textarea', className) || undefined}
@@ -13,3 +10,5 @@ export function Textarea({ className, ...props }: TextareaProps) {
     />
   );
 }
+
+export { type TextareaProps, Textarea };

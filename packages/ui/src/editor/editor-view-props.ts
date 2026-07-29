@@ -1,0 +1,41 @@
+import type { GamePackage, GameQuestion } from '@schdk/common';
+import type { QuestionDatabaseRow } from '../shell/QuestionDatabasePage';
+import { type AiQuestionGenerationOptions } from './ai-question-generation-options';
+import { type RecentPackageItem } from './recent-package-item';
+import { type EditorSaveStatus } from './types';
+
+export interface EditorViewProps {
+  aiGeneration?: AiQuestionGenerationOptions;
+  gamePackage: GamePackage;
+  hasPackage: boolean;
+  message: string;
+  questionDatabaseRows: QuestionDatabaseRow[];
+  openingRecentPackageId?: string | null;
+  recentPackages: RecentPackageItem[];
+  recentPackagesLoading?: boolean;
+  saveStatus: EditorSaveStatus;
+  selectedIndex: number;
+  showValidation: boolean;
+  onAddHandout(file: File): void;
+  onMusicBreakChange(index: number, file: File | null): void;
+  onAnswerBlur(): void;
+  onAnswerCommentBlur(): void;
+  onAlternativeAnswerBlur(index: number): void;
+  onWrongAnswerBlur(index: number): void;
+  onBack(): void;
+  onCopyQuestion(): void;
+  onCreatePackage(): void;
+  onDeletePackage(): void;
+  onDeleteRecentPackage(recent: RecentPackageItem): void;
+  onDownloadRecentPackage(recent: RecentPackageItem): void;
+  onOpenPackage(file: File): void;
+  onOpenRecentPackage(recent: RecentPackageItem): void;
+  onPasteQuestion(): void;
+  onQuestionChange(change: Partial<GameQuestion>): void;
+  onDatabaseQuestionSelect(row: QuestionDatabaseRow): Promise<boolean>;
+  onQuestionGenerated(index: number, question: GameQuestion): void;
+  onQuestionTextBlur(index: number): void;
+  onSelectQuestion(index: number): void;
+  onSwapQuestions(sourceIndex: number, targetIndex: number): void;
+  onTitleChange(value: string): void;
+}

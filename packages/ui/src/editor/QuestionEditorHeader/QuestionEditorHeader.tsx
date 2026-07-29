@@ -1,12 +1,9 @@
 import './styles.scss';
-
 import { faCopy, faPaste, faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import type { GameQuestion } from '@schdk/common';
 import { useDeferredValue, useMemo, useState } from 'react';
 import { IconButton } from '../../atoms/IconButton';
 import { Input } from '../../atoms/Input';
 import { useLocalization } from '../../localization';
-import type { QuestionDatabaseRow } from '../../shell/QuestionDatabasePage';
 import {
   QuestionDatabaseTable,
   searchQuestionDatabaseRows,
@@ -14,20 +11,9 @@ import {
   type QuestionDatabaseSort,
 } from '../../shell/QuestionDatabaseTable';
 import { QuestionGenerationDialog } from '../QuestionGenerationDialog';
-import type { AiQuestionGenerationOptions } from '../types';
+import { type QuestionEditorHeaderProps } from './question-editor-header-props';
 
-export interface QuestionEditorHeaderProps {
-  aiGeneration?: AiQuestionGenerationOptions;
-  questionDatabaseRows: QuestionDatabaseRow[];
-  questionNumber: number;
-  onDatabaseQuestionSelect(row: QuestionDatabaseRow): Promise<boolean>;
-  onGenerated(question: GameQuestion): void;
-  onClear(): void;
-  onCopy(): void;
-  onPaste(): void;
-}
-
-export function QuestionEditorHeader({
+function QuestionEditorHeader({
   aiGeneration,
   questionDatabaseRows,
   questionNumber,
@@ -114,3 +100,5 @@ export function QuestionEditorHeader({
     </>
   );
 }
+
+export { type QuestionEditorHeaderProps, QuestionEditorHeader };

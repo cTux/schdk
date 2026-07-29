@@ -1,26 +1,15 @@
-import type {
-  CustomGameElement,
-  GameLayoutElementId,
-  GameLayoutPosition,
-  GameOptions,
-} from '../../options/types';
-import { RESIZE_HANDLES } from './constants';
+import type { GameLayoutPosition } from '../../options/types';
+import { type ResizeHandle } from './resize-handle';
+import { type ElementSelection } from './element-selection';
+import { type VisualEditorProps } from './visual-editor-props';
+import { type VisualEditorController } from './visual-editor-controller';
 
-export type GamePoint = Pick<GameLayoutPosition, 'x' | 'y'>;
-export type ResizeHandle = (typeof RESIZE_HANDLES)[number];
-export type ElementSelection =
-  | { kind: 'built-in'; id: GameLayoutElementId }
-  | { kind: 'custom'; id: string };
+type GamePoint = Pick<GameLayoutPosition, 'x' | 'y'>;
 
-export interface VisualEditorProps {
-  hidden: boolean;
-  game: GameOptions;
-  message: string;
-  onChange(game: GameOptions): void;
-  onImportTemplate(file: File): void;
-  onExportTemplate(): void;
-}
-
-export interface VisualEditorController {
-  addElement(kind: CustomGameElement['kind']): void;
-}
+export {
+  type GamePoint,
+  type ResizeHandle,
+  type ElementSelection,
+  type VisualEditorProps,
+  type VisualEditorController,
+};

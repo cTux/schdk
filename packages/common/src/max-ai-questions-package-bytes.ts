@@ -1,0 +1,1 @@
+export const MAX_AI_QUESTIONS_PACKAGE_BYTES = 1024 * 1024;

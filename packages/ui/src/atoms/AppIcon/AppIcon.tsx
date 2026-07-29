@@ -1,7 +1,7 @@
-export interface AppIconProps {
-  className?: string;
-}
+import { type AppIconProps } from './app-icon-props';
 
-export function AppIcon({ className = 'app-icon' }: AppIconProps) {
+function AppIcon({ className = 'app-icon' }: AppIconProps) {
   return <img className={className} src="./owl.svg" alt="" />;
 }
+
+export { type AppIconProps, AppIcon };

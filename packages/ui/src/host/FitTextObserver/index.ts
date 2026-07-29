@@ -1,2 +1,4 @@
-export { FitTextObserver } from './FitTextObserver';
-export type * from './types';
+import { FitTextObserver } from './FitTextObserver';
+import { type FitTextObserverProps } from './types';
+
+export { FitTextObserver, type FitTextObserverProps };

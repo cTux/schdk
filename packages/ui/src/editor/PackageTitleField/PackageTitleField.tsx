@@ -1,13 +1,8 @@
 import { Input } from '../../atoms/Input';
 import { useLocalization } from '../../localization';
+import { type PackageTitleFieldProps } from './package-title-field-props';
 
-export interface PackageTitleFieldProps {
-  invalid: boolean;
-  value: string;
-  onChange(value: string): void;
-}
-
-export function PackageTitleField({
+function PackageTitleField({
   invalid,
   value,
   onChange,
@@ -27,3 +22,5 @@ export function PackageTitleField({
     </label>
   );
 }
+
+export { type PackageTitleFieldProps, PackageTitleField };

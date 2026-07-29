@@ -1,13 +1,9 @@
 import { useLocalization } from '../../localization';
-import { getShellContent, type ShellViewName } from '../shellItems';
+import { getShellContent } from '../shellItems';
 import { ToolCard } from '../ToolCard';
+import { type ShellHomeProps } from './shell-home-props';
 
-export interface ShellHomeProps {
-  hidden: boolean;
-  onOpen(view: ShellViewName): void;
-}
-
-export function ShellHome({ hidden, onOpen }: ShellHomeProps) {
+function ShellHome({ hidden, onOpen }: ShellHomeProps) {
   const { copy } = useLocalization();
   const content = getShellContent(copy);
 
@@ -27,3 +23,5 @@ export function ShellHome({ hidden, onOpen }: ShellHomeProps) {
     </div>
   );
 }
+
+export { type ShellHomeProps, ShellHome };

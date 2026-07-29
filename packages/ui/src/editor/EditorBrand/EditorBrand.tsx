@@ -2,13 +2,9 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { AppIcon } from '../../atoms/AppIcon';
 import { IconButton } from '../../atoms/IconButton';
 import { useLocalization } from '../../localization';
+import { type EditorBrandProps } from './editor-brand-props';
 
-export interface EditorBrandProps {
-  showBackButton: boolean;
-  onBack(): void;
-}
-
-export function EditorBrand({ showBackButton, onBack }: EditorBrandProps) {
+function EditorBrand({ showBackButton, onBack }: EditorBrandProps) {
   const { copy } = useLocalization();
 
   return (
@@ -30,3 +26,5 @@ export function EditorBrand({ showBackButton, onBack }: EditorBrandProps) {
     </div>
   );
 }
+
+export { type EditorBrandProps, EditorBrand };

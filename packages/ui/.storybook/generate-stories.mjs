@@ -80,12 +80,13 @@ const meta = {
   tags: ['autodocs'],
 ${needsToolbar ? '  decorators: [(Story) => <ToolbarStory><Story /></ToolbarStory>],\n' : ''}} satisfies Meta<typeof ${component.name}>;
 
-export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default = {
+const Default = {
   args: getStoryArgs('${component.name}', ${JSON.stringify(component.props)}),
 } as Story;
+
+export { meta as default, Default };
 `;
 }
 

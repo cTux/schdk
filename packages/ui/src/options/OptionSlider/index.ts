@@ -1,2 +1,4 @@
-export { OptionSlider } from './OptionSlider';
-export type * from './types';
+import { OptionSlider } from './OptionSlider';
+import { type OptionSliderProps } from './types';
+
+export { OptionSlider, type OptionSliderProps };

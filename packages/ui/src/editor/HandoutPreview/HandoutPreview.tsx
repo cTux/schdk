@@ -1,14 +1,9 @@
-import type { ImageHandout } from '@schdk/common';
 import { Button } from '../../atoms/Button';
 import { useLocalization } from '../../localization';
 import { ZoomableImage } from '../ZoomableImage';
+import { type HandoutPreviewProps } from './handout-preview-props';
 
-export interface HandoutPreviewProps {
-  handout: ImageHandout;
-  onRemove(): void;
-}
-
-export function HandoutPreview({ handout, onRemove }: HandoutPreviewProps) {
+function HandoutPreview({ handout, onRemove }: HandoutPreviewProps) {
   const { copy } = useLocalization();
 
   return (
@@ -25,3 +20,5 @@ export function HandoutPreview({ handout, onRemove }: HandoutPreviewProps) {
     </div>
   );
 }
+
+export { type HandoutPreviewProps, HandoutPreview };

@@ -16,6 +16,20 @@ directions in [architecture.md](architecture.md).
 - Generated output, lockfiles, binary assets, and prose documentation are not
   source-code files and are outside this limit.
 
+## Exports
+
+- Keep at most one top-level `export` statement in each source-code file.
+- Split files with multiple exported declarations by consumer-facing
+  responsibility. Give each reusable symbol its own owning module instead of
+  hiding multiple declarations behind one grouped export statement.
+- Keep a helper in the same file as its primary exported function only when no
+  other module uses it. When another module needs the helper, move it to its own
+  file and export it there.
+- Entry-point files may import consumer-facing symbols from their owning
+  modules and expose them through one grouped `export` statement.
+- Refactor an existing file that violates these rules when the file is changed;
+  do not add another export to it.
+
 ## UI components
 
 - Put each new or structurally changed component in its own

@@ -1,11 +1,8 @@
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import { type TooltipProps } from './tooltip-props';
 
-export interface TooltipProviderProps {
+interface TooltipProviderProps {
   children: ReactNode;
 }
 
-export interface TooltipProps {
-  label: string;
-  side?: 'top' | 'right' | 'bottom' | 'left';
-  trigger: ReactElement;
-}
+export { type TooltipProviderProps, type TooltipProps };

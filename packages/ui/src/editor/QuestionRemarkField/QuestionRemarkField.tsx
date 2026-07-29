@@ -1,15 +1,9 @@
 import { Button } from '../../atoms/Button';
 import { TextAreaField } from '../../atoms/TextAreaField';
 import { useLocalization } from '../../localization';
+import { type QuestionRemarkFieldProps } from './question-remark-field-props';
 
-export interface QuestionRemarkFieldProps {
-  remark: string;
-  showValidation: boolean;
-  onChange(remark: string): void;
-  onResolve(): void;
-}
-
-export function QuestionRemarkField({
+function QuestionRemarkField({
   remark,
   showValidation,
   onChange,
@@ -40,3 +34,5 @@ export function QuestionRemarkField({
     </div>
   );
 }
+
+export { type QuestionRemarkFieldProps, QuestionRemarkField };

@@ -1,4 +1,6 @@
-export const editorToastCopy = {
+import { type EditorToastAction } from './editor-toast-action';
+
+const editorToastCopy = {
   uk: {
     copied: 'Питання скопійовано',
     created: 'Пакет створено',
@@ -23,7 +25,4 @@ export const editorToastCopy = {
   },
 };
 
-export type EditorToastAction = Exclude<
-  keyof (typeof editorToastCopy)['en'],
-  'notifications'
->;
+export { editorToastCopy, type EditorToastAction };

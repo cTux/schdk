@@ -1,256 +1,33 @@
-import classNames from 'classnames';
-import type { CSSProperties, ReactNode } from 'react';
-import type { Handout } from '@schdk/common';
-import {
-  LOCALIZATION_COPY,
-  type LocalizationCopy,
-  useLocalization,
-} from '../../localization';
-import type { CustomGameElement } from '../../options/types';
-import { FitTextObserver } from '../FitTextObserver';
+import { AppIcon } from '../../atoms/AppIcon';
+import { type ElementProps } from './element-props';
+import { GameProgress } from '../GameProgress';
+import { GameQuestionIntro } from '../GameQuestionIntro';
+import { GameHandout } from '../GameHandout';
+import { GameQuestion } from '../GameQuestion';
+import { GameQuestionParts } from '../GameQuestionParts';
+import { GameTimer } from '../GameTimer';
+import { GameAnswerComment } from '../GameAnswerComment';
+import { GameAnswer } from '../GameAnswer';
+import { GameAlternativeAnswer } from '../GameAlternativeAnswer';
+import { GameCustomElement } from '../GameCustomElement';
+import { GameControls } from '../GameControls';
 
-export interface ElementProps {
-  children: ReactNode;
-  className?: string;
-}
-
-export function GameLogo() {
+function GameLogo() {
   return <AppIcon className="game-logo" />;
 }
 
-export function GameProgress({
-  questionNumber,
-  questionCount,
-}: {
-  questionNumber: number;
-  questionCount: number;
-}) {
-  const { copy } = useLocalization();
-
-  return (
-    <div className="game-progress" aria-label={copy.host.gameProgress}>
-      <span>
-        {questionNumber} / {questionCount}
-      </span>
-    </div>
-  );
-}
-
-export function GameQuestionIntro({
-  questionNumber,
-  className,
-}: {
-  questionNumber: number;
-  className?: string;
-}) {
-  const { copy } = useLocalization();
-
-  return (
-    <div className={classNames('question-intro', className)}>
-      {copy.host.questionIntro(questionNumber)}
-    </div>
-  );
-}
-
-export function GameHandout({
-  copy = LOCALIZATION_COPY.uk,
-  handout,
-  className,
-}: {
-  copy?: LocalizationCopy;
-  handout?: Handout;
-  className?: string;
-}) {
-  const handoutClasses = classNames('game-handout', className);
-  if (handout?.kind === 'text') {
-    return (
-      <div className={classNames(handoutClasses, 'game-handout-text')}>
-        <p>{handout.text}</p>
-        <FitTextObserver enabled />
-      </div>
-    );
-  }
-  return handout ? (
-    <img
-      className={handoutClasses}
-      src={handout.dataUrl}
-      alt={copy.host.handoutAlt}
-    />
-  ) : (
-    <div className={classNames(handoutClasses, 'game-handout-placeholder')}>
-      {copy.shared.handout}
-    </div>
-  );
-}
-
-export function GameQuestion({ children, className }: ElementProps) {
-  return (
-    <div className={classNames('game-question', className)}>{children}</div>
-  );
-}
-
-export function GameQuestionParts({
-  currentPartIndex,
-  entering,
-  parts,
-}: {
-  currentPartIndex: number;
-  entering: boolean;
-  parts: string[];
-}) {
-  return parts.slice(0, currentPartIndex + 1).map((part, index) => (
-    <p
-      className={classNames('game-question-part', {
-        'is-entering is-forward': entering && index === currentPartIndex,
-      })}
-      key={index}
-    >
-      {part}
-    </p>
-  ));
-}
-
-export function GameTimer({
-  seconds,
-  className,
-}: {
-  seconds: number;
-  className?: string;
-}) {
-  const text = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(
-    seconds % 60,
-  ).padStart(2, '0')}`;
-  return (
-    <div
-      className={classNames('game-timer', className)}
-      role="timer"
-      aria-live="off"
-    >
-      <strong>{text}</strong>
-    </div>
-  );
-}
-
-export function GameAnswerComment({ children, className }: ElementProps) {
-  return (
-    <p className={classNames('game-answer-comment', className)}>{children}</p>
-  );
-}
-
-export function GameAnswer({
-  answer,
-  className,
-}: {
-  answer: string;
-  className?: string;
-}) {
-  return (
-    <div className={classNames('game-answer', className)}>
-      <strong>{answer}</strong>
-    </div>
-  );
-}
-
-export function GameAlternativeAnswer({ children, className }: ElementProps) {
-  return (
-    <p className={classNames('game-alternative-answer', className)}>
-      {children}
-    </p>
-  );
-}
-
-export function GameCustomElement({
-  element,
-  preview = false,
-}: {
-  element: CustomGameElement;
-  preview?: boolean;
-}) {
-  const { copy } = useLocalization();
-  const { position } = element;
-  if (position.hidden && !preview) return null;
-  return (
-    <div
-      className={classNames(
-        'game-custom-element',
-        `game-custom-${element.kind}`,
-      )}
-      style={
-        {
-          '--game-layout-x': `${position.x}%`,
-          '--game-layout-y': `${position.y}%`,
-          '--game-layout-width': `${position.width}%`,
-          '--game-layout-height': `${position.height}%`,
-          '--game-font-scale': position.fontScale,
-          '--game-text-color': position.textColor,
-          '--game-grow-align':
-            position.textGrowDirection === 'up' ? 'flex-end' : 'flex-start',
-          '--game-image-position': position.imagePosition,
-        } as CSSProperties
-      }
-    >
-      {element.kind === 'text' ? (
-        <p>{element.text}</p>
-      ) : element.image ? (
-        <img src={element.image} alt="" />
-      ) : preview ? (
-        <span className="game-custom-image-placeholder" aria-hidden="true">
-          {copy.shared.image}
-        </span>
-      ) : null}
-      {element.kind === 'text' && (
-        <FitTextObserver enabled={position.fitTextToHeight} />
-      )}
-    </div>
-  );
-}
-
-export function GameControls({
-  copy = LOCALIZATION_COPY.uk,
-  canGoBack,
-  controlsDisabled,
-  preview = false,
-  onBack,
-  onNext,
-}: {
-  copy?: LocalizationCopy;
-  canGoBack: boolean;
-  controlsDisabled: boolean;
-  preview?: boolean;
-  onBack(): void;
-  onNext(): void;
-}) {
-  return (
-    <nav
-      className={classNames('game-controls', { 'is-preview': preview })}
-      aria-label={copy.host.controls}
-    >
-      <Button
-        type="button"
-        variant="ghost"
-        aria-label={copy.host.previousStage}
-        disabled={preview || controlsDisabled || !canGoBack}
-        tabIndex={preview ? -1 : undefined}
-        onClick={onBack}
-      >
-        <FontAwesomeIcon icon={faArrowLeft} aria-hidden="true" />
-        <kbd>{copy.host.previousStageKeys}</kbd>
-      </Button>
-      <Button
-        type="button"
-        variant="ghost"
-        aria-label={copy.host.nextStage}
-        disabled={preview || controlsDisabled}
-        tabIndex={preview ? -1 : undefined}
-        onClick={onNext}
-      >
-        <kbd>{copy.host.nextStageKeys}</kbd>
-        <FontAwesomeIcon icon={faArrowRight} aria-hidden="true" />
-      </Button>
-    </nav>
-  );
-}
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { AppIcon } from '../../atoms/AppIcon';
-import { Button } from '../../atoms/Button';
+export {
+  type ElementProps,
+  GameLogo,
+  GameProgress,
+  GameQuestionIntro,
+  GameHandout,
+  GameQuestion,
+  GameQuestionParts,
+  GameTimer,
+  GameAnswerComment,
+  GameAnswer,
+  GameAlternativeAnswer,
+  GameCustomElement,
+  GameControls,
+};

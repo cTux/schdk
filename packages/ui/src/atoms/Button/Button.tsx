@@ -1,20 +1,9 @@
 import './styles.scss';
-
 import classNames from 'classnames';
-import type { ButtonHTMLAttributes } from 'react';
+import { type ButtonProps } from './button-props';
+import { type ButtonVariant } from './button-variant';
 
-export type ButtonVariant =
-  | 'default'
-  | 'primary'
-  | 'secondary'
-  | 'ghost'
-  | 'danger';
-
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: ButtonVariant;
-}
-
-export function Button({
+function Button({
   className = '',
   variant = 'default',
   ...props
@@ -29,3 +18,5 @@ export function Button({
     />
   );
 }
+
+export { type ButtonVariant, type ButtonProps, Button };

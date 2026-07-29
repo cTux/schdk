@@ -1,2 +1,4 @@
-export { IconButton } from './IconButton';
-export type * from './types';
+import { IconButton } from './IconButton';
+import { type IconButtonProps } from './types';
+
+export { IconButton, type IconButtonProps };

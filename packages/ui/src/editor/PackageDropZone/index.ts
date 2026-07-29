@@ -1,2 +1,4 @@
-export { PackageDropZone } from './PackageDropZone';
-export type * from './types';
+import { PackageDropZone } from './PackageDropZone';
+import { type PackageDropZoneProps } from './types';
+
+export { PackageDropZone, type PackageDropZoneProps };

@@ -1,2 +1,4 @@
-export { AIQuestionsPackagesPage } from './AIQuestionsPackagesPage';
-export type { AIQuestionsPackagesPageProps } from './types';
+import { AIQuestionsPackagesPage } from './AIQuestionsPackagesPage';
+import { type AIQuestionsPackagesPageProps } from './types';
+
+export { AIQuestionsPackagesPage, type AIQuestionsPackagesPageProps };

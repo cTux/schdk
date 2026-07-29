@@ -1,14 +1,8 @@
 import { Button } from '../../atoms/Button';
 import { useLocalization } from '../../localization';
-import type { HostPackageDetails } from '../HostView';
+import { type GamePackageDetailsProps } from './game-package-details-props';
 
-export interface GamePackageDetailsProps {
-  details: HostPackageDetails;
-  onBack(): void;
-  onStart(): void;
-}
-
-export function GamePackageDetails({
+function GamePackageDetails({
   details,
   onBack,
   onStart,
@@ -48,3 +42,5 @@ export function GamePackageDetails({
     </section>
   );
 }
+
+export { type GamePackageDetailsProps, GamePackageDetails };

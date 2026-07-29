@@ -1,0 +1,1 @@
+export const MAX_GAME_PACKAGE_BYTES = 160 * 1024 * 1024;

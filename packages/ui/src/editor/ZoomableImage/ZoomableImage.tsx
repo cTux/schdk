@@ -10,24 +10,10 @@ import { Button } from '../../atoms/Button';
 import { IconButton } from '../../atoms/IconButton';
 import { useLocalization } from '../../localization';
 import { MAX_ZOOM, MIN_ZOOM, ZOOM_STEP } from './constants';
+import { type ZoomableImageProps } from './zoomable-image-props';
+import { clampImageZoom } from './clamp-image-zoom';
 
-export function clampImageZoom(zoom: number) {
-  return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, zoom));
-}
-
-export interface ZoomableImageProps {
-  alt: string;
-  openLabel: string;
-  src: string;
-  title: string;
-}
-
-export function ZoomableImage({
-  alt,
-  openLabel,
-  src,
-  title,
-}: ZoomableImageProps) {
+function ZoomableImage({ alt, openLabel, src, title }: ZoomableImageProps) {
   const { copy } = useLocalization();
   const viewport = useRef<HTMLDivElement>(null);
   const drag = useRef<{
@@ -142,3 +128,5 @@ export function ZoomableImage({
     </>
   );
 }
+
+export { clampImageZoom, type ZoomableImageProps, ZoomableImage };

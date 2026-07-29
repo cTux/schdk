@@ -1,11 +1,11 @@
-export interface StatusMessageProps {
-  children: string;
-}
+import { type StatusMessageProps } from './status-message-props';
 
-export function StatusMessage({ children }: StatusMessageProps) {
+function StatusMessage({ children }: StatusMessageProps) {
   return (
     <p className="status" role="status">
       {children}
     </p>
   );
 }
+
+export { type StatusMessageProps, StatusMessage };

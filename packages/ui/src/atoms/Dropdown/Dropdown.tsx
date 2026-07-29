@@ -1,11 +1,8 @@
 import './styles.scss';
-
 import classNames from 'classnames';
-import type { SelectHTMLAttributes } from 'react';
+import { type DropdownProps } from './dropdown-props';
 
-export interface DropdownProps extends SelectHTMLAttributes<HTMLSelectElement> {}
-
-export function Dropdown({ className, ...props }: DropdownProps) {
+function Dropdown({ className, ...props }: DropdownProps) {
   return (
     <span className="ui-dropdown">
       <select
@@ -15,3 +12,5 @@ export function Dropdown({ className, ...props }: DropdownProps) {
     </span>
   );
 }
+
+export { type DropdownProps, Dropdown };

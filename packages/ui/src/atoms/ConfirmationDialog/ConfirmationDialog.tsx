@@ -1,15 +1,12 @@
 import './styles.scss';
-
 import { AlertDialog } from '@base-ui/react/alert-dialog';
-import { useCallback, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Button } from '../Button';
 import { useLocalization } from '../../localization';
-import type {
-  ConfirmationDialogController,
-  ConfirmationDialogProps,
-} from './types';
+import type { ConfirmationDialogProps } from './types';
+import { useConfirmationDialog } from './use-confirmation-dialog';
 
-export function ConfirmationDialog({
+function ConfirmationDialog({
   message,
   open,
   onClose,
@@ -60,32 +57,4 @@ export function ConfirmationDialog({
   );
 }
 
-export function useConfirmationDialog(): ConfirmationDialogController {
-  const [message, setMessage] = useState<string | null>(null);
-  const resolver = useRef<((confirmed: boolean) => void) | null>(null);
-
-  const close = useCallback((confirmed: boolean) => {
-    resolver.current?.(confirmed);
-    resolver.current = null;
-    setMessage(null);
-  }, []);
-
-  const confirm = useCallback(
-    (nextMessage: string) =>
-      new Promise<boolean>((resolve) => {
-        resolver.current?.(false);
-        resolver.current = resolve;
-        setMessage(nextMessage);
-      }),
-    [],
-  );
-
-  return {
-    confirm,
-    dialogProps: {
-      message: message ?? '',
-      open: message !== null,
-      onClose: close,
-    },
-  };
-}
+export { ConfirmationDialog, useConfirmationDialog };

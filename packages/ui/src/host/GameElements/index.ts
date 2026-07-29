@@ -1,2 +1,30 @@
-export * from './GameElements';
-export type * from './types';
+import {
+  type ElementProps,
+  GameLogo,
+  GameProgress,
+  GameQuestionIntro,
+  GameHandout,
+  GameQuestion,
+  GameQuestionParts,
+  GameTimer,
+  GameAnswerComment,
+  GameAnswer,
+  GameAlternativeAnswer,
+  GameCustomElement,
+  GameControls,
+} from './GameElements';
+export {
+  type ElementProps,
+  GameLogo,
+  GameProgress,
+  GameQuestionIntro,
+  GameHandout,
+  GameQuestion,
+  GameQuestionParts,
+  GameTimer,
+  GameAnswerComment,
+  GameAnswer,
+  GameAlternativeAnswer,
+  GameCustomElement,
+  GameControls,
+};

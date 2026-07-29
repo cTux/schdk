@@ -1,14 +1,12 @@
-export const AUTOSAVE_DELAY_MS = 1_000;
+import { scheduleAutosave } from './schedule-autosave';
+import { saveStatusAfterWrite } from './save-status-after-write';
+import { shouldScheduleAutosave } from './should-schedule-autosave';
 
-export function scheduleAutosave(save: () => void): () => void {
-  const timeout = globalThis.setTimeout(save, AUTOSAVE_DELAY_MS);
-  return () => globalThis.clearTimeout(timeout);
-}
+const AUTOSAVE_DELAY_MS = 1_000;
 
-export function saveStatusAfterWrite(isLatest: boolean): 'saved' | 'pending' {
-  return isLatest ? 'saved' : 'pending';
-}
-
-export function shouldScheduleAutosave(status: string, canWrite: boolean) {
-  return status === 'pending' && canWrite;
-}
+export {
+  AUTOSAVE_DELAY_MS,
+  scheduleAutosave,
+  saveStatusAfterWrite,
+  shouldScheduleAutosave,
+};

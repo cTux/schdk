@@ -1,58 +1,23 @@
 import './styles.scss';
-
 import classNames from 'classnames';
 import type { CSSProperties } from 'react';
 import { AppIcon } from '../../atoms/AppIcon';
 import { StatusMessage } from '../../atoms/StatusMessage';
 import { PackageStart } from '../../editor/PackageStart';
-import type { RecentPackageItem } from '../../editor/types';
-import { LOCALIZATION_COPY, type LocalizationCopy } from '../../localization';
+import { LOCALIZATION_COPY } from '../../localization';
 import { GameFinished } from '../GameFinished';
 import { GamePackageDetails } from '../GamePackageDetails';
 import { GameWizard } from '../GameWizard';
-import type { HostGameView } from '../types';
-import type { CustomGameElement, GameLayout } from '../../options/types';
-
-export type { RecentPackageItem } from '../../editor/types';
-export type {
+import type { RecentPackageItem } from '../../editor/types';
+import type {
   HostGameTransition,
   HostGameView,
   HostQuestionStage,
 } from '../types';
+import { type HostViewProps } from './host-view-props';
+import { type HostPackageDetails } from './host-package-details';
 
-export interface HostPackageDetails {
-  fileName: string;
-  title: string;
-  roundCount: number;
-  questionCount: number;
-  handoutCount: number;
-}
-
-export interface HostViewProps {
-  backgroundImage: string | null;
-  backgroundOpacity: number;
-  copy?: LocalizationCopy;
-  customElements?: CustomGameElement[];
-  finished: boolean;
-  game: HostGameView | null;
-  layout: GameLayout | null;
-  message: string;
-  openingRecentPackageId?: string | null;
-  packageDetails: HostPackageDetails | null;
-  recentPackages: RecentPackageItem[];
-  recentPackagesLoading?: boolean;
-  onBack(): void;
-  onDeleteRecentPackage?(recent: RecentPackageItem): void;
-  onDownloadRecentPackage?(recent: RecentPackageItem): void;
-  onGameBack(): void;
-  onGameNext(): void;
-  onOpenPackage(file: File): void;
-  onOpenRecentPackage(recent: RecentPackageItem): void;
-  onReturnToGames(): void;
-  onStartGame(): void;
-}
-
-export function HostView({
+function HostView({
   backgroundImage,
   backgroundOpacity,
   copy = LOCALIZATION_COPY.uk,
@@ -132,3 +97,13 @@ export function HostView({
     </main>
   );
 }
+
+export {
+  type RecentPackageItem,
+  type HostGameTransition,
+  type HostGameView,
+  type HostQuestionStage,
+  type HostPackageDetails,
+  type HostViewProps,
+  HostView,
+};

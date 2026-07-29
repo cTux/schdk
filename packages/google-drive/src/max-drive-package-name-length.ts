@@ -1,0 +1,1 @@
+export const MAX_DRIVE_PACKAGE_NAME_LENGTH = 256;

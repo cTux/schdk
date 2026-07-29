@@ -1,16 +1,8 @@
 import classNames from 'classnames';
-import { LOCALIZATION_COPY, type LocalizationCopy } from '../../localization';
+import { LOCALIZATION_COPY } from '../../localization';
+import { type QuestionTooltipProps } from './question-tooltip-props';
 
-export interface QuestionTooltipProps {
-  answer: string;
-  copy?: LocalizationCopy;
-  hasSummary: boolean;
-  id: string;
-  question: string;
-  remark: string;
-}
-
-export function QuestionTooltip({
+function QuestionTooltip({
   answer,
   copy = LOCALIZATION_COPY.uk,
   hasSummary,
@@ -46,3 +38,5 @@ export function QuestionTooltip({
     </span>
   );
 }
+
+export { type QuestionTooltipProps, QuestionTooltip };

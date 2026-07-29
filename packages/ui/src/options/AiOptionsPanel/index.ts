@@ -1,2 +1,4 @@
-export { AiOptionsPanel } from './AiOptionsPanel';
-export type { AiOptionsPanelProps } from './types';
+import { AiOptionsPanel } from './AiOptionsPanel';
+import { type AiOptionsPanelProps } from './types';
+
+export { AiOptionsPanel, type AiOptionsPanelProps };

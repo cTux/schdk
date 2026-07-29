@@ -1,3 +1,17 @@
-export { EditorView } from './EditorView';
-export { showEditorToast } from './toast';
-export type * from './types';
+import { EditorView } from './EditorView';
+import { showEditorToast } from './toast';
+import {
+  type AiQuestionGenerationOptions,
+  type EditorSaveStatus,
+  type EditorViewProps,
+  type RecentPackageItem,
+} from './types';
+
+export {
+  EditorView,
+  showEditorToast,
+  type AiQuestionGenerationOptions,
+  type EditorSaveStatus,
+  type EditorViewProps,
+  type RecentPackageItem,
+};

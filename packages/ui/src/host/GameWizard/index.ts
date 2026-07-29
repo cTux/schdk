@@ -1,2 +1,4 @@
-export { GameWizard } from './GameWizard';
-export type * from './types';
+import { GameWizard } from './GameWizard';
+import { type GameWizardProps } from './types';
+
+export { GameWizard, type GameWizardProps };

@@ -1,3 +1,6 @@
-export const MIN_ZOOM = 1;
-export const MAX_ZOOM = 4;
-export const ZOOM_STEP = 0.5;
+import { MAX_ZOOM } from './max-zoom';
+import { ZOOM_STEP } from './zoom-step';
+
+const MIN_ZOOM = 1;
+
+export { MIN_ZOOM, MAX_ZOOM, ZOOM_STEP };

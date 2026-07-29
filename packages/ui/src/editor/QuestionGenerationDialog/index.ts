@@ -1,2 +1,4 @@
-export { QuestionGenerationDialog } from './QuestionGenerationDialog';
-export type * from './types';
+import { QuestionGenerationDialog } from './QuestionGenerationDialog';
+import { type QuestionGenerationDialogProps } from './types';
+
+export { QuestionGenerationDialog, type QuestionGenerationDialogProps };

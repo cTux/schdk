@@ -1,4 +1,6 @@
-export interface QuestionDatabaseRow {
+import { type QuestionDatabasePageProps } from './question-database-page-props';
+
+interface QuestionDatabaseRow {
   fileId: string;
   packageTitles: string[];
   number: number;
@@ -7,10 +9,4 @@ export interface QuestionDatabaseRow {
   alternativeAnswers: string[];
 }
 
-export interface QuestionDatabasePageProps {
-  failed: boolean;
-  hidden?: boolean;
-  loading: boolean;
-  progress: { current: number; total: number };
-  rows: QuestionDatabaseRow[];
-}
+export { type QuestionDatabaseRow, type QuestionDatabasePageProps };
