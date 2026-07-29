@@ -77,8 +77,10 @@ without losing in-progress work.
 - **EDT-18:** AI generation phrases each question naturally as if written by a
   human rather than AI and requires a non-empty answer comment that explains
   only why the answer is correct, never why the question was generated or
-  phrased that way. An AI icon beside the editable package title opens a panel
-  docked to the editor's right that selects missing
+  phrased that way. Question text and answer comments never expose internal
+  template headings, construction techniques, paths, or stages. An AI icon
+  beside the editable package title opens a panel docked to the editor's right
+  that selects missing
   questions, questions with unresolved author remarks, or the whole package
   and one enabled AI question package from a dropdown. Remarked questions are
   regenerated from the current question and remark, and a resolved result
@@ -240,3 +242,6 @@ without losing in-progress work.
     actual three parameters, retains them after saving and reopening, and
     preserves them through complete-question clipboard copying. Open a manual
     and legacy question and confirm neither shows the parameter block.
+20. Generate from a rule whose description or examples name internal
+    construction paths. Confirm neither the question text nor the answer
+    comment repeats those labels and both read as natural player-facing prose.

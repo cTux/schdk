@@ -30,6 +30,13 @@ type GeneratedQuestion = Omit<
   hostNotes: string | null;
 };
 
+const constructionLabelPattern =
+  /(?:(?:фактологічн|асоціативн)\p{L}*\s+шлях\p{L}*|(?:factual|associative)\s+(?:path|route)s?)\s*(?:[—–:-]\s*)?/giu;
+
+function removeConstructionLabels(value: string) {
+  return value.replace(constructionLabelPattern, '').trim();
+}
+
 const nullableString = () => ({
   anyOf: [{ type: 'string' as const }, { type: 'null' as const }],
 });
@@ -50,13 +57,14 @@ const generatedQuestionSchema = jsonSchema<GameQuestion>(
         minItems: 1,
         maxItems: 3,
         description:
-          'Required question text parts: 1 for standard, 2 for blitz-2x30, and 3 for blitz-3x20.',
+          'Required reader-facing question text parts without template or construction labels: 1 for standard, 2 for blitz-2x30, and 3 for blitz-3x20.',
       },
       answer: { type: 'string', description: 'Required main answer.' },
       answerComment: {
         type: 'string',
         minLength: 1,
-        description: 'Required answer explanation.',
+        description:
+          'Required natural reader-facing answer explanation without template or construction labels.',
       },
       alternativeAnswers: {
         type: 'array',
@@ -110,22 +118,27 @@ const generatedQuestionSchema = jsonSchema<GameQuestion>(
     validate(value) {
       try {
         const generated = value as GeneratedQuestion;
-        if (!generated.answerComment.trim()) {
+        const answerComment = removeConstructionLabels(generated.answerComment);
+        if (!answerComment) {
           throw new Error('Answer comment is required');
         }
         const partCount = QUESTION_TYPE_CONFIG[generated.type].partCount;
+        const sanitizedQuestionParts = generated.questionParts.map(
+          removeConstructionLabels,
+        );
         const questionParts =
-          generated.questionParts.length > partCount
+          sanitizedQuestionParts.length > partCount
             ? [
-                ...generated.questionParts.slice(0, partCount - 1),
-                generated.questionParts.slice(partCount - 1).join('\n\n'),
+                ...sanitizedQuestionParts.slice(0, partCount - 1),
+                sanitizedQuestionParts.slice(partCount - 1).join('\n\n'),
               ]
-            : generated.questionParts;
+            : sanitizedQuestionParts;
         return {
           success: true,
           value: parseGameQuestion({
             ...generated,
             questionParts,
+            answerComment,
             ...(generated.comment === null ? { comment: undefined } : {}),
             ...(generated.handout === null ? { handout: undefined } : {}),
             ...(generated.hostNotes === null ? { hostNotes: undefined } : {}),
