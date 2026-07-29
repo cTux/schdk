@@ -4,7 +4,6 @@ import { ConfirmationDialog, useConfirmationDialog } from '@schdk/ui';
 import { HostView } from '@schdk/ui/host';
 import { useLocalization } from '@schdk/ui/localization';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type {} from './electron';
 import { setGameAudioVolume, unlockGameAudio } from './game-audio';
 import {
   getDeepLinkedHostSession,

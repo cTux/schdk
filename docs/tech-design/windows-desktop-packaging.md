@@ -25,15 +25,15 @@ Related research:
 
 ### Package dependency classification
 
-In `packages/all-desktop-app/package.json`, move
-`@schdk/all-web-app: workspace:*` from `dependencies` to `devDependencies`.
+In `packages/desktop/package.json`, move
+`@schdk/web: workspace:*` from `dependencies` to `devDependencies`.
 
 The relationship is build-time only:
 
 - Turbo uses it to build the web application before desktop packaging.
 - electron-builder copies the compiled web output through `extraResources`.
 - Electron loads `resources/web/index.html`; main/preload code does not import
-  `@schdk/all-web-app` at runtime.
+  `@schdk/web` at runtime.
 
 Classifying it as a development dependency prevents electron-builder from
 copying the web package and its transitive React, Font Awesome, and SCHDK
@@ -67,7 +67,7 @@ continue building only the unpacked directory:
 ```json
 {
   "scripts": {
-    "dev": "pnpm --filter @schdk/all-web-app build && tsc && electron-builder --dir && electron .",
+    "dev": "pnpm turbo build --filter=@schdk/web && tsc && electron-builder --dir && electron .",
     "build": "tsc && electron-builder --win"
   }
 }
@@ -82,7 +82,7 @@ application launch.
 Package-local output:
 
 ```text
-packages/all-desktop-app/dist/release/
+packages/desktop/dist/release/
   win-unpacked/
   ЩДК Setup <version>.exe
   ЩДК Setup <version>.exe.blockmap
@@ -95,7 +95,7 @@ future updates even though publishing is out of scope.
 
 ## Implementation steps
 
-1. Move `@schdk/all-web-app` to desktop `devDependencies` with pnpm and update
+1. Move `@schdk/web` to desktop `devDependencies` with pnpm and update
    `pnpm-lock.yaml`.
 2. Add `electronLanguages: ["uk", "en-US"]`.
 3. Change `win.target` from `"dir"` to `["dir", "nsis"]`.
@@ -115,8 +115,8 @@ future updates even though publishing is out of scope.
 pnpm turbo run build --dry=json
 ```
 
-Confirm `@schdk/all-desktop-app#build` still depends on
-`@schdk/all-web-app#build`. If moving the dependency category removes that
+Confirm `@schdk/desktop#build` still depends on
+`@schdk/web#build`. If moving the dependency category removes that
 edge, stop and add an explicit Turbo build dependency before packaging.
 
 ### Repository checks
@@ -147,7 +147,7 @@ pnpm build
 Record the same metrics used by the research:
 
 ```powershell
-$root = 'packages/all-desktop-app/dist/release'
+$root = 'packages/desktop/dist/release'
 $files = Get-ChildItem "$root/win-unpacked" -Recurse -File
 ($files | Measure-Object Length -Sum).Sum / 1MB
 (Get-Item "$root/win-unpacked/ЩДК.exe").Length / 1MB
@@ -175,6 +175,6 @@ Acceptance thresholds:
 
 ## Rollback
 
-Restore `@schdk/all-web-app` to production dependencies, remove
+Restore `@schdk/web` to production dependencies, remove
 `electronLanguages`, restore `win.target: "dir"`, and restore the current
 scripts. No application data or file-format migration is involved.

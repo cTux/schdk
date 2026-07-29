@@ -25,8 +25,8 @@ C10|Keep the personal question database a rebuildable account-scoped projection;
 I.specs|Feature acceptance contracts|`docs/specs/README.md`
 I.package|Portable game file|`.schdk`
 I.template|Portable visual layout|`.schdk-template`
-I.web|Unified browser application|`@schdk/all-web-app`
-I.desktop|Windows, macOS, and Linux application|`@schdk/all-desktop-app`
+I.web|Unified browser application|`@schdk/web`
+I.desktop|Windows, macOS, and Linux application|`@schdk/desktop`
 I.drive|Package and settings persistence|Google Drive
 I.ai|Structured question generation|`@schdk/ai`
 I.aiquestion|Portable AI question rule|`.aiquestion`
@@ -34,7 +34,7 @@ I.aiquestionpackage|Portable AI question package|`.aiquestionpackage`
 I.questiondatabase|Personal question search index|`question-database-v1.json`
 I.pages|Hosted browser application|GitHub Pages
 I.release|Versioned unsigned Windows installer|GitHub Releases
-I.version|Published browser version|`packages/all-web-app/version.json`
+I.version|Published browser version|`packages/web/version.json`
 
 ## §V
 
@@ -161,3 +161,4 @@ B73|2026-07-29|Unstable failure callbacks, separate editor and host loads, and p
 B74|2026-07-29|Recents rendered status tags only for ready or remarked packages, leaving unfinished packages without remarks unlabeled|Show a localized in-development tag for the remaining package state.
 B75|2026-07-29|Adding recent-package copy to the full Ukrainian locale module exceeded the enforced source-file limit|Keep related recent-package status copy in the existing question-database localization module; the repository workflow test covers recurrence.
 B76|2026-07-29|The export migration moved a Storybook fixture mutation before the declaration it initializes|Keep the fixture declaration before its mutation; Storybook typechecking covers recurrence.
+B77|2026-07-29|The package merge left type-only imports of ambient declarations that moved to the shared web root|Remove the obsolete imports; web typechecking covers this one-time migration failure.

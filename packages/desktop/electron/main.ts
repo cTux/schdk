@@ -117,9 +117,7 @@ function createWindow() {
   void window.loadFile(
     app.isPackaged
       ? join(process.resourcesPath, 'web/index.html')
-      : fileURLToPath(
-          new URL('../../../all-web-app/dist/index.html', import.meta.url),
-        ),
+      : fileURLToPath(new URL('../../../web/dist/index.html', import.meta.url)),
   );
 }
 

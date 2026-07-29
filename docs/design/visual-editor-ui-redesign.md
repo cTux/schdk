@@ -316,7 +316,7 @@ Expected implementation touch points:
 - `packages/ui/src/visual-editor/*`
 - `packages/ui/src/host/GameElements.tsx`
 - `packages/ui/src/host/GameWizard.tsx`
-- `packages/all-web-app/src/options-storage.ts`
+- `packages/web/src/options-storage.ts`
 - focused tests beside changed behavior
 
 No editor-web or Electron code should be needed. File selection remains a
@@ -372,8 +372,8 @@ pnpm fmt:check
 pnpm lint
 pnpm typecheck
 pnpm test
-pnpm --filter @schdk/all-web-app build
-pnpm --filter @schdk/all-desktop-app build
+pnpm turbo build --filter=@schdk/web
+pnpm --filter @schdk/desktop build
 ```
 
 Also run a real-browser smoke test covering mouse, keyboard, narrow width,

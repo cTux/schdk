@@ -2,7 +2,7 @@
 
 - Use Turbo for `build`, `lint`, `typecheck`, and `test`; package builds must
   declare cacheable output under `dist/**`.
-- Cache only `dist/electron/**` for the `@schdk/all-desktop-app` build. Run its
+- Cache only `dist/electron/**` for the `@schdk/desktop` build. Run its
   Electron packaging task without caching so `dist/release/**`, including
   executable files, never enters the Turbo cache.
 - Root `pnpm build` builds packages in dependency order, then packages the
@@ -24,13 +24,13 @@
   macOS, and Ubuntu runners after one shared verification job. Upload unsigned
   Windows x64, macOS x64/arm64, and Debian x64 artifacts separately; never
   attach them to a GitHub Release.
-- Deploy `@schdk/all-web-app` to GitHub Pages after every push to `main` through
+- Deploy `@schdk/web` to GitHub Pages after every push to `main` through
   the official Pages artifact and deployment actions, including its root
   `version.json`.
 - In pull requests, load the production unified web shell in headless Chrome
   and require its Google login view to render.
 - Create releases only from `main` through the manual release workflow. Require
-  a SemVer version matching `packages/all-web-app/version.json` and the
+  a SemVer version matching `packages/web/version.json` and the
   Ukrainian `CHANGELOG.md` section with separate product and technical decision
   lists. Prefix every list item with `[NEW]`, `[CHANGE]`, `[FIX]`, `[DELETE]`,
   or `[SECURITY]`, run shared checks once, and package on a native Windows

@@ -19,10 +19,9 @@
 - Accept package handout images only as embedded base64 `data:image/*` URLs
   matching their declared MIME type. Keep application image CSP restricted to
   trusted application, embedded, blob, and Google-account image sources.
-- Keep every browser entry point on a default-deny CSP. Allow the unified shell
-  to connect only to Google GIS, Drive REST, `models.dev`, and the registered
-  OpenAI, Anthropic, and Google generation endpoints; standalone tools remain
-  same-origin except for embedded image and media content.
+- Keep the browser entry point on a default-deny CSP. Allow it to connect only
+  to Google GIS, Drive REST, `models.dev`, and the registered OpenAI,
+  Anthropic, and Google generation endpoints.
 - Deny new-window requests and block navigation from all desktop renderers.
 - Open the fixed SCHDK GitHub Releases page through Electron main; do not expose
   a generic external-URL opener or GitHub request bridge to the renderer.

@@ -24,10 +24,10 @@ import { useSettingsDeepLink } from './use-settings-deep-link';
 import { useQuestionDatabase } from './use-question-database';
 
 const HostApp = lazy(() =>
-  import('@schdk/host-web-app/app').then(({ App }) => ({ default: App })),
+  import('./host/App').then(({ App }) => ({ default: App })),
 );
 const EditorApp = lazy(() =>
-  import('@schdk/editor-web-app/app').then(({ App }) => ({ default: App })),
+  import('./editor/App').then(({ App }) => ({ default: App })),
 );
 
 export function App() {

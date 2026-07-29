@@ -25,7 +25,7 @@ jobs:
       - name: Smoke test packaged Electron shell
         shell: pwsh
         run: |
-          $appPath = Resolve-Path 'packages/all-desktop-app/dist/release/win-unpacked/ЩДК.exe'
+          $appPath = Resolve-Path 'packages/desktop/dist/release/win-unpacked/ЩДК.exe'
           $smoke = Start-Process -FilePath $appPath -ArgumentList '--smoke-test' -PassThru
           try {
             if (!$smoke.WaitForExit(30000)) {
@@ -58,11 +58,11 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
-      - run: pnpm turbo build --filter=@schdk/all-web-app
+      - run: pnpm turbo build --filter=@schdk/web
       - name: Smoke test browser shell
         shell: bash
         run: |
-          pnpm --filter @schdk/all-web-app preview --host 127.0.0.1 --port 4173 \
+          pnpm --filter @schdk/web preview --host 127.0.0.1 --port 4173 \
             > "$RUNNER_TEMP/web-preview.log" 2>&1 &
           preview_pid=$!
           trap 'kill "$preview_pid"' EXIT

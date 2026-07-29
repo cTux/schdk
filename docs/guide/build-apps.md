@@ -14,14 +14,14 @@ Turborepo збирає пакети в порядку залежностей, к
 Виконуваний файл Windows розташований тут:
 
 ```text
-packages/all-desktop-app/dist/release/win-unpacked/ЩДК.exe
+packages/desktop/dist/release/win-unpacked/ЩДК.exe
 ```
 
 Для збирання окремого пакета скористайтеся фільтром робочого простору pnpm:
 
 ```powershell
-pnpm --filter @schdk/editor-web-app build
-pnpm turbo package --filter @schdk/all-desktop-app
+pnpm turbo build --filter=@schdk/web
+pnpm turbo package --filter @schdk/desktop
 ```
 
 Під час прямого збирання десктопного пакета спершу потрібно зібрати його
@@ -31,10 +31,10 @@ pnpm turbo package --filter @schdk/all-desktop-app
 Інсталятори й пакети потрібно створювати на відповідній операційній системі:
 
 ```powershell
-pnpm turbo build --filter=@schdk/all-desktop-app
-pnpm --filter @schdk/all-desktop-app package:win
-pnpm --filter @schdk/all-desktop-app package:mac
-pnpm --filter @schdk/all-desktop-app package:linux
+pnpm turbo build --filter=@schdk/desktop
+pnpm --filter @schdk/desktop package:win
+pnpm --filter @schdk/desktop package:mac
+pnpm --filter @schdk/desktop package:linux
 ```
 
 `package:win` створює x64-інсталятор і портативний `.exe`; `package:mac` —

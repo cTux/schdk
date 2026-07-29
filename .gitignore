@@ -7,5 +7,5 @@ coverage
 .playwright-cli/
 *.log
 *.tsbuildinfo
-packages/all-desktop-app/build/google-oauth-client.json
+packages/desktop/build/google-oauth-client.json
 packages/ui/.storybook/generated/

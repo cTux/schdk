@@ -1,5 +1,5 @@
 {
-  "name": "@schdk/all-web-app",
+  "name": "@schdk/web",
   "version": "0.1.0",
   "description": "Unified browser shell for SCHDK tools.",
   "private": true,
@@ -16,9 +16,7 @@
     "@opencode-ai/models": "^0.0.26",
     "@schdk/ai": "workspace:*",
     "@schdk/common": "workspace:*",
-    "@schdk/editor-web-app": "workspace:*",
     "@schdk/google-drive": "workspace:*",
-    "@schdk/host-web-app": "workspace:*",
     "@schdk/ui": "workspace:*",
     "fflate": "^0.8.3",
     "react": "catalog:",

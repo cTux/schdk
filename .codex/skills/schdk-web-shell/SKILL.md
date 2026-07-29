@@ -1,6 +1,6 @@
 ---
 name: schdk-web-shell
-description: Maintain SCHDK browser applications and the unified @schdk/all-web-app shell. Use for web entry points, shell navigation, fixed sidebar behavior, React.lazy bundle loading, application mounting, browser deep links, options tabs and storage, Vite configuration, or standalone versus unified renderer behavior.
+description: Maintain the @schdk/web browser application. Use for web entry points, shell navigation, fixed sidebar behavior, React.lazy feature loading, application mounting, browser deep links, options tabs and storage, or Vite configuration.
 ---
 
 # SCHDK Web Shell
@@ -12,7 +12,7 @@ description: Maintain SCHDK browser applications and the unified @schdk/all-web-
    Read `docs/rules/google-drive.md` for settings authorization or synchronization.
 3. Keep the unified web and desktop tools unmounted until Google authorization
    succeeds. Preserve mounted state behind the login gate after later expiry.
-4. Keep unified locale state and persistence in `@schdk/all-web-app`; keep
+4. Keep unified locale state and persistence in `@schdk/web`; keep
    translated copy and the locale context in `@schdk/ui`.
 5. Start Google browser token requests only from an explicit login action;
    restore valid short-lived tokens only from per-tab session storage, and never
@@ -25,18 +25,18 @@ description: Maintain SCHDK browser applications and the unified @schdk/all-web-
    file for the current Google account and outside local or synchronized
    settings.
 9. Keep the production Vite base relative and deploy
-   `packages/all-web-app/dist` through the GitHub Pages workflow after pushes to
+   `packages/web/dist` through the GitHub Pages workflow after pushes to
    `main`.
-10. Keep `packages/all-web-app/version.json` embedded in the browser build and
+10. Keep `packages/web/version.json` embedded in the browser build and
     published at the Pages root so the shell can poll it once per minute.
 
 ## Checks
 
 ```powershell
-pnpm --filter @schdk/all-web-app lint
-pnpm --filter @schdk/all-web-app typecheck
-pnpm --filter @schdk/all-web-app test
-pnpm --filter @schdk/all-web-app build
+pnpm --filter @schdk/web lint
+pnpm --filter @schdk/web typecheck
+pnpm --filter @schdk/web test
+pnpm turbo build --filter=@schdk/web
 ```
 
 Use the `$schdk-quality` browser smoke-test workflow for browser flows.

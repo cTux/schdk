@@ -27,7 +27,7 @@ macOS release; that is a distribution requirement, not a packaging service.
 
 ## Current repository
 
-`@schdk/all-desktop-app` currently uses Electron 43.2.0 and electron-builder
+`@schdk/desktop` currently uses Electron 43.2.0 and electron-builder
 26.15.3. Its production package:
 
 - compiles platform-neutral TypeScript main and preload code;

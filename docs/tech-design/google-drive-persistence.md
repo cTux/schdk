@@ -104,10 +104,10 @@ React, Electron, Node-only APIs, `@schdk/ui`, or game-package schema code.
 Existing ownership remains:
 
 - `@schdk/common` parses, serializes, and validates `.schdk` content;
-- `@schdk/all-web-app` owns connection state and portable settings sync;
+- `@schdk/web` owns connection state and portable settings sync;
 - editor and host apps own package use and receive Drive operations through
   props;
-- `@schdk/all-desktop-app` owns installed-app OAuth, token storage, and narrow
+- `@schdk/desktop` owns installed-app OAuth, token storage, and narrow
   Drive IPC;
 - `@schdk/ui` owns connection/sync/recent-source visuals.
 
@@ -224,7 +224,7 @@ Electron main process constructs it with its installed-app token provider.
 
 ## Browser authorization
 
-`@schdk/all-web-app` loads GIS once and creates a token client for:
+`@schdk/web` loads GIS once and creates a token client for:
 
 ```text
 https://www.googleapis.com/auth/drive.file

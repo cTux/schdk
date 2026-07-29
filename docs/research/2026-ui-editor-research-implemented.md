@@ -35,7 +35,7 @@ literal application screen._
 The repository already has the right ownership boundary:
 
 - `@schdk/ui` owns shared components, tokens, SCSS, and composed views.
-- `@schdk/all-web-app` owns the persisted editor and game options.
+- `@schdk/web` owns the persisted editor and game options.
 - The host and visual editor already share game-element components.
 - The visual editor already stores fixed element bounds as percentages and
   renders them through the host presentation.
@@ -60,7 +60,7 @@ Relevant implementation locations:
 - `packages/ui/src/atoms/IconButton.tsx`
 - `packages/ui/src/visual-editor/VisualEditor.tsx`
 - `packages/ui/src/options/types.ts`
-- `packages/all-web-app/src/options-storage.ts`
+- `packages/web/src/options-storage.ts`
 - `packages/ui/src/host/GameWizard.tsx`
 
 ## What the 2026 trend research means here

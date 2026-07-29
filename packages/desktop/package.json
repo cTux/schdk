@@ -1,5 +1,5 @@
 {
-  "name": "@schdk/all-desktop-app",
+  "name": "@schdk/desktop",
   "version": "0.1.0",
   "description": "Unified desktop app for SCHDK tools.",
   "author": {
@@ -10,7 +10,7 @@
   "type": "module",
   "main": "./dist/electron/main.js",
   "scripts": {
-    "dev": "pnpm --filter @schdk/all-web-app build && pnpm build && electron .",
+    "dev": "pnpm turbo build --filter=@schdk/web && pnpm build && electron .",
     "build": "tsc",
     "prepackage": "node scripts/prepare-google-oauth-client.mjs",
     "package": "electron-builder --dir",
@@ -26,7 +26,7 @@
     "@schdk/google-drive": "workspace:*"
   },
   "devDependencies": {
-    "@schdk/all-web-app": "workspace:*",
+    "@schdk/web": "workspace:*",
     "@types/node": "catalog:",
     "electron": "catalog:",
     "electron-builder": "catalog:",
@@ -50,7 +50,7 @@
     ],
     "extraResources": [
       {
-        "from": "../all-web-app/dist",
+        "from": "../web/dist",
         "to": "web"
       },
       {

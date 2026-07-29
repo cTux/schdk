@@ -1,6 +1,6 @@
-import { getDeepLinkedPackageName } from '@schdk/editor-web-app/deep-link';
 import type { ShellEditTarget, ShellViewName } from '@schdk/ui/shell';
 import { useEffect, useState } from 'react';
+import { getDeepLinkedPackageName } from './editor/deep-link';
 import {
   getDeepLinkedShellEdit,
   getDeepLinkedShellView,

@@ -45,7 +45,7 @@ jobs upload separately named artifacts so files cannot overwrite one another.
 
 ## Package configuration
 
-Extend `packages/all-desktop-app/package.json` after applying the existing
+Extend `packages/desktop/package.json` after applying the existing
 Windows packaging design:
 
 ```json
@@ -108,8 +108,8 @@ target-distribution failure.
 Each platform build must execute in this order:
 
 1. `pnpm install --frozen-lockfile`
-2. `pnpm --filter @schdk/all-web-app build`
-3. `pnpm --filter @schdk/all-desktop-app build:<platform>`
+2. `pnpm turbo build --filter=@schdk/web`
+3. `pnpm --filter @schdk/desktop build:<platform>`
 4. platform validation
 5. artifact upload
 
@@ -118,17 +118,17 @@ while guaranteeing that `extraResources` has a current web build.
 
 Root `pnpm build` continues to produce development/unpacked output for the
 current host in package-local `dist` directories. Release jobs upload directly
-from `packages/all-desktop-app/dist/release`.
+from `packages/desktop/dist/release`.
 
 ## GitHub Actions workflow
 
 Add `.github/workflows/desktop-builds.yml` with three native jobs:
 
-| Job       | Runner           | Command                                              |
-| --------- | ---------------- | ---------------------------------------------------- |
-| `windows` | `windows-latest` | `pnpm --filter @schdk/all-desktop-app package:win`   |
-| `macos`   | `macos-latest`   | `pnpm --filter @schdk/all-desktop-app package:mac`   |
-| `linux`   | `ubuntu-latest`  | `pnpm --filter @schdk/all-desktop-app package:linux` |
+| Job       | Runner           | Command                                      |
+| --------- | ---------------- | -------------------------------------------- |
+| `windows` | `windows-latest` | `pnpm --filter @schdk/desktop package:win`   |
+| `macos`   | `macos-latest`   | `pnpm --filter @schdk/desktop package:mac`   |
+| `linux`   | `ubuntu-latest`  | `pnpm --filter @schdk/desktop package:linux` |
 
 Trigger the workflow with `workflow_dispatch` during rollout. Add version-tag
 triggers only after all artifacts pass native smoke tests. Do not run these

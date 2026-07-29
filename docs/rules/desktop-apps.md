@@ -7,7 +7,7 @@
 - While hosting a game, show current host notes in a separate always-on-top
   window. Prefer another display, keep the window dismissed after the presenter
   closes it, and allow the next game to open it again.
-- Use `all-desktop-app/build/owl.png` for the desktop executable and
+- Use `desktop/build/owl.png` for the desktop executable and
   development window.
 - Development launches build the unified web application before opening
   Electron. Packaged applications load web assets from `process.resourcesPath`.

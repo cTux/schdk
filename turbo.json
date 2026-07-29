@@ -5,7 +5,7 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
-    "@schdk/all-desktop-app#build": {
+    "@schdk/desktop#build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/electron/**"]
     },

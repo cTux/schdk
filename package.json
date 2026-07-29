@@ -11,12 +11,10 @@
     "pnpm": "11.x"
   },
   "scripts": {
-    "dev": "pnpm --filter @schdk/all-web-app dev",
-    "preview": "pnpm --filter @schdk/all-web-app preview",
+    "dev": "pnpm --filter @schdk/web dev",
+    "preview": "pnpm --filter @schdk/web preview",
     "storybook": "pnpm --filter @schdk/ui storybook",
-    "dev:all-desktop": "pnpm --filter @schdk/all-desktop-app dev",
-    "dev:host-web": "pnpm --filter @schdk/host-web-app dev",
-    "dev:editor-web": "pnpm --filter @schdk/editor-web-app dev",
+    "dev:desktop": "pnpm --filter @schdk/desktop dev",
     "prepare": "git config core.hooksPath .githooks",
     "build": "turbo build package",
     "fmt": "oxfmt .",
