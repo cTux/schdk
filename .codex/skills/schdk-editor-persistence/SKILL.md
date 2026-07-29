@@ -1,6 +1,6 @@
 ---
 name: schdk-editor-persistence
-description: Change or debug Drive-backed SCHDK editor state and persistence in @schdk/editor-web-app and the unified desktop app. Use for imports, autosave, save states, Drive recents, downloads, deep links, desktop sessions, back navigation, or save-before-close behavior.
+description: Change or debug Drive-backed SCHDK editor state and persistence in @schdk/web and the unified desktop app. Use for imports, autosave, save states, Drive recents, downloads, deep links, desktop sessions, back navigation, or save-before-close behavior.
 ---
 
 # SCHDK Editor Persistence
@@ -8,7 +8,7 @@ description: Change or debug Drive-backed SCHDK editor state and persistence in 
 ## Workflow
 
 1. Follow `$schdk-development`, then read `docs/rules/editor-state.md` and `docs/rules/game-packages.md`.
-2. Trace browser and desktop paths separately from `packages/editor-web-app/src/App.tsx` through the injected Drive bridge.
+2. Trace browser and desktop paths separately from `packages/web/src/editor/App.tsx` through the injected Drive bridge.
 3. Read `docs/rules/browser-persistence.md` or `docs/rules/desktop-editor-persistence.md` only for the affected platform.
 4. Read `docs/rules/security.md` and `docs/rules/desktop-apps.md` only for bridge or close changes; read `docs/rules/ui-editor.md` only for visual changes.
 5. Validate restored packages through `@schdk/common` and preserve pending data across every changed path.
@@ -19,10 +19,10 @@ description: Change or debug Drive-backed SCHDK editor state and persistence in 
 ## Checks
 
 ```powershell
-pnpm --filter @schdk/editor-web-app lint
-pnpm --filter @schdk/editor-web-app typecheck
-pnpm --filter @schdk/editor-web-app test
-pnpm --filter @schdk/editor-web-app build
+pnpm --filter @schdk/web lint
+pnpm --filter @schdk/web typecheck
+pnpm --filter @schdk/web test
+pnpm turbo build --filter=@schdk/web
 ```
 
-Build `@schdk/all-desktop-app` when the bridge or close flow changes.
+Build `@schdk/desktop` when the bridge or close flow changes.

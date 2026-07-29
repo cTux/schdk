@@ -148,6 +148,7 @@ button:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .sidebar-preloading,
   .visual-editor-add-button,
   .tool-list button,
   .home header {

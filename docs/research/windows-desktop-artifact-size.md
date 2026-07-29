@@ -10,7 +10,7 @@ Electron packaging tools would not remove Electron's Chromium/Node runtime.
 The recommended low-risk work is:
 
 1. Keep only the Ukrainian and English Electron locale packs.
-2. Stop packaging `@schdk/all-web-app` and its transitive runtime dependencies
+2. Stop packaging `@schdk/web` and its transitive runtime dependencies
    inside `app.asar`; the compiled web application is already copied as an
    extra resource.
 3. Build electron-builder's `dir` and `nsis` targets in the same production
@@ -21,15 +21,15 @@ This reduces the distributable footprint, but it does not materially shrink
 
 ## Current implementation
 
-`@schdk/all-desktop-app` uses Electron 43.2.0 and electron-builder 26.15.3.
+`@schdk/desktop` uses Electron 43.2.0 and electron-builder 26.15.3.
 Its package:
 
 - compiles Electron main/preload code with TypeScript;
 - runs `electron-builder --dir`;
 - includes only compiled Electron files and `package.json` as application
   files;
-- copies `@schdk/all-web-app/dist` to `resources/web`;
-- declares `@schdk/all-web-app` as a production dependency;
+- copies `@schdk/web/dist` to `resources/web`;
+- declares `@schdk/web` as a production dependency;
 - produces only `dist/release/win-unpacked`.
 
 The file filter is already narrow, and ASAR is already enabled by
@@ -52,14 +52,14 @@ Measurements were taken from a clean x64 Windows build in this worktree.
 The NSIS baseline was produced without changing repository configuration:
 
 ```powershell
-pnpm --filter @schdk/all-desktop-app exec electron-builder --win nsis
+pnpm --filter @schdk/desktop exec electron-builder --win nsis
 ```
 
 ### What is inside `app.asar`
 
 The desktop main process does not import the web workspace packages at runtime;
 it loads the already-built `resources/web/index.html`. However, declaring
-`@schdk/all-web-app` as a production dependency makes electron-builder package
+`@schdk/web` as a production dependency makes electron-builder package
 that workspace dependency and its complete transitive tree.
 
 Largest extracted ASAR groups:
@@ -83,7 +83,7 @@ electron-builder supports `electronLanguages`; without it, all Electron locales
 are copied. A build with only `uk` was measured through a CLI override:
 
 ```powershell
-pnpm --filter @schdk/all-desktop-app exec electron-builder --win nsis --config.electronLanguages=uk
+pnpm --filter @schdk/desktop exec electron-builder --win nsis --config.electronLanguages=uk
 ```
 
 | Artifact           |   Baseline | Ukrainian-only | Reduction |
@@ -98,7 +98,7 @@ unpacked, leaving almost all measured savings intact.
 
 ### 2. Remove duplicated production dependencies from ASAR
 
-Move the build-only `@schdk/all-web-app` workspace edge from `dependencies` to
+Move the build-only `@schdk/web` workspace edge from `dependencies` to
 `devDependencies`. Turbo still needs the workspace edge for build ordering, but
 electron-builder excludes development dependencies from packaged application
 files.
@@ -111,7 +111,7 @@ Expected effect:
   NSIS already compresses repeated/text-heavy files.
 
 The implementation must verify Turbo's dry-run graph still places
-`@schdk/all-web-app#build` before `@schdk/all-desktop-app#build`.
+`@schdk/web#build` before `@schdk/desktop#build`.
 
 ### 3. Build unpacked and installer targets together
 
@@ -130,7 +130,7 @@ Then a production `electron-builder --win` run emits both:
 - `dist/release/win-unpacked/`;
 - `dist/release/ЩДК Setup <version>.exe`.
 
-Both artifacts remain under `packages/all-desktop-app/dist/release`.
+Both artifacts remain under `packages/desktop/dist/release`.
 
 ### 4. Keep normal compression
 

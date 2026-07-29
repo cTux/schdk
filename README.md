@@ -55,7 +55,6 @@ SCHDK прибирає ручну роботу між написанням па�
 - [Підключення Google Диска](docs/guide/google-drive.md)
 - [Запуск повного вебзастосунку](docs/guide/run-web-app.md)
 - [Запуск повного десктопного застосунку](docs/guide/run-desktop-app.md)
-- [Окремий запуск вебзастосунків](docs/guide/run-standalone-web-apps.md)
 - [Робота з файлами в браузері та на десктопі](docs/guide/file-handling.md)
 - [Збирання готових застосунків](docs/guide/build-apps.md)
 - [Релізи та вебверсія](docs/guide/releases.md)

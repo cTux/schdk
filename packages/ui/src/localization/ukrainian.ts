@@ -4,6 +4,7 @@ import { aiPackageRulesCopy } from './ai-package-rules';
 import { packageGenerationCopy } from './package-generation';
 import { ukrainianAllWeb, ukrainianMeta } from './ukrainian-misc';
 import { questionDatabaseCopy } from './question-database';
+import { shellCopy } from './shell';
 export const ukrainian = {
   shared: {
     confirmation: 'Підтвердження дії',
@@ -33,46 +34,7 @@ export const ukrainian = {
     zoomIn: 'Збільшити',
   },
   meta: ukrainianMeta,
-  shell: {
-    brand: 'Що? Де? Коли?',
-    toolsLabel: 'Інструменти',
-    groupLabel: 'ЩДК',
-    settingsLabel: 'Налаштування',
-    accountConnected: 'Підключено',
-    accountDisconnected: 'Не підключено',
-    loginTitle: 'Увійдіть через Google',
-    loginDescription:
-      'Увійдіть, щоб створювати, відкривати та зберігати пакети SCHDK на Google Диску.',
-    loginAction: 'Продовжити з Google',
-    homeTitle: 'Усе для гри в одному місці',
-    homeDescription:
-      'Налаштуйте макет у візуальному редакторі, потім створіть пакет питань, потім розпочніть гру.',
-    home: {
-      label: 'Домашня',
-      description: 'Огляд інструментів для підготовки та проведення гри.',
-    },
-    host: {
-      label: 'Провести гру',
-      description: 'Запускайте готовий пакет і проводьте гру для команд.',
-    },
-    editor: {
-      label: 'Редагувати пакети питань',
-      description: 'Створюйте та редагуйте пакети запитань у форматі .schdk.',
-    },
-    visualEditor: {
-      label: 'Візуальний редактор',
-      description: 'Створюйте власний макет екрана проведення гри.',
-    },
-    artificialIntelligence: {
-      label: 'Правила створення питань',
-      description: 'Налаштовуйте правила створення запитань.',
-    },
-    packageRules: {
-      label: aiPackageRulesCopy.uk.navigationLabel,
-      description: aiPackageRulesCopy.uk.navigationDescription,
-    },
-    questionDatabase: questionDatabaseCopy.uk.navigation,
-  },
+  shell: shellCopy.uk,
   questionDatabase: questionDatabaseCopy.uk,
   aiQuestions: aiQuestionsCopy.uk,
   aiPackageRules: aiPackageRulesCopy.uk,

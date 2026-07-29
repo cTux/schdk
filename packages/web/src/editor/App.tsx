@@ -14,7 +14,6 @@ import {
   getDeepLinkedQuestionIndex,
 } from './deep-link';
 import { loadDesktopEditorSession } from './desktop-session';
-import type {} from './electron';
 import { useEditorOpening } from './use-editor-opening';
 import { useEditorPersistence } from './use-editor-persistence';
 import { useEditorRecents } from './use-editor-recents';

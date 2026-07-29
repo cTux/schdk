@@ -31,5 +31,5 @@ pnpm --filter @schdk/common lint
 pnpm --filter @schdk/common typecheck
 pnpm --filter @schdk/common test
 pnpm --filter @schdk/common build
-pnpm --filter @schdk/editor-web-app typecheck
+pnpm --filter @schdk/web typecheck
 ```

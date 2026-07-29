@@ -35,7 +35,7 @@ pnpm --filter @schdk/ui lint
 pnpm --filter @schdk/ui typecheck
 pnpm --filter @schdk/ui test
 pnpm --filter @schdk/ui build:storybook
-pnpm --filter @schdk/all-web-app build
+pnpm turbo build --filter=@schdk/web
 ```
 
 Use the `$schdk-quality` browser smoke-test workflow for interaction and screenshots.

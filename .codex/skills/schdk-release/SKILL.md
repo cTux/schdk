@@ -15,14 +15,14 @@ workflow, and verify the published GitHub Release.
    `docs/rules/verification.md`, `docs/rules/desktop-apps.md`,
    `docs/rules/security.md`, `docs/guide/releases.md`, `CHANGELOG.md`,
    `.github/workflows/release.yml`, `scripts/release-notes.mjs`, and
-   `packages/all-desktop-app/package.json`, and
-   `packages/all-web-app/version.json`.
+   `packages/desktop/package.json`, and
+   `packages/web/version.json`.
 2. Fetch `origin main --tags`; inspect releases, tags, open pull requests, and
    recent release runs. Release only commits merged into `main`.
 3. Use an explicitly requested SemVer version. Otherwise increment the patch
    component of the highest stable SemVer release or tag. Treat `X.Y.Z` and
    `vX.Y.Z` as the same version and publish the canonical tag `vX.Y.Z`.
-4. Set `packages/all-web-app/version.json` to the selected version. Build
+4. Set `packages/web/version.json` to the selected version. Build
    concise Ukrainian changelog notes from commits since the previous release.
    Separate `### Продуктові рішення` from `### Технічні рішення` and prefix
    every item with `[NEW]`, `[CHANGE]`, `[FIX]`, `[DELETE]`, or `[SECURITY]`.
@@ -54,7 +54,7 @@ Pass the version with `--config.extraMetadata.version=X.Y.Z`, disable signing
 identity discovery, and verify the installer is non-empty and unsigned. Use
 `scripts/release-notes.mjs X.Y.Z release-notes.md` as the changelog and SemVer
 gate; it must reject missing decision sections, empty sections, unprefixed
-items, and a mismatched `packages/all-web-app/version.json`. Materialize Google
+items, and a mismatched `packages/web/version.json`. Materialize Google
 desktop credentials only under the runner temporary directory and remove them
 in an `if: always()` step. Keep third-party actions pinned to full commit SHAs.
 

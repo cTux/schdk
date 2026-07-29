@@ -24,10 +24,10 @@ import { useSettingsDeepLink } from './use-settings-deep-link';
 import { useQuestionDatabase } from './use-question-database';
 
 const HostApp = lazy(() =>
-  import('@schdk/host-web-app/app').then(({ App }) => ({ default: App })),
+  import('./host/App').then(({ App }) => ({ default: App })),
 );
 const EditorApp = lazy(() =>
-  import('@schdk/editor-web-app/app').then(({ App }) => ({ default: App })),
+  import('./editor/App').then(({ App }) => ({ default: App })),
 );
 
 export function App() {
@@ -65,6 +65,12 @@ export function App() {
       locale,
       questionDatabase,
     );
+  const preloading =
+    connected &&
+    (questionDatabase.loading ||
+      aiQuestions.loading ||
+      aiQuestions.globalLoading ||
+      aiQuestionsPackages.loading);
   const loginState = googleDrive.statusReady ? connection.state : 'connecting';
   const [unlocked, setUnlocked] = useState(connected);
   useEffect(() => setUnlocked((current) => current || connected), [connected]);
@@ -177,7 +183,8 @@ export function App() {
                 />
               </Suspense>
             }
-            loadedApps={navigation.loadedApps}
+            loadedViews={navigation.loadedViews}
+            preloading={preloading}
             questionDatabase={{
               failed: questionDatabase.failed,
               loading: questionDatabase.loading,

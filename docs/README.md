@@ -8,7 +8,6 @@
 - [Підключення Google Диска](guide/google-drive.md)
 - [Запуск повного вебзастосунку](guide/run-web-app.md)
 - [Запуск повного десктопного застосунку](guide/run-desktop-app.md)
-- [Окремий запуск вебзастосунків](guide/run-standalone-web-apps.md)
 - [Робота з файлами в браузері та на десктопі](guide/file-handling.md)
 - [Збирання готових застосунків](guide/build-apps.md)
 - [Релізи та вебверсія](guide/releases.md)

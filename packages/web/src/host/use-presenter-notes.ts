@@ -1,6 +1,5 @@
 import type { GamePackage, GameQuestion } from '@schdk/common';
 import { useEffect } from 'react';
-import type {} from './electron';
 import type { GamePosition } from './game-flow';
 
 interface PresenterNotesState {

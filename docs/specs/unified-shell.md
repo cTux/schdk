@@ -14,8 +14,8 @@ package authoring, hosting, settings, and account state.
   game under SCHDK, in that order, with Settings at the bottom. The Ukrainian
   question-rules label is
   `Правила створення питань`.
-- **SHL-2:** Application chunks load lazily on first selection and remain
-  mounted afterward so navigation preserves state.
+- **SHL-2:** Every navigable page chunk loads lazily on first selection and
+  remains mounted afterward so navigation preserves state.
 - **SHL-3:** Active view persists locally and in the validated `view` query
   parameter. The active primary settings group persists in the validated
   `settings` query parameter while settings are open. Browser back, forward,
@@ -99,6 +99,10 @@ package authoring, hosting, settings, and account state.
   position; and loads at most 100 additional filtered rows from a bottom
   action. On desktop, the table consumes the remaining workspace height and
   scrolls without creating a second full-page scrollbar.
+- **SHL-20:** After Google authorization, Drive-backed question packages,
+  personal and global AI question rules, and AI question packages begin
+  loading before their pages open. The sidebar brand and SCHDK group show a
+  localized preloading indicator until those lists finish loading.
 
 ## Invariants
 
@@ -162,3 +166,7 @@ package authoring, hosting, settings, and account state.
     reverse both sortable columns, scroll the dynamically sized desktop table
     without scrolling the whole page or rendering the complete result set, and
     load the next batch from the bottom action.
+14. Connect Google without opening a SCHDK page and observe its Drive-backed
+    lists begin loading. Confirm localized preloading indicators appear in the
+    sidebar brand and SCHDK group until every list finishes, then navigate to
+    each page and confirm its page chunk loads on first selection.

@@ -1,11 +1,15 @@
 # Unified web shell
 
-- Root `pnpm dev` starts `@schdk/all-web-app` at the strict
+- Root `pnpm dev` starts `@schdk/web` at the strict
   `127.0.0.1:5173`; fail instead of switching ports.
-- Export host and editor roots from their standalone packages and load them
-  with `React.lazy`; do not use iframes or copy standalone builds.
-- Load an application chunk on first selection, then keep it mounted so
-  navigation does not discard state.
+- Keep host and editor roots under `packages/web/src/host` and
+  `packages/web/src/editor`, and load them with `React.lazy`; do not use
+  iframes or duplicate application builds.
+- Load every page chunk on first selection, then keep it mounted so navigation
+  does not discard state.
+- Keep Drive-backed list hooks above lazy page boundaries so question packages,
+  personal and global AI question rules, and AI question packages preload
+  immediately after authorization.
 - Preserve keyboard-accessible navigation in the shared renderer.
 - Group the question database, visual editor, artificial intelligence, editor,
   and host pages under `ЩДК` in the fixed sidebar, with the current account's
@@ -44,7 +48,7 @@
   validated game question, never the key.
 - Keep personal AI question packages in Drive as `.aiquestionpackage` archives
   and expose their page immediately after question-generation rules.
-- Publish `packages/all-web-app/version.json` at the GitHub Pages root and
+- Publish `packages/web/version.json` at the GitHub Pages root and
   compare it with the version embedded in the loaded browser build once per
   minute.
 - Show a localized Google login screen before mounting the unified tools.

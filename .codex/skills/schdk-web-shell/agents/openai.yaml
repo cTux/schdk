@@ -1,4 +1,4 @@
 interface:
   display_name: 'SCHDK Web Shell'
-  short_description: 'Maintain web apps and unified navigation'
-  default_prompt: 'Use $schdk-web-shell to change SCHDK web apps, lazy loading, routes, or options.'
+  short_description: 'Maintain the web app and unified navigation'
+  default_prompt: 'Use $schdk-web-shell to change the SCHDK web app, lazy loading, routes, or options.'

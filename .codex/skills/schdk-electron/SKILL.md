@@ -9,7 +9,7 @@ description: Build, debug, secure, or package SCHDK Electron applications. Use f
 
 1. Follow `$schdk-development`, then read `docs/rules/desktop-apps.md`, `docs/rules/security.md`, and `docs/rules/builds.md`.
 2. Trace main, preload, renderer, and packaging paths affected by the change.
-3. Keep Electron and filesystem access inside `@schdk/all-desktop-app`; preserve every trust boundary in the rules.
+3. Keep Electron and filesystem access inside `@schdk/desktop`; preserve every trust boundary in the rules.
 4. Read `docs/rules/google-drive.md` for OAuth, secure token storage, or Drive
    IPC changes. Package installed-app OAuth client configuration from the
    ignored credentials resource, keep it in Electron main, and never expose it
@@ -40,12 +40,12 @@ description: Build, debug, secure, or package SCHDK Electron applications. Use f
 Run tests and build the unified desktop package:
 
 ```powershell
-pnpm --filter @schdk/all-desktop-app test
-pnpm turbo package --filter @schdk/all-desktop-app
+pnpm --filter @schdk/desktop test
+pnpm turbo package --filter @schdk/desktop
 ```
 
 Close running packaged executables before rebuilding locked Windows output.
 For release-packaging changes, also run
-`pnpm --filter @schdk/all-desktop-app package:win`.
+`pnpm --filter @schdk/desktop package:win`.
 Run `package:mac` and `package:linux` only on their matching native hosts; use
 the manually dispatched `Desktop builds` workflow to verify every platform.
