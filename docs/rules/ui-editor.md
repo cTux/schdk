@@ -75,7 +75,7 @@
   Show only the host-notes field directly below the answer row, without a
   separate section title.
   Give question, remark, answer, and answer-comment text areas the same default
-  height.
+  height. Keep the gap between adjacent editor fields equal in both directions.
 - Let authors add optional alternative and wrong answer lists. Keep each add
   action inline with its list title instead of rendering a separate button
   below the list.

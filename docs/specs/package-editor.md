@@ -80,7 +80,8 @@ without losing in-progress work.
 - **EDT-17:** Every multiline package and generation field uses the same
   non-resizable shared control with dropdown-aligned borders, surfaces, hover,
   focus, and disabled states. Its label appears as the placeholder while empty
-  and moves inside the populated textarea at the bottom right.
+  and moves inside the populated textarea at the bottom right. Adjacent
+  question-editor fields use the same horizontal and vertical gap.
 - **EDT-18:** AI generation phrases each question naturally as if written by a
   human rather than AI and requires a non-empty answer comment that explains
   only why the answer is correct, never why the question was generated or
@@ -270,4 +271,6 @@ without losing in-progress work.
 23. Inspect an empty handout at normal and narrow widths. Confirm there is no
     separate handout heading, the hatched image action stays left of the text
     field, both match the corresponding question-row field dimensions, and the
-    question and remark fields match each other.
+    question and remark fields match each other. Confirm every horizontal and
+    vertical gap between the handout, question, remark, answer, answer comment,
+    and host-notes fields is equal.
