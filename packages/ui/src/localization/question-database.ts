@@ -28,6 +28,7 @@ export const questionDatabaseCopy = {
     sortQuestion: 'Сортувати за питанням',
     sortAnswer: 'Сортувати за відповіддю',
     hasRemarks: 'Має зауваження',
+    developing: 'Розробляється',
     confirmReplacement: (number: number) =>
       `Дійсно замінити питання ${number} питанням із бази?`,
     loadQuestionFailed: 'Не вдалося завантажити питання з Google Диска.',
@@ -61,6 +62,7 @@ export const questionDatabaseCopy = {
     sortQuestion: 'Sort by question',
     sortAnswer: 'Sort by answer',
     hasRemarks: 'Has remarks',
+    developing: 'In development',
     confirmReplacement: (number: number) =>
       `Replace question ${number} with the question from the database?`,
     loadQuestionFailed: 'Could not load the question from Google Drive.',

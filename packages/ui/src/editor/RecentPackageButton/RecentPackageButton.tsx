@@ -47,12 +47,15 @@ export function RecentPackageButton({
         <span className="recent-package-label">
           <span className="recent-package-title">
             <strong>{title}</strong>
-            {recent.ready && (
+            {recent.ready ? (
               <span className="recent-package-ready">{copy.shared.ready}</span>
-            )}
-            {recent.hasRemarks && (
+            ) : recent.hasRemarks ? (
               <span className="recent-package-remarks">
                 {copy.questionDatabase.hasRemarks}
+              </span>
+            ) : (
+              <span className="recent-package-developing">
+                {copy.questionDatabase.developing}
               </span>
             )}
           </span>
