@@ -82,7 +82,6 @@ function App({
 
   const { recentPackages, recentPackagesLoading, refreshRecentPackages } =
     useEditorRecents({ drive, onDriveFailure });
-
   useEditorOpening({
     copy,
     driveActive,
@@ -125,6 +124,7 @@ function App({
   const questions = useQuestionActions({
     confirm,
     copy,
+    currentPackage,
     drive,
     gamePackage,
     locale,
@@ -162,6 +162,7 @@ function App({
   return (
     <>
       <EditorView
+        key={driveFileId ?? 'no-package'}
         aiGeneration={aiGeneration}
         gamePackage={gamePackage}
         hasPackage={hasPackage}

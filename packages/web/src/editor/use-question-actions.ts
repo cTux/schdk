@@ -1,6 +1,7 @@
 import {
   parseGamePackage,
   parseGameQuestion,
+  serializeGamePackage,
   type GamePackage,
   type GameQuestion,
 } from '@schdk/common';
@@ -12,14 +13,16 @@ import {
 } from '@schdk/ui/editor';
 import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
 import type { EditorTextOptions } from '@schdk/ui/options';
-import type { Dispatch, SetStateAction } from 'react';
+import type { Dispatch, RefObject, SetStateAction } from 'react';
 import { getSelectedIndexAfterSwap, swapQuestions } from './question-order';
+import { readImageHandout } from './read-image-handout';
 import { correctAnswer, correctSentence } from './text-correction';
 
 interface QuestionActionsOptions {
   confirm(message: string): Promise<boolean>;
   copy: LocalizationCopy;
   drive?: DrivePackageStorage;
+  currentPackage: RefObject<GamePackage>;
   gamePackage: GamePackage;
   locale: AppLocale;
   selectedIndex: number;
@@ -34,6 +37,7 @@ interface QuestionActionsOptions {
 export function useQuestionActions({
   confirm,
   copy,
+  currentPackage,
   drive,
   gamePackage,
   locale,
@@ -185,33 +189,26 @@ export function useQuestionActions({
     setMessage('');
   }
 
-  function addHandout(file: File) {
-    if (!file.type.startsWith('image/')) {
-      setMessage(copy.visualEditor.chooseImage);
-      return;
-    }
-    const reader = new FileReader();
-    reader.addEventListener('load', () => {
-      if (
-        typeof reader.result !== 'string' ||
-        !reader.result.startsWith(`data:${file.type};base64,`)
-      ) {
-        setMessage(copy.visualEditor.chooseImage);
-        return;
-      }
-      updateQuestion({
-        handout: {
-          kind: 'image',
-          name: file.name,
-          mimeType: file.type,
-          dataUrl: reader.result,
-        },
+  async function addHandout(file: File) {
+    const packageAtStart = gamePackage;
+    const indexAtStart = selectedIndex;
+    try {
+      const handout = await readImageHandout(file);
+      if (currentPackage.current !== packageAtStart) return;
+      const question = {
+        ...packageAtStart.questions[indexAtStart]!,
+        handout,
+      };
+      serializeGamePackage({
+        ...packageAtStart,
+        questions: packageAtStart.questions.map((item, index) =>
+          index === indexAtStart ? question : item,
+        ),
       });
-    });
-    reader.addEventListener('error', () =>
-      setMessage(copy.visualEditor.chooseImage),
-    );
-    reader.readAsDataURL(file);
+      replaceQuestion(indexAtStart, question);
+    } catch {
+      setMessage(copy.visualEditor.chooseImage);
+    }
   }
 
   const question = gamePackage.questions[selectedIndex]!;

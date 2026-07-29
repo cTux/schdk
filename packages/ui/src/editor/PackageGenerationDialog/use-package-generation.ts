@@ -1,5 +1,5 @@
 import * as common from '@schdk/common';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useConfirmationDialog } from '../../atoms/ConfirmationDialog';
 import { useLocalization } from '../../localization';
 import * as gen from './generation-input';
@@ -74,6 +74,8 @@ function usePackageGeneration({
     setOpen(true);
     onGenerationStateChange([], true);
   }
+
+  useEffect(() => () => void (generationId.current += 1), []);
 
   async function cancel() {
     if (await cancelDialog.confirm(copy.packageGeneration.cancelConfirmation)) {
