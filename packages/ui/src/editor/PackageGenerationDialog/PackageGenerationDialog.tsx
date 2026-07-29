@@ -43,14 +43,12 @@ export function PackageGenerationDialog({
   });
   const {
     activePackages,
-    background,
     cancel,
     checkQuestionDatabase,
     difficulty,
     excludedAnswers,
     failed,
     generate,
-    generateInBackground,
     initialExcludedAnswers,
     open,
     previewInput,
@@ -82,7 +80,8 @@ export function PackageGenerationDialog({
         onClick={show}
       />
       <Dialog.Root
-        modal={!background}
+        modal={false}
+        disablePointerDismissal
         open={open}
         onOpenChange={(nextOpen) => {
           if (thinking) return;
@@ -91,9 +90,6 @@ export function PackageGenerationDialog({
         }}
       >
         <Dialog.Portal>
-          {!background && (
-            <Dialog.Backdrop className="question-generation-backdrop" />
-          )}
           <Dialog.Viewport className={dockedGenerationViewportClassName}>
             <Dialog.Popup
               className={classNames(
@@ -126,7 +122,6 @@ export function PackageGenerationDialog({
                   </Dialog.Description>
                   <PackageGenerationOptions
                     activePackages={activePackages}
-                    backgroundAvailable={thinking && !background}
                     canGenerate={
                       selected !== null &&
                       Boolean(randomTemplates.length) &&
@@ -143,7 +138,6 @@ export function PackageGenerationDialog({
                     thinking={thinking}
                     checkQuestionDatabase={checkQuestionDatabase}
                     onCheckQuestionDatabaseChange={setCheckQuestionDatabase}
-                    onBackground={generateInBackground}
                     onCancel={() => void cancel()}
                     onDifficultyChange={setDifficulty}
                     onRecognizabilityChange={setRecognizability}

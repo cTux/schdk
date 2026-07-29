@@ -48,8 +48,10 @@ without losing in-progress work.
   account's scoped session.
 - **EDT-15:** The browser warns before unloading an open package with pending,
   saving, or failed changes and stops warning after the package is saved.
-- **EDT-16:** An AI icon beside the selected question opens a dimmed panel
-  docked to the editor's right with an account or global `AIQuestion` template
+- **EDT-16:** An AI icon beside the selected question opens a non-modal,
+  full-height panel docked to the editor's right with the same chrome as the
+  left navigation and no blocking backdrop. It includes an account or global
+  `AIQuestion` template
   selector, difficulty and
   recognizability selectors from very easy through very hard, and a context
   field. Medium is selected by default for both scales. Favorite templates
@@ -58,10 +60,9 @@ without losing in-progress work.
   custom tooltip. Generation disables the complete panel, sends the selected
   difficulty and recognizability definitions in the provider prompt, and shows
   a thinking state; on success it replaces every generated question field
-  before the panel resets and closes. While generation runs, the
-  `Generate in background` action removes the blocking backdrop without
-  interrupting the request, keeps the target question disabled, and lets the
-  author work elsewhere in the editor. The prompt requests a text handout when
+  before the panel resets and closes. While generation runs, the target
+  question stays disabled and ready questions remain editable. The prompt
+  requests a text handout when
   the selected rule or context requires one, returns no handout otherwise, and
   never asks the text model to invent an image or data URL. The one global rule
   marked as general is excluded from the selector and prepended to every
@@ -90,19 +91,19 @@ without losing in-progress work.
   general rule is applied separately to every generated question. Only a
   missing question part or answer makes a question missing; optional fields do
   not.
-  It selects each target slot behind the panel, waits for a validated provider
-  response, joins overflow text into the last part allowed by the declared
-  question type, replaces the complete question record, and continues sequentially.
+  It selects the first target when generation starts, waits for each validated
+  provider response, joins overflow text into the last part allowed by the
+  declared question type, replaces the complete question record, and continues
+  sequentially without taking selection away from the author.
   The selected difficulty and recognizability are sent for every question. The
   visible cancel action asks for confirmation, then closes the panel and
   ignores any unfinished provider result only after confirmation.
   While generation runs, the panel shows the current question, its
   package-generation percentage, and an animated progress indicator that respects
   reduced-motion preferences.
-  Its `Generate in background` action removes the blocking backdrop while the
-  same sequence continues. Questions still awaiting generation are disabled;
-  each completed question becomes editable immediately. The docked panel
-  closes after the final question succeeds.
+  Questions still awaiting generation are disabled; each completed question
+  becomes editable immediately while the same sequence continues. The docked
+  panel closes after the final question succeeds.
   Browser generation renews Google authorization from the confirmation click
   before the sequence starts. A failed request keeps questions generated before
   the failure. An allowlisted administrator can expand the panel beside its
@@ -186,9 +187,11 @@ without losing in-progress work.
     provider prompt. Confirm remarked-question prompts include the current
     question and remark and accepted results clear the remark. Confirm fallback
     rules are randomly selected only from that set, while explicitly configured
-    per-question types still win. Observe each target slot selected in order,
-    every generated record replaced completely, and prior successful results
-    retained when a request fails. Start cancellation during an unfinished
+    per-question types still win. Observe the first target selected at start,
+    then select and edit a ready question while later targets generate without
+    the selection being taken away. Confirm every generated record is replaced
+    completely and prior successful results are retained when a request fails.
+    Start cancellation during an unfinished
     request, dismiss its confirmation, and verify generation continues. Confirm
     cancellation and verify the unfinished result is ignored. Confirm the
     progress percentage matches the current target position,
@@ -214,8 +217,9 @@ without losing in-progress work.
     of an existing entity, and an answer that worsens an overrepresented type
     or form; confirm each is rejected, one rejection is retried, and a second
     rejection leaves its target unchanged.
-16. Open each generation panel and confirm it is docked to the editor's right
-    and its database toggle defaults off.
+16. Open each generation panel and confirm it is a full-height right dock with
+    the left navigation's chrome, no blocking backdrop, and an editor that
+    remains interactive. Confirm its database toggle defaults off.
     Enable it, return an answer and then a paraphrased question already present
     in another indexed package, and confirm each first draft is rejected and
     regenerated once. Close and reopen the panel and confirm the toggle is off.

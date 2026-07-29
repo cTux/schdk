@@ -26,7 +26,6 @@ function usePackageGeneration({
     useState<common.AIQuestionRecognizability>('medium');
   const [selected, setSelected] = useState<number | null>(null);
   const [thinking, setThinking] = useState(false);
-  const [background, setBackground] = useState(false);
   const [failed, setFailed] = useState(false);
   const [progress, setProgress] = useState<[number, number] | null>(null);
   const [promptOpen, setPromptOpen] = useState(false);
@@ -35,7 +34,6 @@ function usePackageGeneration({
     useState<gen.PackageGenerationInput | null>(null);
   const [checkQuestionDatabase, setCheckQuestionDatabase] = useState(false);
   const generationId = useRef(0);
-  const backgroundRef = useRef(false);
   const activePackages = packages
     .filter((item) => item.enabled)
     .sort(common.compareFavoriteItemsByName);
@@ -55,7 +53,6 @@ function usePackageGeneration({
 
   function reset() {
     generationId.current += 1;
-    backgroundRef.current = false;
     setOpen(false);
     setScope('missing');
     setRuleSet('all');
@@ -63,7 +60,6 @@ function usePackageGeneration({
     setRecognizability('medium');
     setSelected(null);
     setThinking(false);
-    setBackground(false);
     setFailed(false);
     setProgress(null);
     setPromptOpen(false);
@@ -91,6 +87,7 @@ function usePackageGeneration({
     onGenerationStateChange(targets, true);
     setThinking(true);
     setFailed(false);
+    onSelectQuestion(targets[0]!);
     try {
       await onGenerationStart?.(checkQuestionDatabase);
       if (currentGenerationId !== generationId.current) return;
@@ -107,7 +104,6 @@ function usePackageGeneration({
         setCurrentInput(input);
         setProgress([position + 1, targets.length]);
         setExcludedAnswers([...usedAnswers]);
-        if (!backgroundRef.current) onSelectQuestion(index);
         const question = await onGenerate(
           input.template,
           input.context,
@@ -135,15 +131,8 @@ function usePackageGeneration({
     }
   }
 
-  function generateInBackground() {
-    backgroundRef.current = true;
-    setBackground(true);
-    onGenerationStateChange(targets.slice((progress?.[0] ?? 1) - 1), true);
-  }
-
   return {
     activePackages,
-    background,
     cancel,
     cancelDialogProps: cancelDialog.dialogProps,
     checkQuestionDatabase,
@@ -151,7 +140,6 @@ function usePackageGeneration({
     excludedAnswers,
     failed,
     generate,
-    generateInBackground,
     initialExcludedAnswers,
     open,
     previewInput,

@@ -15,7 +15,6 @@ import './styles.scss';
 
 export function PackageGenerationOptions({
   activePackages,
-  backgroundAvailable,
   canGenerate,
   difficulty,
   recognizability,
@@ -28,7 +27,6 @@ export function PackageGenerationOptions({
   thinking,
   checkQuestionDatabase,
   onCheckQuestionDatabaseChange,
-  onBackground,
   onCancel,
   onDifficultyChange,
   onRecognizabilityChange,
@@ -157,11 +155,6 @@ export function PackageGenerationOptions({
         </div>
       )}
       <div className="question-generation-actions">
-        {backgroundAvailable && (
-          <Button type="button" variant="secondary" onClick={onBackground}>
-            {copy.packageGeneration.background}
-          </Button>
-        )}
         <Button type="button" variant="secondary" onClick={onCancel}>
           {copy.packageGeneration.cancel}
         </Button>

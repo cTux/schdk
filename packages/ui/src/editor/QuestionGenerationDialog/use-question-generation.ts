@@ -21,7 +21,6 @@ function useQuestionGeneration({
     useState<AIQuestionRecognizability>('medium');
   const [context, setContext] = useState('');
   const [thinking, setThinking] = useState(false);
-  const [background, setBackground] = useState(false);
   const [failed, setFailed] = useState(false);
   const [promptOpen, setPromptOpen] = useState(false);
   const [checkQuestionDatabase, setCheckQuestionDatabase] = useState(false);
@@ -36,7 +35,6 @@ function useQuestionGeneration({
     setRecognizability('medium');
     setContext('');
     setThinking(false);
-    setBackground(false);
     setFailed(false);
     setPromptOpen(false);
     setCheckQuestionDatabase(false);
@@ -72,19 +70,12 @@ function useQuestionGeneration({
     }
   }
 
-  function generateInBackground() {
-    setBackground(true);
-    onQuestionGenerationStateChange?.(true, true);
-  }
-
   return {
-    background,
     checkQuestionDatabase,
     context,
     difficulty,
     failed,
     generate,
-    generateInBackground,
     open,
     promptOpen,
     recognizability,
