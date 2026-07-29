@@ -81,6 +81,38 @@ export function QuestionEditor({
         onPaste={onPaste}
       />
 
+      {question.aiGeneration && (
+        <div className="ai-generation-details">
+          <strong>{copy.questionGeneration.parameters}</strong>
+          <dl>
+            <div>
+              <dt>{copy.questionGeneration.template}</dt>
+              <dd>{question.aiGeneration.rule}</dd>
+            </div>
+            <div>
+              <dt>{copy.questionGeneration.difficulty}</dt>
+              <dd>
+                {
+                  copy.questionGeneration.difficulties[
+                    question.aiGeneration.difficulty
+                  ]
+                }
+              </dd>
+            </div>
+            <div>
+              <dt>{copy.questionGeneration.recognizability}</dt>
+              <dd>
+                {
+                  copy.questionGeneration.recognizabilities[
+                    question.aiGeneration.recognizability
+                  ]
+                }
+              </dd>
+            </div>
+          </dl>
+        </div>
+      )}
+
       <label className="question-type">
         {copy.editor.questionType}
         <Dropdown

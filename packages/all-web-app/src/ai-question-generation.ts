@@ -109,7 +109,7 @@ export function createAiQuestionGeneration(
           return `${system}\n\n${prompt}`;
         }
       : undefined,
-    onGenerate(
+    async onGenerate(
       template,
       context,
       excludedAnswers = [],
@@ -118,9 +118,9 @@ export function createAiQuestionGeneration(
       recognizability = 'medium',
     ) {
       if (!bridge) {
-        return Promise.reject(new Error('Google Drive is disconnected'));
+        throw new Error('Google Drive is disconnected');
       }
-      return bridge.generateAiQuestion(
+      const question = await bridge.generateAiQuestion(
         createRequest(
           template,
           context,
@@ -130,6 +130,14 @@ export function createAiQuestionGeneration(
           recognizability,
         ),
       );
+      return {
+        ...question,
+        aiGeneration: {
+          rule: template.name,
+          difficulty,
+          recognizability,
+        },
+      };
     },
   };
 }

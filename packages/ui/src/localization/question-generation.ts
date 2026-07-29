@@ -3,6 +3,7 @@ export const questionGenerationCopy = {
     open: 'Згенерувати питання',
     apiKeyMissing: 'Додайте API-ключ у налаштуваннях, щоб генерувати питання.',
     title: 'Генерація питання',
+    parameters: 'Параметри AI-генерації',
     description: 'Оберіть шаблон і опишіть, про що має бути нове питання.',
     template: 'Шаблон питання',
     noTemplates:
@@ -39,6 +40,7 @@ export const questionGenerationCopy = {
     open: 'Generate question',
     apiKeyMissing: 'Add an API key in settings to generate questions.',
     title: 'Generate question',
+    parameters: 'AI generation parameters',
     description:
       'Choose a template and describe what the new question should be about.',
     template: 'Question template',

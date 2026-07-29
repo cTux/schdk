@@ -50,6 +50,7 @@ export {
   parseGameQuestion,
 } from './game-question.js';
 export type {
+  AIQuestionGenerationMetadata,
   GameQuestion,
   GameQuestionType,
   Handout,

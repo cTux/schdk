@@ -14,7 +14,13 @@ export const gameQuestion = {
   questionParts: ['Яке питання показати?'],
   answer: 'Приклад відповіді',
   alternativeAnswers: ['Альтернатива'],
+  aiGeneration: {
+    rule: 'Логічне питання',
+    difficulty: 'medium' as const,
+    recognizability: 'easy' as const,
+  },
 };
+gamePackage.questions[1] = gameQuestion;
 export const aiQuestion: AIQuestion = {
   name: 'Логічне питання',
   description: 'Створюй короткі питання з однозначною відповіддю.',
@@ -92,6 +98,11 @@ export const componentValues: Record<string, Record<string, unknown>> = {
       { questionNumber: 11, context: 'Футбольне питання' },
       { questionNumber: 2, context: 'Питання про Київ' },
     ],
+  },
+  EditorView: {
+    gamePackage,
+    hasPackage: true,
+    selectedIndex: 1,
   },
   PackageGenerationOptions: {
     activePackages: [

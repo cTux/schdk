@@ -32,6 +32,9 @@ three-round game, including presentation media.
   limits before extracting ZIP content.
 - **PKG-11:** Readiness validation rejects a main or alternative answer reused
   by another question after Unicode, case, and whitespace normalization.
+- **PKG-12:** An AI-generated question may store the question-rule name,
+  difficulty, and recognizability used for its accepted generation without
+  affecting readiness. Questions without these metadata remain valid.
 
 ## Invariants
 
@@ -58,5 +61,7 @@ three-round game, including presentation media.
 6. An oversized compressed entry is rejected before decompression.
 7. A package remains unfinished when two questions share a normalized main or
    alternative answer.
+8. AI-generation metadata round-trips with its question, while manual and
+   legacy questions remain valid without it.
 
 Canonical format: [`../GAME_PACKAGE.md`](../GAME_PACKAGE.md).

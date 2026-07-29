@@ -126,6 +126,12 @@ without losing in-progress work.
   included-packages table as the personal question database. Selecting a row
   loads the complete canonical source question into an empty slot immediately.
   A populated slot is replaced only after explicit confirmation.
+- **EDT-24:** Every AI-generated question stores the name of the question rule,
+  difficulty, and recognizability actually used for its accepted generation.
+  The editor shows these three read-only parameters whenever they are present.
+  They survive package saving, reopening, and complete-question clipboard
+  copying; manually created and legacy questions show no generation-parameter
+  block.
 
 ## Invariants
 
@@ -211,3 +217,8 @@ without losing in-progress work.
     loaded. Repeat with a populated slot, cancel replacement, then confirm it.
     Reopen recents and confirm packages with unresolved remarks carry their
     separate status tag.
+19. Generate one question and then a package with different rule, difficulty,
+    and recognizability selections. Confirm each accepted question shows its
+    actual three parameters, retains them after saving and reopening, and
+    preserves them through complete-question clipboard copying. Open a manual
+    and legacy question and confirm neither shows the parameter block.

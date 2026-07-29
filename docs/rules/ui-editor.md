@@ -28,7 +28,9 @@
   every control while generation is pending. Pass the selected difficulty and
   recognizability into the provider prompt; default generation flows without
   explicit selectors to medium for both. Successful structured output replaces
-  every question field, resets the modal, and closes it.
+  every question field, records the selected rule name, difficulty, and
+  recognizability on the question, resets the modal, and closes it. Show those
+  read-only generation parameters in the editor whenever they are present.
 - Put personal question-database search beside the question heading. Search
   question and answer text after two entered characters and show the shared
   question, answer, and included-packages table. Selecting a result loads the
@@ -41,8 +43,8 @@
   regenerating remarked questions, include the current question and remark in
   the prompt and clear the remark after resolving it. Generate slots
   sequentially, select the active slot behind the modal, wait for each provider
-  response, replace the complete question record, and continue to the next
-  slot.
+  response, replace the complete question record with its selected rule,
+  difficulty, and recognizability metadata, and continue to the next slot.
 - Put a red cloud-delete button after package generation in the editable
   package-title row. Confirm it before moving the active package to Google Drive
   trash and returning to the package list.
