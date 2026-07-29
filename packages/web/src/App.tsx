@@ -1,7 +1,7 @@
 import type { EditorTextOptions, GameOptions } from '@schdk/ui/options';
 import { LOCALIZATION_COPY, LocaleProvider } from '@schdk/ui/localization';
 import { GoogleLoginView, ShellView } from '@schdk/ui/shell';
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useLayoutEffect, useState } from 'react';
 import {
   loadEditorTextOptions,
   loadGameOptions,
@@ -13,8 +13,10 @@ import {
 import {
   loadShellLocale,
   loadShellTheme,
+  loadUiAnimations,
   saveShellLocale,
   saveShellTheme,
+  saveUiAnimations,
 } from './shell-preferences';
 import { useAiQuestionTools } from './ai-question-generation';
 import { AppUpdateButton } from './AppUpdateButton';
@@ -34,6 +36,7 @@ export function App() {
   const sessionScope = window.location.pathname;
   const [locale, setLocale] = useState(loadShellLocale);
   const [theme, setTheme] = useState(loadShellTheme);
+  const [uiAnimations, setUiAnimations] = useState(loadUiAnimations);
   const copy = LOCALIZATION_COPY[locale];
   const navigation = useShellNavigation(sessionScope);
   const { view } = navigation;
@@ -98,6 +101,11 @@ export function App() {
     saveShellTheme(theme);
     document.documentElement.dataset.theme = theme;
   }, [theme]);
+
+  useLayoutEffect(() => {
+    saveUiAnimations(uiAnimations);
+    document.documentElement.dataset.uiAnimations = String(uiAnimations);
+  }, [uiAnimations]);
 
   useEffect(() => {
     saveEditorTextOptions(localStorage, editorOptions);
@@ -204,6 +212,7 @@ export function App() {
             googleDriveState={connection.state}
             settingsGroup={settings.group}
             theme={theme}
+            uiAnimations={uiAnimations}
             view={view}
             onEditorOptionsChange={googleDrive.setEditorTextOptions}
             onAiApiKeySave={ai.saveApiKey}
@@ -219,6 +228,7 @@ export function App() {
             onShowView={navigation.showView}
             onSettingsGroupChange={settings.showGroup}
             onThemeChange={setTheme}
+            onUiAnimationsChange={setUiAnimations}
           />
         </div>
       )}

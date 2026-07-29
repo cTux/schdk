@@ -16,6 +16,7 @@ export interface OptionsPageProps {
   hidden: boolean;
   settingsGroup: SettingsGroup;
   theme: AppTheme;
+  uiAnimations: boolean;
   onAiApiKeySave(apiKey: string | null): Promise<void>;
   onAiModelChange(model: string): void;
   onAiProviderChange(provider: string): void;
@@ -25,4 +26,5 @@ export interface OptionsPageProps {
   onGoogleDriveDisconnect(): void;
   onSettingsGroupChange(group: SettingsGroup): void;
   onThemeChange(theme: AppTheme): void;
+  onUiAnimationsChange(enabled: boolean): void;
 }

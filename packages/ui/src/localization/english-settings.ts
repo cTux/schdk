@@ -13,6 +13,8 @@ export const englishSettings: typeof ukrainianSettings = {
   systemTheme: 'System',
   lightTheme: 'Light',
   darkTheme: 'Dark',
+  uiAnimations: 'UI animations',
+  uiAnimationsDescription: 'Animate page transitions and interface responses.',
   googleDriveHeading: 'Google Drive',
   googleDriveUnavailable:
     'Add an OAuth client ID to the application configuration.',
