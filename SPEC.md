@@ -179,3 +179,4 @@ B90|2026-07-29|The generation prompt allowed answer comments to begin with the s
 B91|2026-07-29|The optional handout used a redundant heading and vertically stacked controls with inconsistent dimensions|Use the two-column handout layout specified by `docs/specs/package-editor.md`.
 B92|2026-07-29|Legacy textarea top margins made vertical editor-field gaps differ from the horizontal gap|Use the uniform field spacing specified by `docs/specs/package-editor.md`.
 B93|2026-07-29|Uniform field spacing pushed the existing editor-question stylesheet past the enforced source-file limit|Move the textarea spacing override to the existing editor-fields rule; the repository workflow test covers recurrence.
+B94|2026-07-29|The populated-field label added bottom padding only after text was entered, making equal-row textareas different heights|Reserve the label space in every labeled textarea as specified by `docs/specs/package-editor.md`.
