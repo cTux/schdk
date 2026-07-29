@@ -1,6 +1,7 @@
 import { Toolbar } from '@base-ui/react/toolbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
+import '../../styles/_primitives.scss';
 import { Tooltip } from '../Tooltip';
 import type { ActionToolbarButtonProps } from './types';
 

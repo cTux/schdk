@@ -1,0 +1,16 @@
+@use '../../styles/tokens' as *;
+
+.status {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  max-width: min(420px, calc(100% - 40px));
+  border: 1px solid rgba($danger-rgb, 0.35);
+  border-radius: 10px;
+  background: rgba($danger-surface-rgb, 0.92);
+  padding: 11px 14px;
+  box-shadow: 0 12px 30px rgba($shadow-rgb, 0.3);
+  color: $danger-text;
+  font-size: $font-size-md;
+  backdrop-filter: blur(18px);
+}
