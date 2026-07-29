@@ -66,8 +66,10 @@ without losing in-progress work.
 - **EDT-17:** Every multiline package and generation field uses the same
   non-resizable shared control with dropdown-aligned borders, surfaces, hover,
   focus, and disabled states.
-- **EDT-18:** AI generation requires a non-empty answer comment. An AI icon
-  beside the editable package title opens a modal that selects missing
+- **EDT-18:** AI generation phrases each question naturally as if written by a
+  human rather than AI and requires a non-empty answer comment that explains
+  only why the answer is correct, never why the question was generated or
+  phrased that way. An AI icon beside the editable package title opens a modal that selects missing
   questions, questions with unresolved author remarks, or the whole package
   and one enabled AI question package from a dropdown. Remarked questions are
   regenerated from the current question and remark, and a resolved result
