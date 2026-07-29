@@ -20,6 +20,12 @@ export const QUESTION_TYPE_CONFIG = {
 
 export type GameQuestionType = keyof typeof QUESTION_TYPE_CONFIG;
 
+export interface AIQuestionGenerationMetadata {
+  rule: string;
+  difficulty: AIQuestionDifficulty;
+  recognizability: AIQuestionRecognizability;
+}
+
 export interface GameQuestion {
   type: GameQuestionType;
   questionParts: string[];
@@ -30,6 +36,7 @@ export interface GameQuestion {
   handout?: Handout;
   comment?: string;
   hostNotes?: string;
+  aiGeneration?: AIQuestionGenerationMetadata;
 }
 
 export function normalizeGameAnswer(answer: string) {
@@ -64,6 +71,28 @@ function isHandout(value: unknown): value is Handout {
 
 function isQuestionType(value: unknown): value is GameQuestionType {
   return typeof value === 'string' && value in QUESTION_TYPE_CONFIG;
+}
+
+function isAIQuestionGenerationMetadata(
+  value: unknown,
+): value is AIQuestionGenerationMetadata {
+  return (
+    !!value &&
+    typeof value === 'object' &&
+    'rule' in value &&
+    typeof value.rule === 'string' &&
+    !!value.rule.trim() &&
+    'difficulty' in value &&
+    typeof value.difficulty === 'string' &&
+    AI_QUESTION_DIFFICULTIES.includes(
+      value.difficulty as AIQuestionDifficulty,
+    ) &&
+    'recognizability' in value &&
+    typeof value.recognizability === 'string' &&
+    AI_QUESTION_RECOGNIZABILITIES.includes(
+      value.recognizability as AIQuestionRecognizability,
+    )
+  );
 }
 
 function parseQuestionParts(value: object): {
@@ -122,6 +151,7 @@ export function parseGameQuestion(value: unknown): GameQuestion {
   const wrongAnswers = 'wrongAnswers' in value ? value.wrongAnswers : [];
   const comment = 'comment' in value ? value.comment : undefined;
   const hostNotes = 'hostNotes' in value ? value.hostNotes : undefined;
+  const aiGeneration = 'aiGeneration' in value ? value.aiGeneration : undefined;
   if (handout !== undefined && !isHandout(handout)) {
     throw new Error('Invalid game question');
   }
@@ -130,7 +160,9 @@ export function parseGameQuestion(value: unknown): GameQuestion {
     !Array.isArray(wrongAnswers) ||
     !wrongAnswers.every((answer: unknown) => typeof answer === 'string') ||
     (comment !== undefined && typeof comment !== 'string') ||
-    (hostNotes !== undefined && typeof hostNotes !== 'string')
+    (hostNotes !== undefined && typeof hostNotes !== 'string') ||
+    (aiGeneration !== undefined &&
+      !isAIQuestionGenerationMetadata(aiGeneration))
   ) {
     throw new Error('Invalid game question');
   }
@@ -145,6 +177,7 @@ export function parseGameQuestion(value: unknown): GameQuestion {
     ...(handout ? { handout } : {}),
     ...(comment !== undefined ? { comment } : {}),
     ...(hostNotes !== undefined ? { hostNotes } : {}),
+    ...(aiGeneration !== undefined ? { aiGeneration } : {}),
   };
 }
 
@@ -176,5 +209,19 @@ export function serializeGameQuestion(question: GameQuestion) {
     ...(question.hostNotes?.trim()
       ? { hostNotes: question.hostNotes.trim() }
       : {}),
+    ...(question.aiGeneration?.rule.trim()
+      ? {
+          aiGeneration: {
+            ...question.aiGeneration,
+            rule: question.aiGeneration.rule.trim(),
+          },
+        }
+      : {}),
   };
 }
+import {
+  AI_QUESTION_DIFFICULTIES,
+  AI_QUESTION_RECOGNIZABILITIES,
+  type AIQuestionDifficulty,
+  type AIQuestionRecognizability,
+} from './ai-question.js';

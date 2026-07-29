@@ -3,6 +3,7 @@ export const questionGenerationCopy = {
     open: 'Згенерувати питання',
     apiKeyMissing: 'Додайте API-ключ у налаштуваннях, щоб генерувати питання.',
     title: 'Генерація питання',
+    parameters: 'Параметри AI-генерації',
     description: 'Оберіть шаблон і опишіть, про що має бути нове питання.',
     template: 'Шаблон питання',
     noTemplates:
@@ -14,6 +15,14 @@ export const questionGenerationCopy = {
       medium: 'Середнє',
       hard: 'Важке',
       'very-hard': 'Дуже важке',
+    },
+    recognizability: 'Впізнаваність',
+    recognizabilities: {
+      'very-easy': 'Дуже легка',
+      easy: 'Легка',
+      medium: 'Середня',
+      hard: 'Важка',
+      'very-hard': 'Дуже важка',
     },
     context: 'Контекст',
     contextPlaceholder: 'Наприклад, щось про фінал чемпіонату з футболу',
@@ -31,6 +40,7 @@ export const questionGenerationCopy = {
     open: 'Generate question',
     apiKeyMissing: 'Add an API key in settings to generate questions.',
     title: 'Generate question',
+    parameters: 'AI generation parameters',
     description:
       'Choose a template and describe what the new question should be about.',
     template: 'Question template',
@@ -38,6 +48,14 @@ export const questionGenerationCopy = {
       'There are no active templates. Add or enable one in Artificial intelligence.',
     difficulty: 'Difficulty',
     difficulties: {
+      'very-easy': 'Very easy',
+      easy: 'Easy',
+      medium: 'Medium',
+      hard: 'Hard',
+      'very-hard': 'Very hard',
+    },
+    recognizability: 'Recognizability',
+    recognizabilities: {
       'very-easy': 'Very easy',
       easy: 'Easy',
       medium: 'Medium',

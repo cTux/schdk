@@ -9,6 +9,9 @@ export const AI_QUESTION_DIFFICULTIES = [
 ] as const;
 
 export type AIQuestionDifficulty = (typeof AI_QUESTION_DIFFICULTIES)[number];
+export const AI_QUESTION_RECOGNIZABILITIES = AI_QUESTION_DIFFICULTIES;
+export type AIQuestionRecognizability =
+  (typeof AI_QUESTION_RECOGNIZABILITIES)[number];
 
 export interface AIQuestion {
   name: string;

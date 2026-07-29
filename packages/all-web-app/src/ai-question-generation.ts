@@ -2,6 +2,7 @@ import {
   compareFavoriteItemsByName,
   type AIQuestion,
   type AIQuestionDifficulty,
+  type AIQuestionRecognizability,
   type AIQuestionsPackage,
 } from '@schdk/common';
 import {
@@ -44,6 +45,7 @@ export function createAiQuestionGeneration(
     excludedAnswers: string[],
     difficulty: AIQuestionDifficulty = 'medium',
     checkQuestionDatabase = false,
+    recognizability: AIQuestionRecognizability = 'medium',
   ): GameQuestionGenerationRequest {
     return {
       provider: options.provider,
@@ -63,6 +65,7 @@ export function createAiQuestionGeneration(
         : template,
       context,
       difficulty,
+      recognizability,
       excludedAnswers,
       existingQuestions: checkQuestionDatabase
         ? questionDatabase.getEntries().map((question) => ({
@@ -86,32 +89,55 @@ export function createAiQuestionGeneration(
       if (checkQuestionDatabase) await questionDatabase.refresh();
     },
     getPromptPreview: isAdmin
-      ? (template, context, excludedAnswers = [], difficulty = 'medium') => {
+      ? (
+          template,
+          context,
+          excludedAnswers = [],
+          difficulty = 'medium',
+          recognizability = 'medium',
+        ) => {
           const { system, prompt } = createGameQuestionPrompt(
-            createRequest(template, context, excludedAnswers, difficulty),
+            createRequest(
+              template,
+              context,
+              excludedAnswers,
+              difficulty,
+              false,
+              recognizability,
+            ),
           );
           return `${system}\n\n${prompt}`;
         }
       : undefined,
-    onGenerate(
+    async onGenerate(
       template,
       context,
       excludedAnswers = [],
       difficulty = 'medium',
       checkQuestionDatabase = false,
+      recognizability = 'medium',
     ) {
       if (!bridge) {
-        return Promise.reject(new Error('Google Drive is disconnected'));
+        throw new Error('Google Drive is disconnected');
       }
-      return bridge.generateAiQuestion(
+      const question = await bridge.generateAiQuestion(
         createRequest(
           template,
           context,
           excludedAnswers,
           difficulty,
           checkQuestionDatabase,
+          recognizability,
         ),
       );
+      return {
+        ...question,
+        aiGeneration: {
+          rule: template.name,
+          difficulty,
+          recognizability,
+        },
+      };
     },
   };
 }
