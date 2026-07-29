@@ -32,6 +32,7 @@
   box-shadow: $shadow-raised;
   text-align: center;
   backdrop-filter: blur(24px);
+  animation: surface-enter 360ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 .google-login-card img {

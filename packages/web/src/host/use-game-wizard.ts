@@ -15,6 +15,7 @@ import {
   QUESTION_TIME_SECONDS,
 } from './game-timer';
 import { type GameWizardSnapshot } from './game-wizard-snapshot';
+import { prefersReducedMotion } from './prefers-reduced-motion';
 
 const EXIT_DURATION_MS = 280;
 
@@ -50,10 +51,6 @@ function useGameWizard(
     useState<HostGameTransition>(idleTransition);
   const transitionLocked = useRef(false);
   const transitionTimers = useRef<number[]>([]);
-  const reducedMotion = useRef(
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-  );
-
   const clearTransitionTimers = useCallback(() => {
     for (const timer of transitionTimers.current) window.clearTimeout(timer);
     transitionTimers.current = [];
@@ -97,7 +94,7 @@ function useGameWizard(
         transitionLocked.current = false;
         setTransition(idleTransition());
       },
-      reducedMotion.current ? 0 : ENTER_DURATION_MS,
+      prefersReducedMotion() ? 0 : ENTER_DURATION_MS,
     );
     return clearTransitionTimers;
   }, [active, clearTransitionTimers, gamePackage, restoredState, schedule]);
@@ -156,10 +153,10 @@ function useGameWizard(
               transitionLocked.current = false;
               setTransition(idleTransition());
             },
-            reducedMotion.current ? 0 : ENTER_DURATION_MS,
+            prefersReducedMotion() ? 0 : ENTER_DURATION_MS,
           );
         },
-        reducedMotion.current ? 0 : EXIT_DURATION_MS,
+        prefersReducedMotion() ? 0 : EXIT_DURATION_MS,
       );
     },
     [active, finished, gamePackage, position, schedule, transition.phase],

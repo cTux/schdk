@@ -18,6 +18,7 @@ export function OptionsPage({
   hidden,
   settingsGroup,
   theme,
+  uiAnimations,
   onAiApiKeySave,
   onAiModelChange,
   onAiProviderChange,
@@ -27,6 +28,7 @@ export function OptionsPage({
   onGoogleDriveDisconnect,
   onSettingsGroupChange,
   onThemeChange,
+  onUiAnimationsChange,
 }: OptionsPageProps) {
   const { copy, locale, onLocaleChange } = useLocalization();
 
@@ -89,6 +91,12 @@ export function OptionsPage({
             <option value="dark">{copy.settings.darkTheme}</option>
           </Dropdown>
         </label>
+        <OptionToggle
+          checked={uiAnimations}
+          label={copy.settings.uiAnimations}
+          description={copy.settings.uiAnimationsDescription}
+          onChange={onUiAnimationsChange}
+        />
         <div className="option-select">
           <span>
             <strong>{copy.settings.googleDriveHeading}</strong>

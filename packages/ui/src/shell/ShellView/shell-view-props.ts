@@ -51,6 +51,7 @@ export interface ShellViewProps {
   googleDriveState: GoogleDriveState;
   settingsGroup: SettingsGroup;
   theme: AppTheme;
+  uiAnimations: boolean;
   view: ShellViewName;
   onAiApiKeySave(apiKey: string | null): Promise<void>;
   onAiModelChange(model: string): void;
@@ -66,4 +67,5 @@ export interface ShellViewProps {
   onShowView(view: ShellViewName): void;
   onSettingsGroupChange(group: SettingsGroup): void;
   onThemeChange(theme: AppTheme): void;
+  onUiAnimationsChange(enabled: boolean): void;
 }

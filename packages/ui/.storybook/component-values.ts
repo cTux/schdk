@@ -86,12 +86,14 @@ export const componentValues: Record<string, Record<string, unknown>> = {
   GameWizard: { game: hostGame },
   HostView: { game: null },
   MusicBreakField: { musicBreak: null },
+  OptionsPage: { uiAnimations: true },
   QuestionList: {
     gamePackage,
     selectedIndex: 1,
   },
   ShellView: {
     game: DEFAULT_GAME_OPTIONS,
+    uiAnimations: true,
     questionDatabase: {
       failed: false,
       loading: false,

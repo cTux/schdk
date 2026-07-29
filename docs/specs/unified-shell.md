@@ -105,6 +105,11 @@ package authoring, hosting, settings, and account state.
   personal and global AI question rules, and AI question packages begin
   loading before their pages open. The sidebar brand and SCHDK group show a
   localized preloading indicator until those lists finish loading.
+- **SHL-21:** UI animations default on and add motion to shell page changes and
+  interactive feedback. The first App settings tab exposes a persisted UI
+  animations toggle that disables CSS animations and transitions across every
+  mounted web and desktop surface. Operating-system reduced-motion preference
+  also shortens motion regardless of this setting.
 
 ## Invariants
 
@@ -113,6 +118,8 @@ package authoring, hosting, settings, and account state.
 - Standalone host and editor remain Ukrainian by default.
 - Invalid stored locale, theme, view, package reference, or option values fall
   back to validated defaults.
+- UI motion never delays host navigation while UI animations or operating-system
+  motion are disabled.
 - AI API keys never enter local storage, URLs, or synchronized settings and
   never carry across Google accounts.
 
@@ -174,3 +181,7 @@ package authoring, hosting, settings, and account state.
     lists begin loading. Confirm localized preloading indicators appear in the
     sidebar brand and SCHDK group until every list finishes, then navigate to
     each page and confirm its page chunk loads on first selection.
+15. Navigate between every shell page and observe its entrance motion. Disable
+    UI animations in App settings, navigate through shell, editor, and host
+    interactions without animated delays, reload, and confirm the toggle
+    remains off. Re-enable it and confirm motion returns.

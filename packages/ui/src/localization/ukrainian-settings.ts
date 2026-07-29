@@ -11,6 +11,9 @@ export const ukrainianSettings = {
   systemTheme: 'Системна',
   lightTheme: 'Світла',
   darkTheme: 'Темна',
+  uiAnimations: 'Анімації UI',
+  uiAnimationsDescription:
+    'Анімувати переходи між сторінками та реакції елементів інтерфейсу.',
   googleDriveHeading: 'Google Диск',
   googleDriveUnavailable: 'Додайте OAuth client ID до конфігурації застосунку.',
   googleDriveDisconnected: 'Не підключено.',

@@ -51,6 +51,7 @@ function ShellView({
   googleDriveState,
   settingsGroup,
   theme,
+  uiAnimations,
   view,
   onAiApiKeySave,
   onAiModelChange,
@@ -66,6 +67,7 @@ function ShellView({
   onShowView,
   onSettingsGroupChange,
   onThemeChange,
+  onUiAnimationsChange,
 }: ShellViewProps) {
   return (
     <TooltipProvider>
@@ -98,6 +100,7 @@ function ShellView({
                 googleDriveState={googleDriveState}
                 settingsGroup={settingsGroup}
                 theme={theme}
+                uiAnimations={uiAnimations}
                 onAiApiKeySave={onAiApiKeySave}
                 onAiModelChange={onAiModelChange}
                 onAiProviderChange={onAiProviderChange}
@@ -107,6 +110,7 @@ function ShellView({
                 onGoogleDriveDisconnect={onGoogleDriveDisconnect}
                 onSettingsGroupChange={onSettingsGroupChange}
                 onThemeChange={onThemeChange}
+                onUiAnimationsChange={onUiAnimationsChange}
               />
             )}
             {loadedViews.visualEditor && (

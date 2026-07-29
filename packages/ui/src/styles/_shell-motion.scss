@@ -1,0 +1,27 @@
+.workspace > :not([hidden]) {
+  animation: surface-enter 360ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+:root[data-ui-animations='false'] *,
+:root[data-ui-animations='false'] *::before,
+:root[data-ui-animations='false'] *::after {
+  /* stylelint-disable declaration-no-important -- The user motion preference must override component motion. */
+  scroll-behavior: auto !important;
+  transition-duration: 0.01ms !important;
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  /* stylelint-enable declaration-no-important */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    /* stylelint-disable declaration-no-important -- Reduced motion must override component motion. */
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    /* stylelint-enable declaration-no-important */
+  }
+}
