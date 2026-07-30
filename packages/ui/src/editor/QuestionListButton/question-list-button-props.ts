@@ -6,6 +6,7 @@ export interface QuestionListButtonProps {
   copy?: LocalizationCopy;
   dragging: boolean;
   dropTarget: boolean;
+  duplicate?: boolean;
   index: number;
   question: GameQuestion;
   selected: boolean;

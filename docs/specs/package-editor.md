@@ -37,7 +37,9 @@ without losing in-progress work.
 - **EDT-6:** Dragging one question number onto another swaps the complete
   question records and keeps the moved question selected.
 - **EDT-7:** Question navigation shows readiness, unresolved remarks, and a
-  completed-question preview without exposing stale data.
+  completed-question preview without exposing stale data. Every question that
+  shares a normalized main or alternative answer with another package
+  question is marked red, including the first question in the duplicate group.
 - **EDT-8:** Enabled text correction runs on blur for configured question,
   answer, alternative-answer, and answer-comment fields.
 - **EDT-9:** Every mutation becomes pending and autosaves to the same Drive file
@@ -283,7 +285,9 @@ without losing in-progress work.
     list title.
 22. Generate a question and confirm its navigation number turns blue. Add an
     unresolved remark or invalidate it and confirm the red state takes
-    priority; select it and confirm the selected border remains visible.
+    priority; select it and confirm the selected border remains visible. Give
+    two questions the same normalized main or alternative answer and confirm
+    both navigation numbers turn red immediately.
 23. Inspect an empty handout at normal and narrow widths. Confirm there is no
     separate handout heading, the hatched image action stays left of the text
     field, both match the corresponding question-row field dimensions, and the
