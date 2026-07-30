@@ -1,9 +1,21 @@
 @use '../../styles/tokens' as *;
 
-.question-generation-check {
+label.question-generation-check {
   display: flex;
   align-items: center;
   flex-direction: row;
   gap: $space-2;
   font-weight: 400;
+}
+
+.ui-checkbox.question-generation-checkbox {
+  appearance: auto;
+  width: 20px;
+  height: 20px;
+  flex-basis: 20px;
+  accent-color: $accent;
+}
+
+.ui-checkbox.question-generation-checkbox::after {
+  content: none;
 }

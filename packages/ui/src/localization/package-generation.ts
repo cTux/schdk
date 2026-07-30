@@ -15,6 +15,8 @@ export const packageGenerationCopy = {
       favorites: 'Улюблені правила',
       nonFavorites: 'Неулюблені правила',
     },
+    difficultyDistribution: 'Розподіл складності',
+    difficultyTotal: (total: number) => `Разом: ${total}%`,
     noTemplates: 'У вибраному наборі немає активних правил.',
     noRules:
       'Немає активних правил створення пакету. Додайте або увімкніть правило.',
@@ -46,6 +48,8 @@ export const packageGenerationCopy = {
       favorites: 'Favorite rules',
       nonFavorites: 'Non-favorite rules',
     },
+    difficultyDistribution: 'Difficulty distribution',
+    difficultyTotal: (total: number) => `Total: ${total}%`,
     noTemplates: 'The selected set has no active rules.',
     noRules: 'There are no active package-generation rules. Add or enable one.',
     progress: (current: number, total: number) =>

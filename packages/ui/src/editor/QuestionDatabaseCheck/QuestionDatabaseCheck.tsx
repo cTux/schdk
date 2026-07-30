@@ -11,6 +11,7 @@ export function QuestionDatabaseCheck({
   return (
     <label className="question-generation-check">
       <Checkbox
+        className="question-generation-checkbox"
         checked={checked}
         disabled={disabled}
         onChange={(event) => onChange(event.target.checked)}

@@ -12,7 +12,7 @@ import type {
 export interface PackageGenerationOptionsProps {
   activePackages: AIQuestionsPackage[];
   canGenerate: boolean;
-  difficulty: AIQuestionDifficulty;
+  difficultyDistribution: Record<AIQuestionDifficulty, number>;
   recognizability: AIQuestionRecognizability;
   difficulties: SchdkDictionaryItem[];
   recognizabilities: SchdkDictionaryItem[];
@@ -26,7 +26,10 @@ export interface PackageGenerationOptionsProps {
   checkQuestionDatabase: boolean;
   onCheckQuestionDatabaseChange(checked: boolean): void;
   onCancel(): void;
-  onDifficultyChange(difficulty: AIQuestionDifficulty): void;
+  onDifficultyPercentageChange(
+    difficulty: AIQuestionDifficulty,
+    percentage: number,
+  ): void;
   onRecognizabilityChange(recognizability: AIQuestionRecognizability): void;
   onPackageChange(index: number): void;
   onRuleSetChange(ruleSet: PackageGenerationRuleSet): void;

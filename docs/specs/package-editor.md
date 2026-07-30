@@ -100,12 +100,15 @@ without losing in-progress work.
   questions, questions with unresolved author remarks, or the whole package
   and one enabled AI question package from a dropdown. Remarked questions are
   regenerated from the current question and remark, and a resolved result
-  clears the remark. The panel also selects difficulty and recognizability from
-  very easy through very hard, with medium difficulty and easy recognizability
-  selected by default. Favorite packages appear first with a star and each
+  clears the remark. The panel distributes generated questions by percentage
+  across difficulty levels from very easy through very hard, defaults to 0%,
+  30%, 60%, 10%, and 0% respectively, and requires the percentages to total
+  100%. Each question independently receives a difficulty according to those
+  weights. Recognizability defaults to easy. Favorite packages appear first with a star and each
   favorite and non-favorite group is name-sorted. The panel also selects all,
   favorite, or non-favorite enabled non-general question rules; each question
-  without an explicitly configured type uses a random rule from that set. An
+  without an explicitly configured type uses a random rule from that set, with
+  favorite rules selected by default. An
   explicitly configured per-question type still takes priority, while the
   general rule is applied separately to every generated question. Only a
   missing question part or answer makes a question missing; optional fields do
@@ -114,7 +117,8 @@ without losing in-progress work.
   provider response, joins overflow text into the last part allowed by the
   declared question type, replaces the complete question record, and continues
   sequentially without taking selection away from the author.
-  The selected difficulty and recognizability are sent for every question. The
+  The weighted difficulty selected for each question and the selected
+  recognizability are sent for every question. The
   visible cancel action asks for confirmation, then closes the panel and
   ignores any unfinished provider result only after confirmation.
   While generation runs, the panel shows the current question, its
@@ -145,7 +149,8 @@ without losing in-progress work.
   rejected candidate and the reviewer's actionable feedback are supplied to
   one retry; a second rejection fails without replacing the target question.
 - **EDT-21:** Question and package generation panels each show a similarity
-  toggle that resets to off whenever the panel closes. When enabled, generation
+  checkbox inline with its label that resets to off whenever the panel closes.
+  When enabled, generation
   refreshes the connected account's question database, rejects exact answers
   locally, shortlists lexically related questions, asks the selected provider
   to reject the same entity, central fact, logic, or material clue sequence,
@@ -215,9 +220,11 @@ without losing in-progress work.
     other accounts.
 12. Generate only missing slots, questions with unresolved remarks, and then
     the whole package after selecting one AI question package from the
-    favorite-first rules dropdown and each available question-rule set in turn.
-    Select each difficulty and recognizability and confirm both reach every
-    provider prompt. Confirm remarked-question prompts include the current
+    favorite-first rules dropdown and confirm favorite rules are the default
+    random set before selecting each available question-rule set in turn.
+    Set each difficulty to 100% in turn and select each recognizability; confirm
+    both reach every provider prompt. Enter percentages that do not total 100%
+    and confirm generation stays unavailable. Confirm remarked-question prompts include the current
     question and remark and accepted results clear the remark. Confirm fallback
     rules are randomly selected only from that set, while explicitly configured
     per-question types still win. Observe the first target selected at start,
@@ -257,7 +264,8 @@ without losing in-progress work.
 16. Open each generation panel and confirm it is a full-height right dock with
     the left navigation's chrome, no blocking backdrop, and an editor that
     remains centered with equal left and right spacing and stays interactive.
-    Confirm its database toggle defaults off.
+    Confirm its compact database checkbox stays on the same row as its label and
+    defaults off.
     Enable it, return an answer and then a paraphrased question already present
     in another indexed package, and confirm each first draft is rejected and
     regenerated once. Close and reopen the panel and confirm the toggle is off.
