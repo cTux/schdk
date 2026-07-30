@@ -99,7 +99,9 @@
   a tooltip that stays within the layout. Show unresolved remarks below the
   question in red and mark their number dark red without a red border. Mark
   AI-generated questions blue unless an invalid or unresolved-remark state
-  takes priority.
+  takes priority. Mark every question that shares a normalized main or
+  alternative answer with another package question red, including the first
+  question in the duplicate group.
 - Question-number hover and selection may change only its 2 px border. Hide
   tooltips while pressing or dragging.
 - Dragging one question number onto another swaps complete records while the

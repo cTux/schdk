@@ -11,6 +11,7 @@ function QuestionListButton({
   copy = LOCALIZATION_COPY.uk,
   dragging,
   dropTarget,
+  duplicate = false,
   index,
   question,
   selected,
@@ -33,7 +34,7 @@ function QuestionListButton({
         selected,
         complete: item.complete,
         generated: Boolean(question.aiGeneration),
-        invalid: item.invalid,
+        invalid: duplicate || item.invalid,
         remark: item.remark,
         dragging,
         'drop-target': dropTarget,
@@ -48,7 +49,7 @@ function QuestionListButton({
       onDragEnd={onDragEnd}
       aria-label={copy.shared.questionNumber(index + 1)}
       aria-describedby={hasTooltip ? tooltipId : undefined}
-      aria-invalid={item.invalid}
+      aria-invalid={duplicate || item.invalid}
     >
       <span>{index + 1}</span>
       {hasTooltip && (

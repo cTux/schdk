@@ -1,6 +1,10 @@
 import './styles.scss';
 
-import { QUESTIONS_PER_ROUND } from '@schdk/common';
+import {
+  getGameQuestionAnswers,
+  normalizeGameAnswer,
+  QUESTIONS_PER_ROUND,
+} from '@schdk/common';
 import { useState, type DragEvent } from 'react';
 import { Input } from '../../atoms/Input';
 import { useLocalization } from '../../localization';
@@ -20,6 +24,21 @@ export function QuestionList({
   const { copy } = useLocalization();
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dropIndex, setDropIndex] = useState<number | null>(null);
+  const answerOwners = new Map<string, number>();
+  const duplicateQuestionIndexes = new Set<number>();
+
+  gamePackage.questions.forEach((question, index) => {
+    new Set(getGameQuestionAnswers(question).map(normalizeGameAnswer)).forEach(
+      (answer) => {
+        const owner = answerOwners.get(answer);
+        if (owner === undefined) answerOwners.set(answer, index);
+        else {
+          duplicateQuestionIndexes.add(owner);
+          duplicateQuestionIndexes.add(index);
+        }
+      },
+    );
+  });
 
   function finishDragging() {
     setDraggedIndex(null);
@@ -55,6 +74,7 @@ export function QuestionList({
                   copy={copy}
                   dragging={index === draggedIndex}
                   dropTarget={index === dropIndex}
+                  duplicate={duplicateQuestionIndexes.has(index)}
                   key={index}
                   index={index}
                   question={question}

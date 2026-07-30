@@ -30,6 +30,7 @@ const booleans = new Set([
   'disabled',
   'dragging',
   'dropTarget',
+  'duplicate',
   'editable',
   'enabled',
   'entering',
