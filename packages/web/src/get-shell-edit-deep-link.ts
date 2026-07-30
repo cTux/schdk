@@ -12,7 +12,9 @@ export function getShellEditDeepLink(
       EDIT_PARAMETER,
       target.kind === 'package'
         ? `package:${target.name}`
-        : `question:${target.global ? 'global' : 'account'}:${target.name}`,
+        : target.kind === 'dictionary'
+          ? `dictionary:${target.id}`
+          : `question:${target.global ? 'global' : 'account'}:${target.name}`,
     );
   }
   return nextUrl.href;

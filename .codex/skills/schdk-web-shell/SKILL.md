@@ -12,8 +12,8 @@ description: Maintain the @schdk/web browser application. Use for web entry poin
    Read `docs/rules/google-drive.md` for settings authorization or synchronization.
 3. Keep the unified web and desktop tools unmounted until Google authorization
    succeeds. Preserve mounted state behind the login gate after later expiry.
-   Keep Drive-backed list hooks above lazy page boundaries and expose their
-   combined preloading state in the sidebar.
+   Keep Drive-backed list hooks, including shared dictionaries, above lazy page
+   boundaries and expose their combined preloading state in the sidebar.
 4. Keep unified locale state and persistence in `@schdk/web`; keep
    translated copy and the locale context in `@schdk/ui`.
 5. Start Google browser token requests only from an explicit login action;

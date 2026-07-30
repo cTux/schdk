@@ -5,6 +5,7 @@ import type {
   DriveAIQuestionsPackageStorage,
   DriveAIQuestionStorage,
   DriveGlobalAIQuestionStorage,
+  DriveDictionaryStorage,
   DrivePackageStorage,
   DriveQuestionDatabaseStorage,
   DriveSettingsDocument,
@@ -17,6 +18,7 @@ interface GoogleDriveBridge
     DriveAIQuestionsPackageStorage,
     DriveAIQuestionStorage,
     DriveGlobalAIQuestionStorage,
+    DriveDictionaryStorage,
     DriveQuestionDatabaseStorage {
   status(): Promise<{
     state: 'unavailable' | 'disconnected' | 'connected';

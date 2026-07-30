@@ -3,7 +3,7 @@
 - Keep the sidebar fixed while application content scrolls.
 - Group, in this order, `База питань`, `Візуальний редактор`,
   `Правила створення питань`, `Правила створення пакету`,
-  `Редагувати пакети питань`, and `Провести гру` under `ЩДК`. Keep
+  `Словники`, `Редагувати пакети питань`, and `Провести гру` under `ЩДК`. Keep
   `Налаштування` in a separate group at the bottom.
 - Explain on the question-database page that it contains only the current
   user's Drive packages. Group identical questions into question, answer, and
@@ -18,6 +18,9 @@
 - Hide rule collections while an existing question kind or package-creation
   rule is edited on its dedicated page. Keep edit selection controlled by the
   web shell so direct links and browser history remain authoritative.
+- List dictionaries in a name-and-description table. Open a selected
+  dictionary as a dedicated item table, expose its editable fields only to the
+  allowlisted administrator, and keep selection controlled by the web shell.
 - Keep the native Ukrainian/English language control in the first `App`
   settings tab. Keep `WWW` as the second primary tab with its host/editor
   fieldsets and `Штучний інтелект` as the third primary tab.

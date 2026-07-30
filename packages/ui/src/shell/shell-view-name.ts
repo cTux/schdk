@@ -6,4 +6,5 @@ export type ShellViewName =
   | 'visualEditor'
   | 'artificialIntelligence'
   | 'packageRules'
+  | 'dictionaries'
   | 'options';

@@ -42,6 +42,16 @@ import { createEmptyGamePackage } from './create-empty-game-package.js';
 import { validateGamePackage } from './validate-game-package.js';
 import { serializeGamePackage } from './serialize-game-package.js';
 import { parseGamePackage } from './parse-game-package.js';
+import {
+  DEFAULT_SCHDK_DICTIONARIES,
+  MAX_SCHDK_DICTIONARY_BYTES,
+  parseSchdkDictionary,
+  parseSchdkDictionaryArchive,
+  serializeSchdkDictionary,
+  type SchdkDictionary,
+  type SchdkDictionaryId,
+  type SchdkDictionaryItem,
+} from './schdk-dictionary.js';
 
 export {
   QUESTION_COUNT,
@@ -82,4 +92,12 @@ export {
   type ImageHandout,
   type TextHandout,
   hasGamePackageRemarks,
+  DEFAULT_SCHDK_DICTIONARIES,
+  MAX_SCHDK_DICTIONARY_BYTES,
+  parseSchdkDictionary,
+  parseSchdkDictionaryArchive,
+  serializeSchdkDictionary,
+  type SchdkDictionary,
+  type SchdkDictionaryId,
+  type SchdkDictionaryItem,
 };

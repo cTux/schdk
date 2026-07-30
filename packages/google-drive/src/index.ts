@@ -56,6 +56,17 @@ import {
   type QuestionDatabasePackage,
   type QuestionDatabaseQuestion,
 } from './question-database.js';
+import {
+  DRIVE_DICTIONARY_MIME_TYPE,
+  GLOBAL_DICTIONARY_FOLDER_ID,
+  SCHDK_DICTIONARY_EXTENSION,
+  createDictionaryFilename,
+  parseDriveDictionaryWrite,
+  type DriveDictionary,
+  type DriveDictionaryFile,
+  type DriveDictionaryStorage,
+  type DriveDictionaryWrite,
+} from './dictionaries.js';
 
 export {
   GOOGLE_DRIVE_SCOPES,
@@ -104,4 +115,13 @@ export {
   type QuestionDatabaseEntry,
   type QuestionDatabasePackage,
   type QuestionDatabaseQuestion,
+  DRIVE_DICTIONARY_MIME_TYPE,
+  GLOBAL_DICTIONARY_FOLDER_ID,
+  SCHDK_DICTIONARY_EXTENSION,
+  createDictionaryFilename,
+  parseDriveDictionaryWrite,
+  type DriveDictionary,
+  type DriveDictionaryFile,
+  type DriveDictionaryStorage,
+  type DriveDictionaryWrite,
 };

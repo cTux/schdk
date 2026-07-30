@@ -6,6 +6,7 @@ import {
   parseDriveSettingsDocument,
   parseDriveGamePackageWrite,
   parseQuestionDatabaseDocument,
+  parseDriveDictionaryWrite,
 } from '@schdk/google-drive';
 import { ipcMain } from 'electron';
 import {
@@ -169,6 +170,26 @@ export function registerGoogleDriveIpc() {
     if (!isDriveFileId(fileId))
       throw new TypeError('Invalid Google Drive file');
     return client.deleteGlobalAIQuestion(fileId);
+  });
+  ipcMain.handle('list-google-drive-dictionaries', () =>
+    client.listDictionaries(),
+  );
+  ipcMain.handle('load-google-drive-dictionary', (_event, fileId) => {
+    if (!isDriveFileId(fileId))
+      throw new TypeError('Invalid Google Drive file');
+    return client.loadDictionary(fileId);
+  });
+  ipcMain.handle('create-google-drive-dictionary', (_event, value) => {
+    const dictionary = parseDriveDictionaryWrite(value);
+    if (!dictionary) throw new TypeError('Invalid Google Drive dictionary');
+    return client.createDictionary(dictionary);
+  });
+  ipcMain.handle('update-google-drive-dictionary', (_event, fileId, value) => {
+    const dictionary = parseDriveDictionaryWrite(value);
+    if (!isDriveFileId(fileId) || !dictionary) {
+      throw new TypeError('Invalid Google Drive dictionary');
+    }
+    return client.updateDictionary(fileId, dictionary);
   });
 }
 import {

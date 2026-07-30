@@ -24,7 +24,13 @@ function assertGameQuestionGenerationInput(input: GenerateGameQuestionInput) {
   const hasValidGenerationOptions =
     typeof input.context === 'string' &&
     AI_QUESTION_DIFFICULTIES.includes(input.difficulty) &&
-    AI_QUESTION_RECOGNIZABILITIES.includes(input.recognizability);
+    AI_QUESTION_RECOGNIZABILITIES.includes(input.recognizability) &&
+    typeof input.difficultyPrompt === 'string' &&
+    Boolean(input.difficultyPrompt.trim()) &&
+    input.difficultyPrompt.length <= 20_000 &&
+    typeof input.recognizabilityPrompt === 'string' &&
+    Boolean(input.recognizabilityPrompt.trim()) &&
+    input.recognizabilityPrompt.length <= 20_000;
   const hasValidExcludedAnswers =
     Array.isArray(input.excludedAnswers) &&
     input.excludedAnswers.length <= 1_000 &&

@@ -7,10 +7,6 @@ import {
   faWandMagicSparkles,
 } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames';
-import {
-  AI_QUESTION_DIFFICULTIES,
-  AI_QUESTION_RECOGNIZABILITIES,
-} from '@schdk/common';
 import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';
 import { IconButton } from '../../atoms/IconButton';
@@ -25,6 +21,8 @@ import { useQuestionGeneration } from './use-question-generation';
 export function QuestionGenerationDialog({
   apiKeyConfigured,
   templates,
+  difficulties,
+  recognizabilities,
   onGenerationStart,
   getPromptPreview,
   onGenerate,
@@ -36,6 +34,8 @@ export function QuestionGenerationDialog({
   const generation = useQuestionGeneration({
     apiKeyConfigured,
     templates,
+    difficulties,
+    recognizabilities,
     onGenerationStart,
     getPromptPreview,
     onGenerate,
@@ -149,9 +149,9 @@ export function QuestionGenerationDialog({
                         setDifficulty(event.target.value as typeof difficulty)
                       }
                     >
-                      {AI_QUESTION_DIFFICULTIES.map((value) => (
-                        <option key={value} value={value}>
-                          {copy.questionGeneration.difficulties[value]}
+                      {difficulties.map((item) => (
+                        <option key={item.value} value={item.value}>
+                          {item.name}
                         </option>
                       ))}
                     </Dropdown>
@@ -167,9 +167,9 @@ export function QuestionGenerationDialog({
                         )
                       }
                     >
-                      {AI_QUESTION_RECOGNIZABILITIES.map((value) => (
-                        <option key={value} value={value}>
-                          {copy.questionGeneration.recognizabilities[value]}
+                      {recognizabilities.map((item) => (
+                        <option key={item.value} value={item.value}>
+                          {item.name}
                         </option>
                       ))}
                     </Dropdown>

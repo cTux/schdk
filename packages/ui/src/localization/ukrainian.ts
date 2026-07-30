@@ -5,6 +5,7 @@ import { packageGenerationCopy } from './package-generation';
 import { ukrainianAllWeb, ukrainianMeta } from './ukrainian-misc';
 import { questionDatabaseCopy } from './question-database';
 import { shellCopy } from './shell';
+import { dictionariesCopy } from './dictionaries';
 export const ukrainian = {
   shared: {
     confirmation: 'Підтвердження дії',
@@ -35,6 +36,7 @@ export const ukrainian = {
   },
   meta: ukrainianMeta,
   shell: shellCopy.uk,
+  dictionaries: dictionariesCopy.uk,
   questionDatabase: questionDatabaseCopy.uk,
   aiQuestions: aiQuestionsCopy.uk,
   aiPackageRules: aiPackageRulesCopy.uk,

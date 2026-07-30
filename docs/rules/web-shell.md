@@ -8,8 +8,8 @@
 - Load every page chunk on first selection, then keep it mounted so navigation
   does not discard state.
 - Keep Drive-backed list hooks above lazy page boundaries so question packages,
-  personal and global AI question rules, and AI question packages preload
-  immediately after authorization.
+  personal and global AI question rules, AI question packages, and shared
+  dictionaries preload immediately after authorization.
 - Preserve keyboard-accessible navigation in the shared renderer.
 - Group the question database, visual editor, artificial intelligence, editor,
   and host pages under `ЩДК` in the fixed sidebar, with the current account's
@@ -28,6 +28,9 @@
 - Reflect the active question-kind or package-rule editor in the validated
   `edit` URL query parameter. Editing an existing rule occupies its own page;
   direct links and browser back/forward restore the editor or collection.
+- Keep Dictionaries as a lazy shell page and reflect its selected dictionary
+  in the same validated `edit` query parameter so direct links and browser
+  history restore it.
 - Persist validated visual-editor custom elements and background settings with
   the other game options.
 - Default the unified application to Ukrainian when no locale was selected.

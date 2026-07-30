@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer, type IpcRendererEvent } from 'electron';
+import type { GameQuestionGenerationRequest } from '@schdk/ai';
 
 const closeApi = {
   onCloseRequested: (callback: (attempt: number) => void): (() => void) => {
@@ -42,20 +43,8 @@ const editorApi = {
       ipcRenderer.invoke('has-google-drive-ai-api-key'),
     saveAiApiKey: (apiKey: string | null): Promise<void> =>
       ipcRenderer.invoke('save-google-drive-ai-api-key', apiKey),
-    generateAiQuestion: (request: {
-      provider: string;
-      model: string;
-      locale: 'uk' | 'en';
-      template: {
-        name: string;
-        description: string;
-        goodExamples: string;
-        badExamples: string;
-        enabled: boolean;
-        favorite: boolean;
-      };
-      context: string;
-    }) => ipcRenderer.invoke('generate-ai-question', request),
+    generateAiQuestion: (request: GameQuestionGenerationRequest) =>
+      ipcRenderer.invoke('generate-ai-question', request),
     loadSettings: () => ipcRenderer.invoke('load-google-drive-settings'),
     saveSettings: (settings: unknown) =>
       ipcRenderer.invoke('save-google-drive-settings', settings),
@@ -104,6 +93,14 @@ const editorApi = {
       ipcRenderer.invoke('update-global-ai-question', fileId, value),
     deleteGlobalAIQuestion: (fileId: string) =>
       ipcRenderer.invoke('delete-global-ai-question', fileId),
+    listDictionaries: () =>
+      ipcRenderer.invoke('list-google-drive-dictionaries'),
+    loadDictionary: (fileId: string) =>
+      ipcRenderer.invoke('load-google-drive-dictionary', fileId),
+    createDictionary: (value: unknown) =>
+      ipcRenderer.invoke('create-google-drive-dictionary', value),
+    updateDictionary: (fileId: string, value: unknown) =>
+      ipcRenderer.invoke('update-google-drive-dictionary', fileId, value),
   },
 };
 

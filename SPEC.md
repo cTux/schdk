@@ -19,6 +19,7 @@ C7|Keep user AI API keys in separate, account-scoped Google Drive app data and o
 C8|Keep personal and global AI question rules as individually parseable Google Drive files with folder-scoped ownership.
 C9|Keep personal AI question packages as individually parseable Google Drive files and out of browser-local persistence.
 C10|Keep the personal question database a rebuildable account-scoped projection; `.schdk` packages remain canonical.
+C11|Keep shared question-generation dictionaries as validated archives in their fixed Google Drive folder and writable only by an allowlisted administrator.
 
 ## §I
 
@@ -35,6 +36,7 @@ I.questiondatabase|Personal question search index|`question-database-v1.json`
 I.pages|Hosted browser application|GitHub Pages
 I.release|Versioned unsigned Windows installer|GitHub Releases
 I.version|Published browser version|`packages/web/version.json`
+I.dictionary|Portable shared generation dictionary|`.schdk-dictionary`
 
 ## §V
 
@@ -81,6 +83,7 @@ V40|Account-scoped background work never persists after the connected Google acc
 V41|Every game-package payload crossing Drive or desktop IPC is parsed before Drive or filesystem writes, and its Drive metadata matches the parsed package.
 V42|Image handout selection is bounded before reading and cannot leave the editor with an unserializable package.
 V43|A replacement global general rule is persisted before the previous general rule is cleared.
+V44|Every shared generation dictionary is parsed from its `.schdk-dictionary` ZIP archive, remains folder-scoped and admin-writable, and supplies both dropdown labels and provider prompt fragments.
 
 ## §T
 
@@ -194,3 +197,5 @@ B100|2026-07-29|Selecting a replacement global general rule cleared the previous
 B101|2026-07-29|Desktop package IPC validated only argument shapes and allowed unparsed bytes or inconsistent metadata to reach writes|V41
 B102|2026-07-29|Image handouts were read without a size bound and could make the package exceed its serialization limit|V42
 B103|2026-07-29|A Drive client test used malformed package bytes after the shared write boundary began enforcing V41|V41
+B104|2026-07-30|The new dictionary flow passed a generic typed array directly to Blob and omitted required dictionary props from generation-hook call objects|Copy the existing Blob input pattern and pass complete props; typechecking covers recurrence.
+B105|2026-07-30|The generated dictionary-page story received a scalar placeholder instead of dictionary fixtures and crashed during visual verification|Add renderable dictionary defaults to the existing Storybook fixture map; the UI workflow requires visual smoke testing.

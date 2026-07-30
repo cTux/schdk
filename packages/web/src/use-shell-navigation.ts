@@ -19,7 +19,9 @@ function getLinkedView(): ShellViewName | null {
       ? 'artificialIntelligence'
       : editTarget?.kind === 'package'
         ? 'packageRules'
-        : null) ??
+        : editTarget?.kind === 'dictionary'
+          ? 'dictionaries'
+          : null) ??
     (url.searchParams.has('hostPackage') ? 'host' : null) ??
     (getDeepLinkedPackageName(url.href) ? 'editor' : null)
   );
@@ -75,7 +77,9 @@ export function useShellNavigation(sessionScope: string) {
     const nextView =
       nextTarget.kind === 'question'
         ? 'artificialIntelligence'
-        : 'packageRules';
+        : nextTarget.kind === 'package'
+          ? 'packageRules'
+          : 'dictionaries';
     const deepLink = getShellEditDeepLink(
       getShellDeepLink(window.location.href, nextView),
       nextTarget,

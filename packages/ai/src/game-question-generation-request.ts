@@ -12,7 +12,9 @@ export interface GameQuestionGenerationRequest {
   template: AIQuestion;
   context: string;
   difficulty: AIQuestionDifficulty;
+  difficultyPrompt: string;
   recognizability: AIQuestionRecognizability;
+  recognizabilityPrompt: string;
   excludedAnswers: string[];
   existingQuestions: ExistingQuestionReference[];
 }

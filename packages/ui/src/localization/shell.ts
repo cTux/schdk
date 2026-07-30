@@ -41,6 +41,10 @@ const shellCopy = {
       label: aiPackageRulesCopy.en.navigationLabel,
       description: aiPackageRulesCopy.en.navigationDescription,
     },
+    dictionaries: {
+      label: 'Dictionaries',
+      description: 'Edit shared question-generation values.',
+    },
     questionDatabase: questionDatabaseCopy.en.navigation,
   },
   uk: {
@@ -81,6 +85,10 @@ const shellCopy = {
     packageRules: {
       label: aiPackageRulesCopy.uk.navigationLabel,
       description: aiPackageRulesCopy.uk.navigationDescription,
+    },
+    dictionaries: {
+      label: 'Словники',
+      description: 'Редагуйте спільні значення генерації питань.',
     },
     questionDatabase: questionDatabaseCopy.uk.navigation,
   },
