@@ -1,5 +1,6 @@
 import { faPlay } from '@fortawesome/free-solid-svg-icons';
 import { LOCALIZATION_COPY } from '../src/localization';
+import { DEFAULT_SCHDK_DICTIONARIES } from '@schdk/common';
 import {
   DEFAULT_EDITOR_TEXT_OPTIONS,
   DEFAULT_GAME_LAYOUT,
@@ -89,9 +90,7 @@ const callbacksReturningConfirmation = new Set([
 function getValue(component: string, prop: string): unknown {
   const componentValue = componentValues[component]?.[prop];
   if (componentValue !== undefined) return componentValue;
-  if (prop === 'getPromptPreview') {
-    return () => 'System prompt\n\nUser prompt';
-  }
+  if (prop === 'getPromptPreview') return () => 'System prompt\n\nUser prompt';
   if (prop === 'apiKeyConfigured') return true;
   const isCallbackProp =
     prop.startsWith('on') || prop === 'addElement' || prop === 'chooseImage';
@@ -104,6 +103,9 @@ function getValue(component: string, prop: string): unknown {
   if (prop === 'removeCustom' || prop.startsWith('update')) return noop;
   if (booleans.has(prop)) return prop === 'open';
   if (numbers.has(prop)) return prop === 'backgroundOpacity' ? 1 : 1;
+  if (prop === 'difficulties' || prop === 'recognizabilities') {
+    return DEFAULT_SCHDK_DICTIONARIES[prop === 'difficulties' ? 0 : 1].items;
+  }
   if (arrays.has(prop)) {
     if (prop === 'questions' || prop === 'globalQuestions') return [aiQuestion];
     if (prop === 'templates') return [aiQuestion];
@@ -130,6 +132,8 @@ function getValue(component: string, prop: string): unknown {
     ai: aiOptions,
     aiGeneration: {
       apiKeyConfigured: true,
+      difficulties: DEFAULT_SCHDK_DICTIONARIES[0].items,
+      recognizabilities: DEFAULT_SCHDK_DICTIONARIES[1].items,
       templates: [aiQuestion],
       packages: [
         {

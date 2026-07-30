@@ -9,6 +9,7 @@ import type {
 import { useAiSettings } from './use-ai-settings';
 import { type QuestionDatabaseAccess } from './question-database-access';
 import { createAiQuestionGeneration } from './ai-question-generation';
+import { useDictionaries } from './use-dictionaries';
 
 export function useAiQuestionTools(
   bridge: GoogleDriveBridge | null,
@@ -22,6 +23,7 @@ export function useAiQuestionTools(
       : undefined;
   const aiQuestionCollections = useAIQuestions(bridge, accountId);
   const aiQuestionsPackages = useAIQuestionsPackages(bridge, accountId);
+  const dictionaries = useDictionaries(bridge, connection);
   const aiQuestions = {
     ...aiQuestionCollections.personal,
     globalQuestions: aiQuestionCollections.global.questions,
@@ -40,6 +42,7 @@ export function useAiQuestionTools(
     ai,
     aiQuestions,
     aiQuestionsPackages,
+    dictionaries,
     aiGeneration: createAiQuestionGeneration(
       bridge,
       ai.options,
@@ -49,6 +52,7 @@ export function useAiQuestionTools(
       isGlobalAIQuestionAdmin(accountId),
       questionDatabase,
       aiQuestions.globalQuestions.find((question) => question.generalRule),
+      dictionaries.dictionaries,
     ),
   };
 }

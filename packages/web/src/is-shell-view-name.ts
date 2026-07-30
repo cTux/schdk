@@ -9,6 +9,7 @@ export function isShellViewName(value: string | null): value is ShellViewName {
     value === 'visualEditor' ||
     value === 'artificialIntelligence' ||
     value === 'packageRules' ||
+    value === 'dictionaries' ||
     value === 'options'
   );
 }

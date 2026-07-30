@@ -3,6 +3,10 @@ import { gameQuestion } from './game-question';
 import { aiQuestion } from './ai-question';
 import { gamePackage } from './game-package';
 import { questionDatabaseRows } from './question-database-rows';
+import { DEFAULT_SCHDK_DICTIONARIES } from '@schdk/common';
+
+const difficultyDictionary = DEFAULT_SCHDK_DICTIONARIES[0];
+const recognizabilityDictionary = DEFAULT_SCHDK_DICTIONARIES[1];
 
 const hostGame = {
   question: gameQuestion,
@@ -39,6 +43,11 @@ export const componentValues: Record<string, Record<string, unknown>> = {
       { questionNumber: 2, context: 'Питання про Київ' },
     ],
   },
+  DictionariesPage: {
+    dictionaries: DEFAULT_SCHDK_DICTIONARIES,
+    editId: null,
+    isAdmin: true,
+  },
   EditorView: {
     gamePackage,
     hasPackage: true,
@@ -64,6 +73,8 @@ export const componentValues: Record<string, Record<string, unknown>> = {
     canGenerate: true,
     difficulty: 'medium',
     recognizability: 'medium',
+    difficulties: difficultyDictionary.items,
+    recognizabilities: recognizabilityDictionary.items,
     hasRandomTemplates: true,
     progress: [3, 36],
     ruleSet: 'all',
@@ -103,6 +114,13 @@ export const componentValues: Record<string, Record<string, unknown>> = {
     googleDriveAccount: {
       displayName: 'Storybook',
       emailAddress: 'storybook@example.com',
+    },
+    dictionaries: {
+      dictionaries: DEFAULT_SCHDK_DICTIONARIES,
+      failed: false,
+      loading: false,
+      isAdmin: true,
+      updateDictionary: async () => true,
     },
   },
   QuestionDatabasePage: {

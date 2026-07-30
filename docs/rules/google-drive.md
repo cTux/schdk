@@ -38,6 +38,10 @@
   in `@schdk/google-drive`, after the current account's rules. Keep the admin
   email allowlist centralized and unobfuscated there; Drive folder permissions
   remain the security boundary for global writes.
+- Load `.schdk-dictionary` archives from the fixed shared dictionary folder.
+  Only the centralized allowlisted administrator can create or update them;
+  initialize missing defaults for that administrator and keep folder
+  permissions as the write authorization boundary.
 - Persist a replacement global general rule before clearing the previous
   general flag. A failed replacement must leave the previous rule intact.
 - Before creating a rule from an analyzed question, search the
@@ -64,8 +68,8 @@
   through the same narrow adapter, require an allowlisted account for global
   writes, and never persist these collections in browser local storage.
 - Start Drive-backed question-package, personal and global AI question-rule,
-  and AI question-package listing after authorization, independently of lazy
-  page mounting.
+  AI question-package, and dictionary listing after authorization,
+  independently of lazy page mounting.
 - Reject package metadata above the canonical package-size limit before
   downloading its media body.
 - Treat a local `.schdk` selection only as an import: validate it, upload it to

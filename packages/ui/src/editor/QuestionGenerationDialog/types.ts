@@ -3,11 +3,14 @@ import type {
   AIQuestionDifficulty,
   AIQuestionRecognizability,
   GameQuestion,
+  SchdkDictionaryItem,
 } from '@schdk/common';
 
 export interface QuestionGenerationDialogProps {
   apiKeyConfigured: boolean;
   templates: AIQuestion[];
+  difficulties: SchdkDictionaryItem[];
+  recognizabilities: SchdkDictionaryItem[];
   onGenerationStart?(checkQuestionDatabase?: boolean): Promise<void>;
   getPromptPreview?(
     template: AIQuestion,

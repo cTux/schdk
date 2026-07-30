@@ -5,6 +5,7 @@ import type {
   DriveAIQuestionStorage,
   DriveAIQuestionsPackageStorage,
   DriveGlobalAIQuestionStorage,
+  DriveDictionaryStorage,
   DrivePackageStorage,
   DriveQuestionDatabaseStorage,
   DriveSettingsDocument,
@@ -36,6 +37,10 @@ declare global {
       DriveAIQuestionStorage &
       DriveAIQuestionsPackageStorage &
       DriveGlobalAIQuestionStorage & {
+        createDictionary: DriveDictionaryStorage['createDictionary'];
+        updateDictionary: DriveDictionaryStorage['updateDictionary'];
+        listDictionaries: DriveDictionaryStorage['listDictionaries'];
+        loadDictionary: DriveDictionaryStorage['loadDictionary'];
         loadQuestionDatabase: DriveQuestionDatabaseStorage['loadQuestionDatabase'];
         saveQuestionDatabase: DriveQuestionDatabaseStorage['saveQuestionDatabase'];
         status(): Promise<{

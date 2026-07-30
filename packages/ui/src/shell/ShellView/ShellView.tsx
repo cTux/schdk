@@ -33,11 +33,17 @@ const AIQuestionsPackagesPage = lazy(() =>
     default: AIQuestionsPackagesPage,
   })),
 );
+const DictionariesPage = lazy(() =>
+  import('../DictionariesPage').then(({ DictionariesPage }) => ({
+    default: DictionariesPage,
+  })),
+);
 
 function ShellView({
   aiOptions,
   aiQuestions,
   aiQuestionsPackages,
+  dictionaries,
   editTarget,
   editorApp,
   hostApp,
@@ -169,6 +175,21 @@ function ShellView({
                   onUpdate={aiQuestionsPackages.updatePackage}
                 />
               </div>
+            )}
+            {loadedViews.dictionaries && (
+              <DictionariesPage
+                dictionaries={dictionaries.dictionaries}
+                editId={
+                  editTarget?.kind === 'dictionary' ? editTarget.id : null
+                }
+                failed={dictionaries.failed}
+                hidden={view !== 'dictionaries'}
+                isAdmin={dictionaries.isAdmin}
+                loading={dictionaries.loading}
+                onCloseEditor={onCloseEditor}
+                onShowEditor={(id) => onShowEditor({ kind: 'dictionary', id })}
+                onUpdate={dictionaries.updateDictionary}
+              />
             )}
             {loadedViews.host && (
               <div className="embedded-app" hidden={view !== 'host'}>

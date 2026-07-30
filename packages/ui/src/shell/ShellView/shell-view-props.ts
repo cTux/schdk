@@ -9,7 +9,11 @@ import type {
   GameOptions,
   SettingsGroup,
 } from '../../options/types';
-import type { AIQuestion, AIQuestionsPackage } from '@schdk/common';
+import type {
+  AIQuestion,
+  AIQuestionsPackage,
+  SchdkDictionary,
+} from '@schdk/common';
 import type { ShellEditTarget } from './types';
 import type { QuestionDatabasePageProps } from '../QuestionDatabasePage';
 
@@ -37,6 +41,13 @@ export interface ShellViewProps {
     addPackage(item: AIQuestionsPackage): Promise<boolean>;
     removePackage(index: number): Promise<boolean>;
     updatePackage(index: number, item: AIQuestionsPackage): Promise<boolean>;
+  };
+  dictionaries: {
+    dictionaries: SchdkDictionary[];
+    failed: boolean;
+    loading: boolean;
+    isAdmin: boolean;
+    updateDictionary(dictionary: SchdkDictionary): Promise<boolean>;
   };
   editTarget: ShellEditTarget | null;
   editorApp: ReactNode;

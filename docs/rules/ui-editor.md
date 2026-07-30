@@ -31,8 +31,9 @@
   selects an enabled `AIQuestion`
   template and a very easy, easy, medium, hard, or very hard difficulty,
   selects recognizability across the same range, accepts context, and disables
-  every control while generation is pending. Pass the selected difficulty and
-  recognizability into the provider prompt; default generation flows without
+  every control while generation is pending. Populate both selectors from the
+  shared dictionaries and pass the selected dictionary prompt fragments into
+  the provider prompt; default generation flows without
   explicit selectors to medium difficulty and easy recognizability. Successful
   structured output keeps question text and answer comments natural and free
   of template construction labels or stock meta-commentary such as "Both clues

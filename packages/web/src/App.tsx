@@ -61,7 +61,7 @@ export function App() {
     googleDrive.bridge ?? null,
     accountId,
   );
-  const { ai, aiQuestions, aiQuestionsPackages, aiGeneration } =
+  const { ai, aiQuestions, aiQuestionsPackages, aiGeneration, dictionaries } =
     useAiQuestionTools(
       googleDrive.bridge ?? null,
       connection,
@@ -73,7 +73,8 @@ export function App() {
     (questionDatabase.loading ||
       aiQuestions.loading ||
       aiQuestions.globalLoading ||
-      aiQuestionsPackages.loading);
+      aiQuestionsPackages.loading ||
+      dictionaries.loading);
   const loginState = googleDrive.statusReady ? connection.state : 'connecting';
   const [unlocked, setUnlocked] = useState(connected);
   useEffect(() => setUnlocked((current) => current || connected), [connected]);
@@ -202,6 +203,7 @@ export function App() {
             aiOptions={ai.options}
             aiQuestions={aiQuestions}
             aiQuestionsPackages={aiQuestionsPackages}
+            dictionaries={dictionaries}
             editTarget={navigation.editTarget}
             editorOptions={editorOptions}
             gameOptions={gameOptions}

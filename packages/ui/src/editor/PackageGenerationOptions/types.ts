@@ -2,6 +2,7 @@ import type {
   AIQuestionDifficulty,
   AIQuestionRecognizability,
   AIQuestionsPackage,
+  SchdkDictionaryItem,
 } from '@schdk/common';
 import type {
   PackageGenerationRuleSet,
@@ -13,6 +14,8 @@ export interface PackageGenerationOptionsProps {
   canGenerate: boolean;
   difficulty: AIQuestionDifficulty;
   recognizability: AIQuestionRecognizability;
+  difficulties: SchdkDictionaryItem[];
+  recognizabilities: SchdkDictionaryItem[];
   hasRandomTemplates: boolean;
   progress: [number, number] | null;
   ruleSet: PackageGenerationRuleSet;

@@ -230,6 +230,10 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
   deleteGlobalAIQuestion = this.client.deleteGlobalAIQuestion.bind(this.client);
   listGlobalAIQuestions = this.client.listGlobalAIQuestions.bind(this.client);
   loadGlobalAIQuestion = this.client.loadGlobalAIQuestion.bind(this.client);
+  createDictionary = this.client.createDictionary.bind(this.client);
+  updateDictionary = this.client.updateDictionary.bind(this.client);
+  listDictionaries = this.client.listDictionaries.bind(this.client);
+  loadDictionary = this.client.loadDictionary.bind(this.client);
 }
 import {
   generateGameQuestion,

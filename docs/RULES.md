@@ -32,6 +32,8 @@ Read only the areas touched by the task:
   contract.
 - [AI_QUESTION_PACKAGE.md](AI_QUESTION_PACKAGE.md) is the user-facing
   `.aiquestionpackage` format contract.
+- [SCHDK_DICTIONARY.md](SCHDK_DICTIONARY.md) is the user-facing
+  `.schdk-dictionary` format contract.
 - [../README.md](../README.md) is the short Ukrainian project overview and
   benefits page.
 - [README.md](README.md) indexes the detailed Ukrainian topic guides under

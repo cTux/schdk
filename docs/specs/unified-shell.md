@@ -10,8 +10,9 @@ package authoring, hosting, settings, and account state.
 ## Requirements
 
 - **SHL-1:** Fixed navigation groups Question database, Visual editor, Question
-  creation rules, Package creation rules, Edit question packages, and Host a
-  game under SCHDK, in that order, with Settings at the bottom. The Ukrainian
+  creation rules, Package creation rules, Dictionaries, Edit question
+  packages, and Host a game under SCHDK, in that order, with Settings at the
+  bottom. The Ukrainian
   question-rules label is
   `Правила створення питань`.
 - **SHL-2:** Every navigable page chunk loads lazily on first selection and
@@ -20,9 +21,9 @@ package authoring, hosting, settings, and account state.
   parameter. The active primary settings group persists in the validated
   `settings` query parameter while settings are open. Browser back, forward,
   and deep links restore both values. Editing an existing question kind or
-  package-creation rule uses a dedicated page identified by the validated
-  `edit` query parameter; direct links and browser history restore the editor
-  or collection.
+  package-creation rule or dictionary uses a dedicated page identified by the
+  validated `edit` query parameter; direct links and browser history restore
+  the editor or collection.
 - **SHL-4:** A valid browser `package` query opens the editor and restores the
   referenced Drive package and selected question.
 - **SHL-5:** Ukrainian is the default locale; explicit Ukrainian or English

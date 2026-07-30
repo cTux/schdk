@@ -6,6 +6,7 @@ import { packageGenerationCopy } from './package-generation';
 import { englishAllWeb, englishMeta } from './english-misc';
 import { questionDatabaseCopy } from './question-database';
 import { shellCopy } from './shell';
+import { dictionariesCopy } from './dictionaries';
 export const english: typeof ukrainian = {
   shared: {
     confirmation: 'Confirm action',
@@ -36,6 +37,7 @@ export const english: typeof ukrainian = {
   },
   meta: englishMeta,
   shell: shellCopy.en,
+  dictionaries: dictionariesCopy.en,
   questionDatabase: questionDatabaseCopy.en,
   aiQuestions: aiQuestionsCopy.en,
   aiPackageRules: aiPackageRulesCopy.en,

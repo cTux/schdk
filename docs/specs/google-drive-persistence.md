@@ -72,8 +72,11 @@ preserving recoverable local state during temporary Drive failures.
   lists the first Drive result page with one files request. Additional result
   pages remain traversed when present.
 - **DRV-21:** Initial question-package, personal and global AI question-rule,
-  and AI question-package listing starts after authorization without depending
-  on their pages being mounted.
+  AI question-package, and shared dictionary listing starts after authorization
+  without depending on their pages being mounted.
+- **DRV-22:** Shared `.schdk-dictionary` archives load only from the configured
+  fixed folder. Every write requires the allowlisted administrator and a
+  matching validated archive, filename, and parent folder.
 
 ## Invariants
 

@@ -26,3 +26,6 @@ compatibility contract. Do not duplicate its schema here.
 - Store each AI question package as a ZIP `.aiquestionpackage` containing the
   canonical `ai-questions-package.json` entry. Parse and serialize it only
   through `@schdk/common`, and keep `docs/AI_QUESTION_PACKAGE.md` synchronized.
+- Store each shared generation dictionary as a ZIP `.schdk-dictionary`
+  containing `dictionary.json`. Parse and serialize it only through
+  `@schdk/common`, and keep `docs/SCHDK_DICTIONARY.md` synchronized.

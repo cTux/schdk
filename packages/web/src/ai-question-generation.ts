@@ -4,6 +4,8 @@ import {
   type AIQuestionDifficulty,
   type AIQuestionRecognizability,
   type AIQuestionsPackage,
+  DEFAULT_SCHDK_DICTIONARIES,
+  type SchdkDictionary,
 } from '@schdk/common';
 import {
   createGameQuestionPrompt,
@@ -25,7 +27,15 @@ function createAiQuestionGeneration(
   isAdmin: boolean,
   questionDatabase: QuestionDatabaseAccess,
   generalRule?: AIQuestion,
+  dictionaries: SchdkDictionary[] = [...DEFAULT_SCHDK_DICTIONARIES],
 ): AiQuestionGenerationOptions {
+  const difficultyDictionary =
+    dictionaries.find(({ id }) => id === 'question-difficulty') ??
+    DEFAULT_SCHDK_DICTIONARIES[0];
+  const recognizabilityDictionary =
+    dictionaries.find(({ id }) => id === 'question-recognizability') ??
+    DEFAULT_SCHDK_DICTIONARIES[1];
+
   function createRequest(
     template: AIQuestion,
     context: string,
@@ -52,7 +62,14 @@ function createAiQuestionGeneration(
         : template,
       context,
       difficulty,
+      difficultyPrompt:
+        difficultyDictionary.items.find(({ value }) => value === difficulty)
+          ?.promptPart ?? '',
       recognizability,
+      recognizabilityPrompt:
+        recognizabilityDictionary.items.find(
+          ({ value }) => value === recognizability,
+        )?.promptPart ?? '',
       excludedAnswers,
       existingQuestions: checkQuestionDatabase
         ? questionDatabase.getEntries().map((question) => ({
@@ -65,6 +82,8 @@ function createAiQuestionGeneration(
 
   return {
     apiKeyConfigured: options.apiKeyConfigured,
+    difficulties: difficultyDictionary.items,
+    recognizabilities: recognizabilityDictionary.items,
     packages: packages
       .filter((item) => item.enabled)
       .sort(compareFavoriteItemsByName),

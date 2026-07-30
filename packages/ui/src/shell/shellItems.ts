@@ -6,6 +6,7 @@ import {
   faLayerGroup,
   faPen,
   faPlay,
+  faBookOpen,
 } from '@fortawesome/free-solid-svg-icons';
 import type { LocalizationCopy } from '../localization';
 import { type ShellItem } from './shell-item';
@@ -38,6 +39,11 @@ function getShellContent(copy: LocalizationCopy) {
       id: 'packageRules',
       icon: faLayerGroup,
       ...shell.packageRules,
+    },
+    {
+      id: 'dictionaries',
+      icon: faBookOpen,
+      ...shell.dictionaries,
     },
     { id: 'editor', icon: faPen, ...shell.editor },
     { id: 'host', icon: faPlay, ...shell.host },

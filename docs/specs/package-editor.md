@@ -66,9 +66,10 @@ without losing in-progress work.
   field. Medium difficulty and easy recognizability are selected by default.
   Favorite templates appear first, carry a star, and are name-sorted before
   the name-sorted remainder. Without a saved key the icon is disabled with an explanatory
-  custom tooltip. Generation disables the complete panel, sends the selected
-  difficulty and recognizability definitions in the provider prompt, and shows
-  a thinking state; on success it replaces every generated question field
+  custom tooltip. The selectors use shared dictionary labels. Generation
+  disables the complete panel, sends the selected dictionary prompt fragments
+  in the provider prompt, and shows a thinking state; on success it replaces
+  every generated question field
   before the panel resets and closes. While generation runs, the target
   question stays disabled and ready questions remain editable. The prompt
   requests a text handout when

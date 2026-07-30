@@ -19,6 +19,8 @@ import { usePackageGeneration } from './use-package-generation';
 export function PackageGenerationDialog({
   apiKeyConfigured,
   templates,
+  difficulties,
+  recognizabilities,
   packages,
   gamePackage,
   onGenerationStart,
@@ -33,6 +35,8 @@ export function PackageGenerationDialog({
     apiKeyConfigured,
     templates,
     packages,
+    difficulties,
+    recognizabilities,
     gamePackage,
     onGenerationStart,
     getPromptPreview,
@@ -129,6 +133,8 @@ export function PackageGenerationDialog({
                     }
                     difficulty={difficulty}
                     recognizability={recognizability}
+                    difficulties={difficulties}
+                    recognizabilities={recognizabilities}
                     hasRandomTemplates={Boolean(randomTemplates.length)}
                     progress={progress}
                     ruleSet={ruleSet}

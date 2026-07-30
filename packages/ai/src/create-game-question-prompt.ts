@@ -1,60 +1,4 @@
-import {
-  type AIQuestionDifficulty,
-  type AIQuestionRecognizability,
-} from '@schdk/common';
 import { type GameQuestionGenerationRequest } from './game-question-generation-request.js';
-
-const difficultyInstructions: Record<
-  AIQuestionDifficulty,
-  Record<'uk' | 'en', string>
-> = {
-  'very-easy': {
-    uk: 'Дуже легке: 0–1 очевидний бар’єр розв’язання та майже пряме прочитання.',
-    en: 'Very easy: 0–1 obvious solving barrier and an almost direct reading.',
-  },
-  easy: {
-    uk: 'Легке: 1–2 прості бар’єри розв’язання, очевидна асоціація та сильна перевірочна підказка.',
-    en: 'Easy: 1–2 simple solving barriers, an obvious association, and a strong confirming clue.',
-  },
-  medium: {
-    uk: 'Середнє: 2–3 помірні бар’єри розв’язання або один небуквальний перехід.',
-    en: 'Medium: 2–3 moderate solving barriers or one non-literal step.',
-  },
-  hard: {
-    uk: 'Важке: 3–4 взаємозалежні бар’єри розв’язання або складний перехід між темами.',
-    en: 'Hard: 3–4 interdependent solving barriers or a difficult cross-topic step.',
-  },
-  'very-hard': {
-    uk: 'Дуже важке: щонайменше 4 бар’єри або 2 складні переходи; усі потрібні опори мають бути присутні, а відповідь — однозначна.',
-    en: 'Very hard: at least 4 barriers or 2 difficult transitions; every required clue must be present and the answer unambiguous.',
-  },
-};
-
-const recognizabilityInstructions: Record<
-  AIQuestionRecognizability,
-  Record<'uk' | 'en', string>
-> = {
-  'very-easy': {
-    uk: 'Дуже легка: обери загальновідому сутність, яку впізнає майже вся цільова аудиторія.',
-    en: 'Very easy: choose a universally known entity recognized by almost the entire target audience.',
-  },
-  easy: {
-    uk: 'Легка: обери широко відому сутність, знайому більшості аудиторії без спеціалізованих знань.',
-    en: 'Easy: choose a widely known entity familiar to most of the audience without specialized knowledge.',
-  },
-  medium: {
-    uk: 'Середня: обери помірно відому сутність, знайому значній частині аудиторії; підказки мають дозволяти вивести відповідь без миттєвого впізнавання.',
-    en: 'Medium: choose a moderately known entity familiar to a significant part of the audience; the clues must allow deduction without immediate recognition.',
-  },
-  hard: {
-    uk: 'Важка: обери менш відому, але значущу сутність, переважно знайому людям, які цікавляться відповідною сферою; дай достатньо опор для інших гравців.',
-    en: 'Hard: choose a less widely known but meaningful entity, mainly familiar to people interested in its field; provide enough support for other players.',
-  },
-  'very-hard': {
-    uk: 'Дуже важка: обери нішеву або спеціалізовану, але культурно чи тематично значущу сутність, а не випадковий маловідомий факт; усі потрібні для виведення опори мають бути в питанні.',
-    en: 'Very hard: choose a niche or specialized but culturally or thematically meaningful entity, not an arbitrary obscure fact; include every clue required to deduce it.',
-  },
-};
 
 export function createGameQuestionPrompt(input: GameQuestionGenerationRequest) {
   const examples = input.locale === 'uk' ? 'Приклади' : 'Examples';
@@ -72,8 +16,8 @@ export function createGameQuestionPrompt(input: GameQuestionGenerationRequest) {
     input.template.badExamples
       ? `${examples} (${input.locale === 'uk' ? 'невдалі' : 'bad'}): ${input.template.badExamples}`
       : '',
-    `${difficulty}: ${difficultyInstructions[input.difficulty][input.locale]}`,
-    `${recognizability}: ${recognizabilityInstructions[input.recognizability][input.locale]}`,
+    `${difficulty}: ${input.difficultyPrompt}`,
+    `${recognizability}: ${input.recognizabilityPrompt}`,
     `${context}: ${input.context}`,
     input.excludedAnswers.length
       ? `${excludedAnswers} (${input.locale === 'uk' ? 'кожен рядок позначає вже використану сутність; обери іншу сутність, а не її синонім, псевдонім, переклад, уточнення чи описову назву; урізноманітнюй людей, місця, події, предмети, твори, поняття та форму відповідей' : 'each string denotes an already used entity; choose a different entity, not its synonym, alias, translation, qualification, or descriptive name; vary people, places, events, objects, works, concepts, and answer forms'}): ${JSON.stringify(input.excludedAnswers)}`

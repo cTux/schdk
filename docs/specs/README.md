@@ -6,15 +6,16 @@ contracts, not implementation plans or a roadmap.
 Project-wide goals, constraints, invariants, and bug history live in
 [`../../SPEC.md`](../../SPEC.md).
 
-| Area               | Specification                                           | Covered features                                                                               |
-| ------------------ | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| Package contract   | [Game package](game-package.md)                         | Tour phrases, questions, answers, handouts, music breaks, ZIP format, compatibility, readiness |
-| Authoring          | [Package editor](package-editor.md)                     | Create, edit, AI generation, reorder, import, autosave, recents, export                        |
-| Gameplay           | [Game hosting](game-hosting.md)                         | Pre-game summary, stages, timers, audio, navigation, restoration                               |
-| Presentation       | [Visual editor](visual-editor.md)                       | Layout, custom elements, backgrounds, templates                                                |
-| Cloud              | [Google Drive persistence](google-drive-persistence.md) | Authorization, packages, question index, AI rules, settings sync, recovery                     |
-| Application shell  | [Unified shell](unified-shell.md)                       | Navigation, question search, localization, themes, settings, deep links                        |
-| Native application | [Desktop application](desktop-application.md)           | Cross-platform shell, presenter notes, close safety, native export, artifacts                  |
+| Area                | Specification                                           | Covered features                                                                               |
+| ------------------- | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Package contract    | [Game package](game-package.md)                         | Tour phrases, questions, answers, handouts, music breaks, ZIP format, compatibility, readiness |
+| Authoring           | [Package editor](package-editor.md)                     | Create, edit, AI generation, reorder, import, autosave, recents, export                        |
+| Gameplay            | [Game hosting](game-hosting.md)                         | Pre-game summary, stages, timers, audio, navigation, restoration                               |
+| Presentation        | [Visual editor](visual-editor.md)                       | Layout, custom elements, backgrounds, templates                                                |
+| Cloud               | [Google Drive persistence](google-drive-persistence.md) | Authorization, packages, question index, AI rules, settings sync, recovery                     |
+| Application shell   | [Unified shell](unified-shell.md)                       | Navigation, question search, localization, themes, settings, deep links                        |
+| Shared dictionaries | [Dictionaries](dictionaries.md)                         | Generation scales, prompt fragments, admin editing, deep links, ZIP format                     |
+| Native application  | [Desktop application](desktop-application.md)           | Cross-platform shell, presenter notes, close safety, native export, artifacts                  |
 
 ## Maintenance
 
@@ -23,7 +24,8 @@ Project-wide goals, constraints, invariants, and bug history live in
   of the feature.
 - Keep format details canonical in [`../GAME_PACKAGE.md`](../GAME_PACKAGE.md),
   [`../AI_QUESTION.md`](../AI_QUESTION.md), and
-  [`../AI_QUESTION_PACKAGE.md`](../AI_QUESTION_PACKAGE.md); feature
+  [`../AI_QUESTION_PACKAGE.md`](../AI_QUESTION_PACKAGE.md), and
+  [`../SCHDK_DICTIONARY.md`](../SCHDK_DICTIONARY.md); feature
   specifications link to those contracts instead of copying their schemas.
 - Keep architecture, security, and contributor workflow in
   [`../RULES.md`](../RULES.md), not in product requirements.
