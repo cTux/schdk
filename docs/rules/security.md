@@ -7,6 +7,9 @@
 - Validate every IPC argument in the main process, including primitive types,
   positive safe-integer attempt IDs, `.schdk` extensions, and `Uint8Array`
   content.
+- Parse every game-package payload crossing IPC before Drive or filesystem
+  writes and verify renderer-provided Drive metadata against the parsed
+  package.
 - Read local imports through renderer `File` bytes and validate them before
   upload; do not expose their native paths through Electron.
 - Allow filesystem writes only through the explicit package download save

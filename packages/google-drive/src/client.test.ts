@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { createEmptyGamePackage, serializeGamePackage } from '@schdk/common';
 import { GoogleDriveAuthorizationError, GoogleDriveClient } from './client.js';
 
 const jsonResponse = (value: unknown, status = 200) =>
@@ -23,7 +24,7 @@ afterEach(() => {
 });
 
 describe('GoogleDriveClient', () => {
-  it('discovers the package folder again after an account switch', async () => {
+  it('V41: discovers the package folder again after an account switch', async () => {
     let token = 'account-a';
     const uploads: string[] = [];
     vi.stubGlobal(
@@ -50,10 +51,12 @@ describe('GoogleDriveClient', () => {
       }),
     );
     const client = new GoogleDriveClient(async () => token);
+    const gamePackage = createEmptyGamePackage();
+    gamePackage.title = 'Test';
     const value = {
       name: 'Test.schdk',
       title: 'Test',
-      content: Uint8Array.from([1]),
+      content: serializeGamePackage(gamePackage),
       ready: false,
       hasRemarks: false,
     };

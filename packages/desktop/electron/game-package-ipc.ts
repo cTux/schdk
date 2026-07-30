@@ -1,3 +1,4 @@
+import { parseGamePackage } from '@schdk/common';
 import { dialog, ipcMain } from 'electron';
 import { writeFile } from 'node:fs/promises';
 
@@ -5,11 +6,14 @@ export function registerGamePackageIpc() {
   ipcMain.handle('save-game-package', async (_event, filename, content) => {
     if (
       typeof filename !== 'string' ||
+      filename.length > 256 ||
       !/\.schdk$/iu.test(filename) ||
+      /[\p{Cc}<>:"/\\|?*]/u.test(filename) ||
       !(content instanceof Uint8Array)
     ) {
       throw new TypeError('Invalid game package');
     }
+    parseGamePackage(content);
     const result = await dialog.showSaveDialog({
       defaultPath: filename,
       filters: [

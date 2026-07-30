@@ -53,7 +53,9 @@ preserving recoverable local state during temporary Drive failures.
 - **DRV-17:** The AI page also loads individually parsed `.aiquestion` archives
   from the configured shared Drive folder. Only allowlisted administrators can
   create, rename, update, trash, or select the single general shared rule;
-  Drive folder permissions enforce the same boundary.
+  Drive folder permissions enforce the same boundary. A replacement general
+  rule is persisted before older general flags are cleared, so a failed
+  replacement cannot remove the current rule.
 - **DRV-18:** Every personal AI question package is a separate visible
   `.aiquestionpackage` ZIP file in the current account's app-marked `SCHDK`
   folder. Listing, loading, creation, renaming, updating, and trashing use the
@@ -63,7 +65,9 @@ preserving recoverable local state during temporary Drive failures.
   questions and answers from parsed app-marked `.schdk` packages. Refresh
   compares file IDs and modification times, downloads only new or changed
   packages, removes missing packages, and reports packages that cannot be
-  indexed without discarding a previous usable projection.
+  indexed without discarding a previous usable projection. A refresh is bound
+  to its originating account and stops before persistence when that account
+  changes.
 - **DRV-20:** Initial recents loading shares concurrent editor and host work and
   lists the first Drive result page with one files request. Additional result
   pages remain traversed when present.
@@ -122,14 +126,15 @@ preserving recoverable local state during temporary Drive failures.
 12. Connect as a regular account and load global rules without global mutation
     controls; connect as an allowlisted administrator and create, edit, and
     delete a global rule in the configured shared folder. Select two rules as
-    general in turn and observe only the latest selection remains set.
+    general in turn and observe only the latest selection remains set. Fail the
+    replacement write and confirm the previous general rule remains selected.
 13. Create, edit, reload, rename, and delete an AI question package on web and
     desktop; observe one `.aiquestionpackage` ZIP file in the current account's
     `SCHDK` folder and no browser-local copy.
 14. Build the question database, reopen it without downloading unchanged
     packages, then edit and delete packages and observe only the changed
-    projection replaced or removed. Switch accounts and confirm no prior
-    account rows appear.
+    projection replaced or removed. Switch accounts during a refresh and
+    confirm no prior-account rows appear or persist in the new account.
 15. Save a package with and without unresolved remarks and confirm recents show
     the matching metadata tag without downloading the package.
 16. Open recents with editor and host mounted and observe one Drive files

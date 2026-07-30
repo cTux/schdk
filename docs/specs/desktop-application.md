@@ -26,9 +26,12 @@ application with native save and presenter-window integration.
 - **DSK-8:** Save failure or a ten-second timeout offers retry, close without
   saving, or cancel, and ignores late results from older close attempts.
 - **DSK-9:** Native filesystem writes occur only through explicit package
-  download with a save dialog.
+  download with a save dialog after the package bytes and filename are
+  validated.
 - **DSK-10:** Desktop Google authorization and package operations use narrow,
-  validated Electron bridges.
+  validated Electron bridges. Game-package create and update operations parse
+  the archive and verify its title, readiness, and unresolved-remark metadata
+  before writing to Drive.
 - **DSK-11:** Windows packaging produces an unpacked application under
   `dist/release/win-unpacked`.
 - **DSK-12:** A user AI API key persists in the current Google account's
@@ -75,7 +78,9 @@ application with native save and presenter-window integration.
 3. Start a game with host notes on a second display, dismiss the presenter, and
    verify it can return in the next game.
 4. Attempt renderer navigation, a new window, malformed IPC, and a filesystem
-   write outside explicit download; each is rejected.
+   write outside explicit download; each is rejected. Send malformed package
+   bytes and mismatched package metadata through create, update, and download
+   operations and confirm every write is rejected.
 5. Save, replace, and remove an AI API key; restart between operations, generate
    a question, and verify only configured status and the validated question
    cross into the renderer. Then switch Google accounts and verify the prior

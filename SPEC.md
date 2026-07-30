@@ -76,6 +76,11 @@ V35|Selecting a personal-database result loads the complete canonical source que
 V36|Initial Drive recents loading issues one files request for its first result page even when editor and host are mounted.
 V37|Question and package generation use a non-modal full-height right dock without a blocking backdrop, keep the editor centered with equal spacing from both docks, lock unfinished targets, unlock completed targets, preserve author selection, and close after final success.
 V38|AI-generated question text and answer comments contain only natural player-facing prose without template construction labels, paths, stages, techniques, or stock meta-commentary.
+V39|Asynchronous editor results apply only to the package session that started them.
+V40|Account-scoped background work never persists after the connected Google account changes.
+V41|Every game-package payload crossing Drive or desktop IPC is parsed before Drive or filesystem writes, and its Drive metadata matches the parsed package.
+V42|Image handout selection is bounded before reading and cannot leave the editor with an unserializable package.
+V43|A replacement global general rule is persisted before the previous general rule is cleared.
 
 ## §T
 
@@ -183,3 +188,9 @@ B94|2026-07-29|The populated-field label added bottom padding only after text wa
 B95|2026-07-29|TypeScript stylesheet imports omitted a Sass partial's required underscore and failed UI tests|Use the partial's literal filename; existing UI tests and Storybook build cover recurrence.
 B96|2026-07-29|Base components depended on parent stylesheet context and the Storybook generator ignored grouped exports|Load base styles at the component boundary and render generated stories with their production area context; Storybook build and browser smoke testing cover recurrence.
 B97|2026-07-29|The page's 320-pixel minimum width excluded the vertical scrollbar and caused horizontal overflow at the minimum supported viewport|Remove the redundant body minimum; the existing 320-pixel browser smoke test covers recurrence.
+B98|2026-07-29|Background generation callbacks remained active after their source package closed and could replace questions in the next package|V39
+B99|2026-07-29|Question-database refresh guarded stale UI updates but could still persist after the Drive account changed|V40
+B100|2026-07-29|Selecting a replacement global general rule cleared the previous rule before the replacement write succeeded|V43
+B101|2026-07-29|Desktop package IPC validated only argument shapes and allowed unparsed bytes or inconsistent metadata to reach writes|V41
+B102|2026-07-29|Image handouts were read without a size bound and could make the package exceed its serialization limit|V42
+B103|2026-07-29|A Drive client test used malformed package bytes after the shared write boundary began enforcing V41|V41

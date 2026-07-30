@@ -3,7 +3,7 @@ import {
   type AIQuestionDifficulty,
   type AIQuestionRecognizability,
 } from '@schdk/common';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { QuestionGenerationDialogProps } from './types';
 
 function useQuestionGeneration({
@@ -24,11 +24,13 @@ function useQuestionGeneration({
   const [failed, setFailed] = useState(false);
   const [promptOpen, setPromptOpen] = useState(false);
   const [checkQuestionDatabase, setCheckQuestionDatabase] = useState(false);
+  const generationId = useRef(0);
   const sortedTemplates = [...templates].sort(compareFavoriteItemsByName);
   const selectedTemplate =
     sortedTemplates[Number(templateIndex)] ?? sortedTemplates[0] ?? null;
 
   function reset() {
+    generationId.current += 1;
     setOpen(false);
     setTemplateIndex('0');
     setDifficulty('medium');
@@ -46,13 +48,17 @@ function useQuestionGeneration({
     onQuestionGenerationStateChange?.(false, true);
   }
 
+  useEffect(() => () => void (generationId.current += 1), []);
+
   async function generate() {
     if (!selectedTemplate || !context.trim()) return;
+    const currentGenerationId = ++generationId.current;
     setThinking(true);
     setFailed(false);
     onQuestionGenerationStateChange?.(true, true);
     try {
       await onGenerationStart?.(checkQuestionDatabase);
+      if (currentGenerationId !== generationId.current) return;
       const question = await onGenerate(
         selectedTemplate,
         context.trim(),
@@ -61,9 +67,11 @@ function useQuestionGeneration({
         checkQuestionDatabase,
         recognizability,
       );
+      if (currentGenerationId !== generationId.current) return;
       onGenerated(question);
       reset();
     } catch {
+      if (currentGenerationId !== generationId.current) return;
       setThinking(false);
       setFailed(true);
       onQuestionGenerationStateChange?.(false, true);

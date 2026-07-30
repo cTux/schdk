@@ -24,7 +24,9 @@ without losing in-progress work.
   font while editing. The handout editor has no separate heading: its hatched
   image action stays left of the text field, and both match the dimensions of
   the question and answer-comment fields. Invalid handouts and oversized audio
-  selections never mutate package state.
+  selections never mutate package state. Oversized images are rejected before
+  reading, and an image replaces the current handout only when the complete
+  candidate package remains serializable within canonical limits.
 - **EDT-5:** Authors can copy a complete question as JSON, replace another
   question from parsed clipboard JSON after confirmation, and clear every
   field of the selected question from its red trailing action. `Ctrl+C` and
@@ -76,7 +78,8 @@ without losing in-progress work.
   selected template's generation instructions and examples. An allowlisted
   administrator can expand the panel beside its title to inspect the exact
   system and user prompt text in a read-only field; the wider two-column layout
-  stacks vertically on narrow screens.
+  stacks vertically on narrow screens. Closing or switching the source package
+  invalidates the request so a late result cannot modify another package.
 - **EDT-17:** Every multiline package and generation field uses the same
   non-resizable shared control with dropdown-aligned borders, surfaces, hover,
   focus, and disabled states. Its label appears as the placeholder while empty
@@ -116,7 +119,8 @@ without losing in-progress work.
   reduced-motion preferences.
   Questions still awaiting generation are disabled; each completed question
   becomes editable immediately while the same sequence continues. The docked
-  panel closes after the final question succeeds.
+  panel closes after the final question succeeds. Closing or switching the
+  source package invalidates the sequence and ignores every unfinished result.
   Browser generation renews Google authorization from the confirmation click
   before the sequence starts. A failed request keeps questions generated before
   the failure. An allowlisted administrator can expand the panel beside its
@@ -181,8 +185,10 @@ without losing in-progress work.
    redirecting the current document.
 5. Edit a browser package and observe an unload warning until autosave
    completes.
-6. Select a file without an image MIME type and observe it rejected without
-   changing or autosaving the current handout.
+6. Select a file without an image MIME type and an image above the handout
+   limit; observe both rejected before changing or autosaving the current
+   handout. Select an image that would make the complete package exceed its
+   serialization limit and observe the current handout remain unchanged.
 7. Select a music break above the package entry limit and observe it rejected
    before the file is read.
 8. Fail restoration for one account and observe its stale session cleared
@@ -192,6 +198,8 @@ without losing in-progress work.
    name-sorted remainder. Generate from an enabled template and context that
    requests a text handout, observe the blocked thinking state, and confirm
    every returned field, including the handout, replaces the selected question.
+   Start another request, return to recents, open another package, and confirm
+   the late result does not modify it.
 10. Inspect every multiline editor and generation field at normal and narrow
     widths; confirm consistent shared styling, no native resize handle, label
     text as the empty placeholder, and the label inside the populated textarea
@@ -219,7 +227,9 @@ without losing in-progress work.
     reduced-motion mode removes that animation. In the browser, confirm that
     generation starts with renewed Google authorization. As an allowlisted
     administrator, expand the prompt panel and confirm its read-only text follows
-    the first pending target and each target being generated.
+    the first pending target and each target being generated. Start another
+    sequence, return to recents, open another package, and confirm unfinished
+    results do not modify it.
 13. Clear a populated question from its trailing heading action, then use
     `Ctrl+C` and `Ctrl+V` anywhere in the open editor and observe the same copy
     and confirmed paste behavior as the heading actions. Confirm each

@@ -4,8 +4,8 @@ import {
   DRIVE_FOLDER_MIME_TYPE,
   DRIVE_PACKAGE_KIND,
   DRIVE_PACKAGE_MIME_TYPE,
-  isDriveGamePackageName,
   parseDriveGamePackageFile,
+  parseDriveGamePackageWrite,
   type DriveGamePackage,
   type DriveGamePackageFile,
   type DriveGamePackageWrite,
@@ -116,17 +116,18 @@ export class GoogleDrivePackageStorage implements DrivePackageStorage {
     value: DriveGamePackageWrite,
     fileId?: string,
   ): Promise<DriveGamePackageFile> {
-    if (!isDriveGamePackageName(value.name)) {
-      throw new TypeError('Invalid Google Drive package name');
+    const gamePackage = parseDriveGamePackageWrite(value);
+    if (!gamePackage) {
+      throw new TypeError('Invalid Google Drive package');
     }
     const metadata = {
-      name: value.name,
-      description: value.title,
+      name: gamePackage.name,
+      description: gamePackage.title,
       mimeType: DRIVE_PACKAGE_MIME_TYPE,
       appProperties: {
         [DRIVE_APP_KIND_KEY]: DRIVE_PACKAGE_KIND,
-        ready: String(value.ready),
-        hasRemarks: String(value.hasRemarks),
+        ready: String(gamePackage.ready),
+        hasRemarks: String(gamePackage.hasRemarks),
       },
       ...(fileId ? {} : { parents: [await this.ensurePackageFolder()] }),
     };
@@ -135,7 +136,7 @@ export class GoogleDrivePackageStorage implements DrivePackageStorage {
       `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n`,
       JSON.stringify(metadata),
       `\r\n--${boundary}\r\nContent-Type: ${DRIVE_PACKAGE_MIME_TYPE}\r\n\r\n`,
-      new Uint8Array(value.content),
+      new Uint8Array(gamePackage.content),
       `\r\n--${boundary}--`,
     ]);
     const target = fileId
