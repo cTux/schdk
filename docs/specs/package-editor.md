@@ -134,11 +134,13 @@ without losing in-progress work.
   package questions in the provider prompt. Package generation adds each
   accepted result to that set before generating the next target. Exact
   normalized duplicates are rejected locally; every other candidate undergoes
-  a structured provider review that rejects aliases, synonyms, translations,
-  qualifications, or descriptive names of the same entity and answer choices
-  that worsen package variety by overusing one entity type or answer form. A
-  rejected candidate is retried once; a second rejection fails without
-  replacing the target question.
+  a structured provider review that rejects materially incorrect, ambiguous,
+  underclued, answer-leaking, unnatural, or instruction-violating questions;
+  insufficient answer explanations; aliases, synonyms, translations,
+  qualifications, or descriptive names of the same entity; and answer choices
+  that worsen package variety by overusing one entity type or answer form. The
+  rejected candidate and the reviewer's actionable feedback are supplied to
+  one retry; a second rejection fails without replacing the target question.
 - **EDT-21:** Question and package generation panels each show a similarity
   toggle that resets to off whenever the panel closes. When enabled, generation
   refreshes the connected account's question database, rejects exact answers
@@ -244,9 +246,11 @@ without losing in-progress work.
 15. Generate one question and a complete package whose existing slots already
     contain answers. Confirm every provider prompt excludes retained and
     accepted answers. Return an exact duplicate, an alias or descriptive name
-    of an existing entity, and an answer that worsens an overrepresented type
-    or form; confirm each is rejected, one rejection is retried, and a second
-    rejection leaves its target unchanged.
+    of an existing entity, an answer that worsens an overrepresented type or
+    form, an ambiguous or underclued question, and an unsupported answer
+    explanation; confirm each is rejected with its candidate and actionable
+    feedback supplied to one retry, and a second rejection leaves its target
+    unchanged.
 16. Open each generation panel and confirm it is a full-height right dock with
     the left navigation's chrome, no blocking backdrop, and an editor that
     remains centered with equal left and right spacing and stays interactive.
