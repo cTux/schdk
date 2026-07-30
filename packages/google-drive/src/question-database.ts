@@ -10,27 +10,33 @@ import { flattenQuestionDatabase } from './flatten-question-database.js';
 function parseQuestion(value: unknown): QuestionDatabaseQuestion | null {
   if (!value || typeof value !== 'object') return null;
   const item = value as Record<string, unknown>;
-  if (
-    !Number.isSafeInteger(item.number) ||
-    Number(item.number) < 1 ||
-    Number(item.number) > 36 ||
-    typeof item.question !== 'string' ||
-    item.question.length > 20_000 ||
-    typeof item.answer !== 'string' ||
-    item.answer.length > 1_000 ||
-    !Array.isArray(item.alternativeAnswers) ||
-    item.alternativeAnswers.length > 100 ||
-    !item.alternativeAnswers.every(
+  const hasValidNumber =
+    Number.isSafeInteger(item.number) &&
+    Number(item.number) >= 1 &&
+    Number(item.number) <= 36;
+  const hasValidQuestion =
+    typeof item.question === 'string' && item.question.length <= 20_000;
+  const hasValidAnswer =
+    typeof item.answer === 'string' && item.answer.length <= 1_000;
+  const hasValidAlternativeAnswers =
+    Array.isArray(item.alternativeAnswers) &&
+    item.alternativeAnswers.length <= 100 &&
+    item.alternativeAnswers.every(
       (answer) => typeof answer === 'string' && answer.length <= 1_000,
-    )
+    );
+  if (
+    !hasValidNumber ||
+    !hasValidQuestion ||
+    !hasValidAnswer ||
+    !hasValidAlternativeAnswers
   ) {
     return null;
   }
   return {
     number: Number(item.number),
-    question: item.question,
-    answer: item.answer,
-    alternativeAnswers: item.alternativeAnswers,
+    question: item.question as string,
+    answer: item.answer as string,
+    alternativeAnswers: item.alternativeAnswers as string[],
   };
 }
 
@@ -40,20 +46,19 @@ function parsePackage(value: unknown): QuestionDatabasePackage | null {
   const questions = Array.isArray(item.questions)
     ? item.questions.map(parseQuestion)
     : [];
-  if (
-    !isDriveFileId(item.fileId) ||
-    typeof item.modifiedTime !== 'string' ||
-    typeof item.title !== 'string' ||
-    item.title.length > 1_000 ||
-    questions.length > 36 ||
-    questions.some((question) => !question)
-  ) {
+  const hasValidIdentity =
+    isDriveFileId(item.fileId) &&
+    typeof item.modifiedTime === 'string' &&
+    typeof item.title === 'string' &&
+    item.title.length <= 1_000;
+  const hasValidQuestions = questions.length <= 36 && questions.every(Boolean);
+  if (!hasValidIdentity || !hasValidQuestions) {
     return null;
   }
   return {
-    fileId: item.fileId,
-    modifiedTime: item.modifiedTime,
-    title: item.title,
+    fileId: item.fileId as string,
+    modifiedTime: item.modifiedTime as string,
+    title: item.title as string,
     questions: questions as QuestionDatabaseQuestion[],
   };
 }
@@ -66,11 +71,9 @@ function parseQuestionDatabaseDocument(
   const packages = Array.isArray(document.packages)
     ? document.packages.map(parsePackage)
     : [];
-  if (
-    document.schemaVersion !== 1 ||
-    packages.some((item) => !item) ||
-    packages.length > 10_000
-  ) {
+  const hasExpectedSchema = document.schemaVersion === 1;
+  const hasValidPackages = packages.length <= 10_000 && packages.every(Boolean);
+  if (!hasExpectedSchema || !hasValidPackages) {
     return null;
   }
   return {

@@ -9,16 +9,18 @@ export function loadStoredGoogleDriveToken(
     const value = JSON.parse(
       sessionStorage.getItem(TOKEN_KEY) ?? 'null',
     ) as Partial<StoredGoogleDriveToken> | null;
-    if (
-      value &&
+    const hasValidAccessToken =
+      !!value &&
       typeof value.accessToken === 'string' &&
       value.accessToken.length > 0 &&
-      value.accessToken.length <= 4096 &&
-      value.clientId === clientId &&
+      value.accessToken.length <= 4096;
+    const hasExpectedClient = value?.clientId === clientId;
+    const hasValidExpiry =
+      !!value &&
       typeof value.expiresAt === 'number' &&
       Number.isFinite(value.expiresAt) &&
-      value.expiresAt > Date.now()
-    ) {
+      value.expiresAt > Date.now();
+    if (hasValidAccessToken && hasExpectedClient && hasValidExpiry) {
       return value as StoredGoogleDriveToken;
     }
   } catch {

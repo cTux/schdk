@@ -187,11 +187,11 @@ function App({
             setMessage('');
             return;
           }
-          if (
-            file.size > MAX_MUSIC_BREAK_BYTES ||
-            !file.type.startsWith('audio/') ||
-            !new Audio().canPlayType(file.type)
-          ) {
+          const hasAcceptableSize = file.size <= MAX_MUSIC_BREAK_BYTES;
+          const hasPlayableAudioType =
+            file.type.startsWith('audio/') &&
+            Boolean(new Audio().canPlayType(file.type));
+          if (!hasAcceptableSize || !hasPlayableAudioType) {
             setMessage(copy.editor.invalidMusic);
             return;
           }

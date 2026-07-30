@@ -114,10 +114,9 @@ export class GoogleDriveAIQuestionStorage implements DriveAIQuestionStorage {
   }
 
   private async uploadAIQuestion(value: DriveAIQuestionWrite, fileId?: string) {
-    if (
-      !isDriveAIQuestionName(value.name) ||
-      value.content.byteLength > MAX_AI_QUESTION_BYTES
-    ) {
+    const hasValidName = isDriveAIQuestionName(value.name);
+    const hasAcceptableSize = value.content.byteLength <= MAX_AI_QUESTION_BYTES;
+    if (!hasValidName || !hasAcceptableSize) {
       throw new TypeError('Invalid Google Drive AI question');
     }
     parseAIQuestionArchive(value.content);
@@ -185,16 +184,21 @@ export class GoogleDriveAIQuestionStorage implements DriveAIQuestionStorage {
     if (!this.folderId) return parseDriveAIQuestionFile(value);
     if (!value || typeof value !== 'object') return null;
     const file = value as Record<string, unknown>;
-    return isDriveFileId(file.id) &&
-      isDriveAIQuestionName(file.name) &&
+    const hasValidIdentity =
+      isDriveFileId(file.id) && isDriveAIQuestionName(file.name);
+    const hasValidModifiedTime =
       typeof file.modifiedTime === 'string' &&
-      Number.isFinite(Date.parse(file.modifiedTime)) &&
-      (!requireFolder ||
-        (Array.isArray(file.parents) && file.parents.includes(this.folderId)))
+      Number.isFinite(Date.parse(file.modifiedTime));
+    const hasRequiredFolder =
+      !requireFolder ||
+      (Array.isArray(file.parents) && file.parents.includes(this.folderId));
+    const isValidFile =
+      hasValidIdentity && hasValidModifiedTime && hasRequiredFolder;
+    return isValidFile
       ? {
-          id: file.id,
-          name: file.name,
-          modifiedTime: file.modifiedTime,
+          id: file.id as string,
+          name: file.name as string,
+          modifiedTime: file.modifiedTime as string,
         }
       : null;
   }

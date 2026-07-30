@@ -34,13 +34,18 @@ const technicalNotes = noteLines
   .slice(technicalHeadingIndex + 1)
   .filter(Boolean);
 const notePattern = /^- \[(?:NEW|CHANGE|FIX|DELETE|SECURITY)\] \S/u;
+const hasProductHeading = noteLines[0] === '### Продуктові рішення';
+const hasTechnicalHeading = technicalHeadingIndex !== -1;
+const hasBothNoteGroups = productNotes.length > 0 && technicalNotes.length > 0;
+const hasValidNotePrefixes = [...productNotes, ...technicalNotes].every(
+  (line) => notePattern.test(line),
+);
 
 if (
-  noteLines[0] !== '### Продуктові рішення' ||
-  technicalHeadingIndex === -1 ||
-  !productNotes.length ||
-  !technicalNotes.length ||
-  [...productNotes, ...technicalNotes].some((line) => !notePattern.test(line))
+  !hasProductHeading ||
+  !hasTechnicalHeading ||
+  !hasBothNoteGroups ||
+  !hasValidNotePrefixes
 ) {
   throw new Error(
     `Release notes for ${version} must separate product and technical decisions and prefix every item.`,

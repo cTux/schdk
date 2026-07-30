@@ -16,15 +16,14 @@ export function normalizeGameOptions(value: unknown): GameOptions | null {
   const candidate = value as Partial<GameOptions>;
   const autoFullscreen = candidate.autoFullscreen ?? true;
   const musicVolume = candidate.musicVolume ?? DEFAULT_GAME_OPTIONS.musicVolume;
-  if (
-    typeof autoFullscreen !== 'boolean' ||
-    typeof candidate.soundVolume !== 'number' ||
-    candidate.soundVolume < 0 ||
-    candidate.soundVolume > 1 ||
-    typeof musicVolume !== 'number' ||
-    musicVolume < 0 ||
-    musicVolume > 1
-  ) {
+  const hasValidFullscreen = typeof autoFullscreen === 'boolean';
+  const hasValidSoundVolume =
+    typeof candidate.soundVolume === 'number' &&
+    candidate.soundVolume >= 0 &&
+    candidate.soundVolume <= 1;
+  const hasValidMusicVolume =
+    typeof musicVolume === 'number' && musicVolume >= 0 && musicVolume <= 1;
+  if (!hasValidFullscreen || !hasValidSoundVolume || !hasValidMusicVolume) {
     return null;
   }
   const layout = normalizeGameLayout(candidate.layout);
@@ -34,19 +33,18 @@ export function normalizeGameOptions(value: unknown): GameOptions | null {
   const backgroundImage = candidate.backgroundImage ?? null;
   const backgroundOpacity = candidate.backgroundOpacity ?? 1;
   const customElements = normalizeCustomElements(candidate.customElements);
-  if (
-    !customElements ||
-    !isBackgroundImage(backgroundImage) ||
-    !isOpacity(backgroundOpacity)
-  ) {
+  const hasValidCustomElements = Boolean(customElements);
+  const hasValidBackground =
+    isBackgroundImage(backgroundImage) && isOpacity(backgroundOpacity);
+  if (!hasValidCustomElements || !hasValidBackground) {
     return null;
   }
   return {
     autoFullscreen,
-    soundVolume: candidate.soundVolume,
+    soundVolume: candidate.soundVolume as number,
     musicVolume,
     layout,
-    customElements,
+    customElements: customElements as CustomGameElement[],
     backgroundImage,
     backgroundOpacity,
   };
@@ -54,9 +52,9 @@ export function normalizeGameOptions(value: unknown): GameOptions | null {
 
 function normalizeCustomElements(value: unknown): CustomGameElement[] | null {
   if (value === undefined) return [];
-  if (!Array.isArray(value) || value.length > MAX_CUSTOM_GAME_ELEMENTS) {
-    return null;
-  }
+  const hasValidElementCount =
+    Array.isArray(value) && value.length <= MAX_CUSTOM_GAME_ELEMENTS;
+  if (!hasValidElementCount) return null;
   const ids = new Set<string>();
   let imageDataLength = 0;
   const normalized: CustomGameElement[] = [];
@@ -64,12 +62,9 @@ function normalizeCustomElements(value: unknown): CustomGameElement[] | null {
     if (!entry || typeof entry !== 'object') return null;
     const candidate = entry as Record<string, unknown>;
     const { id, kind, position } = candidate;
-    if (
-      typeof id !== 'string' ||
-      id.length === 0 ||
-      ids.has(id) ||
-      !isGameLayoutPosition(position)
-    ) {
+    const hasUniqueId = typeof id === 'string' && id.length > 0 && !ids.has(id);
+    const hasValidPosition = isGameLayoutPosition(position);
+    if (!hasUniqueId || !hasValidPosition) {
       return null;
     }
     const rawPosition = position as Record<string, unknown>;
@@ -79,21 +74,23 @@ function normalizeCustomElements(value: unknown): CustomGameElement[] | null {
     };
     if (!isGameLayoutElement(normalizedPosition)) return null;
     ids.add(id);
-    if (
+    const isValidTextElement =
       kind === 'text' &&
       typeof candidate.text === 'string' &&
       candidate.text.length >= 1 &&
-      candidate.text.length <= 500
-    ) {
+      candidate.text.length <= 500;
+    if (isValidTextElement) {
       normalized.push({
-        id,
+        id: id as string,
         kind,
-        text: candidate.text,
+        text: candidate.text as string,
         position: normalizedPosition,
       });
       continue;
     }
-    if (kind === 'image' && isBackgroundImage(candidate.image ?? null)) {
+    const isValidImageElement =
+      kind === 'image' && isBackgroundImage(candidate.image ?? null);
+    if (isValidImageElement) {
       const image = (candidate.image ?? null) as string | null;
       imageDataLength += image?.length ?? 0;
       if (imageDataLength > MAX_CUSTOM_IMAGE_DATA_LENGTH) return null;
@@ -112,14 +109,15 @@ function normalizeGameLayout(value: unknown): GameLayout | null {
   if (positions.logo === undefined) {
     positions.logo = DEFAULT_GAME_LAYOUT.logo;
   }
-  if (
+  const needsAlternativeAnswerPosition =
     positions['alternative-answer'] === undefined &&
-    isGameLayoutPosition(positions.answer)
-  ) {
+    isGameLayoutPosition(positions.answer);
+  if (needsAlternativeAnswerPosition) {
+    const answerPosition = positions.answer as { x: number; y: number };
     positions['alternative-answer'] = {
       ...DEFAULT_GAME_LAYOUT['alternative-answer'],
-      x: positions.answer.x,
-      y: Math.max(0, positions.answer.y - 18),
+      x: answerPosition.x,
+      y: Math.max(0, answerPosition.y - 18),
     };
   }
   const normalized = {} as GameLayout;
@@ -144,38 +142,43 @@ function isGameLayoutPosition(
 ): value is { x: number; y: number } {
   if (!value || typeof value !== 'object') return false;
   const { x, y } = value as Record<string, unknown>;
-  return (
-    typeof x === 'number' &&
-    Number.isFinite(x) &&
-    x >= 0 &&
-    x <= 100 &&
-    typeof y === 'number' &&
-    Number.isFinite(y) &&
-    y >= 0 &&
-    y <= 100
-  );
+  const hasValidHorizontalPosition =
+    typeof x === 'number' && Number.isFinite(x) && x >= 0 && x <= 100;
+  const hasValidVerticalPosition =
+    typeof y === 'number' && Number.isFinite(y) && y >= 0 && y <= 100;
+  return hasValidHorizontalPosition && hasValidVerticalPosition;
 }
 
 function isGameLayoutElement(value: unknown): value is GameLayoutPosition {
   if (!isGameLayoutPosition(value)) return false;
   const position = value as Record<string, unknown>;
-  return (
-    isPercentage(position.width) &&
-    isPercentage(position.height) &&
-    typeof position.hidden === 'boolean' &&
+  const hasValidSize =
+    isPercentage(position.width) && isPercentage(position.height);
+  const hasValidVisibility = typeof position.hidden === 'boolean';
+  const hasValidFontScale =
     typeof position.fontScale === 'number' &&
     Number.isFinite(position.fontScale) &&
     position.fontScale >= 0.5 &&
-    position.fontScale <= 2 &&
+    position.fontScale <= 2;
+  const hasValidTextSettings =
     typeof position.fitTextToHeight === 'boolean' &&
     typeof position.textColor === 'string' &&
-    /^#[\da-f]{6}$/i.test(position.textColor) &&
-    (position.textGrowDirection === 'up' ||
-      position.textGrowDirection === 'down') &&
+    /^#[\da-f]{6}$/i.test(position.textColor);
+  const hasValidTextDirection =
+    position.textGrowDirection === 'up' ||
+    position.textGrowDirection === 'down';
+  const hasValidImagePosition =
     typeof position.imagePosition === 'string' &&
     GAME_IMAGE_POSITIONS.includes(
       position.imagePosition as (typeof GAME_IMAGE_POSITIONS)[number],
-    )
+    );
+  return (
+    hasValidSize &&
+    hasValidVisibility &&
+    hasValidFontScale &&
+    hasValidTextSettings &&
+    hasValidTextDirection &&
+    hasValidImagePosition
   );
 }
 

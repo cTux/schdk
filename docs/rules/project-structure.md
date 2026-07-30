@@ -30,6 +30,18 @@ directions in [architecture.md](architecture.md).
 - Refactor an existing file that violates these rules when the file is changed;
   do not add another export to it.
 
+## Readable conditions
+
+- Make implementation-heavy control flow read as English. Name each semantic
+  predicate before combining type checks, limits, regular expressions, or
+  nested property checks in a branch.
+- Prefer positive predicate names such as `hasValidFilenameType` and
+  `hasAcceptableFilenameLength`, then compose them in the condition. Avoid
+  double negatives.
+- Keep a direct condition inline when its identifiers and operators already
+  state the business rule clearly. Do not introduce aliases that only repeat
+  an already-readable expression.
+
 ## UI components
 
 - Put each new or structurally changed component in its own

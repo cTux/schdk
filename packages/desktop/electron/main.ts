@@ -122,21 +122,17 @@ function createWindow() {
 }
 
 ipcMain.on('close-attempt-finished', (event, attempt, succeeded) => {
-  if (
-    !Number.isSafeInteger(attempt) ||
-    attempt < 1 ||
-    typeof succeeded !== 'boolean'
-  )
-    return;
+  const hasValidAttempt = Number.isSafeInteger(attempt) && attempt >= 1;
+  const hasValidResult = typeof succeeded === 'boolean';
+  if (!hasValidAttempt || !hasValidResult) return;
   closeControllers.get(event.sender.id)?.finished(attempt, succeeded);
 });
 
 ipcMain.on('set-editor-package-open', (event, open) => {
-  if (
-    typeof open === 'boolean' &&
-    mainWindow &&
-    event.sender.id === mainWindow.webContents.id
-  ) {
+  const hasValidOpenState = typeof open === 'boolean';
+  const isMainWindowSender =
+    mainWindow && event.sender.id === mainWindow.webContents.id;
+  if (hasValidOpenState && isMainWindowSender) {
     editorPackageOpen = open;
   }
 });

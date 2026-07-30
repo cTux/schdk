@@ -12,15 +12,19 @@ export function parseDriveAIQuestionFile(
     file.appProperties && typeof file.appProperties === 'object'
       ? (file.appProperties as Record<string, unknown>)
       : {};
-  return isDriveFileId(file.id) &&
-    isDriveAIQuestionName(file.name) &&
-    properties.schdkType === DRIVE_AI_QUESTION_KIND &&
+  const hasValidIdentity =
+    isDriveFileId(file.id) && isDriveAIQuestionName(file.name);
+  const hasExpectedKind = properties.schdkType === DRIVE_AI_QUESTION_KIND;
+  const hasValidModifiedTime =
     typeof file.modifiedTime === 'string' &&
-    Number.isFinite(Date.parse(file.modifiedTime))
+    Number.isFinite(Date.parse(file.modifiedTime));
+  const isValidFile =
+    hasValidIdentity && hasExpectedKind && hasValidModifiedTime;
+  return isValidFile
     ? {
-        id: file.id,
-        name: file.name,
-        modifiedTime: file.modifiedTime,
+        id: file.id as string,
+        name: file.name as string,
+        modifiedTime: file.modifiedTime as string,
       }
     : null;
 }

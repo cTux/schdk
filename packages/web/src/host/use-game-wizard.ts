@@ -64,12 +64,13 @@ function useGameWizard(
   useEffect(() => {
     clearTransitionTimers();
     stopGameAudio();
-    const restoredPosition =
+    const hasValidRestoredPosition =
       restoredState &&
       gamePackage?.questions[restoredState.position.questionIndex] &&
-      isValidGamePosition(gamePackage, restoredState.position)
-        ? restoredState.position
-        : INITIAL_POSITION;
+      isValidGamePosition(gamePackage, restoredState.position);
+    const restoredPosition = hasValidRestoredPosition
+      ? restoredState.position
+      : INITIAL_POSITION;
     setFinished(restoredState?.finished ?? false);
     setPosition(restoredPosition);
     setRemainingSeconds(
@@ -166,18 +167,18 @@ function useGameWizard(
     if (!active || finished) return;
     function handleKeyDown(event: KeyboardEvent) {
       if (event.repeat || event.target instanceof HTMLMediaElement) return;
-      if (
+      const isForwardKey =
         event.code === 'Space' ||
         event.code === 'PageDown' ||
-        event.code === 'ArrowRight'
-      ) {
-        event.preventDefault();
-        move('forward');
-      } else if (
+        event.code === 'ArrowRight';
+      const isBackwardKey =
         event.code === 'Backspace' ||
         event.code === 'PageUp' ||
-        event.code === 'ArrowLeft'
-      ) {
+        event.code === 'ArrowLeft';
+      if (isForwardKey) {
+        event.preventDefault();
+        move('forward');
+      } else if (isBackwardKey) {
         event.preventDefault();
         move('backward');
       }

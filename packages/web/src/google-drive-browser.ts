@@ -51,17 +51,18 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
 
   private readonly refreshTokenOnActivity = () => {
     const now = Date.now();
-    if (
-      !this.accessToken ||
-      !this.account ||
-      !this.googleOauth ||
-      this.expiresAt - now > TOKEN_REFRESH_WINDOW ||
-      now - this.lastTokenRefreshAttempt < TOKEN_REFRESH_RETRY_INTERVAL
-    ) {
+    const canRefresh =
+      Boolean(this.accessToken) &&
+      Boolean(this.account) &&
+      Boolean(this.googleOauth);
+    const needsRefresh = this.expiresAt - now <= TOKEN_REFRESH_WINDOW;
+    const retryDelayPassed =
+      now - this.lastTokenRefreshAttempt >= TOKEN_REFRESH_RETRY_INTERVAL;
+    if (!canRefresh || !needsRefresh || !retryDelayPassed) {
       return;
     }
     this.lastTokenRefreshAttempt = now;
-    void this.requestToken('', this.account.emailAddress).catch(
+    void this.requestToken('', this.account?.emailAddress).catch(
       () => undefined,
     );
   };
@@ -100,16 +101,14 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
       });
       client.requestAccessToken(prompt === undefined ? undefined : { prompt });
     });
-    if (
-      response.error ||
-      !response.access_token ||
-      !GOOGLE_DRIVE_SCOPES.every((scope) =>
-        response.scope?.split(' ').includes(scope),
-      )
-    ) {
+    const hasAccessToken = !response.error && Boolean(response.access_token);
+    const hasRequiredScopes = GOOGLE_DRIVE_SCOPES.every((scope) =>
+      response.scope?.split(' ').includes(scope),
+    );
+    if (!hasAccessToken || !hasRequiredScopes) {
       throw new Error(response.error ?? 'Required Google Drive access denied');
     }
-    this.accessToken = response.access_token;
+    this.accessToken = response.access_token!;
     this.expiresAt = Date.now() + (response.expires_in ?? 3600) * 1000;
     storeGoogleDriveToken({
       accessToken: this.accessToken,

@@ -11,13 +11,12 @@ async function findSourceFiles(directory) {
   const files = await Promise.all(
     entries.map((entry) => {
       const entryPath = path.join(directory, entry.name);
-      return entry.isDirectory()
-        ? findSourceFiles(entryPath)
-        : entry.name.endsWith('.tsx') &&
-            !entry.name.includes('.test.') &&
-            !entry.name.includes('.stories.')
-          ? [entryPath]
-          : [];
+      if (entry.isDirectory()) return findSourceFiles(entryPath);
+      const isComponentSource =
+        entry.name.endsWith('.tsx') &&
+        !entry.name.includes('.test.') &&
+        !entry.name.includes('.stories.');
+      return isComponentSource ? [entryPath] : [];
     }),
   );
   return files.flat();
@@ -63,7 +62,8 @@ function getComponents(source) {
   let match;
   while ((match = functions.exec(source))) {
     const name = match[2];
-    if (!match[1] && !groupedExports.has(name)) continue;
+    const isExported = Boolean(match[1]) || groupedExports.has(name);
+    if (!isExported) continue;
     const open = functions.lastIndex - 1;
     const close = findClosingCharacter(source, open, '(', ')');
     components.push({

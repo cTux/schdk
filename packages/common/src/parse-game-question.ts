@@ -17,15 +17,14 @@ function isHandout(value: unknown): value is Handout {
   }
   const mimeType = 'mimeType' in value ? value.mimeType : undefined;
   const dataUrl = 'dataUrl' in value ? value.dataUrl : undefined;
-  return (
-    (!('kind' in value) || value.kind === 'image') &&
-    'name' in value &&
-    typeof value.name === 'string' &&
-    typeof mimeType === 'string' &&
-    mimeType.startsWith('image/') &&
+  const hasImageKind = !('kind' in value) || value.kind === 'image';
+  const hasValidName = 'name' in value && typeof value.name === 'string';
+  const hasImageMimeType =
+    typeof mimeType === 'string' && mimeType.startsWith('image/');
+  const hasMatchingDataUrl =
     typeof dataUrl === 'string' &&
-    dataUrl.startsWith(`data:${mimeType};base64,`)
-  );
+    dataUrl.startsWith(`data:${mimeType};base64,`);
+  return hasImageKind && hasValidName && hasImageMimeType && hasMatchingDataUrl;
 }
 
 function isQuestionType(value: unknown): value is GameQuestionType {
@@ -35,61 +34,63 @@ function isQuestionType(value: unknown): value is GameQuestionType {
 function isAIQuestionGenerationMetadata(
   value: unknown,
 ): value is AIQuestionGenerationMetadata {
-  return (
-    !!value &&
-    typeof value === 'object' &&
+  if (!value || typeof value !== 'object') return false;
+  const hasValidRule =
     'rule' in value &&
     typeof value.rule === 'string' &&
-    !!value.rule.trim() &&
+    Boolean(value.rule.trim());
+  const hasValidDifficulty =
     'difficulty' in value &&
     typeof value.difficulty === 'string' &&
-    AI_QUESTION_DIFFICULTIES.includes(
-      value.difficulty as AIQuestionDifficulty,
-    ) &&
+    AI_QUESTION_DIFFICULTIES.includes(value.difficulty as AIQuestionDifficulty);
+  const hasValidRecognizability =
     'recognizability' in value &&
     typeof value.recognizability === 'string' &&
     AI_QUESTION_RECOGNIZABILITIES.includes(
       value.recognizability as AIQuestionRecognizability,
-    )
-  );
+    );
+  return hasValidRule && hasValidDifficulty && hasValidRecognizability;
 }
 
 function parseQuestionParts(value: object): {
   type: GameQuestionType;
   questionParts: string[];
 } {
-  if (
+  const hasTypedQuestionParts =
     'type' in value &&
     isQuestionType(value.type) &&
     'questionParts' in value &&
     Array.isArray(value.questionParts) &&
     value.questionParts.length === QUESTION_TYPE_CONFIG[value.type].partCount &&
-    value.questionParts.every((part: unknown) => typeof part === 'string')
-  ) {
-    return { type: value.type, questionParts: value.questionParts };
+    value.questionParts.every((part: unknown) => typeof part === 'string');
+  if (hasTypedQuestionParts) {
+    return {
+      type: value.type as GameQuestionType,
+      questionParts: value.questionParts as string[],
+    };
   }
-  if (
+  const hasLegacyQuestion =
     !('type' in value) &&
     'question' in value &&
-    typeof value.question === 'string'
-  ) {
-    return { type: 'standard', questionParts: [value.question] };
+    typeof value.question === 'string';
+  if (hasLegacyQuestion) {
+    return { type: 'standard', questionParts: [value.question as string] };
   }
   throw new Error('Invalid game question');
 }
 
 export function parseGameQuestion(value: unknown): GameQuestion {
-  if (
-    !value ||
-    typeof value !== 'object' ||
-    !('answer' in value) ||
-    typeof value.answer !== 'string' ||
-    !('alternativeAnswers' in value) ||
-    !Array.isArray(value.alternativeAnswers) ||
-    !value.alternativeAnswers.every(
+  const isObject = !!value && typeof value === 'object';
+  if (!isObject) throw new Error('Invalid game question');
+
+  const hasAnswer = 'answer' in value && typeof value.answer === 'string';
+  const hasAlternativeAnswers =
+    'alternativeAnswers' in value &&
+    Array.isArray(value.alternativeAnswers) &&
+    value.alternativeAnswers.every(
       (answer: unknown) => typeof answer === 'string',
-    )
-  ) {
+    );
+  if (!hasAnswer || !hasAlternativeAnswers) {
     throw new Error('Invalid game question');
   }
 
@@ -104,14 +105,22 @@ export function parseGameQuestion(value: unknown): GameQuestion {
   if (handout !== undefined && !isHandout(handout)) {
     throw new Error('Invalid game question');
   }
+  const hasValidAnswerComment =
+    answerComment === undefined || typeof answerComment === 'string';
+  const hasValidWrongAnswers =
+    Array.isArray(wrongAnswers) &&
+    wrongAnswers.every((answer: unknown) => typeof answer === 'string');
+  const hasValidComment = comment === undefined || typeof comment === 'string';
+  const hasValidHostNotes =
+    hostNotes === undefined || typeof hostNotes === 'string';
+  const hasValidGenerationMetadata =
+    aiGeneration === undefined || isAIQuestionGenerationMetadata(aiGeneration);
   if (
-    (answerComment !== undefined && typeof answerComment !== 'string') ||
-    !Array.isArray(wrongAnswers) ||
-    !wrongAnswers.every((answer: unknown) => typeof answer === 'string') ||
-    (comment !== undefined && typeof comment !== 'string') ||
-    (hostNotes !== undefined && typeof hostNotes !== 'string') ||
-    (aiGeneration !== undefined &&
-      !isAIQuestionGenerationMetadata(aiGeneration))
+    !hasValidAnswerComment ||
+    !hasValidWrongAnswers ||
+    !hasValidComment ||
+    !hasValidHostNotes ||
+    !hasValidGenerationMetadata
   ) {
     throw new Error('Invalid game question');
   }
@@ -119,9 +128,9 @@ export function parseGameQuestion(value: unknown): GameQuestion {
   return {
     type,
     questionParts,
-    answer: value.answer,
+    answer: value.answer as string,
     ...(answerComment !== undefined ? { answerComment } : {}),
-    alternativeAnswers: value.alternativeAnswers,
+    alternativeAnswers: value.alternativeAnswers as string[],
     wrongAnswers,
     ...(handout ? { handout } : {}),
     ...(comment !== undefined ? { comment } : {}),

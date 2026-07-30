@@ -12,8 +12,10 @@ export function getDeepLinkedShellEdit(url: string): ShellEditTarget | null {
         name: question[2]!,
       };
     }
-    return value?.startsWith('package:') && value.length > 'package:'.length
-      ? { kind: 'package', name: value.slice('package:'.length) }
+    const hasPackageName =
+      value?.startsWith('package:') && value.length > 'package:'.length;
+    return hasPackageName
+      ? { kind: 'package', name: value!.slice('package:'.length) }
       : null;
   } catch {
     return null;

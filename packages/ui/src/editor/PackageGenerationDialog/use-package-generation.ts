@@ -84,7 +84,11 @@ function usePackageGeneration({
   }
 
   async function generate() {
-    if (!selectedPackage || !randomTemplates.length || !targets.length) return;
+    const canGenerate =
+      Boolean(selectedPackage) &&
+      randomTemplates.length > 0 &&
+      targets.length > 0;
+    if (!canGenerate) return;
     const currentGenerationId = ++generationId.current;
     onGenerationStateChange(targets, true);
     setThinking(true);

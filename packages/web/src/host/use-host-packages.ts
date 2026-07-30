@@ -188,14 +188,11 @@ export function useHostPackages({
   }
 
   async function deleteRecentPackage(recent: RecentPackageItem) {
-    if (
-      openingRecentPackage.current ||
-      !(await confirm(
-        copy.shared.deletePackageConfirmation(recent.title || recent.name),
-      ))
-    ) {
-      return;
-    }
+    if (openingRecentPackage.current) return;
+    const deletionConfirmed = await confirm(
+      copy.shared.deletePackageConfirmation(recent.title || recent.name),
+    );
+    if (!deletionConfirmed) return;
     openingRecentPackage.current = recent.id;
     setOpeningRecentPackageId(recent.id);
     setMessage('');

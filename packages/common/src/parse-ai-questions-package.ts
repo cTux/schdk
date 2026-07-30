@@ -9,39 +9,49 @@ export function parseAIQuestionsPackage(
     ? item.questions.flatMap((question) => {
         if (!question || typeof question !== 'object') return [];
         const candidate = question as Record<string, unknown>;
-        return Number.isSafeInteger(candidate.questionNumber) &&
+        const hasValidQuestionNumber =
+          Number.isSafeInteger(candidate.questionNumber) &&
           Number(candidate.questionNumber) >= 1 &&
-          Number(candidate.questionNumber) <= 36 &&
-          (candidate.questionType === undefined ||
-            typeof candidate.questionType === 'string') &&
+          Number(candidate.questionNumber) <= 36;
+        const hasValidQuestionType =
+          candidate.questionType === undefined ||
+          typeof candidate.questionType === 'string';
+        const hasValidContext =
           typeof candidate.context === 'string' &&
-          Boolean(candidate.context.trim())
+          Boolean(candidate.context.trim());
+        const isValidQuestion =
+          hasValidQuestionNumber && hasValidQuestionType && hasValidContext;
+        return isValidQuestion
           ? [
               {
                 questionNumber: Number(candidate.questionNumber),
                 ...(candidate.questionType?.toString().trim()
                   ? { questionType: candidate.questionType.toString() }
                   : {}),
-                context: candidate.context,
+                context: candidate.context as string,
               },
             ]
           : [];
       })
     : [];
-  return typeof item.name === 'string' &&
-    Boolean(item.name.trim()) &&
-    typeof item.context === 'string' &&
-    Boolean(item.context.trim()) &&
-    Array.isArray(item.questions) &&
-    questions.length === item.questions.length &&
-    typeof item.enabled === 'boolean' &&
-    typeof item.favorite === 'boolean'
+  const hasValidName =
+    typeof item.name === 'string' && Boolean(item.name.trim());
+  const hasValidContext =
+    typeof item.context === 'string' && Boolean(item.context.trim());
+  const hasValidQuestions =
+    Array.isArray(item.questions) && questions.length === item.questions.length;
+  const hasValidFlags =
+    typeof item.enabled === 'boolean' && typeof item.favorite === 'boolean';
+  const isValidPackage =
+    hasValidName && hasValidContext && hasValidQuestions && hasValidFlags;
+
+  return isValidPackage
     ? {
-        name: item.name,
-        context: item.context,
+        name: item.name as string,
+        context: item.context as string,
         questions,
-        enabled: item.enabled,
-        favorite: item.favorite,
+        enabled: item.enabled as boolean,
+        favorite: item.favorite as boolean,
       }
     : null;
 }

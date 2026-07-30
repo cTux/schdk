@@ -13,19 +13,19 @@ export function parseDriveGamePackageFile(
     file.appProperties && typeof file.appProperties === 'object'
       ? (file.appProperties as Record<string, unknown>)
       : {};
-  if (
-    !isDriveFileId(file.id) ||
-    !isDriveGamePackageName(file.name) ||
-    properties[DRIVE_APP_KIND_KEY] !== DRIVE_PACKAGE_KIND ||
-    typeof file.modifiedTime !== 'string' ||
-    !Number.isFinite(Date.parse(file.modifiedTime))
-  ) {
+  const hasValidIdentity =
+    isDriveFileId(file.id) && isDriveGamePackageName(file.name);
+  const hasExpectedKind = properties[DRIVE_APP_KIND_KEY] === DRIVE_PACKAGE_KIND;
+  const hasValidModifiedTime =
+    typeof file.modifiedTime === 'string' &&
+    Number.isFinite(Date.parse(file.modifiedTime));
+  if (!hasValidIdentity || !hasExpectedKind || !hasValidModifiedTime) {
     return null;
   }
   return {
-    id: file.id,
-    name: file.name,
-    modifiedTime: file.modifiedTime,
+    id: file.id as string,
+    name: file.name as string,
+    modifiedTime: file.modifiedTime as string,
     ...(typeof file.description === 'string'
       ? { title: file.description }
       : {}),

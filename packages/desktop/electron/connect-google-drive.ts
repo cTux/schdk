@@ -46,12 +46,11 @@ async function receiveAuthorizationCode(state: string, verifier: string) {
             ? `http://127.0.0.1:${address.port}${CALLBACK_PATH}`
             : '';
         const url = new URL(request.url ?? '/', 'http://127.0.0.1');
-        if (
-          request.method !== 'GET' ||
-          url.pathname !== CALLBACK_PATH ||
-          url.searchParams.get('state') !== state ||
-          !url.searchParams.get('code')
-        ) {
+        const hasExpectedRequest =
+          request.method === 'GET' && url.pathname === CALLBACK_PATH;
+        const hasExpectedState = url.searchParams.get('state') === state;
+        const hasAuthorizationCode = Boolean(url.searchParams.get('code'));
+        if (!hasExpectedRequest || !hasExpectedState || !hasAuthorizationCode) {
           response.writeHead(400).end('Google Drive authorization failed.');
           finish(new GoogleDriveAuthorizationError('Invalid OAuth callback'));
           return;

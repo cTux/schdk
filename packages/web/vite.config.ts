@@ -8,7 +8,8 @@ const versionSource = readFileSync(
 );
 const { version } = JSON.parse(versionSource) as { version?: unknown };
 
-if (typeof version !== 'string' || !version) {
+const hasValidVersion = typeof version === 'string' && Boolean(version);
+if (!hasValidVersion) {
   throw new Error('version.json must contain a non-empty version string.');
 }
 
