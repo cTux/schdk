@@ -65,7 +65,7 @@ V24|At most one global AI question rule is marked as general, only an allowliste
 V25|Only an allowlisted administrator can preview the exact system and user prompt text used for AI question generation.
 V26|Every personal AI question package is parsed from its own `.aiquestionpackage` ZIP archive before use and persisted through the current account's Google Drive folder.
 V27|A ready package never reuses a normalized main or alternative answer across questions, and AI generation never accepts such a duplicate.
-V28|Every non-initial AI answer candidate undergoes semantic review for entity uniqueness and package-wide type and form diversity before replacing editor state.
+V28|Every AI-generated candidate undergoes editorial quality review and semantic review for entity uniqueness and package-wide type and form diversity before replacing editor state.
 V29|Editing an existing question kind or package-creation rule occupies a dedicated deep-linkable shell page restored by reload and browser history.
 V30|Web and desktop clients surface a newer published application version within one minute without granting the renderer generic network or navigation access.
 V31|Question-database rows derive only from parsed packages owned by the connected account and never become canonical package data.
