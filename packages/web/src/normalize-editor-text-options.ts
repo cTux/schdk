@@ -5,16 +5,14 @@ export function normalizeEditorTextOptions(
 ): EditorTextOptions | null {
   if (!value || typeof value !== 'object') return null;
   const candidate = value as Partial<EditorTextOptions>;
-  if (
-    typeof candidate.correctQuestionText !== 'boolean' ||
-    typeof candidate.correctAnswers !== 'boolean' ||
-    typeof candidate.correctAnswerComment !== 'boolean'
-  ) {
-    return null;
-  }
+  const hasValidCorrectionOptions =
+    typeof candidate.correctQuestionText === 'boolean' &&
+    typeof candidate.correctAnswers === 'boolean' &&
+    typeof candidate.correctAnswerComment === 'boolean';
+  if (!hasValidCorrectionOptions) return null;
   return {
-    correctQuestionText: candidate.correctQuestionText,
-    correctAnswers: candidate.correctAnswers,
-    correctAnswerComment: candidate.correctAnswerComment,
+    correctQuestionText: candidate.correctQuestionText as boolean,
+    correctAnswers: candidate.correctAnswers as boolean,
+    correctAnswerComment: candidate.correctAnswerComment as boolean,
   };
 }

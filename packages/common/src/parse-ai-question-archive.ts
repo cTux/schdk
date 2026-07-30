@@ -6,11 +6,9 @@ import { MAX_AI_QUESTION_JSON_BYTES } from './max-ai-question-json-bytes.js';
 import { parseAIQuestion } from './parse-ai-question.js';
 
 export function parseAIQuestionArchive(content: Uint8Array): AIQuestion {
-  if (
-    content.byteLength > MAX_AI_QUESTION_BYTES ||
-    content[0] !== 0x50 ||
-    content[1] !== 0x4b
-  ) {
+  const hasAcceptableArchiveSize = content.byteLength <= MAX_AI_QUESTION_BYTES;
+  const hasZipSignature = content[0] === 0x50 && content[1] === 0x4b;
+  if (!hasAcceptableArchiveSize || !hasZipSignature) {
     throw new Error('Invalid AI question');
   }
   let entry: Uint8Array | undefined;
@@ -31,12 +29,11 @@ export function parseAIQuestionArchive(content: Uint8Array): AIQuestion {
   }
   if (!entry) throw new Error('Invalid AI question');
   const value: unknown = JSON.parse(strFromU8(entry));
-  if (
-    !value ||
-    typeof value !== 'object' ||
-    (value as Record<string, unknown>).format !== 'schdk-ai-question' ||
-    (value as Record<string, unknown>).version !== 1
-  ) {
+  const isObject = !!value && typeof value === 'object';
+  const archive = value as Record<string, unknown>;
+  const hasExpectedIdentity =
+    isObject && archive.format === 'schdk-ai-question' && archive.version === 1;
+  if (!hasExpectedIdentity) {
     throw new Error('Invalid AI question');
   }
   const question = parseAIQuestion(value);

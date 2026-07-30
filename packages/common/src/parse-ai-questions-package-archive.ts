@@ -8,11 +8,10 @@ import { parseAIQuestionsPackage } from './parse-ai-questions-package.js';
 export function parseAIQuestionsPackageArchive(
   content: Uint8Array,
 ): AIQuestionsPackage {
-  if (
-    content.byteLength > MAX_AI_QUESTIONS_PACKAGE_BYTES ||
-    content[0] !== 0x50 ||
-    content[1] !== 0x4b
-  ) {
+  const hasAcceptableArchiveSize =
+    content.byteLength <= MAX_AI_QUESTIONS_PACKAGE_BYTES;
+  const hasZipSignature = content[0] === 0x50 && content[1] === 0x4b;
+  if (!hasAcceptableArchiveSize || !hasZipSignature) {
     throw new Error('Invalid AI questions package');
   }
   let entry: Uint8Array | undefined;
@@ -33,13 +32,13 @@ export function parseAIQuestionsPackageArchive(
   }
   if (!entry) throw new Error('Invalid AI questions package');
   const value: unknown = JSON.parse(strFromU8(entry));
-  if (
-    !value ||
-    typeof value !== 'object' ||
-    (value as Record<string, unknown>).format !==
-      'schdk-ai-questions-package' ||
-    (value as Record<string, unknown>).version !== 1
-  ) {
+  const isObject = !!value && typeof value === 'object';
+  const archive = value as Record<string, unknown>;
+  const hasExpectedIdentity =
+    isObject &&
+    archive.format === 'schdk-ai-questions-package' &&
+    archive.version === 1;
+  if (!hasExpectedIdentity) {
     throw new Error('Invalid AI questions package');
   }
   const item = parseAIQuestionsPackage(value);

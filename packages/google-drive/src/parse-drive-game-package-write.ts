@@ -11,21 +11,28 @@ export function parseDriveGamePackageWrite(
 ): DriveGamePackageWrite | null {
   if (!value || typeof value !== 'object') return null;
   const candidate = value as Record<string, unknown>;
-  if (
-    !isDriveGamePackageName(candidate.name) ||
-    typeof candidate.title !== 'string' ||
-    !(candidate.content instanceof Uint8Array) ||
-    typeof candidate.ready !== 'boolean' ||
-    typeof candidate.hasRemarks !== 'boolean'
-  ) {
+  const hasValidIdentity =
+    isDriveGamePackageName(candidate.name) &&
+    typeof candidate.title === 'string';
+  const hasValidContent = candidate.content instanceof Uint8Array;
+  const hasValidState =
+    typeof candidate.ready === 'boolean' &&
+    typeof candidate.hasRemarks === 'boolean';
+  if (!hasValidIdentity || !hasValidContent || !hasValidState) {
     return null;
   }
+  const write = candidate as unknown as DriveGamePackageWrite;
   try {
-    const gamePackage = parseGamePackage(candidate.content);
+    const gamePackage = parseGamePackage(write.content);
+    const hasMatchingTitle = write.title.trim() === gamePackage.title;
+    const hasMatchingReadyState =
+      write.ready === (validateGamePackage(gamePackage).length === 0);
+    const hasMatchingRemarksState =
+      write.hasRemarks === hasGamePackageRemarks(gamePackage);
     if (
-      candidate.title.trim() !== gamePackage.title ||
-      candidate.ready !== (validateGamePackage(gamePackage).length === 0) ||
-      candidate.hasRemarks !== hasGamePackageRemarks(gamePackage)
+      !hasMatchingTitle ||
+      !hasMatchingReadyState ||
+      !hasMatchingRemarksState
     ) {
       return null;
     }
@@ -33,10 +40,7 @@ export function parseDriveGamePackageWrite(
     return null;
   }
   return {
-    name: candidate.name,
-    title: candidate.title.trim(),
-    content: candidate.content,
-    ready: candidate.ready,
-    hasRemarks: candidate.hasRemarks,
+    ...write,
+    title: write.title.trim(),
   };
 }

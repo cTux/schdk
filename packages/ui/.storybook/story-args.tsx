@@ -93,11 +93,9 @@ function getValue(component: string, prop: string): unknown {
     return () => 'System prompt\n\nUser prompt';
   }
   if (prop === 'apiKeyConfigured') return true;
-  if (
-    prop.startsWith('on') ||
-    prop === 'addElement' ||
-    prop === 'chooseImage'
-  ) {
+  const isCallbackProp =
+    prop.startsWith('on') || prop === 'addElement' || prop === 'chooseImage';
+  if (isCallbackProp) {
     if (prop === 'onGenerate') return async () => gameQuestion;
     if (callbacksReturningConfirmation.has(prop)) return confirm;
     return noop;

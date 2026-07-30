@@ -6,10 +6,10 @@ import { saveAiApiKey } from './save-ai-api-key.js';
 async function loadAiApiKey(appData: GoogleDriveAppData) {
   const value = await appData.load(AI_CREDENTIALS_NAME);
   if (value === null) return null;
-  if (
-    typeof value !== 'object' ||
-    (value as { schemaVersion?: unknown }).schemaVersion !== 1
-  ) {
+  const hasExpectedSchema =
+    typeof value === 'object' &&
+    (value as { schemaVersion?: unknown }).schemaVersion === 1;
+  if (!hasExpectedSchema) {
     throw new TypeError('Invalid AI credentials');
   }
   return normalizeAiApiKey((value as { apiKey?: unknown }).apiKey);

@@ -17,10 +17,12 @@ export function parseVisualEditorTemplate(
       return null;
     }
     const seenEntries = new Set<string>();
+    const isArchive =
+      typeof content !== 'string' && content[0] === 0x50 && content[1] === 0x4b;
     const templateJson =
       typeof content === 'string'
         ? content
-        : content[0] === 0x50 && content[1] === 0x4b
+        : isArchive
           ? strFromU8(
               unzipSync(content, {
                 filter: ({ name, originalSize }) => {

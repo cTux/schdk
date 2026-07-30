@@ -8,6 +8,8 @@ export function serializeGameQuestion(question: GameQuestion) {
           text: question.handout.text.trim(),
         }
       : question.handout;
+  const hasSerializableHandout =
+    handout && (handout.kind !== 'text' || Boolean(handout.text));
   return {
     type: question.type,
     questionParts: question.questionParts.map((part) => part.trim()),
@@ -21,9 +23,7 @@ export function serializeGameQuestion(question: GameQuestion) {
     wrongAnswers: question.wrongAnswers
       .map((answer) => answer.trim())
       .filter(Boolean),
-    ...(handout && (handout.kind !== 'text' || handout.text)
-      ? { handout }
-      : {}),
+    ...(hasSerializableHandout ? { handout } : {}),
     ...(question.comment?.trim() ? { comment: question.comment.trim() } : {}),
     ...(question.hostNotes?.trim()
       ? { hostNotes: question.hostNotes.trim() }

@@ -96,7 +96,9 @@ export function QuestionDatabaseTable({
               tabIndex={onSelect ? 0 : undefined}
               onClick={() => onSelect?.(row)}
               onKeyDown={(event) => {
-                if (onSelect && (event.key === 'Enter' || event.key === ' ')) {
+                const isSelectionKey =
+                  event.key === 'Enter' || event.key === ' ';
+                if (onSelect && isSelectionKey) {
                   event.preventDefault();
                   onSelect(row);
                 }

@@ -4,12 +4,21 @@ import { writeFile } from 'node:fs/promises';
 
 export function registerGamePackageIpc() {
   ipcMain.handle('save-game-package', async (_event, filename, content) => {
+    const hasValidFilenameType = typeof filename === 'string';
+    const hasAcceptableFilenameLength =
+      hasValidFilenameType && filename.length <= 256;
+    const hasGamePackageExtension =
+      hasValidFilenameType && /\.schdk$/iu.test(filename);
+    const hasSafeFilenameCharacters =
+      hasValidFilenameType && !/[\p{Cc}<>:"/\\|?*]/u.test(filename);
+    const hasValidContentType = content instanceof Uint8Array;
+
     if (
-      typeof filename !== 'string' ||
-      filename.length > 256 ||
-      !/\.schdk$/iu.test(filename) ||
-      /[\p{Cc}<>:"/\\|?*]/u.test(filename) ||
-      !(content instanceof Uint8Array)
+      !hasValidFilenameType ||
+      !hasAcceptableFilenameLength ||
+      !hasGamePackageExtension ||
+      !hasSafeFilenameCharacters ||
+      !hasValidContentType
     ) {
       throw new TypeError('Invalid game package');
     }

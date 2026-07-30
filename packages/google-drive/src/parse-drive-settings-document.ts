@@ -6,11 +6,11 @@ import { type DriveSettingsDocument } from './drive-settings-document.js';
 function isTimedSection(value: unknown): value is TimedSection {
   if (!value || typeof value !== 'object') return false;
   const candidate = value as Record<string, unknown>;
-  return (
+  const hasValidTimestamp =
     typeof candidate.updatedAt === 'string' &&
-    Number.isFinite(Date.parse(candidate.updatedAt)) &&
-    'value' in candidate
-  );
+    Number.isFinite(Date.parse(candidate.updatedAt));
+  const hasValue = 'value' in candidate;
+  return hasValidTimestamp && hasValue;
 }
 
 function isRecentPackages(
@@ -36,31 +36,32 @@ export function parseDriveSettingsDocument(
 ): DriveSettingsDocument | null {
   if (!value || typeof value !== 'object') return null;
   const candidate = value as Record<string, unknown>;
-  if (
-    candidate.schemaVersion !== 1 ||
-    !candidate.sections ||
-    typeof candidate.sections !== 'object' ||
-    (candidate.packageFolderId !== undefined &&
-      !isDriveFileId(candidate.packageFolderId))
-  ) {
+  const hasExpectedSchema = candidate.schemaVersion === 1;
+  const hasSections =
+    !!candidate.sections && typeof candidate.sections === 'object';
+  const hasValidPackageFolder =
+    candidate.packageFolderId === undefined ||
+    isDriveFileId(candidate.packageFolderId);
+  if (!hasExpectedSchema || !hasSections || !hasValidPackageFolder) {
     return null;
   }
   const sections = candidate.sections as Record<string, unknown>;
   const editorTextOptions = sections.editorTextOptions;
   const gameOptions = sections.gameOptions;
   const recentPackages = sections.recentPackages;
-  if (
-    !isTimedSection(editorTextOptions) ||
-    !isTimedSection(gameOptions) ||
-    !isTimedSection(recentPackages) ||
-    !isRecentPackages(recentPackages)
-  ) {
+  const hasRequiredSections =
+    isTimedSection(editorTextOptions) &&
+    isTimedSection(gameOptions) &&
+    isTimedSection(recentPackages);
+  const hasValidRecentPackages =
+    hasRequiredSections && isRecentPackages(recentPackages);
+  if (!hasRequiredSections || !hasValidRecentPackages) {
     return null;
   }
   return {
     schemaVersion: 1,
     ...(candidate.packageFolderId
-      ? { packageFolderId: candidate.packageFolderId }
+      ? { packageFolderId: candidate.packageFolderId as string }
       : {}),
     sections: { editorTextOptions, gameOptions, recentPackages },
   };

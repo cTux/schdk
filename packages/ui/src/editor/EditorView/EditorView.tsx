@@ -80,18 +80,17 @@ function EditorView({
     if (!hasPackage) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (!event.ctrlKey || event.altKey || event.shiftKey || event.repeat) {
-        return;
-      }
+      const isCopyPasteShortcut =
+        event.ctrlKey && !event.altKey && !event.shiftKey && !event.repeat;
+      if (!isCopyPasteShortcut) return;
+
       const target = event.target;
-      if (
+      const isEditingText =
         target instanceof HTMLInputElement ||
         target instanceof HTMLTextAreaElement ||
         target instanceof HTMLSelectElement ||
-        (target instanceof HTMLElement && target.isContentEditable)
-      ) {
-        return;
-      }
+        (target instanceof HTMLElement && target.isContentEditable);
+      if (isEditingText) return;
 
       const action =
         event.key.toLowerCase() === 'c'

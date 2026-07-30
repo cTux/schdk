@@ -6,8 +6,12 @@ export function parseDriveAIQuestionWrite(
 ): DriveAIQuestionWrite | null {
   if (!value || typeof value !== 'object') return null;
   const candidate = value as Record<string, unknown>;
-  return isDriveAIQuestionName(candidate.name) &&
-    candidate.content instanceof Uint8Array
-    ? { name: candidate.name, content: candidate.content }
+  const hasValidName = isDriveAIQuestionName(candidate.name);
+  const hasValidContent = candidate.content instanceof Uint8Array;
+  return hasValidName && hasValidContent
+    ? {
+        name: candidate.name as string,
+        content: candidate.content as Uint8Array,
+      }
     : null;
 }

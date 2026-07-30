@@ -4,11 +4,11 @@ import { QUESTION_PARAMETER } from './question-parameter';
 export function getDeepLinkedQuestionIndex(url: string): number | null {
   try {
     const question = Number(new URL(url).searchParams.get(QUESTION_PARAMETER));
-    return Number.isSafeInteger(question) &&
+    const isValidQuestionNumber =
+      Number.isSafeInteger(question) &&
       question >= 1 &&
-      question <= QUESTION_COUNT
-      ? question - 1
-      : null;
+      question <= QUESTION_COUNT;
+    return isValidQuestionNumber ? question - 1 : null;
   } catch {
     return null;
   }

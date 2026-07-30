@@ -145,7 +145,9 @@ function App({
     unlockGameAudio();
     setWizardRestore(null);
     const host = document.getElementById('schdk-host-app');
-    if (autoFullscreen && host && !document.fullscreenElement) {
+    const shouldEnterFullscreen =
+      autoFullscreen && host && !document.fullscreenElement;
+    if (shouldEnterFullscreen) {
       void host.requestFullscreen().catch(() => {
         // The fixed game surface remains usable when fullscreen is denied.
       });
@@ -165,16 +167,14 @@ function App({
   useEffect(() => {
     if (!gameActive) return;
     function handleKeyDown(event: KeyboardEvent) {
-      if (
-        event.code !== 'KeyQ' ||
-        event.ctrlKey ||
-        event.shiftKey ||
-        !event.altKey ||
-        event.metaKey ||
-        event.repeat
-      ) {
-        return;
-      }
+      const isExitGameShortcut =
+        event.code === 'KeyQ' &&
+        !event.ctrlKey &&
+        !event.shiftKey &&
+        event.altKey &&
+        !event.metaKey &&
+        !event.repeat;
+      if (!isExitGameShortcut) return;
       event.preventDefault();
       void confirm(copy.host.exitGameConfirmation).then((confirmed) => {
         if (confirmed) returnToGames();
@@ -184,36 +184,35 @@ function App({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [confirm, copy.host.exitGameConfirmation, gameActive, returnToGames]);
 
-  const game =
-    gameActive && !wizard.finished && selectedPackage && wizard.question
-      ? {
-          question: wizard.question,
-          questionNumber: wizard.position.questionIndex + 1,
-          questionCount: selectedPackage.questions.length,
-          tourNumber:
-            Math.floor(wizard.position.questionIndex / QUESTIONS_PER_ROUND) + 1,
-          tourPhrase:
-            selectedPackage.tourPhrases[
-              Math.floor(wizard.position.questionIndex / QUESTIONS_PER_ROUND)
-            ] ?? '',
-          currentQuestionPartIndex: wizard.position.questionPartIndex,
-          currentStage: wizard.position.stage,
-          visibleStages: wizard.visibleStages,
-          remainingSeconds: wizard.remainingSeconds,
-          transition: wizard.transition,
-          controlsDisabled: wizard.controlsDisabled,
-          canGoBack: wizard.canGoBack,
-          musicBreak:
-            wizard.position.stage === 'musicBreak'
-              ? (selectedPackage.musicBreaks[
-                  Math.floor(
-                    wizard.position.questionIndex / QUESTIONS_PER_ROUND,
-                  )
-                ] ?? null)
-              : null,
-          musicVolume,
-        }
-      : null;
+  const hasActiveQuestion =
+    gameActive && !wizard.finished && selectedPackage && wizard.question;
+  const game = hasActiveQuestion
+    ? {
+        question: wizard.question!,
+        questionNumber: wizard.position.questionIndex + 1,
+        questionCount: selectedPackage.questions.length,
+        tourNumber:
+          Math.floor(wizard.position.questionIndex / QUESTIONS_PER_ROUND) + 1,
+        tourPhrase:
+          selectedPackage.tourPhrases[
+            Math.floor(wizard.position.questionIndex / QUESTIONS_PER_ROUND)
+          ] ?? '',
+        currentQuestionPartIndex: wizard.position.questionPartIndex,
+        currentStage: wizard.position.stage,
+        visibleStages: wizard.visibleStages,
+        remainingSeconds: wizard.remainingSeconds,
+        transition: wizard.transition,
+        controlsDisabled: wizard.controlsDisabled,
+        canGoBack: wizard.canGoBack,
+        musicBreak:
+          wizard.position.stage === 'musicBreak'
+            ? (selectedPackage.musicBreaks[
+                Math.floor(wizard.position.questionIndex / QUESTIONS_PER_ROUND)
+              ] ?? null)
+            : null,
+        musicVolume,
+      }
+    : null;
 
   if (!driveActive) return null;
   return (

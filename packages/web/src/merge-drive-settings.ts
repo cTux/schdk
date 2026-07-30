@@ -25,42 +25,42 @@ export function mergeDriveSettings(
 ): DriveSettingsDocument {
   if (!remoteValue || typeof remoteValue !== 'object') return local;
   const candidate = remoteValue as Record<string, unknown>;
-  if (
-    candidate.schemaVersion !== 1 ||
-    !candidate.sections ||
-    typeof candidate.sections !== 'object'
-  ) {
-    return local;
-  }
+  const hasExpectedSchema = candidate.schemaVersion === 1;
+  const hasSections =
+    !!candidate.sections && typeof candidate.sections === 'object';
+  if (!hasExpectedSchema || !hasSections) return local;
   const sections = candidate.sections as Record<string, unknown>;
   const readSection = (name: string): TimedSection | null => {
     const value = sections[name];
     if (!value || typeof value !== 'object') return null;
     const section = value as Record<string, unknown>;
-    return typeof section.updatedAt === 'string' &&
-      Number.isFinite(Date.parse(section.updatedAt)) &&
-      'value' in section
-      ? { updatedAt: section.updatedAt, value: section.value }
+    const hasValidTimestamp =
+      typeof section.updatedAt === 'string' &&
+      Number.isFinite(Date.parse(section.updatedAt));
+    const hasValue = 'value' in section;
+    return hasValidTimestamp && hasValue
+      ? { updatedAt: section.updatedAt as string, value: section.value }
       : null;
   };
   const remoteEditor = readSection('editorTextOptions');
   const remoteGame = readSection('gameOptions');
   const remoteRecents = readSection('recentPackages');
-  const validRemoteRecents =
-    remoteRecents &&
+  const isValidRecentPackage = (item: unknown) => {
+    if (!item || typeof item !== 'object') return false;
+    const recent = item as Record<string, unknown>;
+    const hasValidFileId = isDriveFileId(recent.fileId);
+    const hasValidOpenedAt =
+      typeof recent.openedAt === 'string' &&
+      Number.isFinite(Date.parse(recent.openedAt));
+    return hasValidFileId && hasValidOpenedAt;
+  };
+  const hasValidRemoteRecents =
+    !!remoteRecents &&
     Array.isArray(remoteRecents.value) &&
-    remoteRecents.value.every(
-      (item) =>
-        item &&
-        typeof item === 'object' &&
-        isDriveFileId((item as Record<string, unknown>).fileId) &&
-        typeof (item as Record<string, unknown>).openedAt === 'string' &&
-        Number.isFinite(
-          Date.parse((item as Record<string, unknown>).openedAt as string),
-        ),
-    )
-      ? (remoteRecents as typeof local.sections.recentPackages)
-      : null;
+    remoteRecents.value.every(isValidRecentPackage);
+  const validRemoteRecents = hasValidRemoteRecents
+    ? (remoteRecents as typeof local.sections.recentPackages)
+    : null;
   return {
     schemaVersion: 1,
     packageFolderId: isDriveFileId(candidate.packageFolderId)

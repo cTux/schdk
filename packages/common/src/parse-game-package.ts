@@ -19,7 +19,8 @@ function readGamePackage(
     }
     return [content, {}];
   }
-  if (content[0] !== 0x50 || content[1] !== 0x4b) {
+  const hasZipSignature = content[0] === 0x50 && content[1] === 0x4b;
+  if (!hasZipSignature) {
     if (content.byteLength > MAX_GAME_JSON_BYTES) {
       throw new Error('Invalid game package');
     }
@@ -69,13 +70,18 @@ function parseMusicBreaks(
     const candidate = item as Record<string, unknown>;
     const expectedEntry = MUSIC_BREAK_ENTRIES[index]!;
     const data = entries[expectedEntry];
+    const hasValidName =
+      typeof candidate.name === 'string' && Boolean(candidate.name);
+    const hasValidMimeType =
+      typeof candidate.mimeType === 'string' &&
+      candidate.mimeType.startsWith('audio/');
+    const hasExpectedEntry = candidate.entry === expectedEntry;
+    const hasAudioData = Boolean(data?.byteLength);
     if (
-      typeof candidate.name !== 'string' ||
-      !candidate.name ||
-      typeof candidate.mimeType !== 'string' ||
-      !candidate.mimeType.startsWith('audio/') ||
-      candidate.entry !== expectedEntry ||
-      !data?.byteLength
+      !hasValidName ||
+      !hasValidMimeType ||
+      !hasExpectedEntry ||
+      !hasAudioData
     ) {
       throw new Error('Invalid game package');
     }
@@ -91,53 +97,66 @@ function parseTourPhrases(
   value: Record<string, unknown>,
 ): [string, string, string] {
   if (value.version !== 4) return ['', '', ''];
-  if (
-    !Array.isArray(value.tourPhrases) ||
-    value.tourPhrases.length !== 3 ||
-    value.tourPhrases.some((phrase) => typeof phrase !== 'string')
-  ) {
+  const tourPhrases = Array.isArray(value.tourPhrases) ? value.tourPhrases : [];
+  const hasThreeTourPhrases = tourPhrases.length === 3;
+  const hasOnlyTextTourPhrases =
+    hasThreeTourPhrases &&
+    tourPhrases.every((phrase) => typeof phrase === 'string');
+  if (!hasThreeTourPhrases || !hasOnlyTextTourPhrases) {
     throw new Error('Invalid game package');
   }
-  return value.tourPhrases as [string, string, string];
+  return tourPhrases as [string, string, string];
 }
 
 export function parseGamePackage(content: string | Uint8Array): GamePackage {
   const [json, entries] = readGamePackage(content);
   const value: unknown = JSON.parse(json);
+  const isObject = !!value && typeof value === 'object';
+  if (!isObject) throw new Error('Invalid game package');
+
+  const hasExpectedFormat =
+    'format' in value && value.format === 'schdk-game-package';
+  const hasSupportedVersion =
+    'version' in value &&
+    (value.version === 1 ||
+      value.version === 2 ||
+      value.version === 3 ||
+      value.version === 4);
+  const hasValidTitle = 'title' in value && typeof value.title === 'string';
+  const hasExpectedQuestions =
+    'questions' in value &&
+    Array.isArray(value.questions) &&
+    value.questions.length === QUESTION_COUNT;
   if (
-    !value ||
-    typeof value !== 'object' ||
-    !('format' in value) ||
-    value.format !== 'schdk-game-package' ||
-    !('version' in value) ||
-    (value.version !== 1 &&
-      value.version !== 2 &&
-      value.version !== 3 &&
-      value.version !== 4) ||
-    !('title' in value) ||
-    typeof value.title !== 'string' ||
-    !('questions' in value) ||
-    !Array.isArray(value.questions) ||
-    value.questions.length !== QUESTION_COUNT
+    !hasExpectedFormat ||
+    !hasSupportedVersion ||
+    !hasValidTitle ||
+    !hasExpectedQuestions
   ) {
     throw new Error('Invalid game package');
   }
+  const gamePackage = value as {
+    format: 'schdk-game-package';
+    version: 1 | 2 | 3 | 4;
+    title: string;
+    questions: unknown[];
+  };
 
   let questions: GameQuestion[];
   let musicBreaks: [MusicBreak | null, MusicBreak | null];
   let tourPhrases: [string, string, string];
   try {
-    questions = value.questions.map(parseGameQuestion);
-    musicBreaks = parseMusicBreaks(value as Record<string, unknown>, entries);
-    tourPhrases = parseTourPhrases(value as Record<string, unknown>);
+    questions = gamePackage.questions.map(parseGameQuestion);
+    musicBreaks = parseMusicBreaks(gamePackage, entries);
+    tourPhrases = parseTourPhrases(gamePackage);
   } catch {
     throw new Error('Invalid game package');
   }
 
   return {
-    format: value.format,
+    format: gamePackage.format,
     version: 4,
-    title: value.title,
+    title: gamePackage.title,
     questions,
     tourPhrases,
     musicBreaks,

@@ -24,12 +24,11 @@ function scoreReference(
   if (generatedAnswers.some((answer) => referenceAnswers.includes(answer))) {
     return 4;
   }
-  if (
-    generatedText &&
-    referenceText &&
-    (generatedText.includes(referenceText) ||
-      referenceText.includes(generatedText))
-  ) {
+  const hasQuestionText = Boolean(generatedText && referenceText);
+  const hasContainedQuestionText =
+    generatedText.includes(referenceText) ||
+    referenceText.includes(generatedText);
+  if (hasQuestionText && hasContainedQuestionText) {
     return 3;
   }
   const generatedTokens = tokens(

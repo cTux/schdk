@@ -145,11 +145,13 @@ export function useVisualEditor(
     }
     if (!imageTarget) return;
     const otherImageDataLength = game.customElements.reduce(
-      (total, element) =>
-        total +
-        (element.kind === 'image' && element.id !== imageTarget && element.image
-          ? element.image.length
-          : 0),
+      (total, element) => {
+        const isOtherImage =
+          element.kind === 'image' &&
+          element.id !== imageTarget &&
+          element.image;
+        return total + (isOtherImage ? element.image!.length : 0);
+      },
       0,
     );
     if (otherImageDataLength + dataUrl.length > MAX_CUSTOM_IMAGE_DATA_LENGTH) {

@@ -13,25 +13,26 @@ function loadDesktopEditorSession(
     const value: unknown = JSON.parse(
       storage.getItem(sessionKey(scope)) ?? 'null',
     );
-    if (
-      !value ||
-      typeof value !== 'object' ||
-      !('driveFileId' in value) ||
-      !isDriveFileId(value.driveFileId) ||
-      !('fileName' in value) ||
-      !isDriveGamePackageName(value.fileName) ||
-      !('selectedIndex' in value) ||
-      typeof value.selectedIndex !== 'number' ||
-      !Number.isSafeInteger(value.selectedIndex) ||
-      value.selectedIndex < 0 ||
-      value.selectedIndex >= QUESTION_COUNT
-    ) {
+    const isObject = !!value && typeof value === 'object';
+    if (!isObject) return null;
+    const hasValidPackageIdentity =
+      'driveFileId' in value &&
+      isDriveFileId(value.driveFileId) &&
+      'fileName' in value &&
+      isDriveGamePackageName(value.fileName);
+    const hasValidSelectedIndex =
+      'selectedIndex' in value &&
+      typeof value.selectedIndex === 'number' &&
+      Number.isSafeInteger(value.selectedIndex) &&
+      value.selectedIndex >= 0 &&
+      value.selectedIndex < QUESTION_COUNT;
+    if (!hasValidPackageIdentity || !hasValidSelectedIndex) {
       return null;
     }
     return {
-      driveFileId: value.driveFileId,
-      fileName: value.fileName,
-      selectedIndex: value.selectedIndex,
+      driveFileId: value.driveFileId as string,
+      fileName: value.fileName as string,
+      selectedIndex: value.selectedIndex as number,
     };
   } catch {
     return null;

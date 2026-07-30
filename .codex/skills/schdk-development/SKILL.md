@@ -15,7 +15,9 @@ description: Implement, debug, refactor, review, or document changes anywhere in
    `docs/POTENTIAL_IMPROVEMENTS.md`.
 4. Make the smallest complete change. Use `$schdk-project-structure` for every
    changed source-code file; refactor an existing multi-export file before
-   finishing the change. Add tests only for the exact prompt
+   finishing the change. Name semantic predicates so implementation-heavy
+   control flow reads as English, while leaving already-readable direct
+   conditions inline. Add tests only for the exact prompt
    `add missing tests`, using `$schdk-add-missing-tests`.
 5. Run `$schdk-sync-specs` after implementation. It creates or updates the
    matching feature contract and root `SPEC.md` entries when required, or

@@ -91,14 +91,15 @@ export function VisualLayoutItem({
       aria-pressed={selected}
       onClick={onSelect}
       onKeyDown={(event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          onSelect();
-        } else if (
+        const isSelectionKey = event.key === 'Enter' || event.key === ' ';
+        const isCustomElementDeletion =
           event.key === 'Delete' &&
           selection.kind === 'custom' &&
-          event.target === event.currentTarget
-        ) {
+          event.target === event.currentTarget;
+        if (isSelectionKey) {
+          event.preventDefault();
+          onSelect();
+        } else if (isCustomElementDeletion) {
           event.preventDefault();
           onRemove();
         } else {
@@ -121,7 +122,9 @@ export function VisualLayoutItem({
       onPointerMove={(event) => {
         const drag = dragRef.current;
         const pointer = pointerPosition(event);
-        if (!drag || drag.pointerId !== event.pointerId || !pointer) return;
+        const hasActiveDrag =
+          drag && drag.pointerId === event.pointerId && pointer;
+        if (!hasActiveDrag) return;
         onUpdate(
           getDraggedPosition(drag.startPosition, drag.startPointer, pointer),
         );
@@ -168,9 +171,9 @@ export function VisualLayoutItem({
             onPointerMove={(event) => {
               const resize = resizeRef.current;
               const pointer = pointerPosition(event);
-              if (!resize || resize.pointerId !== event.pointerId || !pointer) {
-                return;
-              }
+              const hasActiveResize =
+                resize && resize.pointerId === event.pointerId && pointer;
+              if (!hasActiveResize) return;
               onUpdate(
                 getResizedPosition(
                   resize.startPosition,
