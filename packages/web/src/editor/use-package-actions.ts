@@ -26,6 +26,7 @@ interface PackageActionsOptions {
   applyOpenedPackage(
     content: Uint8Array,
     opened: DriveGamePackageFile,
+    selectedIndex?: number,
   ): GamePackage;
   createLocalizedPackage(): GamePackage;
   refreshRecentPackages(): Promise<void>;
@@ -34,7 +35,6 @@ interface PackageActionsOptions {
   changeGamePackage: Dispatch<SetStateAction<GamePackage>>;
   resetPackage(gamePackage: GamePackage): void;
   setMessage: Dispatch<SetStateAction<string>>;
-  setSelectedIndex: Dispatch<SetStateAction<number>>;
   setShowValidation: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -54,7 +54,6 @@ export function usePackageActions(options: PackageActionsOptions) {
     changeGamePackage,
     resetPackage: resetEditorSession,
     setMessage,
-    setSelectedIndex,
     setShowValidation,
   } = options;
   const opening = usePackageOpeningActions({
@@ -70,7 +69,6 @@ export function usePackageActions(options: PackageActionsOptions) {
 
   function resetPackage() {
     resetEditorSession(createLocalizedPackage());
-    setSelectedIndex(0);
     setShowValidation(false);
     setMessage('');
     replaceBrowserPackageDeepLink(null);
@@ -94,7 +92,6 @@ export function usePackageActions(options: PackageActionsOptions) {
         hasRemarks: hasGamePackageRemarks(emptyPackage),
       });
       applyOpenedPackage(content, saved);
-      setSelectedIndex(0);
       setShowValidation(false);
       replaceBrowserPackageDeepLink(toDrivePackageReference(saved.id), 0);
       await refreshRecentPackages();

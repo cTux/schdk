@@ -1,4 +1,4 @@
-import type { QuestionDatabaseRow } from '../../QuestionDatabasePage';
+import type { QuestionDatabaseRow } from '../../question-database-row';
 import { type QuestionDatabaseSearchField } from '../types/question-database-search-field';
 import { getQuestionDatabaseAnswer } from './get-question-database-answer';
 

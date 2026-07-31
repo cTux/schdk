@@ -12,6 +12,8 @@ description: Handle SCHDK work spanning packages or lacking a narrower skill, in
    current flow and all callers before editing.
 3. Read `docs/rules/architecture.md` for ownership changes. Reuse existing
    helpers and native APIs, then make the smallest complete change.
+   Reuse the shared `@schdk/google-drive` transport helpers for Drive endpoints,
+   multipart uploads, and SCHDK-folder discovery.
    Keep AI-generation orchestration in `@schdk/web`; UI may only collect its
    inputs and render callback-driven progress. Carry one `AbortSignal` through
    web and platform adapters to the selected provider call.

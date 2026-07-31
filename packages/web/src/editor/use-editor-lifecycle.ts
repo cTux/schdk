@@ -1,63 +1,55 @@
-import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
 import type { EditorSaveStatus } from '@schdk/ui/editor';
-import { useEffect, useRef, type Dispatch, type SetStateAction } from 'react';
+import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
+import { useEffect, type Dispatch, type SetStateAction } from 'react';
 import { saveDesktopEditorSession } from './desktop-session';
 
-interface EditorLifecycleOptions {
-  copy: LocalizationCopy;
-  desktopSessionReady: boolean;
-  driveActive: boolean;
+interface DesktopSessionOptions {
+  ready: boolean;
   driveFileId: string | null;
   fileName: string | null;
-  hasPackage: boolean;
-  locale: AppLocale;
-  manageDocumentTitle: boolean;
-  saveStatus: EditorSaveStatus;
   selectedIndex: number;
   sessionScope: string;
-  saveCurrentPackage(): Promise<boolean>;
-  setMessage: Dispatch<SetStateAction<string>>;
-  setSaveStatus: Dispatch<SetStateAction<EditorSaveStatus>>;
 }
 
-export function useEditorLifecycle({
-  copy,
-  desktopSessionReady,
-  driveActive,
+interface CloseGuardOptions {
+  copy: LocalizationCopy;
+  hasPackage: boolean;
+  saveStatus: EditorSaveStatus;
+  saveCurrentPackage(): Promise<boolean>;
+  setMessage: Dispatch<SetStateAction<string>>;
+}
+
+interface DocumentTitleOptions {
+  copy: LocalizationCopy;
+  enabled: boolean;
+  fileName: string | null;
+  locale: AppLocale;
+}
+
+function useDesktopEditorSession({
+  ready,
   driveFileId,
   fileName,
-  hasPackage,
-  locale,
-  manageDocumentTitle,
-  saveStatus,
   selectedIndex,
   sessionScope,
-  saveCurrentPackage,
-  setMessage,
-  setSaveStatus,
-}: EditorLifecycleOptions) {
-  const previousDriveActive = useRef(driveActive);
+}: DesktopSessionOptions) {
   useEffect(() => {
-    if (!window.desktop || !desktopSessionReady) return;
+    if (!window.desktop || !ready) return;
     saveDesktopEditorSession(
       localStorage,
       sessionScope,
       driveFileId && fileName ? { driveFileId, fileName, selectedIndex } : null,
     );
-  }, [desktopSessionReady, driveFileId, fileName, selectedIndex, sessionScope]);
+  }, [driveFileId, fileName, ready, selectedIndex, sessionScope]);
+}
 
-  useEffect(() => {
-    if (
-      driveActive &&
-      !previousDriveActive.current &&
-      driveFileId &&
-      saveStatus === 'error'
-    ) {
-      setSaveStatus('pending');
-    }
-    previousDriveActive.current = driveActive;
-  }, [driveActive, driveFileId, saveStatus, setSaveStatus]);
-
+function useEditorCloseGuard({
+  copy,
+  hasPackage,
+  saveStatus,
+  saveCurrentPackage,
+  setMessage,
+}: CloseGuardOptions) {
   useEffect(() => {
     window.desktop?.setEditorPackageOpen(hasPackage);
     return () => window.desktop?.setEditorPackageOpen(false);
@@ -91,10 +83,19 @@ export function useEditorLifecycle({
       }),
     [copy, saveCurrentPackage, saveStatus, setMessage],
   );
+}
 
+function useEditorDocumentTitle({
+  copy,
+  enabled,
+  fileName,
+  locale,
+}: DocumentTitleOptions) {
   useEffect(() => {
-    if (!manageDocumentTitle) return;
+    if (!enabled) return;
     document.documentElement.lang = locale;
     document.title = copy.meta.editorTitle(fileName);
-  }, [copy, fileName, locale, manageDocumentTitle]);
+  }, [copy, enabled, fileName, locale]);
 }
+
+export { useDesktopEditorSession, useEditorCloseGuard, useEditorDocumentTitle };

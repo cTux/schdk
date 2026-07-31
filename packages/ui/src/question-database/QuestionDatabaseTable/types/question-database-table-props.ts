@@ -1,4 +1,4 @@
-import type { QuestionDatabaseRow } from '../../QuestionDatabasePage';
+import type { QuestionDatabaseRow } from '../../question-database-row';
 import { type QuestionDatabaseSort } from '../types';
 
 export interface QuestionDatabaseTableProps {

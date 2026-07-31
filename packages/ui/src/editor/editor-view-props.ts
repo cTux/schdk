@@ -1,5 +1,5 @@
 import type { GamePackage, GameQuestion } from '@schdk/common';
-import type { QuestionDatabaseRow } from '../shell/QuestionDatabasePage';
+import type { QuestionDatabaseRow } from '../question-database';
 import { type AiQuestionGenerationOptions } from './ai-question-generation-options';
 import { type RecentPackageItem } from '../game-packages';
 import { type EditorSaveStatus } from './types';

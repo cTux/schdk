@@ -13,6 +13,7 @@ import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
 import {
   useCallback,
   useEffect,
+  useRef,
   type Dispatch,
   type MutableRefObject,
   type SetStateAction,
@@ -22,7 +23,11 @@ import {
   scheduleAutosave,
   shouldScheduleAutosave,
 } from './autosave';
-import { useEditorLifecycle } from './use-editor-lifecycle';
+import {
+  useDesktopEditorSession,
+  useEditorCloseGuard,
+  useEditorDocumentTitle,
+} from './use-editor-lifecycle';
 
 interface EditorPersistenceOptions {
   copy: LocalizationCopy;
@@ -73,6 +78,7 @@ export function useEditorPersistence({
   setMessage,
   setSaveStatus,
 }: EditorPersistenceOptions) {
+  const previousDriveActive = useRef(driveActive);
   const saveCurrentPackage = useCallback(async () => {
     if (!drive || !driveFileId || !driveModifiedTime || !fileName) {
       throw new Error('Google Drive is unavailable');
@@ -131,22 +137,38 @@ export function useEditorPersistence({
     setSaveStatus,
   ]);
 
-  useEditorLifecycle({
-    copy,
-    desktopSessionReady,
-    driveActive,
+  useDesktopEditorSession({
+    ready: desktopSessionReady,
     driveFileId,
     fileName,
-    hasPackage,
-    locale,
-    manageDocumentTitle,
-    saveStatus,
     selectedIndex,
     sessionScope,
+  });
+  useEditorCloseGuard({
+    copy,
+    hasPackage,
+    saveStatus,
     saveCurrentPackage,
     setMessage,
-    setSaveStatus,
   });
+  useEditorDocumentTitle({
+    copy,
+    enabled: manageDocumentTitle,
+    fileName,
+    locale,
+  });
+
+  useEffect(() => {
+    if (
+      driveActive &&
+      !previousDriveActive.current &&
+      driveFileId &&
+      saveStatus === 'error'
+    ) {
+      setSaveStatus('pending');
+    }
+    previousDriveActive.current = driveActive;
+  }, [driveActive, driveFileId, saveStatus, setSaveStatus]);
 
   useEffect(() => {
     if (!shouldScheduleAutosave(saveStatus, Boolean(driveFileId && drive))) {

@@ -10,15 +10,22 @@ interface EditorSessionState {
   driveModifiedTime: string | null;
   fileName: string | null;
   saveStatus: EditorSaveStatus;
+  selectedIndex: number;
 }
 
 type EditorSessionAction =
   | { type: 'change'; value: SetStateAction<GamePackage> }
-  | { type: 'open'; gamePackage: GamePackage; file: DriveGamePackageFile }
+  | {
+      type: 'open';
+      gamePackage: GamePackage;
+      file: DriveGamePackageFile;
+      selectedIndex: number;
+    }
   | { type: 'reset'; gamePackage: GamePackage }
   | { type: 'file-name'; value: SetStateAction<string | null> }
   | { type: 'modified-time'; value: SetStateAction<string | null> }
-  | { type: 'save-status'; value: SetStateAction<EditorSaveStatus> };
+  | { type: 'save-status'; value: SetStateAction<EditorSaveStatus> }
+  | { type: 'selected-index'; value: SetStateAction<number> };
 
 function resolve<T>(value: SetStateAction<T>, current: T): T {
   return typeof value === 'function'
@@ -26,7 +33,7 @@ function resolve<T>(value: SetStateAction<T>, current: T): T {
     : value;
 }
 
-function createState(title: string): EditorSessionState {
+function createEditorSessionState(title: string): EditorSessionState {
   return {
     gamePackage: { ...createEmptyGamePackage(), title },
     hasPackage: false,
@@ -34,10 +41,11 @@ function createState(title: string): EditorSessionState {
     driveModifiedTime: null,
     fileName: null,
     saveStatus: 'saved',
+    selectedIndex: 0,
   };
 }
 
-function reducer(
+function editorSessionReducer(
   state: EditorSessionState,
   action: EditorSessionAction,
 ): EditorSessionState {
@@ -56,10 +64,11 @@ function reducer(
         driveModifiedTime: action.file.modifiedTime,
         fileName: action.file.name,
         saveStatus: 'saved',
+        selectedIndex: action.selectedIndex,
       };
     case 'reset':
       return {
-        ...createState(action.gamePackage.title),
+        ...createEditorSessionState(action.gamePackage.title),
         gamePackage: action.gamePackage,
       };
     case 'file-name':
@@ -71,18 +80,27 @@ function reducer(
       };
     case 'save-status':
       return { ...state, saveStatus: resolve(action.value, state.saveStatus) };
+    case 'selected-index':
+      return {
+        ...state,
+        selectedIndex: resolve(action.value, state.selectedIndex),
+      };
   }
 }
 
 function useEditorSession(untitledTitle: string) {
-  const [state, dispatch] = useReducer(reducer, untitledTitle, createState);
+  const [state, dispatch] = useReducer(
+    editorSessionReducer,
+    untitledTitle,
+    createEditorSessionState,
+  );
   const changeGamePackage = useCallback(
     (value: SetStateAction<GamePackage>) => dispatch({ type: 'change', value }),
     [],
   );
   const openPackage = useCallback(
-    (gamePackage: GamePackage, file: DriveGamePackageFile) =>
-      dispatch({ type: 'open', gamePackage, file }),
+    (gamePackage: GamePackage, file: DriveGamePackageFile, selectedIndex = 0) =>
+      dispatch({ type: 'open', gamePackage, file, selectedIndex }),
     [],
   );
   const resetPackage = useCallback(
@@ -104,6 +122,11 @@ function useEditorSession(untitledTitle: string) {
       dispatch({ type: 'save-status', value }),
     [],
   );
+  const setSelectedIndex = useCallback(
+    (value: SetStateAction<number>) =>
+      dispatch({ type: 'selected-index', value }),
+    [],
+  );
 
   return {
     ...state,
@@ -113,7 +136,8 @@ function useEditorSession(untitledTitle: string) {
     setDriveModifiedTime,
     setFileName,
     setSaveStatus,
+    setSelectedIndex,
   };
 }
 
-export { useEditorSession };
+export { createEditorSessionState, editorSessionReducer, useEditorSession };

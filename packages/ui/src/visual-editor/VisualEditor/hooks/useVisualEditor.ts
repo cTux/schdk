@@ -9,6 +9,11 @@ import {
   type GameOptions,
 } from '../../../options/types';
 import { createCustomElement, getNextZoom } from '../utils/geometry';
+import {
+  removeVisualEditorElement,
+  updateVisualEditorElement,
+  updateVisualEditorPosition,
+} from '../utils/update-visual-editor-game';
 import type { ElementSelection, GamePoint } from '../types';
 
 interface VisualEditorState {
@@ -100,38 +105,11 @@ export function useVisualEditor(
     selection: ElementSelection,
     patch: Partial<GameLayoutPosition>,
   ) {
-    onChange(
-      selection.kind === 'built-in'
-        ? {
-            ...game,
-            layout: {
-              ...positions,
-              [selection.id]: { ...positions[selection.id], ...patch },
-            },
-          }
-        : {
-            ...game,
-            customElements: game.customElements.map((element) =>
-              element.id === selection.id
-                ? {
-                    ...element,
-                    position: { ...element.position, ...patch },
-                  }
-                : element,
-            ),
-          },
-    );
+    onChange(updateVisualEditorPosition(game, selection, patch));
   }
 
   function updateCustom(id: string, patch: Partial<CustomGameElement>) {
-    onChange({
-      ...game,
-      customElements: game.customElements.map((element) =>
-        element.id === id
-          ? ({ ...element, ...patch } as CustomGameElement)
-          : element,
-      ),
-    });
+    onChange(updateVisualEditorElement(game, id, patch));
   }
 
   function selectWorkspace() {
@@ -162,12 +140,7 @@ export function useVisualEditor(
   }
 
   function removeCustom(id: string) {
-    onChange({
-      ...game,
-      customElements: game.customElements.filter(
-        (element) => element.id !== id,
-      ),
-    });
+    onChange(removeVisualEditorElement(game, id));
     selectWorkspace();
   }
 

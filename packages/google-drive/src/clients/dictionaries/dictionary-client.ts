@@ -12,12 +12,11 @@ import {
   type DriveDictionaryWrite,
 } from '../../services/dictionaries/dictionaries.js';
 import { isDriveFileId } from '../../services/settings/settings.js';
-import { createDriveMultipartBody } from '../../utils/client/create-drive-multipart-body.js';
-
-const DRIVE_API = 'https://www.googleapis.com/drive/v3';
-const DRIVE_UPLOAD_API = 'https://www.googleapis.com/upload/drive/v3';
-
-type DriveRequest = (input: string, init?: RequestInit) => Promise<Response>;
+import {
+  DRIVE_API,
+  uploadDriveFile,
+  type DriveRequest,
+} from '../../utils/client/drive-api.js';
 
 class GoogleDriveDictionaryStorage implements DriveDictionaryStorage {
   constructor(private readonly request: DriveRequest) {}
@@ -109,18 +108,12 @@ class GoogleDriveDictionaryStorage implements DriveDictionaryStorage {
       mimeType: DRIVE_DICTIONARY_MIME_TYPE,
       ...(fileId ? {} : { parents: [GLOBAL_DICTIONARY_FOLDER_ID] }),
     };
-    const { body, contentType } = createDriveMultipartBody(
+    const response = await uploadDriveFile(this.request, {
+      fileId,
+      fields: 'id,name,modifiedTime',
       metadata,
-      DRIVE_DICTIONARY_MIME_TYPE,
-      new Uint8Array(parsed.content),
-    );
-    const target = fileId
-      ? `${DRIVE_UPLOAD_API}/files/${encodeURIComponent(fileId)}?uploadType=multipart&fields=id,name,modifiedTime`
-      : `${DRIVE_UPLOAD_API}/files?uploadType=multipart&fields=id,name,modifiedTime`;
-    const response = await this.request(target, {
-      method: fileId ? 'PATCH' : 'POST',
-      headers: { 'Content-Type': contentType },
-      body,
+      mimeType: DRIVE_DICTIONARY_MIME_TYPE,
+      content: new Uint8Array(parsed.content),
     });
     const file = parseDriveDictionaryFile(await response.json());
     if (!file) throw new Error('Google Drive dictionary is unavailable');

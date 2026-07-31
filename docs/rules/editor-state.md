@@ -2,9 +2,9 @@
 
 - The editor controller owns package state; `@schdk/ui` receives data and
   callbacks and must not persist files.
-- Keep the active package, its Drive backing metadata, and save status in one
-  reducer. Open and reset them atomically, and make every package mutation
-  transition to `pending` in the same reducer action.
+- Keep the active package, selected question, its Drive backing metadata, and
+  save status in one reducer. Open and reset them atomically, and make every
+  package mutation transition to `pending` in the same reducer action.
 - Every package mutation sets save status to `pending` and clears stale errors.
 - Apply enabled text correction only on blur. Trim corrected values; capitalize
   configured question, answer, alternative-answer, and answer-comment fields.

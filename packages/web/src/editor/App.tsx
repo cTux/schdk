@@ -46,6 +46,8 @@ function App({
     hasPackage,
     openPackage,
     saveStatus,
+    selectedIndex,
+    setSelectedIndex,
   } = session;
   const currentPackage = useRef(gamePackage);
   const saveQueue = useRef(Promise.resolve());
@@ -63,16 +65,14 @@ function App({
   const [desktopSessionReady, setDesktopSessionReady] = useState(
     !initialDesktopSession.current,
   );
-  const [selectedIndex, setSelectedIndex] = useState(0);
   const [showValidation, setShowValidation] = useState(false);
   const [message, setMessage] = useState('');
   currentPackage.current = gamePackage;
 
   const applyOpenedPackage = useCallback(
-    (content: Uint8Array, opened: DriveGamePackageFile) => {
+    (content: Uint8Array, opened: DriveGamePackageFile, selectedIndex = 0) => {
       const packageToEdit = parseGamePackage(content);
-      openPackage(packageToEdit, opened);
-      setSelectedIndex(0);
+      openPackage(packageToEdit, opened, selectedIndex);
       setShowValidation(false);
       return packageToEdit;
     },
@@ -97,7 +97,6 @@ function App({
     onDriveFailure,
     setDesktopSessionReady,
     setMessage,
-    setSelectedIndex,
   });
   const resolveDriveConflict = useDriveConflictResolution({
     confirm,
@@ -165,7 +164,6 @@ function App({
     changeGamePackage: session.changeGamePackage,
     resetPackage: session.resetPackage,
     setMessage,
-    setSelectedIndex,
     setShowValidation,
   });
 

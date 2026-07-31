@@ -25,6 +25,7 @@ interface PackageOpeningOptions {
   applyOpenedPackage(
     content: Uint8Array,
     opened: DriveGamePackageFile,
+    selectedIndex?: number,
   ): GamePackage;
   refreshRecentPackages(): Promise<void>;
   onDriveFailure?(): void;

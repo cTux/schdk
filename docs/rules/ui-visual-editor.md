@@ -15,6 +15,8 @@
   standard layout until changed.
 - Preview pointer drag and resize locally, then persist one final position when
   the interaction ends. Persist keyboard adjustments immediately.
+- Keep `GameOptions` mutations in pure helpers; the React hook owns transient
+  interaction state and delegates persisted model updates.
 - Let every built-in and custom element be marked hidden while remaining
   editable in the visual editor; omit hidden elements only from gameplay.
 - Keep resize and property controls outside the transformed game container.
