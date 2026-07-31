@@ -9,7 +9,7 @@
 
   .question-list,
   .question-editor {
-    border: 1px solid $border;
+    border: 0;
     border-radius: $radius-surface;
     background:
       linear-gradient(145deg, rgba($highlight-rgb, 0.035), transparent 45%),
@@ -213,7 +213,6 @@
   fieldset {
     margin: 0 0 18px;
     border: 0;
-    border-top: 1px solid $border;
     padding: 17px 0 0;
   }
 

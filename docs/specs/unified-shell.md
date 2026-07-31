@@ -116,9 +116,9 @@ package authoring, hosting, settings, and account state.
   also shortens motion regardless of this setting.
 - **SHL-22:** The shell keeps the existing light and dark color palettes while
   using a solid fixed sidebar, a separated brand row, compact uppercase section
-  labels, flat active navigation, a plain workspace, and
-  low-radius bordered surfaces without decorative gradients, glows, or glass
-  effects.
+  labels, flat active navigation, a plain workspace, and borderless major
+  surfaces without decorative gradients, glows, or glass effects. Borders stay
+  on controls and structural delimiters, including editor question numbers.
 
 ## Invariants
 

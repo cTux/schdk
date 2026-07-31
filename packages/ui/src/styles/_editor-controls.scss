@@ -75,7 +75,7 @@
     justify-content: space-between;
     gap: 24px;
     margin-bottom: 16px;
-    border: 1px solid rgba($border-rgb, 0.8);
+    border: 0;
     border-radius: $radius-surface;
     background:
       linear-gradient(120deg, rgba($highlight-rgb, 0.045), transparent 42%),
@@ -89,6 +89,10 @@
   .brand {
     min-width: 0;
     gap: 12px;
+  }
+
+  .brand > div {
+    min-width: 0;
   }
 
   h1,

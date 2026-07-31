@@ -53,8 +53,9 @@
   when needed.
 - Use the shared ink/plum chrome, amber brand actions, periwinkle interaction
   states, and warm canvases. Keep application chrome flat with solid
-  backgrounds, low-radius bordered surfaces, and restrained elevation; do not
-  add decorative gradients, glows, or glass effects.
+  backgrounds, borderless major surfaces, and restrained elevation; reserve
+  borders for controls, data separators, dialogs, drop zones, and question
+  numbers, and do not add decorative gradients, glows, or glass effects.
 - Keep action bars compact and icon-only with Ukrainian accessible labels shown
   by the shared tooltip on hover and keyboard focus.
 - Preserve semantic elements, labels, `aria-*` state, visible focus, disabled

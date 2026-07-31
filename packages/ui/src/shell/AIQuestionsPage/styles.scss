@@ -27,7 +27,7 @@
 }
 
 .ai-question-form {
-  border: 1px solid $border;
+  border: 0;
   border-radius: $radius-panel;
   background: rgba($surface-rgb, 0.82);
   box-shadow: $shadow-raised;
@@ -50,7 +50,7 @@
   align-items: center;
   justify-content: space-between;
   gap: $space-4;
-  border: 1px solid $border;
+  border: 0;
   border-radius: $radius-control;
   background: $surface-raised;
   padding: $space-3 $space-4;

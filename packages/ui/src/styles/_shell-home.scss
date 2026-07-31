@@ -47,7 +47,7 @@
   align-items: center;
   justify-content: flex-start;
   gap: 14px;
-  border: 1px solid $border;
+  border: 0;
   min-height: $control-normal;
   min-width: min(280px, 100%);
   flex: 1 1 280px;
@@ -57,9 +57,7 @@
   color: $text;
   text-align: left;
   cursor: pointer;
-  transition:
-    border-color $motion-fast ease,
-    background-color $motion-fast ease;
+  transition: background-color $motion-fast ease;
   box-shadow: $shadow-raised;
 }
 
@@ -69,7 +67,6 @@
 }
 
 .tool-list button:hover {
-  border-color: $border-strong;
   background: $surface-raised;
 }
 

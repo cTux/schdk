@@ -45,7 +45,6 @@ button {
   height: 100vh;
   flex: 0 0 288px;
   flex-direction: column;
-  border-right: 1px solid $border;
   background: $sidebar;
 }
 
@@ -54,7 +53,6 @@ button {
   min-height: 88px;
   align-items: center;
   gap: 10px;
-  border-bottom: 1px solid $border;
   padding: 20px 24px;
 }
 
