@@ -1,8 +1,8 @@
 # Google Drive persistence
 
 - Keep the Drive REST client, package-storage contract, reference helpers, and
-  settings envelope in `@schdk/google-drive`. Treat option values as opaque
-  there; the owning web shell validates them.
+  generic settings envelope in `@schdk/google-drive`. Its parser validates the
+  envelope while the owning web shell binds and validates section value types.
 - Keep local storage as the immediate source and fallback. Merge remote
   settings per section by `updatedAt`, debounce uploads for one second, and
   retain local changes when Drive is unavailable.

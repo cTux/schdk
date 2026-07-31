@@ -1,11 +1,7 @@
-import {
-  isDriveFileId,
-  type DriveSettingsDocument,
-  type TimedSection,
-} from '@schdk/google-drive';
-import { normalizeGameOptions, type GameOptions } from '@schdk/common';
-import type { EditorTextOptions } from '@schdk/ui/options';
+import { isDriveFileId, type TimedSection } from '@schdk/google-drive';
+import { normalizeGameOptions } from '@schdk/common';
 import { normalizeEditorTextOptions } from '../../storage/editor/editor-options-storage';
+import type { WebDriveSettingsDocument } from '../../types/google-drive/web-drive-settings-document';
 
 function newerValidSection<T>(
   local: TimedSection<T>,
@@ -20,9 +16,9 @@ function newerValidSection<T>(
 }
 
 export function mergeDriveSettings(
-  local: DriveSettingsDocument,
+  local: WebDriveSettingsDocument,
   remoteValue: unknown,
-): DriveSettingsDocument {
+): WebDriveSettingsDocument {
   if (!remoteValue || typeof remoteValue !== 'object') return local;
   const candidate = remoteValue as Record<string, unknown>;
   const hasExpectedSchema = candidate.schemaVersion === 1;
@@ -69,14 +65,14 @@ export function mergeDriveSettings(
     sections: {
       editorTextOptions: remoteEditor
         ? newerValidSection(
-            local.sections.editorTextOptions as TimedSection<EditorTextOptions>,
+            local.sections.editorTextOptions,
             remoteEditor,
             normalizeEditorTextOptions,
           )
         : local.sections.editorTextOptions,
       gameOptions: remoteGame
         ? newerValidSection(
-            local.sections.gameOptions as TimedSection<GameOptions>,
+            local.sections.gameOptions,
             remoteGame,
             normalizeGameOptions,
           )

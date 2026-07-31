@@ -1,8 +1,8 @@
-import { type DriveSettingsDocument } from '@schdk/google-drive';
+import type { WebDriveSettingsDocument } from '../../types/google-drive/web-drive-settings-document';
 
 export function initializeDriveSettings(
-  settings: DriveSettingsDocument,
-): DriveSettingsDocument {
+  settings: WebDriveSettingsDocument,
+): WebDriveSettingsDocument {
   const updatedAt = new Date().toISOString();
   return {
     ...settings,

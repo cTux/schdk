@@ -60,8 +60,8 @@ export function useGoogleDriveSettings({
 
   function applySettings(next: typeof settings.current) {
     settings.current = next;
-    const editor = next.sections.editorTextOptions.value as EditorTextOptions;
-    const game = next.sections.gameOptions.value as GameOptions;
+    const editor = next.sections.editorTextOptions.value;
+    const game = next.sections.gameOptions.value;
     saveEditorTextOptions(localStorage, editor);
     setGameOptionsStorageFailed(!saveGameOptions(localStorage, game));
     saveLocalDriveSettings(localStorage, next);
