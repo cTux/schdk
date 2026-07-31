@@ -64,10 +64,30 @@
   gap: $space-1;
 }
 
-.dictionary-distribution-fields label {
+.dictionary-distribution-field {
+  position: relative;
   display: grid;
   gap: $space-1;
   font-size: $font-size-sm;
+}
+
+.dictionary-distribution-field .ui-input {
+  padding-bottom: 26px;
+}
+
+.dictionary-distribution-field span {
+  position: absolute;
+  right: 11px;
+  bottom: 8px;
+  max-width: calc(100% - 22px);
+  overflow: hidden;
+  color: $muted;
+  font-size: $font-size-xs;
+  font-weight: 600;
+  line-height: 1;
+  pointer-events: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .dictionary-link {

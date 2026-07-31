@@ -6,13 +6,13 @@ export function DictionaryDistributionFields({ item, onChange }: Props) {
   return (
     <div className="dictionary-distribution-fields">
       {AI_QUESTION_DIFFICULTIES.map((value) => (
-        <label key={value}>
-          {value}
+        <div className="dictionary-distribution-field" key={value}>
           <Input
             type="number"
             min={0}
             max={100}
             value={item.distribution?.[value] ?? 0}
+            aria-label={`${value}, %`}
             onChange={(event) =>
               onChange(
                 value,
@@ -20,8 +20,8 @@ export function DictionaryDistributionFields({ item, onChange }: Props) {
               )
             }
           />
-          %
-        </label>
+          <span aria-hidden="true">{value}, %</span>
+        </div>
       ))}
     </div>
   );
