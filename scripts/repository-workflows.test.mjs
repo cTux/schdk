@@ -4,6 +4,7 @@ import { existsSync } from 'node:fs';
 import { access, readFile, readdir } from 'node:fs/promises';
 import test from 'node:test';
 import { promisify } from 'node:util';
+import { findImportCycles } from './source-import-graph.mjs';
 
 const repositoryRoot = new URL('../', import.meta.url);
 const read = (path) => readFile(new URL(path, repositoryRoot), 'utf8');
@@ -180,6 +181,22 @@ test('workspace imports respect package boundaries and manifests', async () => {
       }
     }
   }
+});
+
+test('workspace source modules have no relative import cycles', async () => {
+  const packageDirectories = (
+    await readdir(new URL('packages/', repositoryRoot), { withFileTypes: true })
+  ).filter((entry) => entry.isDirectory());
+  const cycles = await findImportCycles(
+    packageDirectories.map(
+      ({ name }) => new URL(`packages/${name}/src/`, repositoryRoot),
+    ),
+  );
+
+  assert.deepEqual(
+    cycles.map((cycle) => cycle.map((url) => new URL(url).pathname)),
+    [],
+  );
 });
 
 test('UI components follow the directory and class composition contracts', async () => {

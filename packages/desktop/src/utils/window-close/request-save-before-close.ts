@@ -1,6 +1,7 @@
 import { type ClosableWindow } from './closable-window.js';
 import { type CloseController } from './close-controller.js';
-import { CLOSE_TIMEOUT_MS } from './window-close.js';
+
+export const CLOSE_TIMEOUT_MS = 10_000;
 
 export function requestSaveBeforeClose(
   window: ClosableWindow,

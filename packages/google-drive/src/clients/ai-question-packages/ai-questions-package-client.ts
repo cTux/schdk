@@ -6,12 +6,12 @@ import {
   DRIVE_AI_QUESTIONS_PACKAGE_KIND,
   DRIVE_AI_QUESTIONS_PACKAGE_MIME_TYPE,
   isDriveAIQuestionsPackageName,
-  parseDriveAIQuestionsPackageFile,
   type DriveAIQuestionsPackage,
   type DriveAIQuestionsPackageFile,
   type DriveAIQuestionsPackageStorage,
   type DriveAIQuestionsPackageWrite,
 } from '../../services/ai-question-packages/ai-questions-packages.js';
+import { parseDriveAIQuestionsPackageFile } from '../../parsers/ai-question-packages/parse-drive-ai-questions-package-file.js';
 import {
   DRIVE_APP_KIND_KEY,
   DRIVE_FOLDER_KIND,

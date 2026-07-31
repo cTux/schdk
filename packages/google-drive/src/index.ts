@@ -31,21 +31,21 @@ import {
 } from './services/game-packages/game-packages.js';
 import {
   isDriveFileId,
-  parseDriveSettingsDocument,
   type DriveRecentPackage,
   type DriveSettingsDocument,
   type TimedSection,
 } from './services/settings/settings.js';
+import { parseDriveSettingsDocument } from './parsers/settings/parse-drive-settings-document.js';
 import {
   createAIQuestionsPackageFilename,
   isDriveAIQuestionsPackageName,
-  parseDriveAIQuestionsPackageFile,
   parseDriveAIQuestionsPackageWrite,
   type DriveAIQuestionsPackage,
   type DriveAIQuestionsPackageFile,
   type DriveAIQuestionsPackageStorage,
   type DriveAIQuestionsPackageWrite,
 } from './services/ai-question-packages/ai-questions-packages.js';
+import { parseDriveAIQuestionsPackageFile } from './parsers/ai-question-packages/parse-drive-ai-questions-package-file.js';
 import {
   createQuestionDatabasePackage,
   flattenQuestionDatabase,

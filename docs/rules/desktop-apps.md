@@ -52,8 +52,9 @@
 - Keep user AI API keys in the current Google account's separate Drive app
   data. Expose only save, remove, configured-status, and validated question
   generation operations to the renderer. Run generation in Electron main and
-  return only the parsed question; migrate and remove a legacy `safeStorage`
-  key only after a successful Drive write.
+  return only the parsed question. Cancel generation through a request-scoped
+  preload message and abort the matching main-process provider call; migrate
+  and remove a legacy `safeStorage` key only after a successful Drive write.
 - Keep normal local packaging on electron-builder's unpacked `dir` target for
   the current host. Use `package:win` and `package:linux` only on their native
   operating systems.

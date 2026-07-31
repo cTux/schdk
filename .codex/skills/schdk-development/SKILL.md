@@ -13,7 +13,8 @@ description: Handle SCHDK work spanning packages or lacking a narrower skill, in
 3. Read `docs/rules/architecture.md` for ownership changes. Reuse existing
    helpers and native APIs, then make the smallest complete change.
    Keep AI-generation orchestration in `@schdk/web`; UI may only collect its
-   inputs and render callback-driven progress.
+   inputs and render callback-driven progress. Carry one `AbortSignal` through
+   web and platform adapters to the selected provider call.
    When research finds a credible scalable solution that is not needed yet,
    record its purpose, tradeoffs, and activation conditions in
    `docs/POTENTIAL_IMPROVEMENTS.md`.

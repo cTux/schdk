@@ -6,9 +6,7 @@ import { type DriveAIQuestionsPackageStorage } from '../../types/ai-question-pac
 import { createAIQuestionsPackageFilename } from '../../factories/ai-question-packages/create-ai-questions-package-filename.js';
 import { isDriveAIQuestionsPackageName } from '../../utils/ai-question-packages/is-drive-ai-questions-package-name.js';
 import { parseDriveAIQuestionsPackageWrite } from '../../parsers/ai-question-packages/parse-drive-ai-questions-package-write.js';
-import { parseDriveAIQuestionsPackageFile } from '../../parsers/ai-question-packages/parse-drive-ai-questions-package-file.js';
-
-const DRIVE_AI_QUESTIONS_PACKAGE_KIND = 'ai-questions-package';
+import { DRIVE_AI_QUESTIONS_PACKAGE_KIND } from '../../constants/ai-question-packages/drive-ai-questions-package-kind.js';
 
 export {
   DRIVE_AI_QUESTIONS_PACKAGE_KIND,
@@ -20,5 +18,4 @@ export {
   createAIQuestionsPackageFilename,
   isDriveAIQuestionsPackageName,
   parseDriveAIQuestionsPackageWrite,
-  parseDriveAIQuestionsPackageFile,
 };

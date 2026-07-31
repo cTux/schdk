@@ -79,4 +79,58 @@ describe('AI generation controller', () => {
       expect.objectContaining({ index: 1, position: 2, total: 2 }),
     );
   });
+
+  it('forwards cancellation and stops before the next package target', async () => {
+    const controller = new AbortController();
+    const generateAiQuestion = vi.fn(async (_request, signal) => {
+      expect(signal).toBe(controller.signal);
+      controller.abort();
+      return question('First');
+    });
+    const generation = createAiQuestionGeneration(
+      {
+        renewToken: vi.fn(),
+        generateAiQuestion,
+      } as unknown as GoogleDriveBridge,
+      {
+        providers: [],
+        provider: 'openai',
+        model: 'test',
+        apiKeyConfigured: true,
+      },
+      [template],
+      [],
+      'uk',
+      false,
+    );
+
+    await expect(
+      generation.generatePackage(
+        {
+          steps: [
+            { index: 0, template, context: 'One' },
+            { index: 1, template, context: 'Two' },
+          ],
+          excludedAnswers: [],
+          difficultyDistribution: {
+            'very-easy': 0,
+            easy: 0,
+            medium: 100,
+            hard: 0,
+            'very-hard': 0,
+          },
+          recognizabilityDistribution: {
+            'very-easy': 0,
+            easy: 100,
+            medium: 0,
+            hard: 0,
+            'very-hard': 0,
+          },
+        },
+        vi.fn(),
+        controller.signal,
+      ),
+    ).rejects.toMatchObject({ name: 'AbortError' });
+    expect(generateAiQuestion).toHaveBeenCalledOnce();
+  });
 });

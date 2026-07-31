@@ -49,11 +49,14 @@ export interface AiQuestionGenerationOptions {
     difficulty?: AIQuestionDifficulty,
     recognizability?: AIQuestionRecognizability,
   ): string;
-  generateQuestion(request: AiQuestionGenerationRequest): Promise<GameQuestion>;
+  generateQuestion(
+    request: AiQuestionGenerationRequest,
+    signal?: AbortSignal,
+  ): Promise<GameQuestion>;
   generatePackage(
     request: AiPackageGenerationRequest,
     onProgress: (progress: AiPackageGenerationProgress) => void,
-    shouldContinue?: () => boolean,
+    signal?: AbortSignal,
   ): Promise<void>;
   onQuestionGenerationStateChange?(generating: boolean, docked: boolean): void;
   excludedAnswers?: string[];

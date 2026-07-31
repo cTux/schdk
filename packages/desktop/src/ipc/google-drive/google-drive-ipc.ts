@@ -10,17 +10,18 @@ import {
 } from '@schdk/google-drive';
 import { ipcMain } from 'electron';
 import {
-  connectGoogleDrive,
   disconnectGoogleDrive,
   getGoogleDriveAccessToken,
-  getGoogleDriveStatus,
 } from '../../services/google-drive/google-drive-auth.js';
+import { connectGoogleDrive } from '../../services/google-drive/connect-google-drive.js';
+import { getGoogleDriveStatus } from '../../services/google-drive/get-google-drive-status.js';
 import {
   loadAiApiKey,
   saveAiApiKey,
 } from '../../services/ai-credentials/ai-credentials.js';
 
 const client = new GoogleDriveClient(getGoogleDriveAccessToken);
+const generationControllers = new Map<string, AbortController>();
 
 export function registerGoogleDriveIpc() {
   ipcMain.handle('google-drive-status', getGoogleDriveStatus);
@@ -41,13 +42,30 @@ export function registerGoogleDriveIpc() {
     await client.saveAiApiKey(apiKey);
     await saveAiApiKey(null);
   });
-  ipcMain.handle('generate-ai-question', async (_event, request) => {
-    const apiKey = await client.loadAiApiKey();
-    if (!apiKey) throw new Error('AI API key is not configured');
-    return generateGameQuestion({
-      ...(request as GameQuestionGenerationRequest),
-      apiKey,
-    });
+  ipcMain.on('cancel-ai-question-generation', (_event, requestId) => {
+    if (typeof requestId === 'string') {
+      generationControllers.get(requestId)?.abort();
+    }
+  });
+  ipcMain.handle('generate-ai-question', async (_event, requestId, request) => {
+    if (typeof requestId !== 'string' || !requestId) {
+      throw new TypeError('Invalid AI generation request');
+    }
+    const controller = new AbortController();
+    generationControllers.set(requestId, controller);
+    try {
+      const apiKey = await client.loadAiApiKey();
+      if (!apiKey) throw new Error('AI API key is not configured');
+      controller.signal.throwIfAborted();
+      const { generateGameQuestion } = await import('@schdk/ai');
+      return await generateGameQuestion({
+        ...(request as GameQuestionGenerationRequest),
+        apiKey,
+        abortSignal: controller.signal,
+      });
+    } finally {
+      generationControllers.delete(requestId);
+    }
   });
   ipcMain.handle('load-google-drive-settings', () => client.loadSettings());
   ipcMain.handle('save-google-drive-settings', async (_event, value) => {
@@ -202,7 +220,4 @@ export function registerGoogleDriveIpc() {
     return client.updateDictionary(fileId, dictionary);
   });
 }
-import {
-  generateGameQuestion,
-  type GameQuestionGenerationRequest,
-} from '@schdk/ai';
+import { type GameQuestionGenerationRequest } from '@schdk/ai';

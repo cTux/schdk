@@ -123,8 +123,8 @@ without losing in-progress work.
   sequentially without taking selection away from the author.
   The weighted difficulty selected for each question and the selected
   recognizability are sent for every question. The
-  visible cancel action asks for confirmation, then closes the panel and
-  ignores any unfinished provider result only after confirmation.
+  visible cancel action asks for confirmation, then aborts the unfinished
+  provider request and closes the panel only after confirmation.
   While generation runs, the panel shows the current question, its
   package-generation percentage, and an animated progress indicator that respects
   reduced-motion preferences.
@@ -241,7 +241,7 @@ without losing in-progress work.
     completely and prior successful results are retained when a request fails.
     Start cancellation during an unfinished
     request, dismiss its confirmation, and verify generation continues. Confirm
-    cancellation and verify the unfinished result is ignored. Confirm the
+    cancellation and verify the unfinished provider request is aborted. Confirm the
     progress percentage matches the current target position,
     its activity indicator remains visibly animated between responses, and
     reduced-motion mode removes that animation. In the browser, confirm that

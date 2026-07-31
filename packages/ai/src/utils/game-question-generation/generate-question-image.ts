@@ -1,4 +1,3 @@
-import { createOpenAI } from '@ai-sdk/openai';
 import { generateImage } from 'ai';
 import { parseGameQuestion, type GameQuestion } from '@schdk/common';
 
@@ -8,7 +7,9 @@ export async function generateQuestionImage(
   apiKey: string,
   question: GameQuestion,
   prompt: string,
+  abortSignal?: AbortSignal,
 ): Promise<GameQuestion> {
+  const { createOpenAI } = await import('@ai-sdk/openai');
   const { image } = await generateImage({
     model: createOpenAI({ apiKey }).image('gpt-image-2'),
     prompt,
@@ -20,6 +21,7 @@ export async function generateQuestionImage(
         outputCompression: 85,
       },
     },
+    abortSignal,
   });
   if (image.uint8Array.byteLength > maxImageBytes) {
     throw new Error('Generated image exceeds the handout size limit');

@@ -46,13 +46,13 @@ import {
   DEFAULT_SCHDK_DICTIONARIES,
   MAX_SCHDK_DICTIONARY_BYTES,
   parseSchdkDictionary,
-  parseSchdkDictionaryArchive,
   serializeSchdkDictionary,
   type SchdkDictionary,
   type SchdkDictionaryDistribution,
   type SchdkDictionaryId,
   type SchdkDictionaryItem,
 } from './contracts/dictionaries/schdk-dictionary.js';
+import { parseSchdkDictionaryArchive } from './contracts/dictionaries/parse-schdk-dictionary-archive.js';
 import { DEFAULT_GAME_LAYOUT } from './constants/game-options/default-game-layout.js';
 import { DEFAULT_GAME_OPTIONS } from './constants/game-options/default-game-options.js';
 import { GAME_IMAGE_POSITIONS } from './constants/game-options/game-image-positions.js';

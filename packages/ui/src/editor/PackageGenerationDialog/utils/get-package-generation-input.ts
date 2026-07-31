@@ -5,7 +5,7 @@ import {
 } from '@schdk/common';
 import { type PackageGenerationRuleSet } from '../types/package-generation-rule-set';
 import { type PackageGenerationInput } from '../types/package-generation-input';
-import { getPackageGenerationTemplates } from './generation-input';
+import { getPackageGenerationTemplates } from './get-package-generation-templates';
 
 export function getPackageGenerationInput(
   selectedPackage: AIQuestionsPackage | undefined,

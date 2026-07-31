@@ -17,7 +17,7 @@ import {
   saveShellTheme,
   saveUiAnimations,
 } from '../../types/shell/shell-preferences';
-import { useAiQuestionTools } from '../../services/ai-questions/ai-question-generation';
+import { useAiQuestionTools } from '../../hooks/ai-questions/use-ai-question-tools';
 import { AppUpdateButton } from '../desktop/AppUpdateButton';
 import { useGoogleDriveSettings } from '../../hooks/google-drive/use-google-drive-settings';
 import { useShellNavigation } from '../../hooks/shell/use-shell-navigation';

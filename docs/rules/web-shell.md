@@ -47,8 +47,9 @@
   Keep the AI API key in a separate app-data file for the current Google
   account; exclude it from local storage and synchronized Drive settings.
 - Generate questions through the current Drive bridge. The bridge loads the
-  saved key only for the selected provider call and returns a canonical
-  validated game question, never the key.
+  saved key and provider runtime only for the selected provider call, forwards
+  its `AbortSignal`, and returns a canonical validated game question, never the
+  key.
 - Keep personal AI question packages in Drive as `.aiquestionpackage` archives
   and expose their page immediately after question-generation rules.
 - Publish `packages/web/version.json` at the GitHub Pages root and

@@ -23,11 +23,14 @@ function useQuestionGeneration({
   const [failed, setFailed] = useState(false);
   const [promptOpen, setPromptOpen] = useState(false);
   const generationId = useRef(0);
+  const generationController = useRef<AbortController | null>(null);
   const sortedTemplates = [...templates].sort(compareFavoriteItemsByName);
   const selectedTemplate =
     sortedTemplates[Number(templateIndex)] ?? sortedTemplates[0] ?? null;
 
   function reset() {
+    generationController.current?.abort();
+    generationController.current = null;
     generationId.current += 1;
     setOpen(false);
     setTemplateIndex('0');
@@ -45,22 +48,33 @@ function useQuestionGeneration({
     onQuestionGenerationStateChange?.(false, true);
   }
 
-  useEffect(() => () => void (generationId.current += 1), []);
+  useEffect(
+    () => () => {
+      generationController.current?.abort();
+      generationId.current += 1;
+    },
+    [],
+  );
 
   async function generate() {
     if (!selectedTemplate || !context.trim()) return;
     const currentGenerationId = ++generationId.current;
+    const controller = new AbortController();
+    generationController.current = controller;
     setThinking(true);
     setFailed(false);
     onQuestionGenerationStateChange?.(true, true);
     try {
-      const question = await generateQuestion({
-        template: selectedTemplate,
-        context: context.trim(),
-        excludedAnswers,
-        difficulty,
-        recognizability,
-      });
+      const question = await generateQuestion(
+        {
+          template: selectedTemplate,
+          context: context.trim(),
+          excludedAnswers,
+          difficulty,
+          recognizability,
+        },
+        controller.signal,
+      );
       if (currentGenerationId !== generationId.current) return;
       onGenerated(question);
       reset();
