@@ -16,6 +16,7 @@ import { clientSecret } from './client-secret.js';
 import { requestTokens } from './request-tokens.js';
 import { googleDriveAuthState } from './google-drive-auth-state.js';
 import { getGoogleDriveAccessToken } from './google-drive-auth.js';
+import { disconnectGoogleDrive } from './disconnect-google-drive.js';
 
 const AUTHORIZATION_ENDPOINT = 'https://accounts.google.com/o/oauth2/v2/auth';
 
@@ -124,6 +125,16 @@ export async function connectGoogleDrive(): Promise<DriveAccount> {
     expiresAt: Date.now() + (result.expires_in ?? 3600) * 1000,
     refreshToken,
   };
+  const grantedScopes = result.scope?.split(' ') ?? [];
+  const hasRequiredScopes = GOOGLE_DRIVE_SCOPES.every((scope) =>
+    grantedScopes.includes(scope),
+  );
+  if (!hasRequiredScopes) {
+    await disconnectGoogleDrive();
+    throw new GoogleDriveAuthorizationError(
+      'Required Google Drive access denied',
+    );
+  }
   await persistRefreshToken(refreshToken);
   return new GoogleDriveClient(getGoogleDriveAccessToken).getAccount();
 }

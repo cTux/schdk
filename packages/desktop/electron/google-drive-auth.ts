@@ -7,7 +7,7 @@ import { legacyTokenPath } from './legacy-token-path.js';
 import { tokenPath } from './token-path.js';
 import { clientId } from './client-id.js';
 import { clientSecret } from './client-secret.js';
-import { requestTokens } from './request-tokens.js';
+import { OAuthTokenError, requestTokens } from './request-tokens.js';
 import { connectGoogleDrive } from './connect-google-drive.js';
 import { disconnectGoogleDrive } from './disconnect-google-drive.js';
 import { getGoogleDriveStatus } from './get-google-drive-status.js';
@@ -58,7 +58,12 @@ async function getGoogleDriveAccessToken() {
       grant_type: 'refresh_token',
       refresh_token: refreshToken,
     }),
-  );
+  ).catch(async (error: unknown) => {
+    if (error instanceof OAuthTokenError && error.code === 'invalid_grant') {
+      await disconnectGoogleDrive();
+    }
+    throw error;
+  });
   googleDriveAuthState.tokens = {
     accessToken: refreshed.access_token!,
     expiresAt: Date.now() + (refreshed.expires_in ?? 3600) * 1000,

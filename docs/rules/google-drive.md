@@ -79,18 +79,19 @@
   failed write. Keep it open, report the failure, and require reconnection or a
   successful retry before leaving it.
 - Browser authorization uses Google Identity Services only from an explicit
-  login action. Keep its short-lived access token in per-tab session storage
-  so a refresh can restore the connection; validate its client ID and expiry
-  before use, and clear invalid, expired, or disconnected sessions. Never call
-  the popup-based token flow during startup, page refresh, autosave, or other
-  background work. While connected, use an active user click to renew the
-  current account's token with no more than 20 minutes remaining, and throttle
-  failed renewal attempts to once per five minutes. Renew immediately from the
+  login action. Keep its short-lived access token only in memory and clear
+  legacy persisted browser tokens during startup. Never call the popup-based
+  token flow during startup, page refresh, autosave, or other background work.
+  While connected, use an active user click to renew the current account's
+  token with no more than 20 minutes remaining, and throttle failed renewal
+  attempts to once per five minutes. Renew immediately from the
   package-generation confirmation click before sequential generation starts.
-  After token expiry, require explicit reconnection.
+  After reload or token expiry, require explicit reconnection.
 - Desktop authorization uses the system browser, PKCE S256, a random-state
   loopback callback on `127.0.0.1`, and refresh tokens encrypted with Electron
-  `safeStorage`. Never persist a refresh token through Linux `basic_text`.
+  `safeStorage`. Verify all required scopes before retaining credentials,
+  delete invalidated refresh credentials, and never persist a refresh token
+  through Linux `basic_text`.
 - Expose only status, connect, disconnect, settings, AI-key status/write,
   question-database load/write, validated AI generation, and validated
   game-package, AI-question-rule, and AI-question-package

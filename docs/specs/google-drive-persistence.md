@@ -26,12 +26,13 @@ preserving recoverable local state during temporary Drive failures.
 - **DRV-7:** Local settings apply immediately and remain available when Drive
   is unavailable.
 - **DRV-8:** Browser login starts only from explicit user action, keeps a
-  validated short-lived access token in per-tab session storage, renews the
-  current account's token from an active click when no more than 20 minutes
-  remain or immediately before package generation, throttles failed renewal
-  attempts to once per five minutes, and requires reconnection after expiry.
+  validated short-lived access token only in memory, renews the current
+  account's token from an active click when no more than 20 minutes remain or
+  immediately before package generation, throttles failed renewal attempts to
+  once per five minutes, and requires reconnection after reload or expiry.
 - **DRV-9:** Desktop login uses the system browser, PKCE S256, random state, a
-  loopback callback, and encrypted refresh-token persistence.
+  loopback callback, complete required-scope validation, encrypted refresh-token
+  persistence, and invalid-token cleanup.
 - **DRV-10:** Disconnect clears the active authorization state and hides tools
   behind the login screen.
 - **DRV-11:** A user AI API key lives in a separate
@@ -80,7 +81,8 @@ preserving recoverable local state during temporary Drive failures.
 
 ## Invariants
 
-- Browser tokens never enter localStorage or persisted settings.
+- Browser tokens never enter browser storage, React state, or persisted
+  settings.
 - Desktop tokens remain in the Electron main process and never cross renderer
   IPC.
 - Drive uses `drive` and `drive.appdata` scopes; the fixed shared folder cannot
@@ -102,8 +104,8 @@ preserving recoverable local state during temporary Drive failures.
 ## Acceptance
 
 1. Connect on web, click while no more than 20 minutes remain and renew the
-   token without repeated consent; then expire it and require an explicit
-   reconnect.
+   token without repeated consent; then reload or expire it and require an
+   explicit reconnect.
 2. Connect on desktop, restart, restore through encrypted refresh credentials,
    then disconnect.
 3. Edit different settings sections on two clients and merge the newest value

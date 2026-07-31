@@ -2,7 +2,16 @@ import { GoogleDriveAuthorizationError } from '@schdk/google-drive';
 import { clientSecret } from './client-secret.js';
 import { TOKEN_ENDPOINT } from './token-endpoint.js';
 
-export async function requestTokens(parameters: URLSearchParams) {
+class OAuthTokenError extends GoogleDriveAuthorizationError {
+  constructor(
+    readonly code: string,
+    description?: string,
+  ) {
+    super([code, description].filter(Boolean).join(': '));
+  }
+}
+
+async function requestTokens(parameters: URLSearchParams) {
   parameters.set('client_secret', clientSecret);
   const response = await fetch(TOKEN_ENDPOINT, {
     method: 'POST',
@@ -15,12 +24,15 @@ export async function requestTokens(parameters: URLSearchParams) {
     error_description?: string;
     expires_in?: number;
     refresh_token?: string;
+    scope?: string;
   };
   if (!response.ok || !value.access_token) {
-    throw new GoogleDriveAuthorizationError(
-      [value.error, value.error_description].filter(Boolean).join(': ') ||
-        'Google authorization failed',
+    throw new OAuthTokenError(
+      value.error ?? 'authorization_failed',
+      value.error_description,
     );
   }
   return value;
 }
+
+export { OAuthTokenError, requestTokens };

@@ -11,14 +11,17 @@ import {
   type TokenResponse,
 } from './google-oauth-browser';
 import type { GoogleDriveBridge } from '../../types/google-drive/google-drive-types';
-import {
-  clearLegacyGoogleDriveToken,
-  clearStoredGoogleDriveToken,
-  loadStoredGoogleDriveToken,
-  storeGoogleDriveToken,
-} from '../../storage/google-drive/google-drive-token-storage';
 const TOKEN_REFRESH_WINDOW = 20 * 60_000;
 const TOKEN_REFRESH_RETRY_INTERVAL = 5 * 60_000;
+
+function clearPersistedBrowserTokens() {
+  try {
+    sessionStorage.removeItem('schdk:google-drive-token');
+    sessionStorage.removeItem('schdk:google-drive-token-v2');
+  } catch {
+    // Unavailable storage already prevents persisted browser tokens.
+  }
+}
 
 export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
   private accessToken = '';
@@ -35,17 +38,7 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
   });
 
   constructor(private readonly clientId: string) {
-    clearLegacyGoogleDriveToken();
-    const token = loadStoredGoogleDriveToken(clientId);
-    if (token) {
-      this.accessToken = token.accessToken;
-      this.expiresAt = token.expiresAt;
-      void loadGoogleOauth()
-        .then((oauth) => {
-          this.googleOauth = oauth;
-        })
-        .catch(() => undefined);
-    }
+    clearPersistedBrowserTokens();
     document.addEventListener('click', this.refreshTokenOnActivity);
   }
 
@@ -71,7 +64,6 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
     this.accessToken = '';
     this.expiresAt = 0;
     this.account = undefined;
-    clearStoredGoogleDriveToken();
   }
 
   private hasValidToken() {
@@ -110,11 +102,6 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
     }
     this.accessToken = response.access_token!;
     this.expiresAt = Date.now() + (response.expires_in ?? 3600) * 1000;
-    storeGoogleDriveToken({
-      accessToken: this.accessToken,
-      clientId: this.clientId,
-      expiresAt: this.expiresAt,
-    });
   }
 
   async status() {

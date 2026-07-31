@@ -85,6 +85,7 @@ V42|Image handout selection is bounded before reading and cannot leave the edito
 V43|A replacement global general rule is persisted before the previous general rule is cleared.
 V44|Every shared generation dictionary is parsed from its `.schdk-dictionary` ZIP archive, remains folder-scoped and admin-writable, and supplies both dropdown labels and provider prompt fragments.
 V45|AI review validates an image request through its generation description, and OpenAI generates and canonically parses the bounded embedded image only after the question passes review.
+V46|Browser OAuth tokens remain memory-only, while desktop refresh credentials remain encrypted, scope-validated, and removed after invalidation.
 
 ## §T
 
@@ -203,3 +204,4 @@ B105|2026-07-30|The generated dictionary-page story received a scalar placeholde
 B106|2026-07-31|Skill compaction removed phrases enforced by repository workflow tests|Restore the machine-checked wording; the existing workflow tests cover recurrence.
 B107|2026-07-30|The generation panel's generic label layout overrode the database checkbox row and separated the control from its text|Keep the compact checkbox inline as specified by `docs/specs/package-editor.md`.
 B108|2026-07-31|The AI reviewer repeatedly rejected candidates for image handouts that the text-only generator cannot produce, exhausting all four provider calls and failing generation|V45
+B109|2026-07-31|Browser OAuth persisted bearer tokens in session storage and desktop refresh retained invalid or partially authorized credentials|V46
