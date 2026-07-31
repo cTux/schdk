@@ -176,6 +176,9 @@ without losing in-progress work.
   version opened or last saved. When they differ, the editor keeps local edits
   open and offers to save them as a distinctly titled copy before opening the
   newer Drive version.
+- **EDT-28:** Opening a package replaces the recents list with the editor. The
+  page header exposes one back action that returns to recents, plus a wide
+  accessible title input without a repeated visible label.
 
 ## Invariants
 
@@ -309,3 +312,6 @@ without losing in-progress work.
     Confirm the second save cannot overwrite the first; dismiss recovery and
     retain the local edits, then accept recovery and observe a titled copy plus
     the newer original.
+25. Open a recent package and confirm its list disappears, the page has one
+    back action that returns to recents, and the wider title input has no
+    repeated visible label while retaining its accessible name.

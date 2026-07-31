@@ -89,6 +89,7 @@ V46|Browser OAuth tokens remain memory-only, while desktop refresh credentials r
 V47|The hosted OAuth landing surface identifies SCHDK and its purpose in crawler-readable HTML and links a same-domain privacy policy that accurately discloses Google user-data handling.
 V48|Autosave never overwrites a Drive package modified since the editor opened or last saved it.
 V49|The hosted browser renders a themed login fallback before its JavaScript bundle executes.
+V50|An open package editor replaces recents and exposes one page-header back action that returns to the package list.
 
 ## §T
 
@@ -215,3 +216,4 @@ B113|2026-07-31|The static browser fallback used unstyled default HTML before th
 B114|2026-07-31|The editor's broad paragraph reset removed the shared page-header description margin only from editor and host pages|Keep compact title-description spacing in the shared `Page` contract.
 B115|2026-07-31|The retained page-entry transform positioned fixed editor toasts against the animated page, while their bottom margin made the viewport edge spacing uneven|Release the transform after entry, remove the extra bottom margin, and preserve spacing between stacked toasts; `docs/specs/package-editor.md` covers recurrence.
 B116|2026-07-31|The first toast-spacing refinement targeted React-Toastify's vendor BEM class and violated the repository selector convention|Use the existing kebab-case editor toast class and an adjacent-sibling selector; Stylelint covers recurrence.
+B117|2026-07-31|The editor rendered recents beneath an open package and duplicated back navigation inside its action header|V50

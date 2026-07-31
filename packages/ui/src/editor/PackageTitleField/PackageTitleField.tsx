@@ -11,8 +11,8 @@ function PackageTitleField({
 
   return (
     <label className="package-title">
-      {copy.editor.packageTitle}
       <Input
+        aria-label={copy.editor.packageTitle}
         className={invalid ? 'invalid' : undefined}
         value={value}
         onChange={(event) => onChange(event.target.value)}

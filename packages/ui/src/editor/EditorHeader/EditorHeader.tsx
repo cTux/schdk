@@ -1,4 +1,4 @@
-import { faArrowLeft, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { IconButton } from '../../atoms/IconButton';
 import { useLocalization } from '../../localization';
 import { PackageGenerationDialog } from '../PackageGenerationDialog';
@@ -11,7 +11,6 @@ function EditorHeader({
   packageTitle,
   saveStatus,
   showValidation,
-  onBack,
   onDeletePackage,
   onTitleChange,
   aiGeneration,
@@ -26,12 +25,6 @@ function EditorHeader({
 
   return (
     <div className="package-header">
-      <IconButton
-        icon={faArrowLeft}
-        label={copy.shared.back}
-        onClick={onBack}
-        variant="ghost"
-      />
       <PackageTitleField
         invalid={showValidation && !packageTitle.trim()}
         value={packageTitle}
