@@ -26,7 +26,7 @@ function resolve<T>(value: SetStateAction<T>, current: T): T {
     : value;
 }
 
-function createState(title: string): EditorSessionState {
+function createEditorSessionState(title: string): EditorSessionState {
   return {
     gamePackage: { ...createEmptyGamePackage(), title },
     hasPackage: false,
@@ -37,7 +37,7 @@ function createState(title: string): EditorSessionState {
   };
 }
 
-function reducer(
+function editorSessionReducer(
   state: EditorSessionState,
   action: EditorSessionAction,
 ): EditorSessionState {
@@ -59,7 +59,7 @@ function reducer(
       };
     case 'reset':
       return {
-        ...createState(action.gamePackage.title),
+        ...createEditorSessionState(action.gamePackage.title),
         gamePackage: action.gamePackage,
       };
     case 'file-name':
@@ -75,7 +75,11 @@ function reducer(
 }
 
 function useEditorSession(untitledTitle: string) {
-  const [state, dispatch] = useReducer(reducer, untitledTitle, createState);
+  const [state, dispatch] = useReducer(
+    editorSessionReducer,
+    untitledTitle,
+    createEditorSessionState,
+  );
   const changeGamePackage = useCallback(
     (value: SetStateAction<GamePackage>) => dispatch({ type: 'change', value }),
     [],
@@ -116,4 +120,4 @@ function useEditorSession(untitledTitle: string) {
   };
 }
 
-export { useEditorSession };
+export { createEditorSessionState, editorSessionReducer, useEditorSession };
