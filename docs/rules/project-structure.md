@@ -3,6 +3,29 @@
 Keep packages under `packages/*` and preserve the ownership and dependency
 directions in [architecture.md](architecture.md).
 
+## Source roots
+
+- Keep each `src` root minimal. A library package may keep only its public
+  `index.ts` entry point there. A runnable application may additionally keep
+  build-required entry points such as `main.tsx` and ambient declaration files
+  such as `electron.d.ts`.
+- Put every other module under `src/<role>/<subject-area>/<file>`, choosing a
+  concrete role such as `components`, `constants`, `hooks`, `parsers`,
+  `services`, `storage`, `types`, `utils`, or `validators`.
+- Use the feature or data domain as the subject area, such as `game-packages`,
+  `google-drive`, or `shell`. Keep tests beside the owning subject area.
+- Do not use catch-all `common`, `misc`, or `shared` directories. When no
+  existing role fits, name the module by what it does instead of creating a
+  speculative abstraction.
+- Treat each nested owner directory as a small source root. Keep its primary
+  module, public entry point, public `types.ts`, `constants.ts`, stylesheet,
+  and tests at that level.
+- A single private secondary module may stay beside its owner. When an owner
+  has multiple secondary modules, group all of them by role under directories
+  such as `hooks`, `utils`, `types`, `context`, or `constants`.
+- Preserve a more specific established structure after role grouping; do not
+  add wrapper entry points inside private role directories.
+
 ## File size
 
 - Keep every tracked source-code file at 256 physical lines or fewer, including
@@ -50,6 +73,11 @@ directions in [architecture.md](architecture.md).
   only when the component emits component-specific CSS; never add an empty
   placeholder stylesheet or import.
 - Add `constants.ts` only for component-specific constants.
+- When the component has multiple secondary modules, keep only
+  `ComponentName.tsx`, `index.ts`, `types.ts`, `constants.ts`, `styles.scss`,
+  and `__tests__` in its root. Move private hooks, helpers, secondary types,
+  context modules, and secondary constants to their matching role
+  directories.
 - Keep tests in `__tests__/`. Because Git does not track empty directories and
   tests are added only by an explicit `add missing tests` prompt, create the
   directory with the first real test; never add placeholders.

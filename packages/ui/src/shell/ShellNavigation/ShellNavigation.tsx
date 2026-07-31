@@ -4,8 +4,8 @@ import { AppIcon } from '../../atoms/AppIcon';
 import { Button } from '../../atoms/Button';
 import { useLocalization } from '../../localization';
 import { getShellContent } from '../shellItems';
-import { type ShellNavigationProps } from './shell-navigation-props';
-import { type ShellAccount } from './shell-account';
+import { type ShellNavigationProps } from './types/shell-navigation-props';
+import { type ShellAccount } from './types/shell-account';
 
 function ShellNavigation({
   account,

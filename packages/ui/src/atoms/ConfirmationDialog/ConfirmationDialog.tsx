@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import { Button } from '../Button';
 import { useLocalization } from '../../localization';
 import type { ConfirmationDialogProps } from './types';
-import { useConfirmationDialog } from './use-confirmation-dialog';
+import { useConfirmationDialog } from './hooks/use-confirmation-dialog';
 
 function ConfirmationDialog({
   message,

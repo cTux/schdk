@@ -8,7 +8,7 @@ import {
 import { FitTextObserver } from '../../../host/FitTextObserver';
 import type { GameLayoutPosition } from '../../../options/types';
 import { RESIZE_HANDLES } from '../constants';
-import { getDraggedPosition, getResizedPosition } from '../geometry';
+import { getDraggedPosition, getResizedPosition } from '../utils/geometry';
 import type { GamePoint, ResizeHandle } from '../types';
 import type { VisualLayoutItemProps } from './types';
 

@@ -3,7 +3,7 @@ import {
   GoogleDriveAuthorizationError,
   GoogleDriveClient,
   type DriveAccount,
-} from './client.js';
+} from './services/client/client.js';
 import {
   createAIQuestionFilename,
   GLOBAL_AI_QUESTION_ADMIN_EMAILS,
@@ -17,7 +17,7 @@ import {
   type DriveAIQuestionStorage,
   type DriveAIQuestionWrite,
   type DriveGlobalAIQuestionStorage,
-} from './ai-questions.js';
+} from './services/ai-questions/ai-questions.js';
 import {
   createGamePackageFilename,
   isDriveGamePackageName,
@@ -28,14 +28,14 @@ import {
   type DriveGamePackageFile,
   type DriveGamePackageWrite,
   type DrivePackageStorage,
-} from './game-packages.js';
+} from './services/game-packages/game-packages.js';
 import {
   isDriveFileId,
   parseDriveSettingsDocument,
   type DriveRecentPackage,
   type DriveSettingsDocument,
   type TimedSection,
-} from './settings.js';
+} from './services/settings/settings.js';
 import {
   createAIQuestionsPackageFilename,
   isDriveAIQuestionsPackageName,
@@ -45,7 +45,7 @@ import {
   type DriveAIQuestionsPackageFile,
   type DriveAIQuestionsPackageStorage,
   type DriveAIQuestionsPackageWrite,
-} from './ai-questions-packages.js';
+} from './services/ai-question-packages/ai-questions-packages.js';
 import {
   createQuestionDatabasePackage,
   flattenQuestionDatabase,
@@ -55,7 +55,7 @@ import {
   type QuestionDatabaseEntry,
   type QuestionDatabasePackage,
   type QuestionDatabaseQuestion,
-} from './question-database.js';
+} from './services/question-database/question-database.js';
 import {
   DRIVE_DICTIONARY_MIME_TYPE,
   GLOBAL_DICTIONARY_FOLDER_ID,
@@ -66,7 +66,7 @@ import {
   type DriveDictionaryFile,
   type DriveDictionaryStorage,
   type DriveDictionaryWrite,
-} from './dictionaries.js';
+} from './services/dictionaries/dictionaries.js';
 
 export {
   GOOGLE_DRIVE_SCOPES,

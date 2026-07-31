@@ -14,7 +14,7 @@ import { PackageGenerationOpenButton } from '../PackageGenerationOpenButton';
 import { PackageGenerationOptions } from '../PackageGenerationOptions';
 import { dockedGenerationViewportClassName } from '../docked-generation-viewport-class-name';
 import type { PackageGenerationDialogProps } from './types';
-import { usePackageGeneration } from './use-package-generation';
+import { usePackageGeneration } from './hooks/use-package-generation';
 
 export function PackageGenerationDialog({
   apiKeyConfigured,

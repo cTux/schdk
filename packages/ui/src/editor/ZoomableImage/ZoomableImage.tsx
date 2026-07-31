@@ -10,8 +10,8 @@ import { Button } from '../../atoms/Button';
 import { IconButton } from '../../atoms/IconButton';
 import { useLocalization } from '../../localization';
 import { MAX_ZOOM, MIN_ZOOM, ZOOM_STEP } from './constants';
-import { type ZoomableImageProps } from './zoomable-image-props';
-import { clampImageZoom } from './clamp-image-zoom';
+import { type ZoomableImageProps } from './types/zoomable-image-props';
+import { clampImageZoom } from './utils/clamp-image-zoom';
 
 function ZoomableImage({ alt, openLabel, src, title }: ZoomableImageProps) {
   const { copy } = useLocalization();

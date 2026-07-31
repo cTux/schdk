@@ -4,8 +4,8 @@ import classNames from 'classnames';
 import { Button } from '../../atoms/Button';
 import { LOCALIZATION_COPY } from '../../localization';
 import { QuestionTooltip } from '../QuestionTooltip';
-import { type QuestionListButtonProps } from './question-list-button-props';
-import { getQuestionListItem } from './get-question-list-item';
+import { type QuestionListButtonProps } from './types/question-list-button-props';
+import { getQuestionListItem } from './utils/get-question-list-item';
 
 function QuestionListButton({
   copy = LOCALIZATION_COPY.uk,

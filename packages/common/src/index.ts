@@ -5,7 +5,7 @@ import {
   serializeAIQuestionsPackage,
   type AIQuestionsPackage,
   type AIQuestionsPackageQuestion,
-} from './ai-questions-package.js';
+} from './contracts/ai-questions/ai-questions-package.js';
 import {
   AI_QUESTION_DIFFICULTIES,
   AI_QUESTION_RECOGNIZABILITIES,
@@ -17,7 +17,7 @@ import {
   type AIQuestion,
   type AIQuestionDifficulty,
   type AIQuestionRecognizability,
-} from './ai-question.js';
+} from './contracts/ai-questions/ai-question.js';
 import {
   QUESTION_TYPE_CONFIG,
   createEmptyGameQuestion,
@@ -30,18 +30,18 @@ import {
   type Handout,
   type ImageHandout,
   type TextHandout,
-} from './game-question.js';
-import { hasGamePackageRemarks } from './game-package-validation.js';
-import { QUESTION_COUNT } from './question-count.js';
-import { QUESTIONS_PER_ROUND } from './questions-per-round.js';
-import { MAX_GAME_PACKAGE_BYTES } from './max-game-package-bytes.js';
-import { MAX_MUSIC_BREAK_BYTES } from './max-music-break-bytes.js';
-import { type GamePackage } from './game-package.js';
-import { type MusicBreak } from './music-break.js';
-import { createEmptyGamePackage } from './create-empty-game-package.js';
-import { validateGamePackage } from './validate-game-package.js';
-import { serializeGamePackage } from './serialize-game-package.js';
-import { parseGamePackage } from './parse-game-package.js';
+} from './contracts/game-questions/game-question.js';
+import { hasGamePackageRemarks } from './validators/game-packages/game-package-validation.js';
+import { QUESTION_COUNT } from './constants/game-questions/question-count.js';
+import { QUESTIONS_PER_ROUND } from './constants/game-questions/questions-per-round.js';
+import { MAX_GAME_PACKAGE_BYTES } from './constants/game-packages/max-game-package-bytes.js';
+import { MAX_MUSIC_BREAK_BYTES } from './constants/music-breaks/max-music-break-bytes.js';
+import { type GamePackage } from './types/game-packages/game-package.js';
+import { type MusicBreak } from './types/music-breaks/music-break.js';
+import { createEmptyGamePackage } from './factories/game-packages/create-empty-game-package.js';
+import { validateGamePackage } from './validators/game-packages/validate-game-package.js';
+import { serializeGamePackage } from './serializers/game-packages/serialize-game-package.js';
+import { parseGamePackage } from './parsers/game-packages/parse-game-package.js';
 import {
   DEFAULT_SCHDK_DICTIONARIES,
   MAX_SCHDK_DICTIONARY_BYTES,
@@ -51,7 +51,7 @@ import {
   type SchdkDictionary,
   type SchdkDictionaryId,
   type SchdkDictionaryItem,
-} from './schdk-dictionary.js';
+} from './contracts/dictionaries/schdk-dictionary.js';
 
 export {
   QUESTION_COUNT,

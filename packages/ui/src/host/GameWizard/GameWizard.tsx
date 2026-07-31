@@ -17,8 +17,8 @@ import {
 import { GameMusicBreak } from '../GameMusicBreak';
 import { GameLayoutItem } from '../GameLayoutItem';
 import { GameTourIntro } from '../GameTourIntro';
-import { stageMotionClass } from './stage-motion';
-import { type GameWizardProps } from './game-wizard-props';
+import { stageMotionClass } from './utils/stage-motion';
+import { type GameWizardProps } from './types/game-wizard-props';
 
 function GameWizard({
   copy = LOCALIZATION_COPY.uk,

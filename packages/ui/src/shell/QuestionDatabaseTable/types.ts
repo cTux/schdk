@@ -1,4 +1,4 @@
-import { type QuestionDatabaseTableProps } from './question-database-table-props';
+import { type QuestionDatabaseTableProps } from './types/question-database-table-props';
 
 type QuestionDatabaseSort = 'question' | 'answer';
 

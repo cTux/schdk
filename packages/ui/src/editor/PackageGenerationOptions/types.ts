@@ -7,7 +7,7 @@ import type {
 import type {
   PackageGenerationRuleSet,
   PackageGenerationScope,
-} from '../PackageGenerationDialog/generation-input';
+} from '../PackageGenerationDialog/utils/generation-input';
 
 export interface PackageGenerationOptionsProps {
   activePackages: AIQuestionsPackage[];
