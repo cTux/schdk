@@ -193,7 +193,6 @@ function EditorView({
               onWrongAnswerBlur={onWrongAnswerBlur}
               onCopy={onCopyQuestion}
               onPaste={onPasteQuestion}
-              onSelectQuestion={onSelectQuestion}
               onQuestionTextBlur={onQuestionTextBlur}
             />
           </div>

@@ -10,7 +10,6 @@ import { AnswerListField } from '../AnswerListField';
 import { HostNotesField } from '../HostNotesField';
 import { QuestionEditorHeader } from '../QuestionEditorHeader';
 import { QuestionHandoutField } from '../QuestionHandoutField';
-import { QuestionNavigation } from '../QuestionNavigation';
 import { QuestionRemarkField } from '../QuestionRemarkField';
 import { type QuestionEditorProps } from './question-editor-props';
 
@@ -31,7 +30,6 @@ function QuestionEditor({
   onGenerated,
   onCopy,
   onPaste,
-  onSelectQuestion,
   onQuestionTextBlur,
 }: QuestionEditorProps) {
   const { copy } = useLocalization();
@@ -197,11 +195,6 @@ function QuestionEditor({
           onChange={(wrongAnswers) => onChange({ wrongAnswers })}
         />
       </fieldset>
-
-      <QuestionNavigation
-        selectedIndex={selectedIndex}
-        onSelect={onSelectQuestion}
-      />
     </section>
   );
 }

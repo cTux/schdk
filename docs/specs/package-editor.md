@@ -16,7 +16,9 @@ without losing in-progress work.
   placeholder and no separate visible label, and every field defined by the
   [game-package specification](game-package.md).
 - **EDT-2a:** Sticky question navigation uses compact controls and spacing so
-  all three tours remain visible on short desktop viewports.
+  all three tours remain visible on short desktop viewports. It is the only
+  manual question-switching control; the selected-question form has no
+  previous or next buttons.
 - **EDT-3:** Question type selection exposes one, two, or three question parts
   for standard, 2×30 blitz, or 3×20 blitz respectively.
 - **EDT-4:** Authors can add, replace, and remove text or validated image
@@ -91,7 +93,8 @@ without losing in-progress work.
   focus, and disabled states. Its label appears as the placeholder while empty
   and moves inside the populated textarea at the bottom right without changing
   the control's height. Adjacent question-editor fields use the same horizontal
-  and vertical gap.
+  and vertical gap. Empty alternative- and wrong-answer lists keep their
+  headings close together without reserving space for absent answer fields.
 - **EDT-18:** AI generation phrases each question naturally as if written by a
   human rather than AI and requires a non-empty answer comment that explains
   only why the answer is correct, never why the question was generated or
@@ -295,7 +298,9 @@ without losing in-progress work.
 21. Inspect the answer area at normal and narrow widths. Confirm only the
     host-notes field appears directly below the answer row, with no separate
     host-notes heading, and each answer-list add action stays inline with its
-    list title.
+    list title. Leave both lists empty and confirm their headings remain close
+    together. Confirm the selected-question form has no previous or next
+    buttons and questions remain selectable from the sticky navigation.
 22. Generate a question and confirm its navigation number turns blue. Add an
     unresolved remark or invalidate it and confirm the red state takes
     priority; select it and confirm the selected border remains visible. Give

@@ -19,6 +19,5 @@ export interface QuestionEditorProps {
   onGenerated(question: GameQuestion): void;
   onCopy(): void;
   onPaste(): void;
-  onSelectQuestion(index: number): void;
   onQuestionTextBlur(index: number): void;
 }
