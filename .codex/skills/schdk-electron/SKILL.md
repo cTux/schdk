@@ -12,9 +12,11 @@ description: Build, debug, secure, or package SCHDK Electron code. Use for windo
 2. Trace main, preload, renderer, and packaging paths affected by the change.
 3. Read `docs/rules/google-drive.md` only for OAuth, token storage, or Drive IPC
    changes.
-4. Validate changed IPC and filesystem paths from the renderer call through
+4. For OAuth changes, verify required scopes before persistence and remove
+   invalidated refresh credentials before requiring reconnection.
+5. Validate changed IPC and filesystem paths from the renderer call through
    main-process handling and the resulting Drive or explicit-download action.
-5. For packaging or release changes, verify only on the matching native host
+6. For packaging or release changes, verify only on the matching native host
    or workflow described by the rules.
 
 ## Checks

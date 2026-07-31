@@ -58,6 +58,47 @@ acceptable product constraint.
 Reference:
 [OpenAI Vector Stores API](https://platform.openai.com/docs/api-reference/vector-stores).
 
+## Sender-constrained Google OAuth
+
+### Why it may be needed
+
+The desktop client protects refresh tokens with Electron `safeStorage`, but
+standard bearer refresh tokens can still be replayed after theft. Google's DPoP
+support can bind new refresh tokens to a device-held P-256 private key.
+Cross-Account Protection can separately notify an application backend when
+Google invalidates a user's authorization.
+
+### Possible design
+
+- Generate one non-exportable P-256 key in a hardware-backed operating-system
+  keystore and create a unique ES256 DPoP proof for every token request.
+- Persist the DPoP nonce beside the encrypted refresh credential and retry once
+  when Google returns `use_dpop_nonce`.
+- Reauthorize existing desktop grants before treating them as DPoP-bound.
+- Add a minimal authenticated backend before registering a Cross-Account
+  Protection receiver; never expose RISC events directly to browser clients.
+
+### Costs and constraints
+
+- Electron does not provide one cross-platform API for non-exportable
+  hardware-backed signing keys, so this requires platform-specific integration.
+- DPoP adds key lifecycle, nonce, migration, and recovery behavior to every
+  desktop token exchange.
+- Cross-Account Protection requires a continuously reachable backend, which
+  SCHDK does not currently operate.
+
+### Activation conditions
+
+Implement DPoP when supported desktop platforms have a verified hardware-backed
+key integration or a compliance requirement mandates sender-constrained tokens.
+Implement Cross-Account Protection only when SCHDK gains an authenticated
+backend that can receive and act on RISC events.
+
+References:
+[Google OAuth best practices](https://developers.google.com/identity/protocols/oauth2/resources/best-practices)
+and
+[Google OAuth for desktop apps](https://developers.google.com/identity/protocols/oauth2/native-app).
+
 ## Local embedding model
 
 ### Why it may be needed
