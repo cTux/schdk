@@ -213,3 +213,4 @@ B111|2026-07-31|Intrinsic-width question tooltips and editor headings expanded t
 B112|2026-07-31|Package autosave updated Drive by file ID without checking whether another client had modified the file|V48
 B113|2026-07-31|The static browser fallback used unstyled default HTML before the application bundle loaded|V49
 B114|2026-07-31|The editor's broad paragraph reset removed the shared page-header description margin only from editor and host pages|Keep compact title-description spacing in the shared `Page` contract.
+B115|2026-07-31|The retained page-entry transform made fixed editor toasts position against the animated page instead of the viewport|Release the transform after entry so the existing bottom-right toast position remains viewport-fixed; `docs/specs/package-editor.md` covers recurrence.
