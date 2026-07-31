@@ -5,20 +5,7 @@ import { useLocalization } from '../../../localization';
 import * as gen from '../utils/generation-input';
 import type { PackageGenerationDialogProps } from '../types';
 
-const DEFAULT_DIFFICULTY_DISTRIBUTION: Record<
-  common.AIQuestionDifficulty,
-  number
-> = {
-  'very-easy': 0,
-  easy: 30,
-  medium: 60,
-  hard: 10,
-  'very-hard': 0,
-};
-
-function getRandomDifficulty(
-  distribution: Record<common.AIQuestionDifficulty, number>,
-) {
+function getRandomValue(distribution: common.SchdkDictionaryDistribution) {
   let position = Math.random() * 100;
   return (
     common.AI_QUESTION_DIFFICULTIES.find(
@@ -30,6 +17,8 @@ function getRandomDifficulty(
 function usePackageGeneration({
   templates,
   packages,
+  difficultyDistributions,
+  recognizabilityDistributions,
   gamePackage,
   onGenerationStart,
   onGenerate,
@@ -43,12 +32,17 @@ function usePackageGeneration({
   const [scope, setScope] = useState<gen.PackageGenerationScope>('missing');
   const [ruleSet, setRuleSet] =
     useState<gen.PackageGenerationRuleSet>('favorites');
-  const [difficultyDistribution, setDifficultyDistribution] = useState({
-    ...DEFAULT_DIFFICULTY_DISTRIBUTION,
-  });
+  const [difficultyDistribution, setDifficultyDistribution] = useState(
+    difficultyDistributions[1]?.id ?? difficultyDistributions[1]?.value ?? '',
+  );
   const [currentDifficulty, setCurrentDifficulty] =
     useState<common.AIQuestionDifficulty>('medium');
-  const [recognizability, setRecognizability] =
+  const [recognizability, setRecognizability] = useState(
+    recognizabilityDistributions[1]?.id ??
+      recognizabilityDistributions[1]?.value ??
+      '',
+  );
+  const [currentRecognizability, setCurrentRecognizability] =
     useState<common.AIQuestionRecognizability>('easy');
   const [selected, setSelected] = useState<number | null>(null);
   const [thinking, setThinking] = useState(false);
@@ -81,9 +75,16 @@ function usePackageGeneration({
     setOpen(false);
     setScope('missing');
     setRuleSet('favorites');
-    setDifficultyDistribution({ ...DEFAULT_DIFFICULTY_DISTRIBUTION });
+    setDifficultyDistribution(
+      difficultyDistributions[1]?.id ?? difficultyDistributions[1]?.value ?? '',
+    );
     setCurrentDifficulty('medium');
-    setRecognizability('easy');
+    setRecognizability(
+      recognizabilityDistributions[1]?.id ??
+        recognizabilityDistributions[1]?.value ??
+        '',
+    );
+    setCurrentRecognizability('easy');
     setSelected(null);
     setThinking(false);
     setFailed(false);
@@ -109,15 +110,19 @@ function usePackageGeneration({
   }
 
   async function generate() {
-    const difficultyTotal = Object.values(difficultyDistribution).reduce(
-      (total, percentage) => total + percentage,
-      0,
-    );
+    const selectedDifficultyDistribution = difficultyDistributions.find(
+      (item) => (item.id ?? item.value) === difficultyDistribution,
+    )?.distribution;
+    const selectedRecognizabilityDistribution =
+      recognizabilityDistributions.find(
+        (item) => (item.id ?? item.value) === recognizability,
+      )?.distribution;
     const canGenerate =
       Boolean(selectedPackage) &&
       randomTemplates.length > 0 &&
       targets.length > 0 &&
-      difficultyTotal === 100;
+      selectedDifficultyDistribution &&
+      selectedRecognizabilityDistribution;
     if (!canGenerate) return;
     const currentGenerationId = ++generationId.current;
     onGenerationStateChange(targets, true);
@@ -129,7 +134,10 @@ function usePackageGeneration({
       if (currentGenerationId !== generationId.current) return;
       const usedAnswers = [...initialExcludedAnswers];
       for (const [position, index] of targets.entries()) {
-        const difficulty = getRandomDifficulty(difficultyDistribution);
+        const difficulty = getRandomValue(selectedDifficultyDistribution);
+        const nextRecognizability = getRandomValue(
+          selectedRecognizabilityDistribution,
+        );
         const input = gen.getPackageGenerationInput(
           selectedPackage,
           templates,
@@ -140,6 +148,7 @@ function usePackageGeneration({
         if (!input) throw new Error('Missing generation input');
         setCurrentInput(input);
         setCurrentDifficulty(difficulty);
+        setCurrentRecognizability(nextRecognizability);
         setProgress([position + 1, targets.length]);
         setExcludedAnswers([...usedAnswers]);
         const question = await onGenerate(
@@ -147,7 +156,7 @@ function usePackageGeneration({
           input.context,
           usedAnswers,
           difficulty,
-          recognizability,
+          nextRecognizability,
         );
         if (currentGenerationId !== generationId.current) return;
         onGenerated(
@@ -173,6 +182,7 @@ function usePackageGeneration({
     cancel,
     cancelDialogProps: cancelDialog.dialogProps,
     currentDifficulty,
+    currentRecognizability,
     difficultyDistribution,
     excludedAnswers,
     failed,
@@ -184,12 +194,15 @@ function usePackageGeneration({
     promptOpen,
     randomTemplates,
     recognizability,
+    recognizabilityDistributions,
+    difficultyDistributions,
     reset,
     ruleSet,
     scope,
     selected,
     setCurrentInput,
     setDifficultyDistribution,
+    setRecognizabilityDistribution: setRecognizability,
     setPromptOpen,
     setRecognizability,
     setRuleSet,

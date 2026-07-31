@@ -13,6 +13,8 @@ export interface AiQuestionGenerationOptions {
   packages: AIQuestionsPackage[];
   difficulties: SchdkDictionaryItem[];
   recognizabilities: SchdkDictionaryItem[];
+  difficultyDistributions: SchdkDictionaryItem[];
+  recognizabilityDistributions: SchdkDictionaryItem[];
   onGenerationStart?(): Promise<void>;
   getPromptPreview?(
     template: AIQuestion,

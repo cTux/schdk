@@ -18,14 +18,16 @@ export function getDeepLinkedShellEdit(url: string): ShellEditTarget | null {
       return { kind: 'package', name: value!.slice('package:'.length) };
     }
     const dictionary = value?.match(
-      /^dictionary:(question-difficulty|question-recognizability)$/u,
+      /^dictionary:(question-difficulty|question-recognizability|question-difficulty-distribution|question-recognizability-distribution)$/u,
     );
     return dictionary
       ? {
           kind: 'dictionary',
           id: dictionary[1] as
             | 'question-difficulty'
-            | 'question-recognizability',
+            | 'question-recognizability'
+            | 'question-difficulty-distribution'
+            | 'question-recognizability-distribution',
         }
       : null;
   } catch {

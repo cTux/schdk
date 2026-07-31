@@ -33,6 +33,13 @@ function createAiQuestionGeneration(
   const recognizabilityDictionary =
     dictionaries.find(({ id }) => id === 'question-recognizability') ??
     DEFAULT_SCHDK_DICTIONARIES[1];
+  const difficultyDistributionDictionary =
+    dictionaries.find(({ id }) => id === 'question-difficulty-distribution') ??
+    DEFAULT_SCHDK_DICTIONARIES[2];
+  const recognizabilityDistributionDictionary =
+    dictionaries.find(
+      ({ id }) => id === 'question-recognizability-distribution',
+    ) ?? DEFAULT_SCHDK_DICTIONARIES[3];
 
   function createRequest(
     template: AIQuestion,
@@ -75,6 +82,8 @@ function createAiQuestionGeneration(
     apiKeyConfigured: options.apiKeyConfigured,
     difficulties: difficultyDictionary.items,
     recognizabilities: recognizabilityDictionary.items,
+    difficultyDistributions: difficultyDistributionDictionary.items,
+    recognizabilityDistributions: recognizabilityDistributionDictionary.items,
     packages: packages
       .filter((item) => item.enabled)
       .sort(compareFavoriteItemsByName),

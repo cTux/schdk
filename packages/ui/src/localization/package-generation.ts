@@ -17,6 +17,7 @@ export const packageGenerationCopy = {
     },
     difficultyDistribution: 'Розподіл складності',
     difficultyTotal: (total: number) => `Разом: ${total}%`,
+    recognizabilityDistribution: 'Розподіл впізнаваності',
     noTemplates: 'У вибраному наборі немає активних правил.',
     noRules:
       'Немає активних правил створення пакету. Додайте або увімкніть правило.',
@@ -48,6 +49,7 @@ export const packageGenerationCopy = {
     },
     difficultyDistribution: 'Difficulty distribution',
     difficultyTotal: (total: number) => `Total: ${total}%`,
+    recognizabilityDistribution: 'Recognizability distribution',
     noTemplates: 'The selected set has no active rules.',
     noRules: 'There are no active package-generation rules. Add or enable one.',
     progress: (current: number, total: number) =>

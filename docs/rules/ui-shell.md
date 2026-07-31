@@ -3,7 +3,7 @@
 - Keep the sidebar fixed while application content scrolls.
 - Group, in this order, `База питань`, `Візуальний редактор`,
   `Правила створення питань`, `Правила створення пакету`,
-  `Словники`, `Редагувати пакети питань`, and `Провести гру` under `ЩДК`. Keep
+  `Словники технічних термінів`, `Редагувати пакети питань`, and `Провести гру` under `ЩДК`. Keep
   `Налаштування` in a separate group at the bottom.
 - Explain on the question-database page that it contains only the current
   user's Drive packages. Group identical questions into question, answer, and

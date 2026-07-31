@@ -9,12 +9,14 @@ code or duplicating prompt definitions.
 
 ## Requirements
 
-- **DCT-1:** The Dictionaries shell page lists Question difficulty and Question
-  recognizability in a table with name and description columns.
-- **DCT-2:** Selecting a dictionary opens a dedicated table with name,
-  description, and prompt-text-fragment columns for very easy, easy, medium,
-  hard, and very hard values. Both dictionary tables use the same rounded,
-  raised panel treatment as the recent-package list.
+- **DCT-1:** The Dictionaries shell page is named `Словники технічних термінів`
+  and lists difficulty, recognizability, difficulty-distribution, and
+  recognizability-distribution dictionaries. All dictionary tables use the
+  same rounded, raised panel treatment as the recent-package list.
+- **DCT-2:** Selecting a base dictionary opens a dedicated table with editable
+  name, description, and prompt-text-fragment columns. Selecting a distribution
+  dictionary opens editable name, description, and percentage columns without a
+  prompt-text-fragment column. Administrators can add records.
 - **DCT-3:** Every account can view dictionaries. Only the centralized
   allowlisted administrator can edit them, and Google Drive folder permissions
   remain the write authorization boundary.
@@ -37,10 +39,13 @@ code or duplicating prompt definitions.
   prompt.
 - A non-administrator cannot write a dictionary through browser or desktop
   adapters.
+- Every distribution record totals 100%, and package generation randomly
+  selects difficulty and recognizability independently from the selected
+  distribution records for each target question.
 
 ## Acceptance
 
-1. Open Dictionaries and confirm both dictionaries appear with names and
+1. Open Dictionaries and confirm all four dictionaries appear with names and
    descriptions.
 2. Open each dictionary, reload, use browser back/forward, and confirm the
    selected editor and collection deep links restore.

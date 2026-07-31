@@ -21,6 +21,8 @@ export function PackageGenerationDialog({
   templates,
   difficulties,
   recognizabilities,
+  difficultyDistributions,
+  recognizabilityDistributions,
   packages,
   gamePackage,
   onGenerationStart,
@@ -37,6 +39,8 @@ export function PackageGenerationDialog({
     packages,
     difficulties,
     recognizabilities,
+    difficultyDistributions,
+    recognizabilityDistributions,
     gamePackage,
     onGenerationStart,
     getPromptPreview,
@@ -49,6 +53,7 @@ export function PackageGenerationDialog({
     activePackages,
     cancel,
     currentDifficulty,
+    currentRecognizability,
     difficultyDistribution,
     excludedAnswers,
     failed,
@@ -65,9 +70,7 @@ export function PackageGenerationDialog({
     scope,
     selected,
     setCurrentInput,
-    setDifficultyDistribution,
     setPromptOpen,
-    setRecognizability,
     setRuleSet,
     setScope,
     setSelected,
@@ -132,8 +135,8 @@ export function PackageGenerationDialog({
                     }
                     difficultyDistribution={difficultyDistribution}
                     recognizability={recognizability}
-                    difficulties={difficulties}
-                    recognizabilities={recognizabilities}
+                    difficultyDistributions={difficultyDistributions}
+                    recognizabilityDistributions={recognizabilityDistributions}
                     hasRandomTemplates={Boolean(randomTemplates.length)}
                     progress={progress}
                     ruleSet={ruleSet}
@@ -142,14 +145,14 @@ export function PackageGenerationDialog({
                     hasTargets={Boolean(targets.length)}
                     thinking={thinking}
                     onCancel={() => void cancel()}
-                    onDifficultyPercentageChange={(difficulty, percentage) => {
-                      setDifficultyDistribution((current) => ({
-                        ...current,
-                        [difficulty]: percentage,
-                      }));
+                    onDifficultyDistributionChange={(value) => {
+                      generation.setDifficultyDistribution(value);
                       setCurrentInput(null);
                     }}
-                    onRecognizabilityChange={setRecognizability}
+                    onRecognizabilityDistributionChange={(value) => {
+                      generation.setRecognizabilityDistribution(value);
+                      setCurrentInput(null);
+                    }}
                     onPackageChange={(index) => {
                       setSelected(index);
                       setCurrentInput(null);
@@ -180,7 +183,7 @@ export function PackageGenerationDialog({
                         previewInput.context,
                         progress ? excludedAnswers : initialExcludedAnswers,
                         currentDifficulty,
-                        recognizability,
+                        currentRecognizability,
                       )}
                     />
                   </label>

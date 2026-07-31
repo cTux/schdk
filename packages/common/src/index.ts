@@ -49,6 +49,7 @@ import {
   parseSchdkDictionaryArchive,
   serializeSchdkDictionary,
   type SchdkDictionary,
+  type SchdkDictionaryDistribution,
   type SchdkDictionaryId,
   type SchdkDictionaryItem,
 } from './contracts/dictionaries/schdk-dictionary.js';
@@ -100,4 +101,5 @@ export {
   type SchdkDictionary,
   type SchdkDictionaryId,
   type SchdkDictionaryItem,
+  type SchdkDictionaryDistribution,
 };
