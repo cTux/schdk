@@ -13,7 +13,8 @@ code or duplicating prompt definitions.
   recognizability in a table with name and description columns.
 - **DCT-2:** Selecting a dictionary opens a dedicated table with name,
   description, and prompt-text-fragment columns for very easy, easy, medium,
-  hard, and very hard values.
+  hard, and very hard values. Both dictionary tables use the same rounded,
+  raised panel treatment as the recent-package list.
 - **DCT-3:** Every account can view dictionaries. Only the centralized
   allowlisted administrator can edit them, and Google Drive folder permissions
   remain the write authorization boundary.
