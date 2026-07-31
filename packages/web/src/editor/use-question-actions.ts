@@ -6,11 +6,7 @@ import {
   type GameQuestion,
 } from '@schdk/common';
 import type { DrivePackageStorage } from '@schdk/google-drive';
-import {
-  showEditorToast,
-  type EditorSaveStatus,
-  type EditorViewProps,
-} from '@schdk/ui/editor';
+import { showEditorToast, type EditorViewProps } from '@schdk/ui/editor';
 import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
 import type { EditorTextOptions } from '@schdk/ui/options';
 import type { Dispatch, RefObject, SetStateAction } from 'react';
@@ -28,9 +24,8 @@ interface QuestionActionsOptions {
   selectedIndex: number;
   textOptions: EditorTextOptions;
   onDriveFailure?(): void;
-  setGamePackage: Dispatch<SetStateAction<GamePackage>>;
+  changeGamePackage: Dispatch<SetStateAction<GamePackage>>;
   setMessage: Dispatch<SetStateAction<string>>;
-  setSaveStatus: Dispatch<SetStateAction<EditorSaveStatus>>;
   setSelectedIndex: Dispatch<SetStateAction<number>>;
 }
 
@@ -44,30 +39,27 @@ export function useQuestionActions({
   selectedIndex,
   textOptions,
   onDriveFailure,
-  setGamePackage,
+  changeGamePackage,
   setMessage,
-  setSaveStatus,
   setSelectedIndex,
 }: QuestionActionsOptions) {
   function updateQuestion(change: Partial<GameQuestion>) {
-    setGamePackage((current) => ({
+    changeGamePackage((current) => ({
       ...current,
       questions: current.questions.map((item, index) =>
         index === selectedIndex ? { ...item, ...change } : item,
       ),
     }));
-    setSaveStatus('pending');
     setMessage('');
   }
 
   function replaceQuestion(index: number, question: GameQuestion) {
-    setGamePackage((current) => ({
+    changeGamePackage((current) => ({
       ...current,
       questions: current.questions.map((item, itemIndex) =>
         itemIndex === index ? question : item,
       ),
     }));
-    setSaveStatus('pending');
     setMessage('');
   }
 
@@ -128,13 +120,12 @@ export function useQuestionActions({
       const question = parseGameQuestion(
         JSON.parse(await navigator.clipboard.readText()),
       );
-      setGamePackage((current) => ({
+      changeGamePackage((current) => ({
         ...current,
         questions: current.questions.map((item, index) =>
           index === selectedIndex ? question : item,
         ),
       }));
-      setSaveStatus('pending');
       showEditorToast('pasted', locale);
     } catch {
       setMessage(copy.editor.pasteFailed);
@@ -178,14 +169,13 @@ export function useQuestionActions({
   }
 
   function swapQuestionPositions(sourceIndex: number, targetIndex: number) {
-    setGamePackage((current) => ({
+    changeGamePackage((current) => ({
       ...current,
       questions: swapQuestions(current.questions, sourceIndex, targetIndex),
     }));
     setSelectedIndex((current) =>
       getSelectedIndexAfterSwap(current, sourceIndex, targetIndex),
     );
-    setSaveStatus('pending');
     setMessage('');
   }
 

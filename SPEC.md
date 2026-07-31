@@ -219,3 +219,4 @@ B116|2026-07-31|The first toast-spacing refinement targeted React-Toastify's ven
 B117|2026-07-31|The editor rendered recents beneath an open package and duplicated back navigation inside its action header|V50
 B118|2026-07-31|Generic fieldset spacing reserved excess room for empty answer lists and redundant previous-next controls duplicated sticky question navigation|Keep empty answer lists compact and use the sticky list as the only manual question-switching control in `docs/specs/package-editor.md`.
 B119|2026-07-31|The new server-rendered UI contract test used `react-dom/server` without declaring its ambient types in `@schdk/ui`|Declare `@types/react-dom` in the owning package; package typechecking covers recurrence.
+B120|2026-07-31|The initial editor reducer adapters narrowed React setter callbacks to raw values and broke persistence callers|Preserve `SetStateAction` semantics at reducer boundaries; package typechecking covers recurrence.

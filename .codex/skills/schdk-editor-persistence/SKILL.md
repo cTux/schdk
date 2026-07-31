@@ -9,8 +9,9 @@ description: Change or debug Drive-backed SCHDK editor persistence across web an
 
 1. Follow `$schdk-development`, then read `docs/rules/editor-state.md`,
    `docs/rules/game-packages.md`, and the affected platform's persistence rule.
-2. Trace browser and desktop paths separately from the editor controller
-   through the injected Drive bridge.
+2. Trace browser and desktop paths separately from the editor session reducer
+   through the injected Drive bridge; preserve atomic package, backing-file,
+   and save-status transitions.
 3. Read `docs/rules/security.md` and `docs/rules/desktop-apps.md` for bridge or
    close changes; read `docs/rules/ui-editor.md` for visual changes.
 4. Exercise every changed create, import, restore, autosave, navigation,
