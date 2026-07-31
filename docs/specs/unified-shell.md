@@ -127,8 +127,9 @@ package authoring, hosting, settings, and account state.
   has only its title and description in the header and no back button. Visual
   editor is the only page without a shared page header and fills the complete
   available workspace area. All shared page headers use the same compact title
-  sizing. Package editor and game-hosting actions remain compact in the right
-  side of their page header; neither page uses a package drop-zone.
+  sizing and title-description spacing. Package editor and game-hosting actions
+  remain compact in the right side of their page header; neither page uses a
+  package drop-zone.
 
 ## Invariants
 
