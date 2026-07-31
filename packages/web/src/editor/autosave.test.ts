@@ -35,6 +35,8 @@ describe('scheduleAutosave', () => {
   it('schedules every writable pending change', () => {
     expect(shouldScheduleAutosave('pending', true)).toBe(true);
     expect(shouldScheduleAutosave('saved', true)).toBe(false);
+    expect(shouldScheduleAutosave('saving', true)).toBe(false);
+    expect(shouldScheduleAutosave('error', true)).toBe(false);
     expect(shouldScheduleAutosave('pending', false)).toBe(false);
   });
 });
