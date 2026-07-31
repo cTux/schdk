@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer, type IpcRendererEvent } from 'electron';
 import type { GameQuestionGenerationRequest } from '@schdk/ai';
-import { randomUUID } from 'node:crypto';
+
+let generationRequestId = 0;
 
 const closeApi = {
   onCloseRequested: (callback: (attempt: number) => void): (() => void) => {
@@ -48,7 +49,7 @@ const editorApi = {
       request: GameQuestionGenerationRequest,
       signal?: AbortSignal,
     ) => {
-      const requestId = randomUUID();
+      const requestId = `${Date.now()}-${++generationRequestId}`;
       const cancel = () =>
         ipcRenderer.send('cancel-ai-question-generation', requestId);
       if (signal?.aborted) {

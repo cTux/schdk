@@ -226,3 +226,4 @@ B119|2026-07-31|The new server-rendered UI contract test used `react-dom/server`
 B120|2026-07-31|The initial editor reducer adapters narrowed React setter callbacks to raw values and broke persistence callers|Preserve `SetStateAction` semantics at reducer boundaries; package typechecking covers recurrence.
 B121|2026-07-31|The AI controller test fixture omitted two values required by the canonical five-point dictionary distribution|Use the complete shared distribution shape; package typechecking covers recurrence.
 B122|2026-07-31|Convenience barrels imported implementations that depended back on their owning module, leaving runtime initialization order cyclic|V52
+B123|2026-07-31|The sandboxed preload imported Node crypto for generation IDs and failed before exposing the renderer bridge|V18
