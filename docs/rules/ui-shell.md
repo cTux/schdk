@@ -20,7 +20,8 @@
   web shell so direct links and browser history remain authoritative.
 - List dictionaries in a name-and-description table. Open a selected
   dictionary as a dedicated item table, expose its editable fields only to the
-  allowlisted administrator, and keep selection controlled by the web shell.
+  allowlisted administrator, keep both tables visually consistent with the
+  recent-package list, and keep selection controlled by the web shell.
 - Keep the native Ukrainian/English language control in the first `App`
   settings tab. Keep `WWW` as the second primary tab with its host/editor
   fieldsets and `Штучний інтелект` as the third primary tab.

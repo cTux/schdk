@@ -21,6 +21,10 @@
 
 .dictionaries-table-wrap {
   overflow-x: auto;
+  border-radius: $radius-panel;
+  background: rgba($surface-rgb, 0.78);
+  box-shadow: $shadow-raised;
+  backdrop-filter: blur(16px);
 }
 
 .dictionaries-page table {
@@ -39,6 +43,10 @@
 
 .dictionaries-page th {
   font-weight: 700;
+}
+
+.dictionaries-page tbody tr:last-child td {
+  border-bottom: 0;
 }
 
 .dictionaries-page .ui-input,
