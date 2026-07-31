@@ -24,7 +24,6 @@ const booleans = new Set([
   'apiKeyConfigured',
   'canGoBack',
   'checked',
-  'connected',
   'controlsDisabled',
   'danger',
   'disabled',
@@ -126,10 +125,6 @@ function getValue(component: string, prop: string): unknown {
   }
 
   const values: Record<string, unknown> = {
-    account: {
-      displayName: 'Storybook',
-      emailAddress: 'storybook@example.com',
-    },
     ai: aiOptions,
     aiGeneration: {
       apiKeyConfigured: true,

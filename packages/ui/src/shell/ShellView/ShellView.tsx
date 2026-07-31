@@ -79,8 +79,6 @@ function ShellView({
     <TooltipProvider>
       <main className="app-shell" data-theme={theme}>
         <ShellNavigation
-          account={googleDriveAccount}
-          connected={googleDriveState === 'connected'}
           preloading={preloading}
           view={view}
           onSelect={onShowView}

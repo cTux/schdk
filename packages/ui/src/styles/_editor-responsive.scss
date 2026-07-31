@@ -101,6 +101,15 @@
       margin-top: 2px;
     }
 
+    .question-tooltip {
+      width: min(180px, calc(100vw - 32px));
+    }
+
+    .answer-list-heading {
+      width: auto;
+      flex-wrap: wrap;
+    }
+
     .alternative {
       align-items: stretch;
       flex-direction: column;

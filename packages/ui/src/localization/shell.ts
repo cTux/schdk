@@ -7,8 +7,6 @@ const shellCopy = {
     toolsLabel: 'Tools',
     groupLabel: 'WWW',
     settingsLabel: 'Settings',
-    accountConnected: 'Connected',
-    accountDisconnected: 'Disconnected',
     preloading: 'Loading Google Drive data',
     loginTitle: 'SCHDK',
     loginDescription:
@@ -53,8 +51,6 @@ const shellCopy = {
     toolsLabel: 'Інструменти',
     groupLabel: 'ЩДК',
     settingsLabel: 'Налаштування',
-    accountConnected: 'Підключено',
-    accountDisconnected: 'Не підключено',
     preloading: 'Завантаження даних із Google Диска',
     loginTitle: 'SCHDK',
     loginDescription:

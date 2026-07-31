@@ -114,6 +114,11 @@ package authoring, hosting, settings, and account state.
   animations toggle that disables CSS animations and transitions across every
   mounted web and desktop surface. Operating-system reduced-motion preference
   also shortens motion regardless of this setting.
+- **SHL-22:** The shell keeps the existing light and dark color palettes while
+  using a solid fixed sidebar, a separated brand row, compact uppercase section
+  labels, flat active navigation, a plain workspace, and borderless major
+  surfaces without decorative gradients, glows, or glass effects. Borders stay
+  on controls and structural delimiters, including editor question numbers.
 
 ## Invariants
 
@@ -190,3 +195,7 @@ package authoring, hosting, settings, and account state.
     UI animations in App settings, navigate through shell, editor, and host
     interactions without animated delays, reload, and confirm the toggle
     remains off. Re-enable it and confirm motion returns.
+16. Compare the shell in light and dark themes and confirm both retain their
+    existing colors while the sidebar, active navigation, workspace, and
+    panels use the flat visual treatment in SHL-22 at normal and 320-pixel
+    widths.

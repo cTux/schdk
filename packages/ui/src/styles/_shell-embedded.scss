@@ -35,12 +35,11 @@ button:focus-visible {
   .sidebar {
     width: 72px;
     flex-basis: 72px;
-    padding-inline: 10px;
   }
 
   .brand {
     justify-content: center;
-    padding-inline: 0;
+    padding-inline: 10px;
   }
 
   .sidebar .brand div {
@@ -49,6 +48,10 @@ button:focus-visible {
 
   .sidebar nav button:not(.active) {
     font-size: 0;
+  }
+
+  .sidebar nav {
+    padding-inline: 10px;
   }
 
   .sidebar nav button {
@@ -62,27 +65,6 @@ button:focus-visible {
 
   .nav-icon {
     font-size: $font-size-md;
-  }
-
-  .sidebar-account {
-    position: relative;
-    justify-content: center;
-    gap: 0;
-    padding-inline: 0;
-  }
-
-  .sidebar-account-status {
-    position: absolute;
-    right: 5px;
-    bottom: 7px;
-    font-size: 0;
-  }
-
-  .sidebar-account-dot {
-    width: 10px;
-    height: 10px;
-    flex-basis: 10px;
-    border: 2px solid $sidebar;
   }
 
   .home {
@@ -118,13 +100,6 @@ button:focus-visible {
 
   .arrow {
     display: none;
-  }
-
-  .home::before {
-    top: 14px;
-    right: -25px;
-    width: 120px;
-    opacity: 0.32;
   }
 }
 
