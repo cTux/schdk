@@ -1,6 +1,6 @@
 ---
 name: schdk-start-session
-description: Initialize a new SCHDK implementation session or newly created Git worktree. Use at the start of repository work that will change files, especially when the worktree starts on a detached HEAD and needs a task-specific branch and installed dependencies.
+description: Initialize SCHDK work that will change files. Use at session or worktree start to create a task branch and install dependencies.
 ---
 
 # SCHDK Session Setup

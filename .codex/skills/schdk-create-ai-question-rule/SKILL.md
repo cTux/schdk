@@ -1,6 +1,6 @@
 ---
 name: schdk-create-ai-question-rule
-description: Analyze the construction of a supplied quiz question, answer, and optional handout, then turn its reusable mechanism into a valid SCHDK .aiquestion generation rule. Use when asked to explain how a question works, classify its type, generalize its clue path, or create an .aiquestion file from one or more examples.
+description: Turn supplied quiz question, answer, and handout examples into reusable SCHDK .aiquestion rules. Use for construction analysis, clue-path classification, mechanism generalization, or .aiquestion creation.
 ---
 
 # Analyze and Create an AI Question Rule

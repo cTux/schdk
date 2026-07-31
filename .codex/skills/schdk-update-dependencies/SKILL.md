@@ -1,6 +1,6 @@
 ---
 name: schdk-update-dependencies
-description: Update pnpm and dependencies in the SCHDK monorepo, regenerate the lockfile, resolve pnpm audit findings with minimal workspace overrides, verify the repository, and commit the result on a new prompt-based branch. Use for dependency upgrades, pnpm self-updates, ncu runs, lockfile refreshes, or dependency audit remediation.
+description: Update SCHDK pnpm or dependencies, lockfiles, and audit overrides. Use for upgrades, pnpm self-update, ncu, lockfile refresh, or vulnerability remediation.
 ---
 
 # SCHDK Dependency Updates

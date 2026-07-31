@@ -1,6 +1,6 @@
 ---
 name: schdk-development
-description: Implement, debug, refactor, review, or document changes anywhere in the SCHDK pnpm monorepo. Use for repository-wide work, cross-package features, bug fixes, dependency changes, rule updates, or tasks that do not fit a narrower SCHDK skill.
+description: Handle SCHDK work spanning packages or lacking a narrower skill, including implementation, debugging, refactoring, review, documentation, dependencies, and rule updates.
 ---
 
 # SCHDK Development
@@ -8,26 +8,21 @@ description: Implement, debug, refactor, review, or document changes anywhere in
 ## Workflow
 
 1. Read `AGENTS.md`, `docs/RULES.md`, and every linked rule area touched by the task.
-2. Trace the current flow and all callers before editing. Respect ownership: data in `common`, AI provider logic in `ai`, visuals in `ui`, browser behavior in web apps, and OS integration in desktop apps.
-3. Reuse existing helpers and native APIs before adding code, dependencies, abstractions, or packages. Prefer `async`/`await` for asynchronous control flow and avoid nested callback chains.
+2. Route specialized work through the smallest matching skill below. Trace the
+   current flow and all callers before editing.
+3. Read `docs/rules/architecture.md` for ownership changes. Reuse existing
+   helpers and native APIs, then make the smallest complete change.
    When research finds a credible scalable solution that is not needed yet,
    record its purpose, tradeoffs, and activation conditions in
    `docs/POTENTIAL_IMPROVEMENTS.md`.
-4. Make the smallest complete change. Use `$schdk-project-structure` for every
-   changed source-code file; refactor an existing multi-export file before
-   finishing the change. Name semantic predicates so implementation-heavy
-   control flow reads as English, while leaving already-readable direct
-   conditions inline. Add tests only for the exact prompt
-   `add missing tests`, using `$schdk-add-missing-tests`.
-5. Run `$schdk-sync-specs` after implementation. It creates or updates the
-   matching feature contract and root `SPEC.md` entries when required, or
-   confirms that the change is internal-only.
-6. Update the matching rule and skill when a durable contract or workflow
-   changes, then run `$schdk-sync-specs` again.
-7. Verify with `$schdk-quality`.
-8. After every prompt that changes repository files, stage and commit all task changes once verified; preserve unrelated changes.
-9. Before creating a pull request, run `git fetch origin main` and `git rebase origin/main`; resolve conflicts and reverify the rebased result.
-10. Push the branch with `git push -u origin HEAD`, create the pull request with `gh pr create --fill`, wait for its checks with `gh pr checks --watch --fail-fast`, and confirm the worktree is clean unless the user explicitly asks to keep the change local. If rebasing rewrote a published branch, update it with `git push --force-with-lease`.
+4. Use `$schdk-project-structure` for every source-code change. Add tests only
+   for the exact prompt `add missing tests`, using
+   `$schdk-add-missing-tests`.
+5. Update the matching rule and skill when a durable contract or workflow
+   changes.
+6. Run `$schdk-sync-specs`, then `$schdk-quality`.
+7. After every prompt that changes repository files, stage and commit all task changes once verified; preserve unrelated changes and confirm the worktree is clean.
+   Follow the push and pull-request workflow in `docs/rules/verification.md`.
 
 ## Route Specialized Work
 

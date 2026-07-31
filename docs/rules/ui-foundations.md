@@ -40,8 +40,17 @@
   levels or fewer, and use class selectors instead of IDs.
 - Avoid `!important` except for documented accessibility or platform
   overrides, including `[hidden]` and reduced-motion rules.
+- Name classes for component roles and states rather than current appearance.
+- Keep responsive rules beside the selectors they change. Prefer mobile-first
+  rules for new isolated layouts without churning working layouts solely to
+  reverse existing media queries.
+- Add a Sass mixin, function, or variable only after a repeated semantic
+  pattern exists; keep one-off values and clear native CSS direct.
 - Create and import a component `styles.scss` only when it emits
   component-specific CSS; do not keep empty stylesheet placeholders.
+- Keep shared area entry points in `styles/editor.scss`, `styles/host.scss`, and
+  `styles/shell.scss`; split them into cohesive area-prefixed partials only
+  when needed.
 - Use the shared ink/plum chrome, amber brand actions, periwinkle interaction
   states, warm canvases, soft elevation, and restrained translucent overlays.
 - Keep action bars compact and icon-only with Ukrainian accessible labels shown

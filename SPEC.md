@@ -199,3 +199,4 @@ B102|2026-07-29|Image handouts were read without a size bound and could make the
 B103|2026-07-29|A Drive client test used malformed package bytes after the shared write boundary began enforcing V41|V41
 B104|2026-07-30|The new dictionary flow passed a generic typed array directly to Blob and omitted required dictionary props from generation-hook call objects|Copy the existing Blob input pattern and pass complete props; typechecking covers recurrence.
 B105|2026-07-30|The generated dictionary-page story received a scalar placeholder instead of dictionary fixtures and crashed during visual verification|Add renderable dictionary defaults to the existing Storybook fixture map; the UI workflow requires visual smoke testing.
+B106|2026-07-31|Skill compaction removed phrases enforced by repository workflow tests|Restore the machine-checked wording; the existing workflow tests cover recurrence.
