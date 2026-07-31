@@ -14,7 +14,7 @@
   [`packages/ui/README.md`](../../packages/ui/README.md).
 - `@schdk/web` is the only browser application package. It owns shell
   navigation, persisted locale selection, editor state and Drive persistence,
-  and host gameplay behavior. Its editor and host feature modules render
+  AI-generation orchestration, and host gameplay behavior. Its editor and host feature modules render
   `@schdk/ui` views and remain lazily loaded.
 - `@schdk/desktop` is the only desktop application. It wraps
   `@schdk/web` and owns Electron main/preload code, packaging, and the
@@ -56,6 +56,9 @@
   integration in `desktop`.
 - The web application composes exported `@schdk/ui` controls and views; it
   does not render native interactive JSX or define app-local visual controls.
+- Keep AI provider calls, token renewal, batch sequencing, answer exclusion,
+  and cancellation in `@schdk/web`; `@schdk/ui` only collects generation
+  inputs and renders lifecycle state supplied through typed callbacks.
 - Do not add an abstraction, package, or dependency for hypothetical future
   use. Reuse existing helpers and native platform APIs first.
 

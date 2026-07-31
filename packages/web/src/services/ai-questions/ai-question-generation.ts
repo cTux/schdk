@@ -1,21 +1,36 @@
 import {
   compareFavoriteItemsByName,
+  AI_QUESTION_DIFFICULTIES,
+  getGameQuestionAnswers,
   type AIQuestion,
   type AIQuestionDifficulty,
   type AIQuestionRecognizability,
   type AIQuestionsPackage,
   DEFAULT_SCHDK_DICTIONARIES,
   type SchdkDictionary,
+  type SchdkDictionaryDistribution,
 } from '@schdk/common';
 import {
   createGameQuestionPrompt,
   type GameQuestionGenerationRequest,
 } from '@schdk/ai';
-import type { AiQuestionGenerationOptions } from '@schdk/ui/editor';
+import type {
+  AiQuestionGenerationOptions,
+  AiQuestionGenerationRequest,
+} from '@schdk/ui/editor';
 import type { AppLocale } from '@schdk/ui/localization';
 import type { AiOptions } from '@schdk/ui/options';
 import type { GoogleDriveBridge } from '../../types/google-drive/google-drive-types';
 import { useAiQuestionTools } from '../../hooks/ai-questions/use-ai-question-tools';
+
+function getRandomValue(distribution: SchdkDictionaryDistribution) {
+  let position = Math.random() * 100;
+  return (
+    AI_QUESTION_DIFFICULTIES.find(
+      (difficulty) => (position -= distribution[difficulty]) < 0,
+    ) ?? 'medium'
+  );
+}
 
 function createAiQuestionGeneration(
   bridge: GoogleDriveBridge | null,
@@ -78,6 +93,35 @@ function createAiQuestionGeneration(
     };
   }
 
+  async function generateQuestion({
+    template,
+    context,
+    excludedAnswers = [],
+    difficulty = 'medium',
+    recognizability = 'easy',
+  }: AiQuestionGenerationRequest) {
+    if (!bridge) {
+      throw new Error('Google Drive is disconnected');
+    }
+    const question = await bridge.generateAiQuestion(
+      createRequest(
+        template,
+        context,
+        excludedAnswers,
+        difficulty,
+        recognizability,
+      ),
+    );
+    return {
+      ...question,
+      aiGeneration: {
+        rule: template.name,
+        difficulty,
+        recognizability,
+      },
+    };
+  }
+
   return {
     apiKeyConfigured: options.apiKeyConfigured,
     difficulties: difficultyDictionary.items,
@@ -90,9 +134,6 @@ function createAiQuestionGeneration(
     templates: templates
       .filter((template) => template.enabled && !template.generalRule)
       .sort(compareFavoriteItemsByName),
-    async onGenerationStart() {
-      await bridge?.renewToken?.();
-    },
     getPromptPreview: isAdmin
       ? (
           template,
@@ -113,33 +154,32 @@ function createAiQuestionGeneration(
           return `${system}\n\n${prompt}`;
         }
       : undefined,
-    async onGenerate(
-      template,
-      context,
-      excludedAnswers = [],
-      difficulty = 'medium',
-      recognizability = 'easy',
-    ) {
-      if (!bridge) {
-        throw new Error('Google Drive is disconnected');
+    async generateQuestion(request) {
+      await bridge?.renewToken?.();
+      return generateQuestion(request);
+    },
+    async generatePackage(request, onProgress, shouldContinue = () => true) {
+      await bridge?.renewToken?.();
+      const usedAnswers = [...request.excludedAnswers];
+      for (const [position, step] of request.steps.entries()) {
+        if (!shouldContinue()) return;
+        const generationRequest = {
+          ...step,
+          excludedAnswers: [...usedAnswers],
+          difficulty: getRandomValue(request.difficultyDistribution),
+          recognizability: getRandomValue(request.recognizabilityDistribution),
+        };
+        const question = await generateQuestion(generationRequest);
+        if (!shouldContinue()) return;
+        onProgress({
+          index: step.index,
+          position: position + 1,
+          total: request.steps.length,
+          question,
+          request: generationRequest,
+        });
+        usedAnswers.push(...getGameQuestionAnswers(question));
       }
-      const question = await bridge.generateAiQuestion(
-        createRequest(
-          template,
-          context,
-          excludedAnswers,
-          difficulty,
-          recognizability,
-        ),
-      );
-      return {
-        ...question,
-        aiGeneration: {
-          rule: template.name,
-          difficulty,
-          recognizability,
-        },
-      };
     },
   };
 }
