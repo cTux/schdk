@@ -9,6 +9,8 @@
   theme changes must not alter its canvas, controls, or text colors.
 - Persist bounds as percentages and apply identical bounds and presentation
   settings in gameplay. Keep the standard layout until changed.
+- Preview pointer drag and resize locally, then persist one final position when
+  the interaction ends. Persist keyboard adjustments immediately.
 - Let every built-in and custom element be marked hidden while remaining
   editable in the visual editor; omit hidden elements only from gameplay.
 - Keep resize and property controls outside the transformed game container.

@@ -11,13 +11,34 @@ const execFileAsync = promisify(execFile);
 const sourceExtensions = new Set([
   '.cjs',
   '.css',
+  '.cts',
   '.html',
   '.js',
   '.jsx',
   '.mjs',
+  '.mts',
   '.scss',
   '.ts',
   '.tsx',
+]);
+const allowedWorkspaceDependencies = new Map([
+  ['@schdk/common', new Set()],
+  ['@schdk/ai', new Set(['@schdk/common'])],
+  ['@schdk/google-drive', new Set(['@schdk/common'])],
+  ['@schdk/ui', new Set(['@schdk/common'])],
+  [
+    '@schdk/web',
+    new Set(['@schdk/ai', '@schdk/common', '@schdk/google-drive', '@schdk/ui']),
+  ],
+  [
+    '@schdk/desktop',
+    new Set([
+      '@schdk/ai',
+      '@schdk/common',
+      '@schdk/google-drive',
+      '@schdk/web',
+    ]),
+  ],
 ]);
 
 const listFiles = async (directory) => {
@@ -115,6 +136,50 @@ test('tracked source files stay within 256 physical lines', async () => {
   }
 
   assert.deepEqual(violations, []);
+});
+
+test('workspace imports respect package boundaries and manifests', async () => {
+  const packageDirectories = (
+    await readdir(new URL('packages/', repositoryRoot), {
+      withFileTypes: true,
+    })
+  ).filter((entry) => entry.isDirectory());
+
+  for (const directory of packageDirectories) {
+    const packageRoot = new URL(`packages/${directory.name}/`, repositoryRoot);
+    const manifest = JSON.parse(
+      await readFile(new URL('package.json', packageRoot), 'utf8'),
+    );
+    const allowed = allowedWorkspaceDependencies.get(manifest.name);
+    assert.ok(allowed, `${manifest.name} needs an explicit dependency policy`);
+    const declared = new Set([
+      ...Object.keys(manifest.dependencies ?? {}),
+      ...Object.keys(manifest.devDependencies ?? {}),
+    ]);
+    const files = (await listFiles(new URL('src/', packageRoot))).filter(
+      (file) =>
+        sourceExtensions.has(
+          file.pathname.slice(file.pathname.lastIndexOf('.')),
+        ),
+    );
+
+    for (const file of files) {
+      const source = await readFile(file, 'utf8');
+      const imports = source.matchAll(
+        /(?:from\s*|import\s*(?:\(\s*)?)["'](@schdk\/[^/"']+)/gu,
+      );
+      for (const [, dependency] of imports) {
+        assert.ok(
+          allowed.has(dependency),
+          `${manifest.name} must not import ${dependency}: ${file.pathname}`,
+        );
+        assert.ok(
+          declared.has(dependency),
+          `${manifest.name} must declare ${dependency}: ${file.pathname}`,
+        );
+      }
+    }
+  }
 });
 
 test('UI components follow the directory and class composition contracts', async () => {

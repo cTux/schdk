@@ -5,11 +5,8 @@ import {
   saveEditorTextOptions,
   saveGameOptions,
 } from './options-storage';
-import {
-  DEFAULT_EDITOR_TEXT_OPTIONS,
-  DEFAULT_GAME_LAYOUT,
-  DEFAULT_GAME_OPTIONS,
-} from '@schdk/ui/options';
+import { DEFAULT_GAME_LAYOUT, DEFAULT_GAME_OPTIONS } from '@schdk/common';
+import { DEFAULT_EDITOR_TEXT_OPTIONS } from '@schdk/ui/options';
 
 function createStorage(initial: string | null = null, failWrites = false) {
   let value = initial;

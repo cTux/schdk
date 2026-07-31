@@ -1,4 +1,4 @@
-import { type CustomGameElementBase } from './custom-game-element-base';
+import { type CustomGameElementBase } from './custom-game-element-base.js';
 
 export interface CustomTextElement extends CustomGameElementBase {
   kind: 'text';

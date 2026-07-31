@@ -1,4 +1,4 @@
-import { type GameLayoutPosition } from './game-layout-position';
+import { type GameLayoutPosition } from './game-layout-position.js';
 
 export interface CustomGameElementBase {
   id: string;

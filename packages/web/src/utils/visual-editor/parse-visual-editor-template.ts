@@ -1,6 +1,5 @@
-import { type GameOptions } from '@schdk/ui/options';
+import { normalizeGameOptions, type GameOptions } from '@schdk/common';
 import { strFromU8, strToU8, unzipSync } from 'fflate';
-import { normalizeGameOptions } from '../../services/options/game-options-validation';
 import { MAX_VISUAL_TEMPLATE_BYTES } from '../../storage/options/game-options-storage';
 import { VISUAL_TEMPLATE_ENTRY } from '../../types/visual-editor/visual-template-entry';
 

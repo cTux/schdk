@@ -1,5 +1,5 @@
-import { type GameTextGrowDirection } from './game-text-grow-direction';
-import { type GameImagePosition } from './game-image-position';
+import { type GameTextGrowDirection } from './game-text-grow-direction.js';
+import { type GameImagePosition } from './game-image-position.js';
 
 export interface GameLayoutPosition {
   hidden: boolean;

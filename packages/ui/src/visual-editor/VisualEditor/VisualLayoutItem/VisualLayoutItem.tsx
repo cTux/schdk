@@ -30,7 +30,7 @@ export function VisualLayoutItem({
   const dragRef = useRef<{
     pointerId: number;
     startPointer: GamePoint;
-    startPosition: GamePoint;
+    startPosition: GameLayoutPosition;
   } | null>(null);
   const resizeRef = useRef<{
     pointerId: number;
@@ -38,8 +38,25 @@ export function VisualLayoutItem({
     startPosition: GameLayoutPosition;
     handle: ResizeHandle;
   } | null>(null);
+  const draftRef = useRef<GameLayoutPosition | null>(null);
   const [dragging, setDragging] = useState(false);
   const [resizing, setResizing] = useState(false);
+  const [draftPosition, setDraftPosition] = useState<GameLayoutPosition | null>(
+    null,
+  );
+  const renderedPosition = draftPosition ?? position;
+
+  function previewPosition(patch: Partial<GameLayoutPosition>) {
+    const next = { ...position, ...patch };
+    draftRef.current = next;
+    setDraftPosition(next);
+  }
+
+  function finishPointerInteraction(commit: boolean) {
+    if (commit && draftRef.current) onUpdate(draftRef.current);
+    draftRef.current = null;
+    setDraftPosition(null);
+  }
 
   function moveFromKeyboard(event: KeyboardEvent<HTMLDivElement>) {
     const delta = event.shiftKey ? 5 : 1;
@@ -70,24 +87,26 @@ export function VisualLayoutItem({
           'is-dragging': dragging,
           'is-resizing': resizing,
           'is-selected': selected,
-          'is-hidden': position.hidden,
+          'is-hidden': renderedPosition.hidden,
         },
       )}
       style={
         {
-          left: `${position.x}%`,
-          top: `${position.y}%`,
-          width: `${position.width}%`,
-          height: `${position.height}%`,
-          '--game-font-scale': position.fontScale,
-          '--game-text-color': position.textColor,
+          left: `${renderedPosition.x}%`,
+          top: `${renderedPosition.y}%`,
+          width: `${renderedPosition.width}%`,
+          height: `${renderedPosition.height}%`,
+          '--game-font-scale': renderedPosition.fontScale,
+          '--game-text-color': renderedPosition.textColor,
           '--game-grow-align':
-            position.textGrowDirection === 'up' ? 'flex-end' : 'flex-start',
-          '--game-image-position': position.imagePosition,
+            renderedPosition.textGrowDirection === 'up'
+              ? 'flex-end'
+              : 'flex-start',
+          '--game-image-position': renderedPosition.imagePosition,
         } as CSSProperties
       }
       data-hidden-label={hiddenLabel}
-      aria-label={`${label}${position.hidden ? hiddenSuffix : ''}. ${dragInstruction}`}
+      aria-label={`${label}${renderedPosition.hidden ? hiddenSuffix : ''}. ${dragInstruction}`}
       aria-pressed={selected}
       onClick={onSelect}
       onKeyDown={(event) => {
@@ -125,7 +144,7 @@ export function VisualLayoutItem({
         const hasActiveDrag =
           drag && drag.pointerId === event.pointerId && pointer;
         if (!hasActiveDrag) return;
-        onUpdate(
+        previewPosition(
           getDraggedPosition(drag.startPosition, drag.startPointer, pointer),
         );
       }}
@@ -135,10 +154,12 @@ export function VisualLayoutItem({
         }
         dragRef.current = null;
         setDragging(false);
+        finishPointerInteraction(true);
       }}
       onPointerCancel={() => {
         dragRef.current = null;
         setDragging(false);
+        finishPointerInteraction(false);
       }}
     >
       {content}
@@ -174,7 +195,7 @@ export function VisualLayoutItem({
               const hasActiveResize =
                 resize && resize.pointerId === event.pointerId && pointer;
               if (!hasActiveResize) return;
-              onUpdate(
+              previewPosition(
                 getResizedPosition(
                   resize.startPosition,
                   resize.startPointer,
@@ -189,10 +210,12 @@ export function VisualLayoutItem({
               }
               resizeRef.current = null;
               setResizing(false);
+              finishPointerInteraction(true);
             }}
             onPointerCancel={() => {
               resizeRef.current = null;
               setResizing(false);
+              finishPointerInteraction(false);
             }}
           />
         ))}

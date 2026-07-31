@@ -1,4 +1,4 @@
-import { type GameOptions } from '@schdk/ui/options';
+import { type GameOptions } from '@schdk/common';
 import { MAX_VISUAL_TEMPLATE_BYTES } from '../../storage/options/game-options-storage';
 import { parseVisualEditorTemplate } from './parse-visual-editor-template';
 

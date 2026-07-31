@@ -1,5 +1,5 @@
-import { type GameLayout } from './game-layout';
-import { layout } from './layout';
+import { type GameLayout } from '../../types/game-options/game-layout.js';
+import { layout } from '../../utils/game-options/layout.js';
 
 export const DEFAULT_GAME_LAYOUT: GameLayout = {
   logo: layout(5, 6, 6, 12),

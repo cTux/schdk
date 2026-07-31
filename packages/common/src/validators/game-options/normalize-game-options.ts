@@ -1,15 +1,13 @@
-import {
-  DEFAULT_GAME_OPTIONS,
-  DEFAULT_GAME_LAYOUT,
-  GAME_IMAGE_POSITIONS,
-  GAME_LAYOUT_ELEMENT_IDS,
-  MAX_CUSTOM_GAME_ELEMENTS,
-  MAX_CUSTOM_IMAGE_DATA_LENGTH,
-  type CustomGameElement,
-  type GameLayout,
-  type GameLayoutPosition,
-  type GameOptions,
-} from '@schdk/ui/options';
+import { DEFAULT_GAME_OPTIONS } from '../../constants/game-options/default-game-options.js';
+import { DEFAULT_GAME_LAYOUT } from '../../constants/game-options/default-game-layout.js';
+import { GAME_IMAGE_POSITIONS } from '../../constants/game-options/game-image-positions.js';
+import { GAME_LAYOUT_ELEMENT_IDS } from '../../constants/game-options/game-layout-element-ids.js';
+import { MAX_CUSTOM_GAME_ELEMENTS } from '../../constants/game-options/max-custom-game-elements.js';
+import { MAX_CUSTOM_IMAGE_DATA_LENGTH } from '../../constants/game-options/max-custom-image-data-length.js';
+import { type CustomGameElement } from '../../types/game-options/custom-game-element.js';
+import { type GameLayout } from '../../types/game-options/game-layout.js';
+import { type GameLayoutPosition } from '../../types/game-options/game-layout-position.js';
+import { type GameOptions } from '../../types/game-options/game-options.js';
 
 export function normalizeGameOptions(value: unknown): GameOptions | null {
   if (!value || typeof value !== 'object') return null;

@@ -1,4 +1,4 @@
-import { type GameOptions } from '@schdk/ui/options';
+import { type GameOptions } from '@schdk/common';
 import { strToU8, zipSync } from 'fflate';
 import { VISUAL_TEMPLATE_ENTRY } from '../../types/visual-editor/visual-template-entry';
 

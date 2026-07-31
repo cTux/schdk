@@ -1,10 +1,10 @@
-import { type DriveSettingsDocument } from '@schdk/google-drive';
 import { type SettingsStorage } from '../settings/settings-storage';
 import { METADATA_KEY } from '../../constants/visual-editor/metadata-key';
+import type { WebDriveSettingsDocument } from '../../types/google-drive/web-drive-settings-document';
 
 export function saveLocalDriveSettings(
   storage: SettingsStorage,
-  settings: DriveSettingsDocument,
+  settings: WebDriveSettingsDocument,
 ) {
   try {
     storage.setItem(
