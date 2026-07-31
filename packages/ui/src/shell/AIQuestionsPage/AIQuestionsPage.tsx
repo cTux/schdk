@@ -101,12 +101,7 @@ export function AIQuestionsPage({
       className="ai-questions-page"
       hidden={hidden}
       title={copy.aiQuestions.title}
-      headerContent={
-        <>
-          <p className="eyebrow">{copy.shell.artificialIntelligence.label}</p>
-          <p>{copy.aiQuestions.description}</p>
-        </>
-      }
+      headerContent={<p>{copy.aiQuestions.description}</p>}
       onBack={onBack}
     >
       {formOpen && (

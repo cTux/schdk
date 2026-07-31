@@ -105,12 +105,7 @@ export function AIQuestionsPackagesPage({
       className="ai-questions-page"
       hidden={hidden}
       title={copy.aiPackageRules.title}
-      headerContent={
-        <>
-          <p className="eyebrow">{copy.aiPackageRules.navigationLabel}</p>
-          <p>{copy.aiPackageRules.description}</p>
-        </>
-      }
+      headerContent={<p>{copy.aiPackageRules.description}</p>}
       onBack={onBack}
     >
       {formOpen && (

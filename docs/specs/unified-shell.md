@@ -123,12 +123,12 @@ package authoring, hosting, settings, and account state.
   surfaces without decorative gradients, glows, or glass effects. Borders stay
   on controls and structural delimiters, including editor question numbers.
 - **SHL-23:** Every shell page except Home uses the shared `Page` layout with a
-  localized back `IconButton`, page title, localized two-line title and
-  description header content where applicable, and page content. Home has only
-  its title and description in the header and no back button. Visual editor is
-  the only page without a shared page header and fills the complete available
-  workspace area. Package editor and game-hosting actions remain compact in
-  the right side of their page header; neither page uses a package drop-zone.
+  localized back `IconButton`, page title, description, and page content. Home
+  has only its title and description in the header and no back button. Visual
+  editor is the only page without a shared page header and fills the complete
+  available workspace area. Package editor and game-hosting actions remain
+  compact in the right side of their page header; neither page uses a package
+  drop-zone.
 
 ## Invariants
 
