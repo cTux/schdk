@@ -1,12 +1,11 @@
 @use './tokens' as *;
 
 .home {
-  width: min(1180px, calc(100% - 64px));
+  max-width: 1180px;
   margin: 0 auto;
-  padding: 32px 0 48px;
 }
 
-.home header {
+.home .page-heading {
   max-width: 720px;
 }
 
@@ -27,7 +26,7 @@
   text-wrap: balance;
 }
 
-.home header > p:last-child {
+.home .page-heading > p:last-child {
   max-width: 560px;
   margin: 18px 0 0;
   color: $muted;

@@ -8,6 +8,7 @@ import { TextAreaField } from '../../atoms/TextAreaField';
 import { useLocalization } from '../../localization';
 import { AIQuestionCollection } from '../AIQuestionCollection';
 import { AIQuestionsPackageContexts } from './AIQuestionsPackageContexts';
+import { Page } from '../Page';
 import type { AIQuestionsPackagesPageProps } from './types';
 
 const EMPTY_PACKAGE: AIQuestionsPackage = {
@@ -32,9 +33,11 @@ export function AIQuestionsPackagesPage({
   packages,
   questionRules,
   failed,
+  hidden,
   loading,
   editTarget,
   onAdd,
+  onBack,
   onCloseEditor,
   onRemove,
   onShowEditor,
@@ -98,14 +101,18 @@ export function AIQuestionsPackagesPage({
   }
 
   return (
-    <section className="ai-questions-page">
-      <header>
-        <div>
+    <Page
+      className="ai-questions-page"
+      hidden={hidden}
+      title={copy.aiPackageRules.title}
+      headerContent={
+        <>
           <p className="eyebrow">{copy.aiPackageRules.navigationLabel}</p>
-          <h1>{copy.aiPackageRules.title}</h1>
           <p>{copy.aiPackageRules.description}</p>
-        </div>
-      </header>
+        </>
+      }
+      onBack={onBack}
+    >
       {formOpen && (
         <form
           className="ai-question-form"
@@ -210,6 +217,6 @@ export function AIQuestionsPackagesPage({
           {copy.aiPackageRules.saveFailed}
         </p>
       )}
-    </section>
+    </Page>
   );
 }

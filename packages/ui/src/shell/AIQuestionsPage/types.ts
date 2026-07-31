@@ -8,10 +8,12 @@ export interface AIQuestionsPageProps {
   globalFailed: boolean;
   loading: boolean;
   globalLoading: boolean;
+  hidden?: boolean;
   isGlobalAdmin: boolean;
   editTarget: Extract<ShellEditTarget, { kind: 'question' }> | null;
   onAdd(question: AIQuestion): Promise<boolean>;
   onAddGlobal(question: AIQuestion): Promise<boolean>;
+  onBack(): void;
   onRemove(index: number): Promise<boolean>;
   onRemoveGlobal(index: number): Promise<boolean>;
   onCloseEditor(): void;

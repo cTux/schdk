@@ -122,6 +122,10 @@ package authoring, hosting, settings, and account state.
   labels, flat active navigation, a plain workspace, and borderless major
   surfaces without decorative gradients, glows, or glass effects. Borders stay
   on controls and structural delimiters, including editor question numbers.
+- **SHL-23:** Every shell page uses the shared `Page` layout with a localized
+  back `IconButton`, page title, optional header content, and page content.
+  Visual editor is the only exception: it has no shared page header and fills
+  the complete available workspace area.
 
 ## Invariants
 

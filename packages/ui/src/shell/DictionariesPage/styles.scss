@@ -4,19 +4,12 @@
   display: flex;
   flex-direction: column;
   gap: $space-4;
-  padding: $space-6;
 }
 
-.dictionaries-page > header {
+.dictionaries-page .page-content {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  flex-direction: column;
   gap: $space-4;
-}
-
-.dictionaries-page h1,
-.dictionaries-page p {
-  margin: 0;
 }
 
 .dictionaries-table-wrap {
@@ -107,14 +100,4 @@
 
 .dictionaries-error {
   color: $danger;
-}
-
-@media (width <= 640px) {
-  .dictionaries-page {
-    padding: $space-4;
-  }
-
-  .dictionaries-page > header {
-    flex-direction: column;
-  }
 }

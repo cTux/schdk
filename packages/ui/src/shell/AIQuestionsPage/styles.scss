@@ -1,29 +1,9 @@
 @use '../../styles/tokens' as *;
 
-.ai-questions-page {
-  box-sizing: border-box;
-  width: 100%;
-  padding: clamp(40px, 7vh, 72px) clamp(20px, 4vw, 64px);
-}
-
-.ai-questions-page > header {
+.ai-questions-page .page-content {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  flex-direction: column;
   gap: $space-6;
-}
-
-.ai-questions-page > header > div {
-  max-width: 640px;
-}
-
-.ai-questions-page h1 {
-  font-size: clamp(2rem, 4vw, 3rem);
-}
-
-.ai-questions-page > header > div > p:last-child {
-  color: $muted;
-  line-height: 1.6;
 }
 
 .ai-question-form {
@@ -37,7 +17,6 @@
   display: flex;
   flex-direction: column;
   gap: $space-4;
-  margin-top: $space-8;
   padding: $space-6;
 }
 
@@ -100,18 +79,6 @@
 }
 
 @media (width <= 640px) {
-  .ai-questions-page {
-    width: 100%;
-    padding-right: $space-3;
-    padding-left: $space-3;
-    padding-top: $space-8;
-  }
-
-  .ai-questions-page > header {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
   .ai-question-form {
     padding: $space-4;
   }

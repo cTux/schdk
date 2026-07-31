@@ -5,6 +5,7 @@ import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';
 import { Input } from '../../atoms/Input';
 import { useLocalization } from '../../localization';
+import { Page } from '../Page';
 import {
   QuestionDatabaseTable,
   searchQuestionDatabaseRows,
@@ -20,6 +21,7 @@ export function QuestionDatabasePage({
   failed,
   hidden,
   loading,
+  onBack,
   progress,
   rows,
 }: QuestionDatabasePageProps) {
@@ -53,11 +55,13 @@ export function QuestionDatabasePage({
   }
 
   return (
-    <section className="question-database-page" hidden={hidden}>
-      <header>
-        <h1>{databaseCopy.title}</h1>
-        <p>{databaseCopy.description}</p>
-      </header>
+    <Page
+      className="question-database-page"
+      hidden={hidden}
+      title={databaseCopy.title}
+      headerContent={<p>{databaseCopy.description}</p>}
+      onBack={onBack}
+    >
       <div className="question-database-filters">
         <label>
           {databaseCopy.search}
@@ -113,6 +117,6 @@ export function QuestionDatabasePage({
           </Button>
         )}
       </footer>
-    </section>
+    </Page>
   );
 }

@@ -12,6 +12,7 @@ import { Textarea } from '../../atoms/Textarea';
 import { useLocalization } from '../../localization';
 import { DictionaryDistributionFields } from './DictionaryDistributionFields';
 import { createDictionaryItem } from './utils/create-dictionary-item';
+import { Page } from '../Page';
 import type { DictionariesPageProps } from './types';
 
 function DictionariesPage({
@@ -22,6 +23,7 @@ function DictionariesPage({
   isAdmin,
   loading,
   onCloseEditor,
+  onBack,
   onShowEditor,
   onUpdate,
 }: DictionariesPageProps) {
@@ -84,18 +86,17 @@ function DictionariesPage({
   }
 
   return (
-    <section className="dictionaries-page" hidden={hidden}>
+    <Page
+      className="dictionaries-page"
+      hidden={hidden}
+      title={draft ? draft.name : copy.dictionaries.title}
+      headerContent={
+        <p>{draft ? draft.description : copy.dictionaries.description}</p>
+      }
+      onBack={draft ? onCloseEditor : onBack}
+    >
       {draft ? (
         <>
-          <header>
-            <div>
-              <h1>{draft.name}</h1>
-              <p>{draft.description}</p>
-            </div>
-            <Button type="button" onClick={onCloseEditor}>
-              {copy.shared.back}
-            </Button>
-          </header>
           <div className="dictionaries-table-wrap">
             <table>
               <thead>
@@ -210,8 +211,6 @@ function DictionariesPage({
         </>
       ) : (
         <>
-          <h1>{copy.dictionaries.title}</h1>
-          <p>{copy.dictionaries.description}</p>
           {loading && <p role="status">{copy.dictionaries.loading}</p>}
           {failed && (
             <p className="dictionaries-error" role="alert">
@@ -246,7 +245,7 @@ function DictionariesPage({
           </div>
         </>
       )}
-    </section>
+    </Page>
   );
 }
 

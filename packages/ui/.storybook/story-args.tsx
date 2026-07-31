@@ -92,6 +92,7 @@ function getValue(component: string, prop: string): unknown {
   if (componentValue !== undefined) return componentValue;
   if (prop === 'getPromptPreview') return () => 'System prompt\n\nUser prompt';
   if (prop === 'apiKeyConfigured') return true;
+  if (component === 'AIQuestionForm' && prop === 'draft') return aiQuestion;
   const isCallbackProp =
     prop.startsWith('on') || prop === 'addElement' || prop === 'chooseImage';
   if (isCallbackProp) {
