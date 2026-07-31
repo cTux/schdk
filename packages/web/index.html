@@ -17,15 +17,112 @@
       content="HwSVk4COF4nDPFCPAXw_a0sMPMSyAUIo3mHE9EQVLek"
     />
     <title>SCHDK</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --initial-accent: 255, 180, 95;
+        --initial-accent-cool: 145, 161, 255;
+        --initial-background: #100f14;
+        --initial-border: #35303e;
+        --initial-muted: #aaa3b1;
+        --initial-surface: 27, 24, 33;
+        --initial-text: #f8f5f0;
+      }
+
+      @media (prefers-color-scheme: light) {
+        :root {
+          color-scheme: light;
+          --initial-accent: 166, 79, 0;
+          --initial-accent-cool: 66, 81, 199;
+          --initial-background: #f7f3ed;
+          --initial-border: #d7cbbd;
+          --initial-muted: #716979;
+          --initial-surface: 255, 250, 243;
+          --initial-text: #24202a;
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        color: var(--initial-text);
+        background: var(--initial-background);
+        font-family:
+          Inter,
+          'Segoe UI',
+          system-ui,
+          -apple-system,
+          sans-serif;
+      }
+
+      .google-login-screen {
+        display: grid;
+        min-height: 100vh;
+        place-items: center;
+        padding: 24px;
+        background:
+          radial-gradient(
+            circle at 50% 0%,
+            rgba(var(--initial-accent), 0.18),
+            transparent 30rem
+          ),
+          radial-gradient(
+            circle at 10% 100%,
+            rgba(var(--initial-accent-cool), 0.12),
+            transparent 34rem
+          ),
+          var(--initial-background);
+      }
+
+      .google-login-card {
+        display: flex;
+        width: min(440px, 100%);
+        align-items: center;
+        flex-direction: column;
+        gap: 14px;
+        border: 1px solid var(--initial-border);
+        border-radius: 12px;
+        padding: 40px;
+        background: rgba(var(--initial-surface), 0.88);
+        text-align: center;
+      }
+
+      .google-login-card img {
+        width: 72px;
+        height: 72px;
+        margin-bottom: 4px;
+      }
+
+      .google-login-card h1,
+      .google-login-card p {
+        margin: 0;
+      }
+
+      .google-login-card h1 {
+        font-size: clamp(1.65rem, 5vw, 2.25rem);
+      }
+
+      .google-login-card > p:not(.eyebrow) {
+        color: var(--initial-muted);
+      }
+    </style>
   </head>
   <body>
     <div id="root">
-      <main>
-        <h1>SCHDK</h1>
-        <p>
-          Створюйте, редагуйте та проводьте ігри «Що? Де? Коли?» з
-          автозбереженням на Google Диску та необов’язковими інструментами ШІ.
-        </p>
+      <main class="google-login-screen">
+        <section class="google-login-card">
+          <img src="./owl.svg" alt="" />
+          <p class="eyebrow">Що? Де? Коли?</p>
+          <h1>SCHDK</h1>
+          <p>
+            Створюйте, редагуйте та проводьте ігри «Що? Де? Коли?» з
+            автозбереженням на Google Диску та необов’язковими інструментами ШІ.
+          </p>
+        </section>
       </main>
     </div>
     <script type="module" src="/src/main.tsx"></script>

@@ -40,10 +40,12 @@ package authoring, hosting, settings, and account state.
   answers, and answer comments.
 - **SHL-10:** Before authorization, only the localized Google login screen is
   visible. The hosted web screen publicly identifies SCHDK, describes its
-  purpose in both the rendered and static HTML, and links its directly
-  accessible same-domain privacy policy with compact themed hover and keyboard
-  focus states; account status and disconnect remain available after
-  connection.
+  purpose in both the rendered and static HTML. Before the JavaScript bundle
+  loads, the static HTML uses the same centered branded card and operating-
+  system light or dark palette as the rendered login screen. The hosted screen
+  links its directly accessible same-domain privacy policy with compact themed
+  hover and keyboard focus states; account status and disconnect remain
+  available after connection.
 - **SHL-11:** The Artificial intelligence page fills the available workspace
   width and lists name-sorted account rules followed by name-sorted global
   rules. The existing form creates account rules; allowlisted administrators
@@ -142,9 +144,12 @@ package authoring, hosting, settings, and account state.
 3. Navigate away from an in-progress editor and game, return, and observe
    preserved state.
 4. Open the hosted web application without authorization and confirm its SCHDK
-   identity, purpose, and privacy-policy link are public. Hover and keyboard
-   focus the link and confirm its themed interaction states. Disconnect Google
-   and verify mounted tools become inaccessible until reconnection.
+   identity, purpose, and privacy-policy link are public. Throttle or disable
+   JavaScript and refresh; confirm the static fallback keeps the centered owl
+   card and operating-system light or dark palette before the bundle runs.
+   Hover and keyboard focus the link and confirm its themed interaction states.
+   Disconnect Google and verify mounted tools become inaccessible until
+   reconnection.
 5. Open the Artificial intelligence route directly, add rules with required
    names and descriptions, and observe account rules followed by global rules,
    each sorted by name. Confirm cards show only name, description, and
