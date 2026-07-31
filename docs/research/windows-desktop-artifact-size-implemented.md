@@ -13,8 +13,8 @@ The recommended low-risk work is:
 2. Stop packaging `@schdk/web` and its transitive runtime dependencies
    inside `app.asar`; the compiled web application is already copied as an
    extra resource.
-3. Build electron-builder's `dir` and `nsis` targets in the same production
-   command.
+3. Build electron-builder's NSIS installer and portable executable together,
+   while retaining the unpacked output used by smoke checks.
 
 This reduces the distributable footprint, but it does not materially shrink
 `ЩДК.exe` itself. That file is primarily the Electron runtime.
@@ -113,24 +113,25 @@ Expected effect:
 The implementation must verify Turbo's dry-run graph still places
 `@schdk/web#build` before `@schdk/desktop#build`.
 
-### 3. Build unpacked and installer targets together
+### 3. Build installer and portable targets together
 
 electron-builder supports multiple Windows targets. Configure:
 
 ```json
 {
   "win": {
-    "target": ["dir", "nsis"]
+    "target": ["nsis", "portable"]
   }
 }
 ```
 
-Then a production `electron-builder --win` run emits both:
+Then a production `electron-builder --win` run emits:
 
 - `dist/release/win-unpacked/`;
-- `dist/release/ЩДК Setup <version>.exe`.
+- a versioned NSIS installer;
+- a versioned portable executable.
 
-Both artifacts remain under `packages/desktop/dist/release`.
+All artifacts remain under `packages/desktop/dist/release`.
 
 ### 4. Keep normal compression
 
@@ -170,10 +171,10 @@ benefit.
 
 ## Recommendation
 
-Implement locale filtering, move the web workspace edge to development
-dependencies, and configure `dir` plus `nsis`. Expected unpacked size is about
-303 MiB with both Ukrainian and English locales, roughly 16% below the current
-baseline. The installer should remain below the measured 88.54 MiB
+The implemented configuration filters locales, keeps the web workspace edge in
+development dependencies, and builds NSIS plus portable artifacts. Expected
+unpacked size is about 303 MiB with both Ukrainian and English locales, roughly
+16% below the current baseline. The installer should remain below the measured 88.54 MiB
 Ukrainian-only result plus the small English-locale cost, then shrink further
 after duplicate ASAR dependencies are removed.
 

@@ -5,7 +5,7 @@ Status: implemented
 Related documents:
 
 - [Cross-platform desktop build research](../research/cross-platform-desktop-builds-implemented.md)
-- [Windows desktop packaging improvement](windows-desktop-packaging.md)
+- [Windows desktop packaging improvement](windows-desktop-packaging-implemented.md)
 
 ## Goals
 

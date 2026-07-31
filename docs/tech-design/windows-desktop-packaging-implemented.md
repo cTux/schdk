@@ -1,23 +1,21 @@
 # Windows desktop packaging improvement
 
-Status: proposed
+Status: implemented
 
 Related research:
-[Windows desktop artifact size research](../research/windows-desktop-artifact-size.md)
+[Windows desktop artifact size research](../research/windows-desktop-artifact-size-implemented.md)
 
 ## Goals
 
 - Reduce the unpacked Windows distribution and installer download size using
   the existing Electron/electron-builder stack.
-- Produce both the unpacked application and a compiled NSIS installer from the
-  normal production build.
+- Produce unpacked, NSIS installer, and portable Windows artifacts.
 - Preserve current Electron behavior, security boundaries, and icon handling.
 
 ## Non-goals
 
 - Shrinking the stock Electron executable itself.
-- Migrating to Tauri, Electron Forge, MSI, a web installer, or a portable
-  single-file target.
+- Migrating to Tauri, Electron Forge, MSI, or a web installer.
 - Adding publishing or automatic updates.
 - Refactoring renderer or Electron application behavior.
 
@@ -50,7 +48,7 @@ configuration:
     "electronLanguages": ["uk", "en-US"],
     "win": {
       "icon": "build/owl.png",
-      "target": ["dir", "nsis"]
+      "target": ["nsis", "portable"]
     }
   }
 }
@@ -61,21 +59,24 @@ Do not disable ASAR.
 
 ### Package scripts
 
-Production builds must create both artifacts, while development startup should
-continue building only the unpacked directory:
+Keep compilation and packaging separate. Normal local packaging builds the
+unpacked directory; native Windows packaging builds the installer and portable
+artifacts:
 
 ```json
 {
   "scripts": {
-    "dev": "pnpm turbo build --filter=@schdk/web && tsc && electron-builder --dir && electron .",
-    "build": "tsc && electron-builder --win"
+    "build": "tsc",
+    "package": "electron-builder --dir",
+    "package:win": "electron-builder --win --x64"
   }
 }
 ```
 
-The configured Windows targets make `electron-builder --win` build `dir` and
-`nsis`. Keeping `--dir` in `dev` avoids compiling an installer on every local
-application launch.
+The configured Windows targets make `electron-builder --win` build `nsis` and
+`portable`; electron-builder retains `win-unpacked` for verification. Keeping
+`--dir` in the normal `package` command avoids compiling distributable artifacts
+during local packaging.
 
 ### Output contract
 
@@ -84,11 +85,12 @@ Package-local output:
 ```text
 packages/desktop/dist/release/
   win-unpacked/
-  ЩДК Setup <version>.exe
-  ЩДК Setup <version>.exe.blockmap
+  schdk-<version>-windows-x64-installer.exe
+  schdk-<version>-windows-x64-installer.exe.blockmap
+  schdk-<version>-windows-x64-portable.exe
 ```
 
-Root `pnpm build` leaves this output in the package-local directory.
+Packaging commands leave this output in the package-local directory.
 
 The block map is expected electron-builder output. It may be retained for
 future updates even though publishing is out of scope.
@@ -98,8 +100,8 @@ future updates even though publishing is out of scope.
 1. Move `@schdk/web` to desktop `devDependencies` with pnpm and update
    `pnpm-lock.yaml`.
 2. Add `electronLanguages: ["uk", "en-US"]`.
-3. Change `win.target` from `"dir"` to `["dir", "nsis"]`.
-4. Change the production and development scripts as specified above.
+3. Configure the Windows targets as `nsis` and `portable`.
+4. Keep compilation and platform packaging in separate scripts.
 5. Run `pnpm install --frozen-lockfile` after the normal install verifies the
    lockfile is reproducible.
 6. Run the verification and measurements below.
@@ -170,7 +172,7 @@ Acceptance thresholds:
 | electron-builder still packages renderer dependencies | Inspect ASAR contents and use an electron-builder file hook only as a fallback |
 | Missing Electron locale causes fallback issues        | Keep both `uk` and `en-US`; test on Ukrainian and non-Ukrainian Windows        |
 | Production builds become slower                       | Keep development on `--dir`; only production builds compile NSIS               |
-| Local installer triggers Windows warnings             | Require signing for releases; allow unsigned local packaging                   |
+| Unsigned installer triggers Windows warnings          | Keep artifact naming and release verification explicit                         |
 | Windows locks an existing unpacked executable         | Close all packaged SCHDK processes before rebuilding                           |
 
 ## Rollback
