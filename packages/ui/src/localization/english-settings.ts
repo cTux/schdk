@@ -2,6 +2,7 @@ import { ukrainianSettings } from './ukrainian-settings';
 
 export const englishSettings: typeof ukrainianSettings = {
   title: 'Settings',
+  description: 'Configure the app, game, and package editor.',
   groupsLabel: 'Settings groups',
   appTab: 'App',
   schdkTab: 'WWW',

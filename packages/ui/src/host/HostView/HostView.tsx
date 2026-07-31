@@ -1,7 +1,6 @@
 import './styles.scss';
 import classNames from 'classnames';
 import type { CSSProperties } from 'react';
-import { AppIcon } from '../../atoms/AppIcon';
 import { StatusMessage } from '../../atoms/StatusMessage';
 import { PackageStart } from '../../editor/PackageStart';
 import { LOCALIZATION_COPY } from '../../localization';
@@ -56,15 +55,6 @@ function HostView({
         } as CSSProperties
       }
     >
-      <header className="app-header" hidden={playing}>
-        <div className="brand">
-          <AppIcon />
-          <div>
-            <p className="eyebrow">{copy.host.eyebrow}</p>
-            <h1>{copy.host.title}</h1>
-          </div>
-        </div>
-      </header>
       <PackageStart
         hidden={packageDetails !== null || playing}
         openingRecentPackageId={openingRecentPackageId}

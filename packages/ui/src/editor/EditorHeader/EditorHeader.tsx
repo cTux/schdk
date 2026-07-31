@@ -1,7 +1,6 @@
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { IconButton } from '../../atoms/IconButton';
 import { useLocalization } from '../../localization';
-import { EditorBrand } from '../EditorBrand';
 import { PackageGenerationDialog } from '../PackageGenerationDialog';
 import { PackageTitleField } from '../PackageTitleField';
 import { SaveStatus } from '../SaveStatus';
@@ -23,38 +22,41 @@ function EditorHeader({
 }: EditorHeaderProps) {
   const { copy } = useLocalization();
 
+  if (!hasPackage) return null;
+
   return (
-    <header className="app-header">
-      <EditorBrand showBackButton={hasPackage} onBack={onBack} />
-      {hasPackage && (
-        <div className="package-header">
-          <PackageTitleField
-            invalid={showValidation && !packageTitle.trim()}
-            value={packageTitle}
-            onChange={onTitleChange}
-          />
-          {aiGeneration && (
-            <PackageGenerationDialog
-              {...aiGeneration}
-              gamePackage={gamePackage}
-              onGenerated={onQuestionGenerated}
-              onGenerationStateChange={onPackageGenerationStateChange}
-              onSelectQuestion={onSelectQuestion}
-            />
-          )}
-          <IconButton
-            icon={faTrashCan}
-            label={copy.shared.deletePackage}
-            onClick={onDeletePackage}
-            variant="danger"
-          />
-          <SaveStatus
-            label={copy.editor.saveStatus[saveStatus]}
-            status={saveStatus}
-          />
-        </div>
+    <div className="package-header">
+      <IconButton
+        icon={faArrowLeft}
+        label={copy.shared.back}
+        onClick={onBack}
+        variant="ghost"
+      />
+      <PackageTitleField
+        invalid={showValidation && !packageTitle.trim()}
+        value={packageTitle}
+        onChange={onTitleChange}
+      />
+      {aiGeneration && (
+        <PackageGenerationDialog
+          {...aiGeneration}
+          gamePackage={gamePackage}
+          onGenerated={onQuestionGenerated}
+          onGenerationStateChange={onPackageGenerationStateChange}
+          onSelectQuestion={onSelectQuestion}
+        />
       )}
-    </header>
+      <IconButton
+        icon={faTrashCan}
+        label={copy.shared.deletePackage}
+        onClick={onDeletePackage}
+        variant="danger"
+      />
+      <SaveStatus
+        label={copy.editor.saveStatus[saveStatus]}
+        status={saveStatus}
+      />
+    </div>
   );
 }
 

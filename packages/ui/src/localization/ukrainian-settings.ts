@@ -1,5 +1,6 @@
 export const ukrainianSettings = {
   title: 'Налаштування',
+  description: 'Налаштуйте застосунок, гру та редактор пакетів.',
   groupsLabel: 'Групи налаштувань',
   appTab: 'Застосунок',
   schdkTab: 'ЩДК',

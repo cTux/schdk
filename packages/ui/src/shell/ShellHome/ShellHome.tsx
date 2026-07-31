@@ -13,13 +13,7 @@ function ShellHome({ hidden, onOpen }: ShellHomeProps) {
       className="home"
       hidden={hidden}
       title={content.homeTitle}
-      headerContent={
-        <>
-          <p className="eyebrow">{content.homeItem.label}</p>
-          <p>{content.homeDescription}</p>
-        </>
-      }
-      onBack={() => onOpen('home')}
+      headerContent={<p>{content.homeDescription}</p>}
     >
       <div className="tool-list">
         {content.items.map((item) => (

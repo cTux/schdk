@@ -5,6 +5,6 @@ export interface PageProps {
   className?: string;
   headerContent?: ReactNode;
   hidden?: boolean;
-  onBack(): void;
+  onBack?(): void;
   title: ReactNode;
 }

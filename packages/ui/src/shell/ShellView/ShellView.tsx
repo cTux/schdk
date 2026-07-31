@@ -1,7 +1,10 @@
 import './styles.scss';
 import { ShellNavigation } from '../ShellNavigation';
 import { TooltipProvider } from '../../atoms/Tooltip';
+import { useLocalization } from '../../localization';
 import { lazy, Suspense } from 'react';
+import { Page } from '../Page';
+import { getShellContent } from '../shellItems';
 import type { ShellViewName } from '../shellItems';
 import { type ShellViewProps } from './types/shell-view-props';
 
@@ -75,6 +78,9 @@ function ShellView({
   onThemeChange,
   onUiAnimationsChange,
 }: ShellViewProps) {
+  const { copy } = useLocalization();
+  const shell = getShellContent(copy);
+
   return (
     <TooltipProvider>
       <main className="app-shell" data-theme={theme}>
@@ -189,14 +195,26 @@ function ShellView({
               />
             )}
             {loadedViews.host && (
-              <div className="embedded-app" hidden={view !== 'host'}>
-                {hostApp}
-              </div>
+              <Page
+                className="embedded-page"
+                hidden={view !== 'host'}
+                title={shell.host.label}
+                headerContent={<p>{shell.host.description}</p>}
+                onBack={() => onShowView('home')}
+              >
+                <div className="embedded-app">{hostApp}</div>
+              </Page>
             )}
             {loadedViews.editor && (
-              <div className="embedded-app" hidden={view !== 'editor'}>
-                {editorApp}
-              </div>
+              <Page
+                className="embedded-page"
+                hidden={view !== 'editor'}
+                title={shell.editor.label}
+                headerContent={<p>{shell.editor.description}</p>}
+                onBack={() => onShowView('home')}
+              >
+                <div className="embedded-app">{editorApp}</div>
+              </Page>
             )}
           </Suspense>
         </section>

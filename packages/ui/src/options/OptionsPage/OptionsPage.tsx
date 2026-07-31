@@ -39,6 +39,7 @@ export function OptionsPage({
       className="options-page"
       hidden={hidden}
       title={copy.settings.title}
+      headerContent={<p>{copy.settings.description}</p>}
       onBack={onBack}
     >
       <div
