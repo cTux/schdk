@@ -1,4 +1,4 @@
-import { type GameOptions } from './game-options';
+import { type GameOptions } from '../../types/game-options/game-options.js';
 
 export const DEFAULT_GAME_OPTIONS: GameOptions = {
   autoFullscreen: true,

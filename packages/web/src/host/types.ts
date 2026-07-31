@@ -1,5 +1,5 @@
 import type { DrivePackageStorage } from '@schdk/google-drive';
-import type { CustomGameElement, GameLayout } from '@schdk/ui/options';
+import type { CustomGameElement, GameLayout } from '@schdk/common';
 
 export interface AppProps {
   autoFullscreen?: boolean;

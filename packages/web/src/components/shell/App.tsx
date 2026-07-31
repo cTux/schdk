@@ -1,4 +1,5 @@
-import type { EditorTextOptions, GameOptions } from '@schdk/ui/options';
+import type { GameOptions } from '@schdk/common';
+import type { EditorTextOptions } from '@schdk/ui/options';
 import { LOCALIZATION_COPY, LocaleProvider } from '@schdk/ui/localization';
 import { GoogleLoginView, ShellView } from '@schdk/ui/shell';
 import { lazy, Suspense, useEffect, useLayoutEffect, useState } from 'react';

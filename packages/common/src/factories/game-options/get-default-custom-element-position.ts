@@ -1,6 +1,6 @@
-import { type CustomGameElement } from './custom-game-element';
-import { type GameLayoutPosition } from './game-layout-position';
-import { layout } from './layout';
+import { type CustomGameElement } from '../../types/game-options/custom-game-element.js';
+import { type GameLayoutPosition } from '../../types/game-options/game-layout-position.js';
+import { layout } from '../../utils/game-options/layout.js';
 
 export function getDefaultCustomElementPosition(
   kind: CustomGameElement['kind'],

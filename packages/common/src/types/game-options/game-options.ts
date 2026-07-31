@@ -1,5 +1,5 @@
-import { type GameLayout } from './game-layout';
-import { type CustomGameElement } from './custom-game-element';
+import { type GameLayout } from './game-layout.js';
+import { type CustomGameElement } from './custom-game-element.js';
 
 export interface GameOptions {
   autoFullscreen: boolean;

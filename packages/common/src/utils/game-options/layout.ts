@@ -1,4 +1,4 @@
-import { type GameLayoutPosition } from './game-layout-position';
+import { type GameLayoutPosition } from '../../types/game-options/game-layout-position.js';
 
 export function layout(
   x: number,

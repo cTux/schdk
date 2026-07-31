@@ -3,9 +3,9 @@ import {
   type DriveSettingsDocument,
   type TimedSection,
 } from '@schdk/google-drive';
-import type { EditorTextOptions, GameOptions } from '@schdk/ui/options';
+import { normalizeGameOptions, type GameOptions } from '@schdk/common';
+import type { EditorTextOptions } from '@schdk/ui/options';
 import { normalizeEditorTextOptions } from '../../storage/editor/editor-options-storage';
-import { normalizeGameOptions } from '../../services/options/game-options-validation';
 
 function newerValidSection<T>(
   local: TimedSection<T>,

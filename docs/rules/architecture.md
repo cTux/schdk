@@ -2,9 +2,9 @@
 
 ## Package boundaries
 
-- `@schdk/common` owns the game-package, AI-question, AI-question-package, and
-  SCHDK-dictionary file types, constants, parsers, serializers, and game
-  readiness validation.
+- `@schdk/common` owns the game-package, game-presentation options,
+  AI-question, AI-question-package, and SCHDK-dictionary file types, constants,
+  defaults, parsers, serializers, normalization, and game readiness validation.
   It must not depend on UI or platform code.
 - `@schdk/ai` owns provider setup, localized generation prompts, structured
   response validation, and conversion to the canonical game-question type.

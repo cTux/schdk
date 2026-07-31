@@ -1,5 +1,8 @@
-import { DEFAULT_GAME_OPTIONS, type GameOptions } from '@schdk/ui/options';
-import { normalizeGameOptions } from '../../services/options/game-options-validation';
+import {
+  DEFAULT_GAME_OPTIONS,
+  normalizeGameOptions,
+  type GameOptions,
+} from '@schdk/common';
 import { type OptionsStorage } from './options-storage-type';
 import { GAME_OPTIONS_KEY } from '../../constants/options/game-options-key';
 

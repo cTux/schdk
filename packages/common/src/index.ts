@@ -53,6 +53,23 @@ import {
   type SchdkDictionaryId,
   type SchdkDictionaryItem,
 } from './contracts/dictionaries/schdk-dictionary.js';
+import { DEFAULT_GAME_LAYOUT } from './constants/game-options/default-game-layout.js';
+import { DEFAULT_GAME_OPTIONS } from './constants/game-options/default-game-options.js';
+import { GAME_IMAGE_POSITIONS } from './constants/game-options/game-image-positions.js';
+import { GAME_LAYOUT_ELEMENT_IDS } from './constants/game-options/game-layout-element-ids.js';
+import { MAX_CUSTOM_GAME_ELEMENTS } from './constants/game-options/max-custom-game-elements.js';
+import { MAX_CUSTOM_IMAGE_DATA_LENGTH } from './constants/game-options/max-custom-image-data-length.js';
+import { getDefaultCustomElementPosition } from './factories/game-options/get-default-custom-element-position.js';
+import { type CustomGameElement } from './types/game-options/custom-game-element.js';
+import { type CustomImageElement } from './types/game-options/custom-image-element.js';
+import { type CustomTextElement } from './types/game-options/custom-text-element.js';
+import { type GameImagePosition } from './types/game-options/game-image-position.js';
+import { type GameLayout } from './types/game-options/game-layout.js';
+import { type GameLayoutElementId } from './types/game-options/game-layout-element-id.js';
+import { type GameLayoutPosition } from './types/game-options/game-layout-position.js';
+import { type GameOptions } from './types/game-options/game-options.js';
+import { type GameTextGrowDirection } from './types/game-options/game-text-grow-direction.js';
+import { normalizeGameOptions } from './validators/game-options/normalize-game-options.js';
 
 export {
   QUESTION_COUNT,
@@ -102,4 +119,21 @@ export {
   type SchdkDictionaryId,
   type SchdkDictionaryItem,
   type SchdkDictionaryDistribution,
+  DEFAULT_GAME_LAYOUT,
+  DEFAULT_GAME_OPTIONS,
+  GAME_IMAGE_POSITIONS,
+  GAME_LAYOUT_ELEMENT_IDS,
+  MAX_CUSTOM_GAME_ELEMENTS,
+  MAX_CUSTOM_IMAGE_DATA_LENGTH,
+  getDefaultCustomElementPosition,
+  type CustomGameElement,
+  type CustomImageElement,
+  type CustomTextElement,
+  type GameImagePosition,
+  type GameLayout,
+  type GameLayoutElementId,
+  type GameLayoutPosition,
+  type GameOptions,
+  type GameTextGrowDirection,
+  normalizeGameOptions,
 };
