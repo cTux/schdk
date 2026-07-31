@@ -1,0 +1,41 @@
+@use '../../styles/tokens' as *;
+
+.page {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: $space-6;
+  box-sizing: border-box;
+  padding: clamp(28px, 5vh, 48px) clamp(20px, 4vw, 64px);
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+}
+
+.page-header h1 {
+  flex: 1 1 auto;
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.page-content {
+  min-width: 0;
+}
+
+@media (width <= 640px) {
+  .page {
+    padding: $space-8 $space-3;
+  }
+
+  .page-header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .page-header h1 {
+    flex-basis: calc(100% - 56px);
+  }
+}
