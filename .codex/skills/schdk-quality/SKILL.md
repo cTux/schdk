@@ -26,6 +26,7 @@ pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
+pnpm --filter @schdk/web check:bundle
 ```
 
 Do not commit generated output excluded by `docs/rules/builds.md`.

@@ -93,6 +93,7 @@ V50|An open package editor replaces recents and exposes one page-header back act
 V51|Visual-editor background and custom images are bounded before reading and remain within the canonical encoded-image limit.
 V52|Workspace runtime modules remain free of relative import cycles.
 V53|Shell page chunks and Drive-backed feature collections load with their first consumer and remain available for the shell session.
+V54|Every production web JavaScript chunk remains at or below 300 KiB.
 
 ## §T
 
