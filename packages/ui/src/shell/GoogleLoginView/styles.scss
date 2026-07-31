@@ -62,5 +62,19 @@
 }
 
 .google-login-card a {
+  border-radius: $radius-control;
+  padding: $space-2 $space-3;
   color: $accent-cool;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color $motion-fast ease;
+}
+
+.google-login-card a:hover {
+  background: rgba($accent-cool-rgb, 0.14);
+}
+
+.google-login-card a:focus-visible {
+  outline: $focus-width solid rgba($accent-cool-rgb, 0.75);
+  outline-offset: $focus-offset;
 }
