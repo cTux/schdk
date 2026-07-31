@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type PointerEvent } from 'react';
+import { useEffect, useReducer, useRef, type PointerEvent } from 'react';
 import type { LocalizationCopy } from '../../../localization';
 import {
   DEFAULT_GAME_LAYOUT,
@@ -10,6 +10,37 @@ import {
 } from '../../../options/types';
 import { createCustomElement, getNextZoom } from '../utils/geometry';
 import type { ElementSelection, GamePoint } from '../types';
+
+interface VisualEditorState {
+  panning: boolean;
+  pan: GamePoint;
+  zoom: number;
+  selected: ElementSelection | null;
+  imageTarget: 'background' | string | null;
+  localMessage: string;
+}
+
+const INITIAL_STATE: VisualEditorState = {
+  panning: false,
+  pan: { x: 0, y: 0 },
+  zoom: 1,
+  selected: null,
+  imageTarget: null,
+  localMessage: '',
+};
+
+type VisualEditorAction =
+  | { type: 'patch'; value: Partial<VisualEditorState> }
+  | { type: 'zoom'; delta: number };
+
+function reduceVisualEditor(
+  state: VisualEditorState,
+  action: VisualEditorAction,
+): VisualEditorState {
+  return action.type === 'zoom'
+    ? { ...state, zoom: getNextZoom(state.zoom, action.delta) }
+    : { ...state, ...action.value };
+}
 
 export function useVisualEditor(
   game: GameOptions,
@@ -24,15 +55,17 @@ export function useVisualEditor(
     start: { x: number; y: number };
     offset: { x: number; y: number };
   } | null>(null);
-  const [panning, setPanning] = useState(false);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [selected, setSelected] = useState<ElementSelection | null>(null);
-  const [imageTarget, setImageTarget] = useState<'background' | string | null>(
-    null,
-  );
-  const [localMessage, setLocalMessage] = useState('');
+  const [state, dispatch] = useReducer(reduceVisualEditor, INITIAL_STATE);
+  const setPan = (pan: GamePoint) =>
+    dispatch({ type: 'patch', value: { pan } });
+  const setPanning = (panning: boolean) =>
+    dispatch({ type: 'patch', value: { panning } });
+  const setSelected = (selected: ElementSelection | null) =>
+    dispatch({ type: 'patch', value: { selected } });
+  const setLocalMessage = (localMessage: string) =>
+    dispatch({ type: 'patch', value: { localMessage } });
   const positions = game.layout ?? DEFAULT_GAME_LAYOUT;
+  const selected = state.selected;
   const selectedCustom =
     selected?.kind === 'custom'
       ? (game.customElements.find(({ id }) => id === selected.id) ?? null)
@@ -48,7 +81,7 @@ export function useVisualEditor(
     if (!workspace) return;
     const handleWheel = (event: WheelEvent) => {
       event.preventDefault();
-      setZoom((current) => getNextZoom(current, event.deltaY));
+      dispatch({ type: 'zoom', delta: event.deltaY });
     };
     workspace.addEventListener('wheel', handleWheel, { passive: false });
     return () => workspace.removeEventListener('wheel', handleWheel);
@@ -107,7 +140,7 @@ export function useVisualEditor(
   }
 
   function chooseImage(target: 'background' | string) {
-    setImageTarget(target);
+    dispatch({ type: 'patch', value: { imageTarget: target } });
     fileInputRef.current?.click();
   }
 
@@ -143,16 +176,16 @@ export function useVisualEditor(
       setLocalMessage(copy.visualEditor.imagesTooLarge);
       return;
     }
-    if (imageTarget === 'background') {
+    if (state.imageTarget === 'background') {
       onChange({ ...game, backgroundImage: dataUrl });
       return;
     }
-    if (!imageTarget) return;
+    if (!state.imageTarget) return;
     const otherImageDataLength = game.customElements.reduce(
       (total, element) => {
         const isOtherImage =
           element.kind === 'image' &&
-          element.id !== imageTarget &&
+          element.id !== state.imageTarget &&
           element.image;
         return total + (isOtherImage ? element.image!.length : 0);
       },
@@ -162,7 +195,7 @@ export function useVisualEditor(
       setLocalMessage(copy.visualEditor.imagesTooLarge);
       return;
     }
-    updateCustom(imageTarget, { image: dataUrl });
+    updateCustom(state.imageTarget, { image: dataUrl });
   }
 
   return {
@@ -171,10 +204,10 @@ export function useVisualEditor(
     canvasRef,
     chooseImage,
     fileInputRef,
-    localMessage,
-    pan,
+    localMessage: state.localMessage,
+    pan: state.pan,
     panRef,
-    panning,
+    panning: state.panning,
     pointerPosition,
     positions,
     removeCustom,
@@ -189,6 +222,6 @@ export function useVisualEditor(
     updateCustom,
     updatePosition,
     workspaceRef,
-    zoom,
+    zoom: state.zoom,
   };
 }

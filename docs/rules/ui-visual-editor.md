@@ -5,6 +5,9 @@
   game logo visible through every question stage with an upper-left default.
 - Use a full-size dark workspace with a pannable, wheel-zoomable 16:9 game
   container.
+- Keep related transient interaction state (selection, pan, zoom, image target,
+  message, and panning state) in one reducer; persisted game options continue
+  to flow only through `onChange`.
 - Keep the visual editor on its fixed dark presentation palette; application
   theme changes must not alter its canvas, controls, or text colors.
 - Persist bounds as percentages and apply identical bounds and presentation

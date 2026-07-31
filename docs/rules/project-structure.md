@@ -77,6 +77,8 @@ directions in [architecture.md](architecture.md).
   placeholder stylesheet or import.
 - Keep each component's props in that component's own `types.ts`. Composite
   components may re-export child props from the child's public entry point,
+  and group large composed-view contracts by document data, feature actions,
+  and supporting collections instead of growing one flat prop list.
   but must not define or store them in the composite's directory.
 - Add `constants.ts` only for component-specific constants.
 - When the component has multiple secondary modules, keep only

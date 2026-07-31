@@ -11,6 +11,8 @@ description: Build, refactor, optimize, or review SCHDK React components and hoo
    affected UI rules. Use `$schdk-project-structure` for new or structurally
    changed components.
 2. Trace the component, callers, props, state, Effects, and identity-sensitive
+   callbacks. Group large composed-view props by responsibility, and use one
+   reducer when several transient values form one interaction state.
    children before editing.
 3. Apply the React behavior and performance rules in
    `docs/rules/ui-foundations.md`.

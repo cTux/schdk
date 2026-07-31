@@ -12,6 +12,9 @@
   trailing periods from main and alternative answers while preserving other
   punctuation.
 - Preserve `saved`, `pending`, `saving`, and `error` states.
+- Keep the Drive write and autosave queue in the persistence hook. Keep desktop
+  session, unload, close-request, Drive-recovery, and document-title effects in
+  the editor lifecycle hook so each effect group has one reason to change.
 - Keep the visible status indicator and show localized success toasts after
   completed package actions. Canceled and failed actions show no success toast;
   keep actionable validation and file-operation errors.

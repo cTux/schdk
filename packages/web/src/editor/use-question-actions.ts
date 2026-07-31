@@ -133,7 +133,7 @@ export function useQuestionActions({
   }
 
   async function selectDatabaseQuestion(
-    row: EditorViewProps['questionDatabaseRows'][number],
+    row: EditorViewProps['document']['questionDatabaseRows'][number],
   ) {
     const current = gamePackage.questions[selectedIndex]!;
     const empty =
