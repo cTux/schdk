@@ -1,5 +1,5 @@
-import { MAX_ZOOM } from './max-zoom';
-import { ZOOM_STEP } from './zoom-step';
+import { MAX_ZOOM } from './constants/max-zoom';
+import { ZOOM_STEP } from './constants/zoom-step';
 
 const MIN_ZOOM = 1;
 

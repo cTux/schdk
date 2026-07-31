@@ -1,8 +1,8 @@
 import type { GameLayoutPosition } from '../../options/types';
-import { type ResizeHandle } from './resize-handle';
-import { type ElementSelection } from './element-selection';
-import { type VisualEditorProps } from './visual-editor-props';
-import { type VisualEditorController } from './visual-editor-controller';
+import { type ResizeHandle } from './types/resize-handle';
+import { type ElementSelection } from './types/element-selection';
+import { type VisualEditorProps } from './types/visual-editor-props';
+import { type VisualEditorController } from './types/visual-editor-controller';
 
 type GamePoint = Pick<GameLayoutPosition, 'x' | 'y'>;
 

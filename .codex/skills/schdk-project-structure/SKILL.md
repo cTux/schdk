@@ -13,22 +13,28 @@ description: Maintain and audit SCHDK monorepo package, source, UI component, an
    library's `index.ts`, or a runnable application's required entry points and
    ambient declarations. Move every other module to
    `src/<role>/<subject-area>/<file>` using concrete existing roles and domains.
-4. Audit every tracked `.cjs`, `.css`, `.html`, `.js`, `.jsx`, `.mjs`,
+4. Audit each affected nested owner directory as a small source root. Keep its
+   primary module, entry point, public `types.ts`, `constants.ts`, stylesheet,
+   and tests at that level. A single private secondary module may remain
+   colocated; when there are multiple secondary modules, move all of them into
+   concrete role directories such as `hooks`, `utils`, `types`, `context`, or
+   `constants`.
+5. Audit every tracked `.cjs`, `.css`, `.html`, `.js`, `.jsx`, `.mjs`,
    `.scss`, `.ts`, and `.tsx` file touched by the task. Keep each at 256
    physical lines or fewer; split larger files by cohesive responsibility
    without compressing formatting or weakening ownership boundaries.
-5. Keep at most one top-level `export` statement in each source-code file.
+6. Keep at most one top-level `export` statement in each source-code file.
    When a touched file has multiple exported declarations, split them into
    owning modules by consumer-facing responsibility; do not merely replace
    them with one grouped export statement.
-6. Keep a helper beside its primary exported function only while it is private
+7. Keep a helper beside its primary exported function only while it is private
    to that module. Before reusing it elsewhere, move it to its own file and
    export it there. Update every caller and preserve the existing public entry
    point where consumers still need it.
-7. Let entry-point files import public symbols from their owning modules and
+8. Let entry-point files import public symbols from their owning modules and
    expose them with one grouped `export` statement.
-8. Apply the structural convention to new or structurally changed files. Do not mass-migrate untouched legacy components without an explicit prompt.
-9. Structure a UI component as:
+9. Apply the structural convention to new or structurally changed files. Do not mass-migrate untouched legacy components without an explicit prompt.
+10. Structure a UI component as:
 
 ```text
 ComponentName/
@@ -39,14 +45,14 @@ ComponentName/
   types.ts
 ```
 
-10. Add `styles.scss` only when the component emits component-specific CSS.
+11. Add `styles.scss` only when the component emits component-specific CSS.
     Omit `constants.ts` when no component-specific constants exist. Create
     `__tests__` with the first explicitly requested test; Git cannot preserve an
     empty directory, and placeholder files and tests are forbidden.
-11. Export only the component's consumer-facing component, types, and applicable constants from `index.ts`; update package entry points only when consumers need them.
-12. Use `classnames` for conditional class composition. If the touched component needs it and `@schdk/ui` does not yet declare it, add it with pnpm; do not add an unused dependency.
-13. For every new exported UI component or changed component prop, confirm the
+12. Export only the component's consumer-facing component, types, and applicable constants from `index.ts`; update package entry points only when consumers need them.
+13. Use `classnames` for conditional class composition. If the touched component needs it and `@schdk/ui` does not yet declare it, add it with pnpm; do not add an unused dependency.
+14. For every new exported UI component or changed component prop, confirm the
     Storybook generator discovers it, update Storybook default args when
     needed, and run `pnpm --filter @schdk/ui build:storybook`.
-14. Run `$schdk-quality` checks for the affected package and consumers. The
+15. Run `$schdk-quality` checks for the affected package and consumers. The
     repository workflow test enforces the 256-line source limit.

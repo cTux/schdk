@@ -6,7 +6,7 @@ import { AiOptionsPanel } from '../AiOptionsPanel';
 import { OptionSlider } from '../OptionSlider';
 import { OptionToggle } from '../OptionToggle';
 import { SETTINGS_GROUPS, type AppTheme } from '../types';
-import { getGoogleDriveMessage } from './google-drive-message';
+import { getGoogleDriveMessage } from './utils/google-drive-message';
 import type { OptionsPageProps } from './types';
 
 export function OptionsPage({

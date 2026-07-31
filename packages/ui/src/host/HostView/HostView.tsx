@@ -14,8 +14,8 @@ import type {
   HostGameView,
   HostQuestionStage,
 } from '../types';
-import { type HostViewProps } from './host-view-props';
-import { type HostPackageDetails } from './host-package-details';
+import { type HostViewProps } from './types/host-view-props';
+import { type HostPackageDetails } from './types/host-package-details';
 
 function HostView({
   backgroundImage,

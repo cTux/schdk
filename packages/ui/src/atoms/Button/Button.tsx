@@ -1,7 +1,7 @@
 import './styles.scss';
 import classNames from 'classnames';
-import { type ButtonProps } from './button-props';
-import { type ButtonVariant } from './button-variant';
+import { type ButtonProps } from './types/button-props';
+import { type ButtonVariant } from './types/button-variant';
 
 function Button({
   className = '',

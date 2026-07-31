@@ -1,4 +1,4 @@
-import { type ConfirmationDialogController } from './confirmation-dialog-controller';
+import { type ConfirmationDialogController } from './types/confirmation-dialog-controller';
 
 interface ConfirmationDialogProps {
   message: string;

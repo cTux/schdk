@@ -1,4 +1,4 @@
-import { type OptionsPageProps } from './options-page-props';
+import { type OptionsPageProps } from './types/options-page-props';
 
 type GoogleDriveState =
   | 'unavailable'

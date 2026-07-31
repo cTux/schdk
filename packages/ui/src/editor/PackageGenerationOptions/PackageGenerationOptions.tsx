@@ -5,7 +5,7 @@ import type {
 import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';
 import { useLocalization } from '../../localization';
-import type { PackageGenerationRuleSet } from '../PackageGenerationDialog/generation-input';
+import type { PackageGenerationRuleSet } from '../PackageGenerationDialog/utils/generation-input';
 import { QuestionDatabaseCheck } from '../QuestionDatabaseCheck';
 import type { PackageGenerationOptionsProps } from './types';
 

@@ -7,7 +7,7 @@ import {
   getDraggedPosition,
   getNextZoom,
   getResizedPosition,
-} from './geometry';
+} from './utils/geometry';
 import {
   GAME_LAYOUT_ELEMENT_IDS,
   type GameLayoutElementId,
@@ -17,7 +17,7 @@ import { VisualEditorPreview } from './VisualEditorPreview';
 import { VisualEditorToolbar } from './VisualEditorToolbar';
 import { VisualLayoutItem } from './VisualLayoutItem';
 import type { ElementSelection, VisualEditorProps } from './types';
-import { useVisualEditor } from './useVisualEditor';
+import { useVisualEditor } from './hooks/useVisualEditor';
 
 const selectionKey = (selection: ElementSelection) =>
   `${selection.kind}:${selection.id}`;

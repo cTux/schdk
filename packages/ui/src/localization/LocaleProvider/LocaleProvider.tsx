@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { LOCALIZATION_COPY } from '../copy';
 import type { LocaleProviderProps } from './types';
-import { LocaleContext } from './locale-context';
-import { useLocalization } from './use-localization';
+import { LocaleContext } from './context/locale-context';
+import { useLocalization } from './hooks/use-localization';
 
 function LocaleProvider({
   children,

@@ -3,7 +3,7 @@ import { ShellNavigation } from '../ShellNavigation';
 import { TooltipProvider } from '../../atoms/Tooltip';
 import { lazy, Suspense } from 'react';
 import type { ShellViewName } from '../shellItems';
-import { type ShellViewProps } from './shell-view-props';
+import { type ShellViewProps } from './types/shell-view-props';
 
 const ShellHome = lazy(() =>
   import('../ShellHome').then(({ ShellHome }) => ({ default: ShellHome })),
