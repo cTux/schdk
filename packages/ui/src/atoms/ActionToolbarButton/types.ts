@@ -1,6 +1,6 @@
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
-interface ActionToolbarButtonProps {
+export interface ActionToolbarButtonProps {
   icon: IconDefinition;
   label: string;
   pressed?: boolean;
@@ -8,5 +8,3 @@ interface ActionToolbarButtonProps {
   disabled?: boolean;
   onClick(): void;
 }
-
-export { type ActionToolbarButtonProps };
