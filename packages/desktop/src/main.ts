@@ -1,17 +1,17 @@
 import { app, BrowserWindow, dialog, ipcMain, Menu } from 'electron';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { registerAppUpdateIpc } from './app-update.js';
-import { registerGamePackageIpc } from './game-package-ipc.js';
+import { registerAppUpdateIpc } from './services/app-updates/app-update.js';
+import { registerGamePackageIpc } from './ipc/game-packages/game-package-ipc.js';
 import {
   closePresenterNotes,
   registerPresenterNotesIpc,
-} from './presenter-notes.js';
-import { registerGoogleDriveIpc } from './google-drive-ipc.js';
+} from './ipc/presenter-notes/presenter-notes.js';
+import { registerGoogleDriveIpc } from './ipc/google-drive/google-drive-ipc.js';
 import {
   requestSaveBeforeClose,
   type CloseController,
-} from './window-close.js';
+} from './utils/window-close/window-close.js';
 
 const closeControllers = new Map<number, CloseController>();
 let mainWindow: BrowserWindow | null = null;

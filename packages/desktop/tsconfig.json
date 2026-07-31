@@ -5,12 +5,12 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "outDir": "dist/electron",
-    "rootDir": "electron",
+    "rootDir": "src",
     "strict": true,
     "skipLibCheck": true,
     "sourceMap": true,
     "types": ["node"]
   },
-  "include": ["electron/**/*.ts", "electron/**/*.cts"],
-  "exclude": ["electron/**/*.test.ts"]
+  "include": ["src/**/*.ts", "src/**/*.cts"],
+  "exclude": ["src/**/*.test.ts"]
 }
