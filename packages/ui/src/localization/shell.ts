@@ -10,10 +10,11 @@ const shellCopy = {
     accountConnected: 'Connected',
     accountDisconnected: 'Disconnected',
     preloading: 'Loading Google Drive data',
-    loginTitle: 'Sign in with Google',
+    loginTitle: 'SCHDK',
     loginDescription:
-      'Sign in to create, open, and save SCHDK packages in Google Drive.',
+      'Create, edit, and host What? Where? When? question packages with Google Drive autosave and optional AI-assisted authoring.',
     loginAction: 'Continue with Google',
+    privacyPolicy: 'Privacy policy',
     homeTitle: 'Everything for the game in one place',
     homeDescription:
       'Set up the layout in the visual editor, then create a question package, then start the game.',
@@ -55,10 +56,11 @@ const shellCopy = {
     accountConnected: 'Підключено',
     accountDisconnected: 'Не підключено',
     preloading: 'Завантаження даних із Google Диска',
-    loginTitle: 'Увійдіть через Google',
+    loginTitle: 'SCHDK',
     loginDescription:
-      'Увійдіть, щоб створювати, відкривати та зберігати пакети SCHDK на Google Диску.',
+      'Створюйте, редагуйте та проводьте ігри «Що? Де? Коли?» з автозбереженням на Google Диску та необов’язковими інструментами ШІ.',
     loginAction: 'Продовжити з Google',
+    privacyPolicy: 'Політика конфіденційності',
     homeTitle: 'Усе для гри в одному місці',
     homeDescription:
       'Налаштуйте макет у візуальному редакторі, потім створіть пакет питань, потім розпочніть гру.',

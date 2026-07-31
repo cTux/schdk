@@ -18,6 +18,9 @@ description: Maintain the @schdk/web shell. Use for entry points, navigation, si
    reconnect rather than restoring authorization from browser storage.
 5. Visually smoke-test changed navigation, restoration, login gating, and
    loading states.
+6. For production OAuth branding changes, verify the unauthenticated hosted
+   login surface identifies the app and links a directly loadable same-domain
+   privacy policy whose disclosures match `docs/rules/google-drive.md`.
 
 ## Checks
 

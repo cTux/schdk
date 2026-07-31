@@ -149,6 +149,7 @@ export function App() {
     <LocaleProvider locale={locale} onLocaleChange={setLocale}>
       {(!unlocked || !connected) && (
         <GoogleLoginView
+          privacyHref={window.desktop ? undefined : 'privacy.html'}
           state={loginState}
           onConnect={() => void googleDrive.connect()}
         />

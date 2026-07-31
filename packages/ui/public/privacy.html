@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+    />
+    <link rel="icon" href="./owl.svg" type="image/svg+xml" />
+    <title>SCHDK Privacy Policy</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: system-ui, sans-serif;
+        line-height: 1.6;
+      }
+
+      body {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 32px 20px 64px;
+      }
+
+      h1,
+      h2 {
+        line-height: 1.2;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      nav,
+      footer {
+        margin-block: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="./">SCHDK</a>
+      <h1>Privacy Policy</h1>
+      <p>Effective: July 31, 2026</p>
+      <p>
+        SCHDK is a web and desktop application for creating, storing, editing,
+        and hosting “What? Where? When?” question packages.
+      </p>
+    </header>
+
+    <main>
+      <h2>Google user data we access</h2>
+      <p>
+        After you authorize SCHDK, the application reads your Google account
+        display name, email address, and profile image. It uses Google Drive to
+        find and manage SCHDK packages and related files, synchronize settings,
+        and load the application’s shared question rules and dictionaries.
+      </p>
+      <p>
+        Although Google describes the requested Drive permission broadly, SCHDK
+        limits its requests to its app-marked SCHDK folder, its private
+        application-data folder, and the configured shared SCHDK folders. It
+        does not inspect unrelated Drive files.
+      </p>
+
+      <h2>How data is used and stored</h2>
+      <p>
+        Game packages, question rules, question packages, settings, the
+        rebuildable question index, and any AI API key you choose to save are
+        stored in your own Google Drive. Browser access tokens are held only in
+        memory. The desktop application stores refresh credentials locally using
+        operating-system encryption and does not expose them to its web
+        interface.
+      </p>
+      <p>
+        SCHDK has no application server that receives your Drive files or OAuth
+        tokens. Data moves directly between your device and Google.
+      </p>
+
+      <h2>Optional AI providers</h2>
+      <p>
+        AI-assisted authoring runs only when you request it. SCHDK then sends
+        the question-generation input to the provider you selected—OpenAI,
+        Anthropic, or Google—using your own API key. Personal question-index
+        content is not sent to an AI provider. The selected provider processes
+        submitted data under its own privacy policy.
+      </p>
+
+      <h2>Sharing, advertising, and human access</h2>
+      <p>
+        SCHDK does not sell Google user data, use it for advertising, or share
+        it except to provide features you explicitly request. No person reads
+        your private data unless you explicitly ask for support involving that
+        data, access is required for security or legal reasons, or you give
+        specific consent.
+      </p>
+
+      <h2>Retention and deletion</h2>
+      <p>
+        Your Drive files remain in your account until you delete them. You can
+        remove SCHDK files in Google Drive, remove a saved AI key in SCHDK,
+        disconnect the application, or revoke SCHDK access from your Google
+        Account. Revoking access prevents future access but does not delete
+        files already stored in your Drive.
+      </p>
+
+      <h2>Google API Services User Data Policy</h2>
+      <p>
+        SCHDK’s use and transfer of information received from Google APIs
+        adheres to the
+        <a
+          href="https://developers.google.com/terms/api-services-user-data-policy"
+          >Google API Services User Data Policy</a
+        >, including its Limited Use requirements.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        For privacy questions or deletion assistance, contact the developer
+        through the
+        <a href="https://github.com/cTux/schdk/issues">SCHDK issue tracker</a>.
+      </p>
+    </main>
+
+    <footer><a href="./">Return to SCHDK</a></footer>
+  </body>
+</html>

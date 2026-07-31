@@ -59,6 +59,9 @@
   Do not mount application tools before the first successful connection; when
   authorization expires, keep mounted state inaccessible until reconnection.
   Keep an authorized session mounted through transient Drive failures.
+- Keep the hosted web login surface publicly accessible before authorization.
+  Identify SCHDK, describe its user-facing purpose, and link the same-domain
+  privacy policy used by the production OAuth branding configuration.
 - Create or import every editor package in Drive and serialize every autosave
   to the same Drive file ID. Editor and Host recents list and load only those
   Drive packages across every Drive API result page. Never fall back to browser
@@ -109,3 +112,6 @@
 - Real OAuth smoke tests use development credentials and test accounts. Never
   put OAuth tokens or confidential production credentials in repository files
   or logs.
+- Keep the public privacy policy synchronized with actual Google data access,
+  token storage, optional AI-provider transfers, retention, deletion, support,
+  and Google API Services User Data Policy Limited Use disclosures.

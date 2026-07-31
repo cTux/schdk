@@ -86,6 +86,7 @@ V43|A replacement global general rule is persisted before the previous general r
 V44|Every shared generation dictionary is parsed from its `.schdk-dictionary` ZIP archive, remains folder-scoped and admin-writable, and supplies both dropdown labels and provider prompt fragments.
 V45|When one structured OpenAI question response requests an image, OpenAI generates and canonically parses the bounded embedded image without a text-review request.
 V46|Browser OAuth tokens remain memory-only, while desktop refresh credentials remain encrypted, scope-validated, and removed after invalidation.
+V47|The hosted OAuth landing surface publicly identifies SCHDK and links a same-domain privacy policy that accurately discloses Google user-data handling.
 
 ## §T
 

@@ -39,7 +39,9 @@ package authoring, hosting, settings, and account state.
 - **SHL-9:** Editor settings persist correction toggles for question text,
   answers, and answer comments.
 - **SHL-10:** Before authorization, only the localized Google login screen is
-  visible; account status and disconnect remain available after connection.
+  visible. The hosted web screen publicly identifies SCHDK, describes its
+  purpose, and links its directly accessible same-domain privacy policy;
+  account status and disconnect remain available after connection.
 - **SHL-11:** The Artificial intelligence page fills the available workspace
   width and lists name-sorted account rules followed by name-sorted global
   rules. The existing form creates account rules; allowlisted administrators
@@ -132,8 +134,9 @@ package authoring, hosting, settings, and account state.
    mounted surface.
 3. Navigate away from an in-progress editor and game, return, and observe
    preserved state.
-4. Disconnect Google and verify mounted tools become inaccessible until
-   reconnection.
+4. Open the hosted web application without authorization and confirm its SCHDK
+   identity, purpose, and privacy-policy link are public. Disconnect Google and
+   verify mounted tools become inaccessible until reconnection.
 5. Open the Artificial intelligence route directly, add rules with required
    names and descriptions, and observe account rules followed by global rules,
    each sorted by name. Confirm cards show only name, description, and
