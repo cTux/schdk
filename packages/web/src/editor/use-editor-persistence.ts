@@ -23,7 +23,11 @@ import {
   scheduleAutosave,
   shouldScheduleAutosave,
 } from './autosave';
-import { saveDesktopEditorSession } from './desktop-session';
+import {
+  useDesktopEditorSession,
+  useEditorCloseGuard,
+  useEditorDocumentTitle,
+} from './use-editor-lifecycle';
 
 interface EditorPersistenceOptions {
   copy: LocalizationCopy;
@@ -75,15 +79,6 @@ export function useEditorPersistence({
   setSaveStatus,
 }: EditorPersistenceOptions) {
   const previousDriveActive = useRef(driveActive);
-  useEffect(() => {
-    if (!window.desktop || !desktopSessionReady) return;
-    saveDesktopEditorSession(
-      localStorage,
-      sessionScope,
-      driveFileId && fileName ? { driveFileId, fileName, selectedIndex } : null,
-    );
-  }, [desktopSessionReady, driveFileId, fileName, selectedIndex, sessionScope]);
-
   const saveCurrentPackage = useCallback(async () => {
     if (!drive || !driveFileId || !driveModifiedTime || !fileName) {
       throw new Error('Google Drive is unavailable');
@@ -142,6 +137,27 @@ export function useEditorPersistence({
     setSaveStatus,
   ]);
 
+  useDesktopEditorSession({
+    ready: desktopSessionReady,
+    driveFileId,
+    fileName,
+    selectedIndex,
+    sessionScope,
+  });
+  useEditorCloseGuard({
+    copy,
+    hasPackage,
+    saveStatus,
+    saveCurrentPackage,
+    setMessage,
+  });
+  useEditorDocumentTitle({
+    copy,
+    enabled: manageDocumentTitle,
+    fileName,
+    locale,
+  });
+
   useEffect(() => {
     if (
       driveActive &&
@@ -166,46 +182,6 @@ export function useEditorPersistence({
       }
     });
   }, [copy, drive, driveFileId, saveCurrentPackage, saveStatus, setMessage]);
-
-  useEffect(() => {
-    window.desktop?.setEditorPackageOpen(hasPackage);
-    return () => window.desktop?.setEditorPackageOpen(false);
-  }, [hasPackage]);
-
-  useEffect(() => {
-    if (window.desktop || !hasPackage || saveStatus === 'saved') return;
-    const preventUnsavedClose = (event: BeforeUnloadEvent) => {
-      event.preventDefault();
-      event.returnValue = '';
-    };
-    window.addEventListener('beforeunload', preventUnsavedClose);
-    return () =>
-      window.removeEventListener('beforeunload', preventUnsavedClose);
-  }, [hasPackage, saveStatus]);
-
-  useEffect(
-    () =>
-      window.desktop?.onCloseRequested(async (attempt) => {
-        if (saveStatus === 'saved') {
-          window.desktop!.finishCloseAttempt(attempt, true);
-          return;
-        }
-        try {
-          const saved = await saveCurrentPackage();
-          window.desktop!.finishCloseAttempt(attempt, saved);
-        } catch {
-          setMessage(copy.editor.autoSaveFailed);
-          window.desktop!.finishCloseAttempt(attempt, false);
-        }
-      }),
-    [copy, saveCurrentPackage, saveStatus, setMessage],
-  );
-
-  useEffect(() => {
-    if (!manageDocumentTitle) return;
-    document.documentElement.lang = locale;
-    document.title = copy.meta.editorTitle(fileName);
-  }, [copy, fileName, locale, manageDocumentTitle]);
 
   return saveCurrentPackage;
 }

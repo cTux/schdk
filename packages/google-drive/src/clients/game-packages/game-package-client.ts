@@ -1,7 +1,5 @@
 import {
   DRIVE_APP_KIND_KEY,
-  DRIVE_FOLDER_KIND,
-  DRIVE_FOLDER_MIME_TYPE,
   DRIVE_PACKAGE_KIND,
   DRIVE_PACKAGE_MIME_TYPE,
   parseDriveGamePackageFile,
@@ -12,14 +10,14 @@ import {
   type DrivePackageStorage,
 } from '../../services/game-packages/game-packages.js';
 import { isDriveFileId } from '../../services/settings/settings.js';
-import { createDriveMultipartBody } from '../../utils/client/create-drive-multipart-body.js';
+import {
+  DRIVE_API,
+  ensurePackageFolder,
+  uploadDriveFile,
+  type DriveRequest,
+} from '../../utils/client/drive-api.js';
 
-const DRIVE_API = 'https://www.googleapis.com/drive/v3';
-const DRIVE_UPLOAD_API = 'https://www.googleapis.com/upload/drive/v3';
 const MAX_GAME_PACKAGE_BYTES = 160 * 1024 * 1024;
-const PACKAGE_FOLDER_NAME = 'SCHDK';
-
-type DriveRequest = (input: string, init?: RequestInit) => Promise<Response>;
 
 export class GoogleDrivePackageStorage implements DrivePackageStorage {
   private listRequest: Promise<DriveGamePackageFile[]> | null = null;
@@ -147,50 +145,17 @@ export class GoogleDrivePackageStorage implements DrivePackageStorage {
         ready: String(gamePackage.ready),
         hasRemarks: String(gamePackage.hasRemarks),
       },
-      ...(fileId ? {} : { parents: [await this.ensurePackageFolder()] }),
+      ...(fileId ? {} : { parents: [await ensurePackageFolder(this.request)] }),
     };
-    const { body, contentType } = createDriveMultipartBody(
+    const response = await uploadDriveFile(this.request, {
+      fileId,
+      fields: 'id,name,description,modifiedTime,appProperties',
       metadata,
-      DRIVE_PACKAGE_MIME_TYPE,
-      new Uint8Array(gamePackage.content),
-    );
-    const target = fileId
-      ? `${DRIVE_UPLOAD_API}/files/${encodeURIComponent(fileId)}?uploadType=multipart&fields=id,name,description,modifiedTime,appProperties`
-      : `${DRIVE_UPLOAD_API}/files?uploadType=multipart&fields=id,name,description,modifiedTime,appProperties`;
-    const response = await this.request(target, {
-      method: fileId ? 'PATCH' : 'POST',
-      headers: { 'Content-Type': contentType },
-      body,
+      mimeType: DRIVE_PACKAGE_MIME_TYPE,
+      content: new Uint8Array(gamePackage.content),
     });
     const file = parseDriveGamePackageFile(await response.json());
     if (!file) throw new Error('Google Drive package metadata is unavailable');
     return file;
-  }
-
-  private async ensurePackageFolder() {
-    const query = new URLSearchParams({
-      spaces: 'drive',
-      q: `mimeType = '${DRIVE_FOLDER_MIME_TYPE}' and trashed = false and appProperties has { key='${DRIVE_APP_KIND_KEY}' and value='${DRIVE_FOLDER_KIND}' }`,
-      fields: 'files(id)',
-      pageSize: '1',
-    });
-    const response = await this.request(`${DRIVE_API}/files?${query}`);
-    const value = (await response.json()) as { files?: { id?: unknown }[] };
-    const existing = value.files?.[0]?.id;
-    if (isDriveFileId(existing)) return existing;
-    const createdResponse = await this.request(`${DRIVE_API}/files?fields=id`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: PACKAGE_FOLDER_NAME,
-        mimeType: DRIVE_FOLDER_MIME_TYPE,
-        appProperties: { [DRIVE_APP_KIND_KEY]: DRIVE_FOLDER_KIND },
-      }),
-    });
-    const created = (await createdResponse.json()) as { id?: unknown };
-    if (!isDriveFileId(created.id)) {
-      throw new Error('Google Drive package folder is unavailable');
-    }
-    return created.id;
   }
 }

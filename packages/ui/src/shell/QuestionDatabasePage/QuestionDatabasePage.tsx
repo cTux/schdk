@@ -5,14 +5,14 @@ import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';
 import { Input } from '../../atoms/Input';
 import { useLocalization } from '../../localization';
-import { Page } from '../Page';
 import {
   QuestionDatabaseTable,
   searchQuestionDatabaseRows,
   sortQuestionDatabaseRows,
   type QuestionDatabaseSearchField,
   type QuestionDatabaseSort,
-} from '../QuestionDatabaseTable';
+} from '../../question-database';
+import { Page } from '../Page';
 import type { QuestionDatabasePageProps } from './types';
 
 const BATCH_SIZE = 100;

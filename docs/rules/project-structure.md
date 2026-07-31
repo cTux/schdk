@@ -70,14 +70,16 @@ directions in [architecture.md](architecture.md).
 
 ## UI components
 
+- Put a UI feature shared by multiple application areas under its neutral
+  subject area instead of nesting it under one consumer.
 - Put each new or structurally changed component in its own
   `packages/ui/src/<area>/<ComponentName>/` directory.
-- Include `ComponentName.tsx`, `types.ts`, and `index.ts`. Add `styles.scss`
-  only when the component emits component-specific CSS; never add an empty
-  placeholder stylesheet or import.
-- Keep each component's props in that component's own `types.ts`. Composite
-  components may re-export child props from the child's public entry point,
-  but must not define or store them in the composite's directory.
+- Include `ComponentName.tsx` and `index.ts`. Add `types.ts` only when the
+  component owns types used outside its implementation. Add `styles.scss` only
+  when the component emits component-specific CSS; never add empty placeholders.
+- Keep private one-use props with the component. Put reusable component props
+  in that component's own `types.ts`. Composite components may re-export child
+  props from the child's public entry point, but must not copy them.
 - Add `constants.ts` only for component-specific constants.
 - When the component has multiple secondary modules, keep only
   `ComponentName.tsx`, `index.ts`, `types.ts`, `constants.ts`, `styles.scss`,

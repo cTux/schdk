@@ -4,7 +4,6 @@ import {
   type ResizeHandle,
   type ElementSelection,
   type VisualEditorProps,
-  type VisualEditorController,
 } from './types';
 
 export {
@@ -13,5 +12,4 @@ export {
   type ResizeHandle,
   type ElementSelection,
   type VisualEditorProps,
-  type VisualEditorController,
 };

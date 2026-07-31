@@ -1,14 +1,13 @@
 import { isDriveFileId } from '../../services/settings/settings.js';
-import { createDriveMultipartBody } from '../../utils/client/create-drive-multipart-body.js';
-
-const DRIVE_API = 'https://www.googleapis.com/drive/v3';
-const DRIVE_UPLOAD_API = 'https://www.googleapis.com/upload/drive/v3';
+import {
+  DRIVE_API,
+  uploadDriveFile,
+  type DriveRequest,
+} from '../../utils/client/drive-api.js';
 
 interface AppDataFile {
   id: string;
 }
-
-type DriveRequest = (input: string, init?: RequestInit) => Promise<Response>;
 
 export class GoogleDriveAppData {
   constructor(private readonly request: DriveRequest) {}
@@ -25,18 +24,11 @@ export class GoogleDriveAppData {
   async save(name: string, value: unknown): Promise<void> {
     const file = await this.find(name);
     const metadata = file ? { name } : { name, parents: ['appDataFolder'] };
-    const { body, contentType } = createDriveMultipartBody(
+    await uploadDriveFile(this.request, {
+      fileId: file?.id,
       metadata,
-      'application/json',
-      JSON.stringify(value),
-    );
-    const target = file
-      ? `${DRIVE_UPLOAD_API}/files/${encodeURIComponent(file.id)}?uploadType=multipart`
-      : `${DRIVE_UPLOAD_API}/files?uploadType=multipart`;
-    await this.request(target, {
-      method: file ? 'PATCH' : 'POST',
-      headers: { 'Content-Type': contentType },
-      body,
+      mimeType: 'application/json',
+      content: JSON.stringify(value),
     });
   }
 

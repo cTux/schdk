@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   DEFAULT_GAME_LAYOUT,
+  DEFAULT_GAME_OPTIONS,
   MAX_CUSTOM_IMAGE_DATA_LENGTH,
 } from '../../../options/types';
 import { readVisualEditorImage } from '../utils/read-visual-editor-image';
@@ -10,6 +11,11 @@ import {
   getNextZoom,
   getResizedPosition,
 } from '../VisualEditor';
+import {
+  removeVisualEditorElement,
+  updateVisualEditorElement,
+  updateVisualEditorPosition,
+} from '../utils/update-visual-editor-game';
 
 describe('visual editor drag position', () => {
   it('rejects oversized images before reading them', async () => {
@@ -104,5 +110,29 @@ describe('visual editor drag position', () => {
       width: DEFAULT_GAME_LAYOUT.question.width,
       height: DEFAULT_GAME_LAYOUT.question.height + 5,
     });
+  });
+
+  it('updates built-in and custom elements without mutating game options', () => {
+    const custom = createCustomElement('text', 0, 'custom');
+    const game = {
+      ...DEFAULT_GAME_OPTIONS,
+      customElements: [custom],
+    };
+
+    const moved = updateVisualEditorPosition(
+      game,
+      { kind: 'built-in', id: 'question' },
+      { x: 25 },
+    );
+    const renamed = updateVisualEditorElement(game, custom.id, {
+      text: 'Changed',
+    });
+    const removed = removeVisualEditorElement(game, custom.id);
+
+    expect(moved.layout?.question.x).toBe(25);
+    expect(game.layout?.question.x).not.toBe(25);
+    expect(renamed.customElements[0]).toMatchObject({ text: 'Changed' });
+    expect(game.customElements[0]).toBe(custom);
+    expect(removed.customElements).toEqual([]);
   });
 });

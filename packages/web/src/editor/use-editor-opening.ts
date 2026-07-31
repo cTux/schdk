@@ -32,12 +32,12 @@ interface EditorOpeningOptions {
   applyOpenedPackage(
     content: Uint8Array,
     opened: DriveGamePackageFile,
+    selectedIndex?: number,
   ): GamePackage;
   refreshRecentPackages(): Promise<void>;
   onDriveFailure?(): void;
   setDesktopSessionReady: Dispatch<SetStateAction<boolean>>;
   setMessage: Dispatch<SetStateAction<string>>;
-  setSelectedIndex: Dispatch<SetStateAction<number>>;
 }
 
 export function useEditorOpening({
@@ -56,7 +56,6 @@ export function useEditorOpening({
   onDriveFailure,
   setDesktopSessionReady,
   setMessage,
-  setSelectedIndex,
 }: EditorOpeningOptions) {
   useEffect(() => {
     if (driveActive && !hasPackage) void refreshRecentPackages();
@@ -71,8 +70,11 @@ export function useEditorOpening({
         const driveId = parseDrivePackageReference(packageReference);
         if (!drive || !driveId) throw new Error('Google Drive is unavailable');
         const opened = await drive.loadGamePackage(driveId);
-        applyOpenedPackage(opened.content, opened);
-        setSelectedIndex(initialDeepLinkedQuestion.current ?? 0);
+        applyOpenedPackage(
+          opened.content,
+          opened,
+          initialDeepLinkedQuestion.current ?? 0,
+        );
       } catch {
         onDriveFailure?.();
         replaceBrowserPackageDeepLink(null);
@@ -87,7 +89,6 @@ export function useEditorOpening({
     initialDeepLinkedQuestion,
     onDriveFailure,
     setMessage,
-    setSelectedIndex,
   ]);
 
   useEffect(() => {
@@ -109,8 +110,7 @@ export function useEditorOpening({
           throw new Error('Google Drive session is unavailable');
         }
         const opened = await drive.loadGamePackage(session.driveFileId);
-        applyOpenedPackage(opened.content, opened);
-        setSelectedIndex(session.selectedIndex);
+        applyOpenedPackage(opened.content, opened, session.selectedIndex);
       } catch {
         onDriveFailure?.();
         saveDesktopEditorSession(localStorage, sessionScope, null);
@@ -128,6 +128,5 @@ export function useEditorOpening({
     sessionScope,
     setDesktopSessionReady,
     setMessage,
-    setSelectedIndex,
   ]);
 }

@@ -1,4 +1,4 @@
-import { type QuestionDatabaseRow } from './types';
+import { type QuestionDatabaseRow } from '../../question-database/question-database-row';
 
 export interface QuestionDatabasePageProps {
   failed: boolean;
