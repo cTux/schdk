@@ -1,9 +1,16 @@
-import { normalizeGameOptions, type GameOptions } from '@schdk/common';
-import { strFromU8, strToU8, unzipSync } from 'fflate';
-import { MAX_VISUAL_TEMPLATE_BYTES } from '../../storage/options/game-options-storage';
-import { VISUAL_TEMPLATE_ENTRY } from '../../types/visual-editor/visual-template-entry';
+import { strFromU8, strToU8, unzipSync, zipSync } from 'fflate';
+import { type GameOptions } from '../../types/game-options/game-options.js';
+import { normalizeGameOptions } from '../../validators/game-options/normalize-game-options.js';
 
-export function parseVisualEditorTemplate(
+const MAX_VISUAL_TEMPLATE_BYTES = 16 * 1024 * 1024;
+const VISUAL_TEMPLATE_ENTRY = 'template.json';
+
+type VisualEditorTemplate = Omit<
+  GameOptions,
+  'autoFullscreen' | 'soundVolume' | 'musicVolume'
+>;
+
+function parseVisualEditorTemplate(
   content: string | Uint8Array,
   options: Pick<GameOptions, 'autoFullscreen' | 'soundVolume' | 'musicVolume'>,
 ): GameOptions | null {
@@ -45,3 +52,26 @@ export function parseVisualEditorTemplate(
     return null;
   }
 }
+
+function serializeVisualEditorTemplate(options: GameOptions): Uint8Array {
+  const template: VisualEditorTemplate & { version: 1 } = {
+    version: 1,
+    layout: options.layout,
+    customElements: options.customElements,
+    backgroundImage: options.backgroundImage,
+    backgroundOpacity: options.backgroundOpacity,
+  };
+  return zipSync(
+    {
+      [VISUAL_TEMPLATE_ENTRY]: strToU8(JSON.stringify(template, null, 2)),
+    },
+    { level: 9 },
+  );
+}
+
+export {
+  MAX_VISUAL_TEMPLATE_BYTES,
+  VISUAL_TEMPLATE_ENTRY,
+  parseVisualEditorTemplate,
+  serializeVisualEditorTemplate,
+};
