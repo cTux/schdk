@@ -6,7 +6,6 @@ export interface EditorHeaderProps {
   packageTitle: string;
   saveStatus: EditorSaveStatus;
   showValidation: boolean;
-  onBack(): void;
   onDeletePackage(): void;
   onTitleChange(value: string): void;
   aiGeneration?: AiQuestionGenerationOptions;

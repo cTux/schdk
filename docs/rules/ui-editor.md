@@ -4,7 +4,9 @@
   `pending`, blue `saving`, and red `error`.
 - Keep editor and host headers compact around their visible controls without
   decorative empty padding. Keep package title and save state on the editor
-  header's right. Do not restore the completion counter. Show localized
+  header's right. While a package is open, hide recents and use the page's sole
+  back button to return to the package list. Keep the title input wide and its
+  label accessible but not visibly repeated. Do not restore the completion counter. Show localized
   success toasts for completed editor actions, but not for canceled or failed
   actions; keep actionable validation and file errors.
 - Place the optional image-or-text handout before question text without a

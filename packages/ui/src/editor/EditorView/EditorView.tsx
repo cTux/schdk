@@ -127,7 +127,6 @@ function EditorView({
               packageTitle={gamePackage.title}
               saveStatus={saveStatus}
               showValidation={showValidation}
-              onBack={onBack}
               onDeletePackage={onDeletePackage}
               onTitleChange={onTitleChange}
               aiGeneration={aiGeneration}
@@ -148,18 +147,20 @@ function EditorView({
             />
           )
         }
-        onBack={onExit}
+        onBack={hasPackage ? onBack : onExit}
       >
         <main>
-          <PackageStart
-            hidden={false}
-            openingRecentPackageId={openingRecentPackageId}
-            recentPackages={recentPackages}
-            recentPackagesLoading={recentPackagesLoading}
-            onDeleteRecentPackage={onDeleteRecentPackage}
-            onDownloadRecentPackage={onDownloadRecentPackage}
-            onOpenRecentPackage={onOpenRecentPackage}
-          />
+          {!hasPackage && (
+            <PackageStart
+              hidden={false}
+              openingRecentPackageId={openingRecentPackageId}
+              recentPackages={recentPackages}
+              recentPackagesLoading={recentPackagesLoading}
+              onDeleteRecentPackage={onDeleteRecentPackage}
+              onDownloadRecentPackage={onDownloadRecentPackage}
+              onOpenRecentPackage={onOpenRecentPackage}
+            />
+          )}
           <div className="editor-layout" hidden={!hasPackage}>
             <QuestionList
               gamePackage={gamePackage}
