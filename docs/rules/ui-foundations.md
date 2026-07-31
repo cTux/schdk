@@ -52,7 +52,9 @@
   `styles/shell.scss`; split them into cohesive area-prefixed partials only
   when needed.
 - Use the shared ink/plum chrome, amber brand actions, periwinkle interaction
-  states, warm canvases, soft elevation, and restrained translucent overlays.
+  states, and warm canvases. Keep application chrome flat with solid
+  backgrounds, low-radius bordered surfaces, and restrained elevation; do not
+  add decorative gradients, glows, or glass effects.
 - Keep action bars compact and icon-only with Ukrainian accessible labels shown
   by the shared tooltip on hover and keyboard focus.
 - Preserve semantic elements, labels, `aria-*` state, visible focus, disabled
