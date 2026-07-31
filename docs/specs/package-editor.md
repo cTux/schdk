@@ -147,7 +147,9 @@ without losing in-progress work.
   qualifications, or descriptive names of the same entity; and answer choices
   that worsen package variety by overusing one entity type or answer form. The
   rejected candidate and the reviewer's actionable feedback are supplied to
-  one retry; a second rejection fails without replacing the target question.
+  one retry. Review feedback requests only output the generator can represent
+  and never rejects a candidate solely for an absent image or other non-text
+  handout. A second rejection fails without replacing the target question.
 - **EDT-21:** Question and package generation panels each show a similarity
   checkbox inline with its label that resets to off whenever the panel closes.
   When enabled, generation
