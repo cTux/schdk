@@ -6,6 +6,8 @@
   supplied it.
 - List and reopen recent packages through the Drive bridge only.
 - Autosave only to the current Drive file after one quiet second.
+- Reject autosave when the Drive modification time changed since open or the
+  previous save; use the shared safe-copy conflict flow instead of overwriting.
 - Serialize writes through one queue. An older write finishing must leave newer
   edits `pending`.
 - Save before returning to start, then clear state.

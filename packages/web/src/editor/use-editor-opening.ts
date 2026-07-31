@@ -3,6 +3,7 @@ import {
   parseDrivePackageReference,
   toDrivePackageReference,
   type DrivePackageStorage,
+  type DriveGamePackageFile,
 } from '@schdk/google-drive';
 import type { LocalizationCopy } from '@schdk/ui/localization';
 import {
@@ -30,8 +31,7 @@ interface EditorOpeningOptions {
   initialDesktopSession: MutableRefObject<DesktopEditorSession | null>;
   applyOpenedPackage(
     content: Uint8Array,
-    fileName: string,
-    driveFileId: string,
+    opened: DriveGamePackageFile,
   ): GamePackage;
   refreshRecentPackages(): Promise<void>;
   onDriveFailure?(): void;
@@ -71,7 +71,7 @@ export function useEditorOpening({
         const driveId = parseDrivePackageReference(packageReference);
         if (!drive || !driveId) throw new Error('Google Drive is unavailable');
         const opened = await drive.loadGamePackage(driveId);
-        applyOpenedPackage(opened.content, opened.name, opened.id);
+        applyOpenedPackage(opened.content, opened);
         setSelectedIndex(initialDeepLinkedQuestion.current ?? 0);
       } catch {
         onDriveFailure?.();
@@ -109,7 +109,7 @@ export function useEditorOpening({
           throw new Error('Google Drive session is unavailable');
         }
         const opened = await drive.loadGamePackage(session.driveFileId);
-        applyOpenedPackage(opened.content, opened.name, opened.id);
+        applyOpenedPackage(opened.content, opened);
         setSelectedIndex(session.selectedIndex);
       } catch {
         onDriveFailure?.();

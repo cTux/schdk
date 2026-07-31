@@ -177,9 +177,10 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
 
   updateGamePackage(
     fileId: string,
-    value: Parameters<GoogleDriveClient['updateGamePackage']>[1],
+    expectedModifiedTime: string,
+    value: Parameters<GoogleDriveClient['updateGamePackage']>[2],
   ) {
-    return this.client.updateGamePackage(fileId, value);
+    return this.client.updateGamePackage(fileId, expectedModifiedTime, value);
   }
 
   deleteGamePackage(fileId: string) {

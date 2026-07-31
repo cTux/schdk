@@ -7,6 +7,7 @@ import {
 import {
   createGamePackageFilename,
   toDrivePackageReference,
+  type DriveGamePackageFile,
   type DrivePackageStorage,
 } from '@schdk/google-drive';
 import { showEditorToast, type EditorSaveStatus } from '@schdk/ui/editor';
@@ -24,14 +25,14 @@ interface PackageActionsOptions {
   saveStatus: EditorSaveStatus;
   applyOpenedPackage(
     content: Uint8Array,
-    fileName: string,
-    driveFileId: string,
+    opened: DriveGamePackageFile,
   ): GamePackage;
   createLocalizedPackage(): GamePackage;
   refreshRecentPackages(): Promise<void>;
-  saveCurrentPackage(): Promise<void>;
+  saveCurrentPackage(): Promise<boolean>;
   onDriveFailure?(): void;
   setDriveFileId: Dispatch<SetStateAction<string | null>>;
+  setDriveModifiedTime: Dispatch<SetStateAction<string | null>>;
   setFileName: Dispatch<SetStateAction<string | null>>;
   setGamePackage: Dispatch<SetStateAction<GamePackage>>;
   setHasPackage: Dispatch<SetStateAction<boolean>>;
@@ -55,6 +56,7 @@ export function usePackageActions(options: PackageActionsOptions) {
     saveCurrentPackage,
     onDriveFailure,
     setDriveFileId,
+    setDriveModifiedTime,
     setFileName,
     setGamePackage,
     setHasPackage,
@@ -78,6 +80,7 @@ export function usePackageActions(options: PackageActionsOptions) {
     setGamePackage(createLocalizedPackage());
     setHasPackage(false);
     setDriveFileId(null);
+    setDriveModifiedTime(null);
     setFileName(null);
     setSaveStatus('saved');
     setSelectedIndex(0);
@@ -103,6 +106,7 @@ export function usePackageActions(options: PackageActionsOptions) {
         hasRemarks: hasGamePackageRemarks(emptyPackage),
       });
       setDriveFileId(saved.id);
+      setDriveModifiedTime(saved.modifiedTime);
       setFileName(saved.name);
       setGamePackage(emptyPackage);
       setHasPackage(true);
@@ -120,7 +124,12 @@ export function usePackageActions(options: PackageActionsOptions) {
 
   async function closePackage() {
     try {
-      if (driveFileId && saveStatus !== 'saved') await saveCurrentPackage();
+      if (
+        driveFileId &&
+        saveStatus !== 'saved' &&
+        !(await saveCurrentPackage())
+      )
+        return;
       resetPackage();
     } catch {
       onDriveFailure?.();

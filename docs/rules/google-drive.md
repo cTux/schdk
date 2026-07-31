@@ -66,6 +66,10 @@
   to the same Drive file ID. Editor and Host recents list and load only those
   Drive packages across every Drive API result page. Never fall back to browser
   storage or desktop paths.
+- Send the modification time observed on open or the previous successful save
+  with every package update. Compare it with current Drive metadata before
+  uploading bytes; on mismatch, keep local edits open and offer to save them as
+  a titled copy before loading the newer original.
 - List, create, update, and delete AI question rules and personal AI question
   packages through the active account's Drive adapter. Route global rules
   through the same narrow adapter, require an allowlisted account for global

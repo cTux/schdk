@@ -82,6 +82,9 @@ preserving recoverable local state during temporary Drive failures.
   authorization and links a same-domain privacy policy that discloses Google
   data access and use, token and Drive storage, optional AI-provider transfers,
   retention, deletion, support, and Limited Use compliance.
+- **DRV-24:** Package updates include the modification time observed when the
+  editor opened or last saved the file. A changed time rejects the update
+  before package bytes are uploaded.
 
 ## Invariants
 
@@ -104,6 +107,7 @@ preserving recoverable local state during temporary Drive failures.
   before generation uses them.
 - The question database never crosses accounts and never replaces canonical
   `.schdk` content.
+- A stale package write never overwrites the newer Drive file.
 
 ## Acceptance
 
@@ -153,3 +157,5 @@ preserving recoverable local state during temporary Drive failures.
     their Drive-backed lists begin loading.
 18. Open the hosted web login and privacy policy without a Google session and
     confirm both load directly and the policy matches the shipped data flow.
+19. Open one package in two editors, save from the first, then edit from the
+    second. Confirm the second editor does not overwrite the first save.

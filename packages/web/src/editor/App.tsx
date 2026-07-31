@@ -1,9 +1,9 @@
 import {
   createEmptyGamePackage,
-  MAX_MUSIC_BREAK_BYTES,
   parseGamePackage,
   type GamePackage,
 } from '@schdk/common';
+import type { DriveGamePackageFile } from '@schdk/google-drive';
 import { ConfirmationDialog, useConfirmationDialog } from '@schdk/ui';
 import { EditorView, type EditorSaveStatus } from '@schdk/ui/editor';
 import { useLocalization } from '@schdk/ui/localization';
@@ -14,9 +14,11 @@ import {
   getDeepLinkedQuestionIndex,
 } from './deep-link';
 import { loadDesktopEditorSession } from './desktop-session';
+import { useDriveConflictResolution } from './use-drive-conflict-resolution';
 import { useEditorOpening } from './use-editor-opening';
 import { useEditorPersistence } from './use-editor-persistence';
 import { useEditorRecents } from './use-editor-recents';
+import { useMusicBreakChange } from './use-music-break-change';
 import { usePackageActions } from './use-package-actions';
 import { useQuestionActions } from './use-question-actions';
 import type { AppProps } from './types';
@@ -58,6 +60,9 @@ function App({
   );
   const [hasPackage, setHasPackage] = useState(false);
   const [driveFileId, setDriveFileId] = useState<string | null>(null);
+  const [driveModifiedTime, setDriveModifiedTime] = useState<string | null>(
+    null,
+  );
   const [fileName, setFileName] = useState<string | null>(null);
   const [saveStatus, setSaveStatus] = useState<EditorSaveStatus>('saved');
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -66,11 +71,12 @@ function App({
   currentPackage.current = gamePackage;
 
   const applyOpenedPackage = useCallback(
-    (content: Uint8Array, openedName: string, openedDriveFileId: string) => {
+    (content: Uint8Array, opened: DriveGamePackageFile) => {
       const packageToEdit = parseGamePackage(content);
       setGamePackage(packageToEdit);
-      setDriveFileId(openedDriveFileId);
-      setFileName(openedName);
+      setDriveFileId(opened.id);
+      setDriveModifiedTime(opened.modifiedTime);
+      setFileName(opened.name);
       setSaveStatus('saved');
       setHasPackage(true);
       setSelectedIndex(0);
@@ -100,6 +106,14 @@ function App({
     setMessage,
     setSelectedIndex,
   });
+  const resolveDriveConflict = useDriveConflictResolution({
+    confirm,
+    copy,
+    drive,
+    driveFileId,
+    applyOpenedPackage,
+    refreshRecentPackages,
+  });
   const saveCurrentPackage = useEditorPersistence({
     copy,
     currentPackage,
@@ -107,6 +121,7 @@ function App({
     drive,
     driveActive,
     driveFileId,
+    driveModifiedTime,
     fileName,
     gamePackage,
     hasPackage,
@@ -117,7 +132,9 @@ function App({
     sessionScope,
     selectedIndex,
     onDriveFailure,
+    resolveDriveConflict,
     setFileName,
+    setDriveModifiedTime,
     setMessage,
     setSaveStatus,
   });
@@ -136,6 +153,12 @@ function App({
     setSaveStatus,
     setSelectedIndex,
   });
+  const changeMusicBreak = useMusicBreakChange(
+    copy,
+    setGamePackage,
+    setMessage,
+    setSaveStatus,
+  );
   const packages = usePackageActions({
     confirm,
     copy,
@@ -150,6 +173,7 @@ function App({
     onDriveFailure,
     setFileName,
     setDriveFileId,
+    setDriveModifiedTime,
     setGamePackage,
     setHasPackage,
     setMessage,
@@ -175,47 +199,7 @@ function App({
         selectedIndex={selectedIndex}
         showValidation={showValidation}
         onAddHandout={questions.addHandout}
-        onMusicBreakChange={(index, file) => {
-          if (!file) {
-            setGamePackage((current) => ({
-              ...current,
-              musicBreaks: current.musicBreaks.map((musicBreak, breakIndex) =>
-                breakIndex === index ? null : musicBreak,
-              ) as GamePackage['musicBreaks'],
-            }));
-            setSaveStatus('pending');
-            setMessage('');
-            return;
-          }
-          const hasAcceptableSize = file.size <= MAX_MUSIC_BREAK_BYTES;
-          const hasPlayableAudioType =
-            file.type.startsWith('audio/') &&
-            Boolean(new Audio().canPlayType(file.type));
-          if (!hasAcceptableSize || !hasPlayableAudioType) {
-            setMessage(copy.editor.invalidMusic);
-            return;
-          }
-          void file
-            .arrayBuffer()
-            .then((buffer) => {
-              setGamePackage((current) => ({
-                ...current,
-                musicBreaks: current.musicBreaks.map(
-                  (musicBreak, breakIndex) =>
-                    breakIndex === index
-                      ? {
-                          name: file.name,
-                          mimeType: file.type,
-                          data: new Uint8Array(buffer),
-                        }
-                      : musicBreak,
-                ) as GamePackage['musicBreaks'],
-              }));
-              setSaveStatus('pending');
-              setMessage('');
-            })
-            .catch(() => setMessage(copy.editor.invalidMusic));
-        }}
+        onMusicBreakChange={changeMusicBreak}
         onAnswerBlur={questions.correctMainAnswer}
         onAnswerCommentBlur={questions.correctAnswerComment}
         onAlternativeAnswerBlur={questions.correctAlternativeAnswer}
