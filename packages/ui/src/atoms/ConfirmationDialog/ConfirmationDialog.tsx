@@ -7,6 +7,7 @@ import type { ConfirmationDialogProps } from './types';
 import { useConfirmationDialog } from './hooks/use-confirmation-dialog';
 
 function ConfirmationDialog({
+  confirmLabel,
   message,
   open,
   onClose,
@@ -47,7 +48,7 @@ function ConfirmationDialog({
                 render={<Button variant="primary" />}
                 onClick={() => onClose(true)}
               >
-                {copy.shared.confirm}
+                {confirmLabel ?? copy.shared.confirm}
               </AlertDialog.Close>
             </div>
           </AlertDialog.Popup>

@@ -106,6 +106,10 @@ export const english: typeof ukrainian = {
       'Could not restore the previous file. It may have been moved or deleted.',
     draftSaveFailed: 'Could not create a browser recovery copy.',
     autoSaveFailed: 'Could not save the file automatically.',
+    driveConflict:
+      'This package changed in Google Drive. Save your edits as a new copy and open the newer version?',
+    resolveDriveConflict: 'Save copy and open',
+    conflictCopyTitle: (title) => `${title} — conflict copy`,
     copyFailed: 'Could not copy the question. Check clipboard access.',
     confirmPaste: (number) =>
       `Replace question ${number} with the question from the clipboard?`,

@@ -31,6 +31,7 @@ interface EditorPersistenceOptions {
   drive?: DrivePackageStorage;
   driveActive: boolean;
   driveFileId: string | null;
+  driveModifiedTime: string | null;
   fileName: string | null;
   gamePackage: GamePackage;
   hasPackage: boolean;
@@ -42,7 +43,9 @@ interface EditorPersistenceOptions {
   selectedIndex: number;
   currentPackage: MutableRefObject<GamePackage>;
   onDriveFailure?(): void;
+  resolveDriveConflict(gamePackage: GamePackage): Promise<boolean>;
   setFileName: Dispatch<SetStateAction<string | null>>;
+  setDriveModifiedTime: Dispatch<SetStateAction<string | null>>;
   setMessage: Dispatch<SetStateAction<string>>;
   setSaveStatus: Dispatch<SetStateAction<EditorSaveStatus>>;
 }
@@ -53,6 +56,7 @@ export function useEditorPersistence({
   drive,
   driveActive,
   driveFileId,
+  driveModifiedTime,
   fileName,
   gamePackage,
   hasPackage,
@@ -64,7 +68,9 @@ export function useEditorPersistence({
   selectedIndex,
   currentPackage,
   onDriveFailure,
+  resolveDriveConflict,
   setFileName,
+  setDriveModifiedTime,
   setMessage,
   setSaveStatus,
 }: EditorPersistenceOptions) {
@@ -79,7 +85,7 @@ export function useEditorPersistence({
   }, [desktopSessionReady, driveFileId, fileName, selectedIndex, sessionScope]);
 
   const saveCurrentPackage = useCallback(async () => {
-    if (!drive || !driveFileId || !fileName) {
+    if (!drive || !driveFileId || !driveModifiedTime || !fileName) {
       throw new Error('Google Drive is unavailable');
     }
     const content = serializeGamePackage(gamePackage);
@@ -87,7 +93,7 @@ export function useEditorPersistence({
     const save = saveQueue.current
       .catch(() => undefined)
       .then(() =>
-        drive.updateGamePackage(driveFileId, {
+        drive.updateGamePackage(driveFileId, driveModifiedTime, {
           name: createGamePackageFilename(
             gamePackage.title,
             copy.editor.unfinishedGame,
@@ -101,12 +107,19 @@ export function useEditorPersistence({
     saveQueue.current = save.then(() => undefined);
     try {
       const saved = await save;
+      if (!saved) {
+        if (await resolveDriveConflict(gamePackage)) return true;
+        setSaveStatus('error');
+        return false;
+      }
+      setDriveModifiedTime(saved.modifiedTime);
       setFileName(saved.name);
       const nextSaveStatus = saveStatusAfterWrite(
         gamePackage === currentPackage.current,
       );
       setSaveStatus(nextSaveStatus);
       if (nextSaveStatus === 'saved') showEditorToast('saved', locale);
+      return true;
     } catch (error) {
       setSaveStatus('error');
       onDriveFailure?.();
@@ -117,12 +130,15 @@ export function useEditorPersistence({
     currentPackage,
     drive,
     driveFileId,
+    driveModifiedTime,
     fileName,
     gamePackage,
     locale,
     onDriveFailure,
+    resolveDriveConflict,
     saveQueue,
     setFileName,
+    setDriveModifiedTime,
     setSaveStatus,
   ]);
 
@@ -175,8 +191,8 @@ export function useEditorPersistence({
           return;
         }
         try {
-          await saveCurrentPackage();
-          window.desktop!.finishCloseAttempt(attempt, true);
+          const saved = await saveCurrentPackage();
+          window.desktop!.finishCloseAttempt(attempt, saved);
         } catch {
           setMessage(copy.editor.autoSaveFailed);
           window.desktop!.finishCloseAttempt(attempt, false);

@@ -29,8 +29,25 @@ export class GoogleDrivePackageStorage implements DrivePackageStorage {
     return this.uploadGamePackage(value);
   }
 
-  updateGamePackage(fileId: string, value: DriveGamePackageWrite) {
+  async updateGamePackage(
+    fileId: string,
+    expectedModifiedTime: string,
+    value: DriveGamePackageWrite,
+  ) {
     if (!isDriveFileId(fileId)) throw new TypeError('Invalid Drive file');
+    if (!Number.isFinite(Date.parse(expectedModifiedTime))) {
+      throw new TypeError('Invalid Drive modification time');
+    }
+    if (!parseDriveGamePackageWrite(value)) {
+      throw new TypeError('Invalid Google Drive package');
+    }
+    const encodedId = encodeURIComponent(fileId);
+    const metadata = await this.request(
+      `${DRIVE_API}/files/${encodedId}?fields=id,name,description,modifiedTime,appProperties`,
+    );
+    const current = parseDriveGamePackageFile(await metadata.json());
+    if (!current) throw new TypeError('Invalid Google Drive package');
+    if (current.modifiedTime !== expectedModifiedTime) return null;
     return this.uploadGamePackage(value, fileId);
   }
 

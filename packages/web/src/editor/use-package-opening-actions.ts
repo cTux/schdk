@@ -10,6 +10,7 @@ import {
   parseDrivePackageReference,
   toDrivePackageReference,
   type DrivePackageStorage,
+  type DriveGamePackageFile,
 } from '@schdk/google-drive';
 import { showEditorToast, type RecentPackageItem } from '@schdk/ui/editor';
 import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
@@ -23,8 +24,7 @@ interface PackageOpeningOptions {
   locale: AppLocale;
   applyOpenedPackage(
     content: Uint8Array,
-    fileName: string,
-    driveFileId: string,
+    opened: DriveGamePackageFile,
   ): GamePackage;
   refreshRecentPackages(): Promise<void>;
   onDriveFailure?(): void;
@@ -84,7 +84,7 @@ export function usePackageOpeningActions({
         ready: validateGamePackage(gamePackage).length === 0,
         hasRemarks: hasGamePackageRemarks(gamePackage),
       });
-      applyOpenedPackage(content, saved.name, saved.id);
+      applyOpenedPackage(content, saved);
       replaceBrowserPackageDeepLink(toDrivePackageReference(saved.id), 0);
       await refreshRecentPackages();
       showEditorToast('imported', locale);
@@ -104,7 +104,7 @@ export function usePackageOpeningActions({
       if (!drive || !driveFileId)
         throw new Error('Google Drive is unavailable');
       const opened = await drive.loadGamePackage(driveFileId);
-      applyOpenedPackage(opened.content, opened.name, opened.id);
+      applyOpenedPackage(opened.content, opened);
       replaceBrowserPackageDeepLink(toDrivePackageReference(opened.id), 0);
       await refreshRecentPackages();
       showEditorToast('opened', locale);

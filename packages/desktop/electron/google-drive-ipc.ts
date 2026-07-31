@@ -73,12 +73,19 @@ export function registerGoogleDriveIpc() {
   });
   ipcMain.handle(
     'update-google-drive-game-package',
-    (_event, fileId, value) => {
+    (_event, fileId, expectedModifiedTime, value) => {
       const gamePackage = parseDriveGamePackageWrite(value);
-      if (!isDriveFileId(fileId) || !gamePackage) {
+      const hasValidModifiedTime =
+        typeof expectedModifiedTime === 'string' &&
+        Number.isFinite(Date.parse(expectedModifiedTime));
+      if (!isDriveFileId(fileId) || !hasValidModifiedTime || !gamePackage) {
         throw new TypeError('Invalid Google Drive package');
       }
-      return client.updateGamePackage(fileId, gamePackage);
+      return client.updateGamePackage(
+        fileId,
+        expectedModifiedTime,
+        gamePackage,
+      );
     },
   );
   ipcMain.handle('delete-google-drive-game-package', (_event, fileId) => {

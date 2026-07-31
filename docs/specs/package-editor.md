@@ -170,6 +170,10 @@ without losing in-progress work.
   appear inline with their respective list titles.
 - **EDT-26:** Question navigation marks AI-generated questions blue while
   preserving higher-priority invalid and unresolved-remark states.
+- **EDT-27:** Autosave compares the current Drive modification time with the
+  version opened or last saved. When they differ, the editor keeps local edits
+  open and offers to save them as a distinctly titled copy before opening the
+  newer Drive version.
 
 ## Invariants
 
@@ -179,6 +183,7 @@ without losing in-progress work.
 - Actionable validation and file errors stay visible; success notifications do
   not replace the save-state indicator.
 - Package filenames track the filesystem-safe title.
+- Dismissing Drive conflict recovery keeps the current edits open and unsaved.
 
 ## Acceptance
 
@@ -295,3 +300,7 @@ without losing in-progress work.
     vertical gap between the handout, question, remark, answer, answer comment,
     and host-notes fields is equal, and that filling any textarea does not
     change its height.
+24. Open one package in two editors and save different changes from each.
+    Confirm the second save cannot overwrite the first; dismiss recovery and
+    retain the local edits, then accept recovery and observe a titled copy plus
+    the newer original.

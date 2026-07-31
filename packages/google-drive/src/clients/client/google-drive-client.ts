@@ -165,8 +165,11 @@ export class GoogleDriveClient
 
   createGamePackage = (value: DriveGamePackageWrite) =>
     this.packages.createGamePackage(value);
-  updateGamePackage = (fileId: string, value: DriveGamePackageWrite) =>
-    this.packages.updateGamePackage(fileId, value);
+  updateGamePackage = (
+    fileId: string,
+    expectedModifiedTime: string,
+    value: DriveGamePackageWrite,
+  ) => this.packages.updateGamePackage(fileId, expectedModifiedTime, value);
   deleteGamePackage = (fileId: string) =>
     this.packages.deleteGamePackage(fileId);
   listGamePackages = () => this.packages.listGamePackages();

@@ -87,6 +87,7 @@ V44|Every shared generation dictionary is parsed from its `.schdk-dictionary` ZI
 V45|When one structured OpenAI question response requests an image, OpenAI generates and canonically parses the bounded embedded image without a text-review request.
 V46|Browser OAuth tokens remain memory-only, while desktop refresh credentials remain encrypted, scope-validated, and removed after invalidation.
 V47|The hosted OAuth landing surface identifies SCHDK and its purpose in crawler-readable HTML and links a same-domain privacy policy that accurately discloses Google user-data handling.
+V48|Autosave never overwrites a Drive package modified since the editor opened or last saved it.
 
 ## §T
 
@@ -208,3 +209,4 @@ B108|2026-07-31|The AI reviewer repeatedly rejected candidates for image handout
 B109|2026-07-31|Browser OAuth persisted bearer tokens in session storage and desktop refresh retained invalid or partially authorized credentials|V46
 B110|2026-07-31|The OAuth landing page kept its product name and purpose only in client-rendered content, so Google's branding crawler saw the obsolete static title and no purpose|V47
 B111|2026-07-31|Intrinsic-width question tooltips and editor headings expanded the 320-pixel page overflow area|Constrain narrow tooltips and allow editor headings to shrink; the existing 320-pixel browser smoke test covers recurrence.
+B112|2026-07-31|Package autosave updated Drive by file ID without checking whether another client had modified the file|V48

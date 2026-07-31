@@ -8,8 +8,9 @@ export interface DrivePackageStorage {
   ): Promise<DriveGamePackageFile>;
   updateGamePackage(
     fileId: string,
+    expectedModifiedTime: string,
     value: DriveGamePackageWrite,
-  ): Promise<DriveGamePackageFile>;
+  ): Promise<DriveGamePackageFile | null>;
   deleteGamePackage(fileId: string): Promise<void>;
   listGamePackages(): Promise<DriveGamePackageFile[]>;
   loadGamePackage(fileId: string): Promise<DriveGamePackage>;
