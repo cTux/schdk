@@ -1,8 +1,6 @@
 import type { ReactNode } from 'react';
 
-interface ActionToolbarProps {
+export interface ActionToolbarProps {
   label: string;
   children: ReactNode;
 }
-
-export { type ActionToolbarProps };

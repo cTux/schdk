@@ -42,6 +42,9 @@ directions in [architecture.md](architecture.md).
 ## Exports
 
 - Keep at most one top-level `export` statement in each source-code file.
+- Export a file's single consumer-facing declaration directly, such as
+  `export interface Props`; do not add a separate grouped export for one
+  locally declared symbol.
 - Split files with multiple exported declarations by consumer-facing
   responsibility. Give each reusable symbol its own owning module instead of
   hiding multiple declarations behind one grouped export statement.

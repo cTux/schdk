@@ -24,6 +24,9 @@ description: Maintain and audit SCHDK monorepo package, source, UI component, an
    physical lines or fewer; split larger files by cohesive responsibility
    without compressing formatting or weakening ownership boundaries.
 6. Keep at most one top-level `export` statement in each source-code file.
+   Export a file's single consumer-facing declaration directly, such as
+   `export interface Props`; do not add a separate grouped export for one
+   locally declared symbol.
    When a touched file has multiple exported declarations, split them into
    owning modules by consumer-facing responsibility; do not merely replace
    them with one grouped export statement.
