@@ -147,7 +147,13 @@ without losing in-progress work.
   qualifications, or descriptive names of the same entity; and answer choices
   that worsen package variety by overusing one entity type or answer form. The
   rejected candidate and the reviewer's actionable feedback are supplied to
-  one retry; a second rejection fails without replacing the target question.
+  one retry. The reviewer validates a requested image handout through its
+  generation description without requiring image bytes. After an OpenAI
+  candidate passes review, its image is generated once, bounded to the editor's
+  handout size limit, embedded in the question, and parsed through the canonical
+  question contract. Other providers fail an image-handout request rather than
+  returning an incomplete question. A second rejection fails without replacing
+  the target question.
 - **EDT-21:** Question and package generation panels each show a similarity
   checkbox inline with its label that resets to off whenever the panel closes.
   When enabled, generation
