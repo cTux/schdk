@@ -84,7 +84,7 @@ V41|Every game-package payload crossing Drive or desktop IPC is parsed before Dr
 V42|Image handout selection is bounded before reading and cannot leave the editor with an unserializable package.
 V43|A replacement global general rule is persisted before the previous general rule is cleared.
 V44|Every shared generation dictionary is parsed from its `.schdk-dictionary` ZIP archive, remains folder-scoped and admin-writable, and supplies both dropdown labels and provider prompt fragments.
-V45|AI review feedback requests only output the question generator can represent and never rejects a candidate solely for an absent image or other non-text handout.
+V45|AI review validates an image request through its generation description, and OpenAI generates and canonically parses the bounded embedded image only after the question passes review.
 
 ## §T
 

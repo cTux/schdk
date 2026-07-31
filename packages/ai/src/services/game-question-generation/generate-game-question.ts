@@ -1,12 +1,10 @@
 import { createAnthropic } from '@ai-sdk/anthropic';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { createOpenAI } from '@ai-sdk/openai';
-import { createProviderRegistry, generateText, jsonSchema, Output } from 'ai';
+import { createProviderRegistry, generateText, Output } from 'ai';
 import {
   getGameQuestionAnswers,
   normalizeGameAnswer,
-  parseGameQuestion,
-  QUESTION_TYPE_CONFIG,
   type GameQuestion,
 } from '@schdk/common';
 import {
@@ -16,143 +14,11 @@ import {
 } from './game-question-prompt.js';
 import { reviewGameQuestion } from '../../utils/game-question-generation/question-review.js';
 import { findSimilarQuestionCandidates } from '../../utils/game-question-generation/question-similarity.js';
+import { generateQuestionImage } from '../../utils/game-question-generation/generate-question-image.js';
+import { generatedQuestionSchema } from '../../utils/game-question-generation/generated-question-schema.js';
 
 import { type SupportedAiProvider } from '../../types/ai-providers/supported-ai-provider.js';
 import { isSupportedAiProvider } from '../../utils/ai-providers/is-supported-ai-provider.js';
-
-type GeneratedQuestion = Omit<
-  GameQuestion,
-  'comment' | 'handout' | 'hostNotes'
-> & {
-  answerComment: string;
-  comment: string | null;
-  handout: GameQuestion['handout'] | null;
-  hostNotes: string | null;
-};
-
-const constructionLabelPattern =
-  /(?:(?:фактологічн|асоціативн)\p{L}*\s+шлях\p{L}*|(?:factual|associative)\s+(?:path|route)s?)\s*(?:[—–:-]\s*)?/giu;
-
-function removeConstructionLabels(value: string) {
-  return value.replace(constructionLabelPattern, '').trim();
-}
-
-const nullableString = () => ({
-  anyOf: [{ type: 'string' as const }, { type: 'null' as const }],
-});
-
-const generatedQuestionSchema = jsonSchema<GameQuestion>(
-  {
-    type: 'object',
-    additionalProperties: false,
-    properties: {
-      type: {
-        type: 'string',
-        enum: ['standard', 'blitz-2x30', 'blitz-3x20'],
-        description: 'Required question type.',
-      },
-      questionParts: {
-        type: 'array',
-        items: { type: 'string' },
-        minItems: 1,
-        maxItems: 3,
-        description:
-          'Required reader-facing question text parts without template or construction labels: 1 for standard, 2 for blitz-2x30, and 3 for blitz-3x20.',
-      },
-      answer: { type: 'string', description: 'Required main answer.' },
-      answerComment: {
-        type: 'string',
-        minLength: 1,
-        description:
-          'Required natural reader-facing answer explanation without template or construction labels.',
-      },
-      alternativeAnswers: {
-        type: 'array',
-        items: { type: 'string' },
-        description: 'Required list; use an empty list when absent.',
-      },
-      wrongAnswers: {
-        type: 'array',
-        items: { type: 'string' },
-        description: 'Required list; use an empty list when absent.',
-      },
-      handout: {
-        anyOf: [
-          {
-            type: 'object',
-            additionalProperties: false,
-            properties: {
-              kind: { type: 'string', enum: ['text'] },
-              text: { type: 'string' },
-            },
-            required: ['kind', 'text'],
-          },
-          { type: 'null' },
-        ],
-        description: 'Optional text handout; null when absent.',
-      },
-      comment: {
-        ...nullableString(),
-        description:
-          'Human-authored unresolved revision remark; never invent one and use null when absent or resolved.',
-      },
-      hostNotes: {
-        ...nullableString(),
-        description:
-          'Optional delivery-only instructions shown to the host while reading the question, such as pronunciation, audible quotation marks, text to omit, pauses, or cues. Never include answer-checking guidance, difficulty estimates, or quality analysis; use null when absent.',
-      },
-    },
-    required: [
-      'type',
-      'questionParts',
-      'answer',
-      'answerComment',
-      'alternativeAnswers',
-      'wrongAnswers',
-      'handout',
-      'comment',
-      'hostNotes',
-    ],
-  },
-  {
-    validate(value) {
-      try {
-        const generated = value as GeneratedQuestion;
-        const answerComment = removeConstructionLabels(generated.answerComment);
-        if (!answerComment) {
-          throw new Error('Answer comment is required');
-        }
-        const partCount = QUESTION_TYPE_CONFIG[generated.type].partCount;
-        const sanitizedQuestionParts = generated.questionParts.map(
-          removeConstructionLabels,
-        );
-        const questionParts =
-          sanitizedQuestionParts.length > partCount
-            ? [
-                ...sanitizedQuestionParts.slice(0, partCount - 1),
-                sanitizedQuestionParts.slice(partCount - 1).join('\n\n'),
-              ]
-            : sanitizedQuestionParts;
-        return {
-          success: true,
-          value: parseGameQuestion({
-            ...generated,
-            questionParts,
-            answerComment,
-            ...(generated.comment === null ? { comment: undefined } : {}),
-            ...(generated.handout === null ? { handout: undefined } : {}),
-            ...(generated.hostNotes === null ? { hostNotes: undefined } : {}),
-          }),
-        };
-      } catch {
-        return {
-          success: false,
-          error: new Error('Invalid generated question'),
-        };
-      }
-    },
-  },
-);
 
 function parseProvider(value: string): SupportedAiProvider {
   if (!isSupportedAiProvider(value)) {
@@ -228,7 +94,14 @@ export async function generateGameQuestion(
         input.excludedAnswers,
         similarQuestions,
       );
-      if (review.acceptable) return result.output;
+      if (review.acceptable) {
+        const { imagePrompt, ...question } = result.output;
+        if (!imagePrompt) return question;
+        if (provider !== 'openai') {
+          throw new Error('Image generation requires the OpenAI provider');
+        }
+        return generateQuestionImage(input.apiKey, question, imagePrompt);
+      }
       rejectionFeedback = review.feedback;
     }
     rejectedQuestion = result.output;

@@ -28,7 +28,7 @@ export async function reviewGameQuestion(
   model: LanguageModel,
   locale: 'uk' | 'en',
   generationRequest: string,
-  question: GameQuestion,
+  question: GameQuestion & { imagePrompt?: string },
   excludedAnswers: string[],
   existingQuestions: ExistingQuestionReference[],
 ) {
@@ -41,8 +41,8 @@ export async function reviewGameQuestion(
     }),
     system:
       locale === 'uk'
-        ? 'Ти суворий редактор питань для гри «Що? Де? Коли?». Прийми кандидата лише якщо він відповідає запиту, фактично узгоджений, однозначно розв’язуваний із наведених підказок, не видає відповідь, звучить природно, не містить службового тексту, а коментар стисло й достатньо доводить правильність відповіді. Також відхили повтор тієї самої сутності, центрального факту, логіки чи суттєвої послідовності підказок, навіть іншими словами, та надмірне повторення типу або форми відповіді. Не відхиляй кандидата через відсутність зображення чи іншої нетекстової роздатки: цей генератор створює лише текстову роздатку. Не вимагай косметичних змін. Якщо відхиляєш, feedback має містити лише конкретні виправлення, які може виконати генератор.'
-        : 'You are a strict What? Where? When? question editor. Accept the candidate only when it follows the request, is factually coherent, has one supportable answer derivable from sufficient clues, does not reveal the answer, reads naturally, contains no internal construction text, and has a concise answer comment that sufficiently establishes why the answer is correct. Also reject repetition of the same entity, central fact, logic, or material clue sequence even with different wording, and excessive repetition of an answer type or form. Do not reject a candidate for a missing image or other non-text handout: this generator supports text handouts only. Do not demand cosmetic changes. When rejecting, put only concrete corrections that the generator can perform in feedback.',
+        ? 'Ти суворий редактор питань для гри «Що? Де? Коли?». Прийми кандидата лише якщо він відповідає запиту, фактично узгоджений, однозначно розв’язуваний із наведених підказок, не видає відповідь, звучить природно, не містить службового тексту, а коментар стисло й достатньо доводить правильність відповіді. Також відхили повтор тієї самої сутності, центрального факту, логіки чи суттєвої послідовності підказок, навіть іншими словами, та надмірне повторення типу або форми відповіді. Якщо кандидат містить imagePrompt, вважай його описом зображення, яке буде створено після схвалення; перевір, що опис виконує запит, не видає відповідь і не містить службового тексту. Не вимагай готового зображення або data URL. Не вимагай косметичних змін. Якщо відхиляєш, feedback має містити лише конкретні виправлення, які може виконати генератор.'
+        : 'You are a strict What? Where? When? question editor. Accept the candidate only when it follows the request, is factually coherent, has one supportable answer derivable from sufficient clues, does not reveal the answer, reads naturally, contains no internal construction text, and has a concise answer comment that sufficiently establishes why the answer is correct. Also reject repetition of the same entity, central fact, logic, or material clue sequence even with different wording, and excessive repetition of an answer type or form. When a candidate has imagePrompt, treat it as the image description that will be generated after approval; verify that it follows the request, does not reveal the answer, and contains no internal text. Do not demand a finished image or data URL. Do not demand cosmetic changes. When rejecting, put only concrete corrections that the generator can perform in feedback.',
     prompt: `${locale === 'uk' ? 'Запит на генерацію' : 'Generation request'}: ${generationRequest}
 
 ${locale === 'uk' ? 'Використані відповіді' : 'Used answers'}: ${JSON.stringify(excludedAnswers)}
