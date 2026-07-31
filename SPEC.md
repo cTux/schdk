@@ -88,6 +88,7 @@ V45|When one structured OpenAI question response requests an image, OpenAI gener
 V46|Browser OAuth tokens remain memory-only, while desktop refresh credentials remain encrypted, scope-validated, and removed after invalidation.
 V47|The hosted OAuth landing surface identifies SCHDK and its purpose in crawler-readable HTML and links a same-domain privacy policy that accurately discloses Google user-data handling.
 V48|Autosave never overwrites a Drive package modified since the editor opened or last saved it.
+V49|The hosted browser renders a themed login fallback before its JavaScript bundle executes.
 
 ## §T
 
@@ -210,3 +211,4 @@ B109|2026-07-31|Browser OAuth persisted bearer tokens in session storage and des
 B110|2026-07-31|The OAuth landing page kept its product name and purpose only in client-rendered content, so Google's branding crawler saw the obsolete static title and no purpose|V47
 B111|2026-07-31|Intrinsic-width question tooltips and editor headings expanded the 320-pixel page overflow area|Constrain narrow tooltips and allow editor headings to shrink; the existing 320-pixel browser smoke test covers recurrence.
 B112|2026-07-31|Package autosave updated Drive by file ID without checking whether another client had modified the file|V48
+B113|2026-07-31|The static browser fallback used unstyled default HTML before the application bundle loaded|V49
