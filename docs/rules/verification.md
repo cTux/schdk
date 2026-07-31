@@ -36,5 +36,7 @@
   `codex/` branch, commit all verified task changes, push the branch to `origin`,
   and create a GitHub pull request. Preserve unrelated user changes, confirm the
   worktree is clean, and keep changes local only when the user explicitly asks.
+  When the current session changes code, end the prompt response with a link to
+  the pull request.
 - Visually smoke-test changed UI in a real browser. Build the affected Electron
   package for preload, main-process, packaging, icon, or web-resource changes.

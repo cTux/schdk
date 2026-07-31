@@ -23,6 +23,7 @@ description: Handle SCHDK work spanning packages or lacking a narrower skill, in
 6. Run `$schdk-sync-specs`, then `$schdk-quality`.
 7. After every prompt that changes repository files, stage and commit all task changes once verified; preserve unrelated changes and confirm the worktree is clean.
    Follow the push and pull-request workflow in `docs/rules/verification.md`.
+   When the current session changes code, end the prompt response with the pull-request link.
 
 ## Route Specialized Work
 
