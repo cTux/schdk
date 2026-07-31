@@ -16,7 +16,7 @@
     "package": "electron-builder --dir",
     "package:win": "node scripts/prepare-google-oauth-client.mjs && electron-builder --win --x64",
     "package:linux": "node scripts/prepare-google-oauth-client.mjs && electron-builder --linux --x64",
-    "lint": "oxlint -c ../../.oxlintrc.json electron",
+    "lint": "oxlint -c ../../.oxlintrc.json src",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },

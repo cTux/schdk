@@ -14,8 +14,11 @@ import {
   disconnectGoogleDrive,
   getGoogleDriveAccessToken,
   getGoogleDriveStatus,
-} from './google-drive-auth.js';
-import { loadAiApiKey, saveAiApiKey } from './ai-credentials.js';
+} from '../../services/google-drive/google-drive-auth.js';
+import {
+  loadAiApiKey,
+  saveAiApiKey,
+} from '../../services/ai-credentials/ai-credentials.js';
 
 const client = new GoogleDriveClient(getGoogleDriveAccessToken);
 

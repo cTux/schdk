@@ -94,7 +94,7 @@ async function showPresenterNotes(mainWindow: BrowserWindow | null) {
       contextIsolation: true,
       devTools: !app.isPackaged,
       preload: fileURLToPath(
-        new URL('./presenter-preload.cjs', import.meta.url),
+        new URL('../../../presenter-preload.cjs', import.meta.url),
       ),
     },
   });
