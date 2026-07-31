@@ -1,5 +1,5 @@
 import { type GameQuestion } from '@schdk/common';
-import type { QuestionDatabaseRow } from '../../shell/QuestionDatabasePage';
+import type { QuestionDatabaseRow } from '../../question-database';
 import type { AiQuestionGenerationOptions } from '../types';
 
 export interface QuestionEditorProps {

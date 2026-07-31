@@ -9,7 +9,7 @@ import {
   searchQuestionDatabaseRows,
   sortQuestionDatabaseRows,
   type QuestionDatabaseSort,
-} from '../../shell/QuestionDatabaseTable';
+} from '../../question-database';
 import { QuestionGenerationDialog } from '../QuestionGenerationDialog';
 import { type QuestionEditorHeaderProps } from './question-editor-header-props';
 

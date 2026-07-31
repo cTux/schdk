@@ -9,7 +9,8 @@
 - `@schdk/ai` owns provider setup, localized generation prompts, structured
   response validation, and conversion to the canonical game-question type.
 - `@schdk/ui` owns components, composed views, styles, design tokens, UI
-  assets, Ukrainian/English application copy and locale context, and UI rules.
+  assets, shared question-database presentation, Ukrainian/English application
+  copy and locale context, and UI rules.
   Its detailed rules live in
   [`packages/ui/README.md`](../../packages/ui/README.md).
 - `@schdk/web` is the only browser application package. It owns shell

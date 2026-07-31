@@ -14,4 +14,6 @@ description: Enforce SCHDK package, source, component, and export structure. Use
    readable-condition rules only to new or touched structural scope.
 4. For UI components, also read `packages/ui/README.md` and verify Storybook
    discovery when exports or props change.
+   Keep cross-area UI features under a neutral subject owner instead of one
+   consumer's directory.
 5. Run `$schdk-quality` for the affected package and consumers.

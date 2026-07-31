@@ -70,6 +70,8 @@ directions in [architecture.md](architecture.md).
 
 ## UI components
 
+- Put a UI feature shared by multiple application areas under its neutral
+  subject area instead of nesting it under one consumer.
 - Put each new or structurally changed component in its own
   `packages/ui/src/<area>/<ComponentName>/` directory.
 - Include `ComponentName.tsx`, `types.ts`, and `index.ts`. Add `styles.scss`
