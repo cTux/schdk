@@ -13,12 +13,13 @@ const shellCopy = {
       'Create, edit, and host What? Where? When? question packages with Google Drive autosave and optional AI-assisted authoring.',
     loginAction: 'Continue with Google',
     privacyPolicy: 'Privacy policy',
-    homeTitle: 'Everything for the game in one place',
+    homeTitle: 'Getting started',
     homeDescription:
-      'Set up the layout in the visual editor, then create a question package, then start the game.',
+      'Follow the tools in order: prepare questions and visuals, assemble a package, then host the game.',
     home: {
-      label: 'Home',
-      description: 'Tools for preparing and hosting a game.',
+      label: 'Getting started',
+      description:
+        'The preparation and hosting workflow in chronological order.',
     },
     host: {
       label: 'Host a game',
@@ -57,12 +58,12 @@ const shellCopy = {
       'Створюйте, редагуйте та проводьте ігри «Що? Де? Коли?» з автозбереженням на Google Диску та необов’язковими інструментами ШІ.',
     loginAction: 'Продовжити з Google',
     privacyPolicy: 'Політика конфіденційності',
-    homeTitle: 'Усе для гри в одному місці',
+    homeTitle: 'З чого почати?',
     homeDescription:
-      'Налаштуйте макет у візуальному редакторі, потім створіть пакет питань, потім розпочніть гру.',
+      'Рухайтеся інструментами за порядком: підготуйте питання й оформлення, зберіть пакет, а потім проведіть гру.',
     home: {
-      label: 'Домашня',
-      description: 'Огляд інструментів для підготовки та проведення гри.',
+      label: 'З чого почати?',
+      description: 'Послідовність підготовки та проведення гри.',
     },
     host: {
       label: 'Провести гру',

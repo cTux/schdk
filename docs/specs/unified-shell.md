@@ -9,10 +9,12 @@ package authoring, hosting, settings, and account state.
 
 ## Requirements
 
-- **SHL-1:** Fixed navigation groups Question database, Visual editor, Question
-  creation rules, Package creation rules, Dictionaries, Edit question
-  packages, and Host a game under SCHDK, in that order, with Settings at the
-  bottom. The Ukrainian
+- **SHL-1:** Getting started is the first shell page. It presents the SCHDK
+  tools in their chronological sidebar order, from content preparation through
+  package editing to hosting. Fixed navigation groups Question database,
+  Visual editor, Question creation rules, Package creation rules, Dictionaries,
+  Edit question packages, and Host a game under SCHDK, in that order, with
+  Settings at the bottom. The Ukrainian
   question-rules label is
   `Правила створення питань`.
 - **SHL-2:** Every navigable page chunk loads lazily on first selection and
@@ -122,9 +124,10 @@ package authoring, hosting, settings, and account state.
   labels, flat active navigation, a plain workspace, and borderless major
   surfaces without decorative gradients, glows, or glass effects. Borders stay
   on controls and structural delimiters, including editor question numbers.
-- **SHL-23:** Every shell page except Home uses the shared `Page` layout with a
-  localized back `IconButton`, page title, description, and page content. Home
-  has only its title and description in the header and no back button. Visual
+- **SHL-23:** Every shell page except Getting started uses the shared `Page`
+  layout with a localized back `IconButton`, page title, description, and page
+  content. Home is the Getting started page; it has only its title and
+  description in the header and no back button. Visual
   editor is the only page without a shared page header and fills the complete
   available workspace area. All shared page headers use the same compact title
   sizing and title-description spacing. Package editor and game-hosting actions
@@ -145,8 +148,10 @@ package authoring, hosting, settings, and account state.
 
 ## Acceptance
 
-1. Deep-link to every shell page and primary settings group, then use browser
-   history to restore prior pages and groups.
+1. Open the shell and confirm Getting started appears first with its tool cards
+   in the same chronological order as the sidebar. Deep-link to every shell
+   page and primary settings group, then use browser history to restore prior
+   pages and groups.
 2. Switch locale and theme, reload, and observe the same selection on every
    mounted surface.
 3. Navigate away from an in-progress editor and game, return, and observe
