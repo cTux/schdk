@@ -90,6 +90,7 @@ V47|The hosted OAuth landing surface identifies SCHDK and its purpose in crawler
 V48|Autosave never overwrites a Drive package modified since the editor opened or last saved it.
 V49|The hosted browser renders a themed login fallback before its JavaScript bundle executes.
 V50|An open package editor replaces recents and exposes one page-header back action that returns to the package list.
+V51|Visual-editor background and custom images are bounded before reading and remain within the canonical encoded-image limit.
 
 ## §T
 

@@ -139,6 +139,10 @@ export function useVisualEditor(
   }
 
   function applyImage(dataUrl: string) {
+    if (dataUrl.length > MAX_CUSTOM_IMAGE_DATA_LENGTH) {
+      setLocalMessage(copy.visualEditor.imagesTooLarge);
+      return;
+    }
     if (imageTarget === 'background') {
       onChange({ ...game, backgroundImage: dataUrl });
       return;

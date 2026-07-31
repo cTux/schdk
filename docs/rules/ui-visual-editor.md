@@ -22,7 +22,9 @@
 - Clip overflow, keep the selected wrapper above others, and show its text or
   image controls in a fixed toolbar.
 - Select the game canvas by default and restore it with Escape. Its toolbar
-  owns the optional background image and opacity.
+  owns the optional background image and opacity. Reject background and custom
+  image files that cannot fit the canonical encoded-image limit before reading
+  them, then validate the generated embedded data URL.
 - Keep the add-elements rail permanently compact. Explain each icon with the
   shared tooltip on hover and focus. Keep add-element actions at the top and
   template import/export actions docked at the bottom. Support editable text

@@ -33,6 +33,9 @@ to every hosted question.
   larger than 16 MiB before allocating or extracting their content.
 - **VIS-13:** Custom text editing uses the shared non-resizable multiline
   control.
+- **VIS-14:** Background and custom-element image selection rejects files that
+  cannot fit the canonical 3 MiB encoded-image limit before reading them, and
+  validates the resulting embedded data URL before changing presentation.
 
 ## Invariants
 
@@ -57,3 +60,5 @@ to every hosted question.
    application.
 6. Edit a custom text element and confirm its multiline control matches other
    application text areas and has no native resize handle.
+7. Select an image that cannot fit the encoded-image limit and confirm the
+   editor rejects it before reading or changing presentation.

@@ -58,6 +58,12 @@ describe('visual editor image contract', () => {
     expect(
       normalizeGameOptions({
         ...DEFAULT_GAME_OPTIONS,
+        backgroundImage: `data:image/png;base64,${'A'.repeat(MAX_CUSTOM_IMAGE_DATA_LENGTH)}`,
+      }),
+    ).toBeNull();
+    expect(
+      normalizeGameOptions({
+        ...DEFAULT_GAME_OPTIONS,
         backgroundImage: 'data:image/png;base64,AA==',
       }),
     ).not.toBeNull();
