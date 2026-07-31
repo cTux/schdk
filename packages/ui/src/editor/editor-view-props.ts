@@ -23,6 +23,7 @@ export interface EditorViewProps {
   onAlternativeAnswerBlur(index: number): void;
   onWrongAnswerBlur(index: number): void;
   onBack(): void;
+  onExit(): void;
   onCopyQuestion(): void;
   onCreatePackage(): void;
   onDeletePackage(): void;

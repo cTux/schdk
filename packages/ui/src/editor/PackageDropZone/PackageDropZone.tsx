@@ -6,6 +6,7 @@ import { type PackageDropZoneProps } from './package-drop-zone-props';
 function PackageDropZone({
   disabled = false,
   hidden,
+  compact = false,
   onCreate,
   onOpen,
 }: PackageDropZoneProps) {
@@ -27,16 +28,8 @@ function PackageDropZone({
 
   return (
     <>
-      <section
-        className="package-drop-zone"
-        hidden={hidden}
-        aria-disabled={disabled}
-        onDragOver={(event) => event.preventDefault()}
-        onDrop={dropPackage}
-      >
-        <h2>{copy.editor.openPackage}</h2>
-        <p>{copy.editor.dropPackage}</p>
-        <div className="drop-actions">
+      {compact && (
+        <div className="package-actions">
           <Button
             type="button"
             disabled={disabled}
@@ -45,20 +38,51 @@ function PackageDropZone({
             {copy.shared.chooseFile}
           </Button>
           {onCreate && (
-            <>
-              <span>{copy.shared.or}</span>
-              <Button
-                variant="primary"
-                type="button"
-                disabled={disabled}
-                onClick={onCreate}
-              >
-                {copy.editor.newPackage}
-              </Button>
-            </>
+            <Button
+              variant="primary"
+              type="button"
+              disabled={disabled}
+              onClick={onCreate}
+            >
+              {copy.editor.newPackage}
+            </Button>
           )}
         </div>
-      </section>
+      )}
+      {!compact && (
+        <section
+          className="package-drop-zone"
+          hidden={hidden}
+          aria-disabled={disabled}
+          onDragOver={(event) => event.preventDefault()}
+          onDrop={dropPackage}
+        >
+          <h2>{copy.editor.openPackage}</h2>
+          <p>{copy.editor.dropPackage}</p>
+          <div className="drop-actions">
+            <Button
+              type="button"
+              disabled={disabled}
+              onClick={() => openFileInput.current?.click()}
+            >
+              {copy.shared.chooseFile}
+            </Button>
+            {onCreate && (
+              <>
+                <span>{copy.shared.or}</span>
+                <Button
+                  variant="primary"
+                  type="button"
+                  disabled={disabled}
+                  onClick={onCreate}
+                >
+                  {copy.editor.newPackage}
+                </Button>
+              </>
+            )}
+          </div>
+        </section>
+      )}
       <input
         ref={openFileInput}
         className="open-file-input"

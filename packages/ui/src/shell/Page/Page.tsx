@@ -9,6 +9,7 @@ import type { PageProps } from './types';
 function Page({
   children,
   className,
+  headerActions,
   headerContent,
   hidden,
   onBack,
@@ -32,6 +33,9 @@ function Page({
           <h1>{title}</h1>
           {headerContent}
         </div>
+        {headerActions && (
+          <div className="page-header-actions">{headerActions}</div>
+        )}
       </header>
       <div className="page-content">{children}</div>
     </section>

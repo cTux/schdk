@@ -18,6 +18,7 @@ export interface HostViewProps {
   recentPackages: RecentPackageItem[];
   recentPackagesLoading?: boolean;
   onBack(): void;
+  onExit?(): void;
   onDeleteRecentPackage?(recent: RecentPackageItem): void;
   onDownloadRecentPackage?(recent: RecentPackageItem): void;
   onGameBack(): void;

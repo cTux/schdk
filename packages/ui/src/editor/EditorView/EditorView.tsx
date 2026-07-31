@@ -7,9 +7,11 @@ import { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { StatusMessage } from '../../atoms/StatusMessage';
 import { TooltipProvider } from '../../atoms/Tooltip';
+import { Page } from '../../shell/Page';
 import { editorToastCopy } from '../../localization/editor-toast';
 import { useLocalization } from '../../localization';
 import { EditorHeader } from '../EditorHeader';
+import { PackageDropZone } from '../PackageDropZone';
 import { PackageStart } from '../PackageStart';
 import { QuestionEditor } from '../QuestionEditor';
 import { QuestionList } from '../QuestionList';
@@ -38,6 +40,7 @@ function EditorView({
   onAlternativeAnswerBlur,
   onWrongAnswerBlur,
   onBack,
+  onExit,
   onCopyQuestion,
   onCreatePackage,
   onDeletePackage,
@@ -55,7 +58,7 @@ function EditorView({
   onTourPhraseChange,
   onTitleChange,
 }: EditorViewProps) {
-  const { locale } = useLocalization();
+  const { copy, locale } = useLocalization();
   const toastCopy = editorToastCopy[locale];
   const [pendingGenerationIndexes, setPendingGenerationIndexes] = useState<
     number[]
@@ -110,88 +113,102 @@ function EditorView({
 
   return (
     <TooltipProvider>
-      <main
+      <Page
         className={classNames('editor-app', {
           'editor-app-package-generation':
             packageGenerationDocked || questionGenerationDocked,
         })}
+        title={copy.shell.editor.label}
+        headerContent={<p>{copy.shell.editor.description}</p>}
+        headerActions={
+          hasPackage ? (
+            <EditorHeader
+              hasPackage={hasPackage}
+              packageTitle={gamePackage.title}
+              saveStatus={saveStatus}
+              showValidation={showValidation}
+              onBack={onBack}
+              onDeletePackage={onDeletePackage}
+              onTitleChange={onTitleChange}
+              aiGeneration={aiGeneration}
+              gamePackage={gamePackage}
+              onQuestionGenerated={onQuestionGenerated}
+              onPackageGenerationStateChange={(pendingIndexes, docked) => {
+                setPendingGenerationIndexes(pendingIndexes);
+                setPackageGenerationDocked(docked);
+              }}
+              onSelectQuestion={onSelectQuestion}
+            />
+          ) : (
+            <PackageDropZone
+              compact
+              hidden={false}
+              onCreate={onCreatePackage}
+              onOpen={onOpenPackage}
+            />
+          )
+        }
+        onBack={onExit}
       >
-        <EditorHeader
-          hasPackage={hasPackage}
-          packageTitle={gamePackage.title}
-          saveStatus={saveStatus}
-          showValidation={showValidation}
-          onBack={onBack}
-          onDeletePackage={onDeletePackage}
-          onTitleChange={onTitleChange}
-          aiGeneration={aiGeneration}
-          gamePackage={gamePackage}
-          onQuestionGenerated={onQuestionGenerated}
-          onPackageGenerationStateChange={(pendingIndexes, docked) => {
-            setPendingGenerationIndexes(pendingIndexes);
-            setPackageGenerationDocked(docked);
-          }}
-          onSelectQuestion={onSelectQuestion}
-        />
-        <PackageStart
-          hidden={hasPackage}
-          openingRecentPackageId={openingRecentPackageId}
-          recentPackages={recentPackages}
-          recentPackagesLoading={recentPackagesLoading}
-          onCreatePackage={onCreatePackage}
-          onDeleteRecentPackage={onDeleteRecentPackage}
-          onDownloadRecentPackage={onDownloadRecentPackage}
-          onOpenPackage={onOpenPackage}
-          onOpenRecentPackage={onOpenRecentPackage}
-        />
-        <div className="editor-layout" hidden={!hasPackage}>
-          <QuestionList
-            gamePackage={gamePackage}
-            selectedIndex={selectedIndex}
-            showValidation={showValidation}
-            onSelectQuestion={onSelectQuestion}
-            onSwapQuestions={onSwapQuestions}
-            onTourPhraseChange={onTourPhraseChange}
-            onMusicBreakChange={onMusicBreakChange}
+        <main>
+          <PackageStart
+            hidden={false}
+            openingRecentPackageId={openingRecentPackageId}
+            recentPackages={recentPackages}
+            recentPackagesLoading={recentPackagesLoading}
+            onDeleteRecentPackage={onDeleteRecentPackage}
+            onDownloadRecentPackage={onDownloadRecentPackage}
+            onOpenRecentPackage={onOpenRecentPackage}
           />
-          <QuestionEditor
-            aiGeneration={questionGeneration}
-            disabled={
-              pendingGenerationIndexes.includes(selectedIndex) ||
-              pendingQuestionGenerationIndex === selectedIndex
-            }
-            question={gamePackage.questions[selectedIndex]!}
-            questionDatabaseRows={questionDatabaseRows}
-            selectedIndex={selectedIndex}
-            showValidation={showValidation}
-            onAddHandout={onAddHandout}
-            onChange={onQuestionChange}
-            onDatabaseQuestionSelect={onDatabaseQuestionSelect}
-            onGenerated={(question) =>
-              onQuestionGenerated(selectedIndex, question)
-            }
-            onAnswerBlur={onAnswerBlur}
-            onAnswerCommentBlur={onAnswerCommentBlur}
-            onAlternativeAnswerBlur={onAlternativeAnswerBlur}
-            onWrongAnswerBlur={onWrongAnswerBlur}
-            onCopy={onCopyQuestion}
-            onPaste={onPasteQuestion}
-            onSelectQuestion={onSelectQuestion}
-            onQuestionTextBlur={onQuestionTextBlur}
+          <div className="editor-layout" hidden={!hasPackage}>
+            <QuestionList
+              gamePackage={gamePackage}
+              selectedIndex={selectedIndex}
+              showValidation={showValidation}
+              onSelectQuestion={onSelectQuestion}
+              onSwapQuestions={onSwapQuestions}
+              onTourPhraseChange={onTourPhraseChange}
+              onMusicBreakChange={onMusicBreakChange}
+            />
+            <QuestionEditor
+              aiGeneration={questionGeneration}
+              disabled={
+                pendingGenerationIndexes.includes(selectedIndex) ||
+                pendingQuestionGenerationIndex === selectedIndex
+              }
+              question={gamePackage.questions[selectedIndex]!}
+              questionDatabaseRows={questionDatabaseRows}
+              selectedIndex={selectedIndex}
+              showValidation={showValidation}
+              onAddHandout={onAddHandout}
+              onChange={onQuestionChange}
+              onDatabaseQuestionSelect={onDatabaseQuestionSelect}
+              onGenerated={(question) =>
+                onQuestionGenerated(selectedIndex, question)
+              }
+              onAnswerBlur={onAnswerBlur}
+              onAnswerCommentBlur={onAnswerCommentBlur}
+              onAlternativeAnswerBlur={onAlternativeAnswerBlur}
+              onWrongAnswerBlur={onWrongAnswerBlur}
+              onCopy={onCopyQuestion}
+              onPaste={onPasteQuestion}
+              onSelectQuestion={onSelectQuestion}
+              onQuestionTextBlur={onQuestionTextBlur}
+            />
+          </div>
+          {message && <StatusMessage>{message}</StatusMessage>}
+          <ToastContainer
+            aria-label={toastCopy.notifications}
+            closeButton={false}
+            closeOnClick
+            limit={2}
+            newestOnTop
+            pauseOnHover
+            position="bottom-right"
+            toastClassName="editor-toast"
           />
-        </div>
-        {message && <StatusMessage>{message}</StatusMessage>}
-        <ToastContainer
-          aria-label={toastCopy.notifications}
-          closeButton={false}
-          closeOnClick
-          limit={2}
-          newestOnTop
-          pauseOnHover
-          position="bottom-right"
-          toastClassName="editor-toast"
-        />
-      </main>
+        </main>
+      </Page>
     </TooltipProvider>
   );
 }

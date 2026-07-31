@@ -29,6 +29,7 @@ function App({
   driveActive = false,
   sessionScope = window.location.pathname,
   onDriveFailure,
+  onExit,
 }: AppProps) {
   const { copy } = useLocalization();
   const { confirm, dialogProps } = useConfirmationDialog();
@@ -231,6 +232,7 @@ function App({
         recentPackages={recentPackages}
         recentPackagesLoading={recentPackagesLoading}
         onBack={clearPackage}
+        onExit={onExit ?? (() => undefined)}
         onDeleteRecentPackage={(recent) => void deleteRecentPackage(recent)}
         onGameBack={wizard.goBack}
         onGameNext={wizard.goNext}

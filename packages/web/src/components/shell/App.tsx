@@ -165,6 +165,7 @@ export function App() {
                   driveActive={connected}
                   manageDocumentTitle={false}
                   onDriveFailure={googleDrive.reportFailure}
+                  onExit={() => navigation.showView('home')}
                   questionDatabaseRows={questionDatabase.entries}
                   sessionScope={`${window.location.pathname}:${googleDrive.accountId}`}
                   textOptions={editorOptions}
@@ -182,6 +183,7 @@ export function App() {
                   driveActive={connected}
                   layout={gameOptions.layout}
                   onDriveFailure={googleDrive.reportFailure}
+                  onExit={() => navigation.showView('home')}
                   sessionScope={`${window.location.pathname}:${googleDrive.accountId}`}
                   soundVolume={gameOptions.soundVolume}
                   musicVolume={gameOptions.musicVolume}

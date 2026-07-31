@@ -1,4 +1,3 @@
-import { PackageDropZone } from '../PackageDropZone';
 import { RecentPackages } from '../RecentPackages';
 import { type PackageStartProps } from './package-start-props';
 
@@ -7,22 +6,12 @@ function PackageStart({
   openingRecentPackageId = null,
   recentPackages,
   recentPackagesLoading = false,
-  onCreatePackage,
   onDeleteRecentPackage,
   onDownloadRecentPackage,
-  onOpenPackage,
   onOpenRecentPackage,
 }: PackageStartProps) {
-  const busy = openingRecentPackageId !== null;
-
   return (
     <>
-      <PackageDropZone
-        disabled={busy}
-        hidden={hidden}
-        onCreate={onCreatePackage}
-        onOpen={onOpenPackage}
-      />
       <RecentPackages
         hidden={hidden}
         loading={recentPackagesLoading}

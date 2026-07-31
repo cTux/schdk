@@ -54,7 +54,7 @@ export interface ShellViewProps {
   hostApp: ReactNode;
   loadedViews: Partial<Record<ShellViewName, true>>;
   preloading: boolean;
-  questionDatabase: Omit<QuestionDatabasePageProps, 'hidden'>;
+  questionDatabase: Omit<QuestionDatabasePageProps, 'hidden' | 'onBack'>;
   editorOptions: EditorTextOptions;
   gameOptions: GameOptions;
   gameOptionsError: string;

@@ -32,6 +32,7 @@ function App({
   sessionScope = window.location.pathname,
   textOptions = DEFAULT_EDITOR_TEXT_OPTIONS,
   onDriveFailure,
+  onExit,
 }: AppProps = {}) {
   const { copy, locale } = useLocalization();
   const { confirm, dialogProps } = useConfirmationDialog();
@@ -205,6 +206,7 @@ function App({
         onAlternativeAnswerBlur={questions.correctAlternativeAnswer}
         onWrongAnswerBlur={questions.correctWrongAnswer}
         onBack={() => void packages.closePackage()}
+        onExit={onExit ?? (() => undefined)}
         onCopyQuestion={() => void questions.copyQuestion()}
         onCreatePackage={() => void packages.createPackage()}
         onDeletePackage={() => void packages.deletePackage(gamePackage.title)}
