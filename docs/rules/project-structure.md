@@ -3,6 +3,23 @@
 Keep packages under `packages/*` and preserve the ownership and dependency
 directions in [architecture.md](architecture.md).
 
+## Source roots
+
+- Keep each `src` root minimal. A library package may keep only its public
+  `index.ts` entry point there. A runnable application may additionally keep
+  build-required entry points such as `main.tsx` and ambient declaration files
+  such as `electron.d.ts`.
+- Put every other module under `src/<role>/<subject-area>/<file>`, choosing a
+  concrete role such as `components`, `constants`, `hooks`, `parsers`,
+  `services`, `storage`, `types`, `utils`, or `validators`.
+- Use the feature or data domain as the subject area, such as `game-packages`,
+  `google-drive`, or `shell`. Keep tests beside the owning subject area.
+- Do not use catch-all `common`, `misc`, or `shared` directories. When no
+  existing role fits, name the module by what it does instead of creating a
+  speculative abstraction.
+- Preserve a more specific established structure, such as the UI component
+  convention below, after files leave the `src` root.
+
 ## File size
 
 - Keep every tracked source-code file at 256 physical lines or fewer, including

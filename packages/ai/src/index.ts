@@ -3,10 +3,10 @@ import {
   type ExistingQuestionReference,
   type GameQuestionGenerationRequest,
   type GenerateGameQuestionInput,
-} from './game-question-prompt.js';
-import { isSupportedAiProvider } from './is-supported-ai-provider.js';
-import { generateGameQuestion } from './generate-game-question.js';
-import { SUPPORTED_AI_PROVIDER_IDS } from './supported-ai-provider-ids.js';
+} from './services/game-question-generation/game-question-prompt.js';
+import { isSupportedAiProvider } from './utils/ai-providers/is-supported-ai-provider.js';
+import { generateGameQuestion } from './services/game-question-generation/generate-game-question.js';
+import { SUPPORTED_AI_PROVIDER_IDS } from './constants/ai-providers/supported-ai-provider-ids.js';
 
 export {
   SUPPORTED_AI_PROVIDER_IDS,
