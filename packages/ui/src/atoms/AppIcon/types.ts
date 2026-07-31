@@ -1,1 +1,3 @@
-export type { AppIconProps } from './AppIcon';
+export interface AppIconProps {
+  className?: string;
+}
