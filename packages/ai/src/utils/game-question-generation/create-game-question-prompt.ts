@@ -6,8 +6,6 @@ export function createGameQuestionPrompt(input: GameQuestionGenerationRequest) {
   const difficulty = input.locale === 'uk' ? 'Складність' : 'Difficulty';
   const recognizability =
     input.locale === 'uk' ? 'Впізнаваність' : 'Recognizability';
-  const excludedAnswers =
-    input.locale === 'uk' ? 'Заборонені відповіді' : 'Forbidden answers';
   const prompt = [
     `${input.template.name}: ${input.template.description}`,
     input.template.goodExamples
@@ -19,9 +17,6 @@ export function createGameQuestionPrompt(input: GameQuestionGenerationRequest) {
     `${difficulty}: ${input.difficultyPrompt}`,
     `${recognizability}: ${input.recognizabilityPrompt}`,
     `${context}: ${input.context}`,
-    input.excludedAnswers.length
-      ? `${excludedAnswers} (${input.locale === 'uk' ? 'кожен рядок позначає вже використану сутність; обери іншу сутність, а не її синонім, псевдонім, переклад, уточнення чи описову назву; урізноманітнюй людей, місця, події, предмети, твори, поняття та форму відповідей' : 'each string denotes an already used entity; choose a different entity, not its synonym, alias, translation, qualification, or descriptive name; vary people, places, events, objects, works, concepts, and answer forms'}): ${JSON.stringify(input.excludedAnswers)}`
-      : '',
   ]
     .filter(Boolean)
     .join('\n\n');

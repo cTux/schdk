@@ -67,8 +67,9 @@
 - Keep a similarity-check toggle in both question and package generation
   panels. Default it to off each time the panel opens. When enabled, refresh
   the current account's question database, reject semantically similar
-  generated questions or answers, and regenerate once before reporting
-  failure.
+  generated questions with repeated central facts, logic, or clue sequences,
+  and regenerate once before reporting failure. An identical answer alone is
+  allowed.
 - Label optional fields. A non-empty unresolved remark keeps a question
   unfinished. Host notes contain only delivery instructions visible to the
   host while reading the question, such as pronunciation, omitted text,
@@ -89,8 +90,8 @@
 - In recents, show only the package title and fall back to the filename without
   `.schdk` for legacy entries. Show `Готовий` only when shared validation finds
   no missing fields or unresolved remarks. Show `Має зауваження` when any
-  question has an unresolved author remark. Show `Розробляється` when a package
-  is unfinished and has no unresolved remarks. Give every recent row separate
+  question has an unresolved author remark. Show `Має помилки` when a package
+  is not ready and has no unresolved remarks. Give every recent row separate
   icon-only download and red cloud-delete buttons with localized accessible
   names. Confirm deletion and move the package to Google Drive trash. While a
   recent package opens or deletes, animate that row and disable all other

@@ -208,7 +208,7 @@
   }
 
   .recent-package-ready,
-  .recent-package-developing,
+  .recent-package-errors,
   .recent-package-remarks {
     flex: 0 0 auto;
     border-radius: 999px;
@@ -223,10 +223,10 @@
     color: $success;
   }
 
-  .recent-package-developing {
-    border: 1px solid rgba($accent-rgb, 0.45);
-    background: rgba($accent-rgb, 0.12);
-    color: $accent;
+  .recent-package-errors {
+    border: 1px solid rgba($danger-rgb, 0.45);
+    background: rgba($danger-rgb, 0.12);
+    color: $danger-text;
   }
 
   .recent-package-remarks {
