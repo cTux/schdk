@@ -11,7 +11,12 @@
 
   .editor-toast {
     border: 1px solid $border;
+    margin-bottom: 0;
     color: $text;
     backdrop-filter: blur(16px);
+  }
+
+  .editor-toast + .editor-toast {
+    margin-top: var(--toastify-toast-offset);
   }
 }

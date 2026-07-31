@@ -32,8 +32,9 @@ without losing in-progress work.
   field of the selected question from its red trailing action. `Ctrl+C` and
   `Ctrl+V` invoke the same copy and paste actions while the editor is open and
   no editable field has focus. A successful copy or paste shows a localized
-  toast using the active application palette for two seconds; cancellation or
-  failure does not.
+  toast fixed to the viewport's bottom-right corner with equal right and bottom
+  spacing, using the active application palette for two seconds; cancellation
+  or failure does not.
 - **EDT-6:** Dragging one question number onto another swaps the complete
   question records and keeps the moved question selected.
 - **EDT-7:** Question navigation shows readiness, unresolved remarks, and a
@@ -135,8 +136,10 @@ without losing in-progress work.
   generation and the current target while generation advances.
 - **EDT-19:** Successful package creation, import, recent opening, current
   autosave, explicit download, and confirmed deletion show a localized toast
-  using the active application palette for two seconds. Canceled or failed
-  actions and stale writes completed before newer edits show no success toast.
+  fixed to the viewport's bottom-right corner with equal right and bottom
+  spacing, using the active application palette for two seconds. Canceled or
+  failed actions and stale writes completed before newer edits show no success
+  toast.
 - **EDT-20:** Each question target sends one structured text-generation request
   and replaces the target with the complete parsed result without a subsequent
   editorial, answer, or similarity-review request and without retrying a
@@ -244,14 +247,17 @@ without losing in-progress work.
 13. Clear a populated question from its trailing heading action, then use
     `Ctrl+C` and `Ctrl+V` anywhere in the open editor and observe the same copy
     and confirmed paste behavior as the heading actions. Confirm each
-    successful action shows its matching localized toast in the active theme
-    for two seconds and cancellation or failure shows none. Focus each editable
-    field and confirm the shortcuts keep the browser's native field-level copy
-    and paste behavior instead.
+    successful action shows its matching localized toast fixed to the
+    viewport's bottom-right corner with equal right and bottom spacing in the
+    active theme for two seconds and cancellation or failure shows none. Focus
+    each editable field and confirm the shortcuts keep the browser's native
+    field-level copy and paste behavior instead.
 14. Create, import, reopen, edit, download, and delete packages and confirm
-    each completed action shows its matching localized toast for two seconds.
-    Cancel the desktop download, fail an action, and complete a stale autosave
-    while a newer edit remains pending; confirm none shows a success toast.
+    each completed action shows its matching localized toast fixed to the
+    viewport's bottom-right corner with equal right and bottom spacing for two
+    seconds. Cancel the desktop download, fail an action, and complete a stale
+    autosave while a newer edit remains pending; confirm none shows a success
+    toast.
 15. Generate one question and a complete package whose existing slots already
     contain answers. Confirm each target sends one structured text-generation
     request, accepts its complete parsed result without review or retry, and

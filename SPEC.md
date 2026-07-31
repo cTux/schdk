@@ -213,3 +213,5 @@ B111|2026-07-31|Intrinsic-width question tooltips and editor headings expanded t
 B112|2026-07-31|Package autosave updated Drive by file ID without checking whether another client had modified the file|V48
 B113|2026-07-31|The static browser fallback used unstyled default HTML before the application bundle loaded|V49
 B114|2026-07-31|The editor's broad paragraph reset removed the shared page-header description margin only from editor and host pages|Keep compact title-description spacing in the shared `Page` contract.
+B115|2026-07-31|The retained page-entry transform positioned fixed editor toasts against the animated page, while their bottom margin made the viewport edge spacing uneven|Release the transform after entry, remove the extra bottom margin, and preserve spacing between stacked toasts; `docs/specs/package-editor.md` covers recurrence.
+B116|2026-07-31|The first toast-spacing refinement targeted React-Toastify's vendor BEM class and violated the repository selector convention|Use the existing kebab-case editor toast class and an adjacent-sibling selector; Stylelint covers recurrence.
