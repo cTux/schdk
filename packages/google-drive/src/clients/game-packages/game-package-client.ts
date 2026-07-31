@@ -12,6 +12,7 @@ import {
   type DrivePackageStorage,
 } from '../../services/game-packages/game-packages.js';
 import { isDriveFileId } from '../../services/settings/settings.js';
+import { createDriveMultipartBody } from '../../utils/client/create-drive-multipart-body.js';
 
 const DRIVE_API = 'https://www.googleapis.com/drive/v3';
 const DRIVE_UPLOAD_API = 'https://www.googleapis.com/upload/drive/v3';
@@ -148,22 +149,17 @@ export class GoogleDrivePackageStorage implements DrivePackageStorage {
       },
       ...(fileId ? {} : { parents: [await this.ensurePackageFolder()] }),
     };
-    const boundary = `schdk-${crypto.randomUUID()}`;
-    const body = new Blob([
-      `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n`,
-      JSON.stringify(metadata),
-      `\r\n--${boundary}\r\nContent-Type: ${DRIVE_PACKAGE_MIME_TYPE}\r\n\r\n`,
+    const { body, contentType } = createDriveMultipartBody(
+      metadata,
+      DRIVE_PACKAGE_MIME_TYPE,
       new Uint8Array(gamePackage.content),
-      `\r\n--${boundary}--`,
-    ]);
+    );
     const target = fileId
       ? `${DRIVE_UPLOAD_API}/files/${encodeURIComponent(fileId)}?uploadType=multipart&fields=id,name,description,modifiedTime,appProperties`
       : `${DRIVE_UPLOAD_API}/files?uploadType=multipart&fields=id,name,description,modifiedTime,appProperties`;
     const response = await this.request(target, {
       method: fileId ? 'PATCH' : 'POST',
-      headers: {
-        'Content-Type': `multipart/related; boundary=${boundary}`,
-      },
+      headers: { 'Content-Type': contentType },
       body,
     });
     const file = parseDriveGamePackageFile(await response.json());

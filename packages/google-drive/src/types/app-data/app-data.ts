@@ -1,4 +1,5 @@
 import { isDriveFileId } from '../../services/settings/settings.js';
+import { createDriveMultipartBody } from '../../utils/client/create-drive-multipart-body.js';
 
 const DRIVE_API = 'https://www.googleapis.com/drive/v3';
 const DRIVE_UPLOAD_API = 'https://www.googleapis.com/upload/drive/v3';
@@ -24,22 +25,17 @@ export class GoogleDriveAppData {
   async save(name: string, value: unknown): Promise<void> {
     const file = await this.find(name);
     const metadata = file ? { name } : { name, parents: ['appDataFolder'] };
-    const boundary = `schdk-${crypto.randomUUID()}`;
-    const body = new Blob([
-      `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n`,
-      JSON.stringify(metadata),
-      `\r\n--${boundary}\r\nContent-Type: application/json\r\n\r\n`,
+    const { body, contentType } = createDriveMultipartBody(
+      metadata,
+      'application/json',
       JSON.stringify(value),
-      `\r\n--${boundary}--`,
-    ]);
+    );
     const target = file
       ? `${DRIVE_UPLOAD_API}/files/${encodeURIComponent(file.id)}?uploadType=multipart`
       : `${DRIVE_UPLOAD_API}/files?uploadType=multipart`;
     await this.request(target, {
       method: file ? 'PATCH' : 'POST',
-      headers: {
-        'Content-Type': `multipart/related; boundary=${boundary}`,
-      },
+      headers: { 'Content-Type': contentType },
       body,
     });
   }
