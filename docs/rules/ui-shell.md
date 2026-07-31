@@ -1,6 +1,9 @@
 # Shell UI
 
 - Keep the sidebar fixed while application content scrolls.
+- Keep `Getting started` above the `SCHDK` group as the first shell page. Its
+  tool cards follow the same chronological order as the sidebar: from content
+  preparation through package editing to hosting.
 - Group, in this order, `База питань`, `Візуальний редактор`,
   `Правила створення питань`, `Правила створення пакету`,
   `Словники технічних термінів`, `Редагувати пакети питань`, and `Провести гру` under `ЩДК`. Keep
