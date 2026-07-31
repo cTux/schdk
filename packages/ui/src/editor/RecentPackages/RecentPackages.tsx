@@ -1,4 +1,3 @@
-import { useLocalization } from '../../localization';
 import { RecentPackageButton } from '../RecentPackageButton';
 import { type RecentPackagesProps } from './recent-packages-props';
 
@@ -11,14 +10,10 @@ function RecentPackages({
   onDownload,
   onOpen,
 }: RecentPackagesProps) {
-  const { copy } = useLocalization();
   if (!loading && packages.length === 0) return null;
 
   return (
     <section className="recent-packages" hidden={hidden} aria-busy={loading}>
-      <div className="recent-packages-heading">
-        <h2>{copy.shared.recentPackages}</h2>
-      </div>
       <div className="recent-package-list">
         {loading
           ? Array.from({ length: 3 }, (_, index) => (
