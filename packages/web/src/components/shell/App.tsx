@@ -62,12 +62,7 @@ export function App() {
     accountId,
   );
   const { ai, aiQuestions, aiQuestionsPackages, aiGeneration, dictionaries } =
-    useAiQuestionTools(
-      googleDrive.bridge ?? null,
-      connection,
-      locale,
-      questionDatabase,
-    );
+    useAiQuestionTools(googleDrive.bridge ?? null, connection, locale);
   const preloading =
     connected &&
     (questionDatabase.loading ||

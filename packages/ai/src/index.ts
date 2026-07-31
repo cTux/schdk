@@ -1,6 +1,5 @@
 import {
   createGameQuestionPrompt,
-  type ExistingQuestionReference,
   type GameQuestionGenerationRequest,
   type GenerateGameQuestionInput,
 } from './services/game-question-generation/game-question-prompt.js';
@@ -13,7 +12,6 @@ export {
   isSupportedAiProvider,
   generateGameQuestion,
   createGameQuestionPrompt,
-  type ExistingQuestionReference,
   type GameQuestionGenerationRequest,
   type GenerateGameQuestionInput,
 };

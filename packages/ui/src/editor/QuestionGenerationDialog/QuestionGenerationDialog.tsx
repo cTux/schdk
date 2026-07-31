@@ -13,7 +13,6 @@ import { IconButton } from '../../atoms/IconButton';
 import { TextAreaField } from '../../atoms/TextAreaField';
 import { Textarea } from '../../atoms/Textarea';
 import { useLocalization } from '../../localization';
-import { QuestionDatabaseCheck } from '../QuestionDatabaseCheck';
 import { dockedGenerationViewportClassName } from '../docked-generation-viewport-class-name';
 import type { QuestionGenerationDialogProps } from './types';
 import { useQuestionGeneration } from './use-question-generation';
@@ -44,7 +43,6 @@ export function QuestionGenerationDialog({
     onGenerated,
   });
   const {
-    checkQuestionDatabase,
     context,
     difficulty,
     failed,
@@ -54,7 +52,6 @@ export function QuestionGenerationDialog({
     recognizability,
     reset,
     selectedTemplate,
-    setCheckQuestionDatabase,
     setContext,
     setDifficulty,
     setPromptOpen,
@@ -181,12 +178,6 @@ export function QuestionGenerationDialog({
                     value={context}
                     disabled={thinking}
                     onValueChange={setContext}
-                  />
-                  <QuestionDatabaseCheck
-                    checked={checkQuestionDatabase}
-                    disabled={thinking}
-                    label={copy.questionGeneration.checkDatabase}
-                    onChange={setCheckQuestionDatabase}
                   />
                   {failed && (
                     <p className="question-generation-error" role="alert">

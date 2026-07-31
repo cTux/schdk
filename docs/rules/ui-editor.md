@@ -64,12 +64,10 @@
 - Put a red cloud-delete button after package generation in the editable
   package-title row. Confirm it before moving the active package to Google Drive
   trash and returning to the package list.
-- Keep a similarity-check toggle in both question and package generation
-  panels. Default it to off each time the panel opens. When enabled, refresh
-  the current account's question database, reject semantically similar
-  generated questions with repeated central facts, logic, or clue sequences,
-  and regenerate once before reporting failure. An identical answer alone is
-  allowed.
+- Keep database similarity checking out of question and package generation.
+  Each target uses one structured text-provider request without sending the
+  generated candidate for review or retry; personal database search remains a
+  separate author action.
 - Label optional fields. A non-empty unresolved remark keeps a question
   unfinished. Host notes contain only delivery instructions visible to the
   host while reading the question, such as pronunciation, omitted text,

@@ -4,7 +4,6 @@ import { Dropdown } from '../../atoms/Dropdown';
 import { Input } from '../../atoms/Input';
 import { useLocalization } from '../../localization';
 import type { PackageGenerationRuleSet } from '../PackageGenerationDialog/utils/generation-input';
-import { QuestionDatabaseCheck } from '../QuestionDatabaseCheck';
 import type { PackageGenerationOptionsProps } from './types';
 
 import './styles.scss';
@@ -23,8 +22,6 @@ export function PackageGenerationOptions({
   selected,
   hasTargets,
   thinking,
-  checkQuestionDatabase,
-  onCheckQuestionDatabaseChange,
   onCancel,
   onDifficultyPercentageChange,
   onRecognizabilityChange,
@@ -162,12 +159,6 @@ export function PackageGenerationOptions({
             : copy.packageGeneration.nothingCommented}
         </p>
       )}
-      <QuestionDatabaseCheck
-        checked={checkQuestionDatabase}
-        disabled={thinking}
-        label={copy.packageGeneration.checkDatabase}
-        onChange={onCheckQuestionDatabaseChange}
-      />
       {progress && (
         <div className="question-generation-progress" role="status">
           <span>{copy.packageGeneration.progress(...progress)}</span>

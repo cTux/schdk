@@ -67,11 +67,11 @@ V24|At most one global AI question rule is marked as general, only an allowliste
 V25|Only an allowlisted administrator can preview the exact system and user prompt text used for AI question generation.
 V26|Every personal AI question package is parsed from its own `.aiquestionpackage` ZIP archive before use and persisted through the current account's Google Drive folder.
 V27|A ready package never reuses a normalized main or alternative answer across questions; AI generation may create such duplicates for author review.
-V28|Every AI-generated candidate undergoes editorial quality review and semantic review for repeated central facts, logic, or clue sequences before replacing editor state; an identical answer alone is allowed.
+V28|Each AI question target uses one structured text-provider request and never sends the generated candidate for editorial or similarity review or retry.
 V29|Editing an existing question kind or package-creation rule occupies a dedicated deep-linkable shell page restored by reload and browser history.
 V30|Web and desktop clients surface a newer published application version within one minute without granting the renderer generic network or navigation access.
 V31|Question-database rows derive only from parsed packages owned by the connected account and never become canonical package data.
-V32|Question-database similarity checking defaults off; when enabled, a generated question with repeated central facts, logic, or clue sequences is rejected and regenerated once before failure, while an identical answer alone is allowed.
+V32|Question generation never sends personal question-database content to an AI provider; the database remains available for author-driven search.
 V33|Host notes contain only delivery instructions visible while the host reads a question and never contain answer-review or quality-analysis notes.
 V34|AI package regeneration of remarked questions includes the current question and author remark and clears the remark only after successful replacement.
 V35|Selecting a personal-database result loads the complete canonical source question and never replaces a populated editor slot without explicit confirmation.
@@ -84,7 +84,7 @@ V41|Every game-package payload crossing Drive or desktop IPC is parsed before Dr
 V42|Image handout selection is bounded before reading and cannot leave the editor with an unserializable package.
 V43|A replacement global general rule is persisted before the previous general rule is cleared.
 V44|Every shared generation dictionary is parsed from its `.schdk-dictionary` ZIP archive, remains folder-scoped and admin-writable, and supplies both dropdown labels and provider prompt fragments.
-V45|AI review validates an image request through its generation description, and OpenAI generates and canonically parses the bounded embedded image only after the question passes review.
+V45|When one structured OpenAI question response requests an image, OpenAI generates and canonically parses the bounded embedded image without a text-review request.
 V46|Browser OAuth tokens remain memory-only, while desktop refresh credentials remain encrypted, scope-validated, and removed after invalidation.
 
 ## §T

@@ -58,7 +58,6 @@ function usePackageGeneration({
   const [excludedAnswers, setExcludedAnswers] = useState<string[]>([]);
   const [currentInput, setCurrentInput] =
     useState<gen.PackageGenerationInput | null>(null);
-  const [checkQuestionDatabase, setCheckQuestionDatabase] = useState(false);
   const generationId = useRef(0);
   const activePackages = packages
     .filter((item) => item.enabled)
@@ -92,7 +91,6 @@ function usePackageGeneration({
     setPromptOpen(false);
     setExcludedAnswers([]);
     setCurrentInput(null);
-    setCheckQuestionDatabase(false);
     onGenerationStateChange([], false);
   }
 
@@ -127,7 +125,7 @@ function usePackageGeneration({
     setFailed(false);
     onSelectQuestion(targets[0]!);
     try {
-      await onGenerationStart?.(checkQuestionDatabase);
+      await onGenerationStart?.();
       if (currentGenerationId !== generationId.current) return;
       const usedAnswers = [...initialExcludedAnswers];
       for (const [position, index] of targets.entries()) {
@@ -149,7 +147,6 @@ function usePackageGeneration({
           input.context,
           usedAnswers,
           difficulty,
-          checkQuestionDatabase,
           recognizability,
         );
         if (currentGenerationId !== generationId.current) return;
@@ -175,7 +172,6 @@ function usePackageGeneration({
     activePackages,
     cancel,
     cancelDialogProps: cancelDialog.dialogProps,
-    checkQuestionDatabase,
     currentDifficulty,
     difficultyDistribution,
     excludedAnswers,
@@ -192,7 +188,6 @@ function usePackageGeneration({
     ruleSet,
     scope,
     selected,
-    setCheckQuestionDatabase,
     setCurrentInput,
     setDifficultyDistribution,
     setPromptOpen,

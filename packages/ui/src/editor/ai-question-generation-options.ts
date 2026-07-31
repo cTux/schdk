@@ -13,7 +13,7 @@ export interface AiQuestionGenerationOptions {
   packages: AIQuestionsPackage[];
   difficulties: SchdkDictionaryItem[];
   recognizabilities: SchdkDictionaryItem[];
-  onGenerationStart?(checkQuestionDatabase?: boolean): Promise<void>;
+  onGenerationStart?(): Promise<void>;
   getPromptPreview?(
     template: AIQuestion,
     context: string,
@@ -26,7 +26,6 @@ export interface AiQuestionGenerationOptions {
     context: string,
     excludedAnswers?: string[],
     difficulty?: AIQuestionDifficulty,
-    checkQuestionDatabase?: boolean,
     recognizability?: AIQuestionRecognizability,
   ): Promise<GameQuestion>;
   onQuestionGenerationStateChange?(generating: boolean, docked: boolean): void;

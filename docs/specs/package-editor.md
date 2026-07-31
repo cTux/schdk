@@ -138,26 +138,18 @@ without losing in-progress work.
   autosave, explicit download, and confirmed deletion show a localized toast
   using the active application palette for two seconds. Canceled or failed
   actions and stale writes completed before newer edits show no success toast.
-- **EDT-20:** AI generation allows the same normalized answer as another
-  package or database question. Every candidate undergoes a structured
-  provider review that rejects materially incorrect, ambiguous, underclued,
-  answer-leaking, unnatural, or instruction-violating questions; insufficient
-  answer explanations; and repetition of a central fact, logic, or material
-  clue sequence. The rejected candidate and the reviewer's actionable feedback
-  are supplied to one retry. The reviewer validates a requested image handout
-  through its generation description without requiring image bytes. After an
-  OpenAI candidate passes review, its image is generated once, bounded to the
-  editor's handout size limit, embedded in the question, and parsed through the
-  canonical question contract. Other providers fail an image-handout request
-  rather than returning an incomplete question. A second rejection fails
-  without replacing the target question.
-- **EDT-21:** Question and package generation panels each show a similarity
-  checkbox inline with its label that resets to off whenever the panel closes.
-  When enabled, generation
-  refreshes the connected account's question database, shortlists lexically
-  related questions, asks the selected provider to reject repeated central
-  facts, logic, or material clue sequences while allowing an identical answer
-  alone, and regenerates one rejected draft before failing.
+- **EDT-20:** Each question target sends one structured text-generation request
+  and replaces the target with the complete parsed result without a subsequent
+  editorial, answer, or similarity-review request and without retrying a
+  rejected draft. If that one OpenAI response requests an image handout, the
+  image is generated once, bounded to the editor's handout size limit, embedded
+  in the question, and parsed through the canonical question contract. Other
+  providers fail an image-handout request rather than returning an incomplete
+  question.
+- **EDT-21:** Question and package generation panels do not offer database
+  similarity checking. Generation never sends personal question-database
+  content to the selected provider; authors use the separate database search
+  to review or reuse existing questions.
 - **EDT-22:** The editable package-title row ends with a red delete action
   after package generation. After confirmation it moves the active Drive
   package to trash, clears the editor state, returns to the package list, and
@@ -257,21 +249,18 @@ without losing in-progress work.
     Cancel the desktop download, fail an action, and complete a stale autosave
     while a newer edit remains pending; confirm none shows a success toast.
 15. Generate one question and a complete package whose existing slots already
-    contain answers. Return an exact duplicate answer with a distinct question
-    and confirm generation accepts it while shared package validation keeps the
-    package unready. Return a repeated central fact or clue sequence, an
-    ambiguous or underclued question, and an unsupported answer explanation;
-    confirm each is rejected with its candidate and actionable feedback
-    supplied to one retry, and a second rejection leaves its target unchanged.
+    contain answers. Confirm each target sends one structured text-generation
+    request, accepts its complete parsed result without review or retry, and
+    does not send personal question-database content to the provider. Return an
+    exact duplicate answer with a distinct question and confirm generation
+    accepts it while shared package validation keeps the package unready.
 16. Open each generation panel and confirm it is a full-height right dock with
     the left navigation's chrome, no blocking backdrop, and an editor that
     remains centered with equal left and right spacing and stays interactive.
     Confirm its compact database checkbox stays on the same row as its label and
     defaults off.
-    Enable it, return an answer already present in another indexed package with
-    a distinct question and confirm it is accepted. Then return a paraphrased
-    question with the same central logic and confirm it is rejected and
-    regenerated once. Close and reopen the panel and confirm the toggle is off.
+    Confirm neither panel offers a database-similarity toggle and personal
+    question-database search remains available separately.
 17. Inspect the selected-question clear action and active-package delete action
     and confirm both use the shared red danger treatment. Delete the active
     package, confirm the dialog, and observe it disappear from Drive recents as

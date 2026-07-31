@@ -4,7 +4,6 @@ import {
 } from '@schdk/common';
 import { type GenerateGameQuestionInput } from '../../types/game-question-generation/generate-game-question-input.js';
 import { type GameQuestionGenerationRequest } from '../../types/game-question-generation/game-question-generation-request.js';
-import { type ExistingQuestionReference } from '../../types/game-question-generation/existing-question-reference.js';
 import { createGameQuestionPrompt } from '../../utils/game-question-generation/create-game-question-prompt.js';
 
 function assertGameQuestionGenerationInput(input: GenerateGameQuestionInput) {
@@ -41,27 +40,6 @@ function assertGameQuestionGenerationInput(input: GenerateGameQuestionInput) {
       (length, answer) => length + answer.length,
       0,
     ) <= 20_000;
-  const hasValidExistingQuestions =
-    Array.isArray(input.existingQuestions) &&
-    input.existingQuestions.length <= 10_000 &&
-    input.existingQuestions.every(
-      (question) =>
-        !!question &&
-        typeof question.question === 'string' &&
-        question.question.length <= 20_000 &&
-        Array.isArray(question.answers) &&
-        question.answers.length <= 100 &&
-        question.answers.every(
-          (answer) => typeof answer === 'string' && answer.length <= 1_000,
-        ),
-    ) &&
-    input.existingQuestions.reduce(
-      (total, question) =>
-        total +
-        question.question.length +
-        question.answers.reduce((length, answer) => length + answer.length, 0),
-      0,
-    ) <= 5_000_000;
   const hasValidTextLengths =
     Boolean(input.apiKey.trim()) &&
     input.apiKey.length <= 16_384 &&
@@ -76,7 +54,6 @@ function assertGameQuestionGenerationInput(input: GenerateGameQuestionInput) {
     !hasValidTemplate ||
     !hasValidGenerationOptions ||
     !hasValidExcludedAnswers ||
-    !hasValidExistingQuestions ||
     !hasValidTextLengths
   ) {
     throw new TypeError('Invalid AI generation input');
@@ -85,7 +62,6 @@ function assertGameQuestionGenerationInput(input: GenerateGameQuestionInput) {
 
 export {
   type GameQuestionGenerationRequest,
-  type ExistingQuestionReference,
   type GenerateGameQuestionInput,
   assertGameQuestionGenerationInput,
   createGameQuestionPrompt,

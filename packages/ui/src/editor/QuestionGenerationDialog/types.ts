@@ -11,7 +11,7 @@ export interface QuestionGenerationDialogProps {
   templates: AIQuestion[];
   difficulties: SchdkDictionaryItem[];
   recognizabilities: SchdkDictionaryItem[];
-  onGenerationStart?(checkQuestionDatabase?: boolean): Promise<void>;
+  onGenerationStart?(): Promise<void>;
   getPromptPreview?(
     template: AIQuestion,
     context: string,
@@ -24,7 +24,6 @@ export interface QuestionGenerationDialogProps {
     context: string,
     excludedAnswers?: string[],
     difficulty?: AIQuestionDifficulty,
-    checkQuestionDatabase?: boolean,
     recognizability?: AIQuestionRecognizability,
   ): Promise<GameQuestion>;
   excludedAnswers?: string[];

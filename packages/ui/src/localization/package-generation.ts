@@ -28,8 +28,6 @@ export const packageGenerationCopy = {
     failed:
       'Не вдалося згенерувати пакет. Збережено питання, створені до помилки.',
     nothingMissing: 'Усі питання пакету вже заповнені.',
-    checkDatabase:
-      'Перевіряти схожість із моєю базою питань і перегенеровувати за потреби',
     nothingCommented: 'У пакеті немає питань із зауваженнями.',
   },
   en: {
@@ -61,8 +59,6 @@ export const packageGenerationCopy = {
     failed:
       'Could not generate the package. Questions created before the error were kept.',
     nothingMissing: 'Every package question is already complete.',
-    checkDatabase:
-      'Check similarity against my question database and regenerate if needed',
     nothingCommented: 'The package has no questions with remarks.',
   },
 };

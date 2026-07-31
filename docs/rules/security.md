@@ -50,10 +50,8 @@
   Desktop renderer IPC may query only whether a key exists, replace or remove
   it, and request validated generation. Generation loads the key in Electron
   main and returns only the parsed question; never return the stored value.
-- Keep similarity checking opt-in for every generation action. Search the
-  current account's validated question index locally, send only shortlisted
-  question and answer text to the selected AI provider for semantic review,
-  and never mix another account's index into the request.
+- Never send personal question-database content to an AI provider during
+  generation. Keep the account-scoped index local to author-driven search.
 - Keep the installed-app OAuth client secret in the Electron main process. It
   is loaded from an ignored packaged resource, distributed with the desktop
   app, and must never be committed, treated as a security boundary, or exposed

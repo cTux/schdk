@@ -23,8 +23,6 @@ export interface PackageGenerationOptionsProps {
   selected: number | null;
   hasTargets: boolean;
   thinking: boolean;
-  checkQuestionDatabase: boolean;
-  onCheckQuestionDatabaseChange(checked: boolean): void;
   onCancel(): void;
   onDifficultyPercentageChange(
     difficulty: AIQuestionDifficulty,
