@@ -1,11 +1,7 @@
-import {
-  createEmptyGamePackage,
-  parseGamePackage,
-  type GamePackage,
-} from '@schdk/common';
+import { createEmptyGamePackage, parseGamePackage } from '@schdk/common';
 import type { DriveGamePackageFile } from '@schdk/google-drive';
 import { ConfirmationDialog, useConfirmationDialog } from '@schdk/ui';
-import { EditorView, type EditorSaveStatus } from '@schdk/ui/editor';
+import { EditorView } from '@schdk/ui/editor';
 import { useLocalization } from '@schdk/ui/localization';
 import { DEFAULT_EDITOR_TEXT_OPTIONS } from '@schdk/ui/options';
 import { useCallback, useRef, useState } from 'react';
@@ -18,6 +14,7 @@ import { useDriveConflictResolution } from './use-drive-conflict-resolution';
 import { useEditorOpening } from './use-editor-opening';
 import { useEditorPersistence } from './use-editor-persistence';
 import { useEditorRecents } from './use-editor-recents';
+import { useEditorSession } from './use-editor-session';
 import { useMusicBreakChange } from './use-music-break-change';
 import { usePackageActions } from './use-package-actions';
 import { useQuestionActions } from './use-question-actions';
@@ -40,9 +37,16 @@ function App({
     ...createEmptyGamePackage(),
     title: copy.shared.untitled,
   });
-  const [gamePackage, setGamePackage] = useState<GamePackage>(
-    createLocalizedPackage,
-  );
+  const session = useEditorSession(copy.shared.untitled);
+  const {
+    driveFileId,
+    driveModifiedTime,
+    fileName,
+    gamePackage,
+    hasPackage,
+    openPackage,
+    saveStatus,
+  } = session;
   const currentPackage = useRef(gamePackage);
   const saveQueue = useRef(Promise.resolve());
   const initialDeepLink = useRef(
@@ -59,13 +63,6 @@ function App({
   const [desktopSessionReady, setDesktopSessionReady] = useState(
     !initialDesktopSession.current,
   );
-  const [hasPackage, setHasPackage] = useState(false);
-  const [driveFileId, setDriveFileId] = useState<string | null>(null);
-  const [driveModifiedTime, setDriveModifiedTime] = useState<string | null>(
-    null,
-  );
-  const [fileName, setFileName] = useState<string | null>(null);
-  const [saveStatus, setSaveStatus] = useState<EditorSaveStatus>('saved');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showValidation, setShowValidation] = useState(false);
   const [message, setMessage] = useState('');
@@ -74,17 +71,12 @@ function App({
   const applyOpenedPackage = useCallback(
     (content: Uint8Array, opened: DriveGamePackageFile) => {
       const packageToEdit = parseGamePackage(content);
-      setGamePackage(packageToEdit);
-      setDriveFileId(opened.id);
-      setDriveModifiedTime(opened.modifiedTime);
-      setFileName(opened.name);
-      setSaveStatus('saved');
-      setHasPackage(true);
+      openPackage(packageToEdit, opened);
       setSelectedIndex(0);
       setShowValidation(false);
       return packageToEdit;
     },
-    [],
+    [openPackage],
   );
 
   const { recentPackages, recentPackagesLoading, refreshRecentPackages } =
@@ -134,10 +126,10 @@ function App({
     selectedIndex,
     onDriveFailure,
     resolveDriveConflict,
-    setFileName,
-    setDriveModifiedTime,
+    setFileName: session.setFileName,
+    setDriveModifiedTime: session.setDriveModifiedTime,
     setMessage,
-    setSaveStatus,
+    setSaveStatus: session.setSaveStatus,
   });
   const questions = useQuestionActions({
     confirm,
@@ -149,16 +141,14 @@ function App({
     selectedIndex,
     textOptions,
     onDriveFailure,
-    setGamePackage,
+    changeGamePackage: session.changeGamePackage,
     setMessage,
-    setSaveStatus,
     setSelectedIndex,
   });
   const changeMusicBreak = useMusicBreakChange(
     copy,
-    setGamePackage,
+    session.changeGamePackage,
     setMessage,
-    setSaveStatus,
   );
   const packages = usePackageActions({
     confirm,
@@ -172,13 +162,9 @@ function App({
     refreshRecentPackages,
     saveCurrentPackage,
     onDriveFailure,
-    setFileName,
-    setDriveFileId,
-    setDriveModifiedTime,
-    setGamePackage,
-    setHasPackage,
+    changeGamePackage: session.changeGamePackage,
+    resetPackage: session.resetPackage,
     setMessage,
-    setSaveStatus,
     setSelectedIndex,
     setShowValidation,
   });
@@ -229,8 +215,7 @@ function App({
         onSwapQuestions={questions.swapQuestionPositions}
         onTourPhraseChange={packages.updateTourPhrase}
         onTitleChange={(title) => {
-          setGamePackage({ ...gamePackage, title });
-          setSaveStatus('pending');
+          session.changeGamePackage({ ...gamePackage, title });
           setMessage('');
         }}
       />

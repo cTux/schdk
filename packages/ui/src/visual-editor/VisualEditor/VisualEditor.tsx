@@ -18,6 +18,7 @@ import { VisualEditorToolbar } from './VisualEditorToolbar';
 import { VisualLayoutItem } from './VisualLayoutItem';
 import type { ElementSelection, VisualEditorProps } from './types';
 import { useVisualEditor } from './hooks/useVisualEditor';
+import { readVisualEditorImage } from './utils/read-visual-editor-image';
 
 const selectionKey = (selection: ElementSelection) =>
   `${selection.kind}:${selection.id}`;
@@ -151,7 +152,7 @@ function VisualEditor({
           className="visual-editor-file-input"
           type="file"
           accept="image/*"
-          onChange={(event) => {
+          onChange={async (event) => {
             const file = event.currentTarget.files?.[0];
             event.currentTarget.value = '';
             if (!file) return;
@@ -159,18 +160,13 @@ function VisualEditor({
               editor.setLocalMessage(copy.visualEditor.chooseImage);
               return;
             }
-            const reader = new FileReader();
-            reader.addEventListener(
-              'load',
-              () => {
-                if (typeof reader.result === 'string') {
-                  editor.setLocalMessage('');
-                  editor.applyImage(reader.result);
-                }
-              },
-              { once: true },
-            );
-            reader.readAsDataURL(file);
+            try {
+              const dataUrl = await readVisualEditorImage(file);
+              editor.setLocalMessage('');
+              editor.applyImage(dataUrl);
+            } catch {
+              editor.setLocalMessage(copy.visualEditor.imagesTooLarge);
+            }
           }}
         />
         <div

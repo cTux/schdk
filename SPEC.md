@@ -90,6 +90,7 @@ V47|The hosted OAuth landing surface identifies SCHDK and its purpose in crawler
 V48|Autosave never overwrites a Drive package modified since the editor opened or last saved it.
 V49|The hosted browser renders a themed login fallback before its JavaScript bundle executes.
 V50|An open package editor replaces recents and exposes one page-header back action that returns to the package list.
+V51|Visual-editor background and custom images are bounded before reading and remain within the canonical encoded-image limit.
 
 ## §T
 
@@ -218,3 +219,6 @@ B115|2026-07-31|The retained page-entry transform positioned fixed editor toasts
 B116|2026-07-31|The first toast-spacing refinement targeted React-Toastify's vendor BEM class and violated the repository selector convention|Use the existing kebab-case editor toast class and an adjacent-sibling selector; Stylelint covers recurrence.
 B117|2026-07-31|The editor rendered recents beneath an open package and duplicated back navigation inside its action header|V50
 B118|2026-07-31|Generic fieldset spacing reserved excess room for empty answer lists and redundant previous-next controls duplicated sticky question navigation|Keep empty answer lists compact and use the sticky list as the only manual question-switching control in `docs/specs/package-editor.md`.
+B119|2026-07-31|The new server-rendered UI contract test used `react-dom/server` without declaring its ambient types in `@schdk/ui`|Declare `@types/react-dom` in the owning package; package typechecking covers recurrence.
+B120|2026-07-31|The initial editor reducer adapters narrowed React setter callbacks to raw values and broke persistence callers|Preserve `SetStateAction` semantics at reducer boundaries; package typechecking covers recurrence.
+B121|2026-07-31|The AI controller test fixture omitted two values required by the canonical five-point dictionary distribution|Use the complete shared distribution shape; package typechecking covers recurrence.

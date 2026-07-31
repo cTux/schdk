@@ -8,8 +8,7 @@ import type { QuestionGenerationDialogProps } from './types';
 
 function useQuestionGeneration({
   templates,
-  onGenerationStart,
-  onGenerate,
+  generateQuestion,
   onQuestionGenerationStateChange,
   excludedAnswers = [],
   onGenerated,
@@ -55,15 +54,13 @@ function useQuestionGeneration({
     setFailed(false);
     onQuestionGenerationStateChange?.(true, true);
     try {
-      await onGenerationStart?.();
-      if (currentGenerationId !== generationId.current) return;
-      const question = await onGenerate(
-        selectedTemplate,
-        context.trim(),
+      const question = await generateQuestion({
+        template: selectedTemplate,
+        context: context.trim(),
         excludedAnswers,
         difficulty,
         recognizability,
-      );
+      });
       if (currentGenerationId !== generationId.current) return;
       onGenerated(question);
       reset();

@@ -70,6 +70,12 @@ import { type GameLayoutPosition } from './types/game-options/game-layout-positi
 import { type GameOptions } from './types/game-options/game-options.js';
 import { type GameTextGrowDirection } from './types/game-options/game-text-grow-direction.js';
 import { normalizeGameOptions } from './validators/game-options/normalize-game-options.js';
+import {
+  MAX_VISUAL_TEMPLATE_BYTES,
+  VISUAL_TEMPLATE_ENTRY,
+  parseVisualEditorTemplate,
+  serializeVisualEditorTemplate,
+} from './contracts/game-options/visual-editor-template.js';
 
 export {
   QUESTION_COUNT,
@@ -136,4 +142,8 @@ export {
   type GameOptions,
   type GameTextGrowDirection,
   normalizeGameOptions,
+  MAX_VISUAL_TEMPLATE_BYTES,
+  VISUAL_TEMPLATE_ENTRY,
+  parseVisualEditorTemplate,
+  serializeVisualEditorTemplate,
 };

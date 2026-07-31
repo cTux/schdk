@@ -5,14 +5,10 @@ import { useLocalization } from '../../../localization';
 import * as gen from '../utils/generation-input';
 import type { PackageGenerationDialogProps } from '../types';
 
-function getRandomValue(distribution: common.SchdkDictionaryDistribution) {
-  let position = Math.random() * 100;
-  return (
-    common.AI_QUESTION_DIFFICULTIES.find(
-      (difficulty) => (position -= distribution[difficulty]) < 0,
-    ) ?? 'medium'
-  );
-}
+type PackageGenerationHookProps = Omit<
+  PackageGenerationDialogProps,
+  'generateQuestion'
+>;
 
 function usePackageGeneration({
   templates,
@@ -20,12 +16,11 @@ function usePackageGeneration({
   difficultyDistributions,
   recognizabilityDistributions,
   gamePackage,
-  onGenerationStart,
-  onGenerate,
+  generatePackage,
   onGenerated,
   onGenerationStateChange,
   onSelectQuestion,
-}: PackageGenerationDialogProps) {
+}: PackageGenerationHookProps) {
   const { copy } = useLocalization();
   const cancelDialog = useConfirmationDialog();
   const [open, setOpen] = useState(false);
@@ -130,14 +125,7 @@ function usePackageGeneration({
     setFailed(false);
     onSelectQuestion(targets[0]!);
     try {
-      await onGenerationStart?.();
-      if (currentGenerationId !== generationId.current) return;
-      const usedAnswers = [...initialExcludedAnswers];
-      for (const [position, index] of targets.entries()) {
-        const difficulty = getRandomValue(selectedDifficultyDistribution);
-        const nextRecognizability = getRandomValue(
-          selectedRecognizabilityDistribution,
-        );
+      const steps = targets.map((index) => {
         const input = gen.getPackageGenerationInput(
           selectedPackage,
           templates,
@@ -146,28 +134,32 @@ function usePackageGeneration({
           scope === 'commented' ? gamePackage.questions[index] : undefined,
         );
         if (!input) throw new Error('Missing generation input');
-        setCurrentInput(input);
-        setCurrentDifficulty(difficulty);
-        setCurrentRecognizability(nextRecognizability);
-        setProgress([position + 1, targets.length]);
-        setExcludedAnswers([...usedAnswers]);
-        const question = await onGenerate(
-          input.template,
-          input.context,
-          usedAnswers,
-          difficulty,
-          nextRecognizability,
-        );
-        if (currentGenerationId !== generationId.current) return;
-        onGenerated(
-          index,
-          scope === 'commented'
-            ? { ...question, comment: undefined }
-            : question,
-        );
-        onGenerationStateChange(targets.slice(position + 1), true);
-        usedAnswers.push(...common.getGameQuestionAnswers(question));
-      }
+        return { index, ...input };
+      });
+      await generatePackage(
+        {
+          steps,
+          excludedAnswers: initialExcludedAnswers,
+          difficultyDistribution: selectedDifficultyDistribution,
+          recognizabilityDistribution: selectedRecognizabilityDistribution,
+        },
+        ({ index, position, total, question, request }) => {
+          setCurrentInput(request);
+          setCurrentDifficulty(request.difficulty);
+          setCurrentRecognizability(request.recognizability);
+          setProgress([position, total]);
+          setExcludedAnswers(request.excludedAnswers ?? []);
+          onGenerated(
+            index,
+            scope === 'commented'
+              ? { ...question, comment: undefined }
+              : question,
+          );
+          onGenerationStateChange(targets.slice(position), true);
+        },
+        () => currentGenerationId === generationId.current,
+      );
+      if (currentGenerationId !== generationId.current) return;
       reset();
     } catch {
       if (currentGenerationId !== generationId.current) return;

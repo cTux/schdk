@@ -183,7 +183,9 @@ function isGameLayoutElement(value: unknown): value is GameLayoutPosition {
 function isBackgroundImage(value: unknown): value is string | null {
   return (
     value === null ||
-    (typeof value === 'string' && value.startsWith('data:image/'))
+    (typeof value === 'string' &&
+      value.length <= MAX_CUSTOM_IMAGE_DATA_LENGTH &&
+      value.startsWith('data:image/'))
   );
 }
 

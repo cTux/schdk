@@ -209,6 +209,9 @@ importers:
       '@types/react':
         specifier: 'catalog:'
         version: 19.2.17
+      '@types/react-dom':
+        specifier: 'catalog:'
+        version: 19.2.3(@types/react@19.2.17)
       oxlint:
         specifier: ^1.76.0
         version: 1.76.0
@@ -254,9 +257,6 @@ importers:
       '@schdk/ui':
         specifier: workspace:*
         version: link:../ui
-      fflate:
-        specifier: ^0.8.3
-        version: 0.8.3
       react:
         specifier: 'catalog:'
         version: 19.2.8

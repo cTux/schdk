@@ -15,14 +15,6 @@ if (!hasValidVersion) {
 
 export default defineConfig({
   base: './',
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks: (id) =>
-          id.includes('node_modules') ? 'vendors' : undefined,
-      },
-    },
-  },
   define: {
     'import.meta.env.VITE_APP_VERSION': JSON.stringify(version),
   },

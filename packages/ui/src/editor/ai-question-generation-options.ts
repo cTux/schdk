@@ -4,8 +4,35 @@ import type {
   AIQuestionRecognizability,
   AIQuestionsPackage,
   GameQuestion,
+  SchdkDictionaryDistribution,
   SchdkDictionaryItem,
 } from '@schdk/common';
+
+export interface AiQuestionGenerationRequest {
+  template: AIQuestion;
+  context: string;
+  excludedAnswers?: string[];
+  difficulty?: AIQuestionDifficulty;
+  recognizability?: AIQuestionRecognizability;
+}
+
+export interface AiPackageGenerationRequest {
+  steps: Array<AiQuestionGenerationRequest & { index: number }>;
+  excludedAnswers: string[];
+  difficultyDistribution: SchdkDictionaryDistribution;
+  recognizabilityDistribution: SchdkDictionaryDistribution;
+}
+
+export interface AiPackageGenerationProgress {
+  index: number;
+  position: number;
+  total: number;
+  question: GameQuestion;
+  request: Required<
+    Pick<AiQuestionGenerationRequest, 'difficulty' | 'recognizability'>
+  > &
+    AiQuestionGenerationRequest;
+}
 
 export interface AiQuestionGenerationOptions {
   apiKeyConfigured: boolean;
@@ -15,7 +42,6 @@ export interface AiQuestionGenerationOptions {
   recognizabilities: SchdkDictionaryItem[];
   difficultyDistributions: SchdkDictionaryItem[];
   recognizabilityDistributions: SchdkDictionaryItem[];
-  onGenerationStart?(): Promise<void>;
   getPromptPreview?(
     template: AIQuestion,
     context: string,
@@ -23,13 +49,12 @@ export interface AiQuestionGenerationOptions {
     difficulty?: AIQuestionDifficulty,
     recognizability?: AIQuestionRecognizability,
   ): string;
-  onGenerate(
-    template: AIQuestion,
-    context: string,
-    excludedAnswers?: string[],
-    difficulty?: AIQuestionDifficulty,
-    recognizability?: AIQuestionRecognizability,
-  ): Promise<GameQuestion>;
+  generateQuestion(request: AiQuestionGenerationRequest): Promise<GameQuestion>;
+  generatePackage(
+    request: AiPackageGenerationRequest,
+    onProgress: (progress: AiPackageGenerationProgress) => void,
+    shouldContinue?: () => boolean,
+  ): Promise<void>;
   onQuestionGenerationStateChange?(generating: boolean, docked: boolean): void;
   excludedAnswers?: string[];
 }

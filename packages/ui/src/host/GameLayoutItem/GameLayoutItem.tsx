@@ -1,24 +1,12 @@
 import classNames from 'classnames';
-import type { CSSProperties } from 'react';
 import { FitTextObserver } from '../FitTextObserver';
+import { getGameLayoutStyle } from '../game-layout-style';
 import type { GameLayoutItemProps } from './types';
 
 export function GameLayoutItem({ children, id, layout }: GameLayoutItemProps) {
   const position = layout?.[id];
   if (position?.hidden) return null;
-  const style = position
-    ? ({
-        '--game-layout-x': `${position.x}%`,
-        '--game-layout-y': `${position.y}%`,
-        '--game-layout-width': `${position.width}%`,
-        '--game-layout-height': `${position.height}%`,
-        '--game-font-scale': position.fontScale,
-        '--game-text-color': position.textColor,
-        '--game-grow-align':
-          position.textGrowDirection === 'up' ? 'flex-end' : 'flex-start',
-        '--game-image-position': position.imagePosition,
-      } as CSSProperties)
-    : undefined;
+  const style = position ? getGameLayoutStyle(position) : undefined;
   return (
     <div
       className={classNames('game-layout-item', `game-layout-${id}`, {

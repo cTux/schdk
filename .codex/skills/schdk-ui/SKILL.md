@@ -15,6 +15,10 @@ description: Build, refactor, or review @schdk/ui components and styles. Use for
 5. Read `docs/rules/architecture.md` when ownership changes.
 6. Trace the owning view and consumers, then reuse existing components and
    tokens before adding UI surface.
+   Route visual-editor and host positions through the shared game-layout style
+   mapper so both surfaces render the persisted presentation identically.
+   Bound visual-editor image files before reading and validate their embedded
+   data URLs against the canonical image-data limit before applying them.
 7. Verify Storybook for changed exports or props and visually smoke-test the
    affected flow at narrow and normal widths.
 

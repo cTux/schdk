@@ -5,13 +5,13 @@ import type {
   GameQuestion,
   SchdkDictionaryItem,
 } from '@schdk/common';
+import type { AiQuestionGenerationOptions } from '../types';
 
 export interface QuestionGenerationDialogProps {
   apiKeyConfigured: boolean;
   templates: AIQuestion[];
   difficulties: SchdkDictionaryItem[];
   recognizabilities: SchdkDictionaryItem[];
-  onGenerationStart?(): Promise<void>;
   getPromptPreview?(
     template: AIQuestion,
     context: string,
@@ -19,13 +19,7 @@ export interface QuestionGenerationDialogProps {
     difficulty?: AIQuestionDifficulty,
     recognizability?: AIQuestionRecognizability,
   ): string;
-  onGenerate(
-    template: AIQuestion,
-    context: string,
-    excludedAnswers?: string[],
-    difficulty?: AIQuestionDifficulty,
-    recognizability?: AIQuestionRecognizability,
-  ): Promise<GameQuestion>;
+  generateQuestion: AiQuestionGenerationOptions['generateQuestion'];
   excludedAnswers?: string[];
   onGenerated(question: GameQuestion): void;
   onQuestionGenerationStateChange?(generating: boolean, docked: boolean): void;

@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_GAME_LAYOUT } from '../../../options/types';
+import {
+  DEFAULT_GAME_LAYOUT,
+  MAX_CUSTOM_IMAGE_DATA_LENGTH,
+} from '../../../options/types';
+import { readVisualEditorImage } from '../utils/read-visual-editor-image';
 import {
   createCustomElement,
   getDraggedPosition,
@@ -8,6 +12,15 @@ import {
 } from '../VisualEditor';
 
 describe('visual editor drag position', () => {
+  it('rejects oversized images before reading them', async () => {
+    await expect(
+      readVisualEditorImage({
+        type: 'image/png',
+        size: MAX_CUSTOM_IMAGE_DATA_LENGTH,
+      } as File),
+    ).rejects.toThrow('Invalid visual editor image');
+  });
+
   it('keeps the grabbed point under the pointer', () => {
     expect(
       getDraggedPosition({ x: 40, y: 30 }, { x: 45, y: 35 }, { x: 45, y: 35 }),

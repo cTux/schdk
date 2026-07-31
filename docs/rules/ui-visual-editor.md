@@ -8,7 +8,8 @@
 - Keep the visual editor on its fixed dark presentation palette; application
   theme changes must not alter its canvas, controls, or text colors.
 - Persist bounds as percentages and apply identical bounds and presentation
-  settings in gameplay. Keep the standard layout until changed.
+  settings in gameplay through the shared game-layout style mapper. Keep the
+  standard layout until changed.
 - Preview pointer drag and resize locally, then persist one final position when
   the interaction ends. Persist keyboard adjustments immediately.
 - Let every built-in and custom element be marked hidden while remaining
@@ -21,7 +22,9 @@
 - Clip overflow, keep the selected wrapper above others, and show its text or
   image controls in a fixed toolbar.
 - Select the game canvas by default and restore it with Escape. Its toolbar
-  owns the optional background image and opacity.
+  owns the optional background image and opacity. Reject background and custom
+  image files that cannot fit the canonical encoded-image limit before reading
+  them, then validate the generated embedded data URL.
 - Keep the add-elements rail permanently compact. Explain each icon with the
   shared tooltip on hover and focus. Keep add-element actions at the top and
   template import/export actions docked at the bottom. Support editable text

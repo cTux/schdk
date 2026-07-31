@@ -31,13 +31,9 @@ interface PackageActionsOptions {
   refreshRecentPackages(): Promise<void>;
   saveCurrentPackage(): Promise<boolean>;
   onDriveFailure?(): void;
-  setDriveFileId: Dispatch<SetStateAction<string | null>>;
-  setDriveModifiedTime: Dispatch<SetStateAction<string | null>>;
-  setFileName: Dispatch<SetStateAction<string | null>>;
-  setGamePackage: Dispatch<SetStateAction<GamePackage>>;
-  setHasPackage: Dispatch<SetStateAction<boolean>>;
+  changeGamePackage: Dispatch<SetStateAction<GamePackage>>;
+  resetPackage(gamePackage: GamePackage): void;
   setMessage: Dispatch<SetStateAction<string>>;
-  setSaveStatus: Dispatch<SetStateAction<EditorSaveStatus>>;
   setSelectedIndex: Dispatch<SetStateAction<number>>;
   setShowValidation: Dispatch<SetStateAction<boolean>>;
 }
@@ -55,13 +51,9 @@ export function usePackageActions(options: PackageActionsOptions) {
     refreshRecentPackages,
     saveCurrentPackage,
     onDriveFailure,
-    setDriveFileId,
-    setDriveModifiedTime,
-    setFileName,
-    setGamePackage,
-    setHasPackage,
+    changeGamePackage,
+    resetPackage: resetEditorSession,
     setMessage,
-    setSaveStatus,
     setSelectedIndex,
     setShowValidation,
   } = options;
@@ -77,12 +69,7 @@ export function usePackageActions(options: PackageActionsOptions) {
   });
 
   function resetPackage() {
-    setGamePackage(createLocalizedPackage());
-    setHasPackage(false);
-    setDriveFileId(null);
-    setDriveModifiedTime(null);
-    setFileName(null);
-    setSaveStatus('saved');
+    resetEditorSession(createLocalizedPackage());
     setSelectedIndex(0);
     setShowValidation(false);
     setMessage('');
@@ -98,19 +85,15 @@ export function usePackageActions(options: PackageActionsOptions) {
     setMessage('');
     try {
       if (!drive) throw new Error('Google Drive is unavailable');
+      const content = serializeGamePackage(emptyPackage);
       const saved = await drive.createGamePackage({
         name: filename,
         title: emptyPackage.title,
-        content: serializeGamePackage(emptyPackage),
+        content,
         ready: validateGamePackage(emptyPackage).length === 0,
         hasRemarks: hasGamePackageRemarks(emptyPackage),
       });
-      setDriveFileId(saved.id);
-      setDriveModifiedTime(saved.modifiedTime);
-      setFileName(saved.name);
-      setGamePackage(emptyPackage);
-      setHasPackage(true);
-      setSaveStatus('saved');
+      applyOpenedPackage(content, saved);
       setSelectedIndex(0);
       setShowValidation(false);
       replaceBrowserPackageDeepLink(toDrivePackageReference(saved.id), 0);
@@ -155,13 +138,12 @@ export function usePackageActions(options: PackageActionsOptions) {
   }
 
   function updateTourPhrase(index: number, value: string) {
-    setGamePackage((current) => ({
+    changeGamePackage((current) => ({
       ...current,
       tourPhrases: current.tourPhrases.map((phrase, phraseIndex) =>
         phraseIndex === index ? value : phrase,
       ) as GamePackage['tourPhrases'],
     }));
-    setSaveStatus('pending');
     setMessage('');
   }
 

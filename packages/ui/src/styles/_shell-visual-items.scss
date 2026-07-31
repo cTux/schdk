@@ -8,6 +8,10 @@
 .visual-layout-item {
   position: absolute;
   z-index: 1;
+  top: var(--game-layout-y);
+  left: var(--game-layout-x);
+  width: var(--game-layout-width);
+  height: var(--game-layout-height);
   max-width: none;
   overflow: hidden;
   background: transparent;
