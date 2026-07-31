@@ -18,6 +18,7 @@ describe('editor session', () => {
           name: 'opened.schdk',
           modifiedTime: '2026-07-31T12:00:00.000Z',
         },
+        selectedIndex: 12,
       }),
     ).toEqual({
       gamePackage,
@@ -26,6 +27,7 @@ describe('editor session', () => {
       driveModifiedTime: '2026-07-31T12:00:00.000Z',
       fileName: 'opened.schdk',
       saveStatus: 'saved',
+      selectedIndex: 12,
     });
   });
 
@@ -53,6 +55,7 @@ describe('editor session', () => {
         name: 'opened.schdk',
         modifiedTime: '2026-07-31T12:00:00.000Z',
       },
+      selectedIndex: 0,
     });
 
     expect(
@@ -64,6 +67,16 @@ describe('editor session', () => {
       driveModifiedTime: null,
       fileName: null,
       saveStatus: 'saved',
+      selectedIndex: 0,
     });
+  });
+
+  it('updates the selected question through the same session reducer', () => {
+    expect(
+      editorSessionReducer(createEditorSessionState('Untitled'), {
+        type: 'selected-index',
+        value: 7,
+      }).selectedIndex,
+    ).toBe(7);
   });
 });
