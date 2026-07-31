@@ -27,7 +27,7 @@ I.specs|Feature acceptance contracts|`docs/specs/README.md`
 I.package|Portable game file|`.schdk`
 I.template|Portable visual layout|`.schdk-template`
 I.web|Unified browser application|`@schdk/web`
-I.desktop|Windows, macOS, and Linux application|`@schdk/desktop`
+I.desktop|Windows and Linux application|`@schdk/desktop`
 I.drive|Package and settings persistence|Google Drive
 I.ai|Structured question generation|`@schdk/ai`
 I.aiquestion|Portable AI question rule|`.aiquestion`

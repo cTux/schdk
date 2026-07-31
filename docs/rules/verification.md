@@ -28,8 +28,7 @@
   can resolve packages that intentionally export compiled output.
 - For cross-platform desktop packaging, verify native unpacked output and each
   requested installer or package before artifact upload. Inspect DEB identity
-  and maintainer fields with `dpkg-deb`; preserve macOS `.app` bundles through
-  electron-builder's ZIP target.
+  and maintainer fields with `dpkg-deb`.
 - Before committing, run `pnpm fmt:check`, `pnpm lint`, `pnpm typecheck`,
   `pnpm test`, and affected builds. Run root `pnpm build` for complete workspace
   build verification.

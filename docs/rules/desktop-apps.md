@@ -55,12 +55,11 @@
   return only the parsed question; migrate and remove a legacy `safeStorage`
   key only after a successful Drive write.
 - Keep normal local packaging on electron-builder's unpacked `dir` target for
-  the current host. Use `package:win`, `package:mac`, and `package:linux` only
-  on their native operating systems.
+  the current host. Use `package:win` and `package:linux` only on their native
+  operating systems.
 - The manually dispatched `Desktop builds` workflow produces unsigned Windows
-  x64, macOS x64/arm64, and Debian x64 artifacts on native runners. Keep
-  unsigned artifact names explicit; macOS uploads use ZIP transport for the
-  `.app` bundle plus `.pkg`, and Linux uploads use `.deb`.
+  x64 and Debian x64 artifacts on native runners. Keep unsigned artifact names
+  explicit; Linux uploads use `.deb`.
 - Publish exactly one unsigned, version-matched Windows x64 NSIS installer in
   each GitHub Release after the shared checks and Windows packaging succeed.
 - Check the fixed SCHDK latest-release URL in Electron main and expose only

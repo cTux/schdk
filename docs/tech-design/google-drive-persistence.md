@@ -489,7 +489,7 @@ starting in local mode.
 2. Add secure refresh-token persistence.
 3. Add narrow Drive IPC and renderer adapter.
 4. Restore Drive package sessions.
-5. Verify Windows, macOS, and Linux secure-storage behavior.
+5. Verify Windows and Linux secure-storage behavior.
 
 ### Phase 4: production readiness
 
@@ -514,7 +514,7 @@ pnpm build
 Manual matrix:
 
 - web production origin and localhost;
-- Electron on Windows, macOS, and Debian/Ubuntu;
+- Electron on Windows and Debian/Ubuntu;
 - personal Google account and a Workspace account with policy restrictions;
 - first consent, reconnect, disconnect/revoke, access-token expiry, desktop
   refresh, and Testing-mode refresh-token expiry;

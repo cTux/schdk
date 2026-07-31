@@ -33,12 +33,11 @@ pnpm turbo package --filter @schdk/desktop
 ```powershell
 pnpm turbo build --filter=@schdk/desktop
 pnpm --filter @schdk/desktop package:win
-pnpm --filter @schdk/desktop package:mac
 pnpm --filter @schdk/desktop package:linux
 ```
 
-`package:win` створює x64-інсталятор і портативний `.exe`; `package:mac` —
-окремі x64 та arm64 ZIP із `.app` і `.pkg`; `package:linux` — x64 `.deb`.
+`package:win` створює x64-інсталятор і портативний `.exe`; `package:linux` —
+x64 `.deb`.
 Workflow `Desktop builds` запускає ці команди вручну на нативних GitHub
 runner-ах і зберігає результати як явно непідписані артефакти.
 
