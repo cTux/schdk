@@ -4,11 +4,9 @@ import {
   ActionToolbarPopover,
   ActionToolbarSeparator,
 } from './ActionToolbar';
-import {
-  type ActionToolbarProps,
-  type ActionToolbarButtonProps,
-  type ActionToolbarPopoverProps,
-} from './types';
+import { type ActionToolbarButtonProps } from '../ActionToolbarButton';
+import { type ActionToolbarPopoverProps } from '../ActionToolbarPopover';
+import { type ActionToolbarProps } from './types';
 
 export {
   ActionToolbar,

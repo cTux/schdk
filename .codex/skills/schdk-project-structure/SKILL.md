@@ -50,9 +50,12 @@ ComponentName/
     `__tests__` with the first explicitly requested test; Git cannot preserve an
     empty directory, and placeholder files and tests are forbidden.
 12. Export only the component's consumer-facing component, types, and applicable constants from `index.ts`; update package entry points only when consumers need them.
-13. Use `classnames` for conditional class composition. If the touched component needs it and `@schdk/ui` does not yet declare it, add it with pnpm; do not add an unused dependency.
-14. For every new exported UI component or changed component prop, confirm the
+13. Keep each component's props in its own `types.ts`. A composite component
+    may re-export child props from the child's public entry point, but must not
+    define or store them in the composite's directory.
+14. Use `classnames` for conditional class composition. If the touched component needs it and `@schdk/ui` does not yet declare it, add it with pnpm; do not add an unused dependency.
+15. For every new exported UI component or changed component prop, confirm the
     Storybook generator discovers it, update Storybook default args when
     needed, and run `pnpm --filter @schdk/ui build:storybook`.
-15. Run `$schdk-quality` checks for the affected package and consumers. The
+16. Run `$schdk-quality` checks for the affected package and consumers. The
     repository workflow test enforces the 256-line source limit.

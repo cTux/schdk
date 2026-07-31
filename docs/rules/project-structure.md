@@ -72,6 +72,9 @@ directions in [architecture.md](architecture.md).
 - Include `ComponentName.tsx`, `types.ts`, and `index.ts`. Add `styles.scss`
   only when the component emits component-specific CSS; never add an empty
   placeholder stylesheet or import.
+- Keep each component's props in that component's own `types.ts`. Composite
+  components may re-export child props from the child's public entry point,
+  but must not define or store them in the composite's directory.
 - Add `constants.ts` only for component-specific constants.
 - When the component has multiple secondary modules, keep only
   `ComponentName.tsx`, `index.ts`, `types.ts`, `constants.ts`, `styles.scss`,
