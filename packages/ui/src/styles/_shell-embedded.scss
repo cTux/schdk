@@ -67,27 +67,6 @@ button:focus-visible {
     font-size: $font-size-md;
   }
 
-  .sidebar-account {
-    position: relative;
-    justify-content: center;
-    gap: 0;
-    padding-inline: 10px;
-  }
-
-  .sidebar-account-status {
-    position: absolute;
-    right: 5px;
-    bottom: 7px;
-    font-size: 0;
-  }
-
-  .sidebar-account-dot {
-    width: 10px;
-    height: 10px;
-    flex-basis: 10px;
-    border: 2px solid $sidebar;
-  }
-
   .home {
     width: min(100% - 28px, 560px);
     padding-top: 44px;

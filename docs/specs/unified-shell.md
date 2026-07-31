@@ -115,8 +115,8 @@ package authoring, hosting, settings, and account state.
   mounted web and desktop surface. Operating-system reduced-motion preference
   also shortens motion regardless of this setting.
 - **SHL-22:** The shell keeps the existing light and dark color palettes while
-  using a solid fixed sidebar, separated brand and account rows, compact
-  uppercase section labels, flat active navigation, a plain workspace, and
+  using a solid fixed sidebar, a separated brand row, compact uppercase section
+  labels, flat active navigation, a plain workspace, and
   low-radius bordered surfaces without decorative gradients, glows, or glass
   effects.
 

@@ -30,9 +30,6 @@
   `App` settings tab, using the existing settings-row and button patterns.
 - Keep a localized reference to every custom keyboard shortcut in the first
   `App` settings tab.
-- Show the Google Drive account status immediately above the sidebar settings
-  item, with the account avatar when available, an anonymous-user fallback, and
-  a green connected or red disconnected indicator.
 - While initial Drive-backed lists load, show the same localized preloading
   status in the sidebar brand and SCHDK group.
 - Before the first successful connection, show only the centered Google login

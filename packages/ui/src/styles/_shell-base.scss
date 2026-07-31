@@ -140,60 +140,8 @@ button {
 }
 
 .sidebar-options {
-  padding-top: 0;
-}
-
-.sidebar-account {
-  display: flex;
-  align-items: center;
-  gap: 10px;
   margin-top: auto;
-  border-top: 1px solid $border;
-  padding: 18px 22px 10px;
-  color: $muted;
-}
-
-.sidebar-account-avatar {
-  position: relative;
-  display: flex;
-  width: 32px;
-  height: 32px;
-  flex: 0 0 32px;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border: 1px solid $border;
-  border-radius: 50%;
-  background: $surface-raised;
-}
-
-.sidebar-account-avatar img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.sidebar-account-status {
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  gap: 7px;
-  font-size: $font-size-sm;
-  font-weight: 650;
-}
-
-.sidebar-account-dot {
-  width: 7px;
-  height: 7px;
-  flex: 0 0 7px;
-  border-radius: 50%;
-  background: $danger;
-}
-
-.sidebar-account[data-connected='true'] .sidebar-account-dot {
-  background: $success;
+  padding-top: 0;
 }
 
 .workspace {

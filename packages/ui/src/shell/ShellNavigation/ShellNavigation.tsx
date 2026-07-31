@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGear, faSpinner, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faGear, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { AppIcon } from '../../atoms/AppIcon';
 import { Button } from '../../atoms/Button';
 import { useLocalization } from '../../localization';
@@ -7,18 +7,9 @@ import { getShellContent } from '../shellItems';
 import { type ShellNavigationProps } from './types/shell-navigation-props';
 import { type ShellAccount } from './types/shell-account';
 
-function ShellNavigation({
-  account,
-  connected,
-  preloading,
-  view,
-  onSelect,
-}: ShellNavigationProps) {
+function ShellNavigation({ preloading, view, onSelect }: ShellNavigationProps) {
   const { copy } = useLocalization();
   const content = getShellContent(copy);
-  const status = connected
-    ? copy.shell.accountConnected
-    : copy.shell.accountDisconnected;
 
   return (
     <aside className="sidebar" aria-busy={preloading}>
@@ -92,33 +83,6 @@ function ShellNavigation({
           ))}
         </div>
       </nav>
-
-      <div
-        className="sidebar-account"
-        data-connected={connected}
-        role="status"
-        aria-label={
-          connected && account ? `${status}: ${account.emailAddress}` : status
-        }
-      >
-        <span className="sidebar-account-avatar" aria-hidden="true">
-          <FontAwesomeIcon icon={faUser} />
-          {connected && account?.photoLink && (
-            <img
-              src={account.photoLink}
-              alt=""
-              referrerPolicy="no-referrer"
-              onError={(event) => {
-                event.currentTarget.hidden = true;
-              }}
-            />
-          )}
-        </span>
-        <span className="sidebar-account-status">
-          <span className="sidebar-account-dot" aria-hidden="true" />
-          {status}
-        </span>
-      </div>
 
       <nav className="sidebar-options" aria-label={content.settingsLabel}>
         <Button
