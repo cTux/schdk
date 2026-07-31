@@ -11,7 +11,8 @@ description: Enforce SCHDK package, source, component, and export structure. Use
    `docs/rules/project-structure.md` and `docs/rules/architecture.md`.
 2. Inspect package manifests, imports, exports, and callers before moving files.
 3. Apply the source-root, owner-directory, file-size, export, helper, and
-   readable-condition rules only to new or touched structural scope.
+   readable-condition rules only to new or touched structural scope. Do not
+   create a `types.ts` that only re-exports another component's type.
 4. For UI components, also read `packages/ui/README.md` and verify Storybook
    discovery when exports or props change.
    Keep cross-area UI features under a neutral subject owner instead of one

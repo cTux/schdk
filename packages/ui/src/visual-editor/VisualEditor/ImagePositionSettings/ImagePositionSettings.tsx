@@ -5,7 +5,7 @@ import {
   GAME_IMAGE_POSITIONS,
   type GameLayoutPosition,
 } from '../../../options/types';
-import type { PositionSettingsProps } from './types';
+import type { PositionSettingsProps } from '../PositionSettings/types';
 
 export function ImagePositionSettings({
   copy,
