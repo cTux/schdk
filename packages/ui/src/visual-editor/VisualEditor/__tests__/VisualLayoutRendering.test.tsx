@@ -34,9 +34,9 @@ describe('game layout rendering contract', () => {
     expect(host).toContain(`--game-layout-y:${position.y}%`);
     expect(host).toContain(`--game-layout-width:${position.width}%`);
     expect(host).toContain(`--game-layout-height:${position.height}%`);
-    expect(editor).toContain(`left:${position.x}%`);
-    expect(editor).toContain(`top:${position.y}%`);
-    expect(editor).toContain(`width:${position.width}%`);
-    expect(editor).toContain(`height:${position.height}%`);
+    expect(editor).toContain(`--game-layout-x:${position.x}%`);
+    expect(editor).toContain(`--game-layout-y:${position.y}%`);
+    expect(editor).toContain(`--game-layout-width:${position.width}%`);
+    expect(editor).toContain(`--game-layout-height:${position.height}%`);
   });
 });

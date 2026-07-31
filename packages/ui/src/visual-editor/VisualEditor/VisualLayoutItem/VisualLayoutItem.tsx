@@ -1,11 +1,7 @@
 import classNames from 'classnames';
-import {
-  useRef,
-  useState,
-  type CSSProperties,
-  type KeyboardEvent,
-} from 'react';
+import { useRef, useState, type KeyboardEvent } from 'react';
 import { FitTextObserver } from '../../../host/FitTextObserver';
+import { getGameLayoutStyle } from '../../../host/game-layout-style';
 import type { GameLayoutPosition } from '../../../options/types';
 import { RESIZE_HANDLES } from '../constants';
 import { getDraggedPosition, getResizedPosition } from '../utils/geometry';
@@ -90,21 +86,7 @@ export function VisualLayoutItem({
           'is-hidden': renderedPosition.hidden,
         },
       )}
-      style={
-        {
-          left: `${renderedPosition.x}%`,
-          top: `${renderedPosition.y}%`,
-          width: `${renderedPosition.width}%`,
-          height: `${renderedPosition.height}%`,
-          '--game-font-scale': renderedPosition.fontScale,
-          '--game-text-color': renderedPosition.textColor,
-          '--game-grow-align':
-            renderedPosition.textGrowDirection === 'up'
-              ? 'flex-end'
-              : 'flex-start',
-          '--game-image-position': renderedPosition.imagePosition,
-        } as CSSProperties
-      }
+      style={getGameLayoutStyle(renderedPosition)}
       data-hidden-label={hiddenLabel}
       aria-label={`${label}${renderedPosition.hidden ? hiddenSuffix : ''}. ${dragInstruction}`}
       aria-pressed={selected}

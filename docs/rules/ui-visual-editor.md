@@ -8,7 +8,8 @@
 - Keep the visual editor on its fixed dark presentation palette; application
   theme changes must not alter its canvas, controls, or text colors.
 - Persist bounds as percentages and apply identical bounds and presentation
-  settings in gameplay. Keep the standard layout until changed.
+  settings in gameplay through the shared game-layout style mapper. Keep the
+  standard layout until changed.
 - Preview pointer drag and resize locally, then persist one final position when
   the interaction ends. Persist keyboard adjustments immediately.
 - Let every built-in and custom element be marked hidden while remaining
