@@ -78,6 +78,10 @@ preserving recoverable local state during temporary Drive failures.
 - **DRV-22:** Shared `.schdk-dictionary` archives load only from the configured
   fixed folder. Every write requires the allowlisted administrator and a
   matching validated archive, filename, and parent folder.
+- **DRV-23:** The hosted web login surface is publicly accessible before
+  authorization and links a same-domain privacy policy that discloses Google
+  data access and use, token and Drive storage, optional AI-provider transfers,
+  retention, deletion, support, and Limited Use compliance.
 
 ## Invariants
 
@@ -147,3 +151,5 @@ preserving recoverable local state during temporary Drive failures.
     additional pages.
 17. Connect without opening the question database or AI pages and observe
     their Drive-backed lists begin loading.
+18. Open the hosted web login and privacy policy without a Google session and
+    confirm both load directly and the policy matches the shipped data flow.

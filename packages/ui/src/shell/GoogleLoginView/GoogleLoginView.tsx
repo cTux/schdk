@@ -4,7 +4,11 @@ import { Button } from '../../atoms/Button';
 import { useLocalization } from '../../localization';
 import { type GoogleLoginViewProps } from './google-login-view-props';
 
-function GoogleLoginView({ state, onConnect }: GoogleLoginViewProps) {
+function GoogleLoginView({
+  privacyHref,
+  state,
+  onConnect,
+}: GoogleLoginViewProps) {
   const { copy } = useLocalization();
   const unavailable = state === 'unavailable';
   const connecting = state === 'connecting';
@@ -34,6 +38,7 @@ function GoogleLoginView({ state, onConnect }: GoogleLoginViewProps) {
             ? copy.settings.googleDriveConnecting
             : copy.shell.loginAction}
         </Button>
+        {privacyHref && <a href={privacyHref}>{copy.shell.privacyPolicy}</a>}
       </section>
     </main>
   );
