@@ -23,7 +23,6 @@ function useQuestionGeneration({
   const [thinking, setThinking] = useState(false);
   const [failed, setFailed] = useState(false);
   const [promptOpen, setPromptOpen] = useState(false);
-  const [checkQuestionDatabase, setCheckQuestionDatabase] = useState(false);
   const generationId = useRef(0);
   const sortedTemplates = [...templates].sort(compareFavoriteItemsByName);
   const selectedTemplate =
@@ -39,7 +38,6 @@ function useQuestionGeneration({
     setThinking(false);
     setFailed(false);
     setPromptOpen(false);
-    setCheckQuestionDatabase(false);
     onQuestionGenerationStateChange?.(false, false);
   }
 
@@ -57,14 +55,13 @@ function useQuestionGeneration({
     setFailed(false);
     onQuestionGenerationStateChange?.(true, true);
     try {
-      await onGenerationStart?.(checkQuestionDatabase);
+      await onGenerationStart?.();
       if (currentGenerationId !== generationId.current) return;
       const question = await onGenerate(
         selectedTemplate,
         context.trim(),
         excludedAnswers,
         difficulty,
-        checkQuestionDatabase,
         recognizability,
       );
       if (currentGenerationId !== generationId.current) return;
@@ -79,7 +76,6 @@ function useQuestionGeneration({
   }
 
   return {
-    checkQuestionDatabase,
     context,
     difficulty,
     failed,
@@ -89,7 +85,6 @@ function useQuestionGeneration({
     recognizability,
     reset,
     selectedTemplate,
-    setCheckQuestionDatabase,
     setContext,
     setDifficulty,
     setPromptOpen,

@@ -15,7 +15,6 @@ import type { AiQuestionGenerationOptions } from '@schdk/ui/editor';
 import type { AppLocale } from '@schdk/ui/localization';
 import type { AiOptions } from '@schdk/ui/options';
 import type { GoogleDriveBridge } from '../../types/google-drive/google-drive-types';
-import { type QuestionDatabaseAccess } from '../question-database/question-database-access';
 import { useAiQuestionTools } from '../../hooks/ai-questions/use-ai-question-tools';
 
 function createAiQuestionGeneration(
@@ -25,7 +24,6 @@ function createAiQuestionGeneration(
   packages: AIQuestionsPackage[],
   locale: AppLocale,
   isAdmin: boolean,
-  questionDatabase: QuestionDatabaseAccess,
   generalRule?: AIQuestion,
   dictionaries: SchdkDictionary[] = [...DEFAULT_SCHDK_DICTIONARIES],
 ): AiQuestionGenerationOptions {
@@ -41,7 +39,6 @@ function createAiQuestionGeneration(
     context: string,
     excludedAnswers: string[],
     difficulty: AIQuestionDifficulty = 'medium',
-    checkQuestionDatabase = false,
     recognizability: AIQuestionRecognizability = 'easy',
   ): GameQuestionGenerationRequest {
     return {
@@ -71,12 +68,6 @@ function createAiQuestionGeneration(
           ({ value }) => value === recognizability,
         )?.promptPart ?? '',
       excludedAnswers,
-      existingQuestions: checkQuestionDatabase
-        ? questionDatabase.getEntries().map((question) => ({
-            question: question.question,
-            answers: [question.answer, ...question.alternativeAnswers],
-          }))
-        : [],
     };
   }
 
@@ -90,9 +81,8 @@ function createAiQuestionGeneration(
     templates: templates
       .filter((template) => template.enabled && !template.generalRule)
       .sort(compareFavoriteItemsByName),
-    async onGenerationStart(checkQuestionDatabase = false) {
+    async onGenerationStart() {
       await bridge?.renewToken?.();
-      if (checkQuestionDatabase) await questionDatabase.refresh();
     },
     getPromptPreview: isAdmin
       ? (
@@ -108,7 +98,6 @@ function createAiQuestionGeneration(
               context,
               excludedAnswers,
               difficulty,
-              false,
               recognizability,
             ),
           );
@@ -120,7 +109,6 @@ function createAiQuestionGeneration(
       context,
       excludedAnswers = [],
       difficulty = 'medium',
-      checkQuestionDatabase = false,
       recognizability = 'easy',
     ) {
       if (!bridge) {
@@ -132,7 +120,6 @@ function createAiQuestionGeneration(
           context,
           excludedAnswers,
           difficulty,
-          checkQuestionDatabase,
           recognizability,
         ),
       );

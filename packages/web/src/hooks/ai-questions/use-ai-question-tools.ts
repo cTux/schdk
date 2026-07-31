@@ -7,7 +7,6 @@ import type {
   GoogleDriveConnection,
 } from '../../types/google-drive/google-drive-types';
 import { useAiSettings } from './use-ai-settings';
-import { type QuestionDatabaseAccess } from '../../services/question-database/question-database-access';
 import { createAiQuestionGeneration } from '../../services/ai-questions/ai-question-generation';
 import { useDictionaries } from '../dictionaries/use-dictionaries';
 
@@ -15,7 +14,6 @@ export function useAiQuestionTools(
   bridge: GoogleDriveBridge | null,
   connection: GoogleDriveConnection,
   locale: AppLocale,
-  questionDatabase: QuestionDatabaseAccess,
 ) {
   const accountId =
     connection.state === 'connected'
@@ -50,7 +48,6 @@ export function useAiQuestionTools(
       aiQuestionsPackages.packages,
       locale,
       isGlobalAIQuestionAdmin(accountId),
-      questionDatabase,
       aiQuestions.globalQuestions.find((question) => question.generalRule),
       dictionaries.dictionaries,
     ),

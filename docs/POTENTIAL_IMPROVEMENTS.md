@@ -14,7 +14,7 @@ normalized answers and lexical token overlap. This is inexpensive and
 provider-neutral, but it can miss a deeply paraphrased question that shares few
 words with the original. An OpenAI Vector Store provides hosted semantic search
 over uploaded question records and can retrieve conceptually related questions
-before the generation model performs the final similarity review.
+for author-driven personal database search.
 
 ### Possible design
 
@@ -23,8 +23,8 @@ before the generation model performs the final similarity review.
 - Keep the Vector Store ID in account-scoped Google Drive app data.
 - Synchronize changed or deleted records from the canonical `.schdk` package
   index.
-- Search the store with the generated draft and pass only the highest-ranked
-  matches to the existing semantic review.
+- Search the store from the author's database query and return only the
+  highest-ranked matches.
 - Keep `.schdk` packages and the Drive question index as the source of truth;
   the Vector Store remains a rebuildable search projection.
 
@@ -118,8 +118,7 @@ existing OpenAI, Anthropic, and Google generation choices.
   the account-scoped Drive index or in a separate rebuildable index file.
 - Re-embed only changed questions and rebuild vectors when the model version
   changes.
-- Use cosine similarity to shortlist candidates, then keep the current
-  generation model as the final semantic reviewer.
+- Use cosine similarity to rank candidates for author-driven database search.
 
 ### Benefits
 

@@ -8,8 +8,6 @@ import {
   createGameQuestionPrompt,
   type GenerateGameQuestionInput,
 } from './game-question-prompt.js';
-import { reviewGameQuestion } from '../../utils/game-question-generation/question-review.js';
-import { findSimilarQuestionCandidates } from '../../utils/game-question-generation/question-similarity.js';
 import { generateQuestionImage } from '../../utils/game-question-generation/generate-question-image.js';
 import { generatedQuestionSchema } from '../../utils/game-question-generation/generated-question-schema.js';
 
@@ -38,53 +36,21 @@ export async function generateGameQuestion(
   });
   const { system, prompt: userPrompt } = createGameQuestionPrompt(input);
   const model = registry.languageModel(`${provider}:${input.model}`);
-  let rejectedQuestions: typeof input.existingQuestions = [];
-  let rejectedQuestion: GameQuestion | undefined;
-  let rejectionFeedback = '';
-  for (let attempt = 0; attempt < 2; attempt += 1) {
-    const result = await generateText({
-      model,
-      output: Output.object({
-        name: 'game_question',
-        description:
-          'A complete game question with required and optional fields.',
-        schema: generatedQuestionSchema,
-      }),
-      system,
-      prompt:
-        attempt === 0
-          ? userPrompt
-          : `${userPrompt}\n\n${
-              input.locale === 'uk'
-                ? 'Попередній кандидат не пройшов редакторську перевірку. Виправ усі зазначені недоліки.'
-                : 'The previous candidate failed editorial review. Correct every reported defect.'
-            }\n\n${rejectionFeedback}\n\n${JSON.stringify({
-              rejectedQuestion,
-              similarQuestions: rejectedQuestions.slice(0, 5),
-            })}`,
-    });
-    const similarQuestions = findSimilarQuestionCandidates(
-      result.output,
-      input.existingQuestions,
-    );
-    const review = await reviewGameQuestion(
-      model,
-      input.locale,
-      userPrompt,
-      result.output,
-      similarQuestions,
-    );
-    if (review.acceptable) {
-      const { imagePrompt, ...question } = result.output;
-      if (!imagePrompt) return question;
-      if (provider !== 'openai') {
-        throw new Error('Image generation requires the OpenAI provider');
-      }
-      return generateQuestionImage(input.apiKey, question, imagePrompt);
-    }
-    rejectionFeedback = review.feedback;
-    rejectedQuestion = result.output;
-    rejectedQuestions = similarQuestions;
+  const result = await generateText({
+    model,
+    output: Output.object({
+      name: 'game_question',
+      description:
+        'A complete game question with required and optional fields.',
+      schema: generatedQuestionSchema,
+    }),
+    system,
+    prompt: userPrompt,
+  });
+  const { imagePrompt, ...question } = result.output;
+  if (!imagePrompt) return question;
+  if (provider !== 'openai') {
+    throw new Error('Image generation requires the OpenAI provider');
   }
-  throw new Error('AI generated an unacceptable question');
+  return generateQuestionImage(input.apiKey, question, imagePrompt);
 }

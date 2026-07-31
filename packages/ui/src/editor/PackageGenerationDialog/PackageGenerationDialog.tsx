@@ -48,7 +48,6 @@ export function PackageGenerationDialog({
   const {
     activePackages,
     cancel,
-    checkQuestionDatabase,
     currentDifficulty,
     difficultyDistribution,
     excludedAnswers,
@@ -65,7 +64,6 @@ export function PackageGenerationDialog({
     ruleSet,
     scope,
     selected,
-    setCheckQuestionDatabase,
     setCurrentInput,
     setDifficultyDistribution,
     setPromptOpen,
@@ -143,8 +141,6 @@ export function PackageGenerationDialog({
                     selected={selected}
                     hasTargets={Boolean(targets.length)}
                     thinking={thinking}
-                    checkQuestionDatabase={checkQuestionDatabase}
-                    onCheckQuestionDatabaseChange={setCheckQuestionDatabase}
                     onCancel={() => void cancel()}
                     onDifficultyPercentageChange={(difficulty, percentage) => {
                       setDifficultyDistribution((current) => ({
