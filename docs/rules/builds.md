@@ -10,9 +10,9 @@
 - Run the pull-request root build on `windows-latest` so CI verifies the
   supported Windows desktop package, then launch that packaged renderer through
   its smoke-test mode.
-- Keep third-party modules from `node_modules` in a separate `vendors` chunk
-  for every runnable Vite application instead of merging them into its main
-  application bundle.
+- Let Vite split runnable applications from their real static and dynamic
+  import graph. Do not force every third-party module into one global
+  `vendors` chunk, because it defeats page-level lazy loading.
 - If parallel root packaging makes Electron's Windows icon tool exit with
   `3221225477` after producing the icon, rerun the affected desktop package
   build sequentially.
