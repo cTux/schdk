@@ -47,19 +47,20 @@ SCHDK прибирає ручну роботу між написанням па�
 - Підготовлений автором макет і оформлення застосовуються автоматично, а після
   фінальної відповіді сценарій завершується готовим фінальним екраном.
 
+- [З чого почати?](docs/guide/getting-started.md)
 - [Можливості гри](docs/guide/game-features.md)
 - [Можливості редактора](docs/guide/editor-features.md)
 - [Застосунки та пакети](docs/guide/applications-and-packages.md)
 - [Вимоги](docs/guide/requirements.md)
 - [Встановлення залежностей](docs/guide/install-dependencies.md)
+- [Структура репозиторію](docs/guide/repository-structure.md)
 - [Підключення Google Диска](docs/guide/google-drive.md)
 - [Запуск повного вебзастосунку](docs/guide/run-web-app.md)
 - [Запуск повного десктопного застосунку](docs/guide/run-desktop-app.md)
 - [Робота з файлами в браузері та на десктопі](docs/guide/file-handling.md)
+- [Формат `.schdk`](docs/guide/schdk-format.md)
+- [Перевірка якості](docs/guide/quality-checks.md)
 - [Збирання готових застосунків](docs/guide/build-apps.md)
 - [Релізи та вебверсія](docs/guide/releases.md)
-- [Перевірка якості](docs/guide/quality-checks.md)
-- [Структура репозиторію](docs/guide/repository-structure.md)
-- [Формат `.schdk`](docs/guide/schdk-format.md)
 - [Усунення проблем](docs/guide/troubleshooting.md)
 - [Стан проєкту та ліцензія](docs/guide/project-status-and-license.md)

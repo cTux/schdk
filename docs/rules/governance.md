@@ -49,7 +49,10 @@
   description, the benefits section, and links to detailed topic guides under
   `docs/guide`.
 - Keep `docs/README.md` as the Ukrainian documentation index. Keep each
-  top-level topic in its own file under `docs/guide`.
+  top-level topic in its own file under `docs/guide`. Start guide navigation
+  with `getting-started.md`, then order the remaining topics by the reader's
+  path from project overview through setup, use, verification, build, and
+  release.
 - Keep shipped feature acceptance contracts under `docs/specs`, indexed by
   `docs/specs/README.md`. Create or update the affected specification in the
   same prompt whenever product behavior changes; do not use feature
