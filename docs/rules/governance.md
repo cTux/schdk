@@ -33,6 +33,9 @@
   onto it, resolve conflicts, and reverify the rebased result.
 - Add a project skill only for a distinct recurring workflow. Do not create
   speculative skills for features or packages that do not exist yet.
+- Before suggesting the next project task, inspect non-archived Codex tasks for
+  the same repository and skip candidates whose outcome or implementation scope
+  is already covered by another task.
 - Rename completed task documents under `docs/research` and `docs/tech-design`
   with an `-implemented.md` suffix so task discovery can skip them.
 - When research identifies a credible scalable solution that is not yet
