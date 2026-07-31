@@ -20,7 +20,10 @@ Each item has:
 - `value`: its stable machine-readable value;
 - `name`: the label shown in generation dropdowns;
 - `description`: the human-readable meaning;
-- `promptPart`: the exact instruction fragment sent to the AI provider.
+- Base difficulty and recognizability dictionaries store `promptPart`, the
+  exact instruction fragment sent to the AI provider. Distribution dictionaries
+  do not store prompt text; generation resolves the selected value in the
+  corresponding base dictionary.
 - Distribution dictionaries additionally store `distribution`, with one
   percentage for each scale value. Percentages must be between 0 and 100 and
   total 100. Distribution items may be added by administrators.

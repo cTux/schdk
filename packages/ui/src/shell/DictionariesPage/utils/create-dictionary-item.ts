@@ -8,7 +8,6 @@ export function createDictionaryItem(
     value: 'medium',
     name: '',
     description: '',
-    promptPart: '',
     ...(isDistribution
       ? {
           distribution: {
@@ -19,6 +18,6 @@ export function createDictionaryItem(
             'very-hard': 0,
           },
         }
-      : {}),
+      : { promptPart: '' }),
   };
 }

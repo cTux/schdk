@@ -5,6 +5,7 @@ import {
 } from '../ai-questions/ai-question.js';
 import { createDistributionDictionary } from './dictionary-distributions.js';
 import { parseSchdkDictionaryArchive } from './parse-schdk-dictionary-archive.js';
+import { createScaleDictionary } from './dictionary-scales.js';
 
 const SCHDK_DICTIONARY_ENTRY = 'dictionary.json';
 const MAX_SCHDK_DICTIONARY_BYTES = 256 * 1024;
@@ -21,7 +22,7 @@ interface SchdkDictionaryItem {
   value: AIQuestionDifficulty;
   name: string;
   description: string;
-  promptPart: string;
+  promptPart?: string;
   distribution?: SchdkDictionaryDistribution;
 }
 
@@ -30,27 +31,6 @@ interface SchdkDictionary {
   name: string;
   description: string;
   items: SchdkDictionaryItem[];
-}
-type ScaleCopy = Record<AIQuestionDifficulty, [string, string, string]>;
-
-function createScaleDictionary(
-  id: SchdkDictionaryId,
-  name: string,
-  description: string,
-  copy: ScaleCopy,
-): SchdkDictionary {
-  return {
-    id,
-    name,
-    description,
-    items: AI_QUESTION_DIFFICULTIES.map((value) => ({
-      id: value,
-      value,
-      name: copy[value][0],
-      description: copy[value][1],
-      promptPart: copy[value][2],
-    })),
-  };
 }
 const DEFAULT_QUESTION_DIFFICULTY: SchdkDictionary = createScaleDictionary(
   'question-difficulty',
@@ -142,6 +122,9 @@ function parseSchdkDictionary(value: unknown): SchdkDictionary | null {
     dictionary.id === 'question-recognizability' ||
     dictionary.id === 'question-difficulty-distribution' ||
     dictionary.id === 'question-recognizability-distribution';
+  const isDistributionDictionary =
+    dictionary.id === 'question-difficulty-distribution' ||
+    dictionary.id === 'question-recognizability-distribution';
   const items = Array.isArray(dictionary.items) ? dictionary.items : [];
   const parsedItems = items.flatMap((item) => {
     if (!item || typeof item !== 'object') return [];
@@ -151,7 +134,9 @@ function parseSchdkDictionary(value: unknown): SchdkDictionary | null {
       AI_QUESTION_DIFFICULTIES.includes(
         candidate.value as AIQuestionDifficulty,
       );
-    const textFields = ['name', 'description', 'promptPart'] as const;
+    const textFields = isDistributionDictionary
+      ? (['name', 'description'] as const)
+      : (['name', 'description', 'promptPart'] as const);
     const hasValidText = textFields.every(
       (field) =>
         typeof candidate[field] === 'string' &&
@@ -184,7 +169,9 @@ function parseSchdkDictionary(value: unknown): SchdkDictionary | null {
             value: candidate.value as AIQuestionDifficulty,
             name: (candidate.name as string).trim(),
             description: (candidate.description as string).trim(),
-            promptPart: (candidate.promptPart as string).trim(),
+            ...(!isDistributionDictionary
+              ? { promptPart: (candidate.promptPart as string).trim() }
+              : {}),
             ...(distribution
               ? { distribution: distribution as SchdkDictionaryDistribution }
               : {}),
@@ -195,9 +182,6 @@ function parseSchdkDictionary(value: unknown): SchdkDictionary | null {
   const hasEveryValue = AI_QUESTION_DIFFICULTIES.every((value) =>
     parsedItems.some((item) => item.value === value),
   );
-  const isDistributionDictionary =
-    dictionary.id === 'question-difficulty-distribution' ||
-    dictionary.id === 'question-recognizability-distribution';
   const hasValidMetadata =
     hasValidId &&
     typeof dictionary.name === 'string' &&

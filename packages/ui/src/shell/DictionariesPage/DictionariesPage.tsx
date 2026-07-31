@@ -102,7 +102,9 @@ function DictionariesPage({
                 <tr>
                   <th>{copy.dictionaries.name}</th>
                   <th>{copy.dictionaries.itemDescription}</th>
-                  <th>{copy.dictionaries.promptPart}</th>
+                  {!draft.id.includes('distribution') && (
+                    <th>{copy.dictionaries.promptPart}</th>
+                  )}
                   {draft.id.includes('distribution') && (
                     <th>{copy.dictionaries.distribution}</th>
                   )}
@@ -139,21 +141,23 @@ function DictionariesPage({
                         item.description
                       )}
                     </td>
-                    <td>
-                      {isAdmin ? (
-                        <Textarea
-                          aria-label={copy.dictionaries.promptPart}
-                          value={item.promptPart}
-                          onChange={(event) =>
-                            updateItem(index, {
-                              promptPart: event.target.value,
-                            })
-                          }
-                        />
-                      ) : (
-                        item.promptPart
-                      )}
-                    </td>
+                    {!draft.id.includes('distribution') && (
+                      <td>
+                        {isAdmin ? (
+                          <Textarea
+                            aria-label={copy.dictionaries.promptPart}
+                            value={item.promptPart ?? ''}
+                            onChange={(event) =>
+                              updateItem(index, {
+                                promptPart: event.target.value,
+                              })
+                            }
+                          />
+                        ) : (
+                          item.promptPart
+                        )}
+                      </td>
+                    )}
                     {draft.id.includes('distribution') && (
                       <td>
                         <DictionaryDistributionFields
@@ -188,7 +192,8 @@ function DictionariesPage({
                     ({ name, description, promptPart, distribution }) =>
                       !name.trim() ||
                       !description.trim() ||
-                      !promptPart.trim() ||
+                      (!draft.id.includes('distribution') &&
+                        !promptPart?.trim()) ||
                       (distribution &&
                         Object.values(distribution).reduce(
                           (a, b) => a + b,

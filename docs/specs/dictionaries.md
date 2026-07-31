@@ -13,9 +13,10 @@ code or duplicating prompt definitions.
   and lists difficulty, recognizability, difficulty-distribution, and
   recognizability-distribution dictionaries. All dictionary tables use the
   same rounded, raised panel treatment as the recent-package list.
-- **DCT-2:** Selecting a dictionary opens a dedicated table with editable name,
-  description, prompt-text-fragment, and percentage columns for distribution
-  dictionaries. Administrators can add records.
+- **DCT-2:** Selecting a base dictionary opens a dedicated table with editable
+  name, description, and prompt-text-fragment columns. Selecting a distribution
+  dictionary opens editable name, description, and percentage columns without a
+  prompt-text-fragment column. Administrators can add records.
 - **DCT-3:** Every account can view dictionaries. Only the centralized
   allowlisted administrator can edit them, and Google Drive folder permissions
   remain the write authorization boundary.

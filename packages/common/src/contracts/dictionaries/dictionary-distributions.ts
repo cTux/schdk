@@ -16,8 +16,8 @@ function createDistributionDictionary(
     name,
     description,
     items: source.items.map((item) => ({
-      ...item,
       id: item.value,
+      value: item.value,
       name: `Повністю ${item.name.toLocaleLowerCase('uk')}`,
       description: `100% питань мають значення «${item.name.toLocaleLowerCase('uk')}».`,
       distribution: Object.fromEntries(
