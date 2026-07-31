@@ -5,6 +5,28 @@ import { useLocalization } from '../../../localization';
 import * as gen from '../utils/generation-input';
 import type { PackageGenerationDialogProps } from '../types';
 
+const DEFAULT_DIFFICULTY_DISTRIBUTION: Record<
+  common.AIQuestionDifficulty,
+  number
+> = {
+  'very-easy': 0,
+  easy: 30,
+  medium: 60,
+  hard: 10,
+  'very-hard': 0,
+};
+
+function getRandomDifficulty(
+  distribution: Record<common.AIQuestionDifficulty, number>,
+) {
+  let position = Math.random() * 100;
+  return (
+    common.AI_QUESTION_DIFFICULTIES.find(
+      (difficulty) => (position -= distribution[difficulty]) < 0,
+    ) ?? 'medium'
+  );
+}
+
 function usePackageGeneration({
   templates,
   packages,
@@ -19,8 +41,12 @@ function usePackageGeneration({
   const cancelDialog = useConfirmationDialog();
   const [open, setOpen] = useState(false);
   const [scope, setScope] = useState<gen.PackageGenerationScope>('missing');
-  const [ruleSet, setRuleSet] = useState<gen.PackageGenerationRuleSet>('all');
-  const [difficulty, setDifficulty] =
+  const [ruleSet, setRuleSet] =
+    useState<gen.PackageGenerationRuleSet>('favorites');
+  const [difficultyDistribution, setDifficultyDistribution] = useState({
+    ...DEFAULT_DIFFICULTY_DISTRIBUTION,
+  });
+  const [currentDifficulty, setCurrentDifficulty] =
     useState<common.AIQuestionDifficulty>('medium');
   const [recognizability, setRecognizability] =
     useState<common.AIQuestionRecognizability>('easy');
@@ -55,8 +81,9 @@ function usePackageGeneration({
     generationId.current += 1;
     setOpen(false);
     setScope('missing');
-    setRuleSet('all');
-    setDifficulty('medium');
+    setRuleSet('favorites');
+    setDifficultyDistribution({ ...DEFAULT_DIFFICULTY_DISTRIBUTION });
+    setCurrentDifficulty('medium');
     setRecognizability('easy');
     setSelected(null);
     setThinking(false);
@@ -84,10 +111,15 @@ function usePackageGeneration({
   }
 
   async function generate() {
+    const difficultyTotal = Object.values(difficultyDistribution).reduce(
+      (total, percentage) => total + percentage,
+      0,
+    );
     const canGenerate =
       Boolean(selectedPackage) &&
       randomTemplates.length > 0 &&
-      targets.length > 0;
+      targets.length > 0 &&
+      difficultyTotal === 100;
     if (!canGenerate) return;
     const currentGenerationId = ++generationId.current;
     onGenerationStateChange(targets, true);
@@ -99,6 +131,7 @@ function usePackageGeneration({
       if (currentGenerationId !== generationId.current) return;
       const usedAnswers = [...initialExcludedAnswers];
       for (const [position, index] of targets.entries()) {
+        const difficulty = getRandomDifficulty(difficultyDistribution);
         const input = gen.getPackageGenerationInput(
           selectedPackage,
           templates,
@@ -108,6 +141,7 @@ function usePackageGeneration({
         );
         if (!input) throw new Error('Missing generation input');
         setCurrentInput(input);
+        setCurrentDifficulty(difficulty);
         setProgress([position + 1, targets.length]);
         setExcludedAnswers([...usedAnswers]);
         const question = await onGenerate(
@@ -142,7 +176,8 @@ function usePackageGeneration({
     cancel,
     cancelDialogProps: cancelDialog.dialogProps,
     checkQuestionDatabase,
-    difficulty,
+    currentDifficulty,
+    difficultyDistribution,
     excludedAnswers,
     failed,
     generate,
@@ -159,7 +194,7 @@ function usePackageGeneration({
     selected,
     setCheckQuestionDatabase,
     setCurrentInput,
-    setDifficulty,
+    setDifficultyDistribution,
     setPromptOpen,
     setRecognizability,
     setRuleSet,

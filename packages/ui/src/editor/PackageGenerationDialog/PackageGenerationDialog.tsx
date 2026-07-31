@@ -49,7 +49,8 @@ export function PackageGenerationDialog({
     activePackages,
     cancel,
     checkQuestionDatabase,
-    difficulty,
+    currentDifficulty,
+    difficultyDistribution,
     excludedAnswers,
     failed,
     generate,
@@ -66,7 +67,7 @@ export function PackageGenerationDialog({
     selected,
     setCheckQuestionDatabase,
     setCurrentInput,
-    setDifficulty,
+    setDifficultyDistribution,
     setPromptOpen,
     setRecognizability,
     setRuleSet,
@@ -131,7 +132,7 @@ export function PackageGenerationDialog({
                       Boolean(randomTemplates.length) &&
                       Boolean(targets.length)
                     }
-                    difficulty={difficulty}
+                    difficultyDistribution={difficultyDistribution}
                     recognizability={recognizability}
                     difficulties={difficulties}
                     recognizabilities={recognizabilities}
@@ -145,7 +146,13 @@ export function PackageGenerationDialog({
                     checkQuestionDatabase={checkQuestionDatabase}
                     onCheckQuestionDatabaseChange={setCheckQuestionDatabase}
                     onCancel={() => void cancel()}
-                    onDifficultyChange={setDifficulty}
+                    onDifficultyPercentageChange={(difficulty, percentage) => {
+                      setDifficultyDistribution((current) => ({
+                        ...current,
+                        [difficulty]: percentage,
+                      }));
+                      setCurrentInput(null);
+                    }}
                     onRecognizabilityChange={setRecognizability}
                     onPackageChange={(index) => {
                       setSelected(index);
@@ -176,7 +183,7 @@ export function PackageGenerationDialog({
                         previewInput.template,
                         previewInput.context,
                         progress ? excludedAnswers : initialExcludedAnswers,
-                        difficulty,
+                        currentDifficulty,
                         recognizability,
                       )}
                     />

@@ -1,9 +1,7 @@
-import type {
-  AIQuestionDifficulty,
-  AIQuestionRecognizability,
-} from '@schdk/common';
+import type { AIQuestionRecognizability } from '@schdk/common';
 import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';
+import { Input } from '../../atoms/Input';
 import { useLocalization } from '../../localization';
 import type { PackageGenerationRuleSet } from '../PackageGenerationDialog/utils/generation-input';
 import { QuestionDatabaseCheck } from '../QuestionDatabaseCheck';
@@ -14,7 +12,7 @@ import './styles.scss';
 export function PackageGenerationOptions({
   activePackages,
   canGenerate,
-  difficulty,
+  difficultyDistribution,
   recognizability,
   difficulties,
   recognizabilities,
@@ -28,7 +26,7 @@ export function PackageGenerationOptions({
   checkQuestionDatabase,
   onCheckQuestionDatabaseChange,
   onCancel,
-  onDifficultyChange,
+  onDifficultyPercentageChange,
   onRecognizabilityChange,
   onPackageChange,
   onRuleSetChange,
@@ -36,6 +34,10 @@ export function PackageGenerationOptions({
   onGenerate,
 }: PackageGenerationOptionsProps) {
   const { copy } = useLocalization();
+  const difficultyTotal = Object.values(difficultyDistribution).reduce(
+    (total, percentage) => total + percentage,
+    0,
+  );
   return (
     <>
       <label>
@@ -52,22 +54,45 @@ export function PackageGenerationOptions({
           <option value="all">{copy.packageGeneration.all}</option>
         </Dropdown>
       </label>
-      <label>
-        {copy.questionGeneration.difficulty}
-        <Dropdown
-          value={difficulty}
-          disabled={thinking}
-          onChange={(event) =>
-            onDifficultyChange(event.target.value as AIQuestionDifficulty)
+      <fieldset className="package-generation-difficulties">
+        <legend>{copy.packageGeneration.difficultyDistribution}</legend>
+        <div className="package-generation-difficulty-list">
+          {difficulties.map((item) => (
+            <label key={item.value}>
+              <span>{item.name}</span>
+              <span className="package-generation-percentage">
+                <Input
+                  type="number"
+                  min={0}
+                  max={100}
+                  step={5}
+                  value={difficultyDistribution[item.value]}
+                  disabled={thinking}
+                  onChange={(event) =>
+                    onDifficultyPercentageChange(
+                      item.value,
+                      Math.min(
+                        100,
+                        Math.max(0, event.target.valueAsNumber || 0),
+                      ),
+                    )
+                  }
+                />
+                %
+              </span>
+            </label>
+          ))}
+        </div>
+        <p
+          className={
+            difficultyTotal === 100
+              ? 'package-generation-difficulty-total'
+              : 'package-generation-difficulty-total question-generation-error'
           }
         >
-          {difficulties.map((item) => (
-            <option key={item.value} value={item.value}>
-              {item.name}
-            </option>
-          ))}
-        </Dropdown>
-      </label>
+          {copy.packageGeneration.difficultyTotal(difficultyTotal)}
+        </p>
+      </fieldset>
       <label>
         {copy.questionGeneration.recognizability}
         <Dropdown
@@ -162,7 +187,7 @@ export function PackageGenerationOptions({
           type="button"
           variant="primary"
           aria-busy={thinking}
-          disabled={thinking || !canGenerate}
+          disabled={thinking || !canGenerate || difficultyTotal !== 100}
           onClick={onGenerate}
         >
           {copy.packageGeneration.generate}
