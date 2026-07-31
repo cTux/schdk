@@ -2,11 +2,7 @@ import { createAnthropic } from '@ai-sdk/anthropic';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { createOpenAI } from '@ai-sdk/openai';
 import { createProviderRegistry, generateText, Output } from 'ai';
-import {
-  getGameQuestionAnswers,
-  normalizeGameAnswer,
-  type GameQuestion,
-} from '@schdk/common';
+import { type GameQuestion } from '@schdk/common';
 import {
   assertGameQuestionGenerationInput,
   createGameQuestionPrompt,
@@ -41,12 +37,6 @@ export async function generateGameQuestion(
     google: createGoogleGenerativeAI({ apiKey: input.apiKey }),
   });
   const { system, prompt: userPrompt } = createGameQuestionPrompt(input);
-  const excludedAnswers = new Set(
-    [
-      ...input.excludedAnswers,
-      ...input.existingQuestions.flatMap((question) => question.answers),
-    ].map(normalizeGameAnswer),
-  );
   const model = registry.languageModel(`${provider}:${input.model}`);
   let rejectedQuestions: typeof input.existingQuestions = [];
   let rejectedQuestion: GameQuestion | undefined;
@@ -77,33 +67,22 @@ export async function generateGameQuestion(
       result.output,
       input.existingQuestions,
     );
-    const repeatsAnswer = getGameQuestionAnswers(result.output).some((answer) =>
-      excludedAnswers.has(normalizeGameAnswer(answer)),
+    const review = await reviewGameQuestion(
+      model,
+      input.locale,
+      userPrompt,
+      result.output,
+      similarQuestions,
     );
-    if (repeatsAnswer) {
-      rejectionFeedback =
-        input.locale === 'uk'
-          ? 'Відповідь повторює вже використану сутність. Обери іншу.'
-          : 'The answer repeats an already used entity. Choose another one.';
-    } else {
-      const review = await reviewGameQuestion(
-        model,
-        input.locale,
-        userPrompt,
-        result.output,
-        input.excludedAnswers,
-        similarQuestions,
-      );
-      if (review.acceptable) {
-        const { imagePrompt, ...question } = result.output;
-        if (!imagePrompt) return question;
-        if (provider !== 'openai') {
-          throw new Error('Image generation requires the OpenAI provider');
-        }
-        return generateQuestionImage(input.apiKey, question, imagePrompt);
+    if (review.acceptable) {
+      const { imagePrompt, ...question } = result.output;
+      if (!imagePrompt) return question;
+      if (provider !== 'openai') {
+        throw new Error('Image generation requires the OpenAI provider');
       }
-      rejectionFeedback = review.feedback;
+      return generateQuestionImage(input.apiKey, question, imagePrompt);
     }
+    rejectionFeedback = review.feedback;
     rejectedQuestion = result.output;
     rejectedQuestions = similarQuestions;
   }

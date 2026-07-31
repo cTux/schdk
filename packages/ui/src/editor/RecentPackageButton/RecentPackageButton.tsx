@@ -45,8 +45,8 @@ function RecentPackageButton({
                 {copy.questionDatabase.hasRemarks}
               </span>
             ) : (
-              <span className="recent-package-developing">
-                {copy.questionDatabase.developing}
+              <span className="recent-package-errors">
+                {copy.questionDatabase.hasErrors}
               </span>
             )}
           </span>
