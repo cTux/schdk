@@ -88,6 +88,35 @@ function DictionariesPage({
   return (
     <Page
       className="dictionaries-page"
+      headerActions={
+        draft && isAdmin ? (
+          <>
+            <Button type="button" onClick={addItem} disabled={saving}>
+              {copy.dictionaries.add}
+            </Button>
+            <Button
+              type="button"
+              variant="primary"
+              disabled={
+                saving ||
+                draft.items.some(
+                  ({ name, description, promptPart, distribution }) =>
+                    !name.trim() ||
+                    !description.trim() ||
+                    (!draft.id.includes('distribution') &&
+                      !promptPart?.trim()) ||
+                    (distribution &&
+                      Object.values(distribution).reduce((a, b) => a + b, 0) !==
+                        100),
+                )
+              }
+              onClick={() => void save()}
+            >
+              {copy.dictionaries.save}
+            </Button>
+          </>
+        ) : undefined
+      }
       hidden={hidden}
       title={draft ? draft.name : copy.dictionaries.title}
       headerContent={
@@ -178,35 +207,6 @@ function DictionariesPage({
             <p className="dictionaries-error" role="alert">
               {copy.dictionaries.saveFailed}
             </p>
-          )}
-          {isAdmin && (
-            <>
-              <Button type="button" onClick={addItem} disabled={saving}>
-                {copy.dictionaries.add}
-              </Button>
-              <Button
-                type="button"
-                variant="primary"
-                disabled={
-                  saving ||
-                  draft.items.some(
-                    ({ name, description, promptPart, distribution }) =>
-                      !name.trim() ||
-                      !description.trim() ||
-                      (!draft.id.includes('distribution') &&
-                        !promptPart?.trim()) ||
-                      (distribution &&
-                        Object.values(distribution).reduce(
-                          (a, b) => a + b,
-                          0,
-                        ) !== 100),
-                  )
-                }
-                onClick={() => void save()}
-              >
-                {copy.dictionaries.save}
-              </Button>
-            </>
           )}
         </>
       ) : (

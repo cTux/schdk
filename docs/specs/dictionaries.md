@@ -16,7 +16,8 @@ code or duplicating prompt definitions.
 - **DCT-2:** Selecting a base dictionary opens a dedicated table with editable
   name, description, and prompt-text-fragment columns. Selecting a distribution
   dictionary opens editable name, description, and percentage columns without a
-  prompt-text-fragment column. Administrators can add records.
+  prompt-text-fragment column. Administrators can add records and save changes
+  from the dictionary editor header.
 - **DCT-3:** Every account can view dictionaries. Only the centralized
   allowlisted administrator can edit them, and Google Drive folder permissions
   remain the write authorization boundary.
