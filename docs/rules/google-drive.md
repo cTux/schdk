@@ -3,6 +3,9 @@
 - Keep the Drive REST client, package-storage contract, reference helpers, and
   generic settings envelope in `@schdk/google-drive`. Its parser validates the
   envelope while the owning web shell binds and validates section value types.
+- Route Drive API endpoints, multipart uploads, and visible SCHDK-folder
+  discovery through the shared client transport helpers. Resource clients own
+  their file validation, metadata mapping, and size limits.
 - Keep local storage as the immediate source and fallback. Merge remote
   settings per section by `updatedAt`, debounce uploads for one second, and
   retain local changes when Drive is unavailable.
