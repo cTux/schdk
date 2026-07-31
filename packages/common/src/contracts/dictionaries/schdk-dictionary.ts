@@ -1,20 +1,28 @@
-import { strFromU8, strToU8, unzipSync, zipSync } from 'fflate';
+import { strToU8, zipSync } from 'fflate';
 import {
   AI_QUESTION_DIFFICULTIES,
   type AIQuestionDifficulty,
 } from '../ai-questions/ai-question.js';
+import { createDistributionDictionary } from './dictionary-distributions.js';
+import { parseSchdkDictionaryArchive } from './parse-schdk-dictionary-archive.js';
 
 const SCHDK_DICTIONARY_ENTRY = 'dictionary.json';
 const MAX_SCHDK_DICTIONARY_BYTES = 256 * 1024;
 const MAX_SCHDK_DICTIONARY_JSON_BYTES = 128 * 1024;
+type SchdkDictionaryId =
+  | 'question-difficulty'
+  | 'question-recognizability'
+  | 'question-difficulty-distribution'
+  | 'question-recognizability-distribution';
 
-type SchdkDictionaryId = 'question-difficulty' | 'question-recognizability';
-
+type SchdkDictionaryDistribution = Record<AIQuestionDifficulty, number>;
 interface SchdkDictionaryItem {
+  id?: string;
   value: AIQuestionDifficulty;
   name: string;
   description: string;
   promptPart: string;
+  distribution?: SchdkDictionaryDistribution;
 }
 
 interface SchdkDictionary {
@@ -23,92 +31,107 @@ interface SchdkDictionary {
   description: string;
   items: SchdkDictionaryItem[];
 }
+type ScaleCopy = Record<AIQuestionDifficulty, [string, string, string]>;
+
+function createScaleDictionary(
+  id: SchdkDictionaryId,
+  name: string,
+  description: string,
+  copy: ScaleCopy,
+): SchdkDictionary {
+  return {
+    id,
+    name,
+    description,
+    items: AI_QUESTION_DIFFICULTIES.map((value) => ({
+      id: value,
+      value,
+      name: copy[value][0],
+      description: copy[value][1],
+      promptPart: copy[value][2],
+    })),
+  };
+}
+const DEFAULT_QUESTION_DIFFICULTY: SchdkDictionary = createScaleDictionary(
+  'question-difficulty',
+  'Складність питань',
+  'Рівень складності розв’язання питання.',
+  {
+    'very-easy': [
+      'Дуже легка',
+      'Майже пряме прочитання питання.',
+      'Майже очевидна відповідь із 0–1 бар’єром.',
+    ],
+    easy: [
+      'Легка',
+      'Прості зв’язки та сильна перевірочна підказка.',
+      'Очевидна асоціація з 1–2 простими бар’єрами.',
+    ],
+    medium: [
+      'Середня',
+      'Кілька помірних кроків розв’язання.',
+      'Потрібно 2–3 помірні бар’єри або один небуквальний перехід.',
+    ],
+    hard: [
+      'Складна',
+      'Кілька взаємозалежних складних кроків.',
+      'Потрібно 3–4 взаємозалежні бар’єри або складний перехід між темами.',
+    ],
+    'very-hard': [
+      'Дуже складна',
+      'Багато бар’єрів із достатніми опорами.',
+      'Потрібні щонайменше 4 бар’єри або 2 складні переходи.',
+    ],
+  },
+);
+const DEFAULT_QUESTION_RECOGNIZABILITY: SchdkDictionary = createScaleDictionary(
+  'question-recognizability',
+  'Впізнаваність питань',
+  'Рівень відомості відповіді для цільової аудиторії.',
+  {
+    'very-easy': [
+      'Дуже легка',
+      'Відповідь знає майже вся аудиторія.',
+      'Обери загальновідому сутність, яку впізнає майже вся аудиторія.',
+    ],
+    easy: [
+      'Легка',
+      'Відповідь відома більшості аудиторії.',
+      'Обери широко відому сутність без спеціалізованих знань.',
+    ],
+    medium: [
+      'Середня',
+      'Відповідь відома значній частині аудиторії.',
+      'Обери помірно відому сутність і дай достатні підказки.',
+    ],
+    hard: [
+      'Складна',
+      'Відповідь переважно відома знавцям теми.',
+      'Обери менш відому, але значущу сутність із опорами для інших гравців.',
+    ],
+    'very-hard': [
+      'Дуже складна',
+      'Відповідь нішова, але значуща.',
+      'Обери нішову або спеціалізовану культурно чи тематично значущу сутність.',
+    ],
+  },
+);
 
 const DEFAULT_SCHDK_DICTIONARIES: readonly SchdkDictionary[] = [
-  {
-    id: 'question-difficulty',
-    name: 'Складність питань',
-    description: 'Рівень складності розв’язання питання.',
-    items: [
-      {
-        value: 'very-easy',
-        name: 'Дуже легка',
-        description: 'Майже пряме прочитання питання.',
-        promptPart:
-          '0–1 очевидний бар’єр розв’язання та майже пряме прочитання.',
-      },
-      {
-        value: 'easy',
-        name: 'Легка',
-        description: 'Прості зв’язки та сильна перевірочна підказка.',
-        promptPart:
-          '1–2 прості бар’єри розв’язання, очевидна асоціація та сильна перевірочна підказка.',
-      },
-      {
-        value: 'medium',
-        name: 'Середня',
-        description: 'Кілька помірних кроків розв’язання.',
-        promptPart:
-          '2–3 помірні бар’єри розв’язання або один небуквальний перехід.',
-      },
-      {
-        value: 'hard',
-        name: 'Складна',
-        description: 'Кілька взаємозалежних складних кроків.',
-        promptPart:
-          '3–4 взаємозалежні бар’єри розв’язання або складний перехід між темами.',
-      },
-      {
-        value: 'very-hard',
-        name: 'Дуже складна',
-        description: 'Багато бар’єрів із достатніми опорами.',
-        promptPart:
-          'Щонайменше 4 бар’єри або 2 складні переходи; усі потрібні опори мають бути присутні, а відповідь — однозначна.',
-      },
-    ],
-  },
-  {
-    id: 'question-recognizability',
-    name: 'Впізнаваність питань',
-    description: 'Рівень відомості відповіді для цільової аудиторії.',
-    items: [
-      {
-        value: 'very-easy',
-        name: 'Дуже легка',
-        description: 'Відповідь знає майже вся аудиторія.',
-        promptPart:
-          'Обери загальновідому сутність, яку впізнає майже вся цільова аудиторія.',
-      },
-      {
-        value: 'easy',
-        name: 'Легка',
-        description: 'Відповідь відома більшості аудиторії.',
-        promptPart:
-          'Обери широко відому сутність, знайому більшості аудиторії без спеціалізованих знань.',
-      },
-      {
-        value: 'medium',
-        name: 'Середня',
-        description: 'Відповідь відома значній частині аудиторії.',
-        promptPart:
-          'Обери помірно відому сутність, знайому значній частині аудиторії; підказки мають дозволяти вивести відповідь без миттєвого впізнавання.',
-      },
-      {
-        value: 'hard',
-        name: 'Складна',
-        description: 'Відповідь переважно відома знавцям теми.',
-        promptPart:
-          'Обери менш відому, але значущу сутність, переважно знайому людям, які цікавляться відповідною сферою; дай достатньо опор для інших гравців.',
-      },
-      {
-        value: 'very-hard',
-        name: 'Дуже складна',
-        description: 'Відповідь нішова, але значуща.',
-        promptPart:
-          'Обери нішеву або спеціалізовану, але культурно чи тематично значущу сутність, а не випадковий маловідомий факт; усі потрібні для виведення опори мають бути в питанні.',
-      },
-    ],
-  },
+  DEFAULT_QUESTION_DIFFICULTY,
+  DEFAULT_QUESTION_RECOGNIZABILITY,
+  createDistributionDictionary(
+    'question-difficulty-distribution',
+    'Розподілення складності',
+    'Профілі розподілення питань за складністю.',
+    DEFAULT_QUESTION_DIFFICULTY,
+  ),
+  createDistributionDictionary(
+    'question-recognizability-distribution',
+    'Розподілення впізнаваності',
+    'Профілі розподілення питань за впізнаваністю.',
+    DEFAULT_QUESTION_RECOGNIZABILITY,
+  ),
 ];
 
 function parseSchdkDictionary(value: unknown): SchdkDictionary | null {
@@ -116,7 +139,9 @@ function parseSchdkDictionary(value: unknown): SchdkDictionary | null {
   const dictionary = value as Record<string, unknown>;
   const hasValidId =
     dictionary.id === 'question-difficulty' ||
-    dictionary.id === 'question-recognizability';
+    dictionary.id === 'question-recognizability' ||
+    dictionary.id === 'question-difficulty-distribution' ||
+    dictionary.id === 'question-recognizability-distribution';
   const items = Array.isArray(dictionary.items) ? dictionary.items : [];
   const parsedItems = items.flatMap((item) => {
     if (!item || typeof item !== 'object') return [];
@@ -133,26 +158,46 @@ function parseSchdkDictionary(value: unknown): SchdkDictionary | null {
         candidate[field].trim().length > 0 &&
         candidate[field].length <= 20_000,
     );
-    return hasValidValue && hasValidText
+    const distribution = candidate.distribution as
+      | Record<string, unknown>
+      | undefined;
+    const hasValidDistribution =
+      distribution === undefined ||
+      (distribution &&
+        AI_QUESTION_DIFFICULTIES.every(
+          (value) =>
+            typeof distribution[value] === 'number' &&
+            distribution[value] >= 0 &&
+            distribution[value] <= 100,
+        ) &&
+        Object.values(distribution).reduce<number>(
+          (total, value) => total + Number(value),
+          0,
+        ) === 100);
+    return hasValidValue && hasValidText && hasValidDistribution
       ? [
           {
+            id:
+              typeof candidate.id === 'string'
+                ? candidate.id.trim()
+                : (candidate.value as string),
             value: candidate.value as AIQuestionDifficulty,
             name: (candidate.name as string).trim(),
             description: (candidate.description as string).trim(),
             promptPart: (candidate.promptPart as string).trim(),
+            ...(distribution
+              ? { distribution: distribution as SchdkDictionaryDistribution }
+              : {}),
           },
         ]
       : [];
   });
-  const hasEveryValue =
-    parsedItems.length === AI_QUESTION_DIFFICULTIES.length &&
-    AI_QUESTION_DIFFICULTIES.every(
-      (value) =>
-        parsedItems.filter((item) => item.value === value).length === 1,
-    ) &&
-    parsedItems.every(
-      (item, index) => item.value === AI_QUESTION_DIFFICULTIES[index],
-    );
+  const hasEveryValue = AI_QUESTION_DIFFICULTIES.every((value) =>
+    parsedItems.some((item) => item.value === value),
+  );
+  const isDistributionDictionary =
+    dictionary.id === 'question-difficulty-distribution' ||
+    dictionary.id === 'question-recognizability-distribution';
   const hasValidMetadata =
     hasValidId &&
     typeof dictionary.name === 'string' &&
@@ -161,7 +206,10 @@ function parseSchdkDictionary(value: unknown): SchdkDictionary | null {
     typeof dictionary.description === 'string' &&
     Boolean(dictionary.description.trim()) &&
     dictionary.description.length <= 5_000;
-  return hasValidMetadata && hasEveryValue
+  return hasValidMetadata &&
+    hasEveryValue &&
+    (!isDistributionDictionary ||
+      parsedItems.every((item) => item.distribution))
     ? {
         id: dictionary.id as SchdkDictionaryId,
         name: (dictionary.name as string).trim(),
@@ -193,51 +241,16 @@ function serializeSchdkDictionary(dictionary: SchdkDictionary): Uint8Array {
   return archive;
 }
 
-function parseSchdkDictionaryArchive(content: Uint8Array): SchdkDictionary {
-  if (
-    content.byteLength > MAX_SCHDK_DICTIONARY_BYTES ||
-    content[0] !== 0x50 ||
-    content[1] !== 0x4b
-  ) {
-    throw new Error('Invalid SCHDK dictionary');
-  }
-  let entry: Uint8Array | undefined;
-  let found = false;
-  try {
-    entry = unzipSync(content, {
-      filter: ({ name, originalSize }) => {
-        if (name !== SCHDK_DICTIONARY_ENTRY) return false;
-        if (found || originalSize > MAX_SCHDK_DICTIONARY_JSON_BYTES) {
-          throw new Error('Invalid SCHDK dictionary');
-        }
-        found = true;
-        return true;
-      },
-    })[SCHDK_DICTIONARY_ENTRY];
-  } catch {
-    throw new Error('Invalid SCHDK dictionary');
-  }
-  if (!entry) throw new Error('Invalid SCHDK dictionary');
-  const value: unknown = JSON.parse(strFromU8(entry));
-  const archive = value as Record<string, unknown>;
-  const dictionary =
-    value &&
-    typeof value === 'object' &&
-    archive.format === 'schdk-dictionary' &&
-    archive.version === 1
-      ? parseSchdkDictionary(value)
-      : null;
-  if (!dictionary) throw new Error('Invalid SCHDK dictionary');
-  return dictionary;
-}
-
 export {
   DEFAULT_SCHDK_DICTIONARIES,
+  SCHDK_DICTIONARY_ENTRY,
   MAX_SCHDK_DICTIONARY_BYTES,
+  MAX_SCHDK_DICTIONARY_JSON_BYTES,
   parseSchdkDictionary,
   parseSchdkDictionaryArchive,
   serializeSchdkDictionary,
   type SchdkDictionary,
   type SchdkDictionaryId,
   type SchdkDictionaryItem,
+  type SchdkDictionaryDistribution,
 };

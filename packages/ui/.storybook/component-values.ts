@@ -7,6 +7,8 @@ import { DEFAULT_SCHDK_DICTIONARIES } from '@schdk/common';
 
 const difficultyDictionary = DEFAULT_SCHDK_DICTIONARIES[0];
 const recognizabilityDictionary = DEFAULT_SCHDK_DICTIONARIES[1];
+const difficultyDistributionDictionary = DEFAULT_SCHDK_DICTIONARIES[2];
+const recognizabilityDistributionDictionary = DEFAULT_SCHDK_DICTIONARIES[3];
 
 const hostGame = {
   question: gameQuestion,
@@ -71,16 +73,10 @@ export const componentValues: Record<string, Record<string, unknown>> = {
       },
     ],
     canGenerate: true,
-    difficultyDistribution: {
-      'very-easy': 0,
-      easy: 30,
-      medium: 60,
-      hard: 10,
-      'very-hard': 0,
-    },
-    recognizability: 'medium',
-    difficulties: difficultyDictionary.items,
-    recognizabilities: recognizabilityDictionary.items,
+    difficultyDistribution: difficultyDistributionDictionary.items[1].id,
+    recognizability: recognizabilityDistributionDictionary.items[1].id,
+    difficultyDistributions: difficultyDistributionDictionary.items,
+    recognizabilityDistributions: recognizabilityDistributionDictionary.items,
     hasRandomTemplates: true,
     progress: [3, 36],
     ruleSet: 'favorites',

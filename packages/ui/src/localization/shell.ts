@@ -41,7 +41,7 @@ const shellCopy = {
       description: aiPackageRulesCopy.en.navigationDescription,
     },
     dictionaries: {
-      label: 'Dictionaries',
+      label: 'Technical term dictionaries',
       description: 'Edit shared question-generation values.',
     },
     questionDatabase: questionDatabaseCopy.en.navigation,
@@ -85,7 +85,7 @@ const shellCopy = {
       description: aiPackageRulesCopy.uk.navigationDescription,
     },
     dictionaries: {
-      label: 'Словники',
+      label: 'Словники технічних термінів',
       description: 'Редагуйте спільні значення генерації питань.',
     },
     questionDatabase: questionDatabaseCopy.uk.navigation,

@@ -58,6 +58,18 @@
   min-height: 96px;
 }
 
+.dictionary-distribution-fields {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(74px, 1fr));
+  gap: $space-1;
+}
+
+.dictionary-distribution-fields label {
+  display: grid;
+  gap: $space-1;
+  font-size: $font-size-sm;
+}
+
 .dictionary-link {
   border: 0;
   padding: 0;

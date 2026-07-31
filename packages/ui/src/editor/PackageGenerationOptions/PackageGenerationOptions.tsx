@@ -1,7 +1,5 @@
-import type { AIQuestionRecognizability } from '@schdk/common';
 import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';
-import { Input } from '../../atoms/Input';
 import { useLocalization } from '../../localization';
 import type { PackageGenerationRuleSet } from '../PackageGenerationDialog/utils/generation-input';
 import type { PackageGenerationOptionsProps } from './types';
@@ -13,8 +11,8 @@ export function PackageGenerationOptions({
   canGenerate,
   difficultyDistribution,
   recognizability,
-  difficulties,
-  recognizabilities,
+  difficultyDistributions,
+  recognizabilityDistributions,
   hasRandomTemplates,
   progress,
   ruleSet,
@@ -23,18 +21,14 @@ export function PackageGenerationOptions({
   hasTargets,
   thinking,
   onCancel,
-  onDifficultyPercentageChange,
-  onRecognizabilityChange,
+  onDifficultyDistributionChange,
+  onRecognizabilityDistributionChange,
   onPackageChange,
   onRuleSetChange,
   onScopeChange,
   onGenerate,
 }: PackageGenerationOptionsProps) {
   const { copy } = useLocalization();
-  const difficultyTotal = Object.values(difficultyDistribution).reduce(
-    (total, percentage) => total + percentage,
-    0,
-  );
   return (
     <>
       <label>
@@ -51,58 +45,33 @@ export function PackageGenerationOptions({
           <option value="all">{copy.packageGeneration.all}</option>
         </Dropdown>
       </label>
-      <fieldset className="package-generation-difficulties">
-        <legend>{copy.packageGeneration.difficultyDistribution}</legend>
-        <div className="package-generation-difficulty-list">
-          {difficulties.map((item) => (
-            <label key={item.value}>
-              <span>{item.name}</span>
-              <span className="package-generation-percentage">
-                <Input
-                  type="number"
-                  min={0}
-                  max={100}
-                  step={5}
-                  value={difficultyDistribution[item.value]}
-                  disabled={thinking}
-                  onChange={(event) =>
-                    onDifficultyPercentageChange(
-                      item.value,
-                      Math.min(
-                        100,
-                        Math.max(0, event.target.valueAsNumber || 0),
-                      ),
-                    )
-                  }
-                />
-                %
-              </span>
-            </label>
-          ))}
-        </div>
-        <p
-          className={
-            difficultyTotal === 100
-              ? 'package-generation-difficulty-total'
-              : 'package-generation-difficulty-total question-generation-error'
+      <label>
+        {copy.packageGeneration.difficultyDistribution}
+        <Dropdown
+          value={difficultyDistribution}
+          disabled={thinking}
+          onChange={(event) =>
+            onDifficultyDistributionChange(event.target.value)
           }
         >
-          {copy.packageGeneration.difficultyTotal(difficultyTotal)}
-        </p>
-      </fieldset>
+          {difficultyDistributions.map((item) => (
+            <option key={item.id ?? item.value} value={item.id ?? item.value}>
+              {item.name}
+            </option>
+          ))}
+        </Dropdown>
+      </label>
       <label>
-        {copy.questionGeneration.recognizability}
+        {copy.packageGeneration.recognizabilityDistribution}
         <Dropdown
           value={recognizability}
           disabled={thinking}
           onChange={(event) =>
-            onRecognizabilityChange(
-              event.target.value as AIQuestionRecognizability,
-            )
+            onRecognizabilityDistributionChange(event.target.value)
           }
         >
-          {recognizabilities.map((item) => (
-            <option key={item.value} value={item.value}>
+          {recognizabilityDistributions.map((item) => (
+            <option key={item.id ?? item.value} value={item.id ?? item.value}>
               {item.name}
             </option>
           ))}
@@ -178,7 +147,7 @@ export function PackageGenerationOptions({
           type="button"
           variant="primary"
           aria-busy={thinking}
-          disabled={thinking || !canGenerate || difficultyTotal !== 100}
+          disabled={thinking || !canGenerate}
           onClick={onGenerate}
         >
           {copy.packageGeneration.generate}

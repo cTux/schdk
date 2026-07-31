@@ -42,7 +42,7 @@ function isDriveDictionaryName(value: unknown): value is string {
   return (
     typeof value === 'string' &&
     value.length <= 500 &&
-    /^(question-difficulty|question-recognizability)\.schdk-dictionary$/u.test(
+    /^(question-difficulty|question-recognizability|question-difficulty-distribution|question-recognizability-distribution)\.schdk-dictionary$/u.test(
       value,
     )
   );

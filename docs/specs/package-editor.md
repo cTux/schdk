@@ -101,11 +101,9 @@ without losing in-progress work.
   questions, questions with unresolved author remarks, or the whole package
   and one enabled AI question package from a dropdown. Remarked questions are
   regenerated from the current question and remark, and a resolved result
-  clears the remark. The panel distributes generated questions by percentage
-  across difficulty levels from very easy through very hard, defaults to 0%,
-  30%, 60%, 10%, and 0% respectively, and requires the percentages to total
-  100%. Each question independently receives a difficulty according to those
-  weights. Recognizability defaults to easy. Favorite packages appear first with a star and each
+  clears the remark. The panel selects difficulty and recognizability
+  distribution records from the shared dictionaries. Each question
+  independently receives both values according to those weights. Favorite packages appear first with a star and each
   favorite and non-favorite group is name-sorted. The panel also selects all,
   favorite, or non-favorite enabled non-general question rules; each question
   without an explicitly configured type uses a random rule from that set, with

@@ -1,11 +1,17 @@
 import './styles.scss';
 
-import type { SchdkDictionary, SchdkDictionaryItem } from '@schdk/common';
+import {
+  type SchdkDictionary,
+  type SchdkDictionaryDistribution,
+  type SchdkDictionaryItem,
+} from '@schdk/common';
 import { useEffect, useState } from 'react';
 import { Button } from '../../atoms/Button';
 import { Input } from '../../atoms/Input';
 import { Textarea } from '../../atoms/Textarea';
 import { useLocalization } from '../../localization';
+import { DictionaryDistributionFields } from './DictionaryDistributionFields';
+import { createDictionaryItem } from './utils/create-dictionary-item';
 import type { DictionariesPageProps } from './types';
 
 function DictionariesPage({
@@ -43,6 +49,33 @@ function DictionariesPage({
     );
   }
 
+  function updateDistribution(
+    index: number,
+    value: keyof SchdkDictionaryDistribution,
+    percentage: number,
+  ) {
+    updateItem(index, {
+      distribution: {
+        ...draft?.items[index]?.distribution,
+        [value]: percentage,
+      } as SchdkDictionaryDistribution,
+    });
+  }
+
+  function addItem() {
+    setDraft((current) =>
+      current
+        ? {
+            ...current,
+            items: [
+              ...current.items,
+              createDictionaryItem(current.id.includes('distribution')),
+            ],
+          }
+        : current,
+    );
+  }
+
   async function save() {
     if (!draft || !isAdmin) return;
     setSaving(true);
@@ -70,11 +103,14 @@ function DictionariesPage({
                   <th>{copy.dictionaries.name}</th>
                   <th>{copy.dictionaries.itemDescription}</th>
                   <th>{copy.dictionaries.promptPart}</th>
+                  {draft.id.includes('distribution') && (
+                    <th>{copy.dictionaries.distribution}</th>
+                  )}
                 </tr>
               </thead>
               <tbody>
                 {draft.items.map((item, index) => (
-                  <tr key={item.value}>
+                  <tr key={item.id ?? item.value}>
                     <td>
                       {isAdmin ? (
                         <Input
@@ -118,6 +154,16 @@ function DictionariesPage({
                         item.promptPart
                       )}
                     </td>
+                    {draft.id.includes('distribution') && (
+                      <td>
+                        <DictionaryDistributionFields
+                          item={item}
+                          onChange={(value, percentage) =>
+                            updateDistribution(index, value, percentage)
+                          }
+                        />
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>
@@ -129,20 +175,32 @@ function DictionariesPage({
             </p>
           )}
           {isAdmin && (
-            <Button
-              type="button"
-              variant="primary"
-              disabled={
-                saving ||
-                draft.items.some(
-                  ({ name, description, promptPart }) =>
-                    !name.trim() || !description.trim() || !promptPart.trim(),
-                )
-              }
-              onClick={() => void save()}
-            >
-              {copy.dictionaries.save}
-            </Button>
+            <>
+              <Button type="button" onClick={addItem} disabled={saving}>
+                {copy.dictionaries.add}
+              </Button>
+              <Button
+                type="button"
+                variant="primary"
+                disabled={
+                  saving ||
+                  draft.items.some(
+                    ({ name, description, promptPart, distribution }) =>
+                      !name.trim() ||
+                      !description.trim() ||
+                      !promptPart.trim() ||
+                      (distribution &&
+                        Object.values(distribution).reduce(
+                          (a, b) => a + b,
+                          0,
+                        ) !== 100),
+                  )
+                }
+                onClick={() => void save()}
+              >
+                {copy.dictionaries.save}
+              </Button>
+            </>
           )}
         </>
       ) : (
