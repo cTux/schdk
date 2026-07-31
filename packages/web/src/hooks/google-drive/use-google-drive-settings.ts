@@ -49,6 +49,8 @@ export function useGoogleDriveSettings({
   );
   const [accountId, setAccountId] = useState<string>();
   const [statusReady, setStatusReady] = useState(!bridge);
+  const [gameOptionsStorageFailed, setGameOptionsStorageFailed] =
+    useState(false);
   const [revision, setRevision] = useState(0);
   const settings = useRef(
     loadLocalDriveSettings(localStorage, editorTextOptions, gameOptions),
@@ -60,7 +62,7 @@ export function useGoogleDriveSettings({
     const editor = next.sections.editorTextOptions.value as EditorTextOptions;
     const game = next.sections.gameOptions.value as GameOptions;
     saveEditorTextOptions(localStorage, editor);
-    saveGameOptions(localStorage, game);
+    setGameOptionsStorageFailed(!saveGameOptions(localStorage, game));
     saveLocalDriveSettings(localStorage, next);
     setEditorTextOptions(editor);
     setGameOptions(game);
@@ -153,7 +155,7 @@ export function useGoogleDriveSettings({
         gameOptions: { updatedAt: now, value },
       },
     };
-    saveGameOptions(localStorage, value);
+    setGameOptionsStorageFailed(!saveGameOptions(localStorage, value));
     saveLocalDriveSettings(localStorage, settings.current);
     setGameOptions(value);
     setRevision((value) => value + 1);
@@ -190,6 +192,7 @@ export function useGoogleDriveSettings({
     bridge,
     accountId,
     connection,
+    gameOptionsStorageFailed,
     statusReady,
     connect,
     disconnect,

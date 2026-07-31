@@ -6,8 +6,6 @@ import {
   loadEditorTextOptions,
   loadGameOptions,
   parseVisualEditorTemplateFile,
-  saveEditorTextOptions,
-  saveGameOptions,
   serializeVisualEditorTemplate,
 } from '../../storage/options/options-storage';
 import {
@@ -47,7 +45,7 @@ export function App() {
   const [gameOptions, setGameOptionsState] = useState<GameOptions>(() =>
     loadGameOptions(localStorage),
   );
-  const [gameOptionsError, setGameOptionsError] = useState('');
+  const [gameOptionsActionError, setGameOptionsActionError] = useState('');
   const googleDrive = useGoogleDriveSettings({
     editorTextOptions: editorOptions,
     gameOptions,
@@ -71,6 +69,9 @@ export function App() {
       aiQuestionsPackages.loading ||
       dictionaries.loading);
   const loginState = googleDrive.statusReady ? connection.state : 'connecting';
+  const gameOptionsError =
+    gameOptionsActionError ||
+    (googleDrive.gameOptionsStorageFailed ? copy.allWeb.saveVisualsFailed : '');
   const [unlocked, setUnlocked] = useState(connected);
   useEffect(() => setUnlocked((current) => current || connected), [connected]);
 
@@ -103,29 +104,22 @@ export function App() {
     document.documentElement.dataset.uiAnimations = String(uiAnimations);
   }, [uiAnimations]);
 
-  useEffect(() => {
-    saveEditorTextOptions(localStorage, editorOptions);
-  }, [editorOptions]);
-
-  useEffect(() => {
-    setGameOptionsError(
-      saveGameOptions(localStorage, gameOptions)
-        ? ''
-        : copy.allWeb.saveVisualsFailed,
-    );
-  }, [copy, gameOptions]);
+  function changeGameOptions(value: GameOptions) {
+    setGameOptionsActionError('');
+    googleDrive.setGameOptions(value);
+  }
 
   async function importVisualEditorTemplate(file: File) {
     try {
       const imported = await parseVisualEditorTemplateFile(file, gameOptions);
       if (imported) {
-        googleDrive.setGameOptions(imported);
+        changeGameOptions(imported);
         return;
       }
     } catch {
       // Report file read failures with the same actionable import error.
     }
-    setGameOptionsError(copy.allWeb.importVisualsFailed);
+    setGameOptionsActionError(copy.allWeb.importVisualsFailed);
   }
 
   function exportVisualEditorTemplate() {
@@ -140,8 +134,9 @@ export function App() {
       link.download = 'schdk-visual-template.schdk-template';
       link.click();
       URL.revokeObjectURL(url);
+      setGameOptionsActionError('');
     } catch {
-      setGameOptionsError(copy.allWeb.exportVisualsFailed);
+      setGameOptionsActionError(copy.allWeb.exportVisualsFailed);
     }
   }
 
@@ -218,7 +213,7 @@ export function App() {
             onAiApiKeySave={ai.saveApiKey}
             onAiModelChange={ai.setModel}
             onAiProviderChange={ai.setProvider}
-            onGameOptionsChange={googleDrive.setGameOptions}
+            onGameOptionsChange={changeGameOptions}
             onGoogleDriveConnect={() => void googleDrive.connect()}
             onGoogleDriveDisconnect={() => void googleDrive.disconnect()}
             onImportVisualEditorTemplate={importVisualEditorTemplate}
