@@ -86,7 +86,7 @@ V43|A replacement global general rule is persisted before the previous general r
 V44|Every shared generation dictionary is parsed from its `.schdk-dictionary` ZIP archive, remains folder-scoped and admin-writable, and supplies both dropdown labels and provider prompt fragments.
 V45|When one structured OpenAI question response requests an image, OpenAI generates and canonically parses the bounded embedded image without a text-review request.
 V46|Browser OAuth tokens remain memory-only, while desktop refresh credentials remain encrypted, scope-validated, and removed after invalidation.
-V47|The hosted OAuth landing surface publicly identifies SCHDK and links a same-domain privacy policy that accurately discloses Google user-data handling.
+V47|The hosted OAuth landing surface identifies SCHDK and its purpose in crawler-readable HTML and links a same-domain privacy policy that accurately discloses Google user-data handling.
 
 ## §T
 
@@ -206,3 +206,4 @@ B106|2026-07-31|Skill compaction removed phrases enforced by repository workflow
 B107|2026-07-30|The generation panel's generic label layout overrode the database checkbox row and separated the control from its text|Keep the compact checkbox inline as specified by `docs/specs/package-editor.md`.
 B108|2026-07-31|The AI reviewer repeatedly rejected candidates for image handouts that the text-only generator cannot produce, exhausting all four provider calls and failing generation|V45
 B109|2026-07-31|Browser OAuth persisted bearer tokens in session storage and desktop refresh retained invalid or partially authorized credentials|V46
+B110|2026-07-31|The OAuth landing page kept its product name and purpose only in client-rendered content, so Google's branding crawler saw the obsolete static title and no purpose|V47

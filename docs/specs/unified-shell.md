@@ -40,8 +40,9 @@ package authoring, hosting, settings, and account state.
   answers, and answer comments.
 - **SHL-10:** Before authorization, only the localized Google login screen is
   visible. The hosted web screen publicly identifies SCHDK, describes its
-  purpose, and links its directly accessible same-domain privacy policy;
-  account status and disconnect remain available after connection.
+  purpose in both the rendered and static HTML, and links its directly
+  accessible same-domain privacy policy; account status and disconnect remain
+  available after connection.
 - **SHL-11:** The Artificial intelligence page fills the available workspace
   width and lists name-sorted account rules followed by name-sorted global
   rules. The existing form creates account rules; allowlisted administrators
