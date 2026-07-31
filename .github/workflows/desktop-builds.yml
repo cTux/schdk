@@ -38,9 +38,6 @@ jobs:
           - platform: windows
             runner: windows-latest
             command: package:win
-          - platform: macos
-            runner: macos-latest
-            command: package:mac
           - platform: linux
             runner: ubuntu-latest
             command: package:linux
@@ -73,8 +70,6 @@ jobs:
           '
       - run: pnpm turbo build --filter=@schdk/desktop
       - run: pnpm --filter @schdk/desktop ${{ matrix.command }}
-        env:
-          CSC_IDENTITY_AUTO_DISCOVERY: ${{ matrix.platform == 'macos' && 'false' || '' }}
       - name: Verify Windows output
         if: matrix.platform == 'windows'
         shell: pwsh
@@ -83,17 +78,6 @@ jobs:
           Resolve-Path "$release/win-unpacked/ЩДК.exe"
           Resolve-Path "$release/schdk-*-windows-x64-installer.exe"
           Resolve-Path "$release/schdk-*-windows-x64-portable.exe"
-      - name: Verify macOS output
-        if: matrix.platform == 'macos'
-        shell: bash
-        run: |
-          release=packages/desktop/dist/release
-          test -d "$release/mac/ЩДК.app"
-          test -d "$release/mac-arm64/ЩДК.app"
-          test "$(find "$release" -maxdepth 1 -name 'schdk-*-macos-x64.zip' | wc -l)" -eq 1
-          test "$(find "$release" -maxdepth 1 -name 'schdk-*-macos-x64.pkg' | wc -l)" -eq 1
-          test "$(find "$release" -maxdepth 1 -name 'schdk-*-macos-arm64.zip' | wc -l)" -eq 1
-          test "$(find "$release" -maxdepth 1 -name 'schdk-*-macos-arm64.pkg' | wc -l)" -eq 1
       - name: Verify Linux output
         if: matrix.platform == 'linux'
         shell: bash
@@ -110,24 +94,6 @@ jobs:
         with:
           name: schdk-windows-x64-unsigned
           path: packages/desktop/dist/release/schdk-*-windows-x64-*.exe
-          if-no-files-found: error
-      - name: Upload macOS x64 artifacts
-        if: matrix.platform == 'macos'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: schdk-macos-x64-unsigned
-          path: |
-            packages/desktop/dist/release/schdk-*-macos-x64.zip
-            packages/desktop/dist/release/schdk-*-macos-x64.pkg
-          if-no-files-found: error
-      - name: Upload macOS arm64 artifacts
-        if: matrix.platform == 'macos'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: schdk-macos-arm64-unsigned
-          path: |
-            packages/desktop/dist/release/schdk-*-macos-arm64.zip
-            packages/desktop/dist/release/schdk-*-macos-arm64.pkg
           if-no-files-found: error
       - name: Upload Linux artifacts
         if: matrix.platform == 'linux'

@@ -116,7 +116,7 @@ Use Google's installed desktop application flow:
 7. Refresh access tokens in the main process without renderer access to either
    token.
 
-The loopback flow remains supported for Windows, macOS, and Linux desktop
+The loopback flow remains supported for Windows and Linux desktop
 applications. PKCE prevents a captured authorization code from being exchanged
 without the verifier.
 

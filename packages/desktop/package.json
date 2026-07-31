@@ -15,7 +15,6 @@
     "prepackage": "node scripts/prepare-google-oauth-client.mjs",
     "package": "electron-builder --dir",
     "package:win": "node scripts/prepare-google-oauth-client.mjs && electron-builder --win --x64",
-    "package:mac": "node scripts/prepare-google-oauth-client.mjs && electron-builder --mac --x64 --arm64",
     "package:linux": "node scripts/prepare-google-oauth-client.mjs && electron-builder --linux --x64",
     "lint": "oxlint -c ../../.oxlintrc.json electron",
     "typecheck": "tsc --noEmit",
@@ -71,19 +70,6 @@
     },
     "portable": {
       "artifactName": "schdk-${version}-windows-${arch}-portable.${ext}"
-    },
-    "mac": {
-      "icon": "build/owl.png",
-      "category": "public.app-category.games",
-      "target": [
-        "dir",
-        "zip",
-        "pkg"
-      ],
-      "artifactName": "schdk-${version}-macos-${arch}.${ext}"
-    },
-    "pkg": {
-      "installLocation": "/Applications"
     },
     "linux": {
       "icon": "build/owl.png",

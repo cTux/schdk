@@ -4,7 +4,7 @@ Status: implemented
 
 ## Goal
 
-Deliver the unified SCHDK experience as a safe Windows, macOS, and Linux
+Deliver the unified SCHDK experience as a safe Windows and Linux
 application with native save and presenter-window integration.
 
 ## Requirements
@@ -47,9 +47,8 @@ application with native save and presenter-window integration.
   unsigned before publication.
 - **DSK-15:** Pull requests launch the packaged Windows renderer and verify its
   root UI and preload bridge before the build check passes.
-- **DSK-16:** A manually dispatched native build produces unsigned Windows x64,
-  macOS x64/arm64 app ZIP and PKG, and Debian x64 artifacts after shared checks
-  pass.
+- **DSK-16:** A manually dispatched native build produces unsigned Windows x64
+  and Debian x64 artifacts after shared checks pass.
 - **DSK-17:** Every cross-platform artifact includes version and architecture;
   DEB metadata identifies `schdk`, `amd64`, and a non-empty maintainer.
 - **DSK-18:** The packaged application checks GitHub's latest SCHDK Release
@@ -90,8 +89,8 @@ application with native save and presenter-window integration.
    x64 installer.
 7. Run pull-request checks and observe the packaged renderer smoke test exit
    successfully.
-8. Dispatch `Desktop builds`; verify both macOS architectures preserve their
-   `.app` bundles in ZIPs, each PKG exists, and the DEB metadata matches DSK-17.
+8. Dispatch `Desktop builds`; verify the Windows artifacts exist and the DEB
+   metadata matches DSK-17.
 9. Run an older packaged version while a newer GitHub Release exists; wait at
    most one minute, activate the update button, and verify the latest release
    page opens in the system browser.
