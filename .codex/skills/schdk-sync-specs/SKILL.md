@@ -1,6 +1,6 @@
 ---
 name: schdk-sync-specs
-description: Synchronize SCHDK feature specifications, the root project specification, and related documentation after any prompt that changes repository files. Use as the mandatory post-change step before verification and commit for features, fixes, refactors, workflow changes, and documentation changes.
+description: Synchronize SCHDK specifications and related docs after any repository file change. Use before verification and commit for all change types.
 ---
 
 # SCHDK Spec Sync

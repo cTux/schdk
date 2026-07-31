@@ -1,6 +1,6 @@
 ---
 name: schdk-add-missing-tests
-description: Backfill automated tests for all SCHDK changes since the previous test-adding commit. Use only when the user explicitly says "add missing tests"; do not trigger automatically after a fix, feature, refactor, or review.
+description: Backfill tests for all SCHDK changes since the previous test commit. Use only when the user explicitly says "add missing tests", never automatically.
 ---
 
 # SCHDK Missing Tests

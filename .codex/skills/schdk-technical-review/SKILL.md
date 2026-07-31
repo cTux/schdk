@@ -1,6 +1,6 @@
 ---
 name: schdk-technical-review
-description: Review the SCHDK project for concrete P0-P2 correctness, security, data-loss, performance, and maintainability issues. Use for project-wide technical reviews, audits, code health checks, or requests to find and prioritize serious technical problems.
+description: Review SCHDK for evidenced P0-P2 correctness, security, data-loss, performance, and maintainability issues. Use for technical reviews, audits, or serious problem discovery.
 ---
 
 # SCHDK Technical Review

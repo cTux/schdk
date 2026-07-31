@@ -1,35 +1,21 @@
 ---
 name: schdk-game-packages
-description: Maintain or diagnose the SCHDK .schdk, .aiquestion, .aiquestionpackage, and .schdk-dictionary file contracts in @schdk/common. Use for portable package types, ZIP encoding, parsing, serialization, readiness validation, clipboard question JSON, compatibility, malformed files, or format documentation changes.
+description: Maintain SCHDK .schdk, .aiquestion, .aiquestionpackage, and .schdk-dictionary contracts. Use for types, ZIPs, parsing, serialization, validation, compatibility, malformed files, or format docs.
 ---
 
 # SCHDK Game Packages
 
 ## Workflow
 
-1. Follow `$schdk-development`, then read `docs/GAME_PACKAGE.md` and `docs/rules/game-packages.md`.
-2. Treat `packages/common/src/index.ts` as the public contract entry point and
-   `packages/common/src/game-question.ts` as the owner of question types and
-   parsing; do not duplicate schema or validation logic in consumers.
-   Store music-break bytes in their fixed ZIP entries, not in `game.json`.
-   Reuse the canonical parser for every desktop IPC or Drive write boundary and
-   verify derived metadata instead of trusting renderer-supplied flags.
-3. Update implementation and `docs/GAME_PACKAGE.md` together for contract changes.
-4. Rebuild affected consumers when exported types or behavior change.
-5. For `.aiquestion` changes, keep `packages/common/src/ai-question.ts` and
-   `docs/AI_QUESTION.md` synchronized. Require a ZIP archive containing the
-   canonical `ai-question.json` entry; do not duplicate its parser in Drive or
-   UI consumers.
-6. For `.aiquestionpackage` changes, keep
-   `packages/common/src/ai-questions-package.ts` and
-   `docs/AI_QUESTION_PACKAGE.md` synchronized. Require a ZIP archive containing
-   the canonical `ai-questions-package.json` entry and validate it before
-   Drive-backed use.
-7. For `.schdk-dictionary` changes, keep
-   `packages/common/src/schdk-dictionary.ts` and
-   `docs/SCHDK_DICTIONARY.md` synchronized. Require a ZIP archive containing
-   the canonical `dictionary.json` entry and validate it before Drive-backed
-   use.
+1. Follow `$schdk-development`, then read `docs/rules/game-packages.md` and the
+   format contract affected by the task:
+   `docs/GAME_PACKAGE.md`, `docs/AI_QUESTION.md`,
+   `docs/AI_QUESTION_PACKAGE.md`, or `docs/SCHDK_DICTIONARY.md`.
+2. Trace the owning `@schdk/common` parser, serializer, validator, public
+   export, and every affected consumer before editing.
+3. Update implementation and its format contract together.
+4. Exercise round-trip and malformed-input paths, then rebuild affected
+   consumers when exports or behavior change.
 
 ## Checks
 

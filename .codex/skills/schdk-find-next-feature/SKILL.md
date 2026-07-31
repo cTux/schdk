@@ -1,6 +1,6 @@
 ---
 name: schdk-find-next-feature
-description: Find and suggest the next concrete SCHDK feature, fix, test, maintenance, security, or performance task. Use when the user asks what to build, fix, improve, or work on next, or requests a single actionable project task from the backlog and repository.
+description: Find one actionable SCHDK feature, fix, test, maintenance, security, or performance task. Use when asked what to build, fix, improve, or do next.
 ---
 
 # SCHDK Find Next Feature

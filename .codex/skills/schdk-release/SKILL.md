@@ -1,6 +1,6 @@
 ---
 name: schdk-release
-description: Prepare, publish, and verify an SCHDK GitHub Release containing one unsigned Windows x64 installer. Use when the user says "make a release", "create a release", "publish a release", asks to release a version, or asks to repair an incomplete release.
+description: Prepare, publish, repair, and verify an SCHDK GitHub Release with one unsigned Windows x64 installer. Use for any request to release a version.
 ---
 
 # SCHDK Release
