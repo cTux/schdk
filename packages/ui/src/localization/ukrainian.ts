@@ -61,8 +61,6 @@ export const ukrainian = {
     invalidMusic: 'Цей аудіофайл не підтримується вбудованим програвачем.',
     copyQuestion: 'Копіювати питання',
     pasteQuestion: 'Вставити питання',
-    previousQuestion: 'Попереднє питання',
-    nextQuestion: 'Наступне питання',
     questionType: 'Тип питання',
     questionTypes: {
       standard: 'Звичайне',

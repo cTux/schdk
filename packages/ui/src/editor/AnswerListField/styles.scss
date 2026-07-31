@@ -1,6 +1,11 @@
 @use '../../styles/tokens' as *;
 
 .editor-app {
+  .answer-list[data-empty='true'] {
+    margin-bottom: 8px;
+    padding-top: 4px;
+  }
+
   .answer-list-heading {
     display: flex;
     width: 100%;

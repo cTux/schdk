@@ -62,8 +62,6 @@ export const english: typeof ukrainian = {
     invalidMusic: 'The built-in player does not support this audio file.',
     copyQuestion: 'Copy question',
     pasteQuestion: 'Paste question',
-    previousQuestion: 'Previous question',
-    nextQuestion: 'Next question',
     questionType: 'Question type',
     questionTypes: {
       standard: 'Standard',

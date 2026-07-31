@@ -81,7 +81,7 @@
   fields equal in both directions.
 - Let authors add optional alternative and wrong answer lists. Keep each add
   action inline with its list title instead of rendering a separate button
-  below the list.
+  below the list, and keep empty lists vertically compact.
 - Let each package slot select `Звичайне`, `Бліц 2×30`, or `Бліц 3×20`.
   Standard questions have one text part; blitz questions have two or three
   separate text parts and still share one answer.
@@ -112,4 +112,6 @@
   on the same row as `Тур N` / `Tour N`. Between tours 1–2 and 2–3, let the
   author add, replace, or remove one audio file. Offer `audio/*` and reject
   files the native player cannot play. Keep the sticky question navigation
-  vertically compact enough to remain visible on short desktop viewports.
+  vertically compact enough to remain visible on short desktop viewports. Use
+  that question list as the only manual question-switching control; do not
+  render previous or next buttons below the selected-question form.

@@ -1,13 +1,6 @@
 @use './tokens' as *;
 
 .editor-app {
-  .question-actions {
-    justify-content: space-between;
-    gap: 10px;
-    border-top: 1px solid $border;
-    padding-top: 18px;
-  }
-
   @keyframes editor-header-in {
     from {
       opacity: 0;

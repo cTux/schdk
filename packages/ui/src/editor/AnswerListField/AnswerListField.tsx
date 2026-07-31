@@ -17,7 +17,11 @@ function AnswerListField({
   const { copy } = useLocalization();
 
   return (
-    <fieldset aria-label={`${legend} ${copy.shared.optional}`}>
+    <fieldset
+      className="answer-list"
+      data-empty={answers.length === 0}
+      aria-label={`${legend} ${copy.shared.optional}`}
+    >
       <legend className="answer-list-heading">
         <span className="answer-list-label">
           <strong>{legend}</strong> {copy.shared.optional}
