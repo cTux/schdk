@@ -13,4 +13,5 @@ export interface AppProps {
   driveActive?: boolean;
   sessionScope?: string;
   onDriveFailure?(): void;
+  onExit?(): void;
 }

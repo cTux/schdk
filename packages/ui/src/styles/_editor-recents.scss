@@ -87,25 +87,10 @@
   }
 
   .recent-packages {
-    width: min(640px, calc(100% - 32px));
+    width: 100%;
     margin-top: 18px;
-    margin-inline: 16px 0;
+    margin-inline: 0;
     text-align: left;
-  }
-
-  .recent-packages-heading {
-    margin-bottom: 10px;
-  }
-
-  .recent-packages h2 {
-    font-size: 0.95rem;
-    letter-spacing: -0.01em;
-  }
-
-  .recent-packages-heading p {
-    margin-top: 3px;
-    color: $muted;
-    font-size: 0.75rem;
   }
 
   .recent-package-list {

@@ -5,9 +5,11 @@ export interface AIQuestionsPackagesPageProps {
   packages: AIQuestionsPackage[];
   questionRules: AIQuestion[];
   failed: boolean;
+  hidden?: boolean;
   loading: boolean;
   editTarget: Extract<ShellEditTarget, { kind: 'package' }> | null;
   onAdd(item: AIQuestionsPackage): Promise<boolean>;
+  onBack(): void;
   onCloseEditor(): void;
   onRemove(index: number): Promise<boolean>;
   onShowEditor(target: ShellEditTarget): void;

@@ -10,7 +10,8 @@ content hidden until the correct stage.
 ## Requirements
 
 - **HST-1:** Host opens a ready package from Drive recents or imports a local
-  package through a visible chooser or drag-and-drop.
+  package through a visible chooser or drag-and-drop. The recents list uses
+  the available host width and does not render a separate section heading.
 - **HST-2:** Before start, the app shows only title, filename, aggregate tour,
   question, and handout counts, plus start and back actions.
 - **HST-3:** Standard questions advance through intro, optional handout,

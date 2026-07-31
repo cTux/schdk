@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';
 import { useLocalization } from '../../localization';
+import { Page } from '../../shell/Page';
 import { AiOptionsPanel } from '../AiOptionsPanel';
 import { OptionSlider } from '../OptionSlider';
 import { OptionToggle } from '../OptionToggle';
@@ -22,6 +23,7 @@ export function OptionsPage({
   onAiApiKeySave,
   onAiModelChange,
   onAiProviderChange,
+  onBack,
   onEditorChange,
   onGameChange,
   onGoogleDriveConnect,
@@ -33,10 +35,13 @@ export function OptionsPage({
   const { copy, locale, onLocaleChange } = useLocalization();
 
   return (
-    <div className="options-page" hidden={hidden}>
-      <header>
-        <h1>{copy.settings.title}</h1>
-      </header>
+    <Page
+      className="options-page"
+      hidden={hidden}
+      title={copy.settings.title}
+      headerContent={<p>{copy.settings.description}</p>}
+      onBack={onBack}
+    >
       <div
         className={classNames('options-tabs', 'options-primary-tabs')}
         role="tablist"
@@ -227,6 +232,6 @@ export function OptionsPage({
           onProviderChange={onAiProviderChange}
         />
       </div>
-    </div>
+    </Page>
   );
 }

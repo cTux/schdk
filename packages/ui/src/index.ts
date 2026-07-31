@@ -34,6 +34,7 @@ import {
   AppUpdateButton,
   type AppUpdateButtonProps,
 } from './shell/AppUpdateButton';
+import { Page, type PageProps } from './shell/Page';
 
 export {
   AppIcon,
@@ -76,4 +77,6 @@ export {
   type TooltipProps,
   AppUpdateButton,
   type AppUpdateButtonProps,
+  Page,
+  type PageProps,
 };

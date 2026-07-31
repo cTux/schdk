@@ -212,3 +212,4 @@ B110|2026-07-31|The OAuth landing page kept its product name and purpose only in
 B111|2026-07-31|Intrinsic-width question tooltips and editor headings expanded the 320-pixel page overflow area|Constrain narrow tooltips and allow editor headings to shrink; the existing 320-pixel browser smoke test covers recurrence.
 B112|2026-07-31|Package autosave updated Drive by file ID without checking whether another client had modified the file|V48
 B113|2026-07-31|The static browser fallback used unstyled default HTML before the application bundle loaded|V49
+B114|2026-07-31|The editor's broad paragraph reset removed the shared page-header description margin only from editor and host pages|Keep compact title-description spacing in the shared `Page` contract.

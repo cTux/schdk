@@ -20,6 +20,7 @@ export interface OptionsPageProps {
   onAiApiKeySave(apiKey: string | null): Promise<void>;
   onAiModelChange(model: string): void;
   onAiProviderChange(provider: string): void;
+  onBack(): void;
   onEditorChange(options: EditorTextOptions): void;
   onGameChange(options: GameOptions): void;
   onGoogleDriveConnect(): void;

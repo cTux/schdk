@@ -1,0 +1,111 @@
+@use '../../styles/tokens' as *;
+
+.page {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: $space-6;
+  box-sizing: border-box;
+  padding: clamp(28px, 5vh, 48px) clamp(20px, 4vw, 64px);
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+}
+
+.page-heading {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.2vw, 1.7rem);
+}
+
+.page .page-header h1 {
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.page-heading > :not(h1) {
+  margin: 0;
+  color: $muted;
+  line-height: 1.6;
+}
+
+.page-header-actions {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  margin-left: auto;
+}
+
+.page-header-actions .package-actions,
+.page-header-actions .package-header {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.page-header-actions .package-header {
+  align-items: flex-end;
+}
+
+.page-header-actions .package-title {
+  display: block;
+  min-width: min(260px, 28vw);
+  color: $muted;
+  font-size: $font-size-xs;
+}
+
+.page-header-actions .package-title input {
+  margin-top: 5px;
+  padding-block: 8px;
+  font-weight: 600;
+}
+
+.page-header-actions .save-status {
+  display: flex;
+  min-height: 16px;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.75rem;
+}
+
+.page-content {
+  min-width: 0;
+}
+
+@media (width <= 640px) {
+  .page {
+    padding: $space-8 $space-3;
+  }
+
+  .page-header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .page-heading {
+    flex-basis: calc(100% - 56px);
+  }
+
+  .page-header-actions {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .page-header-actions .package-header {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .page-header-actions .package-title {
+    min-width: 0;
+    flex: 1;
+  }
+}

@@ -1,10 +1,11 @@
 import './styles.scss';
 import classNames from 'classnames';
 import type { CSSProperties } from 'react';
-import { AppIcon } from '../../atoms/AppIcon';
 import { StatusMessage } from '../../atoms/StatusMessage';
+import { PackageDropZone } from '../../editor/PackageDropZone';
 import { PackageStart } from '../../editor/PackageStart';
 import { LOCALIZATION_COPY } from '../../localization';
+import { Page } from '../../shell/Page';
 import { GameFinished } from '../GameFinished';
 import { GamePackageDetails } from '../GamePackageDetails';
 import { GameWizard } from '../GameWizard';
@@ -31,6 +32,7 @@ function HostView({
   recentPackages,
   recentPackagesLoading = false,
   onBack,
+  onExit,
   onDeleteRecentPackage,
   onDownloadRecentPackage,
   onGameBack,
@@ -42,59 +44,60 @@ function HostView({
 }: HostViewProps) {
   const playing = game !== null || finished;
   return (
-    <main
-      id="schdk-host-app"
+    <Page
       className={classNames('editor-app', 'host-app', {
         'is-playing': playing,
       })}
-      style={
-        {
-          '--game-surface-background-image': backgroundImage
-            ? `url(${JSON.stringify(backgroundImage)})`
-            : 'none',
-          '--game-surface-background-opacity': backgroundOpacity,
-        } as CSSProperties
+      title={copy.shell.host.label}
+      headerContent={<p>{copy.shell.host.description}</p>}
+      headerActions={
+        !playing && !packageDetails ? (
+          <PackageDropZone compact hidden={false} onOpen={onOpenPackage} />
+        ) : undefined
       }
+      onBack={onExit ?? onBack}
     >
-      <header className="app-header" hidden={playing}>
-        <div className="brand">
-          <AppIcon />
-          <div>
-            <p className="eyebrow">{copy.host.eyebrow}</p>
-            <h1>{copy.host.title}</h1>
-          </div>
-        </div>
-      </header>
-      <PackageStart
-        hidden={packageDetails !== null || playing}
-        openingRecentPackageId={openingRecentPackageId}
-        recentPackages={recentPackages}
-        recentPackagesLoading={recentPackagesLoading}
-        onDeleteRecentPackage={onDeleteRecentPackage}
-        onDownloadRecentPackage={onDownloadRecentPackage}
-        onOpenPackage={onOpenPackage}
-        onOpenRecentPackage={onOpenRecentPackage}
-      />
-      {packageDetails && !playing && (
-        <GamePackageDetails
-          details={packageDetails}
-          onBack={onBack}
-          onStart={onStartGame}
+      <main
+        id="schdk-host-app"
+        style={
+          {
+            '--game-surface-background-image': backgroundImage
+              ? `url(${JSON.stringify(backgroundImage)})`
+              : 'none',
+            '--game-surface-background-opacity': backgroundOpacity,
+          } as CSSProperties
+        }
+      >
+        <PackageStart
+          hidden={packageDetails !== null || playing}
+          openingRecentPackageId={openingRecentPackageId}
+          recentPackages={recentPackages}
+          recentPackagesLoading={recentPackagesLoading}
+          onDeleteRecentPackage={onDeleteRecentPackage}
+          onDownloadRecentPackage={onDownloadRecentPackage}
+          onOpenRecentPackage={onOpenRecentPackage}
         />
-      )}
-      {game && (
-        <GameWizard
-          copy={copy}
-          customElements={customElements}
-          game={game}
-          layout={layout}
-          onBack={onGameBack}
-          onNext={onGameNext}
-        />
-      )}
-      {finished && <GameFinished onReturn={onReturnToGames} />}
-      {message && <StatusMessage>{message}</StatusMessage>}
-    </main>
+        {packageDetails && !playing && (
+          <GamePackageDetails
+            details={packageDetails}
+            onBack={onBack}
+            onStart={onStartGame}
+          />
+        )}
+        {game && (
+          <GameWizard
+            copy={copy}
+            customElements={customElements}
+            game={game}
+            layout={layout}
+            onBack={onGameBack}
+            onNext={onGameNext}
+          />
+        )}
+        {finished && <GameFinished onReturn={onReturnToGames} />}
+        {message && <StatusMessage>{message}</StatusMessage>}
+      </main>
+    </Page>
   );
 }
 

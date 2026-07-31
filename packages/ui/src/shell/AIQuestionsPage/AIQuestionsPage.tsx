@@ -2,13 +2,11 @@ import './styles.scss';
 
 import type { AIQuestion } from '@schdk/common';
 import { useEffect, useState } from 'react';
-import { Button } from '../../atoms/Button';
-import { Checkbox } from '../../atoms/Checkbox';
-import { Input } from '../../atoms/Input';
-import { TextAreaField } from '../../atoms/TextAreaField';
 import { useLocalization } from '../../localization';
 import { AIQuestionCollection } from '../AIQuestionCollection';
+import { Page } from '../Page';
 import { EMPTY_QUESTION } from './constants';
+import { AIQuestionForm } from './AIQuestionForm';
 import type { AIQuestionsPageProps } from './types';
 
 export function AIQuestionsPage({
@@ -18,10 +16,12 @@ export function AIQuestionsPage({
   globalFailed,
   loading,
   globalLoading,
+  hidden,
   isGlobalAdmin,
   editTarget,
   onAdd,
   onAddGlobal,
+  onBack,
   onRemove,
   onRemoveGlobal,
   onCloseEditor,
@@ -81,126 +81,45 @@ export function AIQuestionsPage({
   function showEditor(question: AIQuestion, global = false) {
     onShowEditor({ kind: 'question', global, name: question.name });
   }
+
+  async function saveQuestion(question: AIQuestion) {
+    setFormSaving(true);
+    const saved = await (
+      editingIndex === null
+        ? editingGlobal
+          ? onAddGlobal(question)
+          : onAdd(question)
+        : updateQuestion(editingIndex, question, editingGlobal)
+    ).catch(() => false);
+    setFormSaving(false);
+    if (saved) closeForm();
+    else setSaveFailed(true);
+  }
+
   return (
-    <section className="ai-questions-page">
-      <header>
-        <div>
-          <p className="eyebrow">{copy.shell.artificialIntelligence.label}</p>
-          <h1>{copy.aiQuestions.title}</h1>
-          <p>{copy.aiQuestions.description}</p>
-        </div>
-      </header>
+    <Page
+      className="ai-questions-page"
+      hidden={hidden}
+      title={copy.aiQuestions.title}
+      headerContent={<p>{copy.aiQuestions.description}</p>}
+      onBack={onBack}
+    >
       {formOpen && (
-        <form
-          className="ai-question-form"
-          onSubmit={async (event) => {
-            event.preventDefault();
-            if (formSaving) return;
-            const question = {
-              name: draft.name.trim(),
-              description: draft.description.trim(),
-              goodExamples: draft.goodExamples.trim(),
-              badExamples: draft.badExamples.trim(),
-              enabled: draft.enabled,
-              favorite: draft.favorite,
-              generalRule: editingGlobal && draft.generalRule,
-            };
-            setFormSaving(true);
-            const saved = await (
-              editingIndex === null
-                ? editingGlobal
-                  ? onAddGlobal(question)
-                  : onAdd(question)
-                : updateQuestion(editingIndex, question, editingGlobal)
-            ).catch(() => false);
-            setFormSaving(false);
-            if (saved) closeForm();
-            else setSaveFailed(true);
-          }}
-        >
-          <div className="ai-question-form-title">
-            <h2>
-              {editingIndex === null
-                ? copy.aiQuestions.newQuestion
-                : copy.aiQuestions.editQuestion}
-            </h2>
-          </div>
-          {editingGlobal && isGlobalAdmin && (
-            <label className="ai-question-general-rule">
-              <span>{copy.aiQuestions.generalRule}</span>
-              <Checkbox
-                checked={draft.generalRule}
-                disabled={formSaving}
-                onChange={(event) =>
-                  setDraft((current) => ({
-                    ...current,
-                    generalRule: event.target.checked,
-                  }))
-                }
-              />
-            </label>
-          )}
-          <label>
-            {copy.aiQuestions.name}
-            <Input
-              autoFocus
-              disabled={formSaving}
-              required
-              value={draft.name}
-              onChange={(event) => updateDraft('name', event.target.value)}
-            />
-          </label>
-          <TextAreaField
-            required
-            disabled={formSaving}
-            rows={5}
-            label={copy.aiQuestions.questionDescription}
-            value={draft.description}
-            onValueChange={(value) => updateDraft('description', value)}
-          />
-          <TextAreaField
-            optional
-            disabled={formSaving}
-            optionalLabel={copy.shared.optional}
-            rows={4}
-            label={copy.aiQuestions.goodExamples}
-            value={draft.goodExamples}
-            onValueChange={(value) => updateDraft('goodExamples', value)}
-          />
-          <TextAreaField
-            optional
-            disabled={formSaving}
-            optionalLabel={copy.shared.optional}
-            rows={4}
-            label={copy.aiQuestions.badExamples}
-            value={draft.badExamples}
-            onValueChange={(value) => updateDraft('badExamples', value)}
-          />
-          {saveFailed && (
-            <p className="ai-question-save-error" role="alert">
-              {copy.aiQuestions.saveFailed}
-            </p>
-          )}
-          <div className="ai-question-form-actions">
-            <Button
-              type="button"
-              variant="ghost"
-              disabled={formSaving}
-              onClick={closeForm}
-            >
-              {copy.shared.cancel}
-            </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              disabled={
-                formSaving || !draft.name.trim() || !draft.description.trim()
-              }
-            >
-              {copy.aiQuestions.save}
-            </Button>
-          </div>
-        </form>
+        <AIQuestionForm
+          copy={copy}
+          draft={draft}
+          editingGlobal={editingGlobal}
+          editingIndex={editingIndex}
+          formSaving={formSaving}
+          isGlobalAdmin={isGlobalAdmin}
+          onChange={updateDraft}
+          onClose={closeForm}
+          onGeneralRuleChange={(generalRule) =>
+            setDraft((current) => ({ ...current, generalRule }))
+          }
+          onSave={saveQuestion}
+          saveFailed={saveFailed}
+        />
       )}
       {editingIndex === null && (
         <>
@@ -251,6 +170,6 @@ export function AIQuestionsPage({
           {copy.aiQuestions.saveFailed}
         </p>
       )}
-    </section>
+    </Page>
   );
 }

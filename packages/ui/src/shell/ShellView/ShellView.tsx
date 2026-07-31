@@ -92,6 +92,7 @@ function ShellView({
               <QuestionDatabasePage
                 {...questionDatabase}
                 hidden={view !== 'questionDatabase'}
+                onBack={() => onShowView('home')}
               />
             )}
             {loadedViews.options && (
@@ -105,6 +106,7 @@ function ShellView({
                 settingsGroup={settingsGroup}
                 theme={theme}
                 uiAnimations={uiAnimations}
+                onBack={() => onShowView('home')}
                 onAiApiKeySave={onAiApiKeySave}
                 onAiModelChange={onAiModelChange}
                 onAiProviderChange={onAiProviderChange}
@@ -128,51 +130,47 @@ function ShellView({
               />
             )}
             {loadedViews.artificialIntelligence && (
-              <div hidden={view !== 'artificialIntelligence'}>
-                <AIQuestionsPage
-                  questions={aiQuestions.questions}
-                  globalQuestions={aiQuestions.globalQuestions}
-                  failed={aiQuestions.failed}
-                  globalFailed={aiQuestions.globalFailed}
-                  loading={aiQuestions.loading}
-                  globalLoading={aiQuestions.globalLoading}
-                  isGlobalAdmin={aiQuestions.isGlobalAdmin}
-                  onAdd={aiQuestions.addQuestion}
-                  onAddGlobal={aiQuestions.addGlobalQuestion}
-                  onRemove={aiQuestions.removeQuestion}
-                  onRemoveGlobal={aiQuestions.removeGlobalQuestion}
-                  editTarget={
-                    editTarget?.kind === 'question' ? editTarget : null
-                  }
-                  onCloseEditor={onCloseEditor}
-                  onShowEditor={onShowEditor}
-                  onUpdate={aiQuestions.updateQuestion}
-                  onUpdateGlobal={aiQuestions.updateGlobalQuestion}
-                />
-              </div>
+              <AIQuestionsPage
+                hidden={view !== 'artificialIntelligence'}
+                questions={aiQuestions.questions}
+                globalQuestions={aiQuestions.globalQuestions}
+                failed={aiQuestions.failed}
+                globalFailed={aiQuestions.globalFailed}
+                loading={aiQuestions.loading}
+                globalLoading={aiQuestions.globalLoading}
+                isGlobalAdmin={aiQuestions.isGlobalAdmin}
+                onAdd={aiQuestions.addQuestion}
+                onAddGlobal={aiQuestions.addGlobalQuestion}
+                onBack={() => onShowView('home')}
+                onRemove={aiQuestions.removeQuestion}
+                onRemoveGlobal={aiQuestions.removeGlobalQuestion}
+                editTarget={editTarget?.kind === 'question' ? editTarget : null}
+                onCloseEditor={onCloseEditor}
+                onShowEditor={onShowEditor}
+                onUpdate={aiQuestions.updateQuestion}
+                onUpdateGlobal={aiQuestions.updateGlobalQuestion}
+              />
             )}
             {loadedViews.packageRules && (
-              <div hidden={view !== 'packageRules'}>
-                <AIQuestionsPackagesPage
-                  packages={aiQuestionsPackages.packages}
-                  questionRules={[
-                    ...aiQuestions.questions,
-                    ...aiQuestions.globalQuestions,
-                  ].filter(
-                    (question) => question.enabled && !question.generalRule,
-                  )}
-                  failed={aiQuestionsPackages.failed}
-                  loading={aiQuestionsPackages.loading}
-                  editTarget={
-                    editTarget?.kind === 'package' ? editTarget : null
-                  }
-                  onAdd={aiQuestionsPackages.addPackage}
-                  onCloseEditor={onCloseEditor}
-                  onRemove={aiQuestionsPackages.removePackage}
-                  onShowEditor={onShowEditor}
-                  onUpdate={aiQuestionsPackages.updatePackage}
-                />
-              </div>
+              <AIQuestionsPackagesPage
+                hidden={view !== 'packageRules'}
+                packages={aiQuestionsPackages.packages}
+                questionRules={[
+                  ...aiQuestions.questions,
+                  ...aiQuestions.globalQuestions,
+                ].filter(
+                  (question) => question.enabled && !question.generalRule,
+                )}
+                failed={aiQuestionsPackages.failed}
+                loading={aiQuestionsPackages.loading}
+                editTarget={editTarget?.kind === 'package' ? editTarget : null}
+                onAdd={aiQuestionsPackages.addPackage}
+                onBack={() => onShowView('home')}
+                onCloseEditor={onCloseEditor}
+                onRemove={aiQuestionsPackages.removePackage}
+                onShowEditor={onShowEditor}
+                onUpdate={aiQuestionsPackages.updatePackage}
+              />
             )}
             {loadedViews.dictionaries && (
               <DictionariesPage
@@ -184,6 +182,7 @@ function ShellView({
                 hidden={view !== 'dictionaries'}
                 isAdmin={dictionaries.isAdmin}
                 loading={dictionaries.loading}
+                onBack={() => onShowView('home')}
                 onCloseEditor={onCloseEditor}
                 onShowEditor={(id) => onShowEditor({ kind: 'dictionary', id })}
                 onUpdate={dictionaries.updateDictionary}

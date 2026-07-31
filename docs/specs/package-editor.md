@@ -50,7 +50,8 @@ without losing in-progress work.
 - **EDT-12:** Recents show Drive packages, readiness, download, and confirmed
   cloud deletion. Ready packages, packages with unresolved author remarks, and
   packages with readiness errors but no remarks carry distinct localized
-  status tags.
+  status tags. The recents list uses the available package-editor width and
+  does not render a separate section heading.
   Opening or deleting one row blocks conflicting start actions.
 - **EDT-13:** Explicit download exports the latest Drive copy without changing
   the editor's backing file.

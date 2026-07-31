@@ -14,4 +14,5 @@ export interface AppProps {
   sessionScope?: string;
   textOptions?: EditorTextOptions;
   onDriveFailure?(): void;
+  onExit?(): void;
 }
