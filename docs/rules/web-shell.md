@@ -7,9 +7,9 @@
   iframes or duplicate application builds.
 - Load every page chunk on first selection, then keep it mounted so navigation
   does not discard state.
-- Keep Drive-backed list hooks above lazy page boundaries so question packages,
-  personal and global AI question rules, AI question packages, and shared
-  dictionaries preload immediately after authorization.
+- Start each Drive-backed collection when its first consuming page or editor is
+  selected, then retain the loaded hook and page state for the shell session.
+  Do not preload unrelated collections immediately after authorization.
 - Preserve keyboard-accessible navigation in the shared renderer.
 - Group the question database, visual editor, artificial intelligence, editor,
   and host pages under `ЩДК` in the fixed sidebar, with the current account's

@@ -92,6 +92,7 @@ V49|The hosted browser renders a themed login fallback before its JavaScript bun
 V50|An open package editor replaces recents and exposes one page-header back action that returns to the package list.
 V51|Visual-editor background and custom images are bounded before reading and remain within the canonical encoded-image limit.
 V52|Workspace runtime modules remain free of relative import cycles.
+V53|Shell page chunks and Drive-backed feature collections load with their first consumer and remain available for the shell session.
 
 ## §T
 

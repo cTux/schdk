@@ -22,6 +22,7 @@ interface StoredDictionary {
 export function useDictionaries(
   bridge: GoogleDriveBridge | null,
   connection: GoogleDriveConnection,
+  enabled = true,
 ) {
   const accountId =
     connection.state === 'connected'
@@ -36,9 +37,9 @@ export function useDictionaries(
 
   useEffect(() => {
     let active = true;
-    setLoading(Boolean(bridge && accountId));
+    setLoading(Boolean(enabled && bridge && accountId));
     setFailed(false);
-    if (!bridge || !accountId) return;
+    if (!enabled || !bridge || !accountId) return;
     void bridge
       .listDictionaries()
       .then(async (files) => {
@@ -77,7 +78,7 @@ export function useDictionaries(
     return () => {
       active = false;
     };
-  }, [accountId, bridge, isAdmin]);
+  }, [accountId, bridge, enabled, isAdmin]);
 
   async function updateDictionary(dictionary: SchdkDictionary) {
     if (!bridge || !isAdmin) return false;
