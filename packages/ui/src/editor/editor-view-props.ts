@@ -1,7 +1,7 @@
 import type { GamePackage, GameQuestion } from '@schdk/common';
 import type { QuestionDatabaseRow } from '../shell/QuestionDatabasePage';
 import { type AiQuestionGenerationOptions } from './ai-question-generation-options';
-import { type RecentPackageItem } from './recent-package-item';
+import { type RecentPackageItem } from '../game-packages';
 import { type EditorSaveStatus } from './types';
 
 export interface EditorViewProps {

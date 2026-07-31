@@ -11,8 +11,7 @@ import { Page } from '../../shell/Page';
 import { editorToastCopy } from '../../localization/editor-toast';
 import { useLocalization } from '../../localization';
 import { EditorHeader } from '../EditorHeader';
-import { PackageDropZone } from '../PackageDropZone';
-import { PackageStart } from '../PackageStart';
+import { GamePackageActions, RecentGamePackages } from '../../game-packages';
 import { QuestionEditor } from '../QuestionEditor';
 import { QuestionList } from '../QuestionList';
 import type {
@@ -147,7 +146,7 @@ function EditorView({
               onSelectQuestion={onSelectQuestion}
             />
           ) : (
-            <PackageDropZone
+            <GamePackageActions
               compact
               hidden={false}
               onCreate={onCreatePackage}
@@ -159,14 +158,14 @@ function EditorView({
       >
         <main>
           {!hasPackage && (
-            <PackageStart
+            <RecentGamePackages
               hidden={false}
-              openingRecentPackageId={openingRecentPackageId}
-              recentPackages={recentPackages}
-              recentPackagesLoading={recentPackagesLoading}
-              onDeleteRecentPackage={onDeleteRecentPackage}
-              onDownloadRecentPackage={onDownloadRecentPackage}
-              onOpenRecentPackage={onOpenRecentPackage}
+              loading={recentPackagesLoading}
+              openingPackageId={openingRecentPackageId}
+              packages={recentPackages}
+              onDelete={onDeleteRecentPackage}
+              onDownload={onDownloadRecentPackage}
+              onOpen={onOpenRecentPackage}
             />
           )}
           <div className="editor-layout" hidden={!hasPackage}>

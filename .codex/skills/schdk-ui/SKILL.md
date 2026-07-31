@@ -15,6 +15,8 @@ description: Build, refactor, or review @schdk/ui components and styles. Use for
 5. Read `docs/rules/architecture.md` when ownership changes.
 6. Trace the owning view and consumers, then reuse existing components and
    tokens before adding UI surface.
+   Keep controls shared by editor and host in a neutral UI domain rather than
+   importing one feature's components from the other.
    Route visual-editor and host positions through the shared game-layout style
    mapper so both surfaces render the persisted presentation identically.
    Bound visual-editor image files before reading and validate their embedded

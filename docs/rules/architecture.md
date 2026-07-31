@@ -54,6 +54,9 @@
 - Prefer shared ownership over copied implementations: data contracts belong
   in `common`, visuals in `ui`, browser behavior in `web`, and operating system
   integration in `desktop`.
+- Keep package-open actions, recent-package rows, and their styles in the
+  neutral `@schdk/ui` game-packages domain; editor and host views consume that
+  domain without importing from each other.
 - The web application composes exported `@schdk/ui` controls and views; it
   does not render native interactive JSX or define app-local visual controls.
 - `@schdk/ui` exports shell page views and their styles as leaf entry points;

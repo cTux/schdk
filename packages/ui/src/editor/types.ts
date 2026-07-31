@@ -1,4 +1,4 @@
-import { type RecentPackageItem } from './recent-package-item';
+import { type RecentPackageItem } from '../game-packages';
 import {
   type AiPackageGenerationProgress,
   type AiPackageGenerationRequest,

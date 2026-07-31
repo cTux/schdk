@@ -19,7 +19,8 @@
     "./shell/ai-question-packages": "./src/shell/AIQuestionsPackagesPage/index.ts",
     "./shell/dictionaries": "./src/shell/DictionariesPage/index.ts",
     "./options/page": "./src/options/OptionsPage/index.ts",
-    "./visual-editor": "./src/visual-editor/VisualEditor/index.ts"
+    "./visual-editor": "./src/visual-editor/VisualEditor/index.ts",
+    "./game-packages": "./src/game-packages/index.ts"
   },
   "scripts": {
     "build": "vite build",
