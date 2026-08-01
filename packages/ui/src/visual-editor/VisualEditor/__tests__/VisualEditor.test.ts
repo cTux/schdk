@@ -5,7 +5,7 @@ import {
   MAX_CUSTOM_IMAGE_DATA_LENGTH,
 } from '../../../options/types';
 import { readVisualEditorImage } from '../utils/read-visual-editor-image';
-import { reduceVisualEditor } from '../hooks/useVisualEditor';
+import { reduceVisualEditor } from '../hooks/visual-editor-state';
 import {
   createCustomElement,
   getDraggedPosition,
