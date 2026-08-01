@@ -1,25 +1,10 @@
 import type { GameOptions } from '@schdk/common';
 import type { EditorTextOptions } from '@schdk/ui/options';
-import {
-  useCallback,
-  useEffect,
-  useEffectEvent,
-  useRef,
-  useState,
-} from 'react';
-import {
-  initializeDriveSettings,
-  loadLocalDriveSettings,
-  mergeDriveSettings,
-  saveLocalDriveSettings,
-} from '../../storage/google-drive/drive-settings-storage';
-import { saveEditorTextOptions } from '../../storage/editor/editor-options-storage';
-import { saveGameOptions } from '../../storage/options/game-options-storage';
+import { useEffect, useEffectEvent, useState } from 'react';
 import { BrowserGoogleDriveBridge } from '../../services/google-drive/google-drive-browser';
-import type {
-  GoogleDriveBridge,
-  GoogleDriveConnection,
-} from '../../types/google-drive/google-drive-types';
+import type { GoogleDriveBridge } from '../../types/google-drive/google-drive-types';
+import { useDriveSettingsSync } from './use-drive-settings-sync';
+import { useGoogleDriveConnection } from './use-google-drive-connection';
 
 interface SyncedSettings {
   editorTextOptions: EditorTextOptions;
@@ -38,167 +23,26 @@ function createBridge(): GoogleDriveBridge | null {
   return new BrowserGoogleDriveBridge(clientId);
 }
 
-export function useGoogleDriveSettings({
-  editorTextOptions,
-  gameOptions,
-  setEditorTextOptions,
-  setGameOptions,
-}: SyncedSettings) {
+export function useGoogleDriveSettings(options: SyncedSettings) {
   const [bridge] = useState(createBridge);
-  const [connection, setConnection] = useState<GoogleDriveConnection>(
-    bridge ? { state: 'disconnected' } : { state: 'unavailable' },
+  const settings = useDriveSettingsSync({ bridge, ...options });
+  const connection = useGoogleDriveConnection(bridge, settings.enqueueSync);
+  const enqueueSyncEvent = useEffectEvent(() =>
+    settings.enqueueSync().catch(connection.reportFailure),
   );
-  const [accountId, setAccountId] = useState<string>();
-  const [statusReady, setStatusReady] = useState(!bridge);
-  const [gameOptionsStorageFailed, setGameOptionsStorageFailed] =
-    useState(false);
-  const [revision, setRevision] = useState(0);
-  const settings = useRef(
-    loadLocalDriveSettings(localStorage, editorTextOptions, gameOptions),
-  );
-  const syncQueue = useRef(Promise.resolve());
-
-  function applySettings(next: typeof settings.current) {
-    settings.current = next;
-    const editor = next.sections.editorTextOptions.value;
-    const game = next.sections.gameOptions.value;
-    saveEditorTextOptions(localStorage, editor);
-    setGameOptionsStorageFailed(!saveGameOptions(localStorage, game));
-    saveLocalDriveSettings(localStorage, next);
-    setEditorTextOptions(editor);
-    setGameOptions(game);
-  }
-
-  async function synchronize() {
-    if (!bridge) return;
-    const remote = await bridge.loadSettings();
-    const merged =
-      remote === null
-        ? initializeDriveSettings(settings.current)
-        : mergeDriveSettings(settings.current, remote);
-    applySettings(merged);
-    await bridge.saveSettings(merged);
-  }
-
-  const handleSyncFailure = useCallback(async () => {
-    const account =
-      connection.state === 'connected' ? connection.account : undefined;
-    if (!account) return;
-    try {
-      const status = await bridge?.status();
-      if (status?.state === 'disconnected') {
-        setConnection({ state: 'reauthorization-required', account });
-      }
-    } catch {
-      // Keep the authorized session mounted through transient Drive failures.
-    }
-  }, [bridge, connection]);
-
-  function enqueueSync() {
-    syncQueue.current = syncQueue.current
-      .catch(() => undefined)
-      .then(synchronize)
-      .catch(handleSyncFailure);
-    return syncQueue.current;
-  }
-
-  const enqueueSyncEvent = useEffectEvent(enqueueSync);
 
   useEffect(() => {
-    if (!bridge) return;
-    let active = true;
-    void bridge
-      .status()
-      .then(async (status) => {
-        if (!active) return;
-        if (status.state === 'unavailable') {
-          setConnection({ state: 'unavailable' });
-        } else if (status.state === 'connected' && status.account) {
-          setAccountId(status.account.emailAddress);
-          setConnection({ state: 'connected', account: status.account });
-          enqueueSyncEvent();
-        }
-      })
-      .catch(() => active && setConnection({ state: 'error' }))
-      .finally(() => active && setStatusReady(true));
-    return () => {
-      active = false;
-    };
-  }, [bridge]);
-
-  useEffect(() => {
-    if (connection.state !== 'connected' || revision === 0) return;
+    if (connection.connection.state !== 'connected' || settings.revision === 0)
+      return;
     const timeout = window.setTimeout(enqueueSyncEvent, 1000);
     return () => window.clearTimeout(timeout);
-  }, [connection.state, revision]);
-
-  function changeEditorTextOptions(value: EditorTextOptions) {
-    const now = new Date().toISOString();
-    settings.current = {
-      ...settings.current,
-      sections: {
-        ...settings.current.sections,
-        editorTextOptions: { updatedAt: now, value },
-      },
-    };
-    saveEditorTextOptions(localStorage, value);
-    saveLocalDriveSettings(localStorage, settings.current);
-    setEditorTextOptions(value);
-    setRevision((value) => value + 1);
-  }
-
-  function changeGameOptions(value: GameOptions) {
-    const now = new Date().toISOString();
-    settings.current = {
-      ...settings.current,
-      sections: {
-        ...settings.current.sections,
-        gameOptions: { updatedAt: now, value },
-      },
-    };
-    setGameOptionsStorageFailed(!saveGameOptions(localStorage, value));
-    saveLocalDriveSettings(localStorage, settings.current);
-    setGameOptions(value);
-    setRevision((value) => value + 1);
-  }
-
-  async function connect() {
-    if (!bridge) return;
-    setConnection({ state: 'connecting' });
-    try {
-      const account = await bridge.connect();
-      setAccountId(account.emailAddress);
-      setConnection({ state: 'connected', account });
-      await enqueueSync();
-    } catch {
-      setConnection({ state: 'error' });
-    } finally {
-      setStatusReady(true);
-    }
-  }
-
-  async function disconnect() {
-    if (!bridge) return;
-    try {
-      await bridge.disconnect();
-      setConnection({ state: 'disconnected' });
-    } catch {
-      const account =
-        connection.state === 'connected' ? connection.account : undefined;
-      setConnection({ state: 'error', account });
-    }
-  }
+  }, [connection.connection.state, settings.revision]);
 
   return {
     bridge,
-    accountId,
-    connection,
-    gameOptionsStorageFailed,
-    statusReady,
-    connect,
-    disconnect,
-    reportFailure: handleSyncFailure,
-    setEditorTextOptions: changeEditorTextOptions,
-    setGameOptions: changeGameOptions,
+    ...connection,
+    gameOptionsStorageFailed: settings.gameOptionsStorageFailed,
+    setEditorTextOptions: settings.setEditorTextOptions,
+    setGameOptions: settings.setGameOptions,
   };
 }

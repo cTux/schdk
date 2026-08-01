@@ -47,6 +47,9 @@
 - Editor and host feature modules may consume the platform-neutral package
   storage contract from `@schdk/google-drive`; they must not own authorization
   or tokens.
+- Outside application composition roots, accept the narrow Drive storage,
+  credential, generation, or connection capability a workflow uses instead of
+  the complete platform bridge.
 - `@schdk/web` consumes the platform-neutral AI-question storage contract from
   `@schdk/google-drive`; it must not own authorization or tokens.
 - The web application rebuilds and searches the current account's derived
@@ -79,6 +82,8 @@
 - Keep workspace runtime imports acyclic. Public barrels may re-export leaf
   implementations but must not import an implementation that depends back on
   the barrel's owning module.
+- Give browser platform adapters that install global listeners an explicit
+  cleanup lifecycle owned by the hook that creates them.
 - Do not add an abstraction, package, or dependency for hypothetical future
   use. Reuse existing helpers and native platform APIs first.
 

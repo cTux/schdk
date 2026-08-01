@@ -9,7 +9,10 @@ import {
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 const PACKAGE_LOAD_CONCURRENCY = 4;
-import type { GoogleDriveBridge } from '../../types/google-drive/google-drive-types';
+import type {
+  DrivePackageStorage,
+  DriveQuestionDatabaseStorage,
+} from '@schdk/google-drive';
 
 const EMPTY_DATABASE: QuestionDatabaseDocument = {
   schemaVersion: 1,
@@ -17,7 +20,7 @@ const EMPTY_DATABASE: QuestionDatabaseDocument = {
 };
 
 export function useQuestionDatabase(
-  bridge: GoogleDriveBridge | null,
+  bridge: (DrivePackageStorage & DriveQuestionDatabaseStorage) | null,
   accountId?: string,
   enabled = true,
 ) {

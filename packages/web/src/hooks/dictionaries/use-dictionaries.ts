@@ -9,10 +9,8 @@ import {
   isGlobalAIQuestionAdmin,
 } from '@schdk/google-drive';
 import { useEffect, useState } from 'react';
-import type {
-  GoogleDriveBridge,
-  GoogleDriveConnection,
-} from '../../types/google-drive/google-drive-types';
+import type { DriveDictionaryStorage } from '@schdk/google-drive';
+import type { GoogleDriveConnection } from '../../types/google-drive/google-drive-types';
 
 interface StoredDictionary {
   fileId?: string;
@@ -20,7 +18,7 @@ interface StoredDictionary {
 }
 
 export function useDictionaries(
-  bridge: GoogleDriveBridge | null,
+  bridge: DriveDictionaryStorage | null,
   connection: GoogleDriveConnection,
   enabled = true,
 ) {

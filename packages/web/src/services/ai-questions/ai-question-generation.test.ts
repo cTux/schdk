@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { GameQuestion } from '@schdk/common';
 import type { AiOptions } from '@schdk/ui/options';
-import type { GoogleDriveBridge } from '../../types/google-drive/google-drive-types';
+import type { AiGenerationPort } from '../../types/google-drive/google-drive-types';
 import { createAiQuestionGeneration } from './ai-question-generation';
 
 const template = {
@@ -30,7 +30,7 @@ describe('AI generation controller', () => {
       .mockResolvedValueOnce(question('First'))
       .mockResolvedValueOnce(question('Second'));
     const generation = createAiQuestionGeneration(
-      { renewToken, generateAiQuestion } as unknown as GoogleDriveBridge,
+      { renewToken, generateAiQuestion } satisfies AiGenerationPort,
       {
         providers: [],
         provider: 'openai',
@@ -91,7 +91,7 @@ describe('AI generation controller', () => {
       {
         renewToken: vi.fn(),
         generateAiQuestion,
-      } as unknown as GoogleDriveBridge,
+      } satisfies AiGenerationPort,
       {
         providers: [],
         provider: 'openai',
