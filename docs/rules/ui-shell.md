@@ -36,6 +36,9 @@
   `App` settings tab.
 - While initial Drive-backed lists load, show the same localized preloading
   status in the sidebar brand and SCHDK group.
+- Show localized status while lazy page chunks load. If a chunk fails, keep the
+  shell visible and offer a localized reload action through the shared shell
+  boundary.
 - Before the first successful connection, show only the centered Google login
   surface. When an active session loses authorization, hide the mounted shell
   behind the same login surface until reconnection.

@@ -1,7 +1,7 @@
 import type { GameOptions } from '@schdk/common';
 import type { EditorTextOptions } from '@schdk/ui/options';
 import { LOCALIZATION_COPY, LocaleProvider } from '@schdk/ui/localization';
-import { GoogleLoginView } from '@schdk/ui/shell';
+import { AsyncBoundary, AsyncLoading, GoogleLoginView } from '@schdk/ui/shell';
 import { lazy, Suspense, useEffect, useLayoutEffect, useState } from 'react';
 import {
   loadEditorTextOptions,
@@ -136,37 +136,47 @@ export function App() {
           <ShellWorkspace
             apps={{
               editor: (
-                <Suspense key={googleDrive.accountId} fallback={null}>
-                  <EditorApp
-                    aiGeneration={aiGeneration}
-                    drive={googleDrive.bridge ?? undefined}
-                    driveActive={connected}
-                    manageDocumentTitle={false}
-                    onDriveFailure={googleDrive.reportFailure}
-                    onExit={() => navigation.showView('home')}
-                    questionDatabaseRows={questionDatabase.entries}
-                    sessionScope={`${window.location.pathname}:${googleDrive.accountId}`}
-                    textOptions={editorOptions}
-                  />
-                </Suspense>
+                <AsyncBoundary onRetry={() => window.location.reload()}>
+                  <Suspense
+                    key={googleDrive.accountId}
+                    fallback={<AsyncLoading />}
+                  >
+                    <EditorApp
+                      aiGeneration={aiGeneration}
+                      drive={googleDrive.bridge ?? undefined}
+                      driveActive={connected}
+                      manageDocumentTitle={false}
+                      onDriveFailure={googleDrive.reportFailure}
+                      onExit={() => navigation.showView('home')}
+                      questionDatabaseRows={questionDatabase.entries}
+                      sessionScope={`${window.location.pathname}:${googleDrive.accountId}`}
+                      textOptions={editorOptions}
+                    />
+                  </Suspense>
+                </AsyncBoundary>
               ),
               host: (
-                <Suspense key={googleDrive.accountId} fallback={null}>
-                  <HostApp
-                    autoFullscreen={gameOptions.autoFullscreen}
-                    backgroundImage={gameOptions.backgroundImage}
-                    backgroundOpacity={gameOptions.backgroundOpacity}
-                    customElements={gameOptions.customElements}
-                    drive={googleDrive.bridge ?? undefined}
-                    driveActive={connected}
-                    layout={gameOptions.layout}
-                    onDriveFailure={googleDrive.reportFailure}
-                    onExit={() => navigation.showView('home')}
-                    sessionScope={`${window.location.pathname}:${googleDrive.accountId}`}
-                    soundVolume={gameOptions.soundVolume}
-                    musicVolume={gameOptions.musicVolume}
-                  />
-                </Suspense>
+                <AsyncBoundary onRetry={() => window.location.reload()}>
+                  <Suspense
+                    key={googleDrive.accountId}
+                    fallback={<AsyncLoading />}
+                  >
+                    <HostApp
+                      autoFullscreen={gameOptions.autoFullscreen}
+                      backgroundImage={gameOptions.backgroundImage}
+                      backgroundOpacity={gameOptions.backgroundOpacity}
+                      customElements={gameOptions.customElements}
+                      drive={googleDrive.bridge ?? undefined}
+                      driveActive={connected}
+                      layout={gameOptions.layout}
+                      onDriveFailure={googleDrive.reportFailure}
+                      onExit={() => navigation.showView('home')}
+                      sessionScope={`${window.location.pathname}:${googleDrive.accountId}`}
+                      soundVolume={gameOptions.soundVolume}
+                      musicVolume={gameOptions.musicVolume}
+                    />
+                  </Suspense>
+                </AsyncBoundary>
               ),
             }}
             data={{

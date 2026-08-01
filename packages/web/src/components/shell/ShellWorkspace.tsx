@@ -1,5 +1,6 @@
 import '@schdk/ui/shell/styles';
 import { TooltipProvider } from '@schdk/ui';
+import { AsyncBoundary, AsyncLoading } from '@schdk/ui/shell';
 import { ShellNavigation } from '@schdk/ui/shell/navigation';
 import { lazy, Suspense } from 'react';
 import type { ShellWorkspaceProps } from './shell-workspace-props';
@@ -60,78 +61,84 @@ export function ShellWorkspace({
           onSelect={navigation.showView}
         />
         <section className="workspace">
-          <Suspense fallback={null}>
-            {loadedViews.home && (
-              <ShellHome
-                hidden={view !== 'home'}
-                onOpen={navigation.showView}
-              />
-            )}
-            {loadedViews.questionDatabase && (
-              <QuestionDatabasePage
-                {...data.questionDatabase}
-                hidden={view !== 'questionDatabase'}
-                onBack={() => navigation.showView('home')}
-              />
-            )}
-            {loadedViews.options && (
-              <OptionsPage
-                {...settings.options}
-                hidden={view !== 'options'}
-                onBack={() => navigation.showView('home')}
-              />
-            )}
-            {loadedViews.visualEditor && (
-              <VisualEditor
-                {...settings.visualEditor}
-                hidden={view !== 'visualEditor'}
-              />
-            )}
-            {loadedViews.artificialIntelligence && (
-              <AIQuestionsPage
-                {...data.aiQuestions}
-                hidden={view !== 'artificialIntelligence'}
-                editTarget={editTarget?.kind === 'question' ? editTarget : null}
-                onBack={() => navigation.showView('home')}
-                onCloseEditor={navigation.closeEditor}
-                onShowEditor={navigation.showEditor}
-              />
-            )}
-            {loadedViews.packageRules && (
-              <AIQuestionsPackagesPage
-                {...data.aiQuestionPackages}
-                hidden={view !== 'packageRules'}
-                editTarget={editTarget?.kind === 'package' ? editTarget : null}
-                onBack={() => navigation.showView('home')}
-                onCloseEditor={navigation.closeEditor}
-                onShowEditor={navigation.showEditor}
-              />
-            )}
-            {loadedViews.dictionaries && (
-              <DictionariesPage
-                {...data.dictionaries}
-                editId={
-                  editTarget?.kind === 'dictionary' ? editTarget.id : null
-                }
-                hidden={view !== 'dictionaries'}
-                onBack={() => navigation.showView('home')}
-                onCloseEditor={navigation.closeEditor}
-                onShowEditor={(id) =>
-                  navigation.showEditor({ kind: 'dictionary', id })
-                }
-              />
-            )}
-            {loadedViews.host && (
-              <div className="embedded-app" hidden={view !== 'host'}>
-                {apps.host}
-              </div>
-            )}
-            {loadedViews.editor && (
-              <div className="embedded-app" hidden={view !== 'editor'}>
-                {apps.editor}
-              </div>
-            )}
-          </Suspense>
+          <AsyncBoundary onRetry={() => window.location.reload()}>
+            <Suspense fallback={<AsyncLoading />}>
+              {loadedViews.home && (
+                <ShellHome
+                  hidden={view !== 'home'}
+                  onOpen={navigation.showView}
+                />
+              )}
+              {loadedViews.questionDatabase && (
+                <QuestionDatabasePage
+                  {...data.questionDatabase}
+                  hidden={view !== 'questionDatabase'}
+                  onBack={() => navigation.showView('home')}
+                />
+              )}
+              {loadedViews.options && (
+                <OptionsPage
+                  {...settings.options}
+                  hidden={view !== 'options'}
+                  onBack={() => navigation.showView('home')}
+                />
+              )}
+              {loadedViews.visualEditor && (
+                <VisualEditor
+                  {...settings.visualEditor}
+                  hidden={view !== 'visualEditor'}
+                />
+              )}
+              {loadedViews.artificialIntelligence && (
+                <AIQuestionsPage
+                  {...data.aiQuestions}
+                  hidden={view !== 'artificialIntelligence'}
+                  editTarget={
+                    editTarget?.kind === 'question' ? editTarget : null
+                  }
+                  onBack={() => navigation.showView('home')}
+                  onCloseEditor={navigation.closeEditor}
+                  onShowEditor={navigation.showEditor}
+                />
+              )}
+              {loadedViews.packageRules && (
+                <AIQuestionsPackagesPage
+                  {...data.aiQuestionPackages}
+                  hidden={view !== 'packageRules'}
+                  editTarget={
+                    editTarget?.kind === 'package' ? editTarget : null
+                  }
+                  onBack={() => navigation.showView('home')}
+                  onCloseEditor={navigation.closeEditor}
+                  onShowEditor={navigation.showEditor}
+                />
+              )}
+              {loadedViews.dictionaries && (
+                <DictionariesPage
+                  {...data.dictionaries}
+                  editId={
+                    editTarget?.kind === 'dictionary' ? editTarget.id : null
+                  }
+                  hidden={view !== 'dictionaries'}
+                  onBack={() => navigation.showView('home')}
+                  onCloseEditor={navigation.closeEditor}
+                  onShowEditor={(id) =>
+                    navigation.showEditor({ kind: 'dictionary', id })
+                  }
+                />
+              )}
+              {loadedViews.host && (
+                <div className="embedded-app" hidden={view !== 'host'}>
+                  {apps.host}
+                </div>
+              )}
+              {loadedViews.editor && (
+                <div className="embedded-app" hidden={view !== 'editor'}>
+                  {apps.editor}
+                </div>
+              )}
+            </Suspense>
+          </AsyncBoundary>
         </section>
       </main>
     </TooltipProvider>

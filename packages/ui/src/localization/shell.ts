@@ -8,6 +8,9 @@ const shellCopy = {
     groupLabel: 'WWW',
     settingsLabel: 'Settings',
     preloading: 'Loading Google Drive data',
+    moduleLoading: 'Loading…',
+    moduleLoadFailed: 'This section could not be loaded.',
+    retry: 'Reload',
     loginTitle: 'SCHDK',
     loginDescription:
       'Create, edit, and host What? Where? When? question packages with Google Drive autosave and optional AI-assisted authoring.',
@@ -53,6 +56,9 @@ const shellCopy = {
     groupLabel: 'ЩДК',
     settingsLabel: 'Налаштування',
     preloading: 'Завантаження даних із Google Диска',
+    moduleLoading: 'Завантаження…',
+    moduleLoadFailed: 'Не вдалося завантажити цей розділ.',
+    retry: 'Перезавантажити',
     loginTitle: 'SCHDK',
     loginDescription:
       'Створюйте, редагуйте та проводьте ігри «Що? Де? Коли?» з автозбереженням на Google Диску та необов’язковими інструментами ШІ.',
