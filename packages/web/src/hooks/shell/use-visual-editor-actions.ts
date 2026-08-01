@@ -1,9 +1,7 @@
 import type { GameOptions, GamePresentationOptions } from '@schdk/common';
 import { useRef, useState } from 'react';
-import {
-  parseVisualEditorTemplateFile,
-  serializeVisualEditorTemplate,
-} from '../../storage/options/options-storage';
+import { serializeVisualEditorTemplate } from '@schdk/common';
+import { parseVisualEditorTemplateFile } from '../../utils/visual-editor/parse-visual-editor-template-file';
 
 const MAX_HISTORY_ENTRIES = 100;
 const MAX_HISTORY_BYTES = 32 * 1024 * 1024;

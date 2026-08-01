@@ -76,3 +76,6 @@
   from the shared Ukrainian/English locale context, default to Ukrainian
   outside the unified application, and use `Провести гру` / `Host a game` as
   the localized host area names.
+- Keep large feature copy in paired domain locale modules and compose it into
+  the Ukrainian and English roots; do not grow the root locale files with
+  feature-specific dictionaries.

@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
   loadEditorTextOptions,
-  loadGameOptions,
   saveEditorTextOptions,
-  saveGameOptions,
-} from './options-storage';
+} from '../editor/editor-options-storage';
+import { loadGameOptions } from './load-game-options';
+import { saveGameOptions } from './save-game-options';
 import { DEFAULT_GAME_LAYOUT, DEFAULT_GAME_OPTIONS } from '@schdk/common';
 import { DEFAULT_EDITOR_TEXT_OPTIONS } from '@schdk/ui/options';
 

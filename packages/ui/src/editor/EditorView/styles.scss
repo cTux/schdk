@@ -1,1 +1,23 @@
+@use '../../styles/tokens' as *;
 @use '../../styles/editor';
+
+.editor-app {
+  --toastify-color-success: #{$success};
+  --toastify-icon-color-success: #{$success};
+  --toastify-color-light: #{$surface-raised};
+  --toastify-toast-bd-radius: #{$radius-panel};
+  --toastify-toast-shadow: #{$shadow-overlay};
+  --toastify-text-color-light: #{$text};
+  --toastify-font-family: inherit;
+
+  .editor-toast {
+    border: 1px solid $border;
+    margin-bottom: 0;
+    color: $text;
+    backdrop-filter: blur(16px);
+  }
+
+  .editor-toast + .editor-toast {
+    margin-top: var(--toastify-toast-offset);
+  }
+}
