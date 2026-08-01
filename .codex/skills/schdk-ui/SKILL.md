@@ -23,7 +23,9 @@ description: Build, refactor, or review @schdk/ui components and styles. Use for
    components and shared game-layout style mapper so both surfaces render the
    persisted presentation identically without importing from each other.
    Keep persisted visual-editor model updates in pure helpers and transient
-   gesture state in the React hook.
+   gesture, keyboard, and image-input state in the React controller hook.
+   Keep workspace, built-in-element, and custom-element toolbar modes in their
+   private components behind grouped selection and action props.
    Keep bounded visual-editor undo and redo history in the web controller;
    expose only availability and callbacks to the UI, bound retained serialized
    presentation size, and clear history across account changes.

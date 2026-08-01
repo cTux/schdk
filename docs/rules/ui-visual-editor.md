@@ -9,6 +9,8 @@
 - Keep related transient interaction state (selection, pan, zoom, image target,
   message, and panning state) in one reducer; persisted game options continue
   to flow only through `onChange`.
+- Keep workspace keyboard, pan, zoom, and image-input lifecycle in the visual
+  editor controller hook so the composed view remains declarative.
 - Keep the visual editor on its fixed dark presentation palette; application
   theme changes must not alter its canvas, controls, or text colors.
 - Persist bounds as percentages and apply identical bounds and presentation

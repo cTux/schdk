@@ -1,4 +1,11 @@
-import { useEffect, useReducer, useRef, type PointerEvent } from 'react';
+import {
+  useEffect,
+  useReducer,
+  useRef,
+  type ChangeEvent,
+  type KeyboardEvent,
+  type PointerEvent,
+} from 'react';
 import type { LocalizationCopy } from '../../../localization';
 import {
   DEFAULT_GAME_LAYOUT,
@@ -15,6 +22,7 @@ import {
 } from '../utils/update-visual-editor-game';
 import type { ElementSelection, GamePoint } from '../types';
 import { applyVisualEditorImage } from '../utils/apply-visual-editor-image';
+import { readVisualEditorImage } from '../utils/read-visual-editor-image';
 import {
   INITIAL_VISUAL_EDITOR_STATE,
   reduceVisualEditor,
@@ -24,6 +32,12 @@ export function useVisualEditor(
   game: GamePresentationOptions,
   copy: LocalizationCopy,
   onChange: (game: GamePresentationOptions) => void,
+  history: {
+    canRedo: boolean;
+    canUndo: boolean;
+    onRedo(): void;
+    onUndo(): void;
+  },
 ) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const workspaceRef = useRef<HTMLDivElement>(null);
@@ -129,27 +143,104 @@ export function useVisualEditor(
     onChange(updated);
   }
 
+  function handleWorkspaceKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    const isEditable =
+      event.target instanceof HTMLInputElement ||
+      event.target instanceof HTMLTextAreaElement ||
+      event.target instanceof HTMLSelectElement ||
+      (event.target instanceof HTMLElement && event.target.isContentEditable);
+    const hasUndoModifier = (event.ctrlKey || event.metaKey) && !event.altKey;
+    const isUndo =
+      hasUndoModifier && event.key.toLowerCase() === 'z' && !event.shiftKey;
+    const isRedo =
+      hasUndoModifier &&
+      (event.key.toLowerCase() === 'y' ||
+        (event.key.toLowerCase() === 'z' && event.shiftKey));
+    if (!isEditable && (isUndo || isRedo)) {
+      event.preventDefault();
+      if (isUndo && history.canUndo) history.onUndo();
+      if (isRedo && history.canRedo) history.onRedo();
+      return;
+    }
+    if (event.key !== 'Escape' || !selected) return;
+    event.preventDefault();
+    event.stopPropagation();
+    selectWorkspace();
+  }
+
+  function startPan(event: PointerEvent<HTMLDivElement>) {
+    if (event.button !== 2) return;
+    event.preventDefault();
+    event.currentTarget.setPointerCapture(event.pointerId);
+    panRef.current = {
+      pointerId: event.pointerId,
+      start: { x: event.clientX, y: event.clientY },
+      offset: state.pan,
+    };
+    setPanning(true);
+  }
+
+  function previewPan(event: PointerEvent<HTMLDivElement>) {
+    const activePan = panRef.current;
+    if (!activePan || activePan.pointerId !== event.pointerId) return;
+    setPan({
+      x: activePan.offset.x + event.clientX - activePan.start.x,
+      y: activePan.offset.y + event.clientY - activePan.start.y,
+    });
+  }
+
+  function finishPan(event: PointerEvent<HTMLDivElement>) {
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    panRef.current = null;
+    setPanning(false);
+  }
+
+  function cancelPan() {
+    panRef.current = null;
+    setPanning(false);
+  }
+
+  async function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.currentTarget.files?.[0];
+    event.currentTarget.value = '';
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      setLocalMessage(copy.visualEditor.chooseImage);
+      return;
+    }
+    try {
+      const dataUrl = await readVisualEditorImage(file);
+      setLocalMessage('');
+      applyImage(dataUrl);
+    } catch {
+      setLocalMessage(copy.visualEditor.imagesTooLarge);
+    }
+  }
+
   return {
     addElement,
-    applyImage,
+    cancelPan,
     canvasRef,
     chooseImage,
     fileInputRef,
+    finishPan,
+    handleImageChange,
+    handleWorkspaceKeyDown,
     localMessage: state.localMessage,
     pan: state.pan,
-    panRef,
     panning: state.panning,
     pointerPosition,
+    previewPan,
     positions,
     removeCustom,
     selectWorkspace,
     selected,
     selectedCustom,
     selectedPosition,
-    setLocalMessage,
-    setPan,
-    setPanning,
     setSelected,
+    startPan,
     updateCustom,
     updatePosition,
     workspaceRef,

@@ -19,7 +19,6 @@ import { VisualEditorToolbar } from './VisualEditorToolbar';
 import { VisualLayoutItem } from './VisualLayoutItem';
 import type { ElementSelection, VisualEditorProps } from './types';
 import { useVisualEditor } from './hooks/useVisualEditor';
-import { readVisualEditorImage } from './utils/read-visual-editor-image';
 
 const selectionKey = (selection: ElementSelection) =>
   `${selection.kind}:${selection.id}`;
@@ -37,7 +36,12 @@ function VisualEditor({
   onUndo,
 }: VisualEditorProps) {
   const { copy } = useLocalization();
-  const editor = useVisualEditor(game, copy, onChange);
+  const editor = useVisualEditor(game, copy, onChange, {
+    canRedo,
+    canUndo,
+    onRedo,
+    onUndo,
+  });
   const labels: Record<GameLayoutElementId, string> = {
     logo: copy.visualEditor.labels.logo,
     intro: copy.visualEditor.labels.intro,
@@ -103,79 +107,30 @@ function VisualEditor({
         className={classNames('visual-editor-workspace', {
           'is-panning': editor.panning,
         })}
-        onKeyDown={(event) => {
-          const isEditable =
-            event.target instanceof HTMLInputElement ||
-            event.target instanceof HTMLTextAreaElement ||
-            event.target instanceof HTMLSelectElement ||
-            (event.target instanceof HTMLElement &&
-              event.target.isContentEditable);
-          const hasUndoModifier =
-            (event.ctrlKey || event.metaKey) && !event.altKey;
-          const isUndo =
-            hasUndoModifier &&
-            event.key.toLowerCase() === 'z' &&
-            !event.shiftKey;
-          const isRedo =
-            hasUndoModifier &&
-            (event.key.toLowerCase() === 'y' ||
-              (event.key.toLowerCase() === 'z' && event.shiftKey));
-          if (!isEditable && (isUndo || isRedo)) {
-            event.preventDefault();
-            if (isUndo && canUndo) onUndo();
-            if (isRedo && canRedo) onRedo();
-            return;
-          }
-          if (event.key !== 'Escape' || !editor.selected) return;
-          event.preventDefault();
-          event.stopPropagation();
-          editor.selectWorkspace();
-        }}
+        onKeyDown={editor.handleWorkspaceKeyDown}
         onContextMenu={(event) => event.preventDefault()}
-        onPointerDown={(event) => {
-          if (event.button !== 2) return;
-          event.preventDefault();
-          event.currentTarget.setPointerCapture(event.pointerId);
-          editor.panRef.current = {
-            pointerId: event.pointerId,
-            start: { x: event.clientX, y: event.clientY },
-            offset: editor.pan,
-          };
-          editor.setPanning(true);
-        }}
-        onPointerMove={(event) => {
-          const activePan = editor.panRef.current;
-          if (!activePan || activePan.pointerId !== event.pointerId) return;
-          editor.setPan({
-            x: activePan.offset.x + event.clientX - activePan.start.x,
-            y: activePan.offset.y + event.clientY - activePan.start.y,
-          });
-        }}
-        onPointerUp={(event) => {
-          if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-            event.currentTarget.releasePointerCapture(event.pointerId);
-          }
-          editor.panRef.current = null;
-          editor.setPanning(false);
-        }}
-        onPointerCancel={() => {
-          editor.panRef.current = null;
-          editor.setPanning(false);
-        }}
+        onPointerDown={editor.startPan}
+        onPointerMove={editor.previewPan}
+        onPointerUp={editor.finishPan}
+        onPointerCancel={editor.cancelPan}
       >
         <div className="visual-editor-toolbar">
           <VisualEditorToolbar
             copy={copy}
             game={game}
             labels={labels}
-            selected={editor.selected}
-            selectedCustom={editor.selectedCustom}
-            selectedPosition={editor.selectedPosition ?? null}
-            chooseImage={editor.chooseImage}
-            onChange={onChange}
-            removeCustom={editor.removeCustom}
-            updateCustom={editor.updateCustom}
-            updatePosition={editor.updatePosition}
+            selection={{
+              element: editor.selected,
+              custom: editor.selectedCustom,
+              position: editor.selectedPosition ?? null,
+            }}
+            actions={{
+              chooseImage: editor.chooseImage,
+              onChange,
+              removeCustom: editor.removeCustom,
+              updateCustom: editor.updateCustom,
+              updatePosition: editor.updatePosition,
+            }}
           />
         </div>
         <input
@@ -183,22 +138,7 @@ function VisualEditor({
           className="visual-editor-file-input"
           type="file"
           accept="image/*"
-          onChange={async (event) => {
-            const file = event.currentTarget.files?.[0];
-            event.currentTarget.value = '';
-            if (!file) return;
-            if (!file.type.startsWith('image/')) {
-              editor.setLocalMessage(copy.visualEditor.chooseImage);
-              return;
-            }
-            try {
-              const dataUrl = await readVisualEditorImage(file);
-              editor.setLocalMessage('');
-              editor.applyImage(dataUrl);
-            } catch {
-              editor.setLocalMessage(copy.visualEditor.imagesTooLarge);
-            }
-          }}
+          onChange={(event) => void editor.handleImageChange(event)}
         />
         <div
           ref={editor.canvasRef}
