@@ -58,6 +58,8 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test:browser
       - run: pnpm turbo build --filter=@schdk/web
       - run: pnpm --filter @schdk/web check:bundle
       - name: Smoke test browser shell

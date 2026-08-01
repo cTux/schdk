@@ -16,6 +16,8 @@
   standard layout until changed.
 - Preview pointer drag and resize locally, then persist one final position when
   the interaction ends. Persist keyboard adjustments immediately.
+- Cover selection, Escape dismissal, and wheel zoom with the Storybook-backed
+  Playwright browser smoke test.
 - Keep bounded undo and redo history in the web visual-editor controller, clear
   it when the connected account changes, and expose only availability and
   callbacks to `@schdk/ui`. Treat a completed pointer gesture as one change.

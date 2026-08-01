@@ -5,6 +5,7 @@ release
 coverage
 .turbo
 .playwright-cli/
+output/playwright/
 *.log
 *.tsbuildinfo
 packages/desktop/build/google-oauth-client.json
