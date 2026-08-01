@@ -8,6 +8,21 @@ import { findImportCycles } from './source-import-graph.mjs';
 const repositoryRoot = new URL('../', import.meta.url);
 const read = (path) => readFile(new URL(path, repositoryRoot), 'utf8');
 const execFileAsync = promisify(execFile);
+const objectEntries = (source, name) => {
+  const body = source.match(
+    new RegExp(
+      `(?:const|export const) ${name} = \\{([\\s\\S]*?)\\} as const`,
+      'u',
+    ),
+  )?.[1];
+  assert.ok(body, `${name} must remain a const object`);
+  return Object.fromEntries(
+    [...body.matchAll(/(\w+): '([^']+)'/gu)].map(([, key, value]) => [
+      key,
+      value,
+    ]),
+  );
+};
 const sourceExtensions = new Set([
   '.cjs',
   '.css',
@@ -198,6 +213,7 @@ test('UI feature areas use neutral game presentation ownership', async () => {
     new URL('packages/ui/src/visual-editor/', repositoryRoot),
   );
   const forbiddenImports = [];
+  const forbiddenScopes = [];
 
   for (const file of visualEditorFiles) {
     if (
@@ -209,9 +225,42 @@ test('UI feature areas use neutral game presentation ownership', async () => {
     if (/from\s+["'][^"']*host\//u.test(source)) {
       forbiddenImports.push(file.pathname);
     }
+    if (/host-app/u.test(source)) forbiddenScopes.push(file.pathname);
   }
 
   assert.deepEqual(forbiddenImports, []);
+  assert.deepEqual(forbiddenScopes, []);
+});
+
+test('critical architecture boundaries remain enforced', async () => {
+  const [channels, preload, history] = await Promise.all([
+    read('packages/desktop/src/ipc/google-drive/google-drive-ipc-channels.ts'),
+    read('packages/desktop/src/preload.cts'),
+    read('packages/web/src/hooks/shell/use-visual-editor-actions.ts'),
+  ]);
+
+  assert.deepEqual(
+    objectEntries(preload, 'googleDriveIpcChannels'),
+    objectEntries(channels, 'GOOGLE_DRIVE_IPC_CHANNELS'),
+  );
+  await assert.rejects(
+    access(
+      new URL(
+        'packages/web/src/storage/options/options-storage.ts',
+        repositoryRoot,
+      ),
+    ),
+  );
+  await assert.rejects(
+    access(
+      new URL(
+        'packages/web/src/storage/options/game-options-storage.ts',
+        repositoryRoot,
+      ),
+    ),
+  );
+  assert.match(history, /MAX_HISTORY_ENTRIES = 100/);
+  assert.match(history, /MAX_HISTORY_BYTES = 32 \* 1024 \* 1024/);
 });
 
 test('UI components follow the directory and class composition contracts', async () => {

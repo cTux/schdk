@@ -1,14 +1,12 @@
 import { strFromU8, strToU8, unzipSync, zipSync } from 'fflate';
 import { type GameOptions } from '../../types/game-options/game-options.js';
+import { type GamePresentationOptions } from '../../types/game-options/game-presentation-options.js';
 import { normalizeGameOptions } from '../../validators/game-options/normalize-game-options.js';
 
 const MAX_VISUAL_TEMPLATE_BYTES = 16 * 1024 * 1024;
 const VISUAL_TEMPLATE_ENTRY = 'template.json';
 
-type VisualEditorTemplate = Omit<
-  GameOptions,
-  'autoFullscreen' | 'soundVolume' | 'musicVolume'
->;
+type VisualEditorTemplate = GamePresentationOptions;
 
 function parseVisualEditorTemplate(
   content: string | Uint8Array,
@@ -53,7 +51,9 @@ function parseVisualEditorTemplate(
   }
 }
 
-function serializeVisualEditorTemplate(options: GameOptions): Uint8Array {
+function serializeVisualEditorTemplate(
+  options: GamePresentationOptions,
+): Uint8Array {
   const template: VisualEditorTemplate & { version: 1 } = {
     version: 1,
     layout: options.layout,

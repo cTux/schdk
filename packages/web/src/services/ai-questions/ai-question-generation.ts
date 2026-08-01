@@ -20,7 +20,7 @@ import type {
 } from '@schdk/ui/editor';
 import type { AppLocale } from '@schdk/ui/localization';
 import type { AiOptions } from '@schdk/ui/options';
-import type { GoogleDriveBridge } from '../../types/google-drive/google-drive-types';
+import type { AiGenerationPort } from '../../types/google-drive/google-drive-types';
 
 function getRandomValue(distribution: SchdkDictionaryDistribution) {
   let position = Math.random() * 100;
@@ -32,7 +32,7 @@ function getRandomValue(distribution: SchdkDictionaryDistribution) {
 }
 
 function createAiQuestionGeneration(
-  bridge: GoogleDriveBridge | null,
+  bridge: AiGenerationPort | null,
   options: AiOptions,
   templates: AIQuestion[],
   packages: AIQuestionsPackage[],

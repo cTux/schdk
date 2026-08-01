@@ -5,7 +5,10 @@ import {
 } from '@schdk/common';
 import { createAIQuestionFilename } from '@schdk/google-drive';
 import { useEffect, useState } from 'react';
-import type { GoogleDriveBridge } from '../../types/google-drive/google-drive-types';
+import type {
+  DriveAIQuestionStorage,
+  DriveGlobalAIQuestionStorage,
+} from '@schdk/google-drive';
 
 interface StoredAIQuestion {
   fileId: string;
@@ -19,7 +22,7 @@ function sortItems(items: StoredAIQuestion[]) {
 }
 
 function useAIQuestionCollection(
-  bridge: GoogleDriveBridge | null,
+  bridge: (DriveAIQuestionStorage & DriveGlobalAIQuestionStorage) | null,
   accountId?: string,
   global = false,
   enabled = true,
@@ -175,7 +178,7 @@ function useAIQuestionCollection(
 }
 
 export function useAIQuestions(
-  bridge: GoogleDriveBridge | null,
+  bridge: (DriveAIQuestionStorage & DriveGlobalAIQuestionStorage) | null,
   accountId?: string,
   enabled = true,
 ) {

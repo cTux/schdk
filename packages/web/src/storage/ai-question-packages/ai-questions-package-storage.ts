@@ -5,7 +5,7 @@ import {
 } from '@schdk/common';
 import { createAIQuestionsPackageFilename } from '@schdk/google-drive';
 import { useEffect, useState } from 'react';
-import type { GoogleDriveBridge } from '../../types/google-drive/google-drive-types';
+import type { DriveAIQuestionsPackageStorage } from '@schdk/google-drive';
 
 interface StoredPackage {
   fileId: string;
@@ -18,7 +18,7 @@ const sortItems = (items: StoredPackage[]) =>
   );
 
 export function useAIQuestionsPackages(
-  bridge: GoogleDriveBridge | null,
+  bridge: DriveAIQuestionsPackageStorage | null,
   accountId?: string,
   enabled = true,
 ) {

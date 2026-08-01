@@ -42,6 +42,10 @@
 - Keep preload files as self-contained `.cts` files with no local imports so
   TypeScript emits sandbox-compatible `.cjs`; use only APIs available to a
   sandboxed preload and reference `preload.cjs` from `BrowserWindow`.
+- Group Google Drive main-process IPC registration by account, settings,
+  game-package, and AI-content domains. Keep channel names in the canonical
+  main-process channel map and an explicitly mirrored preload-local map because
+  the sandboxed preload must remain self-contained.
 - The preload exposes the narrow Drive, close, presenter, and explicit package
   download APIs to its trusted main renderer. Do not expose local package open,
   recent-path, or autosave IPC. Do not enable Node integration for renderer

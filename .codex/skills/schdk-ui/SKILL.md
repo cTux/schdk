@@ -19,14 +19,18 @@ description: Build, refactor, or review @schdk/ui components and styles. Use for
    importing one feature's components from the other.
    Keep feature-specific styles at the owning component boundary instead of
    loading them through an application-area stylesheet.
+   Keep large editor-area copy in paired domain locale modules composed by the
+   Ukrainian and English locale roots.
    Route visual-editor and host positions through the neutral game-presentation
    components and shared game-layout style mapper so both surfaces render the
    persisted presentation identically without importing from each other.
    Keep persisted visual-editor model updates in pure helpers and transient
-   gesture state in the React hook.
+   gesture, keyboard, and image-input state in the React controller hook.
+   Keep workspace, built-in-element, and custom-element toolbar modes in their
+   private components behind grouped selection and action props.
    Keep bounded visual-editor undo and redo history in the web controller;
-   expose only availability and callbacks to the UI and clear history across
-   account changes.
+   expose only availability and callbacks to the UI, bound retained serialized
+   presentation size, and clear history across account changes.
    Reuse the editor generation-task hook for AbortController ownership,
    unmount cleanup, and stale-result guards across generation dialogs.
    Bound visual-editor image files before reading and validate their embedded

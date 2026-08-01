@@ -43,6 +43,10 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
     document.addEventListener('click', this.refreshTokenOnActivity);
   }
 
+  dispose() {
+    document.removeEventListener('click', this.refreshTokenOnActivity);
+  }
+
   private readonly refreshTokenOnActivity = () => {
     const now = Date.now();
     const canRefresh =

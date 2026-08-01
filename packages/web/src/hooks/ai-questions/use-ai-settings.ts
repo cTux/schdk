@@ -2,7 +2,7 @@ import { Models, type ProviderMap } from '@opencode-ai/models';
 import { isSupportedAiProvider } from '@schdk/ai';
 import type { AiOptions, AiProviderOption } from '@schdk/ui/options';
 import { useEffect, useState } from 'react';
-import type { GoogleDriveBridge } from '../../types/google-drive/google-drive-types';
+import type { AiCredentialsPort } from '../../types/google-drive/google-drive-types';
 
 const PROVIDER_KEY = 'schdk.ai.provider';
 const MODEL_KEY = 'schdk.ai.model';
@@ -99,7 +99,7 @@ function clearLegacyBrowserApiKey() {
 }
 
 export function useAiSettings(
-  credentials: GoogleDriveBridge | null,
+  credentials: AiCredentialsPort | null,
   accountId?: string,
 ) {
   const [options, setOptions] = useState<AiOptions>(() => ({

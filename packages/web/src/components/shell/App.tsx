@@ -3,10 +3,8 @@ import type { EditorTextOptions } from '@schdk/ui/options';
 import { LOCALIZATION_COPY, LocaleProvider } from '@schdk/ui/localization';
 import { AsyncBoundary, AsyncLoading, GoogleLoginView } from '@schdk/ui/shell';
 import { lazy, Suspense, useEffect, useLayoutEffect, useState } from 'react';
-import {
-  loadEditorTextOptions,
-  loadGameOptions,
-} from '../../storage/options/options-storage';
+import { loadEditorTextOptions } from '../../storage/editor/editor-options-storage';
+import { loadGameOptions } from '../../storage/options/load-game-options';
 import {
   loadShellLocale,
   loadShellTheme,

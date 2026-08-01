@@ -68,6 +68,7 @@ import { type GameLayout } from './types/game-options/game-layout.js';
 import { type GameLayoutElementId } from './types/game-options/game-layout-element-id.js';
 import { type GameLayoutPosition } from './types/game-options/game-layout-position.js';
 import { type GameOptions } from './types/game-options/game-options.js';
+import { type GamePresentationOptions } from './types/game-options/game-presentation-options.js';
 import { type GameTextGrowDirection } from './types/game-options/game-text-grow-direction.js';
 import { normalizeGameOptions } from './validators/game-options/normalize-game-options.js';
 import {
@@ -140,6 +141,7 @@ export {
   type GameLayoutElementId,
   type GameLayoutPosition,
   type GameOptions,
+  type GamePresentationOptions,
   type GameTextGrowDirection,
   normalizeGameOptions,
   MAX_VISUAL_TEMPLATE_BYTES,
