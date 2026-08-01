@@ -16,6 +16,8 @@ description: Maintain the @schdk/web shell. Use for entry points, navigation, si
    authorization path before editing.
    Keep routing and page composition in `@schdk/web`; load Drive collections
    with their first consumer and retain them for the shell session.
+   Wrap lazy shell, editor, and host chunks in the shared localized loading and
+   error boundary so chunk failures retain a usable shell and reload action.
    Let Vite derive chunks from that import graph; do not force all third-party
    modules into a global vendor chunk.
 4. Keep GIS access tokens in memory only; page reload must require an explicit

@@ -136,6 +136,10 @@ package authoring, hosting, settings, and account state.
   sizing and title-description spacing. Package editor and game-hosting actions
   remain compact in the right side of their page header; neither page uses a
   package drop-zone.
+- **SHL-24:** Lazy shell, editor, and host chunks show a localized loading
+  status. If a chunk fails to load or render, the shell remains visible and
+  offers a localized action that reloads the application instead of leaving an
+  empty workspace.
 
 ## Invariants
 
@@ -222,3 +226,6 @@ package authoring, hosting, settings, and account state.
     existing colors while the sidebar, active navigation, workspace, and
     panels use the flat visual treatment in SHL-22 at normal and 320-pixel
     widths.
+17. Throttle a lazy page chunk and confirm its localized loading status is
+    visible. Make the chunk fail and confirm the shell stays mounted with a
+    localized reload action.

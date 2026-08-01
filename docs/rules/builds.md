@@ -30,7 +30,8 @@
   the official Pages artifact and deployment actions, including its root
   `version.json`.
 - In pull requests, load the production unified web shell in headless Chrome
-  and require its Google login view to render.
+  and require its Google login view to render. Also run the visual-editor
+  interaction suite with Playwright's bundled Chromium.
 - Create releases only from `main` through the manual release workflow. Require
   a SemVer version matching `packages/web/version.json` and the
   Ukrainian `CHANGELOG.md` section with separate product and technical decision

@@ -82,9 +82,10 @@ describe('GoogleDriveClient', () => {
     );
     const client = new GoogleDriveClient(async () => 'expired');
 
-    await expect(client.listGamePackages()).rejects.toBeInstanceOf(
-      GoogleDriveAuthorizationError,
-    );
+    await expect(client.listGamePackages()).rejects.toMatchObject({
+      code: 'authorization',
+      name: 'GoogleDriveAuthorizationError',
+    });
   });
 
   it('rejects global writes from non-admin accounts', async () => {

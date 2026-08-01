@@ -13,6 +13,9 @@
 - Prefer unit and integration tests, and use stable snapshots to catch UI
   regressions. Reserve fast end-to-end tests for critical flows that must never
   fail.
+- Run the checked-in Playwright browser suite against generated Storybook
+  stories in pull requests. Keep it limited to critical visual-editor
+  interactions and use Playwright's bundled Chromium.
 - Contract-test every built-in layout element in both host and visual-editor
   markup so all persisted positioning styles stay aligned.
 - Keep the lazy visual-editor JavaScript chunk within its explicit bundle

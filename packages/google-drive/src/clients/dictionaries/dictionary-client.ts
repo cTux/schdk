@@ -11,12 +11,15 @@ import {
   type DriveDictionaryStorage,
   type DriveDictionaryWrite,
 } from '../../services/dictionaries/dictionaries.js';
-import { isDriveFileId } from '../../services/settings/settings.js';
 import {
-  DRIVE_API,
+  downloadDriveFile,
+  hasValidDriveSize,
+  listDriveFiles,
+  loadDriveMetadata,
   uploadDriveFile,
   type DriveRequest,
 } from '../../utils/client/drive-api.js';
+import { GoogleDriveError } from '../../errors/client/google-drive-error.js';
 
 class GoogleDriveDictionaryStorage implements DriveDictionaryStorage {
   constructor(private readonly request: DriveRequest) {}
@@ -28,7 +31,10 @@ class GoogleDriveDictionaryStorage implements DriveDictionaryStorage {
   async updateDictionary(fileId: string, value: DriveDictionaryWrite) {
     const { file } = await this.loadMetadata(fileId);
     if (!file || file.name !== value.name) {
-      throw new TypeError('Invalid Google Drive dictionary');
+      throw new GoogleDriveError(
+        'Invalid Google Drive dictionary',
+        'invalid-data',
+      );
     }
     return this.uploadDictionary(value, fileId);
   }
@@ -41,62 +47,53 @@ class GoogleDriveDictionaryStorage implements DriveDictionaryStorage {
       orderBy: 'name_natural',
       pageSize: '100',
     });
-    const files: DriveDictionaryFile[] = [];
-    let pageToken: string | undefined;
-    do {
-      if (pageToken) query.set('pageToken', pageToken);
-      const response = await this.request(`${DRIVE_API}/files?${query}`);
-      const value = (await response.json()) as {
-        files?: unknown[];
-        nextPageToken?: string;
-      };
-      files.push(
-        ...(value.files ?? []).flatMap((file) => {
-          const parsed = parseDriveDictionaryFile(file);
-          return parsed ? [parsed] : [];
-        }),
-      );
-      pageToken = value.nextPageToken;
-    } while (pageToken);
-    return files;
+    return listDriveFiles(this.request, query, parseDriveDictionaryFile);
   }
 
   async loadDictionary(fileId: string): Promise<DriveDictionary> {
     const metadata = await this.loadMetadata(fileId, true);
     if (!metadata.file || !metadata.validSize) {
-      throw new Error('Invalid Google Drive dictionary');
+      throw new GoogleDriveError(
+        'Invalid Google Drive dictionary',
+        'invalid-data',
+      );
     }
-    const response = await this.request(
-      `${DRIVE_API}/files/${encodeURIComponent(fileId)}?alt=media`,
+    const content = await downloadDriveFile(
+      this.request,
+      fileId,
+      MAX_SCHDK_DICTIONARY_BYTES,
     );
-    const content = new Uint8Array(await response.arrayBuffer());
+    if (!content) {
+      throw new GoogleDriveError(
+        'Invalid Google Drive dictionary',
+        'invalid-data',
+      );
+    }
     const dictionary = parseSchdkDictionaryArchive(content);
     if (createDictionaryFilename(dictionary.id) !== metadata.file.name) {
-      throw new Error('Invalid Google Drive dictionary');
+      throw new GoogleDriveError(
+        'Invalid Google Drive dictionary',
+        'invalid-data',
+      );
     }
     return { ...metadata.file, content };
   }
 
   private async loadMetadata(fileId: string, includeSize = false) {
-    if (!isDriveFileId(fileId))
-      throw new TypeError('Invalid Google Drive file');
-    const response = await this.request(
-      `${DRIVE_API}/files/${encodeURIComponent(fileId)}?fields=id,name,modifiedTime,parents${includeSize ? ',size' : ''}`,
+    const value = await loadDriveMetadata(
+      this.request,
+      fileId,
+      `id,name,modifiedTime,parents${includeSize ? ',size' : ''}`,
     );
-    const value = (await response.json()) as Record<string, unknown>;
     const parsed = parseDriveDictionaryFile(value);
     const hasRequiredFolder =
       Array.isArray(value.parents) &&
       value.parents.includes(GLOBAL_DICTIONARY_FOLDER_ID);
-    const size = Number(value.size);
     return {
       file: parsed && hasRequiredFolder ? parsed : null,
       validSize:
         !includeSize ||
-        (typeof value.size === 'string' &&
-          Number.isSafeInteger(size) &&
-          size > 0 &&
-          size <= MAX_SCHDK_DICTIONARY_BYTES),
+        hasValidDriveSize(value.size, MAX_SCHDK_DICTIONARY_BYTES),
     };
   }
 
@@ -116,7 +113,12 @@ class GoogleDriveDictionaryStorage implements DriveDictionaryStorage {
       content: new Uint8Array(parsed.content),
     });
     const file = parseDriveDictionaryFile(await response.json());
-    if (!file) throw new Error('Google Drive dictionary is unavailable');
+    if (!file) {
+      throw new GoogleDriveError(
+        'Google Drive dictionary is unavailable',
+        'unavailable',
+      );
+    }
     return file;
   }
 }

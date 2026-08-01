@@ -57,7 +57,10 @@ async function getGoogleDriveAccessToken() {
       refresh_token: refreshToken,
     }),
   ).catch(async (error: unknown) => {
-    if (error instanceof OAuthTokenError && error.code === 'invalid_grant') {
+    if (
+      error instanceof OAuthTokenError &&
+      error.oauthCode === 'invalid_grant'
+    ) {
       await disconnectGoogleDrive();
     }
     throw error;

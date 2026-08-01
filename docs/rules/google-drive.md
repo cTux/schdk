@@ -6,6 +6,10 @@
 - Route Drive API endpoints, multipart uploads, and visible SCHDK-folder
   discovery through the shared client transport helpers. Resource clients own
   their file validation, metadata mapping, and size limits.
+- Expose Drive runtime failures as `GoogleDriveError` with stable
+  `authorization`, `invalid-data`, or `unavailable` codes. Keep `TypeError` for
+  invalid values supplied by callers, and keep save-conflict `null` results as
+  the optimistic-concurrency contract.
 - Keep local storage as the immediate source and fallback. Merge remote
   settings per section by `updatedAt`, debounce uploads for one second, and
   retain local changes when Drive is unavailable.

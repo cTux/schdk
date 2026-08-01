@@ -3,64 +3,22 @@ import type { LocalizationCopy } from '../../../localization';
 import {
   DEFAULT_GAME_LAYOUT,
   MAX_CUSTOM_GAME_ELEMENTS,
-  MAX_CUSTOM_IMAGE_DATA_LENGTH,
   type CustomGameElement,
   type GameLayoutPosition,
   type GameOptions,
 } from '../../../options/types';
-import { createCustomElement, getNextZoom } from '../utils/geometry';
+import { createCustomElement } from '../utils/geometry';
 import {
   removeVisualEditorElement,
   updateVisualEditorElement,
   updateVisualEditorPosition,
 } from '../utils/update-visual-editor-game';
 import type { ElementSelection, GamePoint } from '../types';
-
-interface VisualEditorState {
-  panning: boolean;
-  pan: GamePoint;
-  zoom: number;
-  selected: ElementSelection | null;
-  imageTarget: 'background' | string | null;
-  localMessage: string;
-}
-
-const INITIAL_STATE: VisualEditorState = {
-  panning: false,
-  pan: { x: 0, y: 0 },
-  zoom: 1,
-  selected: null,
-  imageTarget: null,
-  localMessage: '',
-};
-
-type VisualEditorAction =
-  | { type: 'select'; selected: ElementSelection | null }
-  | { type: 'pan'; pan: GamePoint }
-  | { type: 'panning'; panning: boolean }
-  | { type: 'choose-image'; target: 'background' | string | null }
-  | { type: 'message'; message: string }
-  | { type: 'zoom'; delta: number };
-
-export function reduceVisualEditor(
-  state: VisualEditorState,
-  action: VisualEditorAction,
-): VisualEditorState {
-  switch (action.type) {
-    case 'select':
-      return { ...state, selected: action.selected };
-    case 'pan':
-      return { ...state, pan: action.pan };
-    case 'panning':
-      return { ...state, panning: action.panning };
-    case 'choose-image':
-      return { ...state, imageTarget: action.target };
-    case 'message':
-      return { ...state, localMessage: action.message };
-    case 'zoom':
-      return { ...state, zoom: getNextZoom(state.zoom, action.delta) };
-  }
-}
+import { applyVisualEditorImage } from '../utils/apply-visual-editor-image';
+import {
+  INITIAL_VISUAL_EDITOR_STATE,
+  reduceVisualEditor,
+} from './visual-editor-state';
 
 export function useVisualEditor(
   game: GameOptions,
@@ -75,7 +33,10 @@ export function useVisualEditor(
     start: { x: number; y: number };
     offset: { x: number; y: number };
   } | null>(null);
-  const [state, dispatch] = useReducer(reduceVisualEditor, INITIAL_STATE);
+  const [state, dispatch] = useReducer(
+    reduceVisualEditor,
+    INITIAL_VISUAL_EDITOR_STATE,
+  );
   const setPan = (pan: GamePoint) => dispatch({ type: 'pan', pan });
   const setPanning = (panning: boolean) =>
     dispatch({ type: 'panning', panning });
@@ -159,30 +120,13 @@ export function useVisualEditor(
   }
 
   function applyImage(dataUrl: string) {
-    if (dataUrl.length > MAX_CUSTOM_IMAGE_DATA_LENGTH) {
-      setLocalMessage(copy.visualEditor.imagesTooLarge);
-      return;
-    }
-    if (state.imageTarget === 'background') {
-      onChange({ ...game, backgroundImage: dataUrl });
-      return;
-    }
     if (!state.imageTarget) return;
-    const otherImageDataLength = game.customElements.reduce(
-      (total, element) => {
-        const isOtherImage =
-          element.kind === 'image' &&
-          element.id !== state.imageTarget &&
-          element.image;
-        return total + (isOtherImage ? element.image!.length : 0);
-      },
-      0,
-    );
-    if (otherImageDataLength + dataUrl.length > MAX_CUSTOM_IMAGE_DATA_LENGTH) {
+    const updated = applyVisualEditorImage(game, state.imageTarget, dataUrl);
+    if (!updated) {
       setLocalMessage(copy.visualEditor.imagesTooLarge);
       return;
     }
-    updateCustom(state.imageTarget, { image: dataUrl });
+    onChange(updated);
   }
 
   return {

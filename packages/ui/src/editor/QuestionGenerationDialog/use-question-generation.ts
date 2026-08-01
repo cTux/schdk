@@ -3,7 +3,8 @@ import {
   type AIQuestionDifficulty,
   type AIQuestionRecognizability,
 } from '@schdk/common';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
+import { useGenerationTask } from '../hooks/use-generation-task';
 import type { QuestionGenerationDialogProps } from './types';
 
 function useQuestionGeneration({
@@ -22,16 +23,13 @@ function useQuestionGeneration({
   const [thinking, setThinking] = useState(false);
   const [failed, setFailed] = useState(false);
   const [promptOpen, setPromptOpen] = useState(false);
-  const generationId = useRef(0);
-  const generationController = useRef<AbortController | null>(null);
+  const generationTask = useGenerationTask();
   const sortedTemplates = [...templates].sort(compareFavoriteItemsByName);
   const selectedTemplate =
     sortedTemplates[Number(templateIndex)] ?? sortedTemplates[0] ?? null;
 
   function reset() {
-    generationController.current?.abort();
-    generationController.current = null;
-    generationId.current += 1;
+    generationTask.cancel();
     setOpen(false);
     setTemplateIndex('0');
     setDifficulty('medium');
@@ -48,19 +46,9 @@ function useQuestionGeneration({
     onQuestionGenerationStateChange?.(false, true);
   }
 
-  useEffect(
-    () => () => {
-      generationController.current?.abort();
-      generationId.current += 1;
-    },
-    [],
-  );
-
   async function generate() {
     if (!selectedTemplate || !context.trim()) return;
-    const currentGenerationId = ++generationId.current;
-    const controller = new AbortController();
-    generationController.current = controller;
+    const task = generationTask.start();
     setThinking(true);
     setFailed(false);
     onQuestionGenerationStateChange?.(true, true);
@@ -73,13 +61,13 @@ function useQuestionGeneration({
           difficulty,
           recognizability,
         },
-        controller.signal,
+        task.signal,
       );
-      if (currentGenerationId !== generationId.current) return;
+      if (!task.isCurrent()) return;
       onGenerated(question);
       reset();
     } catch {
-      if (currentGenerationId !== generationId.current) return;
+      if (!task.isCurrent()) return;
       setThinking(false);
       setFailed(true);
       onQuestionGenerationStateChange?.(false, true);

@@ -27,6 +27,7 @@ pnpm fmt:check
 pnpm lint
 pnpm typecheck
 pnpm test
+pnpm test:browser
 pnpm build
 pnpm --filter @schdk/web check:bundle
 ```

@@ -7,6 +7,9 @@
   iframes or duplicate application builds.
 - Load every page chunk on first selection, then keep it mounted so navigation
   does not discard state.
+- Wrap lazy shell, editor, and host chunks in the shared localized loading and
+  error boundary. A failed chunk keeps the shell mounted and offers a full-page
+  reload instead of leaving an empty workspace.
 - Start each Drive-backed collection when its first consuming page or editor is
   selected, then retain the loaded hook and page state for the shell session.
   Do not preload unrelated collections immediately after authorization.

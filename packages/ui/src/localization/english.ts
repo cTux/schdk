@@ -218,6 +218,8 @@ export const english: typeof ukrainian = {
     chooseImage: 'Choose an image file.',
     gameLayout: 'Game screen layout',
     hidden: 'Hidden',
+    undo: 'Undo the last change',
+    redo: 'Redo the reverted change',
   },
   allWeb: englishAllWeb,
 };

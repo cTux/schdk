@@ -21,9 +21,11 @@
     "fmt:check": "oxfmt --check .",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
-    "test": "turbo test && node --test scripts/repository-workflows.test.mjs"
+    "test": "turbo test && node --test scripts/repository-workflows.test.mjs",
+    "test:browser": "playwright test"
   },
   "devDependencies": {
+    "@playwright/test": "1.62.1",
     "npm-check-updates": "^23.0.0",
     "oxfmt": "^0.61.0",
     "turbo": "^2.10.7"

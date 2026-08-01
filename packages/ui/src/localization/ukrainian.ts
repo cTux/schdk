@@ -219,6 +219,8 @@ export const ukrainian = {
     chooseImage: 'Оберіть файл зображення.',
     gameLayout: 'Макет екрана гри',
     hidden: 'Приховано',
+    undo: 'Скасувати останню зміну',
+    redo: 'Повторити скасовану зміну',
   },
   allWeb: ukrainianAllWeb,
 };

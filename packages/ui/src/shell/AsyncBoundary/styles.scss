@@ -1,0 +1,14 @@
+@use '../../styles/tokens' as *;
+
+.async-boundary-message {
+  display: flex;
+  min-height: 160px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: $space-4;
+  margin: 0;
+  padding: $space-6;
+  color: $muted;
+  text-align: center;
+}
