@@ -36,6 +36,10 @@ to every hosted question.
 - **VIS-14:** Background and custom-element image selection rejects files that
   cannot fit the canonical 3 MiB encoded-image limit before reading them, and
   validates the resulting embedded data URL before changing presentation.
+- **VIS-15:** Authors can undo and redo presentation changes with the permanent
+  visual-editor controls or standard keyboard shortcuts. One completed drag or
+  resize is one history entry, new edits clear redo history, and history never
+  crosses connected Google accounts.
 
 ## Invariants
 
@@ -62,3 +66,7 @@ to every hosted question.
    application text areas and has no native resize handle.
 7. Select an image that cannot fit the encoded-image limit and confirm the
    editor rejects it before reading or changing presentation.
+8. Change text, background, visibility, and element bounds; undo and redo each
+   change with buttons and keyboard shortcuts. Make a new edit after undo and
+   confirm redo is unavailable, then switch accounts and confirm history is
+   cleared.

@@ -24,6 +24,9 @@ description: Build, refactor, or review @schdk/ui components and styles. Use for
    persisted presentation identically without importing from each other.
    Keep persisted visual-editor model updates in pure helpers and transient
    gesture state in the React hook.
+   Keep bounded visual-editor undo and redo history in the web controller;
+   expose only availability and callbacks to the UI and clear history across
+   account changes.
    Bound visual-editor image files before reading and validate their embedded
    data URLs against the canonical image-data limit before applying them.
 7. Verify Storybook for changed exports or props and visually smoke-test the

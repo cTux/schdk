@@ -25,12 +25,16 @@ const selectionKey = (selection: ElementSelection) =>
   `${selection.kind}:${selection.id}`;
 
 function VisualEditor({
+  canRedo,
+  canUndo,
   hidden,
   game,
   message,
   onChange,
   onImportTemplate,
   onExportTemplate,
+  onRedo,
+  onUndo,
 }: VisualEditorProps) {
   const { copy } = useLocalization();
   const editor = useVisualEditor(game, copy, onChange);
@@ -85,10 +89,14 @@ function VisualEditor({
   return (
     <div className="visual-editor" hidden={hidden}>
       <VisualEditorSidebar
+        canRedo={canRedo}
+        canUndo={canUndo}
         copy={copy}
         addElement={editor.addElement}
         onExportTemplate={onExportTemplate}
         onImportTemplate={onImportTemplate}
+        onRedo={onRedo}
+        onUndo={onUndo}
       />
       <div
         ref={editor.workspaceRef}
@@ -96,6 +104,28 @@ function VisualEditor({
           'is-panning': editor.panning,
         })}
         onKeyDown={(event) => {
+          const isEditable =
+            event.target instanceof HTMLInputElement ||
+            event.target instanceof HTMLTextAreaElement ||
+            event.target instanceof HTMLSelectElement ||
+            (event.target instanceof HTMLElement &&
+              event.target.isContentEditable);
+          const hasUndoModifier =
+            (event.ctrlKey || event.metaKey) && !event.altKey;
+          const isUndo =
+            hasUndoModifier &&
+            event.key.toLowerCase() === 'z' &&
+            !event.shiftKey;
+          const isRedo =
+            hasUndoModifier &&
+            (event.key.toLowerCase() === 'y' ||
+              (event.key.toLowerCase() === 'z' && event.shiftKey));
+          if (!isEditable && (isUndo || isRedo)) {
+            event.preventDefault();
+            if (isUndo && canUndo) onUndo();
+            if (isRedo && canRedo) onRedo();
+            return;
+          }
           if (event.key !== 'Escape' || !editor.selected) return;
           event.preventDefault();
           event.stopPropagation();

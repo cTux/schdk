@@ -84,6 +84,7 @@ export function App() {
     gameOptions,
     googleDrive.setGameOptions,
     googleDrive.gameOptionsStorageFailed,
+    googleDrive.accountId,
     {
       importFailed: copy.allWeb.importVisualsFailed,
       exportFailed: copy.allWeb.exportVisualsFailed,
@@ -240,11 +241,15 @@ export function App() {
                 onUiAnimationsChange: setUiAnimations,
               },
               visualEditor: {
+                canRedo: visualEditor.canRedo,
+                canUndo: visualEditor.canUndo,
                 game: gameOptions,
                 message: visualEditor.error,
                 onChange: visualEditor.change,
                 onImportTemplate: visualEditor.importTemplate,
                 onExportTemplate: visualEditor.exportTemplate,
+                onRedo: visualEditor.redo,
+                onUndo: visualEditor.undo,
               },
             }}
           />
