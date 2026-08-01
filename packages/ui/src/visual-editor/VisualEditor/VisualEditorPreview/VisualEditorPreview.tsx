@@ -9,7 +9,7 @@ import {
   GameQuestion,
   GameQuestionIntro,
   GameTimer,
-} from '../../../host/GameElements';
+} from '../../../game-presentation/GameElements';
 import type { VisualEditorPreviewProps } from './types';
 
 export function VisualEditorPreview({ copy, id }: VisualEditorPreviewProps) {

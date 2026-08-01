@@ -35,16 +35,31 @@ const INITIAL_STATE: VisualEditorState = {
 };
 
 type VisualEditorAction =
-  | { type: 'patch'; value: Partial<VisualEditorState> }
+  | { type: 'select'; selected: ElementSelection | null }
+  | { type: 'pan'; pan: GamePoint }
+  | { type: 'panning'; panning: boolean }
+  | { type: 'choose-image'; target: 'background' | string | null }
+  | { type: 'message'; message: string }
   | { type: 'zoom'; delta: number };
 
-function reduceVisualEditor(
+export function reduceVisualEditor(
   state: VisualEditorState,
   action: VisualEditorAction,
 ): VisualEditorState {
-  return action.type === 'zoom'
-    ? { ...state, zoom: getNextZoom(state.zoom, action.delta) }
-    : { ...state, ...action.value };
+  switch (action.type) {
+    case 'select':
+      return { ...state, selected: action.selected };
+    case 'pan':
+      return { ...state, pan: action.pan };
+    case 'panning':
+      return { ...state, panning: action.panning };
+    case 'choose-image':
+      return { ...state, imageTarget: action.target };
+    case 'message':
+      return { ...state, localMessage: action.message };
+    case 'zoom':
+      return { ...state, zoom: getNextZoom(state.zoom, action.delta) };
+  }
 }
 
 export function useVisualEditor(
@@ -61,14 +76,13 @@ export function useVisualEditor(
     offset: { x: number; y: number };
   } | null>(null);
   const [state, dispatch] = useReducer(reduceVisualEditor, INITIAL_STATE);
-  const setPan = (pan: GamePoint) =>
-    dispatch({ type: 'patch', value: { pan } });
+  const setPan = (pan: GamePoint) => dispatch({ type: 'pan', pan });
   const setPanning = (panning: boolean) =>
-    dispatch({ type: 'patch', value: { panning } });
+    dispatch({ type: 'panning', panning });
   const setSelected = (selected: ElementSelection | null) =>
-    dispatch({ type: 'patch', value: { selected } });
+    dispatch({ type: 'select', selected });
   const setLocalMessage = (localMessage: string) =>
-    dispatch({ type: 'patch', value: { localMessage } });
+    dispatch({ type: 'message', message: localMessage });
   const positions = game.layout ?? DEFAULT_GAME_LAYOUT;
   const selected = state.selected;
   const selectedCustom =
@@ -118,7 +132,7 @@ export function useVisualEditor(
   }
 
   function chooseImage(target: 'background' | string) {
-    dispatch({ type: 'patch', value: { imageTarget: target } });
+    dispatch({ type: 'choose-image', target });
     fileInputRef.current?.click();
   }
 

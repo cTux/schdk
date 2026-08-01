@@ -1,5 +1,5 @@
 import { createEmptyGamePackage, parseGamePackage } from '@schdk/common';
-import type { DriveGamePackageFile } from '@schdk/google-drive';
+import type { DriveGamePackageFile } from '@schdk/google-drive/game-packages';
 import { ConfirmationDialog, useConfirmationDialog } from '@schdk/ui';
 import { EditorView } from '@schdk/ui/editor';
 import { useLocalization } from '@schdk/ui/localization';
@@ -8,16 +8,16 @@ import { useCallback, useRef, useState } from 'react';
 import {
   getDeepLinkedPackageName,
   getDeepLinkedQuestionIndex,
-} from './deep-link';
-import { loadDesktopEditorSession } from './desktop-session';
-import { useDriveConflictResolution } from './use-drive-conflict-resolution';
-import { useEditorOpening } from './use-editor-opening';
-import { useEditorPersistence } from './use-editor-persistence';
-import { useEditorRecents } from './use-editor-recents';
-import { useEditorSession } from './use-editor-session';
-import { useMusicBreakChange } from './use-music-break-change';
+} from './opening/deep-link';
+import { useEditorOpening } from './opening/use-editor-opening';
+import { useEditorRecents } from './opening/use-editor-recents';
+import { loadDesktopEditorSession } from './persistence/desktop-session';
+import { useDriveConflictResolution } from './persistence/use-drive-conflict-resolution';
+import { useEditorPersistence } from './persistence/use-editor-persistence';
+import { useMusicBreakChange } from './questions/use-music-break-change';
+import { useQuestionActions } from './questions/use-question-actions';
+import { useEditorSession } from './session/use-editor-session';
 import { usePackageActions } from './use-package-actions';
-import { useQuestionActions } from './use-question-actions';
 import type { AppProps } from './types';
 
 function App({
@@ -40,8 +40,6 @@ function App({
   const session = useEditorSession(copy.shared.untitled);
   const {
     driveFileId,
-    driveModifiedTime,
-    fileName,
     gamePackage,
     hasPackage,
     openPackage,
@@ -112,23 +110,14 @@ function App({
     desktopSessionReady,
     drive,
     driveActive,
-    driveFileId,
-    driveModifiedTime,
-    fileName,
-    gamePackage,
-    hasPackage,
     locale,
     manageDocumentTitle,
     saveQueue,
-    saveStatus,
+    session,
     sessionScope,
-    selectedIndex,
     onDriveFailure,
     resolveDriveConflict,
-    setFileName: session.setFileName,
-    setDriveModifiedTime: session.setDriveModifiedTime,
     setMessage,
-    setSaveStatus: session.setSaveStatus,
   });
   const questions = useQuestionActions({
     confirm,

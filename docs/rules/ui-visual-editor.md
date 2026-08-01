@@ -1,6 +1,7 @@
 # Visual editor UI
 
-- Reuse the host's game-element components and styles for previews.
+- Reuse the neutral game-presentation components and styles shared with the
+  host for previews; visual-editor code must not import from the host feature.
 - Keep main and alternative answers as separate draggable elements. Keep the
   game logo visible through every question stage with an upper-left default.
 - Use a full-size dark workspace with a pannable, wheel-zoomable 16:9 game

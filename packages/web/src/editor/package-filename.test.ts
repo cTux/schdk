@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createGamePackageFilename } from '@schdk/google-drive';
+import { createGamePackageFilename } from '@schdk/google-drive/game-packages';
 
 describe('createGamePackageFilename', () => {
   it('uses the package title', () => {

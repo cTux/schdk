@@ -9,6 +9,21 @@
       "types": "./src/index.ts",
       "development": "./src/index.ts",
       "default": "./dist/index.js"
+    },
+    "./ai-questions": {
+      "types": "./src/services/ai-questions/ai-questions.ts",
+      "development": "./src/services/ai-questions/ai-questions.ts",
+      "default": "./dist/services/ai-questions/ai-questions.js"
+    },
+    "./game-packages": {
+      "types": "./src/services/game-packages/game-packages.ts",
+      "development": "./src/services/game-packages/game-packages.ts",
+      "default": "./dist/services/game-packages/game-packages.js"
+    },
+    "./question-database": {
+      "types": "./src/services/question-database/question-database.ts",
+      "development": "./src/services/question-database/question-database.ts",
+      "default": "./dist/services/question-database/question-database.js"
     }
   },
   "scripts": {

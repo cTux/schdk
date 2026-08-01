@@ -4,7 +4,7 @@ import {
   toDrivePackageReference,
   type DrivePackageStorage,
   type DriveGamePackageFile,
-} from '@schdk/google-drive';
+} from '@schdk/google-drive/game-packages';
 import type { LocalizationCopy } from '@schdk/ui/localization';
 import {
   useEffect,
@@ -16,7 +16,7 @@ import { replaceBrowserPackageDeepLink } from './browser-deep-link';
 import {
   saveDesktopEditorSession,
   type DesktopEditorSession,
-} from './desktop-session';
+} from '../persistence/desktop-session';
 
 interface EditorOpeningOptions {
   copy: LocalizationCopy;

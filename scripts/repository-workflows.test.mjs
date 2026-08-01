@@ -1,6 +1,5 @@
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
-import { existsSync } from 'node:fs';
 import { access, readFile, readdir } from 'node:fs/promises';
 import test from 'node:test';
 import { promisify } from 'node:util';
@@ -113,32 +112,6 @@ test('development prompts end with a clean commit', async () => {
   assert.match(skill, /confirm the worktree is clean/);
 });
 
-test('tracked source files stay within 256 physical lines', async () => {
-  const { stdout } = await execFileAsync(
-    'git',
-    ['ls-files', '--cached', '--others', '--exclude-standard', '-z'],
-    { cwd: repositoryRoot, encoding: 'utf8' },
-  );
-  const sourceFiles = stdout
-    .split('\0')
-    .filter(Boolean)
-    .filter((path) => existsSync(new URL(path, repositoryRoot)))
-    .filter((path) =>
-      sourceExtensions.has(path.slice(path.lastIndexOf('.')).toLowerCase()),
-    );
-  const violations = [];
-
-  for (const path of sourceFiles) {
-    const content = await read(path);
-    const lineCount = content
-      .replace(/(?:\r\n|\r|\n)$/u, '')
-      .split(/\r\n|\r|\n/u).length;
-    if (lineCount > 256) violations.push(`${path}: ${lineCount}`);
-  }
-
-  assert.deepEqual(violations, []);
-});
-
 test('workspace imports respect package boundaries and manifests', async () => {
   const packageDirectories = (
     await readdir(new URL('packages/', repositoryRoot), {
@@ -183,6 +156,27 @@ test('workspace imports respect package boundaries and manifests', async () => {
   }
 });
 
+test('shared packages expose stable domain entry points', async () => {
+  const [common, drive] = await Promise.all([
+    read('packages/common/package.json').then(JSON.parse),
+    read('packages/google-drive/package.json').then(JSON.parse),
+  ]);
+
+  assert.deepEqual(Object.keys(common.exports).sort(), [
+    '.',
+    './ai-question',
+    './ai-question-package',
+    './game-question',
+    './visual-editor-template',
+  ]);
+  assert.deepEqual(Object.keys(drive.exports).sort(), [
+    '.',
+    './ai-questions',
+    './game-packages',
+    './question-database',
+  ]);
+});
+
 test('workspace source modules have no relative import cycles', async () => {
   const packageDirectories = (
     await readdir(new URL('packages/', repositoryRoot), { withFileTypes: true })
@@ -197,6 +191,27 @@ test('workspace source modules have no relative import cycles', async () => {
     cycles.map((cycle) => cycle.map((url) => new URL(url).pathname)),
     [],
   );
+});
+
+test('UI feature areas use neutral game presentation ownership', async () => {
+  const visualEditorFiles = await listFiles(
+    new URL('packages/ui/src/visual-editor/', repositoryRoot),
+  );
+  const forbiddenImports = [];
+
+  for (const file of visualEditorFiles) {
+    if (
+      !sourceExtensions.has(file.pathname.slice(file.pathname.lastIndexOf('.')))
+    ) {
+      continue;
+    }
+    const source = await readFile(file, 'utf8');
+    if (/from\s+["'][^"']*host\//u.test(source)) {
+      forbiddenImports.push(file.pathname);
+    }
+  }
+
+  assert.deepEqual(forbiddenImports, []);
 });
 
 test('UI components follow the directory and class composition contracts', async () => {

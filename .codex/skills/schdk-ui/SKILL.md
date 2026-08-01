@@ -19,8 +19,9 @@ description: Build, refactor, or review @schdk/ui components and styles. Use for
    importing one feature's components from the other.
    Keep feature-specific styles at the owning component boundary instead of
    loading them through an application-area stylesheet.
-   Route visual-editor and host positions through the shared game-layout style
-   mapper so both surfaces render the persisted presentation identically.
+   Route visual-editor and host positions through the neutral game-presentation
+   components and shared game-layout style mapper so both surfaces render the
+   persisted presentation identically without importing from each other.
    Keep persisted visual-editor model updates in pure helpers and transient
    gesture state in the React hook.
    Bound visual-editor image files before reading and validate their embedded

@@ -17,6 +17,8 @@ description: Verify SCHDK changes and builds. Use for pre-commit checks, health 
    apps for main, preload, packaging, icon, or bundled-resource changes.
 6. Confirm `git diff --check`, structural rules for changed source files, and
    that generated output remains ignored.
+7. Treat the web bundle check as both the global chunk budget and the lazy
+   visual-editor chunk budget.
 
 ## Full Checks
 

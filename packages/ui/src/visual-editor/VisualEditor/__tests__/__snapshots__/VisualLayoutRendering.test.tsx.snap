@@ -1,8 +1,0 @@
-// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
-
-exports[`game layout rendering contract > applies every persisted bound in host and editor markup 1`] = `
-{
-  "editor": "<div role="button" tabindex="0" class="visual-layout-item visual-layout-question" style="--game-layout-x:24%;--game-layout-y:36%;--game-layout-width:34%;--game-layout-height:12%;--game-font-scale:1;--game-text-color:#f1f3f6;--game-grow-align:flex-start;--game-image-position:right bottom" data-hidden-label="Hidden" aria-label="Question. Move" aria-pressed="false">Question<span class="game-fit-observer" aria-hidden="true"></span></div>",
-  "host": "<div class="game-layout-item game-layout-question has-position" style="--game-layout-x:24%;--game-layout-y:36%;--game-layout-width:34%;--game-layout-height:12%;--game-font-scale:1;--game-text-color:#f1f3f6;--game-grow-align:flex-start;--game-image-position:right bottom">Question<span class="game-fit-observer" aria-hidden="true"></span></div>",
-}
-`;

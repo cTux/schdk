@@ -9,7 +9,8 @@
 - `@schdk/ai` owns provider setup, localized generation prompts, structured
   response validation, and conversion to the canonical game-question type.
 - `@schdk/ui` owns components, composed views, styles, design tokens, UI
-  assets, shared question-database presentation, Ukrainian/English application
+  assets, neutral game-presentation primitives shared by gameplay and the visual
+  editor, shared question-database presentation, Ukrainian/English application
   copy and locale context, and UI rules.
   Its detailed rules live in
   [`packages/ui/README.md`](../../packages/ui/README.md).
@@ -37,6 +38,8 @@
   `@schdk/desktop`.
 - Consume workspace packages through their declared package exports and list
   every workspace dependency in the consuming package manifest.
+- Prefer a declared domain subpath when a consumer needs one contract only;
+  keep the package root export for composition code that spans domains.
 - Keep the allowed workspace dependency directions synchronized with the
   repository workflow test; new packages require an explicit policy entry.
 - Keep editor and host feature modules inside `@schdk/web`; do not recreate
@@ -58,16 +61,18 @@
 - Keep package-open actions, recent-package rows, and their styles in the
   neutral `@schdk/ui` game-packages domain; editor and host views consume that
   domain without importing from each other.
+- Keep game elements, fitted-text measurement, and persisted layout rendering
+  in the neutral `@schdk/ui` game-presentation domain; host and visual-editor
+  features consume it without importing from each other.
 - The web application composes exported `@schdk/ui` controls and views; it
   does not render native interactive JSX or define app-local visual controls.
 - `@schdk/ui` exports shell page views and their styles as leaf entry points;
   it does not decide application routes, mounting, or data-fetch timing.
-- Keep AI provider calls, token renewal, batch sequencing, answer exclusion,
-  and cancellation in `@schdk/web`; `@schdk/ui` only collects generation
-  inputs and renders lifecycle state supplied through typed callbacks.
-- Propagate cancellation as one `AbortSignal` from the UI controller through
-  the web bridge to the provider call. Electron maps that signal to a narrow,
-  request-scoped cancellation message handled in main.
+- Keep AI provider calls, token renewal, batch sequencing, and answer
+  exclusion in `@schdk/web`; `@schdk/ui` owns only form and dialog lifecycle.
+- Let the active UI dialog create one cancellation `AbortSignal` and propagate
+  it through the web bridge to the provider call. Electron maps that signal to
+  a narrow, request-scoped cancellation message handled in main.
 - Keep workspace runtime imports acyclic. Public barrels may re-export leaf
   implementations but must not import an implementation that depends back on
   the barrel's owning module.

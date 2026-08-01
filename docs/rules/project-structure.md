@@ -17,27 +17,28 @@ directions in [architecture.md](architecture.md).
 - Do not use catch-all `common`, `misc`, or `shared` directories. When no
   existing role fits, name the module by what it does instead of creating a
   speculative abstraction.
-- Treat each nested owner directory as a small source root. Keep its primary
-  module, public entry point, public `types.ts`, `constants.ts`, stylesheet,
-  and tests at that level.
+- Treat each nested owner directory as a small source root. Keep related
+  implementation, private types, constants, styles, and tests together when
+  that makes the feature easier to understand.
 - A single private secondary module may stay beside its owner. When an owner
   has multiple secondary modules, group all of them by role under directories
   such as `hooks`, `utils`, `types`, `context`, or `constants`.
 - Preserve a more specific established structure after role grouping; do not
   add wrapper entry points inside private role directories.
+- In `packages/web/src/editor`, keep opening, persistence, question editing,
+  and editor-session state in their matching workflow directories. Keep
+  `App.tsx` as the composition root and cross-workflow package actions beside
+  it.
 
-## File size
+## Cohesion
 
-- Keep every tracked source-code file at 256 physical lines or fewer, including
-  blank lines and comments. This applies to `.cjs`, `.css`, `.html`, `.js`,
-  `.jsx`, `.mjs`, `.scss`, `.ts`, and `.tsx` files.
-- When a source file would exceed the limit, split it by cohesive
-  responsibility into smaller modules, components, hooks, or stylesheet
-  partials. Preserve ownership boundaries and public entry points; do not
-  compress formatting or combine unrelated statements merely to satisfy the
-  limit.
-- Generated output, lockfiles, binary assets, and prose documentation are not
-  source-code files and are outside this limit.
+- Split a source file when it owns multiple independently changing
+  responsibilities, not when it crosses an arbitrary physical line count.
+- Keep a component, its private props, and small private helpers together when
+  they change as one unit. Extract a module only when it has another consumer,
+  a separately testable responsibility, or materially improves readability.
+- Do not create pass-through `types.ts`, `constants.ts`, or `index.ts` files for
+  private symbols. Keep entry points only at real consumer boundaries.
 
 ## Exports
 
@@ -72,11 +73,13 @@ directions in [architecture.md](architecture.md).
 
 - Put a UI feature shared by multiple application areas under its neutral
   subject area instead of nesting it under one consumer.
-- Put each new or structurally changed component in its own
-  `packages/ui/src/<area>/<ComponentName>/` directory.
-- Include `ComponentName.tsx` and `index.ts`. Add `types.ts` only when the
-  component owns types used outside its implementation. Add `styles.scss` only
-  when the component emits component-specific CSS; never add empty placeholders.
+- Put a reusable component with multiple implementation files in its own
+  `packages/ui/src/<area>/<ComponentName>/` directory. A small leaf component
+  may remain in one file under its owning area.
+- Add `types.ts` only for types consumed outside the component implementation.
+  Add `index.ts` only when the directory is a public or cross-feature import
+  boundary. Add `styles.scss` only when the component emits component-specific
+  CSS; never add empty placeholders.
 - Keep private one-use props with the component. Put reusable component props
   in that component's own `types.ts`. Composite components may re-export child
   props from the child's public entry point, but must not copy them. Group

@@ -13,8 +13,10 @@
 - Prefer unit and integration tests, and use stable snapshots to catch UI
   regressions. Reserve fast end-to-end tests for critical flows that must never
   fail.
-- Snapshot the shared host/visual-editor layout markup so changes to persisted
-  positioning presentation require an explicit review.
+- Contract-test every built-in layout element in both host and visual-editor
+  markup so all persisted positioning styles stay aligned.
+- Keep the lazy visual-editor JavaScript chunk within its explicit bundle
+  budget in `scripts/check-web-bundle-budget.mjs`.
 - Use `$schdk-technical-review` for project technical audits. Report only
   evidenced P0-P2 issues in a priority-sorted table.
 - Keep pure logic outside React/Electron objects when that makes it directly

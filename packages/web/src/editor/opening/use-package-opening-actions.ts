@@ -11,7 +11,7 @@ import {
   toDrivePackageReference,
   type DrivePackageStorage,
   type DriveGamePackageFile,
-} from '@schdk/google-drive';
+} from '@schdk/google-drive/game-packages';
 import { showEditorToast, type RecentPackageItem } from '@schdk/ui/editor';
 import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
 import { useRef, useState } from 'react';
