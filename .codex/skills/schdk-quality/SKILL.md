@@ -19,6 +19,8 @@ description: Verify SCHDK changes and builds. Use for pre-commit checks, health 
    that generated output remains ignored.
 7. Treat the web bundle check as both the global chunk budget and the lazy
    visual-editor chunk budget.
+8. Keep repository workflow checks aligned with durable architecture boundaries
+   when ownership or mirrored preload IPC contracts change.
 
 ## Full Checks
 

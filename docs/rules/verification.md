@@ -20,6 +20,8 @@
   markup so all persisted positioning styles stay aligned.
 - Keep the lazy visual-editor JavaScript chunk within its explicit bundle
   budget in `scripts/check-web-bundle-budget.mjs`.
+- Keep critical package, presentation, storage, history, and mirrored preload
+  IPC boundaries executable in `scripts/repository-workflows.test.mjs`.
 - Use `$schdk-technical-review` for project technical audits. Report only
   evidenced P0-P2 issues in a priority-sorted table.
 - Keep pure logic outside React/Electron objects when that makes it directly

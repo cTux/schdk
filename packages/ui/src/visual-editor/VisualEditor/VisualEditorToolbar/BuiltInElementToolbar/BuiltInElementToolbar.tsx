@@ -9,7 +9,7 @@ import {
 } from '../../../../atoms/ActionToolbar';
 import { ImagePositionSettings, TextSettings } from '../../PositionSettings';
 import type { ElementSelection } from '../../types';
-import { ElementVisibilityButton } from './ElementVisibilityButton';
+import { ElementVisibilityButton } from '../ElementVisibilityButton';
 
 const GRAPHIC_ELEMENTS = new Set<GameLayoutElementId>(['logo', 'handout']);
 
