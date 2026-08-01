@@ -5,6 +5,7 @@ import {
   MAX_CUSTOM_IMAGE_DATA_LENGTH,
 } from '../../../options/types';
 import { readVisualEditorImage } from '../utils/read-visual-editor-image';
+import { reduceVisualEditor } from '../hooks/useVisualEditor';
 import {
   createCustomElement,
   getDraggedPosition,
@@ -18,6 +19,27 @@ import {
 } from '../utils/update-visual-editor-game';
 
 describe('visual editor drag position', () => {
+  it('applies semantic interaction transitions without dropping state', () => {
+    const state = {
+      panning: false,
+      pan: { x: 0, y: 0 },
+      zoom: 1,
+      selected: null,
+      imageTarget: null,
+      localMessage: '',
+    };
+
+    expect(
+      reduceVisualEditor(state, {
+        type: 'select',
+        selected: { kind: 'built-in', id: 'question' },
+      }),
+    ).toEqual({
+      ...state,
+      selected: { kind: 'built-in', id: 'question' },
+    });
+  });
+
   it('rejects oversized images before reading them', async () => {
     await expect(
       readVisualEditorImage({
