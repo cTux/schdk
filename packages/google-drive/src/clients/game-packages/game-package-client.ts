@@ -19,6 +19,7 @@ import {
   uploadDriveFile,
   type DriveRequest,
 } from '../../utils/client/drive-api.js';
+import { GoogleDriveError } from '../../errors/client/google-drive-error.js';
 
 const MAX_GAME_PACKAGE_BYTES = 160 * 1024 * 1024;
 
@@ -48,7 +49,12 @@ export class GoogleDrivePackageStorage implements DrivePackageStorage {
       'id,name,description,modifiedTime,appProperties',
     );
     const current = parseDriveGamePackageFile(metadata);
-    if (!current) throw new TypeError('Invalid Google Drive package');
+    if (!current) {
+      throw new GoogleDriveError(
+        'Invalid Google Drive package',
+        'invalid-data',
+      );
+    }
     if (current.modifiedTime !== expectedModifiedTime) return null;
     return this.uploadGamePackage(value, fileId);
   }
@@ -60,7 +66,10 @@ export class GoogleDrivePackageStorage implements DrivePackageStorage {
       'id,name,description,modifiedTime,appProperties',
     );
     if (!parseDriveGamePackageFile(metadata)) {
-      throw new TypeError('Invalid Google Drive package');
+      throw new GoogleDriveError(
+        'Invalid Google Drive package',
+        'invalid-data',
+      );
     }
     await trashDriveFile(this.request, fileId);
   }
@@ -95,14 +104,22 @@ export class GoogleDrivePackageStorage implements DrivePackageStorage {
       MAX_GAME_PACKAGE_BYTES,
       0,
     );
-    if (!file || !validSize) throw new Error('Invalid Google Drive package');
+    if (!file || !validSize) {
+      throw new GoogleDriveError(
+        'Invalid Google Drive package',
+        'invalid-data',
+      );
+    }
     const content = await downloadDriveFile(
       this.request,
       fileId,
       MAX_GAME_PACKAGE_BYTES,
     );
     if (!content) {
-      throw new Error('Invalid Google Drive package');
+      throw new GoogleDriveError(
+        'Invalid Google Drive package',
+        'invalid-data',
+      );
     }
     return { ...file, content };
   }
@@ -134,7 +151,12 @@ export class GoogleDrivePackageStorage implements DrivePackageStorage {
       content: new Uint8Array(gamePackage.content),
     });
     const file = parseDriveGamePackageFile(await response.json());
-    if (!file) throw new Error('Google Drive package metadata is unavailable');
+    if (!file) {
+      throw new GoogleDriveError(
+        'Google Drive package metadata is unavailable',
+        'unavailable',
+      );
+    }
     return file;
   }
 }

@@ -14,6 +14,8 @@ description: Handle SCHDK work spanning packages or lacking a narrower skill, in
    helpers and native APIs, then make the smallest complete change.
    Reuse the shared `@schdk/google-drive` transport helpers for Drive endpoints,
    multipart uploads, and SCHDK-folder discovery.
+   Preserve `GoogleDriveError` codes for Drive runtime failures; caller input
+   validation stays `TypeError` and save conflicts stay `null`.
    Keep AI-generation orchestration in `@schdk/web`; UI may only collect its
    inputs and render callback-driven progress. Carry one `AbortSignal` through
    web and platform adapters to the selected provider call.

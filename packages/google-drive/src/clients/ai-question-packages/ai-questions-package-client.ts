@@ -23,6 +23,7 @@ import {
   uploadDriveFile,
   type DriveRequest,
 } from '../../utils/client/drive-api.js';
+import { GoogleDriveError } from '../../errors/client/google-drive-error.js';
 
 export class GoogleDriveAIQuestionsPackageStorage implements DriveAIQuestionsPackageStorage {
   constructor(private readonly request: DriveRequest) {}
@@ -36,14 +37,20 @@ export class GoogleDriveAIQuestionsPackageStorage implements DriveAIQuestionsPac
     value: DriveAIQuestionsPackageWrite,
   ) {
     if (!(await this.loadMetadata(fileId)).file) {
-      throw new TypeError('Invalid Google Drive AI package rule');
+      throw new GoogleDriveError(
+        'Invalid Google Drive AI package rule',
+        'invalid-data',
+      );
     }
     return this.upload(value, fileId);
   }
 
   async deleteAIQuestionsPackage(fileId: string): Promise<void> {
     if (!(await this.loadMetadata(fileId)).file) {
-      throw new TypeError('Invalid Google Drive AI package rule');
+      throw new GoogleDriveError(
+        'Invalid Google Drive AI package rule',
+        'invalid-data',
+      );
     }
     await trashDriveFile(this.request, fileId);
   }
@@ -69,7 +76,10 @@ export class GoogleDriveAIQuestionsPackageStorage implements DriveAIQuestionsPac
   ): Promise<DriveAIQuestionsPackage> {
     const metadata = await this.loadMetadata(fileId, true);
     if (!metadata.file || !metadata.validSize) {
-      throw new Error('Invalid Google Drive AI package rule');
+      throw new GoogleDriveError(
+        'Invalid Google Drive AI package rule',
+        'invalid-data',
+      );
     }
     const content = await downloadDriveFile(
       this.request,
@@ -77,7 +87,10 @@ export class GoogleDriveAIQuestionsPackageStorage implements DriveAIQuestionsPac
       MAX_AI_QUESTIONS_PACKAGE_BYTES,
     );
     if (!content) {
-      throw new Error('Invalid Google Drive AI package rule');
+      throw new GoogleDriveError(
+        'Invalid Google Drive AI package rule',
+        'invalid-data',
+      );
     }
     return { ...metadata.file, content };
   }
@@ -120,7 +133,12 @@ export class GoogleDriveAIQuestionsPackageStorage implements DriveAIQuestionsPac
       content: new Uint8Array(value.content),
     });
     const file = parseDriveAIQuestionsPackageFile(await response.json());
-    if (!file) throw new Error('Google Drive AI package rule is unavailable');
+    if (!file) {
+      throw new GoogleDriveError(
+        'Google Drive AI package rule is unavailable',
+        'unavailable',
+      );
+    }
     return file;
   }
 }

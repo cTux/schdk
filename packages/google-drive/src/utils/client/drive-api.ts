@@ -4,6 +4,7 @@ import {
   DRIVE_FOLDER_MIME_TYPE,
 } from '../../services/game-packages/game-packages.js';
 import { isDriveFileId } from '../../services/settings/settings.js';
+import { GoogleDriveError } from '../../errors/client/google-drive-error.js';
 import { createDriveMultipartBody } from './create-drive-multipart-body.js';
 
 const DRIVE_API = 'https://www.googleapis.com/drive/v3';
@@ -111,7 +112,10 @@ async function ensurePackageFolder(request: DriveRequest) {
   });
   const file = (await created.json()) as { id?: unknown };
   if (!isDriveFileId(file.id)) {
-    throw new Error('Google Drive package folder is unavailable');
+    throw new GoogleDriveError(
+      'Google Drive package folder is unavailable',
+      'unavailable',
+    );
   }
   return file.id;
 }

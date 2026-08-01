@@ -38,6 +38,7 @@ import {
 } from '../../services/question-database/question-database.js';
 
 import { GoogleDriveAuthorizationError } from '../../errors/client/google-drive-authorization-error.js';
+import { GoogleDriveError } from '../../errors/client/google-drive-error.js';
 
 const DRIVE_API = 'https://www.googleapis.com/drive/v3';
 
@@ -81,7 +82,10 @@ export class GoogleDriveClient
     );
     const account = parseDriveAccount(await response.json());
     if (!account) {
-      throw new Error('Google Drive account metadata is unavailable');
+      throw new GoogleDriveError(
+        'Google Drive account metadata is unavailable',
+        'invalid-data',
+      );
     }
     return account;
   }
@@ -195,7 +199,10 @@ export class GoogleDriveClient
       throw new GoogleDriveAuthorizationError('Google Drive access expired');
     }
     if (!response.ok) {
-      throw new Error(`Google Drive request failed (${response.status})`);
+      throw new GoogleDriveError(
+        `Google Drive request failed (${response.status})`,
+        'unavailable',
+      );
     }
     return response;
   }

@@ -1,8 +1,10 @@
 import {
   GOOGLE_DRIVE_SCOPES,
   GoogleDriveAuthorizationError,
+  GoogleDriveError,
   GoogleDriveClient,
   type DriveAccount,
+  type GoogleDriveErrorCode,
 } from './services/client/client.js';
 import {
   createAIQuestionFilename,
@@ -71,8 +73,10 @@ import {
 export {
   GOOGLE_DRIVE_SCOPES,
   GoogleDriveAuthorizationError,
+  GoogleDriveError,
   GoogleDriveClient,
   type DriveAccount,
+  type GoogleDriveErrorCode,
   createAIQuestionFilename,
   GLOBAL_AI_QUESTION_ADMIN_EMAILS,
   GLOBAL_AI_QUESTION_FOLDER_ID,

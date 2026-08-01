@@ -21,6 +21,7 @@ import {
   uploadDriveFile,
   type DriveRequest,
 } from '../../utils/client/drive-api.js';
+import { GoogleDriveError } from '../../errors/client/google-drive-error.js';
 
 export class GoogleDriveAIQuestionStorage implements DriveAIQuestionStorage {
   constructor(
@@ -34,13 +35,23 @@ export class GoogleDriveAIQuestionStorage implements DriveAIQuestionStorage {
 
   async updateAIQuestion(fileId: string, value: DriveAIQuestionWrite) {
     const { file } = await this.loadMetadata(fileId);
-    if (!file) throw new TypeError('Invalid Google Drive AI question');
+    if (!file) {
+      throw new GoogleDriveError(
+        'Invalid Google Drive AI question',
+        'invalid-data',
+      );
+    }
     return this.uploadAIQuestion(value, fileId);
   }
 
   async deleteAIQuestion(fileId: string): Promise<void> {
     const { file } = await this.loadMetadata(fileId);
-    if (!file) throw new TypeError('Invalid Google Drive AI question');
+    if (!file) {
+      throw new GoogleDriveError(
+        'Invalid Google Drive AI question',
+        'invalid-data',
+      );
+    }
     await trashDriveFile(this.request, fileId);
   }
 
@@ -59,7 +70,10 @@ export class GoogleDriveAIQuestionStorage implements DriveAIQuestionStorage {
   async loadAIQuestion(fileId: string): Promise<DriveAIQuestion> {
     const metadata = await this.loadMetadata(fileId, true);
     if (!metadata?.file || !metadata.validSize) {
-      throw new Error('Invalid Google Drive AI question');
+      throw new GoogleDriveError(
+        'Invalid Google Drive AI question',
+        'invalid-data',
+      );
     }
     const content = await downloadDriveFile(
       this.request,
@@ -67,7 +81,10 @@ export class GoogleDriveAIQuestionStorage implements DriveAIQuestionStorage {
       MAX_AI_QUESTION_BYTES,
     );
     if (!content) {
-      throw new Error('Invalid Google Drive AI question');
+      throw new GoogleDriveError(
+        'Invalid Google Drive AI question',
+        'invalid-data',
+      );
     }
     return { ...metadata.file, content };
   }
@@ -115,7 +132,12 @@ export class GoogleDriveAIQuestionStorage implements DriveAIQuestionStorage {
       content: new Uint8Array(value.content),
     });
     const file = parseDriveAIQuestionFile(await response.json());
-    if (!file) throw new Error('Google Drive AI question is unavailable');
+    if (!file) {
+      throw new GoogleDriveError(
+        'Google Drive AI question is unavailable',
+        'unavailable',
+      );
+    }
     return file;
   }
 
