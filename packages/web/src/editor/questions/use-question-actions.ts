@@ -5,7 +5,7 @@ import {
   type GamePackage,
   type GameQuestion,
 } from '@schdk/common';
-import type { DrivePackageStorage } from '@schdk/google-drive';
+import type { DrivePackageStorage } from '@schdk/google-drive/game-packages';
 import { showEditorToast, type EditorViewProps } from '@schdk/ui/editor';
 import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
 import type { EditorTextOptions } from '@schdk/ui/options';

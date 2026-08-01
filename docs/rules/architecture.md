@@ -38,6 +38,8 @@
   `@schdk/desktop`.
 - Consume workspace packages through their declared package exports and list
   every workspace dependency in the consuming package manifest.
+- Prefer a declared domain subpath when a consumer needs one contract only;
+  keep the package root export for composition code that spans domains.
 - Keep the allowed workspace dependency directions synchronized with the
   repository workflow test; new packages require an explicit policy entry.
 - Keep editor and host feature modules inside `@schdk/web`; do not recreate
@@ -66,12 +68,11 @@
   does not render native interactive JSX or define app-local visual controls.
 - `@schdk/ui` exports shell page views and their styles as leaf entry points;
   it does not decide application routes, mounting, or data-fetch timing.
-- Keep AI provider calls, token renewal, batch sequencing, answer exclusion,
-  and cancellation in `@schdk/web`; `@schdk/ui` only collects generation
-  inputs and renders lifecycle state supplied through typed callbacks.
-- Propagate cancellation as one `AbortSignal` from the UI controller through
-  the web bridge to the provider call. Electron maps that signal to a narrow,
-  request-scoped cancellation message handled in main.
+- Keep AI provider calls, token renewal, batch sequencing, and answer
+  exclusion in `@schdk/web`; `@schdk/ui` owns only form and dialog lifecycle.
+- Let the active UI dialog create one cancellation `AbortSignal` and propagate
+  it through the web bridge to the provider call. Electron maps that signal to
+  a narrow, request-scoped cancellation message handled in main.
 - Keep workspace runtime imports acyclic. Public barrels may re-export leaf
   implementations but must not import an implementation that depends back on
   the barrel's owning module.

@@ -20,4 +20,14 @@ assert.ok(
   largest.bytes <= limit,
   `${largest.file} is ${largest.bytes} bytes; web chunks must stay within ${limit} bytes`,
 );
+const visualEditor = sizes.find(({ file }) => file.startsWith('VisualEditor-'));
+const visualEditorLimit = 24 * 1024;
+assert.ok(visualEditor, 'Visual editor must stay in its own lazy chunk');
+assert.ok(
+  visualEditor.bytes <= visualEditorLimit,
+  `${visualEditor.file} is ${visualEditor.bytes} bytes; visual editor must stay within ${visualEditorLimit} bytes`,
+);
 console.log(`Largest web chunk: ${largest.file} (${largest.bytes} bytes)`);
+console.log(
+  `Visual editor chunk: ${visualEditor.file} (${visualEditor.bytes} bytes)`,
+);

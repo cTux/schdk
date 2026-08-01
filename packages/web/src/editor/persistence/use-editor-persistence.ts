@@ -7,7 +7,7 @@ import {
 import {
   createGamePackageFilename,
   type DrivePackageStorage,
-} from '@schdk/google-drive';
+} from '@schdk/google-drive/game-packages';
 import { showEditorToast } from '@schdk/ui/editor';
 import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
 import {

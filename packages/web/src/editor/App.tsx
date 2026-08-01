@@ -1,5 +1,5 @@
 import { createEmptyGamePackage, parseGamePackage } from '@schdk/common';
-import type { DriveGamePackageFile } from '@schdk/google-drive';
+import type { DriveGamePackageFile } from '@schdk/google-drive/game-packages';
 import { ConfirmationDialog, useConfirmationDialog } from '@schdk/ui';
 import { EditorView } from '@schdk/ui/editor';
 import { useLocalization } from '@schdk/ui/localization';

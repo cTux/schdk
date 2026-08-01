@@ -1,7 +1,7 @@
 import {
   AI_QUESTION_DIFFICULTIES,
   AI_QUESTION_RECOGNIZABILITIES,
-} from '@schdk/common';
+} from '@schdk/common/ai-question';
 import { type GenerateGameQuestionInput } from '../../types/game-question-generation/generate-game-question-input.js';
 import { type GameQuestionGenerationRequest } from '../../types/game-question-generation/game-question-generation-request.js';
 import { createGameQuestionPrompt } from '../../utils/game-question-generation/create-game-question-prompt.js';

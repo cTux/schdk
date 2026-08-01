@@ -2,7 +2,7 @@ import {
   toDrivePackageReference,
   type DriveGamePackageFile,
   type DrivePackageStorage,
-} from '@schdk/google-drive';
+} from '@schdk/google-drive/game-packages';
 import type { RecentPackageItem } from '@schdk/ui/editor';
 import { useCallback, useState } from 'react';
 

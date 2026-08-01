@@ -1,5 +1,5 @@
 import { createEmptyGamePackage, type GamePackage } from '@schdk/common';
-import type { DriveGamePackageFile } from '@schdk/google-drive';
+import type { DriveGamePackageFile } from '@schdk/google-drive/game-packages';
 import type { EditorSaveStatus } from '@schdk/ui/editor';
 import { useCallback, useReducer, type SetStateAction } from 'react';
 

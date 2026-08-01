@@ -4,7 +4,7 @@ import {
   toDrivePackageReference,
   type DrivePackageStorage,
   type DriveGamePackageFile,
-} from '@schdk/google-drive';
+} from '@schdk/google-drive/game-packages';
 import type { LocalizationCopy } from '@schdk/ui/localization';
 import {
   useEffect,

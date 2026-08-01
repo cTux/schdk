@@ -156,6 +156,27 @@ test('workspace imports respect package boundaries and manifests', async () => {
   }
 });
 
+test('shared packages expose stable domain entry points', async () => {
+  const [common, drive] = await Promise.all([
+    read('packages/common/package.json').then(JSON.parse),
+    read('packages/google-drive/package.json').then(JSON.parse),
+  ]);
+
+  assert.deepEqual(Object.keys(common.exports).sort(), [
+    '.',
+    './ai-question',
+    './ai-question-package',
+    './game-question',
+    './visual-editor-template',
+  ]);
+  assert.deepEqual(Object.keys(drive.exports).sort(), [
+    '.',
+    './ai-questions',
+    './game-packages',
+    './question-database',
+  ]);
+});
+
 test('workspace source modules have no relative import cycles', async () => {
   const packageDirectories = (
     await readdir(new URL('packages/', repositoryRoot), { withFileTypes: true })

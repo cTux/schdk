@@ -1,4 +1,4 @@
-import type { DrivePackageStorage } from '@schdk/google-drive';
+import type { DrivePackageStorage } from '@schdk/google-drive/game-packages';
 import type {
   AiQuestionGenerationOptions,
   EditorViewProps,

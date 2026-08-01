@@ -3,7 +3,7 @@ import {
   parseGameQuestion,
   QUESTION_TYPE_CONFIG,
   type GameQuestion,
-} from '@schdk/common';
+} from '@schdk/common/game-question';
 
 type GeneratedQuestion = Omit<
   GameQuestion,

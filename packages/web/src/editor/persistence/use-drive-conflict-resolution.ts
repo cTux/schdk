@@ -8,7 +8,7 @@ import {
   createGamePackageFilename,
   type DriveGamePackageFile,
   type DrivePackageStorage,
-} from '@schdk/google-drive';
+} from '@schdk/google-drive/game-packages';
 import type { LocalizationCopy } from '@schdk/ui/localization';
 import { useCallback } from 'react';
 

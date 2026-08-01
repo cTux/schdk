@@ -1,5 +1,5 @@
 import { generateText, Output, type LanguageModel } from 'ai';
-import { type GameQuestion } from '@schdk/common';
+import { type GameQuestion } from '@schdk/common/game-question';
 import {
   assertGameQuestionGenerationInput,
   createGameQuestionPrompt,

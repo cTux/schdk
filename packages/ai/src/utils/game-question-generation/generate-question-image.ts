@@ -1,5 +1,8 @@
 import { generateImage } from 'ai';
-import { parseGameQuestion, type GameQuestion } from '@schdk/common';
+import {
+  parseGameQuestion,
+  type GameQuestion,
+} from '@schdk/common/game-question';
 
 const maxImageBytes = 8 * 1024 * 1024;
 

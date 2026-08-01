@@ -2,7 +2,7 @@ import {
   type AIQuestion,
   type AIQuestionDifficulty,
   type AIQuestionRecognizability,
-} from '@schdk/common';
+} from '@schdk/common/ai-question';
 
 export interface GameQuestionGenerationRequest {
   provider: string;

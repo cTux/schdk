@@ -1,5 +1,6 @@
 import { QUESTION_COUNT } from '@schdk/common';
-import { isDriveFileId, isDriveGamePackageName } from '@schdk/google-drive';
+import { isDriveFileId } from '@schdk/google-drive';
+import { isDriveGamePackageName } from '@schdk/google-drive/game-packages';
 import { type SessionStorage } from './session-storage';
 import { type DesktopEditorSession } from './desktop-editor-session';
 import { sessionKey } from './session-key';
