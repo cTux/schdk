@@ -1,9 +1,10 @@
 import * as common from '@schdk/common';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useConfirmationDialog } from '../../../atoms/ConfirmationDialog';
 import { useLocalization } from '../../../localization';
 import * as gen from '../utils/generation-input';
 import type { PackageGenerationDialogProps } from '../types';
+import { useGenerationTask } from '../../hooks/use-generation-task';
 
 type PackageGenerationHookProps = Omit<
   PackageGenerationDialogProps,
@@ -47,8 +48,7 @@ function usePackageGeneration({
   const [excludedAnswers, setExcludedAnswers] = useState<string[]>([]);
   const [currentInput, setCurrentInput] =
     useState<gen.PackageGenerationInput | null>(null);
-  const generationId = useRef(0);
-  const generationController = useRef<AbortController | null>(null);
+  const generationTask = useGenerationTask();
   const activePackages = packages
     .filter((item) => item.enabled)
     .sort(common.compareFavoriteItemsByName);
@@ -67,9 +67,7 @@ function usePackageGeneration({
     );
 
   function reset() {
-    generationController.current?.abort();
-    generationController.current = null;
-    generationId.current += 1;
+    generationTask.cancel();
     setOpen(false);
     setScope('missing');
     setRuleSet('favorites');
@@ -99,14 +97,6 @@ function usePackageGeneration({
     onGenerationStateChange([], true);
   }
 
-  useEffect(
-    () => () => {
-      generationController.current?.abort();
-      generationId.current += 1;
-    },
-    [],
-  );
-
   async function cancel() {
     if (await cancelDialog.confirm(copy.packageGeneration.cancelConfirmation)) {
       reset();
@@ -128,9 +118,7 @@ function usePackageGeneration({
       selectedDifficultyDistribution &&
       selectedRecognizabilityDistribution;
     if (!canGenerate) return;
-    const currentGenerationId = ++generationId.current;
-    const controller = new AbortController();
-    generationController.current = controller;
+    const task = generationTask.start();
     onGenerationStateChange(targets, true);
     setThinking(true);
     setFailed(false);
@@ -168,12 +156,12 @@ function usePackageGeneration({
           );
           onGenerationStateChange(targets.slice(position), true);
         },
-        controller.signal,
+        task.signal,
       );
-      if (currentGenerationId !== generationId.current) return;
+      if (!task.isCurrent()) return;
       reset();
     } catch {
-      if (currentGenerationId !== generationId.current) return;
+      if (!task.isCurrent()) return;
       setThinking(false);
       setFailed(true);
       onGenerationStateChange([], true);
