@@ -9,10 +9,13 @@ import {
   type DriveGamePackageWrite,
   type DrivePackageStorage,
 } from '../../services/game-packages/game-packages.js';
-import { isDriveFileId } from '../../services/settings/settings.js';
 import {
-  DRIVE_API,
+  downloadDriveFile,
   ensurePackageFolder,
+  hasValidDriveSize,
+  listDriveFiles,
+  loadDriveMetadata,
+  trashDriveFile,
   uploadDriveFile,
   type DriveRequest,
 } from '../../utils/client/drive-api.js';
@@ -33,37 +36,33 @@ export class GoogleDrivePackageStorage implements DrivePackageStorage {
     expectedModifiedTime: string,
     value: DriveGamePackageWrite,
   ) {
-    if (!isDriveFileId(fileId)) throw new TypeError('Invalid Drive file');
     if (!Number.isFinite(Date.parse(expectedModifiedTime))) {
       throw new TypeError('Invalid Drive modification time');
     }
     if (!parseDriveGamePackageWrite(value)) {
       throw new TypeError('Invalid Google Drive package');
     }
-    const encodedId = encodeURIComponent(fileId);
-    const metadata = await this.request(
-      `${DRIVE_API}/files/${encodedId}?fields=id,name,description,modifiedTime,appProperties`,
+    const metadata = await loadDriveMetadata(
+      this.request,
+      fileId,
+      'id,name,description,modifiedTime,appProperties',
     );
-    const current = parseDriveGamePackageFile(await metadata.json());
+    const current = parseDriveGamePackageFile(metadata);
     if (!current) throw new TypeError('Invalid Google Drive package');
     if (current.modifiedTime !== expectedModifiedTime) return null;
     return this.uploadGamePackage(value, fileId);
   }
 
   async deleteGamePackage(fileId: string): Promise<void> {
-    if (!isDriveFileId(fileId)) throw new TypeError('Invalid Drive file');
-    const encodedId = encodeURIComponent(fileId);
-    const metadata = await this.request(
-      `${DRIVE_API}/files/${encodedId}?fields=id,name,description,modifiedTime,appProperties`,
+    const metadata = await loadDriveMetadata(
+      this.request,
+      fileId,
+      'id,name,description,modifiedTime,appProperties',
     );
-    if (!parseDriveGamePackageFile(await metadata.json())) {
+    if (!parseDriveGamePackageFile(metadata)) {
       throw new TypeError('Invalid Google Drive package');
     }
-    await this.request(`${DRIVE_API}/files/${encodedId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ trashed: true }),
-    });
+    await trashDriveFile(this.request, fileId);
   }
 
   listGamePackages(): Promise<DriveGamePackageFile[]> {
@@ -81,48 +80,28 @@ export class GoogleDrivePackageStorage implements DrivePackageStorage {
       orderBy: 'modifiedTime desc',
       pageSize: '100',
     });
-    const files: DriveGamePackageFile[] = [];
-    let pageToken: string | undefined;
-    do {
-      if (pageToken) query.set('pageToken', pageToken);
-      const response = await this.request(`${DRIVE_API}/files?${query}`);
-      const value = (await response.json()) as {
-        files?: unknown[];
-        nextPageToken?: string;
-      };
-      files.push(
-        ...(value.files ?? []).flatMap((file) => {
-          const parsed = parseDriveGamePackageFile(file);
-          return parsed ? [parsed] : [];
-        }),
-      );
-      pageToken = value.nextPageToken;
-    } while (pageToken);
-    return files;
+    return listDriveFiles(this.request, query, parseDriveGamePackageFile);
   }
 
   async loadGamePackage(fileId: string): Promise<DriveGamePackage> {
-    if (!isDriveFileId(fileId)) {
-      throw new TypeError('Invalid Google Drive file');
-    }
-    const encodedId = encodeURIComponent(fileId);
-    const metadataResponse = await this.request(
-      `${DRIVE_API}/files/${encodedId}?fields=id,name,description,modifiedTime,appProperties,size`,
+    const metadata = await loadDriveMetadata(
+      this.request,
+      fileId,
+      'id,name,description,modifiedTime,appProperties,size',
     );
-    const metadata = (await metadataResponse.json()) as Record<string, unknown>;
     const file = parseDriveGamePackageFile(metadata);
-    const size = Number(metadata.size);
-    const validSize =
-      typeof metadata.size === 'string' &&
-      Number.isSafeInteger(size) &&
-      size >= 0 &&
-      size <= MAX_GAME_PACKAGE_BYTES;
-    if (!file || !validSize) throw new Error('Invalid Google Drive package');
-    const contentResponse = await this.request(
-      `${DRIVE_API}/files/${encodedId}?alt=media`,
+    const validSize = hasValidDriveSize(
+      metadata.size,
+      MAX_GAME_PACKAGE_BYTES,
+      0,
     );
-    const content = new Uint8Array(await contentResponse.arrayBuffer());
-    if (content.byteLength > MAX_GAME_PACKAGE_BYTES) {
+    if (!file || !validSize) throw new Error('Invalid Google Drive package');
+    const content = await downloadDriveFile(
+      this.request,
+      fileId,
+      MAX_GAME_PACKAGE_BYTES,
+    );
+    if (!content) {
       throw new Error('Invalid Google Drive package');
     }
     return { ...file, content };

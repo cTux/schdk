@@ -12,8 +12,12 @@ import {
 import { DRIVE_APP_KIND_KEY } from '../../services/game-packages/game-packages.js';
 import { isDriveFileId } from '../../services/settings/settings.js';
 import {
-  DRIVE_API,
+  downloadDriveFile,
   ensurePackageFolder,
+  hasValidDriveSize,
+  listDriveFiles,
+  loadDriveMetadata,
+  trashDriveFile,
   uploadDriveFile,
   type DriveRequest,
 } from '../../utils/client/drive-api.js';
@@ -37,11 +41,7 @@ export class GoogleDriveAIQuestionStorage implements DriveAIQuestionStorage {
   async deleteAIQuestion(fileId: string): Promise<void> {
     const { file } = await this.loadMetadata(fileId);
     if (!file) throw new TypeError('Invalid Google Drive AI question');
-    await this.request(`${DRIVE_API}/files/${encodeURIComponent(fileId)}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ trashed: true }),
-    });
+    await trashDriveFile(this.request, fileId);
   }
 
   async listAIQuestions(): Promise<DriveAIQuestionFile[]> {
@@ -53,24 +53,7 @@ export class GoogleDriveAIQuestionStorage implements DriveAIQuestionStorage {
       orderBy: 'name_natural',
       pageSize: '100',
     });
-    const files: DriveAIQuestionFile[] = [];
-    let pageToken: string | undefined;
-    do {
-      if (pageToken) query.set('pageToken', pageToken);
-      const response = await this.request(`${DRIVE_API}/files?${query}`);
-      const value = (await response.json()) as {
-        files?: unknown[];
-        nextPageToken?: string;
-      };
-      files.push(
-        ...(value.files ?? []).flatMap((file) => {
-          const parsed = this.parseFile(file);
-          return parsed ? [parsed] : [];
-        }),
-      );
-      pageToken = value.nextPageToken;
-    } while (pageToken);
-    return files;
+    return listDriveFiles(this.request, query, (file) => this.parseFile(file));
   }
 
   async loadAIQuestion(fileId: string): Promise<DriveAIQuestion> {
@@ -78,34 +61,28 @@ export class GoogleDriveAIQuestionStorage implements DriveAIQuestionStorage {
     if (!metadata?.file || !metadata.validSize) {
       throw new Error('Invalid Google Drive AI question');
     }
-    const response = await this.request(
-      `${DRIVE_API}/files/${encodeURIComponent(fileId)}?alt=media`,
+    const content = await downloadDriveFile(
+      this.request,
+      fileId,
+      MAX_AI_QUESTION_BYTES,
     );
-    const content = new Uint8Array(await response.arrayBuffer());
-    if (content.byteLength > MAX_AI_QUESTION_BYTES) {
+    if (!content) {
       throw new Error('Invalid Google Drive AI question');
     }
     return { ...metadata.file, content };
   }
 
   private async loadMetadata(fileId: string, includeSize = false) {
-    if (!isDriveFileId(fileId)) {
-      throw new TypeError('Invalid Google Drive file');
-    }
-    const response = await this.request(
-      `${DRIVE_API}/files/${encodeURIComponent(fileId)}?fields=id,name,modifiedTime,appProperties,parents${includeSize ? ',size' : ''}`,
+    const value = await loadDriveMetadata(
+      this.request,
+      fileId,
+      `id,name,modifiedTime,appProperties,parents${includeSize ? ',size' : ''}`,
     );
-    const value = (await response.json()) as Record<string, unknown>;
     const file = this.parseFile(value, true);
-    const size = Number(value.size);
     return {
       file,
       validSize:
-        !includeSize ||
-        (typeof value.size === 'string' &&
-          Number.isSafeInteger(size) &&
-          size > 0 &&
-          size <= MAX_AI_QUESTION_BYTES),
+        !includeSize || hasValidDriveSize(value.size, MAX_AI_QUESTION_BYTES),
     };
   }
 

@@ -20,6 +20,75 @@ interface DriveUpload {
   content: BlobPart;
 }
 
+async function listDriveFiles<T>(
+  request: DriveRequest,
+  query: URLSearchParams,
+  parse: (value: unknown) => T | null,
+): Promise<T[]> {
+  const files: T[] = [];
+  let pageToken: string | undefined;
+  do {
+    if (pageToken) query.set('pageToken', pageToken);
+    const response = await request(`${DRIVE_API}/files?${query}`);
+    const value = (await response.json()) as {
+      files?: unknown[];
+      nextPageToken?: string;
+    };
+    files.push(
+      ...(value.files ?? []).flatMap((file) => {
+        const parsed = parse(file);
+        return parsed ? [parsed] : [];
+      }),
+    );
+    pageToken = value.nextPageToken;
+  } while (pageToken);
+  return files;
+}
+
+async function loadDriveMetadata(
+  request: DriveRequest,
+  fileId: string,
+  fields: string,
+) {
+  if (!isDriveFileId(fileId)) throw new TypeError('Invalid Google Drive file');
+  const response = await request(
+    `${DRIVE_API}/files/${encodeURIComponent(fileId)}?fields=${fields}`,
+  );
+  return (await response.json()) as Record<string, unknown>;
+}
+
+async function downloadDriveFile(
+  request: DriveRequest,
+  fileId: string,
+  maxBytes: number,
+) {
+  if (!isDriveFileId(fileId)) throw new TypeError('Invalid Google Drive file');
+  const response = await request(
+    `${DRIVE_API}/files/${encodeURIComponent(fileId)}?alt=media`,
+  );
+  const content = new Uint8Array(await response.arrayBuffer());
+  return content.byteLength <= maxBytes ? content : null;
+}
+
+function hasValidDriveSize(value: unknown, maxBytes: number, minimumBytes = 1) {
+  const size = Number(value);
+  return (
+    typeof value === 'string' &&
+    Number.isSafeInteger(size) &&
+    size >= minimumBytes &&
+    size <= maxBytes
+  );
+}
+
+function trashDriveFile(request: DriveRequest, fileId: string) {
+  if (!isDriveFileId(fileId)) throw new TypeError('Invalid Google Drive file');
+  return request(`${DRIVE_API}/files/${encodeURIComponent(fileId)}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ trashed: true }),
+  });
+}
+
 async function ensurePackageFolder(request: DriveRequest) {
   const query = new URLSearchParams({
     spaces: 'drive',
@@ -60,4 +129,14 @@ function uploadDriveFile(
   });
 }
 
-export { DRIVE_API, ensurePackageFolder, uploadDriveFile, type DriveRequest };
+export {
+  DRIVE_API,
+  downloadDriveFile,
+  ensurePackageFolder,
+  hasValidDriveSize,
+  listDriveFiles,
+  loadDriveMetadata,
+  trashDriveFile,
+  uploadDriveFile,
+  type DriveRequest,
+};
