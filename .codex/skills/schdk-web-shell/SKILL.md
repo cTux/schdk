@@ -14,6 +14,8 @@ description: Maintain the @schdk/web shell. Use for entry points, navigation, si
    `docs/rules/google-drive.md` for authorization or synchronization changes.
 3. Trace the affected shell state, URL state, lazy boundary, persistence, and
    authorization path before editing.
+   Keep routing and page composition in `@schdk/web`; load Drive collections
+   with their first consumer and retain them for the shell session.
    Let Vite derive chunks from that import graph; do not force all third-party
    modules into a global vendor chunk.
 4. Keep GIS access tokens in memory only; page reload must require an explicit

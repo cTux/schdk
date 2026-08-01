@@ -1,7 +1,7 @@
 import { isDriveFileId } from '../../services/settings/settings.js';
 import { type DriveAIQuestionsPackageFile } from '../../types/ai-question-packages/drive-ai-questions-package-file.js';
 import { isDriveAIQuestionsPackageName } from '../../utils/ai-question-packages/is-drive-ai-questions-package-name.js';
-import { DRIVE_AI_QUESTIONS_PACKAGE_KIND } from '../../services/ai-question-packages/ai-questions-packages.js';
+import { DRIVE_AI_QUESTIONS_PACKAGE_KIND } from '../../constants/ai-question-packages/drive-ai-questions-package-kind.js';
 
 export function parseDriveAIQuestionsPackageFile(
   value: unknown,

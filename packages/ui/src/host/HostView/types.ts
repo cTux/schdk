@@ -4,7 +4,7 @@ import {
   type HostGameView,
   type HostQuestionStage,
 } from '../types';
-import { type RecentPackageItem } from '../../editor/types';
+import { type RecentPackageItem } from '../../game-packages';
 
 export {
   type HostPackageDetails,

@@ -16,6 +16,7 @@ description: Build, debug, secure, or package SCHDK Electron code. Use for windo
    invalidated refresh credentials before requiring reconnection.
 5. Validate changed IPC and filesystem paths from the renderer call through
    main-process handling and the resulting Drive or explicit-download action.
+   Keep preload code within Electron's sandboxed API surface.
 6. For Windows or Linux packaging changes, verify only on the matching native
    host or workflow described by the rules.
 

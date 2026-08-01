@@ -1,4 +1,4 @@
-import { QUESTION_TIME_SECONDS } from './game-timer';
+export const QUESTION_TIME_SECONDS = 60;
 
 export function getRemainingSeconds(
   startedAt: number,

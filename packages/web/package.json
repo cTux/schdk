@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 5173 --strictPort",
     "build": "vite build",
+    "check:bundle": "node ../../scripts/check-web-bundle-budget.mjs",
     "preview": "vite preview",
     "lint": "oxlint -c ../../.oxlintrc.json src vite.config.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.node.json --noEmit",

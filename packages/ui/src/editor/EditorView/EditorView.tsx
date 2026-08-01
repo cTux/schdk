@@ -11,8 +11,7 @@ import { Page } from '../../shell/Page';
 import { editorToastCopy } from '../../localization/editor-toast';
 import { useLocalization } from '../../localization';
 import { EditorHeader } from '../EditorHeader';
-import { PackageDropZone } from '../PackageDropZone';
-import { PackageStart } from '../PackageStart';
+import { GamePackageActions, RecentGamePackages } from '../../game-packages';
 import { QuestionEditor } from '../QuestionEditor';
 import { QuestionList } from '../QuestionList';
 import type {
@@ -23,40 +22,48 @@ import type {
 
 function EditorView({
   aiGeneration,
-  gamePackage,
-  hasPackage,
-  message,
-  questionDatabaseRows,
-  openingRecentPackageId = null,
-  recentPackages,
-  recentPackagesLoading = false,
-  saveStatus,
-  selectedIndex,
-  showValidation,
-  onAddHandout,
-  onMusicBreakChange,
-  onAnswerBlur,
-  onAnswerCommentBlur,
-  onAlternativeAnswerBlur,
-  onWrongAnswerBlur,
-  onBack,
-  onExit,
-  onCopyQuestion,
-  onCreatePackage,
-  onDeletePackage,
-  onDeleteRecentPackage,
-  onDownloadRecentPackage,
-  onOpenPackage,
-  onOpenRecentPackage,
-  onPasteQuestion,
-  onQuestionChange,
-  onDatabaseQuestionSelect,
-  onQuestionGenerated,
-  onQuestionTextBlur,
-  onSelectQuestion,
-  onSwapQuestions,
-  onTourPhraseChange,
-  onTitleChange,
+  document: {
+    gamePackage,
+    hasPackage,
+    message,
+    questionDatabaseRows,
+    saveStatus,
+    selectedIndex,
+    showValidation,
+  },
+  recents: {
+    openingRecentPackageId = null,
+    recentPackages,
+    recentPackagesLoading = false,
+    onDeleteRecentPackage,
+    onDownloadRecentPackage,
+    onOpenRecentPackage,
+  },
+  packageActions: {
+    onBack,
+    onExit,
+    onCreatePackage,
+    onDeletePackage,
+    onOpenPackage,
+    onTourPhraseChange,
+    onTitleChange,
+  },
+  questionActions: {
+    onAddHandout,
+    onMusicBreakChange,
+    onAnswerBlur,
+    onAnswerCommentBlur,
+    onAlternativeAnswerBlur,
+    onWrongAnswerBlur,
+    onCopyQuestion,
+    onPasteQuestion,
+    onQuestionChange,
+    onDatabaseQuestionSelect,
+    onQuestionGenerated,
+    onQuestionTextBlur,
+    onSelectQuestion,
+    onSwapQuestions,
+  },
 }: EditorViewProps) {
   const { copy, locale } = useLocalization();
   const toastCopy = editorToastCopy[locale];
@@ -139,7 +146,7 @@ function EditorView({
               onSelectQuestion={onSelectQuestion}
             />
           ) : (
-            <PackageDropZone
+            <GamePackageActions
               compact
               hidden={false}
               onCreate={onCreatePackage}
@@ -151,14 +158,14 @@ function EditorView({
       >
         <main>
           {!hasPackage && (
-            <PackageStart
+            <RecentGamePackages
               hidden={false}
-              openingRecentPackageId={openingRecentPackageId}
-              recentPackages={recentPackages}
-              recentPackagesLoading={recentPackagesLoading}
-              onDeleteRecentPackage={onDeleteRecentPackage}
-              onDownloadRecentPackage={onDownloadRecentPackage}
-              onOpenRecentPackage={onOpenRecentPackage}
+              loading={recentPackagesLoading}
+              openingPackageId={openingRecentPackageId}
+              packages={recentPackages}
+              onDelete={onDeleteRecentPackage}
+              onDownload={onDownloadRecentPackage}
+              onOpen={onOpenRecentPackage}
             />
           )}
           <div className="editor-layout" hidden={!hasPackage}>

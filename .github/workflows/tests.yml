@@ -59,6 +59,7 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm turbo build --filter=@schdk/web
+      - run: pnpm --filter @schdk/web check:bundle
       - name: Smoke test browser shell
         shell: bash
         run: |

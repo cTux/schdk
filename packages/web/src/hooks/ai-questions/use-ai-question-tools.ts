@@ -14,14 +14,27 @@ export function useAiQuestionTools(
   bridge: GoogleDriveBridge | null,
   connection: GoogleDriveConnection,
   locale: AppLocale,
+  enabled: { questions: boolean; packages: boolean; dictionaries: boolean },
 ) {
   const accountId =
     connection.state === 'connected'
       ? connection.account.emailAddress
       : undefined;
-  const aiQuestionCollections = useAIQuestions(bridge, accountId);
-  const aiQuestionsPackages = useAIQuestionsPackages(bridge, accountId);
-  const dictionaries = useDictionaries(bridge, connection);
+  const aiQuestionCollections = useAIQuestions(
+    bridge,
+    accountId,
+    enabled.questions,
+  );
+  const aiQuestionsPackages = useAIQuestionsPackages(
+    bridge,
+    accountId,
+    enabled.packages,
+  );
+  const dictionaries = useDictionaries(
+    bridge,
+    connection,
+    enabled.dictionaries,
+  );
   const aiQuestions = {
     ...aiQuestionCollections.personal,
     globalQuestions: aiQuestionCollections.global.questions,

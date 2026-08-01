@@ -13,6 +13,8 @@
 - Prefer unit and integration tests, and use stable snapshots to catch UI
   regressions. Reserve fast end-to-end tests for critical flows that must never
   fail.
+- Snapshot the shared host/visual-editor layout markup so changes to persisted
+  positioning presentation require an explicit review.
 - Use `$schdk-technical-review` for project technical audits. Report only
   evidenced P0-P2 issues in a priority-sorted table.
 - Keep pure logic outside React/Electron objects when that makes it directly

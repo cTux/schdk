@@ -1,7 +1,4 @@
-import { createAnthropic } from '@ai-sdk/anthropic';
-import { createGoogleGenerativeAI } from '@ai-sdk/google';
-import { createOpenAI } from '@ai-sdk/openai';
-import { createProviderRegistry, generateText, Output } from 'ai';
+import { generateText, Output, type LanguageModel } from 'ai';
 import { type GameQuestion } from '@schdk/common';
 import {
   assertGameQuestionGenerationInput,
@@ -21,21 +18,37 @@ function parseProvider(value: string): SupportedAiProvider {
   return value as SupportedAiProvider;
 }
 
+async function createLanguageModel(
+  provider: SupportedAiProvider,
+  apiKey: string,
+  model: string,
+): Promise<LanguageModel> {
+  switch (provider) {
+    case 'openai': {
+      const { createOpenAI } = await import('@ai-sdk/openai');
+      return createOpenAI({ apiKey })(model);
+    }
+    case 'anthropic': {
+      const { createAnthropic } = await import('@ai-sdk/anthropic');
+      return createAnthropic({
+        apiKey,
+        headers: { 'anthropic-dangerous-direct-browser-access': 'true' },
+      })(model);
+    }
+    case 'google': {
+      const { createGoogleGenerativeAI } = await import('@ai-sdk/google');
+      return createGoogleGenerativeAI({ apiKey })(model);
+    }
+  }
+}
+
 export async function generateGameQuestion(
   input: GenerateGameQuestionInput,
 ): Promise<GameQuestion> {
   assertGameQuestionGenerationInput(input);
   const provider = parseProvider(input.provider);
-  const registry = createProviderRegistry({
-    openai: createOpenAI({ apiKey: input.apiKey }),
-    anthropic: createAnthropic({
-      apiKey: input.apiKey,
-      headers: { 'anthropic-dangerous-direct-browser-access': 'true' },
-    }),
-    google: createGoogleGenerativeAI({ apiKey: input.apiKey }),
-  });
   const { system, prompt: userPrompt } = createGameQuestionPrompt(input);
-  const model = registry.languageModel(`${provider}:${input.model}`);
+  const model = await createLanguageModel(provider, input.apiKey, input.model);
   const result = await generateText({
     model,
     output: Output.object({
@@ -46,11 +59,17 @@ export async function generateGameQuestion(
     }),
     system,
     prompt: userPrompt,
+    abortSignal: input.abortSignal,
   });
   const { imagePrompt, ...question } = result.output;
   if (!imagePrompt) return question;
   if (provider !== 'openai') {
     throw new Error('Image generation requires the OpenAI provider');
   }
-  return generateQuestionImage(input.apiKey, question, imagePrompt);
+  return generateQuestionImage(
+    input.apiKey,
+    question,
+    imagePrompt,
+    input.abortSignal,
+  );
 }

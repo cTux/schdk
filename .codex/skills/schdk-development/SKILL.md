@@ -15,7 +15,8 @@ description: Handle SCHDK work spanning packages or lacking a narrower skill, in
    Reuse the shared `@schdk/google-drive` transport helpers for Drive endpoints,
    multipart uploads, and SCHDK-folder discovery.
    Keep AI-generation orchestration in `@schdk/web`; UI may only collect its
-   inputs and render callback-driven progress.
+   inputs and render callback-driven progress. Carry one `AbortSignal` through
+   web and platform adapters to the selected provider call.
    When research finds a credible scalable solution that is not needed yet,
    record its purpose, tradeoffs, and activation conditions in
    `docs/POTENTIAL_IMPROVEMENTS.md`.

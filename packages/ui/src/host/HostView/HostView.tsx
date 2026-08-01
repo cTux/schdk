@@ -2,14 +2,13 @@ import './styles.scss';
 import classNames from 'classnames';
 import type { CSSProperties } from 'react';
 import { StatusMessage } from '../../atoms/StatusMessage';
-import { PackageDropZone } from '../../editor/PackageDropZone';
-import { PackageStart } from '../../editor/PackageStart';
+import { GamePackageActions, RecentGamePackages } from '../../game-packages';
 import { LOCALIZATION_COPY } from '../../localization';
 import { Page } from '../../shell/Page';
 import { GameFinished } from '../GameFinished';
 import { GamePackageDetails } from '../GamePackageDetails';
 import { GameWizard } from '../GameWizard';
-import type { RecentPackageItem } from '../../editor/types';
+import type { RecentPackageItem } from '../../game-packages';
 import type {
   HostGameTransition,
   HostGameView,
@@ -52,7 +51,7 @@ function HostView({
       headerContent={<p>{copy.shell.host.description}</p>}
       headerActions={
         !playing && !packageDetails ? (
-          <PackageDropZone compact hidden={false} onOpen={onOpenPackage} />
+          <GamePackageActions compact hidden={false} onOpen={onOpenPackage} />
         ) : undefined
       }
       onBack={onExit ?? onBack}
@@ -68,14 +67,14 @@ function HostView({
           } as CSSProperties
         }
       >
-        <PackageStart
+        <RecentGamePackages
           hidden={packageDetails !== null || playing}
-          openingRecentPackageId={openingRecentPackageId}
-          recentPackages={recentPackages}
-          recentPackagesLoading={recentPackagesLoading}
-          onDeleteRecentPackage={onDeleteRecentPackage}
-          onDownloadRecentPackage={onDownloadRecentPackage}
-          onOpenRecentPackage={onOpenRecentPackage}
+          loading={recentPackagesLoading}
+          openingPackageId={openingRecentPackageId}
+          packages={recentPackages}
+          onDelete={onDeleteRecentPackage}
+          onDownload={onDownloadRecentPackage}
+          onOpen={onOpenRecentPackage}
         />
         {packageDetails && !playing && (
           <GamePackageDetails

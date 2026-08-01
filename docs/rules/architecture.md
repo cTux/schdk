@@ -14,7 +14,7 @@
   Its detailed rules live in
   [`packages/ui/README.md`](../../packages/ui/README.md).
 - `@schdk/web` is the only browser application package. It owns shell
-  navigation, persisted locale selection, editor state and Drive persistence,
+  navigation and page composition, persisted locale selection, editor state and Drive persistence,
   AI-generation orchestration, and host gameplay behavior. Its editor and host feature modules render
   `@schdk/ui` views and remain lazily loaded.
 - `@schdk/desktop` is the only desktop application. It wraps
@@ -50,16 +50,27 @@
   question database through `@schdk/google-drive`; `.schdk` packages remain
   the source of truth.
 - Browser and Electron generation adapters call `@schdk/ai`; they load the
-  account-scoped key internally and never expose it as renderer state or IPC
-  output.
+  account-scoped key and selected provider runtime only when generation starts,
+  and never expose the key as renderer state or IPC output.
 - Prefer shared ownership over copied implementations: data contracts belong
   in `common`, visuals in `ui`, browser behavior in `web`, and operating system
   integration in `desktop`.
+- Keep package-open actions, recent-package rows, and their styles in the
+  neutral `@schdk/ui` game-packages domain; editor and host views consume that
+  domain without importing from each other.
 - The web application composes exported `@schdk/ui` controls and views; it
   does not render native interactive JSX or define app-local visual controls.
+- `@schdk/ui` exports shell page views and their styles as leaf entry points;
+  it does not decide application routes, mounting, or data-fetch timing.
 - Keep AI provider calls, token renewal, batch sequencing, answer exclusion,
   and cancellation in `@schdk/web`; `@schdk/ui` only collects generation
   inputs and renders lifecycle state supplied through typed callbacks.
+- Propagate cancellation as one `AbortSignal` from the UI controller through
+  the web bridge to the provider call. Electron maps that signal to a narrow,
+  request-scoped cancellation message handled in main.
+- Keep workspace runtime imports acyclic. Public barrels may re-export leaf
+  implementations but must not import an implementation that depends back on
+  the barrel's owning module.
 - Do not add an abstraction, package, or dependency for hypothetical future
   use. Reuse existing helpers and native platform APIs first.
 

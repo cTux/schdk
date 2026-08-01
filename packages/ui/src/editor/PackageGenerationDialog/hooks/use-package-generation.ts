@@ -48,6 +48,7 @@ function usePackageGeneration({
   const [currentInput, setCurrentInput] =
     useState<gen.PackageGenerationInput | null>(null);
   const generationId = useRef(0);
+  const generationController = useRef<AbortController | null>(null);
   const activePackages = packages
     .filter((item) => item.enabled)
     .sort(common.compareFavoriteItemsByName);
@@ -66,6 +67,8 @@ function usePackageGeneration({
     );
 
   function reset() {
+    generationController.current?.abort();
+    generationController.current = null;
     generationId.current += 1;
     setOpen(false);
     setScope('missing');
@@ -96,7 +99,13 @@ function usePackageGeneration({
     onGenerationStateChange([], true);
   }
 
-  useEffect(() => () => void (generationId.current += 1), []);
+  useEffect(
+    () => () => {
+      generationController.current?.abort();
+      generationId.current += 1;
+    },
+    [],
+  );
 
   async function cancel() {
     if (await cancelDialog.confirm(copy.packageGeneration.cancelConfirmation)) {
@@ -120,6 +129,8 @@ function usePackageGeneration({
       selectedRecognizabilityDistribution;
     if (!canGenerate) return;
     const currentGenerationId = ++generationId.current;
+    const controller = new AbortController();
+    generationController.current = controller;
     onGenerationStateChange(targets, true);
     setThinking(true);
     setFailed(false);
@@ -157,7 +168,7 @@ function usePackageGeneration({
           );
           onGenerationStateChange(targets.slice(position), true);
         },
-        () => currentGenerationId === generationId.current,
+        controller.signal,
       );
       if (currentGenerationId !== generationId.current) return;
       reset();

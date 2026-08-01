@@ -21,7 +21,6 @@ import type {
 import type { AppLocale } from '@schdk/ui/localization';
 import type { AiOptions } from '@schdk/ui/options';
 import type { GoogleDriveBridge } from '../../types/google-drive/google-drive-types';
-import { useAiQuestionTools } from '../../hooks/ai-questions/use-ai-question-tools';
 
 function getRandomValue(distribution: SchdkDictionaryDistribution) {
   let position = Math.random() * 100;
@@ -93,13 +92,16 @@ function createAiQuestionGeneration(
     };
   }
 
-  async function generateQuestion({
-    template,
-    context,
-    excludedAnswers = [],
-    difficulty = 'medium',
-    recognizability = 'easy',
-  }: AiQuestionGenerationRequest) {
+  async function generateQuestion(
+    {
+      template,
+      context,
+      excludedAnswers = [],
+      difficulty = 'medium',
+      recognizability = 'easy',
+    }: AiQuestionGenerationRequest,
+    signal?: AbortSignal,
+  ) {
     if (!bridge) {
       throw new Error('Google Drive is disconnected');
     }
@@ -111,6 +113,7 @@ function createAiQuestionGeneration(
         difficulty,
         recognizability,
       ),
+      signal,
     );
     return {
       ...question,
@@ -154,23 +157,24 @@ function createAiQuestionGeneration(
           return `${system}\n\n${prompt}`;
         }
       : undefined,
-    async generateQuestion(request) {
+    async generateQuestion(request, signal) {
       await bridge?.renewToken?.();
-      return generateQuestion(request);
+      signal?.throwIfAborted();
+      return generateQuestion(request, signal);
     },
-    async generatePackage(request, onProgress, shouldContinue = () => true) {
+    async generatePackage(request, onProgress, signal) {
       await bridge?.renewToken?.();
       const usedAnswers = [...request.excludedAnswers];
       for (const [position, step] of request.steps.entries()) {
-        if (!shouldContinue()) return;
+        signal?.throwIfAborted();
         const generationRequest = {
           ...step,
           excludedAnswers: [...usedAnswers],
           difficulty: getRandomValue(request.difficultyDistribution),
           recognizability: getRandomValue(request.recognizabilityDistribution),
         };
-        const question = await generateQuestion(generationRequest);
-        if (!shouldContinue()) return;
+        const question = await generateQuestion(generationRequest, signal);
+        signal?.throwIfAborted();
         onProgress({
           index: step.index,
           position: position + 1,
@@ -184,4 +188,4 @@ function createAiQuestionGeneration(
   };
 }
 
-export { createAiQuestionGeneration, useAiQuestionTools };
+export { createAiQuestionGeneration };

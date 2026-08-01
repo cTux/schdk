@@ -7,9 +7,9 @@
   iframes or duplicate application builds.
 - Load every page chunk on first selection, then keep it mounted so navigation
   does not discard state.
-- Keep Drive-backed list hooks above lazy page boundaries so question packages,
-  personal and global AI question rules, AI question packages, and shared
-  dictionaries preload immediately after authorization.
+- Start each Drive-backed collection when its first consuming page or editor is
+  selected, then retain the loaded hook and page state for the shell session.
+  Do not preload unrelated collections immediately after authorization.
 - Preserve keyboard-accessible navigation in the shared renderer.
 - Group the question database, visual editor, artificial intelligence, editor,
   and host pages under `ЩДК` in the fixed sidebar, with the current account's
@@ -47,8 +47,9 @@
   Keep the AI API key in a separate app-data file for the current Google
   account; exclude it from local storage and synchronized Drive settings.
 - Generate questions through the current Drive bridge. The bridge loads the
-  saved key only for the selected provider call and returns a canonical
-  validated game question, never the key.
+  saved key and provider runtime only for the selected provider call, forwards
+  its `AbortSignal`, and returns a canonical validated game question, never the
+  key.
 - Keep personal AI question packages in Drive as `.aiquestionpackage` archives
   and expose their page immediately after question-generation rules.
 - Publish `packages/web/version.json` at the GitHub Pages root and

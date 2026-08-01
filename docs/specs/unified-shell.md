@@ -18,7 +18,10 @@ package authoring, hosting, settings, and account state.
   question-rules label is
   `Правила створення питань`.
 - **SHL-2:** Every navigable page chunk loads lazily on first selection and
-  remains mounted afterward so navigation preserves state.
+  remains mounted afterward so navigation preserves state. Drive-backed
+  question, package-rule, dictionary, and question-database collections start
+  with their first consuming page or package editor and remain available for
+  that shell session.
 - **SHL-3:** Active view persists locally and in the validated `view` query
   parameter. The active primary settings group persists in the validated
   `settings` query parameter while settings are open. Browser back, forward,

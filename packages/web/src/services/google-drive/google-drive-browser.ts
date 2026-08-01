@@ -11,6 +11,7 @@ import {
   type TokenResponse,
 } from './google-oauth-browser';
 import type { GoogleDriveBridge } from '../../types/google-drive/google-drive-types';
+import type { GameQuestionGenerationRequest } from '@schdk/ai';
 const TOKEN_REFRESH_WINDOW = 20 * 60_000;
 const TOKEN_REFRESH_RETRY_INTERVAL = 5 * 60_000;
 
@@ -145,10 +146,15 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
     return this.requestToken('', this.account?.emailAddress);
   }
 
-  async generateAiQuestion(request: GameQuestionGenerationRequest) {
+  async generateAiQuestion(
+    request: GameQuestionGenerationRequest,
+    signal?: AbortSignal,
+  ) {
     const apiKey = await this.client.loadAiApiKey();
     if (!apiKey) throw new Error('AI API key is not configured');
-    return generateGameQuestion({ ...request, apiKey });
+    signal?.throwIfAborted();
+    const { generateGameQuestion } = await import('@schdk/ai');
+    return generateGameQuestion({ ...request, apiKey, abortSignal: signal });
   }
 
   loadSettings() {
@@ -223,7 +229,3 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
   listDictionaries = this.client.listDictionaries.bind(this.client);
   loadDictionary = this.client.loadDictionary.bind(this.client);
 }
-import {
-  generateGameQuestion,
-  type GameQuestionGenerationRequest,
-} from '@schdk/ai';

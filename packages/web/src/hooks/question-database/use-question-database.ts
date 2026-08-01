@@ -17,6 +17,7 @@ const EMPTY_DATABASE: QuestionDatabaseDocument = {
 export function useQuestionDatabase(
   bridge: GoogleDriveBridge | null,
   accountId?: string,
+  enabled = true,
 ) {
   const documentRef = useRef<QuestionDatabaseDocument>(EMPTY_DATABASE);
   const entriesRef = useRef<QuestionDatabaseEntry[]>([]);
@@ -28,12 +29,14 @@ export function useQuestionDatabase(
     accountRevisionRef.current += 1;
   }
   const [entries, setEntries] = useState<QuestionDatabaseEntry[]>([]);
-  const [loading, setLoading] = useState(Boolean(bridge && accountId));
+  const [loading, setLoading] = useState(
+    Boolean(enabled && bridge && accountId),
+  );
   const [failed, setFailed] = useState(false);
   const [progress, setProgress] = useState({ current: 0, total: 0 });
 
   const refresh = useCallback(async () => {
-    if (!bridge || !accountId) return [];
+    if (!enabled || !bridge || !accountId) return [];
     if (syncRef.current) return syncRef.current;
     const activeAccount = accountId;
     const activeRevision = accountRevisionRef.current;
@@ -104,7 +107,7 @@ export function useQuestionDatabase(
     } finally {
       if (syncRef.current === sync) syncRef.current = null;
     }
-  }, [accountId, bridge]);
+  }, [accountId, bridge, enabled]);
 
   useEffect(() => {
     documentRef.current = EMPTY_DATABASE;
@@ -113,9 +116,9 @@ export function useQuestionDatabase(
     setEntries([]);
     setProgress({ current: 0, total: 0 });
     setFailed(false);
-    setLoading(Boolean(bridge && accountId));
-    if (bridge && accountId) void refresh().catch(() => undefined);
-  }, [accountId, bridge, refresh]);
+    setLoading(Boolean(enabled && bridge && accountId));
+    if (enabled && bridge && accountId) void refresh().catch(() => undefined);
+  }, [accountId, bridge, enabled, refresh]);
 
   return {
     entries,

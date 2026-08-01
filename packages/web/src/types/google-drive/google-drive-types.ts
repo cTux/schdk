@@ -31,6 +31,7 @@ interface GoogleDriveBridge
   renewToken?(): Promise<void>;
   generateAiQuestion(
     request: GameQuestionGenerationRequest,
+    signal?: AbortSignal,
   ): Promise<GameQuestion>;
   loadSettings(): Promise<unknown | null>;
   saveSettings(settings: DriveSettingsDocument): Promise<void>;

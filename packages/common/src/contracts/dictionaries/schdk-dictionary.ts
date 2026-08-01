@@ -4,7 +4,6 @@ import {
   type AIQuestionDifficulty,
 } from '../ai-questions/ai-question.js';
 import { createDistributionDictionary } from './dictionary-distributions.js';
-import { parseSchdkDictionaryArchive } from './parse-schdk-dictionary-archive.js';
 import { createScaleDictionary } from './dictionary-scales.js';
 
 const SCHDK_DICTIONARY_ENTRY = 'dictionary.json';
@@ -231,7 +230,6 @@ export {
   MAX_SCHDK_DICTIONARY_BYTES,
   MAX_SCHDK_DICTIONARY_JSON_BYTES,
   parseSchdkDictionary,
-  parseSchdkDictionaryArchive,
   serializeSchdkDictionary,
   type SchdkDictionary,
   type SchdkDictionaryId,

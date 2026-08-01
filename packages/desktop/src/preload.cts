@@ -1,6 +1,8 @@
 import { contextBridge, ipcRenderer, type IpcRendererEvent } from 'electron';
 import type { GameQuestionGenerationRequest } from '@schdk/ai';
 
+let generationRequestId = 0;
+
 const closeApi = {
   onCloseRequested: (callback: (attempt: number) => void): (() => void) => {
     const listener = (_event: IpcRendererEvent, attempt: unknown) => {
@@ -43,8 +45,21 @@ const editorApi = {
       ipcRenderer.invoke('has-google-drive-ai-api-key'),
     saveAiApiKey: (apiKey: string | null): Promise<void> =>
       ipcRenderer.invoke('save-google-drive-ai-api-key', apiKey),
-    generateAiQuestion: (request: GameQuestionGenerationRequest) =>
-      ipcRenderer.invoke('generate-ai-question', request),
+    generateAiQuestion: (
+      request: GameQuestionGenerationRequest,
+      signal?: AbortSignal,
+    ) => {
+      const requestId = `${Date.now()}-${++generationRequestId}`;
+      const cancel = () =>
+        ipcRenderer.send('cancel-ai-question-generation', requestId);
+      if (signal?.aborted) {
+        return Promise.reject(new Error('AI generation aborted'));
+      }
+      signal?.addEventListener('abort', cancel, { once: true });
+      return ipcRenderer
+        .invoke('generate-ai-question', requestId, request)
+        .finally(() => signal?.removeEventListener('abort', cancel));
+    },
     loadSettings: () => ipcRenderer.invoke('load-google-drive-settings'),
     saveSettings: (settings: unknown) =>
       ipcRenderer.invoke('save-google-drive-settings', settings),

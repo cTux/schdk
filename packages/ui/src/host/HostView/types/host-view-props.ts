@@ -1,4 +1,4 @@
-import type { RecentPackageItem } from '../../../editor/types';
+import type { RecentPackageItem } from '../../../game-packages';
 import { type LocalizationCopy } from '../../../localization';
 import type { HostGameView } from '../../types';
 import type { CustomGameElement, GameLayout } from '../../../options/types';

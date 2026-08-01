@@ -1,3 +1,4 @@
+import './styles.scss';
 import classNames from 'classnames';
 import type { CSSProperties, ReactNode } from 'react';
 import { useLocalization } from '../../localization';
@@ -225,5 +226,3 @@ export {
   getNextZoom,
   getResizedPosition,
 };
-
-import './styles.scss';

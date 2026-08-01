@@ -173,48 +173,53 @@ function App({
       <EditorView
         key={driveFileId ?? 'no-package'}
         aiGeneration={aiGeneration}
-        gamePackage={gamePackage}
-        hasPackage={hasPackage}
-        message={message}
-        questionDatabaseRows={questionDatabaseRows}
-        openingRecentPackageId={packages.openingRecentPackageId}
-        recentPackages={recentPackages}
-        recentPackagesLoading={recentPackagesLoading}
-        saveStatus={saveStatus}
-        selectedIndex={selectedIndex}
-        showValidation={showValidation}
-        onAddHandout={questions.addHandout}
-        onMusicBreakChange={changeMusicBreak}
-        onAnswerBlur={questions.correctMainAnswer}
-        onAnswerCommentBlur={questions.correctAnswerComment}
-        onAlternativeAnswerBlur={questions.correctAlternativeAnswer}
-        onWrongAnswerBlur={questions.correctWrongAnswer}
-        onBack={() => void packages.closePackage()}
-        onExit={onExit ?? (() => undefined)}
-        onCopyQuestion={() => void questions.copyQuestion()}
-        onCreatePackage={() => void packages.createPackage()}
-        onDeletePackage={() => void packages.deletePackage(gamePackage.title)}
-        onDeleteRecentPackage={(recent) =>
-          void packages.deleteRecentPackage(recent)
-        }
-        onDownloadRecentPackage={(recent) =>
-          void packages.downloadRecentPackage(recent)
-        }
-        onOpenPackage={(file) => void packages.openPackage(file)}
-        onOpenRecentPackage={(recent) =>
-          void packages.openRecentPackage(recent)
-        }
-        onPasteQuestion={() => void questions.pasteQuestion()}
-        onQuestionChange={questions.updateQuestion}
-        onDatabaseQuestionSelect={questions.selectDatabaseQuestion}
-        onQuestionGenerated={questions.replaceQuestion}
-        onQuestionTextBlur={questions.correctQuestionText}
-        onSelectQuestion={setSelectedIndex}
-        onSwapQuestions={questions.swapQuestionPositions}
-        onTourPhraseChange={packages.updateTourPhrase}
-        onTitleChange={(title) => {
-          session.changeGamePackage({ ...gamePackage, title });
-          setMessage('');
+        document={{
+          gamePackage,
+          hasPackage,
+          message,
+          questionDatabaseRows,
+          saveStatus,
+          selectedIndex,
+          showValidation,
+        }}
+        recents={{
+          openingRecentPackageId: packages.openingRecentPackageId,
+          recentPackages,
+          recentPackagesLoading,
+          onDeleteRecentPackage: (recent) =>
+            void packages.deleteRecentPackage(recent),
+          onDownloadRecentPackage: (recent) =>
+            void packages.downloadRecentPackage(recent),
+          onOpenRecentPackage: (recent) =>
+            void packages.openRecentPackage(recent),
+        }}
+        packageActions={{
+          onBack: () => void packages.closePackage(),
+          onExit: onExit ?? (() => undefined),
+          onCreatePackage: () => void packages.createPackage(),
+          onDeletePackage: () => void packages.deletePackage(gamePackage.title),
+          onOpenPackage: (file) => void packages.openPackage(file),
+          onTourPhraseChange: packages.updateTourPhrase,
+          onTitleChange: (title) => {
+            session.changeGamePackage({ ...gamePackage, title });
+            setMessage('');
+          },
+        }}
+        questionActions={{
+          onAddHandout: questions.addHandout,
+          onMusicBreakChange: changeMusicBreak,
+          onAnswerBlur: questions.correctMainAnswer,
+          onAnswerCommentBlur: questions.correctAnswerComment,
+          onAlternativeAnswerBlur: questions.correctAlternativeAnswer,
+          onWrongAnswerBlur: questions.correctWrongAnswer,
+          onCopyQuestion: () => void questions.copyQuestion(),
+          onPasteQuestion: () => void questions.pasteQuestion(),
+          onQuestionChange: questions.updateQuestion,
+          onDatabaseQuestionSelect: questions.selectDatabaseQuestion,
+          onQuestionGenerated: questions.replaceQuestion,
+          onQuestionTextBlur: questions.correctQuestionText,
+          onSelectQuestion: setSelectedIndex,
+          onSwapQuestions: questions.swapQuestionPositions,
         }}
       />
       <ConfirmationDialog {...dialogProps} />

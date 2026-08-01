@@ -79,7 +79,9 @@ directions in [architecture.md](architecture.md).
   when the component emits component-specific CSS; never add empty placeholders.
 - Keep private one-use props with the component. Put reusable component props
   in that component's own `types.ts`. Composite components may re-export child
-  props from the child's public entry point, but must not copy them.
+  props from the child's public entry point, but must not copy them. Group
+  large composed-view contracts by document data, feature actions, and
+  supporting collections instead of growing one flat prop list.
 - Add `constants.ts` only for component-specific constants.
 - When the component has multiple secondary modules, keep only
   `ComponentName.tsx`, `index.ts`, `types.ts`, `constants.ts`, `styles.scss`,

@@ -87,6 +87,8 @@
   separate text parts and still share one answer.
 - Keep the file-open drop zone compact and at most 250 px tall. Keep recents
   below it and show non-interactive skeleton rows while Drive recents load.
+  The shared game-package picker owns these controls and styles for both editor
+  and host surfaces.
 - In recents, show only the package title and fall back to the filename without
   `.schdk` for legacy entries. Show `Готовий` only when shared validation finds
   no missing fields or unresolved remarks. Show `Має зауваження` when any

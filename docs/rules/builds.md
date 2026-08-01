@@ -13,6 +13,8 @@
 - Let Vite split runnable applications from their real static and dynamic
   import graph. Do not force every third-party module into one global
   `vendors` chunk, because it defeats page-level lazy loading.
+- Keep every production web JavaScript chunk at or below 300 KiB and run the
+  bundle-budget check after the web build in pull requests.
 - If parallel root packaging makes Electron's Windows icon tool exit with
   `3221225477` after producing the icon, rerun the affected desktop package
   build sequentially.

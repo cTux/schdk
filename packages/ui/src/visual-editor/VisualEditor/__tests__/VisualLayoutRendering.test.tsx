@@ -38,5 +38,6 @@ describe('game layout rendering contract', () => {
     expect(editor).toContain(`--game-layout-y:${position.y}%`);
     expect(editor).toContain(`--game-layout-width:${position.width}%`);
     expect(editor).toContain(`--game-layout-height:${position.height}%`);
+    expect({ host, editor }).toMatchSnapshot();
   });
 });

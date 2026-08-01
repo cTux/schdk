@@ -3,10 +3,8 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { registerAppUpdateIpc } from './services/app-updates/app-update.js';
 import { registerGamePackageIpc } from './ipc/game-packages/game-package-ipc.js';
-import {
-  closePresenterNotes,
-  registerPresenterNotesIpc,
-} from './ipc/presenter-notes/presenter-notes.js';
+import { closePresenterNotes } from './ipc/presenter-notes/presenter-notes.js';
+import { registerPresenterNotesIpc } from './ipc/presenter-notes/register-presenter-notes-ipc.js';
 import { registerGoogleDriveIpc } from './ipc/google-drive/google-drive-ipc.js';
 import {
   requestSaveBeforeClose,

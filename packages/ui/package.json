@@ -10,7 +10,17 @@
     "./host": "./src/host/HostView/index.ts",
     "./localization": "./src/localization/index.ts",
     "./options": "./src/options/types.ts",
-    "./shell": "./src/shell/ShellView/index.ts"
+    "./shell": "./src/shell/ShellView/index.ts",
+    "./shell/styles": "./src/shell/ShellView/shell-styles.ts",
+    "./shell/navigation": "./src/shell/ShellNavigation/index.ts",
+    "./shell/home": "./src/shell/ShellHome/index.ts",
+    "./shell/question-database": "./src/shell/QuestionDatabasePage/index.ts",
+    "./shell/ai-questions": "./src/shell/AIQuestionsPage/index.ts",
+    "./shell/ai-question-packages": "./src/shell/AIQuestionsPackagesPage/index.ts",
+    "./shell/dictionaries": "./src/shell/DictionariesPage/index.ts",
+    "./options/page": "./src/options/OptionsPage/index.ts",
+    "./visual-editor": "./src/visual-editor/VisualEditor/index.ts",
+    "./game-packages": "./src/game-packages/index.ts"
   },
   "scripts": {
     "build": "vite build",

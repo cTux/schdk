@@ -1,13 +1,11 @@
 import type { GameOptions } from '@schdk/common';
 import type { EditorTextOptions } from '@schdk/ui/options';
 import { LOCALIZATION_COPY, LocaleProvider } from '@schdk/ui/localization';
-import { GoogleLoginView, ShellView } from '@schdk/ui/shell';
+import { GoogleLoginView } from '@schdk/ui/shell';
 import { lazy, Suspense, useEffect, useLayoutEffect, useState } from 'react';
 import {
   loadEditorTextOptions,
   loadGameOptions,
-  parseVisualEditorTemplateFile,
-  serializeVisualEditorTemplate,
 } from '../../storage/options/options-storage';
 import {
   loadShellLocale,
@@ -17,12 +15,14 @@ import {
   saveShellTheme,
   saveUiAnimations,
 } from '../../types/shell/shell-preferences';
-import { useAiQuestionTools } from '../../services/ai-questions/ai-question-generation';
+import { useAiQuestionTools } from '../../hooks/ai-questions/use-ai-question-tools';
 import { AppUpdateButton } from '../desktop/AppUpdateButton';
 import { useGoogleDriveSettings } from '../../hooks/google-drive/use-google-drive-settings';
 import { useShellNavigation } from '../../hooks/shell/use-shell-navigation';
 import { useSettingsDeepLink } from '../../hooks/settings/use-settings-deep-link';
 import { useQuestionDatabase } from '../../hooks/question-database/use-question-database';
+import { ShellWorkspace } from './ShellWorkspace';
+import { useVisualEditorActions } from '../../hooks/shell/use-visual-editor-actions';
 
 const HostApp = lazy(() =>
   import('../../host/App').then(({ App }) => ({ default: App })),
@@ -46,7 +46,6 @@ export function App() {
   const [gameOptions, setGameOptionsState] = useState<GameOptions>(() =>
     loadGameOptions(localStorage),
   );
-  const [gameOptionsActionError, setGameOptionsActionError] = useState('');
   const googleDrive = useGoogleDriveSettings({
     editorTextOptions: editorOptions,
     gameOptions,
@@ -56,12 +55,23 @@ export function App() {
   const { connection } = googleDrive;
   const connected = connection.state === 'connected';
   const accountId = connected ? connection.account.emailAddress : undefined;
+  const editorDataEnabled = Boolean(navigation.loadedViews.editor);
   const questionDatabase = useQuestionDatabase(
     googleDrive.bridge ?? null,
     accountId,
+    Boolean(navigation.loadedViews.questionDatabase) || editorDataEnabled,
   );
   const { ai, aiQuestions, aiQuestionsPackages, aiGeneration, dictionaries } =
-    useAiQuestionTools(googleDrive.bridge ?? null, connection, locale);
+    useAiQuestionTools(googleDrive.bridge ?? null, connection, locale, {
+      questions:
+        Boolean(navigation.loadedViews.artificialIntelligence) ||
+        Boolean(navigation.loadedViews.packageRules) ||
+        editorDataEnabled,
+      packages:
+        Boolean(navigation.loadedViews.packageRules) || editorDataEnabled,
+      dictionaries:
+        Boolean(navigation.loadedViews.dictionaries) || editorDataEnabled,
+    });
   const preloading =
     connected &&
     (questionDatabase.loading ||
@@ -70,9 +80,16 @@ export function App() {
       aiQuestionsPackages.loading ||
       dictionaries.loading);
   const loginState = googleDrive.statusReady ? connection.state : 'connecting';
-  const gameOptionsError =
-    gameOptionsActionError ||
-    (googleDrive.gameOptionsStorageFailed ? copy.allWeb.saveVisualsFailed : '');
+  const visualEditor = useVisualEditorActions(
+    gameOptions,
+    googleDrive.setGameOptions,
+    googleDrive.gameOptionsStorageFailed,
+    {
+      importFailed: copy.allWeb.importVisualsFailed,
+      exportFailed: copy.allWeb.exportVisualsFailed,
+      saveFailed: copy.allWeb.saveVisualsFailed,
+    },
+  );
   const [unlocked, setUnlocked] = useState(connected);
   useEffect(() => setUnlocked((current) => current || connected), [connected]);
 
@@ -105,42 +122,6 @@ export function App() {
     document.documentElement.dataset.uiAnimations = String(uiAnimations);
   }, [uiAnimations]);
 
-  function changeGameOptions(value: GameOptions) {
-    setGameOptionsActionError('');
-    googleDrive.setGameOptions(value);
-  }
-
-  async function importVisualEditorTemplate(file: File) {
-    try {
-      const imported = await parseVisualEditorTemplateFile(file, gameOptions);
-      if (imported) {
-        changeGameOptions(imported);
-        return;
-      }
-    } catch {
-      // Report file read failures with the same actionable import error.
-    }
-    setGameOptionsActionError(copy.allWeb.importVisualsFailed);
-  }
-
-  function exportVisualEditorTemplate() {
-    try {
-      const url = URL.createObjectURL(
-        new Blob([new Uint8Array(serializeVisualEditorTemplate(gameOptions))], {
-          type: 'application/zip',
-        }),
-      );
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'schdk-visual-template.schdk-template';
-      link.click();
-      URL.revokeObjectURL(url);
-      setGameOptionsActionError('');
-    } catch {
-      setGameOptionsActionError(copy.allWeb.exportVisualsFailed);
-    }
-  }
-
   return (
     <LocaleProvider locale={locale} onLocaleChange={setLocale}>
       {(!unlocked || !connected) && (
@@ -152,79 +133,110 @@ export function App() {
       )}
       {unlocked && (
         <div hidden={!connected}>
-          <ShellView
-            editorApp={
-              <Suspense key={googleDrive.accountId} fallback={null}>
-                <EditorApp
-                  aiGeneration={aiGeneration}
-                  drive={googleDrive.bridge ?? undefined}
-                  driveActive={connected}
-                  manageDocumentTitle={false}
-                  onDriveFailure={googleDrive.reportFailure}
-                  onExit={() => navigation.showView('home')}
-                  questionDatabaseRows={questionDatabase.entries}
-                  sessionScope={`${window.location.pathname}:${googleDrive.accountId}`}
-                  textOptions={editorOptions}
-                />
-              </Suspense>
-            }
-            hostApp={
-              <Suspense key={googleDrive.accountId} fallback={null}>
-                <HostApp
-                  autoFullscreen={gameOptions.autoFullscreen}
-                  backgroundImage={gameOptions.backgroundImage}
-                  backgroundOpacity={gameOptions.backgroundOpacity}
-                  customElements={gameOptions.customElements}
-                  drive={googleDrive.bridge ?? undefined}
-                  driveActive={connected}
-                  layout={gameOptions.layout}
-                  onDriveFailure={googleDrive.reportFailure}
-                  onExit={() => navigation.showView('home')}
-                  sessionScope={`${window.location.pathname}:${googleDrive.accountId}`}
-                  soundVolume={gameOptions.soundVolume}
-                  musicVolume={gameOptions.musicVolume}
-                />
-              </Suspense>
-            }
-            loadedViews={navigation.loadedViews}
-            preloading={preloading}
-            questionDatabase={{
-              failed: questionDatabase.failed,
-              loading: questionDatabase.loading,
-              progress: questionDatabase.progress,
-              rows: questionDatabase.entries,
+          <ShellWorkspace
+            apps={{
+              editor: (
+                <Suspense key={googleDrive.accountId} fallback={null}>
+                  <EditorApp
+                    aiGeneration={aiGeneration}
+                    drive={googleDrive.bridge ?? undefined}
+                    driveActive={connected}
+                    manageDocumentTitle={false}
+                    onDriveFailure={googleDrive.reportFailure}
+                    onExit={() => navigation.showView('home')}
+                    questionDatabaseRows={questionDatabase.entries}
+                    sessionScope={`${window.location.pathname}:${googleDrive.accountId}`}
+                    textOptions={editorOptions}
+                  />
+                </Suspense>
+              ),
+              host: (
+                <Suspense key={googleDrive.accountId} fallback={null}>
+                  <HostApp
+                    autoFullscreen={gameOptions.autoFullscreen}
+                    backgroundImage={gameOptions.backgroundImage}
+                    backgroundOpacity={gameOptions.backgroundOpacity}
+                    customElements={gameOptions.customElements}
+                    drive={googleDrive.bridge ?? undefined}
+                    driveActive={connected}
+                    layout={gameOptions.layout}
+                    onDriveFailure={googleDrive.reportFailure}
+                    onExit={() => navigation.showView('home')}
+                    sessionScope={`${window.location.pathname}:${googleDrive.accountId}`}
+                    soundVolume={gameOptions.soundVolume}
+                    musicVolume={gameOptions.musicVolume}
+                  />
+                </Suspense>
+              ),
             }}
-            aiOptions={ai.options}
-            aiQuestions={aiQuestions}
-            aiQuestionsPackages={aiQuestionsPackages}
-            dictionaries={dictionaries}
-            editTarget={navigation.editTarget}
-            editorOptions={editorOptions}
-            gameOptions={gameOptions}
-            gameOptionsError={gameOptionsError}
-            googleDriveAccount={
-              'account' in connection ? connection.account : undefined
-            }
-            googleDriveState={connection.state}
-            settingsGroup={settings.group}
-            theme={theme}
-            uiAnimations={uiAnimations}
-            view={view}
-            onEditorOptionsChange={googleDrive.setEditorTextOptions}
-            onAiApiKeySave={ai.saveApiKey}
-            onAiModelChange={ai.setModel}
-            onAiProviderChange={ai.setProvider}
-            onGameOptionsChange={changeGameOptions}
-            onGoogleDriveConnect={() => void googleDrive.connect()}
-            onGoogleDriveDisconnect={() => void googleDrive.disconnect()}
-            onImportVisualEditorTemplate={importVisualEditorTemplate}
-            onExportVisualEditorTemplate={exportVisualEditorTemplate}
-            onCloseEditor={navigation.closeEditor}
-            onShowEditor={navigation.showEditor}
-            onShowView={navigation.showView}
-            onSettingsGroupChange={settings.showGroup}
-            onThemeChange={setTheme}
-            onUiAnimationsChange={setUiAnimations}
+            data={{
+              preloading,
+              questionDatabase: {
+                failed: questionDatabase.failed,
+                loading: questionDatabase.loading,
+                progress: questionDatabase.progress,
+                rows: questionDatabase.entries,
+              },
+              aiQuestions: {
+                ...aiQuestions,
+                onAdd: aiQuestions.addQuestion,
+                onAddGlobal: aiQuestions.addGlobalQuestion,
+                onRemove: aiQuestions.removeQuestion,
+                onRemoveGlobal: aiQuestions.removeGlobalQuestion,
+                onUpdate: aiQuestions.updateQuestion,
+                onUpdateGlobal: aiQuestions.updateGlobalQuestion,
+              },
+              aiQuestionPackages: {
+                ...aiQuestionsPackages,
+                questionRules: [
+                  ...aiQuestions.questions,
+                  ...aiQuestions.globalQuestions,
+                ].filter(
+                  (question) => question.enabled && !question.generalRule,
+                ),
+                onAdd: aiQuestionsPackages.addPackage,
+                onRemove: aiQuestionsPackages.removePackage,
+                onUpdate: aiQuestionsPackages.updatePackage,
+              },
+              dictionaries: {
+                ...dictionaries,
+                onUpdate: dictionaries.updateDictionary,
+              },
+            }}
+            navigation={navigation}
+            settings={{
+              theme,
+              options: {
+                ai: ai.options,
+                editor: editorOptions,
+                game: gameOptions,
+                googleDriveAccount:
+                  connection.state === 'connected'
+                    ? connection.account.emailAddress
+                    : undefined,
+                googleDriveState: connection.state,
+                settingsGroup: settings.group,
+                theme,
+                uiAnimations,
+                onAiApiKeySave: ai.saveApiKey,
+                onAiModelChange: ai.setModel,
+                onAiProviderChange: ai.setProvider,
+                onEditorChange: googleDrive.setEditorTextOptions,
+                onGameChange: visualEditor.change,
+                onGoogleDriveConnect: () => void googleDrive.connect(),
+                onGoogleDriveDisconnect: () => void googleDrive.disconnect(),
+                onSettingsGroupChange: settings.showGroup,
+                onThemeChange: setTheme,
+                onUiAnimationsChange: setUiAnimations,
+              },
+              visualEditor: {
+                game: gameOptions,
+                message: visualEditor.error,
+                onChange: visualEditor.change,
+                onImportTemplate: visualEditor.importTemplate,
+                onExportTemplate: visualEditor.exportTemplate,
+              },
+            }}
           />
         </div>
       )}

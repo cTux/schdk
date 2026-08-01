@@ -10,7 +10,7 @@ export interface AppProps {
   drive?: DrivePackageStorage;
   driveActive?: boolean;
   manageDocumentTitle?: boolean;
-  questionDatabaseRows?: EditorViewProps['questionDatabaseRows'];
+  questionDatabaseRows?: EditorViewProps['document']['questionDatabaseRows'];
   sessionScope?: string;
   textOptions?: EditorTextOptions;
   onDriveFailure?(): void;

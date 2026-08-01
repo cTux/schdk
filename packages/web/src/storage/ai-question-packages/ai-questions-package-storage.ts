@@ -20,6 +20,7 @@ const sortItems = (items: StoredPackage[]) =>
 export function useAIQuestionsPackages(
   bridge: GoogleDriveBridge | null,
   accountId?: string,
+  enabled = true,
 ) {
   const [items, setItems] = useState<StoredPackage[]>([]);
   const [failed, setFailed] = useState(false);
@@ -29,8 +30,8 @@ export function useAIQuestionsPackages(
     let active = true;
     setItems([]);
     setFailed(false);
-    setLoading(Boolean(bridge && accountId));
-    if (!bridge || !accountId) return;
+    setLoading(Boolean(enabled && bridge && accountId));
+    if (!enabled || !bridge || !accountId) return;
     void bridge
       .listAIQuestionsPackages()
       .then((files) =>
@@ -62,7 +63,7 @@ export function useAIQuestionsPackages(
     return () => {
       active = false;
     };
-  }, [accountId, bridge]);
+  }, [accountId, bridge, enabled]);
 
   async function addPackage(value: AIQuestionsPackage) {
     if (!bridge) return false;

@@ -22,6 +22,7 @@ function useAIQuestionCollection(
   bridge: GoogleDriveBridge | null,
   accountId?: string,
   global = false,
+  enabled = true,
 ) {
   const [items, setItems] = useState<StoredAIQuestion[]>([]);
   const [failed, setFailed] = useState(false);
@@ -31,8 +32,8 @@ function useAIQuestionCollection(
     let active = true;
     setItems([]);
     setFailed(false);
-    setLoading(Boolean(bridge && accountId));
-    if (!bridge || !accountId) return;
+    setLoading(Boolean(enabled && bridge && accountId));
+    if (!enabled || !bridge || !accountId) return;
     void (global ? bridge.listGlobalAIQuestions() : bridge.listAIQuestions())
       .then((files) =>
         Promise.all(
@@ -66,7 +67,7 @@ function useAIQuestionCollection(
     return () => {
       active = false;
     };
-  }, [accountId, bridge, global]);
+  }, [accountId, bridge, enabled, global]);
 
   async function addQuestion(question: AIQuestion): Promise<boolean> {
     if (!bridge) return false;
@@ -176,9 +177,10 @@ function useAIQuestionCollection(
 export function useAIQuestions(
   bridge: GoogleDriveBridge | null,
   accountId?: string,
+  enabled = true,
 ) {
   return {
-    personal: useAIQuestionCollection(bridge, accountId),
-    global: useAIQuestionCollection(bridge, accountId, true),
+    personal: useAIQuestionCollection(bridge, accountId, false, enabled),
+    global: useAIQuestionCollection(bridge, accountId, true, enabled),
   };
 }

@@ -2,4 +2,5 @@ import { type GameQuestionGenerationRequest } from './game-question-generation-r
 
 export interface GenerateGameQuestionInput extends GameQuestionGenerationRequest {
   apiKey: string;
+  abortSignal?: AbortSignal;
 }

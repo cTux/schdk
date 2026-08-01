@@ -1,7 +1,8 @@
-import { RecentPackageButton } from '../RecentPackageButton';
-import { type RecentPackagesProps } from './recent-packages-props';
+import './styles.scss';
+import { RecentGamePackageButton } from '../RecentGamePackageButton/RecentGamePackageButton';
+import type { RecentGamePackagesProps } from './types';
 
-function RecentPackages({
+function RecentGamePackages({
   hidden,
   loading = false,
   openingPackageId = null,
@@ -9,9 +10,8 @@ function RecentPackages({
   onDelete,
   onDownload,
   onOpen,
-}: RecentPackagesProps) {
+}: RecentGamePackagesProps) {
   if (!loading && packages.length === 0) return null;
-
   return (
     <section className="recent-packages" hidden={hidden} aria-busy={loading}>
       <div className="recent-package-list">
@@ -27,7 +27,7 @@ function RecentPackages({
               </div>
             ))
           : packages.map((recent) => (
-              <RecentPackageButton
+              <RecentGamePackageButton
                 disabled={openingPackageId !== null}
                 key={recent.id}
                 opening={openingPackageId === recent.id}
@@ -42,4 +42,4 @@ function RecentPackages({
   );
 }
 
-export { type RecentPackagesProps, RecentPackages };
+export { RecentGamePackages };
