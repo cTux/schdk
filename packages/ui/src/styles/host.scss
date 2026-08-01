@@ -1,6 +1,6 @@
 @use './host-details';
-@use './host-game';
-@use './host-stages';
+@use '../game-presentation/styles/game';
+@use '../game-presentation/styles/stages';
 @use './host-motion';
-@use './host-layout';
+@use '../game-presentation/styles/layout';
 @use './host-keyframes';

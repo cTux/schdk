@@ -7,6 +7,8 @@ import {
   type QuestionDatabasePackage,
 } from '@schdk/google-drive';
 import { useCallback, useEffect, useRef, useState } from 'react';
+
+const PACKAGE_LOAD_CONCURRENCY = 4;
 import type { GoogleDriveBridge } from '../../types/google-drive/google-drive-types';
 
 const EMPTY_DATABASE: QuestionDatabaseDocument = {
@@ -57,31 +59,43 @@ export function useQuestionDatabase(
       );
       const packages: QuestionDatabasePackage[] = [];
       let partialFailure = false;
-      for (const [index, file] of files.entries()) {
-        if (isActive()) {
-          setProgress({ current: index, total: files.length });
-        }
-        const existing = previous.get(file.id);
-        if (existing?.modifiedTime === file.modifiedTime) {
-          packages.push(existing);
-          continue;
-        }
-        try {
-          const loaded = await bridge.loadGamePackage(file.id);
-          if (!isActive()) return [];
-          const gamePackage = await parseGamePackage(loaded.content);
-          packages.push(createQuestionDatabasePackage(file, gamePackage));
-        } catch {
-          partialFailure = true;
-          if (existing) packages.push(existing);
-        }
+      let databaseChanged = files.length !== stored.packages.length;
+      for (
+        let offset = 0;
+        offset < files.length;
+        offset += PACKAGE_LOAD_CONCURRENCY
+      ) {
+        const batch = await Promise.all(
+          files
+            .slice(offset, offset + PACKAGE_LOAD_CONCURRENCY)
+            .map(async (file): Promise<QuestionDatabasePackage | null> => {
+              const existing = previous.get(file.id);
+              if (existing?.modifiedTime === file.modifiedTime) return existing;
+              try {
+                const loaded = await bridge.loadGamePackage(file.id);
+                if (!isActive()) return null;
+                const gamePackage = await parseGamePackage(loaded.content);
+                databaseChanged = true;
+                return createQuestionDatabasePackage(file, gamePackage);
+              } catch {
+                partialFailure = true;
+                return existing ?? null;
+              }
+            }),
+        );
+        if (!isActive()) return [];
+        packages.push(...batch.filter((item) => item !== null));
+        setProgress({
+          current: Math.min(offset + batch.length, files.length),
+          total: files.length,
+        });
       }
       const document: QuestionDatabaseDocument = {
         schemaVersion: 1,
         packages,
       };
       if (!isActive()) return [];
-      if (JSON.stringify(document) !== JSON.stringify(stored)) {
+      if (databaseChanged) {
         await bridge.saveQuestionDatabase(document);
       }
       const nextEntries = flattenQuestionDatabase(document);

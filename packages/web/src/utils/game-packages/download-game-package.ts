@@ -1,6 +1,7 @@
-import { toRecentPackage } from './to-recent-package';
-
-function downloadPackage(name: string, content: Uint8Array) {
+export async function downloadGamePackage(name: string, content: Uint8Array) {
+  if (window.desktop) {
+    return Boolean(await window.desktop.saveGamePackage(name, content));
+  }
   const url = URL.createObjectURL(
     new Blob([new Uint8Array(content)], { type: 'application/zip' }),
   );
@@ -9,6 +10,5 @@ function downloadPackage(name: string, content: Uint8Array) {
   link.download = name;
   link.click();
   URL.revokeObjectURL(url);
+  return true;
 }
-
-export { downloadPackage, toRecentPackage };

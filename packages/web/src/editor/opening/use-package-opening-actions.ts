@@ -7,14 +7,13 @@ import {
 } from '@schdk/common';
 import {
   createGamePackageFilename,
-  parseDrivePackageReference,
   toDrivePackageReference,
   type DrivePackageStorage,
   type DriveGamePackageFile,
 } from '@schdk/google-drive/game-packages';
-import { showEditorToast, type RecentPackageItem } from '@schdk/ui/editor';
+import { showEditorToast } from '@schdk/ui/editor';
 import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
-import { useRef, useState } from 'react';
+import { useRecentGamePackageActions } from '../../hooks/game-packages/use-recent-game-package-actions';
 import { replaceBrowserPackageDeepLink } from './browser-deep-link';
 
 interface PackageOpeningOptions {
@@ -32,17 +31,6 @@ interface PackageOpeningOptions {
   setMessage(message: string): void;
 }
 
-function downloadPackage(name: string, content: Uint8Array) {
-  const url = URL.createObjectURL(
-    new Blob([new Uint8Array(content)], { type: 'application/zip' }),
-  );
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = name;
-  link.click();
-  URL.revokeObjectURL(url);
-}
-
 export function usePackageOpeningActions({
   confirm,
   copy,
@@ -53,13 +41,30 @@ export function usePackageOpeningActions({
   onDriveFailure,
   setMessage,
 }: PackageOpeningOptions) {
-  const openingRecentPackage = useRef<string | null>(null);
-  const [openingRecentPackageId, setOpeningRecentPackageId] = useState<
-    string | null
-  >(null);
+  const { hasActiveAction, ...recentActions } = useRecentGamePackageActions({
+    confirm,
+    drive,
+    messages: {
+      deleteConfirmation: (recent) =>
+        copy.shared.deletePackageConfirmation(recent.title || recent.name),
+      deleteFailed: copy.shared.deletePackageFailed,
+      downloadFailed: copy.editor.downloadFailed,
+      openFailed: copy.editor.recentOpenFailed,
+    },
+    onDriveFailure,
+    onMessage: setMessage,
+    onOpen(opened) {
+      applyOpenedPackage(opened.content, opened);
+      replaceBrowserPackageDeepLink(toDrivePackageReference(opened.id), 0);
+    },
+    onOpened: () => showEditorToast('opened', locale),
+    onDownloaded: () => showEditorToast('downloaded', locale),
+    onDeleted: () => showEditorToast('deleted', locale),
+    refreshRecentPackages,
+  });
 
   async function openPackage(file: File) {
-    if (openingRecentPackage.current) return;
+    if (hasActiveAction()) return;
     setMessage('');
     let content: Uint8Array;
     let gamePackage: GamePackage;
@@ -95,84 +100,8 @@ export function usePackageOpeningActions({
     }
   }
 
-  async function openRecentPackage(recent: RecentPackageItem) {
-    if (openingRecentPackage.current) return;
-    openingRecentPackage.current = recent.id;
-    setOpeningRecentPackageId(recent.id);
-    setMessage('');
-    try {
-      const driveFileId = parseDrivePackageReference(recent.id);
-      if (!drive || !driveFileId)
-        throw new Error('Google Drive is unavailable');
-      const opened = await drive.loadGamePackage(driveFileId);
-      applyOpenedPackage(opened.content, opened);
-      replaceBrowserPackageDeepLink(toDrivePackageReference(opened.id), 0);
-      await refreshRecentPackages();
-      showEditorToast('opened', locale);
-    } catch {
-      onDriveFailure?.();
-      setMessage(copy.editor.recentOpenFailed);
-      await refreshRecentPackages();
-    } finally {
-      openingRecentPackage.current = null;
-      setOpeningRecentPackageId(null);
-    }
-  }
-
-  async function downloadRecentPackage(recent: RecentPackageItem) {
-    if (openingRecentPackage.current) return;
-    setMessage('');
-    try {
-      const driveFileId = parseDrivePackageReference(recent.id);
-      if (!drive || !driveFileId)
-        throw new Error('Google Drive is unavailable');
-      const opened = await drive.loadGamePackage(driveFileId);
-      if (window.desktop) {
-        const savedPath = await window.desktop.saveGamePackage(
-          opened.name,
-          opened.content,
-        );
-        if (!savedPath) return;
-      } else {
-        downloadPackage(opened.name, opened.content);
-      }
-      showEditorToast('downloaded', locale);
-    } catch {
-      onDriveFailure?.();
-      setMessage(copy.editor.downloadFailed);
-    }
-  }
-
-  async function deleteRecentPackage(recent: RecentPackageItem) {
-    if (openingRecentPackage.current) return;
-    const deletionConfirmed = await confirm(
-      copy.shared.deletePackageConfirmation(recent.title || recent.name),
-    );
-    if (!deletionConfirmed) return;
-    openingRecentPackage.current = recent.id;
-    setOpeningRecentPackageId(recent.id);
-    setMessage('');
-    try {
-      const driveFileId = parseDrivePackageReference(recent.id);
-      if (!drive || !driveFileId)
-        throw new Error('Google Drive is unavailable');
-      await drive.deleteGamePackage(driveFileId);
-      await refreshRecentPackages();
-      showEditorToast('deleted', locale);
-    } catch {
-      onDriveFailure?.();
-      setMessage(copy.shared.deletePackageFailed);
-    } finally {
-      openingRecentPackage.current = null;
-      setOpeningRecentPackageId(null);
-    }
-  }
-
   return {
-    deleteRecentPackage,
-    downloadRecentPackage,
-    openingRecentPackageId,
+    ...recentActions,
     openPackage,
-    openRecentPackage,
   };
 }

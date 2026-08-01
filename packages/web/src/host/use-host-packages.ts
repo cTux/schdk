@@ -6,22 +6,21 @@ import {
 } from '@schdk/common';
 import {
   createGamePackageFilename,
-  parseDrivePackageReference,
   toDrivePackageReference,
   type DrivePackageStorage,
 } from '@schdk/google-drive';
-import type { HostPackageDetails, RecentPackageItem } from '@schdk/ui/host';
+import type { HostPackageDetails } from '@schdk/ui/host';
 import type { LocalizationCopy } from '@schdk/ui/localization';
 import {
   useCallback,
-  useRef,
   useState,
   type Dispatch,
   type SetStateAction,
 } from 'react';
+import { useRecentGamePackageActions } from '../hooks/game-packages/use-recent-game-package-actions';
+import { useRecentGamePackages } from '../hooks/game-packages/use-recent-game-packages';
 import { summarizeGamePackage } from './game-package-summary';
 import type { HostSession } from './host-session';
-import { downloadPackage, toRecentPackage } from './package-files';
 import type { GameWizardSnapshot } from './use-game-wizard';
 
 export function useHostPackages({
@@ -38,16 +37,8 @@ export function useHostPackages({
   setGameActive: Dispatch<SetStateAction<boolean>>;
 }) {
   const [message, setMessage] = useState('');
-  const openingRecentPackage = useRef<string | null>(null);
-  const [openingRecentPackageId, setOpeningRecentPackageId] = useState<
-    string | null
-  >(null);
   const [packageDetails, setPackageDetails] =
     useState<HostPackageDetails | null>(null);
-  const [recentPackages, setRecentPackages] = useState<RecentPackageItem[]>([]);
-  const [recentPackagesLoading, setRecentPackagesLoading] = useState(
-    drive !== undefined,
-  );
   const [selectedPackage, setSelectedPackage] = useState<GamePackage | null>(
     null,
   );
@@ -58,21 +49,8 @@ export function useHostPackages({
     null,
   );
 
-  const refreshRecentPackages = useCallback(async () => {
-    if (!drive) {
-      setRecentPackagesLoading(false);
-      return;
-    }
-    setRecentPackagesLoading(true);
-    try {
-      setRecentPackages((await drive.listGamePackages()).map(toRecentPackage));
-    } catch {
-      setRecentPackages([]);
-      onDriveFailure?.();
-    } finally {
-      setRecentPackagesLoading(false);
-    }
-  }, [drive, onDriveFailure]);
+  const { recentPackages, recentPackagesLoading, refreshRecentPackages } =
+    useRecentGamePackages(drive, onDriveFailure);
 
   const acceptPackage = useCallback(
     async (
@@ -102,8 +80,29 @@ export function useHostPackages({
     [refreshRecentPackages, setGameActive],
   );
 
+  const { hasActiveAction, ...recentActions } = useRecentGamePackageActions({
+    confirm,
+    drive,
+    messages: {
+      deleteConfirmation: (recent) =>
+        copy.shared.deletePackageConfirmation(recent.title || recent.name),
+      deleteFailed: copy.shared.deletePackageFailed,
+      downloadFailed: copy.host.downloadFailed,
+      openFailed: copy.host.recentOpenFailed,
+    },
+    onDriveFailure,
+    onMessage: setMessage,
+    onOpen: (opened) =>
+      acceptPackage(
+        opened.content,
+        opened.name,
+        toDrivePackageReference(opened.id),
+      ),
+    refreshRecentPackages,
+  });
+
   async function openPackage(file: File) {
-    if (openingRecentPackage.current) return;
+    if (hasActiveAction()) return;
     setMessage('');
     let content: Uint8Array;
     let gamePackage: GamePackage;
@@ -143,74 +142,6 @@ export function useHostPackages({
     }
   }
 
-  async function openRecentPackage(recent: RecentPackageItem) {
-    if (openingRecentPackage.current) return;
-    openingRecentPackage.current = recent.id;
-    setOpeningRecentPackageId(recent.id);
-    setMessage('');
-    try {
-      const driveFileId = parseDrivePackageReference(recent.id);
-      if (!drive || !driveFileId)
-        throw new Error('Google Drive is unavailable');
-      const opened = await drive.loadGamePackage(driveFileId);
-      await acceptPackage(
-        opened.content,
-        opened.name,
-        toDrivePackageReference(opened.id),
-      );
-    } catch {
-      onDriveFailure?.();
-      setMessage(copy.host.recentOpenFailed);
-      await refreshRecentPackages();
-    } finally {
-      openingRecentPackage.current = null;
-      setOpeningRecentPackageId(null);
-    }
-  }
-
-  async function downloadRecentPackage(recent: RecentPackageItem) {
-    if (openingRecentPackage.current) return;
-    setMessage('');
-    try {
-      const driveFileId = parseDrivePackageReference(recent.id);
-      if (!drive || !driveFileId)
-        throw new Error('Google Drive is unavailable');
-      const opened = await drive.loadGamePackage(driveFileId);
-      if (window.desktop) {
-        await window.desktop.saveGamePackage(opened.name, opened.content);
-      } else {
-        downloadPackage(opened.name, opened.content);
-      }
-    } catch {
-      onDriveFailure?.();
-      setMessage(copy.host.downloadFailed);
-    }
-  }
-
-  async function deleteRecentPackage(recent: RecentPackageItem) {
-    if (openingRecentPackage.current) return;
-    const deletionConfirmed = await confirm(
-      copy.shared.deletePackageConfirmation(recent.title || recent.name),
-    );
-    if (!deletionConfirmed) return;
-    openingRecentPackage.current = recent.id;
-    setOpeningRecentPackageId(recent.id);
-    setMessage('');
-    try {
-      const driveFileId = parseDrivePackageReference(recent.id);
-      if (!drive || !driveFileId)
-        throw new Error('Google Drive is unavailable');
-      await drive.deleteGamePackage(driveFileId);
-      await refreshRecentPackages();
-    } catch {
-      onDriveFailure?.();
-      setMessage(copy.shared.deletePackageFailed);
-    } finally {
-      openingRecentPackage.current = null;
-      setOpeningRecentPackageId(null);
-    }
-  }
-
   const clearPackage = useCallback(() => {
     setGameActive(false);
     setSelectedPackage(null);
@@ -222,12 +153,9 @@ export function useHostPackages({
   return {
     acceptPackage,
     clearPackage,
-    deleteRecentPackage,
-    downloadRecentPackage,
+    ...recentActions,
     message,
-    openingRecentPackageId,
     openPackage,
-    openRecentPackage,
     packageDetails,
     recentPackages,
     recentPackagesLoading,

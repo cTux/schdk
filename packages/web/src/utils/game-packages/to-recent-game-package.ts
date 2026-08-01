@@ -1,10 +1,10 @@
 import {
   toDrivePackageReference,
   type DriveGamePackageFile,
-} from '@schdk/google-drive';
-import type { RecentPackageItem } from '@schdk/ui/host';
+} from '@schdk/google-drive/game-packages';
+import type { RecentPackageItem } from '@schdk/ui/game-packages';
 
-export function toRecentPackage({
+export function toRecentGamePackage({
   id,
   name,
   title,

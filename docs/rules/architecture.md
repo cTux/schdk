@@ -61,6 +61,9 @@
 - Keep package-open actions, recent-package rows, and their styles in the
   neutral `@schdk/ui` game-packages domain; editor and host views consume that
   domain without importing from each other.
+- Keep recent-package listing, loading, downloading, and deletion behavior in
+  the neutral `@schdk/web` game-packages controller; editor and host supply
+  only their feature-specific validation, messages, and success effects.
 - Keep game elements, fitted-text measurement, and persisted layout rendering
   in the neutral `@schdk/ui` game-presentation domain; host and visual-editor
   features consume it without importing from each other.
