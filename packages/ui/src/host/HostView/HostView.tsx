@@ -44,7 +44,7 @@ function HostView({
   const playing = game !== null || finished;
   return (
     <Page
-      className={classNames('editor-app', 'host-app', {
+      className={classNames('editor-app', 'host-app', 'game-presentation', {
         'is-playing': playing,
       })}
       title={copy.shell.host.label}

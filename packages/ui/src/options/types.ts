@@ -21,6 +21,7 @@ import {
   type GameLayoutElementId,
   type GameLayoutPosition,
   type GameOptions,
+  type GamePresentationOptions,
   type GameTextGrowDirection,
 } from '@schdk/common';
 
@@ -47,6 +48,7 @@ export {
   MAX_CUSTOM_GAME_ELEMENTS,
   MAX_CUSTOM_IMAGE_DATA_LENGTH,
   type GameOptions,
+  type GamePresentationOptions,
   DEFAULT_EDITOR_TEXT_OPTIONS,
   DEFAULT_GAME_OPTIONS,
   DEFAULT_GAME_LAYOUT,

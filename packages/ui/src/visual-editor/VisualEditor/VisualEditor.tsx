@@ -202,7 +202,7 @@ function VisualEditor({
         />
         <div
           ref={editor.canvasRef}
-          className={classNames('visual-editor-canvas', 'host-app', {
+          className={classNames('visual-editor-canvas', 'game-presentation', {
             'is-selected': !editor.selected,
           })}
           tabIndex={0}

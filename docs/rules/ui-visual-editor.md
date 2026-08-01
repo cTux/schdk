@@ -20,7 +20,11 @@
   Playwright browser smoke test.
 - Keep bounded undo and redo history in the web visual-editor controller, clear
   it when the connected account changes, and expose only availability and
-  callbacks to `@schdk/ui`. Treat a completed pointer gesture as one change.
+  callbacks to `@schdk/ui`. Bound both entry count and retained serialized
+  presentation size. Treat a completed pointer gesture as one change.
+- Pass only layout, custom elements, background image, and background opacity
+  through the visual-editor UI contract; preserve unrelated game options in
+  the web controller.
 - Keep `GameOptions` mutations in pure helpers; the React hook owns transient
   interaction state and delegates persisted model updates.
 - Let every built-in and custom element be marked hidden while remaining

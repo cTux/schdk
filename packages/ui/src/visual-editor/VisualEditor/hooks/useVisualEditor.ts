@@ -5,7 +5,7 @@ import {
   MAX_CUSTOM_GAME_ELEMENTS,
   type CustomGameElement,
   type GameLayoutPosition,
-  type GameOptions,
+  type GamePresentationOptions,
 } from '../../../options/types';
 import { createCustomElement } from '../utils/geometry';
 import {
@@ -21,9 +21,9 @@ import {
 } from './visual-editor-state';
 
 export function useVisualEditor(
-  game: GameOptions,
+  game: GamePresentationOptions,
   copy: LocalizationCopy,
-  onChange: (game: GameOptions) => void,
+  onChange: (game: GamePresentationOptions) => void,
 ) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const workspaceRef = useRef<HTMLDivElement>(null);

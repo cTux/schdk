@@ -3,19 +3,19 @@ import type {
   CustomGameElement,
   GameLayoutElementId,
   GameLayoutPosition,
-  GameOptions,
+  GamePresentationOptions,
 } from '../../../options/types';
 import type { ElementSelection } from '../types';
 
 export interface VisualEditorToolbarProps {
   copy: LocalizationCopy;
-  game: GameOptions;
+  game: GamePresentationOptions;
   labels: Record<GameLayoutElementId, string>;
   selected: ElementSelection | null;
   selectedCustom: CustomGameElement | null;
   selectedPosition: GameLayoutPosition | null;
   chooseImage(target: 'background' | string): void;
-  onChange(game: GameOptions): void;
+  onChange(game: GamePresentationOptions): void;
   removeCustom(id: string): void;
   updateCustom(id: string, patch: Partial<CustomGameElement>): void;
   updatePosition(

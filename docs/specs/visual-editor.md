@@ -39,7 +39,8 @@ to every hosted question.
 - **VIS-15:** Authors can undo and redo presentation changes with the permanent
   visual-editor controls or standard keyboard shortcuts. One completed drag or
   resize is one history entry, new edits clear redo history, and history never
-  crosses connected Google accounts.
+  crosses connected Google accounts. History is bounded by both entry count and
+  retained presentation size.
 
 ## Invariants
 

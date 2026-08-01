@@ -70,6 +70,8 @@
 - Keep game elements, fitted-text measurement, and persisted layout rendering
   in the neutral `@schdk/ui` game-presentation domain; host and visual-editor
   features consume it without importing from each other.
+- Scope shared gameplay and visual-editor presentation styles under the neutral
+  `.game-presentation` root; keep host-only behavior under `.host-app`.
 - The web application composes exported `@schdk/ui` controls and views; it
   does not render native interactive JSX or define app-local visual controls.
 - `@schdk/ui` exports shell page views and their styles as leaf entry points;

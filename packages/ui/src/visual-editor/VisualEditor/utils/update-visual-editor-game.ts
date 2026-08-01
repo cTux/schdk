@@ -2,12 +2,12 @@ import {
   DEFAULT_GAME_LAYOUT,
   type CustomGameElement,
   type GameLayoutPosition,
-  type GameOptions,
+  type GamePresentationOptions,
 } from '../../../options/types';
 import type { ElementSelection } from '../types';
 
 function updateVisualEditorPosition(
-  game: GameOptions,
+  game: GamePresentationOptions,
   selection: ElementSelection,
   patch: Partial<GameLayoutPosition>,
 ) {
@@ -30,7 +30,7 @@ function updateVisualEditorPosition(
 }
 
 function updateVisualEditorElement(
-  game: GameOptions,
+  game: GamePresentationOptions,
   id: string,
   patch: Partial<CustomGameElement>,
 ) {
@@ -44,7 +44,7 @@ function updateVisualEditorElement(
   };
 }
 
-function removeVisualEditorElement(game: GameOptions, id: string) {
+function removeVisualEditorElement(game: GamePresentationOptions, id: string) {
   return {
     ...game,
     customElements: game.customElements.filter((element) => element.id !== id),

@@ -1,12 +1,12 @@
-import type { GameOptions } from '../../../options/types';
+import type { GamePresentationOptions } from '../../../options/types';
 
 export interface VisualEditorProps {
   canRedo: boolean;
   canUndo: boolean;
   hidden: boolean;
-  game: GameOptions;
+  game: GamePresentationOptions;
   message: string;
-  onChange(game: GameOptions): void;
+  onChange(game: GamePresentationOptions): void;
   onImportTemplate(file: File): void;
   onExportTemplate(): void;
   onRedo(): void;

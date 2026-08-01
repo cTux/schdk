@@ -23,10 +23,10 @@ const render = (finished: boolean) =>
 describe('HostView', () => {
   it('adds the playing class only during a game flow', () => {
     expect(render(false).props.className).toMatchInlineSnapshot(
-      `"editor-app host-app"`,
+      `"editor-app host-app game-presentation"`,
     );
     expect(render(true).props.className).toMatchInlineSnapshot(
-      `"editor-app host-app is-playing"`,
+      `"editor-app host-app game-presentation is-playing"`,
     );
   });
 });
