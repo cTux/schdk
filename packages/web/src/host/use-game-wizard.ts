@@ -1,6 +1,6 @@
 import { QUESTION_TYPE_CONFIG, type GamePackage } from '@schdk/common';
-import type { HostGameTransition, HostQuestionStage } from '@schdk/ui/host';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { HostQuestionStage } from '@schdk/ui/host';
+import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 import { playMainSignal, playPreAlarm, stopGameAudio } from './game-audio';
 import {
   getNextPosition,
@@ -15,6 +15,11 @@ import {
   QUESTION_TIME_SECONDS,
 } from './game-timer';
 import { type GameWizardSnapshot } from './game-wizard-snapshot';
+import {
+  idleTransition,
+  reduceGameWizard,
+  type GameWizardState,
+} from './game-wizard-state';
 import { prefersReducedMotion } from './prefers-reduced-motion';
 
 const EXIT_DURATION_MS = 280;
@@ -29,26 +34,18 @@ const INITIAL_POSITION: GamePosition = {
 
 type Direction = 'forward' | 'backward';
 
-function idleTransition(): HostGameTransition {
-  return {
-    phase: 'idle',
-    direction: 'forward',
-    questionChanging: false,
-  };
-}
-
 function useGameWizard(
   gamePackage: GamePackage | null,
   active: boolean,
   restoredState: GameWizardSnapshot | null = null,
 ) {
-  const [finished, setFinished] = useState(false);
-  const [position, setPosition] = useState(INITIAL_POSITION);
-  const [remainingSeconds, setRemainingSeconds] = useState(
-    QUESTION_TIME_SECONDS,
-  );
-  const [transition, setTransition] =
-    useState<HostGameTransition>(idleTransition);
+  const [state, dispatch] = useReducer(reduceGameWizard, {
+    finished: false,
+    position: INITIAL_POSITION,
+    remainingSeconds: QUESTION_TIME_SECONDS,
+    transition: idleTransition(),
+  });
+  const { finished, position, remainingSeconds, transition } = state;
   const transitionLocked = useRef(false);
   const transitionTimers = useRef<number[]>([]);
   const clearTransitionTimers = useCallback(() => {
@@ -71,29 +68,32 @@ function useGameWizard(
     const restoredPosition = hasValidRestoredPosition
       ? restoredState.position
       : INITIAL_POSITION;
-    setFinished(restoredState?.finished ?? false);
-    setPosition(restoredPosition);
-    setRemainingSeconds(
-      gamePackage?.questions[restoredPosition.questionIndex]
+    const nextState: GameWizardState = {
+      finished: restoredState?.finished ?? false,
+      position: restoredPosition,
+      remainingSeconds: gamePackage?.questions[restoredPosition.questionIndex]
         ? QUESTION_TYPE_CONFIG[
             gamePackage.questions[restoredPosition.questionIndex].type
           ].seconds
         : QUESTION_TIME_SECONDS,
-    );
+      transition:
+        active && !restoredState?.finished
+          ? {
+              phase: 'enter',
+              direction: 'forward',
+              questionChanging: true,
+            }
+          : idleTransition(),
+    };
+    dispatch({ type: 'reset', state: nextState });
     transitionLocked.current = active;
     if (!active || restoredState?.finished) {
-      setTransition(idleTransition());
       return;
     }
-    setTransition({
-      phase: 'enter',
-      direction: 'forward',
-      questionChanging: true,
-    });
     schedule(
       () => {
         transitionLocked.current = false;
-        setTransition(idleTransition());
+        dispatch({ type: 'idle' });
       },
       prefersReducedMotion() ? 0 : ENTER_DURATION_MS,
     );
@@ -125,34 +125,29 @@ function useGameWizard(
         position.stage === 'tour' ||
         target.stage === 'musicBreak' ||
         position.stage === 'musicBreak';
-      setTransition({
-        phase: 'exit',
+      dispatch({
+        type: 'exit',
         direction,
         questionChanging,
       });
       schedule(
         () => {
-          if (!target) {
-            setFinished(true);
-          } else {
-            if (target.stage === 'timer') {
-              setRemainingSeconds(
-                QUESTION_TYPE_CONFIG[
-                  gamePackage.questions[target.questionIndex]!.type
-                ].seconds,
-              );
-            }
-            setPosition(target);
-          }
-          setTransition({
-            phase: 'enter',
+          dispatch({
+            type: 'enter',
             direction,
             questionChanging,
+            position: target,
+            remainingSeconds:
+              target?.stage === 'timer'
+                ? QUESTION_TYPE_CONFIG[
+                    gamePackage.questions[target.questionIndex]!.type
+                  ].seconds
+                : undefined,
           });
           schedule(
             () => {
               transitionLocked.current = false;
-              setTransition(idleTransition());
+              dispatch({ type: 'idle' });
             },
             prefersReducedMotion() ? 0 : ENTER_DURATION_MS,
           );
@@ -200,14 +195,14 @@ function useGameWizard(
 
   useEffect(() => {
     if (!timerVisible) {
-      setRemainingSeconds(questionTimeSeconds);
+      dispatch({ type: 'timer', remainingSeconds: questionTimeSeconds });
       stopGameAudio();
       return;
     }
 
     const startedAt = Date.now();
     let previousSeconds: number = questionTimeSeconds;
-    setRemainingSeconds(previousSeconds);
+    dispatch({ type: 'timer', remainingSeconds: previousSeconds });
     playMainSignal();
     const timer = window.setInterval(() => {
       const nextSeconds = getRemainingSeconds(
@@ -220,7 +215,7 @@ function useGameWizard(
       if (signal === 'preAlarm') playPreAlarm();
       else if (signal === 'main') playMainSignal();
       previousSeconds = nextSeconds;
-      setRemainingSeconds(nextSeconds);
+      dispatch({ type: 'timer', remainingSeconds: nextSeconds });
       if (nextSeconds === 0) window.clearInterval(timer);
     }, 100);
 
