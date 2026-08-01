@@ -2,7 +2,7 @@ import './styles.scss';
 import classNames from 'classnames';
 import type { CSSProperties, ReactNode } from 'react';
 import { useLocalization } from '../../localization';
-import { GameCustomElement } from '../../host/GameElements';
+import { GameCustomElement } from '../../game-presentation/GameElements';
 import {
   createCustomElement,
   getDraggedPosition,

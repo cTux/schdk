@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { useRef, useState, type KeyboardEvent } from 'react';
-import { FitTextObserver } from '../../../host/FitTextObserver';
-import { getGameLayoutStyle } from '../../../host/game-layout-style';
+import { FitTextObserver } from '../../../game-presentation/FitTextObserver';
+import { getGameLayoutStyle } from '../../../game-presentation/game-layout-style';
 import type { GameLayoutPosition } from '../../../options/types';
 import { RESIZE_HANDLES } from '../constants';
 import { getDraggedPosition, getResizedPosition } from '../utils/geometry';

@@ -1,7 +1,7 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_GAME_LAYOUT } from '../../../options/types';
-import { GameLayoutItem } from '../../../host/GameLayoutItem';
+import { GameLayoutItem } from '../../../game-presentation/GameLayoutItem';
 import { VisualLayoutItem } from '../VisualLayoutItem';
 
 describe('game layout rendering contract', () => {

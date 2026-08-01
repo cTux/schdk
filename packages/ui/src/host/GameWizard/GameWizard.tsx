@@ -13,9 +13,9 @@ import {
   GameQuestionParts,
   GameQuestionIntro,
   GameTimer,
-} from '../GameElements';
+} from '../../game-presentation/GameElements';
 import { GameMusicBreak } from '../GameMusicBreak';
-import { GameLayoutItem } from '../GameLayoutItem';
+import { GameLayoutItem } from '../../game-presentation/GameLayoutItem';
 import { GameTourIntro } from '../GameTourIntro';
 import { stageMotionClass } from './utils/stage-motion';
 import { type GameWizardProps } from './types/game-wizard-props';

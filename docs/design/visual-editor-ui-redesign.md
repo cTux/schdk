@@ -314,8 +314,8 @@ Expected implementation touch points:
 - `packages/ui/src/styles/{shell,editor,host}.scss`
 - `packages/ui/src/options/types.ts`
 - `packages/ui/src/visual-editor/*`
-- `packages/ui/src/host/GameElements.tsx`
-- `packages/ui/src/host/GameWizard.tsx`
+- `packages/ui/src/game-presentation/*`
+- `packages/ui/src/host/GameWizard/*`
 - `packages/web/src/options-storage.ts`
 - focused tests beside changed behavior
 

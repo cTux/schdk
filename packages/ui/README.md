@@ -4,6 +4,9 @@
 visual rules. Applications own state, persistence, routing, and platform
 integration.
 
+Shared gameplay and visual-editor rendering primitives live under
+`src/game-presentation`; neither feature imports implementation from the other.
+
 Read only the areas touched by the task:
 
 - [Component structure](../../docs/rules/project-structure.md): directories,

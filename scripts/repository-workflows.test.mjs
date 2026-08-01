@@ -172,6 +172,27 @@ test('workspace source modules have no relative import cycles', async () => {
   );
 });
 
+test('UI feature areas use neutral game presentation ownership', async () => {
+  const visualEditorFiles = await listFiles(
+    new URL('packages/ui/src/visual-editor/', repositoryRoot),
+  );
+  const forbiddenImports = [];
+
+  for (const file of visualEditorFiles) {
+    if (
+      !sourceExtensions.has(file.pathname.slice(file.pathname.lastIndexOf('.')))
+    ) {
+      continue;
+    }
+    const source = await readFile(file, 'utf8');
+    if (/from\s+["'][^"']*host\//u.test(source)) {
+      forbiddenImports.push(file.pathname);
+    }
+  }
+
+  assert.deepEqual(forbiddenImports, []);
+});
+
 test('UI components follow the directory and class composition contracts', async () => {
   const uiSource = new URL('packages/ui/src/', repositoryRoot);
   const files = await listFiles(uiSource);

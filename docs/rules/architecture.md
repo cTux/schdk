@@ -9,7 +9,8 @@
 - `@schdk/ai` owns provider setup, localized generation prompts, structured
   response validation, and conversion to the canonical game-question type.
 - `@schdk/ui` owns components, composed views, styles, design tokens, UI
-  assets, shared question-database presentation, Ukrainian/English application
+  assets, neutral game-presentation primitives shared by gameplay and the visual
+  editor, shared question-database presentation, Ukrainian/English application
   copy and locale context, and UI rules.
   Its detailed rules live in
   [`packages/ui/README.md`](../../packages/ui/README.md).
@@ -58,6 +59,9 @@
 - Keep package-open actions, recent-package rows, and their styles in the
   neutral `@schdk/ui` game-packages domain; editor and host views consume that
   domain without importing from each other.
+- Keep game elements, fitted-text measurement, and persisted layout rendering
+  in the neutral `@schdk/ui` game-presentation domain; host and visual-editor
+  features consume it without importing from each other.
 - The web application composes exported `@schdk/ui` controls and views; it
   does not render native interactive JSX or define app-local visual controls.
 - `@schdk/ui` exports shell page views and their styles as leaf entry points;
