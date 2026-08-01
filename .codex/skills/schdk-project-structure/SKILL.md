@@ -14,6 +14,8 @@ description: Enforce SCHDK package, source, component, and export structure. Use
    readable-condition rules only to new or touched structural scope. Keep
    private types with their component and do not create pass-through entry
    points or a `types.ts` that only re-exports another component's type.
+   Keep web editor modules grouped by opening, persistence, question editing,
+   and session workflow; leave cross-workflow composition in `App.tsx`.
 4. For UI components, also read `packages/ui/README.md` and verify Storybook
    discovery when exports or props change.
    Keep cross-area UI features under a neutral subject owner instead of one

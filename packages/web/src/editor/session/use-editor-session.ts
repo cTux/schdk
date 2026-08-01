@@ -140,4 +140,11 @@ function useEditorSession(untitledTitle: string) {
   };
 }
 
-export { createEditorSessionState, editorSessionReducer, useEditorSession };
+type EditorSession = ReturnType<typeof useEditorSession>;
+
+export {
+  createEditorSessionState,
+  editorSessionReducer,
+  type EditorSession,
+  useEditorSession,
+};

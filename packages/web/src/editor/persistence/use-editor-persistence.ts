@@ -8,7 +8,7 @@ import {
   createGamePackageFilename,
   type DrivePackageStorage,
 } from '@schdk/google-drive';
-import { showEditorToast, type EditorSaveStatus } from '@schdk/ui/editor';
+import { showEditorToast } from '@schdk/ui/editor';
 import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
 import {
   useCallback,
@@ -18,6 +18,7 @@ import {
   type MutableRefObject,
   type SetStateAction,
 } from 'react';
+import type { EditorSession } from '../session/use-editor-session';
 import {
   saveStatusAfterWrite,
   scheduleAutosave,
@@ -34,24 +35,15 @@ interface EditorPersistenceOptions {
   desktopSessionReady: boolean;
   drive?: DrivePackageStorage;
   driveActive: boolean;
-  driveFileId: string | null;
-  driveModifiedTime: string | null;
-  fileName: string | null;
-  gamePackage: GamePackage;
-  hasPackage: boolean;
   locale: AppLocale;
   manageDocumentTitle: boolean;
   saveQueue: MutableRefObject<Promise<void>>;
-  saveStatus: EditorSaveStatus;
+  session: EditorSession;
   sessionScope: string;
-  selectedIndex: number;
   currentPackage: MutableRefObject<GamePackage>;
   onDriveFailure?(): void;
   resolveDriveConflict(gamePackage: GamePackage): Promise<boolean>;
-  setFileName: Dispatch<SetStateAction<string | null>>;
-  setDriveModifiedTime: Dispatch<SetStateAction<string | null>>;
   setMessage: Dispatch<SetStateAction<string>>;
-  setSaveStatus: Dispatch<SetStateAction<EditorSaveStatus>>;
 }
 
 export function useEditorPersistence({
@@ -59,25 +51,28 @@ export function useEditorPersistence({
   desktopSessionReady,
   drive,
   driveActive,
-  driveFileId,
-  driveModifiedTime,
-  fileName,
-  gamePackage,
-  hasPackage,
   locale,
   manageDocumentTitle,
   saveQueue,
-  saveStatus,
+  session,
   sessionScope,
-  selectedIndex,
   currentPackage,
   onDriveFailure,
   resolveDriveConflict,
-  setFileName,
-  setDriveModifiedTime,
   setMessage,
-  setSaveStatus,
 }: EditorPersistenceOptions) {
+  const {
+    driveFileId,
+    driveModifiedTime,
+    fileName,
+    gamePackage,
+    hasPackage,
+    saveStatus,
+    selectedIndex,
+    setDriveModifiedTime,
+    setFileName,
+    setSaveStatus,
+  } = session;
   const previousDriveActive = useRef(driveActive);
   const saveCurrentPackage = useCallback(async () => {
     if (!drive || !driveFileId || !driveModifiedTime || !fileName) {

@@ -13,8 +13,8 @@ import {
 import { showEditorToast, type EditorSaveStatus } from '@schdk/ui/editor';
 import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
 import type { Dispatch, SetStateAction } from 'react';
-import { replaceBrowserPackageDeepLink } from './browser-deep-link';
-import { usePackageOpeningActions } from './use-package-opening-actions';
+import { replaceBrowserPackageDeepLink } from './opening/browser-deep-link';
+import { usePackageOpeningActions } from './opening/use-package-opening-actions';
 
 interface PackageActionsOptions {
   confirm(message: string): Promise<boolean>;

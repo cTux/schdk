@@ -16,7 +16,7 @@ import { replaceBrowserPackageDeepLink } from './browser-deep-link';
 import {
   saveDesktopEditorSession,
   type DesktopEditorSession,
-} from './desktop-session';
+} from '../persistence/desktop-session';
 
 interface EditorOpeningOptions {
   copy: LocalizationCopy;

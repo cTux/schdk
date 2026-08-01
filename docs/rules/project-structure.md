@@ -25,6 +25,10 @@ directions in [architecture.md](architecture.md).
   such as `hooks`, `utils`, `types`, `context`, or `constants`.
 - Preserve a more specific established structure after role grouping; do not
   add wrapper entry points inside private role directories.
+- In `packages/web/src/editor`, keep opening, persistence, question editing,
+  and editor-session state in their matching workflow directories. Keep
+  `App.tsx` as the composition root and cross-workflow package actions beside
+  it.
 
 ## Cohesion
 
