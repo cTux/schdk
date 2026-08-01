@@ -27,8 +27,11 @@ directions in [architecture.md](architecture.md).
   add wrapper entry points inside private role directories.
 - In `packages/web/src/editor`, keep opening, persistence, question editing,
   and editor-session state in their matching workflow directories. Keep
-  `App.tsx` as the composition root and cross-workflow package actions beside
-  it.
+  `App.tsx` as the composition root and editor-only cross-workflow package
+  actions beside it.
+- Keep recent-package listing, loading, downloading, and deletion shared by the
+  editor and host under `packages/web/src/hooks/game-packages`; keep their
+  browser file helpers under `packages/web/src/utils/game-packages`.
 
 ## Cohesion
 

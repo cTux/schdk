@@ -5,12 +5,12 @@ import { EditorView } from '@schdk/ui/editor';
 import { useLocalization } from '@schdk/ui/localization';
 import { DEFAULT_EDITOR_TEXT_OPTIONS } from '@schdk/ui/options';
 import { useCallback, useRef, useState } from 'react';
+import { useRecentGamePackages } from '../hooks/game-packages/use-recent-game-packages';
 import {
   getDeepLinkedPackageName,
   getDeepLinkedQuestionIndex,
 } from './opening/deep-link';
 import { useEditorOpening } from './opening/use-editor-opening';
-import { useEditorRecents } from './opening/use-editor-recents';
 import { loadDesktopEditorSession } from './persistence/desktop-session';
 import { useDriveConflictResolution } from './persistence/use-drive-conflict-resolution';
 import { useEditorPersistence } from './persistence/use-editor-persistence';
@@ -78,7 +78,7 @@ function App({
   );
 
   const { recentPackages, recentPackagesLoading, refreshRecentPackages } =
-    useEditorRecents({ drive, onDriveFailure });
+    useRecentGamePackages(drive, onDriveFailure);
   useEditorOpening({
     copy,
     driveActive,

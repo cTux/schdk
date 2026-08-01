@@ -16,6 +16,8 @@ description: Enforce SCHDK package, source, component, and export structure. Use
    points or a `types.ts` that only re-exports another component's type.
    Keep web editor modules grouped by opening, persistence, question editing,
    and session workflow; leave cross-workflow composition in `App.tsx`.
+   Keep recent-package operations shared by editor and host in the neutral web
+   game-packages subject area.
 4. For UI components, also read `packages/ui/README.md` and verify Storybook
    discovery when exports or props change.
    Keep cross-area UI features under a neutral subject owner instead of one

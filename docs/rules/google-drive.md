@@ -19,8 +19,9 @@
 - Store the current account's rebuildable question index in
   `question-database-v1.json` in `appDataFolder`. Derive it only from parsed
   app-marked `.schdk` packages, compare package IDs and modification times
-  before downloading media, abort refresh persistence when the connected
-  account changes, and never treat the index as the source of truth.
+  before downloading media, load changed package bodies with bounded
+  concurrency, abort refresh persistence when the connected account changes,
+  and never treat the index as the source of truth.
 - Store app-created `.schdk` files in a visible `SCHDK` Drive folder. Mark the
   folder and packages with private app properties, and expose package identity
   to browser deep links and sessions through validated `drive:<fileId>`
