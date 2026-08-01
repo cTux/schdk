@@ -4,10 +4,10 @@ import { TOKEN_ENDPOINT } from './token-endpoint.js';
 
 class OAuthTokenError extends GoogleDriveAuthorizationError {
   constructor(
-    readonly code: string,
+    readonly oauthCode: string,
     description?: string,
   ) {
-    super([code, description].filter(Boolean).join(': '));
+    super([oauthCode, description].filter(Boolean).join(': '));
   }
 }
 
