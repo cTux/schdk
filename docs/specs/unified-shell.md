@@ -145,7 +145,8 @@ package authoring, hosting, settings, and account state.
   surface, including text handouts.
 - **SHL-26:** A localized icon button beside the sidebar brand toggles the
   navigation between its full width and a compact 72-pixel width that keeps
-  only navigation icons visible. Narrow layouts remain compact automatically.
+  only navigation icons visible. The selection persists locally across reloads
+  in web and desktop. Narrow layouts remain compact automatically.
 
 ## Invariants
 
@@ -238,5 +239,6 @@ package authoring, hosting, settings, and account state.
 18. Select each application font, confirm shell, editor, host, gameplay, and
     text handouts update together, then reload and observe the same selection.
 19. At normal width, collapse and expand the sidebar with pointer and keyboard;
-    confirm the compact state keeps only navigation icons visible. At narrow
-    width, confirm the sidebar remains compact without the toggle.
+    confirm the compact state keeps only navigation icons visible, reload, and
+    confirm the selection is restored. At narrow width, confirm the sidebar
+    remains compact without the toggle.

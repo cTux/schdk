@@ -15,10 +15,22 @@ import { getShellContent } from '../shellItems';
 import { type ShellNavigationProps } from './types/shell-navigation-props';
 import { type ShellAccount } from './types/shell-account';
 
-function ShellNavigation({ preloading, view, onSelect }: ShellNavigationProps) {
-  const [collapsed, setCollapsed] = useState(false);
+function ShellNavigation({
+  initialCollapsed = false,
+  preloading,
+  view,
+  onCollapsedChange,
+  onSelect,
+}: ShellNavigationProps) {
+  const [collapsed, setCollapsed] = useState(initialCollapsed);
   const { copy } = useLocalization();
   const content = getShellContent(copy);
+
+  function toggleCollapsed() {
+    const nextCollapsed = !collapsed;
+    setCollapsed(nextCollapsed);
+    onCollapsedChange?.(nextCollapsed);
+  }
 
   return (
     <aside
@@ -46,7 +58,7 @@ function ShellNavigation({ preloading, view, onSelect }: ShellNavigationProps) {
           icon={collapsed ? faAnglesRight : faAnglesLeft}
           label={collapsed ? content.expandLabel : content.collapseLabel}
           aria-expanded={!collapsed}
-          onClick={() => setCollapsed((value) => !value)}
+          onClick={toggleCollapsed}
         />
       </div>
 

@@ -14,6 +14,8 @@
   selected, then retain the loaded hook and page state for the shell session.
   Do not preload unrelated collections immediately after authorization.
 - Preserve keyboard-accessible navigation in the shared renderer.
+- Persist the sidebar's expanded or collapsed state in browser storage across
+  reloads in web and desktop.
 - List the question database, visual editor, artificial intelligence, editor,
   and host pages after Getting started in the fixed sidebar without a category
   heading, with the current account's question database first. Keep Options at

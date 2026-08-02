@@ -1,6 +1,7 @@
 # Shell UI
 
 - Keep the sidebar fixed while application content scrolls.
+- Keep its expanded or collapsed state across reloads in web and desktop.
 - Keep `Getting started` above the primary tool list as the first shell page. Its
   tool cards follow the same chronological order as the sidebar: from content
   preparation through package editing to hosting.
