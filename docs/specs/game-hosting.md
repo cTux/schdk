@@ -15,10 +15,11 @@ content hidden until the correct stage.
 - **HST-2:** Before start, the app shows only title, filename, aggregate tour,
   question, and handout counts, plus start and back actions.
 - **HST-3:** Standard questions advance through intro, optional handout,
-  question, 60-second timer, optional answer comment, and answer. Text
-  handouts render with a monospace font.
+  question, 60-second timer, a stage that displays the timer at zero, optional
+  answer comment, and answer. Text handouts render with a monospace font.
 - **HST-4:** Blitz questions reveal two 30-second or three 20-second parts
-  cumulatively, restarting the timer for each part.
+  cumulatively, displaying the timer at zero before advancing to each next
+  part.
 - **HST-5:** Timer start, ten-seconds-remaining, and expiry signals use the
   persisted signal volume.
 - **HST-6:** Questions 12 and 24 lead to a music-break slide when matching audio

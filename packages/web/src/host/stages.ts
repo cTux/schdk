@@ -6,6 +6,7 @@ export const STAGES: HostQuestionStage[] = [
   'handout',
   'question',
   'timer',
+  'timerReset',
   'answerComment',
   'answer',
   'musicBreak',

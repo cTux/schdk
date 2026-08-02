@@ -7,6 +7,7 @@ type HostQuestionStage =
   | 'handout'
   | 'question'
   | 'timer'
+  | 'timerReset'
   | 'answerComment'
   | 'answer'
   | 'musicBreak';

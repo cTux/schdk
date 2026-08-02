@@ -71,11 +71,14 @@ function useGameWizard(
     const nextState: GameWizardState = {
       finished: restoredState?.finished ?? false,
       position: restoredPosition,
-      remainingSeconds: gamePackage?.questions[restoredPosition.questionIndex]
-        ? QUESTION_TYPE_CONFIG[
-            gamePackage.questions[restoredPosition.questionIndex].type
-          ].seconds
-        : QUESTION_TIME_SECONDS,
+      remainingSeconds:
+        restoredPosition.stage === 'timerReset'
+          ? 0
+          : gamePackage?.questions[restoredPosition.questionIndex]
+            ? QUESTION_TYPE_CONFIG[
+                gamePackage.questions[restoredPosition.questionIndex].type
+              ].seconds
+            : QUESTION_TIME_SECONDS,
       transition:
         active && !restoredState?.finished
           ? {
@@ -142,7 +145,9 @@ function useGameWizard(
                 ? QUESTION_TYPE_CONFIG[
                     gamePackage.questions[target.questionIndex]!.type
                   ].seconds
-                : undefined,
+                : target?.stage === 'timerReset'
+                  ? 0
+                  : undefined,
           });
           schedule(
             () => {
@@ -191,11 +196,15 @@ function useGameWizard(
       question ? getVisibleQuestionStages(question, position.stage) : ['tour'],
     [position.stage, question],
   );
-  const timerVisible = active && !finished && visibleStages.includes('timer');
+  const timerRunning = active && !finished && position.stage === 'timer';
 
   useEffect(() => {
-    if (!timerVisible) {
-      dispatch({ type: 'timer', remainingSeconds: questionTimeSeconds });
+    if (!timerRunning) {
+      dispatch({
+        type: 'timer',
+        remainingSeconds:
+          position.stage === 'timerReset' ? 0 : questionTimeSeconds,
+      });
       stopGameAudio();
       return;
     }
@@ -226,8 +235,9 @@ function useGameWizard(
   }, [
     position.questionIndex,
     position.questionPartIndex,
+    position.stage,
     questionTimeSeconds,
-    timerVisible,
+    timerRunning,
   ]);
 
   return {

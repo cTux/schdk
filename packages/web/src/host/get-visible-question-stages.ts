@@ -14,5 +14,8 @@ export function getVisibleQuestionStages(
     ...(question.answerComment?.trim() ? (['answerComment'] as const) : []),
     'answer',
   ];
+  if (stage === 'timerReset') {
+    return stages.slice(0, stages.indexOf('timer') + 1);
+  }
   return stages.slice(0, stages.indexOf(stage) + 1);
 }
