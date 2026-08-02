@@ -115,7 +115,8 @@ package authoring, hosting, settings, and account state.
 - **SHL-20:** After Google authorization, Drive-backed question packages,
   personal and global AI question rules, and AI question packages begin
   loading before their pages open. The sidebar brand shows a localized
-  preloading indicator until those lists finish loading.
+  preloading indicator without shifting the brand or navigation until those
+  lists finish loading.
 - **SHL-21:** UI animations default on and add motion to shell page changes and
   interactive feedback. The first App settings tab exposes a persisted UI
   animations toggle that disables CSS animations and transitions across every
@@ -146,9 +147,10 @@ package authoring, hosting, settings, and account state.
 - **SHL-26:** A localized icon button beside the sidebar brand toggles the
   navigation between its full width and a compact 72-pixel width that keeps
   only navigation icons visible. The selection persists locally across reloads
-  in web and desktop. The icon stays centered in its compact square control,
-  which remains within the sidebar panel in both states, outside page content
-  and transition layers. Narrow layouts remain compact automatically.
+  in web and desktop. Every compact navigation icon and the toggle icon stay
+  centered in their controls. The toggle remains within the sidebar panel in
+  both states, outside page content and transition layers. Narrow layouts
+  remain compact automatically.
 
 ## Invariants
 
@@ -225,7 +227,7 @@ package authoring, hosting, settings, and account state.
     load the next batch from the bottom action.
 14. Connect Google without opening a SCHDK page and observe its Drive-backed
     lists begin loading. Confirm localized preloading indicators appear in the
-    sidebar brand until every list finishes, then navigate to
+    sidebar brand without shifting its controls until every list finishes, then navigate to
     each page and confirm its page chunk loads on first selection.
 15. Navigate between every shell page and observe its entrance motion. Disable
     UI animations in App settings, navigate through shell, editor, and host
@@ -241,8 +243,9 @@ package authoring, hosting, settings, and account state.
 18. Select each application font, confirm shell, editor, host, gameplay, and
     text handouts update together, then reload and observe the same selection.
 19. At normal width, collapse and expand the sidebar with pointer and keyboard;
-    confirm the compact state keeps only navigation icons visible and its
-    square toggle fully inside the sidebar, reload, and confirm the selection
-    is restored. Open the visual editor and navigate between pages to confirm
-    page content and transitions do not cover the toggle. At narrow width,
-    confirm the sidebar remains compact without the toggle.
+    confirm the compact state keeps every navigation icon centered and its
+    square toggle fully inside the sidebar with its icon centered, reload, and
+    confirm the selection is restored. Open the visual editor and navigate
+    between pages to confirm page content and transitions do not cover the
+    toggle. At narrow width, confirm the sidebar remains compact without the
+    toggle.
