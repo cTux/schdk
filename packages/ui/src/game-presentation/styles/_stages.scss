@@ -108,6 +108,11 @@
     line-height: 1;
   }
 
+  .game-timer.is-submission-time strong {
+    color: $danger;
+    text-shadow: 0 0 0.45em rgba($danger-rgb, 0.9);
+  }
+
   .game-answer-comment {
     --enter-x: -38px;
     --enter-y: 24px;

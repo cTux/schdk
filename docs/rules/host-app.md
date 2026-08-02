@@ -9,8 +9,10 @@
   fullscreen option is enabled. Keep a fixed full-viewport fallback when
   fullscreen is disabled, denied, or exited.
 - Advance standard questions through intro, optional handout, question,
-  60-second timer, a stage that shows the timer at zero, optional answer
-  comment, and answer. For blitz questions, show the first part with its timer,
+  a 60-second countdown shown from `01:00`, then a separate red-shadowed
+  10-second submission countdown, a stage that shows the timer at zero,
+  optional answer comment, and answer. For blitz questions, show the first part
+  with its timer,
   then reset the timer to zero before revealing each next part below the
   previous ones and restarting a 30- or 20-second timer. Keep revealed content
   visible until the next question.
