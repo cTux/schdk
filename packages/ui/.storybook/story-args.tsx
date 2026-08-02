@@ -175,6 +175,7 @@ function getValue(component: string, prop: string): unknown {
     editorOptions: DEFAULT_EDITOR_TEXT_OPTIONS,
     element: customElement,
     game: DEFAULT_GAME_OPTIONS,
+    font: 'comfortable',
     gameOptions: DEFAULT_GAME_OPTIONS,
     gamePackage,
     googleDriveAccount: 'storybook@example.com',

@@ -1,15 +1,10 @@
 @use 'tokens' as *;
+@use 'fonts';
 @use 'primitives';
 
 :root {
   color: $text;
   background: $background;
-  font-family:
-    Inter,
-    'Segoe UI',
-    system-ui,
-    -apple-system,
-    sans-serif;
   color-scheme: var(--schdk-color-scheme);
   font-synthesis: none;
 }

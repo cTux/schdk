@@ -22,8 +22,8 @@ without losing in-progress work.
 - **EDT-3:** Question type selection exposes one, two, or three question parts
   for standard, 2×30 blitz, or 3×20 blitz respectively.
 - **EDT-4:** Authors can add, replace, and remove text or validated image
-  handouts and the two between-tour audio files. Text handouts use a monospace
-  font while editing. The handout editor has no separate heading: its hatched
+  handouts and the two between-tour audio files. Text handouts use the selected
+  application font while editing. The handout editor has no separate heading: its hatched
   image action stays left of the text field, and both match the dimensions of
   the question and answer-comment fields. Invalid handouts and oversized audio
   selections never mutate package state. Oversized images are rejected before

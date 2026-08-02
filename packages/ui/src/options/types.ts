@@ -3,6 +3,7 @@ import { type AiModelOption } from './ai-model-option';
 import { type AiProviderOption } from './ai-provider-option';
 import { type AiOptions } from './ai-options';
 import { type AppTheme } from './app-theme';
+import { type AppFont } from './app-font';
 import { type SettingsGroup } from './settings-group';
 import { DEFAULT_EDITOR_TEXT_OPTIONS } from './default-editor-text-options';
 import {
@@ -33,6 +34,7 @@ export {
   type AiProviderOption,
   type AiOptions,
   type AppTheme,
+  type AppFont,
   SETTINGS_GROUPS,
   type SettingsGroup,
   GAME_LAYOUT_ELEMENT_IDS,

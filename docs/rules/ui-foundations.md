@@ -61,6 +61,9 @@
 - Preserve semantic elements, labels, `aria-*` state, visible focus, disabled
   states, native behavior, `prefers-reduced-motion`, and the persisted
   application UI-animation preference.
+- Apply the persisted application font to every shell, editor, host, and game
+  surface; feature content inherits it unless its meaning requires a distinct
+  typeface.
 - Use shared custom dialogs instead of browser alerts or confirms. Dialogs must
   dim the background, clearly state the action, and show explicit choices with
   the contrasting primary action focused by default.

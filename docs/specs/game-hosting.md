@@ -17,8 +17,8 @@ content hidden until the correct stage.
 - **HST-3:** Standard questions advance through intro, optional handout,
   question, a 60-second countdown shown from `01:00`, then a separate
   red-shadowed 10-second submission countdown, a stage that displays the timer
-  at zero, optional answer comment, and answer. Text handouts render with a
-  monospace font.
+  at zero, optional answer comment, and answer. Text handouts render with the
+  selected application font.
 - **HST-4:** Blitz questions reveal two 30-second or three 20-second parts
   cumulatively, displaying the timer at zero before advancing to each next
   part.

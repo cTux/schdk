@@ -20,7 +20,6 @@
 
   .game-handout-text p {
     margin: 0;
-    font-family: monospace;
     font-size: clamp(1.5rem, calc(8cqw * var(--game-fit-scale, 1)), 6rem);
     font-weight: 700;
     line-height: 1.2;

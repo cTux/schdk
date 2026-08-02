@@ -6,7 +6,7 @@ import { Page } from '../../shell/Page';
 import { AiOptionsPanel } from '../AiOptionsPanel';
 import { OptionSlider } from '../OptionSlider';
 import { OptionToggle } from '../OptionToggle';
-import { SETTINGS_GROUPS, type AppTheme } from '../types';
+import { SETTINGS_GROUPS, type AppFont, type AppTheme } from '../types';
 import { getGoogleDriveMessage } from './utils/google-drive-message';
 import type { OptionsPageProps } from './types';
 
@@ -18,6 +18,7 @@ export function OptionsPage({
   googleDriveState,
   hidden,
   settingsGroup,
+  font,
   theme,
   uiAnimations,
   onAiApiKeySave,
@@ -29,6 +30,7 @@ export function OptionsPage({
   onGoogleDriveConnect,
   onGoogleDriveDisconnect,
   onSettingsGroupChange,
+  onFontChange,
   onThemeChange,
   onUiAnimationsChange,
 }: OptionsPageProps) {
@@ -94,6 +96,20 @@ export function OptionsPage({
             <option value="system">{copy.settings.systemTheme}</option>
             <option value="light">{copy.settings.lightTheme}</option>
             <option value="dark">{copy.settings.darkTheme}</option>
+          </Dropdown>
+        </label>
+        <label className="option-select">
+          <span>
+            <strong>{copy.settings.fontLabel}</strong>
+          </span>
+          <Dropdown
+            value={font}
+            onChange={(event) => onFontChange(event.target.value as AppFont)}
+          >
+            <option value="comfortable">{copy.settings.comfortableFont}</option>
+            <option value="system">{copy.settings.systemFont}</option>
+            <option value="verdana">Verdana</option>
+            <option value="georgia">Georgia</option>
           </Dropdown>
         </label>
         <OptionToggle
