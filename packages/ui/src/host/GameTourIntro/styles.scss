@@ -17,10 +17,7 @@
   .has-custom-layout
   .game-layout-intro
   .question-intro.tour-intro {
-  font-size: min(
-    calc(14cqw * var(--game-font-scale) * var(--game-fit-scale, 1)),
-    16vh
-  );
+  font-size: min(calc(14cqw * var(--game-font-scale)), 16vh);
 }
 
 .tour-intro span {

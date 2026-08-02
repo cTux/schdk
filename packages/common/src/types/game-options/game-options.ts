@@ -9,4 +9,7 @@ export interface GameOptions {
   customElements: CustomGameElement[];
   backgroundImage: string | null;
   backgroundOpacity: number;
+  backgroundGradientFrom: string | null;
+  backgroundGradientTo: string;
+  backgroundGradientDirection: number;
 }

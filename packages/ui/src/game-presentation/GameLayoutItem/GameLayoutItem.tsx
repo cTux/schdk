@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import { FitTextObserver } from '../FitTextObserver';
 import { getGameLayoutStyle } from '../game-layout-style';
 import type { GameLayoutItemProps } from './types';
 
@@ -15,7 +14,6 @@ export function GameLayoutItem({ children, id, layout }: GameLayoutItemProps) {
       style={style}
     >
       {children}
-      <FitTextObserver enabled={position?.fitTextToHeight ?? false} />
     </div>
   );
 }

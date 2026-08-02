@@ -8,8 +8,19 @@ export interface GameLayoutPosition {
   width: number;
   height: number;
   fontScale: number;
-  fitTextToHeight: boolean;
   textColor: string;
+  textAlign: 'left' | 'center' | 'right' | 'justify';
+  textBold: boolean;
+  textItalic: boolean;
+  textUnderline: boolean;
+  lineHeight: number;
+  letterSpacing: number;
   textGrowDirection: GameTextGrowDirection;
   imagePosition: GameImagePosition;
+  backgroundColor: string | null;
+  backgroundGradientColor: string | null;
+  backgroundGradientDirection: number;
+  backgroundOpacity: number;
+  borderRadius: number;
+  contentOpacity: number;
 }

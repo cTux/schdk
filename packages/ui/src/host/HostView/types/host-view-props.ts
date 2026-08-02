@@ -7,6 +7,9 @@ import { type HostPackageDetails } from './host-package-details';
 export interface HostViewProps {
   backgroundImage: string | null;
   backgroundOpacity: number;
+  backgroundGradientFrom: string | null;
+  backgroundGradientTo: string;
+  backgroundGradientDirection: number;
   copy?: LocalizationCopy;
   customElements?: CustomGameElement[];
   finished: boolean;

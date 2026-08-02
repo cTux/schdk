@@ -8,4 +8,7 @@ export const DEFAULT_GAME_OPTIONS: GameOptions = {
   customElements: [],
   backgroundImage: null,
   backgroundOpacity: 1,
+  backgroundGradientFrom: null,
+  backgroundGradientTo: '#2b3048',
+  backgroundGradientDirection: 135,
 };

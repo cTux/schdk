@@ -28,6 +28,8 @@ description: Build, refactor, or review @schdk/ui components and styles. Use for
    gesture, keyboard, and image-input state in the React controller hook.
    Keep workspace, built-in-element, and custom-element toolbar modes in their
    private components behind grouped selection and action props.
+   Keep selected-element formatting in the document-editor-style top toolbar;
+   do not reintroduce text measurement or automatic fitting to layout bounds.
    Keep bounded visual-editor undo and redo history in the web controller;
    expose only availability and callbacks to the UI, bound retained serialized
    presentation size, and clear history across account changes.

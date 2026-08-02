@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import { FitTextObserver } from '../../../game-presentation/FitTextObserver';
 import { getGameLayoutStyle } from '../../../game-presentation/game-layout-style';
 import { RESIZE_HANDLES } from '../constants';
 import type { VisualLayoutItemProps } from './types';
@@ -7,7 +6,6 @@ import { useLayoutTransform } from './use-layout-transform';
 
 export function VisualLayoutItem({
   content,
-  fitWarningLabel,
   hiddenLabel,
   hiddenSuffix,
   dragInstruction,
@@ -70,12 +68,6 @@ export function VisualLayoutItem({
       onPointerCancel={transform.cancelDrag}
     >
       {content}
-      {selection.kind === 'built-in' && (
-        <FitTextObserver
-          enabled={position.fitTextToHeight}
-          warningLabel={fitWarningLabel}
-        />
-      )}
       {selected &&
         RESIZE_HANDLES.map((handle) => (
           <span

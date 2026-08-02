@@ -21,6 +21,9 @@ function App({
   autoFullscreen = true,
   backgroundImage = null,
   backgroundOpacity = 1,
+  backgroundGradientFrom = null,
+  backgroundGradientTo = '#2b3048',
+  backgroundGradientDirection = 135,
   customElements = [],
   layout = null,
   musicVolume = 0.05,
@@ -229,6 +232,9 @@ function App({
       <HostView
         backgroundImage={backgroundImage}
         backgroundOpacity={backgroundOpacity}
+        backgroundGradientFrom={backgroundGradientFrom}
+        backgroundGradientTo={backgroundGradientTo}
+        backgroundGradientDirection={backgroundGradientDirection}
         copy={copy}
         customElements={customElements}
         finished={gameActive && wizard.finished}

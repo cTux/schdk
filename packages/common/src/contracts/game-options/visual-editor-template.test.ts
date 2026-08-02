@@ -18,6 +18,9 @@ describe('visual editor template contract', () => {
       layout: DEFAULT_GAME_LAYOUT,
       backgroundImage: 'data:image/png;base64,AA==',
       backgroundOpacity: 0.4,
+      backgroundGradientFrom: '#101015',
+      backgroundGradientTo: '#303048',
+      backgroundGradientDirection: 45,
     };
     const unrelated = {
       autoFullscreen: false,

@@ -5,6 +5,9 @@ export interface AppProps {
   autoFullscreen?: boolean;
   backgroundImage?: string | null;
   backgroundOpacity?: number;
+  backgroundGradientFrom?: string | null;
+  backgroundGradientTo?: string;
+  backgroundGradientDirection?: number;
   customElements?: CustomGameElement[];
   layout?: GameLayout | null;
   musicVolume?: number;

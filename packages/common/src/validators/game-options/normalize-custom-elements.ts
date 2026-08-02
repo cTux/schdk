@@ -1,5 +1,6 @@
 import { MAX_CUSTOM_GAME_ELEMENTS } from '../../constants/game-options/max-custom-game-elements.js';
 import { MAX_CUSTOM_IMAGE_DATA_LENGTH } from '../../constants/game-options/max-custom-image-data-length.js';
+import { getDefaultCustomElementPosition } from '../../factories/game-options/get-default-custom-element-position.js';
 import { type CustomGameElement } from '../../types/game-options/custom-game-element.js';
 import {
   isGameLayoutElement,
@@ -26,18 +27,15 @@ function normalizeCustomElements(value: unknown): CustomGameElement[] | null {
     ) {
       return null;
     }
-    const normalizedPosition = {
-      ...(position as Record<string, unknown>),
-      hidden: (position as Record<string, unknown>).hidden ?? false,
-    };
-    if (!isGameLayoutElement(normalizedPosition)) return null;
-    ids.add(id);
     if (
       kind === 'text' &&
       typeof candidate.text === 'string' &&
       candidate.text.length >= 1 &&
       candidate.text.length <= 500
     ) {
+      const normalizedPosition = normalizePosition(position, kind);
+      if (!normalizedPosition) return null;
+      ids.add(id);
       normalized.push({
         id,
         kind,
@@ -48,6 +46,9 @@ function normalizeCustomElements(value: unknown): CustomGameElement[] | null {
     }
     const image = candidate.image ?? null;
     if (kind === 'image' && isBackgroundImage(image)) {
+      const normalizedPosition = normalizePosition(position, kind);
+      if (!normalizedPosition) return null;
+      ids.add(id);
       imageDataLength += image?.length ?? 0;
       if (imageDataLength > MAX_CUSTOM_IMAGE_DATA_LENGTH) return null;
       normalized.push({ id, kind, image, position: normalizedPosition });
@@ -56,6 +57,15 @@ function normalizeCustomElements(value: unknown): CustomGameElement[] | null {
     return null;
   }
   return normalized;
+}
+
+function normalizePosition(position: unknown, kind: CustomGameElement['kind']) {
+  const normalized = {
+    ...getDefaultCustomElementPosition(kind),
+    ...(position as Record<string, unknown>),
+  };
+  delete (normalized as Record<string, unknown>).fitTextToHeight;
+  return isGameLayoutElement(normalized) ? normalized : null;
 }
 
 function isBackgroundImage(value: unknown): value is string | null {

@@ -22,6 +22,9 @@
     height: var(--game-layout-height);
     overflow: hidden;
     align-items: stretch;
+    border-radius: var(--game-element-radius, 0);
+    background: var(--game-element-background, transparent);
+    opacity: var(--game-content-opacity, 1);
     transform: translate(-50%, -50%);
     container-type: inline-size;
   }
@@ -34,7 +37,13 @@
     justify-content: var(--game-grow-align);
     margin: 0;
     color: var(--game-text-color);
-    font-size: calc(8cqw * var(--game-font-scale) * var(--game-fit-scale, 1));
+    font-size: calc(8cqw * var(--game-font-scale));
+    font-style: var(--game-font-style);
+    font-weight: var(--game-font-weight);
+    letter-spacing: var(--game-letter-spacing);
+    line-height: var(--game-line-height);
+    text-align: var(--game-text-align);
+    text-decoration: var(--game-text-decoration);
     overflow-wrap: anywhere;
     white-space: pre-wrap;
   }
@@ -87,11 +96,7 @@
     align-items: center;
     justify-content: flex-end;
     border-radius: 12px;
-    background: linear-gradient(
-      to left,
-      rgba($surface-raised-rgb, 0.88),
-      rgba($surface-raised-rgb, 0)
-    );
+    background: transparent;
     padding: 10px 14px 10px 42px;
     color: rgba($text-rgb, 0.72);
     font-size: 0.82rem;
@@ -186,11 +191,7 @@
     max-height: min(36dvh, 380px);
     border: 0;
     border-radius: 12px;
-    background: linear-gradient(
-      to left,
-      rgba($surface-raised-rgb, 0.88),
-      rgba($surface-raised-rgb, 0)
-    );
+    background: transparent;
     object-fit: contain;
     object-position: right bottom;
     box-shadow: 0 24px 54px rgba($shadow-rgb, 0.58);

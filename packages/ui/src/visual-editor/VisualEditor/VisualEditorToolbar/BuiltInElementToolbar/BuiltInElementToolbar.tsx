@@ -7,7 +7,9 @@ import {
   ActionToolbar,
   ActionToolbarSeparator,
 } from '../../../../atoms/ActionToolbar';
-import { ImagePositionSettings, TextSettings } from '../../PositionSettings';
+import { ElementStyleSettings } from '../../ElementStyleSettings';
+import { ImagePositionSettings } from '../../ImagePositionSettings';
+import { TextSettings } from '../../PositionSettings';
 import type { ElementSelection } from '../../types';
 import { ElementVisibilityButton } from '../ElementVisibilityButton';
 
@@ -48,6 +50,13 @@ export function BuiltInElementToolbar({
           onUpdate={onUpdate}
         />
       )}
+      <ActionToolbarSeparator />
+      <ElementStyleSettings
+        copy={copy}
+        position={position}
+        selection={selection}
+        onUpdate={onUpdate}
+      />
       <ActionToolbarSeparator />
       <ElementVisibilityButton
         copy={copy}

@@ -1,7 +1,6 @@
 import classNames from 'classnames';
 import type { Handout } from '@schdk/common';
 import { LOCALIZATION_COPY, type LocalizationCopy } from '../../localization';
-import { FitTextObserver } from '../FitTextObserver';
 
 export function GameHandout({
   copy = LOCALIZATION_COPY.uk,
@@ -17,7 +16,6 @@ export function GameHandout({
     return (
       <div className={classNames(handoutClasses, 'game-handout-text')}>
         <p>{handout.text}</p>
-        <FitTextObserver enabled />
       </div>
     );
   }

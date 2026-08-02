@@ -131,6 +131,7 @@
   border: 1px solid $border-strong;
   border-radius: $radius-surface;
   background:
+    var(--game-surface-background-gradient),
     radial-gradient(circle at 50% 35%, $game-surface-glow 0, transparent 32rem),
     $game-surface;
   box-shadow: 0 22px 60px rgba($shadow-rgb, 0.26);

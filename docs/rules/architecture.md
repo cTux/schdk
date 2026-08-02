@@ -67,9 +67,9 @@
 - Keep recent-package listing, loading, downloading, and deletion behavior in
   the neutral `@schdk/web` game-packages controller; editor and host supply
   only their feature-specific validation, messages, and success effects.
-- Keep game elements, fitted-text measurement, and persisted layout rendering
-  in the neutral `@schdk/ui` game-presentation domain; host and visual-editor
-  features consume it without importing from each other.
+- Keep game elements and persisted layout rendering in the neutral `@schdk/ui`
+  game-presentation domain; host and visual-editor features consume it without
+  importing from each other.
 - Scope shared gameplay and visual-editor presentation styles under the neutral
   `.game-presentation` root; keep host-only behavior under `.host-app`.
 - The web application composes exported `@schdk/ui` controls and views; it

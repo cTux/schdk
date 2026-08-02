@@ -60,6 +60,9 @@ function serializeVisualEditorTemplate(
     customElements: options.customElements,
     backgroundImage: options.backgroundImage,
     backgroundOpacity: options.backgroundOpacity,
+    backgroundGradientFrom: options.backgroundGradientFrom,
+    backgroundGradientTo: options.backgroundGradientTo,
+    backgroundGradientDirection: options.backgroundGradientDirection,
   };
   return zipSync(
     {

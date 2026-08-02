@@ -1,6 +1,6 @@
 import './styles.scss';
 import classNames from 'classnames';
-import type { CSSProperties } from 'react';
+import { getGameSurfaceStyle } from '../../game-presentation/game-surface-style';
 import { StatusMessage } from '../../atoms/StatusMessage';
 import { GamePackageActions, RecentGamePackages } from '../../game-packages';
 import { LOCALIZATION_COPY } from '../../localization';
@@ -20,6 +20,9 @@ import { type HostPackageDetails } from './types/host-package-details';
 function HostView({
   backgroundImage,
   backgroundOpacity,
+  backgroundGradientFrom,
+  backgroundGradientTo,
+  backgroundGradientDirection,
   copy = LOCALIZATION_COPY.uk,
   customElements = [],
   finished,
@@ -58,14 +61,13 @@ function HostView({
     >
       <main
         id="schdk-host-app"
-        style={
-          {
-            '--game-surface-background-image': backgroundImage
-              ? `url(${JSON.stringify(backgroundImage)})`
-              : 'none',
-            '--game-surface-background-opacity': backgroundOpacity,
-          } as CSSProperties
-        }
+        style={getGameSurfaceStyle({
+          backgroundImage,
+          backgroundOpacity,
+          backgroundGradientFrom,
+          backgroundGradientTo,
+          backgroundGradientDirection,
+        })}
       >
         <RecentGamePackages
           hidden={packageDetails !== null || playing}

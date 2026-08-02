@@ -2,5 +2,11 @@ import type { GameOptions } from './game-options.js';
 
 export type GamePresentationOptions = Pick<
   GameOptions,
-  'layout' | 'customElements' | 'backgroundImage' | 'backgroundOpacity'
+  | 'layout'
+  | 'customElements'
+  | 'backgroundImage'
+  | 'backgroundOpacity'
+  | 'backgroundGradientFrom'
+  | 'backgroundGradientTo'
+  | 'backgroundGradientDirection'
 >;

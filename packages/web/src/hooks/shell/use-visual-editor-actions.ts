@@ -22,6 +22,9 @@ function getPresentation(game: GameOptions): GamePresentationOptions {
     customElements: game.customElements,
     backgroundImage: game.backgroundImage,
     backgroundOpacity: game.backgroundOpacity,
+    backgroundGradientFrom: game.backgroundGradientFrom,
+    backgroundGradientTo: game.backgroundGradientTo,
+    backgroundGradientDirection: game.backgroundGradientDirection,
   };
 }
 

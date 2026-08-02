@@ -15,15 +15,18 @@ to every hosted question.
   comment, alternative answer, answer, and controls elements are independently
   selectable, movable, resizable, configurable, and hideable.
 - **VIS-3:** Bounds persist as percentages and render identically in gameplay.
-- **VIS-4:** Text presentation supports color, scale, fitting, and growth
-  direction; image presentation supports position.
-- **VIS-5:** Canvas settings support an optional background image and opacity.
+- **VIS-4:** Text presentation supports horizontal and vertical alignment,
+  color, scale, bold, italic, underline, line height, and letter spacing; image
+  presentation supports position.
+- **VIS-5:** Canvas settings support an optional background image with opacity
+  and an optional two-color gradient with a configurable direction.
 - **VIS-6:** Authors can add editable text and image elements, reposition them,
   configure them, hide them, and render them during gameplay.
 - **VIS-7:** Resize handles keep the grabbed edge or corner under the pointer;
   selection borders do not move content.
-- **VIS-8:** Text fitting is shared with gameplay, never enlarges beyond the
-  configured size, and warns when content cannot fit at the readable minimum.
+- **VIS-8:** Text renders at its configured size without measuring or scaling
+  to fit element bounds; overflow is clipped identically in editor and
+  gameplay.
 - **VIS-9:** Revealed blitz parts share the single question element bounds.
 - **VIS-10:** Layout, background, and custom elements export to and import from
   versioned `.schdk-template` ZIP files.
@@ -41,6 +44,13 @@ to every hosted question.
   resize is one history entry, new edits clear redo history, and history never
   crosses connected Google accounts. History is bounded by both entry count and
   retained presentation size.
+- **VIS-16:** Element backgrounds are transparent by default and support an
+  optional solid color or directional two-color gradient, background opacity,
+  corner rounding, and whole-element opacity.
+- **VIS-17:** The selected-element top toolbar resembles a compact document
+  editor, with direct alignment, bold, italic, and underline buttons and
+  grouped typography, background, image-position, visibility, and removal
+  controls.
 
 ## Invariants
 
@@ -50,6 +60,8 @@ to every hosted question.
 - The game logo is visible by default in every question stage.
 - Application light/dark theme does not alter the visual-editor presentation
   palette.
+- New and legacy elements have no gradient background unless the author enables
+  one.
 
 ## Acceptance
 
@@ -59,8 +71,8 @@ to every hosted question.
    recover the same presentation.
 3. Hide an element and verify it stays selectable in the editor but absent in
    gameplay.
-4. Fit long standard and blitz text without overflow or growth above configured
-   size.
+4. Resize long standard and blitz text elements and confirm the configured font
+   size does not change while overflow remains clipped.
 5. Reject an oversized or duplicate-entry template without freezing the
    application.
 6. Edit a custom text element and confirm its multiline control matches other
@@ -71,3 +83,6 @@ to every hosted question.
    change with buttons and keyboard shortcuts. Make a new edit after undo and
    confirm redo is unavailable, then switch accounts and confirm history is
    cleared.
+9. Format text with alignment, bold, italic, underline, line height, and letter
+   spacing; configure solid and gradient element backgrounds and confirm the
+   hosted game matches the editor.
