@@ -21,7 +21,6 @@ describe('game layout rendering contract', () => {
         <VisualLayoutItem
           content="Content"
           dragInstruction="Move"
-          fitWarningLabel="Overflow"
           hiddenLabel="Hidden"
           hiddenSuffix=" hidden"
           label={id}
@@ -34,6 +33,20 @@ describe('game layout rendering contract', () => {
           pointerPosition={() => null}
         />,
       );
+      const growAlign =
+        position.textGrowDirection === 'up'
+          ? 'flex-end'
+          : position.textGrowDirection === 'center'
+            ? 'center'
+            : 'flex-start';
+      const itemsAlign =
+        position.textAlign === 'left'
+          ? 'flex-start'
+          : position.textAlign === 'right'
+            ? 'flex-end'
+            : position.textAlign === 'justify'
+              ? 'stretch'
+              : 'center';
       const styles = [
         `--game-layout-x:${position.x}%`,
         `--game-layout-y:${position.y}%`,
@@ -41,8 +54,18 @@ describe('game layout rendering contract', () => {
         `--game-layout-height:${position.height}%`,
         `--game-font-scale:${position.fontScale}`,
         `--game-text-color:${position.textColor}`,
-        `--game-grow-align:${position.textGrowDirection === 'up' ? 'flex-end' : 'flex-start'}`,
+        `--game-text-align:${position.textAlign}`,
+        `--game-text-items-align:${itemsAlign}`,
+        `--game-font-weight:${position.textBold ? 700 : 400}`,
+        `--game-font-style:${position.textItalic ? 'italic' : 'normal'}`,
+        `--game-text-decoration:${position.textUnderline ? 'underline' : 'none'}`,
+        `--game-line-height:${position.lineHeight}`,
+        `--game-letter-spacing:${position.letterSpacing}em`,
+        `--game-grow-align:${growAlign}`,
         `--game-image-position:${position.imagePosition}`,
+        '--game-element-background:transparent',
+        `--game-element-radius:${position.borderRadius}%`,
+        `--game-content-opacity:${position.contentOpacity}`,
       ];
 
       for (const style of styles) {

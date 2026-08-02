@@ -1,4 +1,4 @@
-import { ImagePositionSettings, TextSettings } from './PositionSettings';
+import { TextSettings } from './PositionSettings';
 import { type PositionSettingsProps } from './types';
 
-export { ImagePositionSettings, TextSettings, type PositionSettingsProps };
+export { TextSettings, type PositionSettingsProps };

@@ -81,7 +81,7 @@
       .game-layout-logo.has-position,
       .visual-layout-item
     )
-    > :not(.visual-layout-resize-edge, .game-fit-observer) {
+    > :not(.visual-layout-resize-edge) {
     position: relative;
     z-index: 1;
     inset: auto;
@@ -102,6 +102,9 @@
     height: 100%;
     object-fit: contain;
     object-position: var(--game-image-position);
+    border-radius: var(--game-element-radius);
+    background: var(--game-element-background);
+    opacity: var(--game-content-opacity);
   }
 
   :is(.has-custom-layout .game-layout-intro, .visual-layout-intro)
@@ -124,24 +127,34 @@
     display: flex;
     width: 100%;
     height: 100%;
+    align-items: var(--game-text-items-align);
     flex-direction: column;
     justify-content: var(--game-grow-align);
     color: var(--game-text-color);
+    border-radius: var(--game-element-radius);
+    background: var(--game-element-background);
+    font-style: var(--game-font-style);
+    font-weight: var(--game-font-weight);
+    letter-spacing: var(--game-letter-spacing);
+    line-height: var(--game-line-height);
+    opacity: var(--game-content-opacity);
+    text-align: var(--game-text-align);
+    text-decoration: var(--game-text-decoration);
   }
 
   :is(.has-custom-layout .game-layout-intro, .visual-layout-intro)
     .question-intro {
-    font-size: calc(14cqw * var(--game-font-scale) * var(--game-fit-scale, 1));
+    font-size: calc(14cqw * var(--game-font-scale));
   }
 
   :is(.has-custom-layout .game-layout-question, .visual-layout-question)
     .game-question {
-    padding: calc(4cqw * var(--game-fit-scale, 1));
-    font-size: calc(8cqw * var(--game-font-scale) * var(--game-fit-scale, 1));
+    padding: 4cqw;
+    font-size: calc(8cqw * var(--game-font-scale));
   }
 
   :is(.has-custom-layout .game-layout-timer, .visual-layout-timer) .game-timer {
-    font-size: calc(30cqw * var(--game-font-scale) * var(--game-fit-scale, 1));
+    font-size: calc(30cqw * var(--game-font-scale));
   }
 
   :is(.has-custom-layout .game-layout-timer, .visual-layout-timer)
@@ -149,6 +162,7 @@
     strong {
     color: var(--game-text-color);
     font-size: 1em;
+    font-weight: var(--game-font-weight);
   }
 
   :is(
@@ -156,8 +170,8 @@
       .visual-layout-answer-comment
     )
     .game-answer-comment {
-    padding: calc(4cqw * var(--game-fit-scale, 1));
-    font-size: calc(6cqw * var(--game-font-scale) * var(--game-fit-scale, 1));
+    padding: 4cqw;
+    font-size: calc(6cqw * var(--game-font-scale));
   }
 
   :is(
@@ -165,20 +179,21 @@
       .visual-layout-alternative-answer
     )
     .game-alternative-answer {
-    padding: calc(4cqw * var(--game-fit-scale, 1));
-    font-size: calc(6cqw * var(--game-font-scale) * var(--game-fit-scale, 1));
+    padding: 4cqw;
+    font-size: calc(6cqw * var(--game-font-scale));
   }
 
   :is(.has-custom-layout .game-layout-answer, .visual-layout-answer)
     .game-answer {
-    padding: calc(4cqw * var(--game-fit-scale, 1));
+    padding: 4cqw;
   }
 
   :is(.has-custom-layout .game-layout-answer, .visual-layout-answer)
     .game-answer
     strong {
     color: var(--game-text-color);
-    font-size: calc(13cqw * var(--game-font-scale) * var(--game-fit-scale, 1));
+    font-size: calc(13cqw * var(--game-font-scale));
+    font-weight: var(--game-font-weight);
   }
 
   :is(.has-custom-layout .game-layout-progress, .visual-layout-progress)
@@ -187,19 +202,36 @@
     height: 100%;
     padding: 2cqw 4cqw;
     color: var(--game-text-color);
-    font-size: calc(14cqw * var(--game-font-scale) * var(--game-fit-scale, 1));
+    border-radius: var(--game-element-radius);
+    background: var(--game-element-background);
+    font-style: var(--game-font-style);
+    font-weight: var(--game-font-weight);
+    letter-spacing: var(--game-letter-spacing);
+    line-height: var(--game-line-height);
+    opacity: var(--game-content-opacity);
+    text-align: var(--game-text-align);
+    text-decoration: var(--game-text-decoration);
+    font-size: calc(14cqw * var(--game-font-scale));
   }
 
   :is(.has-custom-layout .game-layout-controls, .visual-layout-controls)
     .game-controls {
     width: 100%;
     height: 100%;
+    border-radius: var(--game-element-radius);
+    background: var(--game-element-background);
+    opacity: var(--game-content-opacity);
   }
 
   :is(.has-custom-layout .game-layout-controls, .visual-layout-controls)
     .game-controls
     button {
     color: var(--game-text-color);
-    font-size: calc(5cqw * var(--game-font-scale) * var(--game-fit-scale, 1));
+    font-style: var(--game-font-style);
+    font-weight: var(--game-font-weight);
+    letter-spacing: var(--game-letter-spacing);
+    line-height: var(--game-line-height);
+    text-decoration: var(--game-text-decoration);
+    font-size: calc(5cqw * var(--game-font-scale));
   }
 }

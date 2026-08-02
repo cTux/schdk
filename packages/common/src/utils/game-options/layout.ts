@@ -6,6 +6,7 @@ export function layout(
   width: number,
   height: number,
   textColor = '#f1f3f6',
+  textAlign: GameLayoutPosition['textAlign'] = 'left',
 ): GameLayoutPosition {
   return {
     hidden: false,
@@ -14,9 +15,20 @@ export function layout(
     width,
     height,
     fontScale: 1,
-    fitTextToHeight: false,
     textColor,
+    textAlign,
+    textBold: false,
+    textItalic: false,
+    textUnderline: false,
+    lineHeight: 1.2,
+    letterSpacing: 0,
     textGrowDirection: 'down',
     imagePosition: 'right bottom',
+    backgroundColor: null,
+    backgroundGradientColor: null,
+    backgroundGradientDirection: 90,
+    backgroundOpacity: 1,
+    borderRadius: 0,
+    contentOpacity: 1,
   };
 }

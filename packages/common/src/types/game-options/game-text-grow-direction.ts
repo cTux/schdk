@@ -1,1 +1,1 @@
-export type GameTextGrowDirection = 'up' | 'down';
+export type GameTextGrowDirection = 'up' | 'center' | 'down';

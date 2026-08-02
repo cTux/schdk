@@ -1,5 +1,6 @@
 import {
   faCircleHalfStroke,
+  faFillDrip,
   faImage,
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
@@ -8,6 +9,7 @@ import {
   ActionToolbarButton,
   ActionToolbarPopover,
 } from '../../../../atoms/ActionToolbar';
+import { Checkbox } from '../../../../atoms/Checkbox';
 import { RangeInput } from '../../../../atoms/RangeInput';
 import type { LocalizationCopy } from '../../../../localization';
 import type { GamePresentationOptions } from '../../../../options/types';
@@ -63,6 +65,68 @@ export function WorkspaceToolbar({
             }
           />
           <output>{Math.round((1 - game.backgroundOpacity) * 100)}%</output>
+        </label>
+      </ActionToolbarPopover>
+      <ActionToolbarPopover
+        icon={faFillDrip}
+        label={copy.visualEditor.canvasGradient}
+      >
+        <h2>{copy.visualEditor.canvasGradient}</h2>
+        <label>
+          {copy.visualEditor.gradient}
+          <Checkbox
+            checked={game.backgroundGradientFrom !== null}
+            onChange={(event) =>
+              actions.onChange({
+                ...game,
+                backgroundGradientFrom: event.target.checked ? '#100f14' : null,
+              })
+            }
+          />
+        </label>
+        <label>
+          {copy.visualEditor.gradientStart}
+          <input
+            type="color"
+            disabled={!game.backgroundGradientFrom}
+            value={game.backgroundGradientFrom ?? '#100f14'}
+            onChange={(event) =>
+              actions.onChange({
+                ...game,
+                backgroundGradientFrom: event.target.value,
+              })
+            }
+          />
+        </label>
+        <label>
+          {copy.visualEditor.gradientColor}
+          <input
+            type="color"
+            disabled={!game.backgroundGradientFrom}
+            value={game.backgroundGradientTo}
+            onChange={(event) =>
+              actions.onChange({
+                ...game,
+                backgroundGradientTo: event.target.value,
+              })
+            }
+          />
+        </label>
+        <label>
+          {copy.visualEditor.gradientDirection}
+          <RangeInput
+            min="0"
+            max="359"
+            disabled={!game.backgroundGradientFrom}
+            value={game.backgroundGradientDirection}
+            onChange={(event) =>
+              actions.onChange({
+                ...game,
+                backgroundGradientDirection: Number(event.target.value),
+              })
+            }
+          />
+          <output>{game.backgroundGradientDirection}°</output>
         </label>
       </ActionToolbarPopover>
     </ActionToolbar>

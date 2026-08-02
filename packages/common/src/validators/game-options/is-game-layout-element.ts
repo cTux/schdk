@@ -20,15 +20,44 @@ function isGameLayoutElement(value: unknown): value is GameLayoutPosition {
     Number.isFinite(position.fontScale) &&
     position.fontScale >= 0.5 &&
     position.fontScale <= 2 &&
-    typeof position.fitTextToHeight === 'boolean' &&
-    typeof position.textColor === 'string' &&
-    /^#[\da-f]{6}$/i.test(position.textColor) &&
+    isColor(position.textColor) &&
+    (position.textAlign === 'left' ||
+      position.textAlign === 'center' ||
+      position.textAlign === 'right' ||
+      position.textAlign === 'justify') &&
+    typeof position.textBold === 'boolean' &&
+    typeof position.textItalic === 'boolean' &&
+    typeof position.textUnderline === 'boolean' &&
+    isNumberBetween(position.lineHeight, 0.8, 2) &&
+    isNumberBetween(position.letterSpacing, -0.1, 0.5) &&
     (position.textGrowDirection === 'up' ||
+      position.textGrowDirection === 'center' ||
       position.textGrowDirection === 'down') &&
     typeof position.imagePosition === 'string' &&
     GAME_IMAGE_POSITIONS.includes(
       position.imagePosition as (typeof GAME_IMAGE_POSITIONS)[number],
-    )
+    ) &&
+    (position.backgroundColor === null || isColor(position.backgroundColor)) &&
+    (position.backgroundGradientColor === null ||
+      isColor(position.backgroundGradientColor)) &&
+    Number.isInteger(position.backgroundGradientDirection) &&
+    isNumberBetween(position.backgroundGradientDirection, 0, 359) &&
+    isNumberBetween(position.backgroundOpacity, 0, 1) &&
+    isNumberBetween(position.borderRadius, 0, 50) &&
+    isNumberBetween(position.contentOpacity, 0, 1)
+  );
+}
+
+function isColor(value: unknown): value is string {
+  return typeof value === 'string' && /^#[\da-f]{6}$/i.test(value);
+}
+
+function isNumberBetween(value: unknown, minimum: number, maximum: number) {
+  return (
+    typeof value === 'number' &&
+    Number.isFinite(value) &&
+    value >= minimum &&
+    value <= maximum
   );
 }
 

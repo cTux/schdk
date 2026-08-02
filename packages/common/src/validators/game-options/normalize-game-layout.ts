@@ -30,8 +30,11 @@ function normalizeGameLayout(value: unknown): GameLayout | null {
       ...DEFAULT_GAME_LAYOUT[id],
       ...(position as Partial<(typeof DEFAULT_GAME_LAYOUT)[typeof id]>),
     };
-    delete (candidate as Record<string, unknown>).backgroundImage;
-    delete (candidate as Record<string, unknown>).backgroundOpacity;
+    if ('backgroundImage' in candidate) {
+      delete (candidate as Record<string, unknown>).backgroundImage;
+      candidate.backgroundOpacity = DEFAULT_GAME_LAYOUT[id].backgroundOpacity;
+    }
+    delete (candidate as Record<string, unknown>).fitTextToHeight;
     if (!isGameLayoutElement(candidate)) return null;
     normalized[id] = candidate;
   }

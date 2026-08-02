@@ -172,6 +172,13 @@ export function App() {
                       autoFullscreen={gameOptions.autoFullscreen}
                       backgroundImage={gameOptions.backgroundImage}
                       backgroundOpacity={gameOptions.backgroundOpacity}
+                      backgroundGradientFrom={
+                        gameOptions.backgroundGradientFrom
+                      }
+                      backgroundGradientTo={gameOptions.backgroundGradientTo}
+                      backgroundGradientDirection={
+                        gameOptions.backgroundGradientDirection
+                      }
                       customElements={gameOptions.customElements}
                       drive={googleDrive.bridge ?? undefined}
                       driveActive={connected}

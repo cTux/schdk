@@ -137,17 +137,17 @@
 
 .action-toolbar {
   display: flex;
+  max-width: 100%;
   align-items: center;
   gap: $space-1;
+  overflow-x: auto;
   border: 1px solid rgba($border-strong-rgb, 0.94);
-  border-radius: $radius-panel;
-  background:
-    linear-gradient(135deg, rgba($highlight-rgb, 0.07), transparent 45%),
-    rgba($surface-raised-rgb, 0.9);
+  border-radius: $radius-control;
+  background: $surface-raised;
   padding: 5px;
   color: $text;
-  box-shadow: $shadow-overlay;
-  backdrop-filter: blur(22px) saturate(140%);
+  box-shadow: 0 3px 12px rgba($shadow-rgb, 0.2);
+  scrollbar-width: thin;
 }
 
 .action-button:hover:not(:disabled),

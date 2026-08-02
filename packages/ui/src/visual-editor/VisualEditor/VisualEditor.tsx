@@ -1,6 +1,7 @@
 import './styles.scss';
 import classNames from 'classnames';
-import type { CSSProperties, ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import { getGameSurfaceStyle } from '../../game-presentation/game-surface-style';
 import { useLocalization } from '../../localization';
 import { GameCustomElement } from '../../game-presentation/GameElements';
 import {
@@ -71,7 +72,6 @@ function VisualEditor({
         key={selectionKey(selection)}
         content={content}
         dragInstruction={copy.visualEditor.dragInstruction}
-        fitWarningLabel={copy.visualEditor.fitWarning}
         hiddenLabel={copy.visualEditor.hidden}
         hiddenSuffix={copy.visualEditor.hiddenSuffix}
         label={label}
@@ -146,15 +146,10 @@ function VisualEditor({
             'is-selected': !editor.selected,
           })}
           tabIndex={0}
-          style={
-            {
-              transform: `translate(-50%, -50%) translate(${editor.pan.x}px, ${editor.pan.y}px) scale(${editor.zoom})`,
-              '--game-surface-background-image': game.backgroundImage
-                ? `url(${JSON.stringify(game.backgroundImage)})`
-                : 'none',
-              '--game-surface-background-opacity': game.backgroundOpacity,
-            } as CSSProperties
-          }
+          style={{
+            ...getGameSurfaceStyle(game),
+            transform: `translate(-50%, -50%) translate(${editor.pan.x}px, ${editor.pan.y}px) scale(${editor.zoom})`,
+          }}
           aria-label={copy.visualEditor.gameLayout}
           aria-current={editor.selected ? undefined : 'true'}
           role="region"

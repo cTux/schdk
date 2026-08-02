@@ -1,7 +1,6 @@
 import classNames from 'classnames';
 import { useLocalization } from '../../localization';
 import type { CustomGameElement } from '../../options/types';
-import { FitTextObserver } from '../FitTextObserver';
 import { getGameLayoutStyle } from '../game-layout-style';
 
 export function GameCustomElement({
@@ -31,9 +30,6 @@ export function GameCustomElement({
           {copy.shared.image}
         </span>
       ) : null}
-      {element.kind === 'text' && (
-        <FitTextObserver enabled={position.fitTextToHeight} />
-      )}
     </div>
   );
 }

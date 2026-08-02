@@ -24,9 +24,9 @@
   it when the connected account changes, and expose only availability and
   callbacks to `@schdk/ui`. Bound both entry count and retained serialized
   presentation size. Treat a completed pointer gesture as one change.
-- Pass only layout, custom elements, background image, and background opacity
-  through the visual-editor UI contract; preserve unrelated game options in
-  the web controller.
+- Pass only layout, custom elements, background image, background opacity, and
+  canvas-gradient settings through the visual-editor UI contract; preserve
+  unrelated game options in the web controller.
 - Keep `GameOptions` mutations in pure helpers; the React hook owns transient
   interaction state and delegates persisted model updates.
 - Let every built-in and custom element be marked hidden while remaining
@@ -47,12 +47,17 @@
   template import/export actions docked at the bottom. Support editable text
   and optional image elements, persist their bounds and presentation, and
   render them in gameplay.
-- Share measured text-height fitting between the visual editor and gameplay,
-  and never enlarge text beyond its configured size.
-- Warn when fitted text cannot fit at the readable minimum size.
+- Never measure or scale text to fit element bounds. Render the configured size
+  identically in the visual editor and gameplay and clip overflow at the fixed
+  bounds.
+- Keep element backgrounds transparent by default. Persist optional solid and
+  directional-gradient backgrounds with opacity and corner rounding.
+- Present selected-element formatting in a compact document-editor toolbar
+  with direct alignment, bold, italic, and underline controls plus grouped
+  typography and appearance settings.
 - Apply the question element's saved bounds to the complete stack of revealed
   blitz parts rather than positioning each part independently.
 - Import and export versioned `.schdk-template` ZIP archives containing
-  `template.json` with only visual layout, background, opacity, and custom
-  elements. Continue importing legacy plain JSON templates and preserve
-  unrelated game options such as sound volume.
+  `template.json` with only visual layout, image and gradient backgrounds,
+  opacity, and custom elements. Continue importing legacy plain JSON templates
+  and preserve unrelated game options such as sound volume.

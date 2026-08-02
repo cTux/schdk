@@ -11,7 +11,9 @@ import type {
   CustomGameElement,
   GameLayoutPosition,
 } from '../../../../options/types';
-import { ImagePositionSettings, TextSettings } from '../../PositionSettings';
+import { ElementStyleSettings } from '../../ElementStyleSettings';
+import { ImagePositionSettings } from '../../ImagePositionSettings';
+import { TextSettings } from '../../PositionSettings';
 import type { ElementSelection } from '../../types';
 import type { VisualEditorToolbarProps } from '../types';
 import { ElementVisibilityButton } from '../ElementVisibilityButton';
@@ -92,6 +94,13 @@ export function CustomElementToolbar({
           />
         </>
       )}
+      <ActionToolbarSeparator />
+      <ElementStyleSettings
+        copy={copy}
+        position={position}
+        selection={selection}
+        onUpdate={actions.updatePosition}
+      />
       <ActionToolbarSeparator />
       <ElementVisibilityButton
         copy={copy}

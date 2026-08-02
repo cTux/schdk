@@ -5,6 +5,9 @@ const render = (finished: boolean) =>
   HostView({
     backgroundImage: null,
     backgroundOpacity: 1,
+    backgroundGradientFrom: null,
+    backgroundGradientTo: '#2b3048',
+    backgroundGradientDirection: 135,
     finished,
     game: null,
     layout: null,
