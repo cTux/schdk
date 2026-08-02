@@ -61,10 +61,7 @@
   color: $text;
   box-shadow: $shadow-raised;
   backdrop-filter: blur(18px) saturate(135%);
-  font:
-    600 0.74rem/1.25 'Segoe UI',
-    system-ui,
-    sans-serif;
+  font: 600 0.74rem/1.25 var(--schdk-font-family);
   transform-origin: var(--transform-origin);
   transition:
     opacity $motion-fast ease,

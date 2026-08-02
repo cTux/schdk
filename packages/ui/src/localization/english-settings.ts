@@ -15,7 +15,7 @@ export const englishSettings: typeof ukrainianSettings = {
   lightTheme: 'Light',
   darkTheme: 'Dark',
   fontLabel: 'Font',
-  comfortableFont: 'Comfortable',
+  comfortableFont: 'Trebuchet MS',
   systemFont: 'System',
   uiAnimations: 'UI animations',
   uiAnimationsDescription: 'Animate page transitions and interface responses.',

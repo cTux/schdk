@@ -13,7 +13,7 @@ export const ukrainianSettings = {
   lightTheme: 'Світла',
   darkTheme: 'Темна',
   fontLabel: 'Шрифт',
-  comfortableFont: 'Комфортний',
+  comfortableFont: 'Trebuchet MS',
   systemFont: 'Системний',
   uiAnimations: 'Анімації UI',
   uiAnimationsDescription:

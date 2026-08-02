@@ -1,6 +1,10 @@
 :root {
-  --schdk-font-family: 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif;
+  --schdk-font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
 
+  font-family: var(--schdk-font-family);
+}
+
+body {
   font-family: var(--schdk-font-family);
 }
 
