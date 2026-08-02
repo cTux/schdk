@@ -55,6 +55,10 @@ button {
 .sidebar-collapse.ui-button {
   position: absolute;
   right: 10px;
+  width: $control-compact;
+  min-width: $control-compact;
+  min-height: $control-compact;
+  padding: 0;
   color: $muted;
 }
 
@@ -64,6 +68,7 @@ button {
 }
 
 .sidebar.collapsed .brand {
+  flex-direction: column;
   justify-content: center;
   padding-inline: 10px;
 }
@@ -73,7 +78,7 @@ button {
 }
 
 .sidebar.collapsed .sidebar-collapse.ui-button {
-  right: -20px;
+  position: static;
   border-color: $border;
   background: $sidebar;
 }
