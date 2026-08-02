@@ -140,13 +140,17 @@ package authoring, hosting, settings, and account state.
   status. If a chunk fails to load or render, the shell remains visible and
   offers a localized action that reloads the application instead of leaving an
   empty workspace.
+- **SHL-25:** The app defaults to a comfortable reading font and the first App
+  settings tab exposes persisted comfortable, system, Verdana, and Georgia
+  choices. The selected font applies to every shell, editor, host, and gameplay
+  surface, including text handouts.
 
 ## Invariants
 
 - Navigation stays keyboard accessible.
 - Browser and Electron runtimes use the same shell and user-facing behavior.
 - Standalone host and editor remain Ukrainian by default.
-- Invalid stored locale, theme, view, package reference, or option values fall
+- Invalid stored locale, theme, font, view, package reference, or option values fall
   back to validated defaults.
 - UI motion never delays host navigation while UI animations or operating-system
   motion are disabled.
@@ -229,3 +233,5 @@ package authoring, hosting, settings, and account state.
 17. Throttle a lazy page chunk and confirm its localized loading status is
     visible. Make the chunk fail and confirm the shell stays mounted with a
     localized reload action.
+18. Select each application font, confirm shell, editor, host, gameplay, and
+    text handouts update together, then reload and observe the same selection.

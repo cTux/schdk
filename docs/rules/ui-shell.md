@@ -28,6 +28,8 @@
 - Keep the native Ukrainian/English language control in the first `App`
   settings tab. Keep `WWW` as the second primary tab with its host/editor
   fieldsets and `Штучний інтелект` as the third primary tab.
+- Keep the application font control in the first `App` settings tab and apply
+  its persisted choice to shell, editor, host, gameplay, and text handouts.
 - Keep AI provider and model as separate dropdowns backed by the application
   catalog; changing the provider refreshes the available text models.
 - Keep the localized Google Drive connection and sync status in the first

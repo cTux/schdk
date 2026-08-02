@@ -1,0 +1,21 @@
+:root {
+  --schdk-font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+
+  font-family: var(--schdk-font-family);
+}
+
+body {
+  font-family: var(--schdk-font-family);
+}
+
+:root[data-font='system'] {
+  --schdk-font-family: system-ui, -apple-system, sans-serif;
+}
+
+:root[data-font='verdana'] {
+  --schdk-font-family: verdana, geneva, sans-serif;
+}
+
+:root[data-font='georgia'] {
+  --schdk-font-family: georgia, 'Times New Roman', serif;
+}

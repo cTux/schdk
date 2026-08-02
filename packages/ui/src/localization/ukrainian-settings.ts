@@ -12,6 +12,9 @@ export const ukrainianSettings = {
   systemTheme: 'Системна',
   lightTheme: 'Світла',
   darkTheme: 'Темна',
+  fontLabel: 'Шрифт',
+  comfortableFont: 'Trebuchet MS',
+  systemFont: 'Системний',
   uiAnimations: 'Анімації UI',
   uiAnimationsDescription:
     'Анімувати переходи між сторінками та реакції елементів інтерфейсу.',

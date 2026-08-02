@@ -9,9 +9,11 @@ import {
   loadShellLocale,
   loadShellTheme,
   loadUiAnimations,
+  loadAppFont,
   saveShellLocale,
   saveShellTheme,
   saveUiAnimations,
+  saveAppFont,
 } from '../../types/shell/shell-preferences';
 import { useAiQuestionTools } from '../../hooks/ai-questions/use-ai-question-tools';
 import { AppUpdateButton } from '../desktop/AppUpdateButton';
@@ -33,6 +35,7 @@ export function App() {
   const sessionScope = window.location.pathname;
   const [locale, setLocale] = useState(loadShellLocale);
   const [theme, setTheme] = useState(loadShellTheme);
+  const [font, setFont] = useState(loadAppFont);
   const [uiAnimations, setUiAnimations] = useState(loadUiAnimations);
   const copy = LOCALIZATION_COPY[locale];
   const navigation = useShellNavigation(sessionScope);
@@ -115,6 +118,11 @@ export function App() {
     saveShellTheme(theme);
     document.documentElement.dataset.theme = theme;
   }, [theme]);
+
+  useLayoutEffect(() => {
+    saveAppFont(font);
+    document.documentElement.dataset.font = font;
+  }, [font]);
 
   useLayoutEffect(() => {
     saveUiAnimations(uiAnimations);
@@ -225,6 +233,7 @@ export function App() {
                     : undefined,
                 googleDriveState: connection.state,
                 settingsGroup: settings.group,
+                font,
                 theme,
                 uiAnimations,
                 onAiApiKeySave: ai.saveApiKey,
@@ -235,6 +244,7 @@ export function App() {
                 onGoogleDriveConnect: () => void googleDrive.connect(),
                 onGoogleDriveDisconnect: () => void googleDrive.disconnect(),
                 onSettingsGroupChange: settings.showGroup,
+                onFontChange: setFont,
                 onThemeChange: setTheme,
                 onUiAnimationsChange: setUiAnimations,
               },

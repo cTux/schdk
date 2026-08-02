@@ -15,8 +15,7 @@
   dimensions respectively. Show no image filename, put remove below the image
   thumbnail or text field, and open a 100–400% zoomable, pannable full-size
   modal from the thumbnail.
-- Render text handouts in the editor with a monospace font so character
-  alignment stays stable.
+- Render text handouts in the editor with the selected application font.
 - Put Font Awesome copy, paste, and trailing clear actions beside the question
   heading. Render the clear action as a red danger button. Copy all question
   fields as JSON; confirm before parsing clipboard JSON and replacing the

@@ -1,5 +1,6 @@
 import type {
   AiOptions,
+  AppFont,
   AppTheme,
   EditorTextOptions,
   GameOptions,
@@ -15,6 +16,7 @@ export interface OptionsPageProps {
   googleDriveState: GoogleDriveState;
   hidden: boolean;
   settingsGroup: SettingsGroup;
+  font: AppFont;
   theme: AppTheme;
   uiAnimations: boolean;
   onAiApiKeySave(apiKey: string | null): Promise<void>;
@@ -26,6 +28,7 @@ export interface OptionsPageProps {
   onGoogleDriveConnect(): void;
   onGoogleDriveDisconnect(): void;
   onSettingsGroupChange(group: SettingsGroup): void;
+  onFontChange(font: AppFont): void;
   onThemeChange(theme: AppTheme): void;
   onUiAnimationsChange(enabled: boolean): void;
 }
