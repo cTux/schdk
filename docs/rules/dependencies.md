@@ -1,7 +1,9 @@
 # Workspace and dependencies
 
 - Use Node.js 24.x LTS and pnpm 11.x; the repository pins Node `24.18.0` and pnpm
-  `11.17.0`.
+  `11.18.0`.
+- Keep `package.json#packageManager` as the single pnpm version pin; GitHub
+  workflows let `pnpm/action-setup` read it instead of declaring another version.
 - Run workspace commands from the repository root unless a package-local
   command is explicitly required.
 - Keep packages under `packages/*`, use `workspace:*` for internal

@@ -14,7 +14,7 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@opencode-ai/models": "^0.0.26",
+    "@opencode-ai/models": "^0.0.31",
     "@schdk/ai": "workspace:*",
     "@schdk/common": "workspace:*",
     "@schdk/google-drive": "workspace:*",
