@@ -7,7 +7,7 @@
   text.
 - Request fullscreen on the host root when the enabled-by-default automatic
   fullscreen option is enabled. Keep a fixed full-viewport fallback when
-  fullscreen is disabled or denied.
+  fullscreen is disabled, denied, or exited.
 - Advance standard questions through intro, optional handout, question,
   60-second timer, a stage that shows the timer at zero, optional answer
   comment, and answer. For blitz questions, show the first part with its timer,

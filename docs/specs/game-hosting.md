@@ -29,7 +29,8 @@ content hidden until the correct stage.
 - **HST-8:** Navigation is locked during transitions, preserving cumulative
   visible stages.
 - **HST-9:** Automatic fullscreen is enabled by default. Denial or disabling
-  falls back to a fixed full-viewport presentation.
+  falls back to a fixed full-viewport presentation, including after fullscreen
+  is exited.
 - **HST-10:** `Alt+Q` exits an active game only after confirmation.
 - **HST-11:** Package identity and exact question stage persist continuously
   and restore from a validated Drive reference.
