@@ -16,7 +16,8 @@
 - Render configured between-tour audio on a dedicated music-break slide with
   native controls.
 - Render a dedicated static tour slide before questions 1, 13, and 25, with the
-  optional tour phrase smaller than the tour title.
+  optional tour phrase smaller than the tour title and fully visible inside its
+  layout bounds.
 - Give image and text handouts the answer gradient and a soft black shadow
   without a border. Align images bottom-right and center text.
 - Render text handouts with a monospace font so character alignment stays

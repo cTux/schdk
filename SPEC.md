@@ -227,3 +227,4 @@ B120|2026-07-31|The initial editor reducer adapters narrowed React setter callba
 B121|2026-07-31|The AI controller test fixture omitted two values required by the canonical five-point dictionary distribution|Use the complete shared distribution shape; package typechecking covers recurrence.
 B122|2026-07-31|Convenience barrels imported implementations that depended back on their owning module, leaving runtime initialization order cyclic|V52
 B123|2026-07-31|The sandboxed preload imported Node crypto for generation IDs and failed before exposing the renderer bridge|V18
+B124|2026-08-02|Tour phrase sizing depended on width alone, so wrapped phrases overflowed the fixed intro height|Keep tour title, phrase, and spacing bounded by viewport height as specified by `docs/specs/game-hosting.md`.

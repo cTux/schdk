@@ -38,7 +38,8 @@ content hidden until the correct stage.
 - **HST-13:** Every recent Drive package offers an explicit download that does
   not select or change the package.
 - **HST-14:** Before questions 1, 13, and 25, the host shows a dedicated static
-  slide with the tour number and its optional smaller phrase.
+  slide with the tour number and its optional smaller phrase fully visible
+  inside the configured intro bounds.
 
 ## Invariants
 
