@@ -252,6 +252,7 @@ function useGameWizard(
     position.questionIndex,
     position.questionPartIndex,
     position.stage,
+    questionTimeSeconds,
     submissionTimeSeconds,
     timerDurationSeconds,
     timerRunning,
