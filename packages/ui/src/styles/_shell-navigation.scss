@@ -1,9 +1,14 @@
 @use './tokens' as *;
 
 .sidebar-preloading {
+  position: absolute;
+  top: 10px;
+  right: 10px;
   display: inline-flex;
-  margin-left: auto;
   color: $accent-cool;
+}
+
+.sidebar-preloading svg {
   animation: sidebar-preloading-spin 0.8s linear infinite;
 }
 
