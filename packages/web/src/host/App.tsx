@@ -72,12 +72,12 @@ function App({
 
   useEffect(() => {
     const session = initialSession.current;
-    if (!session) return;
+    if (!session || !driveActive || !drive) return;
     initialSession.current = null;
     void (async () => {
       try {
         const driveFileId = parseDrivePackageReference(session.packageId);
-        if (!driveFileId || !drive) {
+        if (!driveFileId) {
           throw new Error('Saved Drive package is unavailable');
         }
         const opened = await drive.loadGamePackage(driveFileId);
@@ -102,7 +102,15 @@ function App({
         setSessionReady(true);
       }
     })();
-  }, [acceptPackage, copy, drive, onDriveFailure, sessionScope, setMessage]);
+  }, [
+    acceptPackage,
+    copy,
+    drive,
+    driveActive,
+    onDriveFailure,
+    sessionScope,
+    setMessage,
+  ]);
 
   useEffect(() => setGameAudioVolume(soundVolume), [soundVolume]);
 
