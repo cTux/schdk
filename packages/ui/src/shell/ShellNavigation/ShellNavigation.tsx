@@ -1,18 +1,30 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGear, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import {
+  faAnglesLeft,
+  faAnglesRight,
+  faGear,
+  faSpinner,
+} from '@fortawesome/free-solid-svg-icons';
+import classNames from 'classnames';
+import { useState } from 'react';
 import { AppIcon } from '../../atoms/AppIcon';
 import { Button } from '../../atoms/Button';
+import { IconButton } from '../../atoms/IconButton';
 import { useLocalization } from '../../localization';
 import { getShellContent } from '../shellItems';
 import { type ShellNavigationProps } from './types/shell-navigation-props';
 import { type ShellAccount } from './types/shell-account';
 
 function ShellNavigation({ preloading, view, onSelect }: ShellNavigationProps) {
+  const [collapsed, setCollapsed] = useState(false);
   const { copy } = useLocalization();
   const content = getShellContent(copy);
 
   return (
-    <aside className="sidebar" aria-busy={preloading}>
+    <aside
+      className={classNames('sidebar', { collapsed })}
+      aria-busy={preloading}
+    >
       <div className="brand">
         <AppIcon />
         <div>
@@ -28,6 +40,14 @@ function ShellNavigation({ preloading, view, onSelect }: ShellNavigationProps) {
             <FontAwesomeIcon icon={faSpinner} />
           </span>
         )}
+        <IconButton
+          className="sidebar-collapse"
+          variant="ghost"
+          icon={collapsed ? faAnglesRight : faAnglesLeft}
+          label={collapsed ? content.expandLabel : content.collapseLabel}
+          aria-expanded={!collapsed}
+          onClick={() => setCollapsed((value) => !value)}
+        />
       </div>
 
       <nav aria-label={content.toolsLabel}>

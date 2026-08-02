@@ -42,6 +42,10 @@ button:focus-visible {
     padding-inline: 10px;
   }
 
+  .sidebar-collapse.ui-button {
+    display: none;
+  }
+
   .sidebar .brand div {
     display: none;
   }
