@@ -44,6 +44,7 @@ const DictionariesPage = lazy(() =>
     default: DictionariesPage,
   })),
 );
+const SIDEBAR_COLLAPSED_KEY = 'schdk.shell.sidebar-collapsed';
 
 export function ShellWorkspace({
   apps,
@@ -56,8 +57,14 @@ export function ShellWorkspace({
     <TooltipProvider>
       <main className="app-shell" data-theme={settings.theme}>
         <ShellNavigation
+          initialCollapsed={
+            localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === 'true'
+          }
           preloading={data.preloading}
           view={view}
+          onCollapsedChange={(collapsed) =>
+            localStorage.setItem(SIDEBAR_COLLAPSED_KEY, String(collapsed))
+          }
           onSelect={navigation.showView}
         />
         <section className="workspace">

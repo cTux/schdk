@@ -1,18 +1,42 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGear, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import {
+  faAnglesLeft,
+  faAnglesRight,
+  faGear,
+  faSpinner,
+} from '@fortawesome/free-solid-svg-icons';
+import classNames from 'classnames';
+import { useState } from 'react';
 import { AppIcon } from '../../atoms/AppIcon';
 import { Button } from '../../atoms/Button';
+import { IconButton } from '../../atoms/IconButton';
 import { useLocalization } from '../../localization';
 import { getShellContent } from '../shellItems';
 import { type ShellNavigationProps } from './types/shell-navigation-props';
 import { type ShellAccount } from './types/shell-account';
 
-function ShellNavigation({ preloading, view, onSelect }: ShellNavigationProps) {
+function ShellNavigation({
+  initialCollapsed = false,
+  preloading,
+  view,
+  onCollapsedChange,
+  onSelect,
+}: ShellNavigationProps) {
+  const [collapsed, setCollapsed] = useState(initialCollapsed);
   const { copy } = useLocalization();
   const content = getShellContent(copy);
 
+  function toggleCollapsed() {
+    const nextCollapsed = !collapsed;
+    setCollapsed(nextCollapsed);
+    onCollapsedChange?.(nextCollapsed);
+  }
+
   return (
-    <aside className="sidebar" aria-busy={preloading}>
+    <aside
+      className={classNames('sidebar', { collapsed })}
+      aria-busy={preloading}
+    >
       <div className="brand">
         <AppIcon />
         <div>
@@ -28,6 +52,14 @@ function ShellNavigation({ preloading, view, onSelect }: ShellNavigationProps) {
             <FontAwesomeIcon icon={faSpinner} />
           </span>
         )}
+        <IconButton
+          className="sidebar-collapse"
+          variant="ghost"
+          icon={collapsed ? faAnglesRight : faAnglesLeft}
+          label={collapsed ? content.expandLabel : content.collapseLabel}
+          aria-expanded={!collapsed}
+          onClick={toggleCollapsed}
+        />
       </div>
 
       <nav aria-label={content.toolsLabel}>
@@ -44,44 +76,21 @@ function ShellNavigation({ preloading, view, onSelect }: ShellNavigationProps) {
           {content.homeItem.label}
         </Button>
 
-        <div
-          className="sidebar-group"
-          role="group"
-          aria-labelledby="sidebar-schdk-group"
-        >
-          <span
-            id="sidebar-schdk-group"
-            className="sidebar-group-label"
-            aria-busy={preloading}
+        {content.items.map((item) => (
+          <Button
+            variant="ghost"
+            className={item.id === view ? 'active' : ''}
+            type="button"
+            key={item.id}
+            onClick={() => onSelect(item.id)}
+            aria-current={item.id === view ? 'page' : undefined}
           >
-            <span>{content.groupLabel}</span>
-            {preloading && (
-              <span
-                className="sidebar-preloading"
-                role="status"
-                aria-label={copy.shell.preloading}
-                title={copy.shell.preloading}
-              >
-                <FontAwesomeIcon icon={faSpinner} aria-hidden="true" />
-              </span>
-            )}
-          </span>
-          {content.items.map((item) => (
-            <Button
-              variant="ghost"
-              className={item.id === view ? 'active' : ''}
-              type="button"
-              key={item.id}
-              onClick={() => onSelect(item.id)}
-              aria-current={item.id === view ? 'page' : undefined}
-            >
-              <span className="nav-icon" aria-hidden="true">
-                <FontAwesomeIcon icon={item.icon} />
-              </span>
-              {item.label}
-            </Button>
-          ))}
-        </div>
+            <span className="nav-icon" aria-hidden="true">
+              <FontAwesomeIcon icon={item.icon} />
+            </span>
+            {item.label}
+          </Button>
+        ))}
       </nav>
 
       <nav className="sidebar-options" aria-label={content.settingsLabel}>

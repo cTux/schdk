@@ -5,8 +5,9 @@ const shellCopy = {
   en: {
     brand: 'What? Where? When?',
     toolsLabel: 'Tools',
-    groupLabel: 'WWW',
     settingsLabel: 'Settings',
+    collapseLabel: 'Collapse navigation',
+    expandLabel: 'Expand navigation',
     preloading: 'Loading Google Drive data',
     moduleLoading: 'Loading…',
     moduleLoadFailed: 'This section could not be loaded.',
@@ -53,8 +54,9 @@ const shellCopy = {
   uk: {
     brand: 'Що? Де? Коли?',
     toolsLabel: 'Інструменти',
-    groupLabel: 'ЩДК',
     settingsLabel: 'Налаштування',
+    collapseLabel: 'Згорнути навігацію',
+    expandLabel: 'Розгорнути навігацію',
     preloading: 'Завантаження даних із Google Диска',
     moduleLoading: 'Завантаження…',
     moduleLoadFailed: 'Не вдалося завантажити цей розділ.',

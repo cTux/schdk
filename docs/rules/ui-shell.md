@@ -1,13 +1,15 @@
 # Shell UI
 
 - Keep the sidebar fixed while application content scrolls.
-- Keep `Getting started` above the `SCHDK` group as the first shell page. Its
+- Keep its expanded or collapsed state across reloads in web and desktop.
+- Keep `Getting started` above the primary tool list as the first shell page. Its
   tool cards follow the same chronological order as the sidebar: from content
   preparation through package editing to hosting.
-- Group, in this order, `База питань`, `Візуальний редактор`,
+- List, in this order, `База питань`, `Візуальний редактор`,
   `Правила створення питань`, `Правила створення пакету`,
-  `Словники технічних термінів`, `Редагувати пакети питань`, and `Провести гру` under `ЩДК`. Keep
-  `Налаштування` in a separate group at the bottom.
+  `Словники технічних термінів`, `Редагувати пакети питань`, and `Провести гру`
+  after Getting started without a category heading. Keep `Налаштування` in a
+  separate group at the bottom.
 - Explain on the question-database page that it contains only the current
   user's Drive packages. Group identical questions into question, answer, and
   included-packages columns. Start question and answer search after two entered
@@ -36,8 +38,8 @@
   `App` settings tab, using the existing settings-row and button patterns.
 - Keep a localized reference to every custom keyboard shortcut in the first
   `App` settings tab.
-- While initial Drive-backed lists load, show the same localized preloading
-  status in the sidebar brand and SCHDK group.
+- While initial Drive-backed lists load, show the localized preloading status
+  in the sidebar brand.
 - Show localized status while lazy page chunks load. If a chunk fails, keep the
   shell visible and offer a localized reload action through the shared shell
   boundary.
