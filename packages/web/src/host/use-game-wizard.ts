@@ -11,6 +11,7 @@ import {
 } from './game-flow';
 import {
   getRemainingSeconds,
+  getTimerDisplaySeconds,
   getTimerSignal,
   QUESTION_TIME_SECONDS,
 } from './game-timer';
@@ -188,9 +189,12 @@ function useGameWizard(
   }, [active, finished, move]);
 
   const question = gamePackage?.questions[position.questionIndex] ?? null;
-  const questionTimeSeconds = question
-    ? QUESTION_TYPE_CONFIG[question.type].seconds
-    : QUESTION_TIME_SECONDS;
+  const timerConfig = question
+    ? QUESTION_TYPE_CONFIG[question.type]
+    : QUESTION_TYPE_CONFIG.standard;
+  const questionTimeSeconds = timerConfig.seconds;
+  const submissionTimeSeconds = timerConfig.submissionSeconds;
+  const timerDurationSeconds = questionTimeSeconds + submissionTimeSeconds;
   const visibleStages = useMemo<HostQuestionStage[]>(
     () =>
       question ? getVisibleQuestionStages(question, position.stage) : ['tour'],
@@ -210,21 +214,33 @@ function useGameWizard(
     }
 
     const startedAt = Date.now();
-    let previousSeconds: number = questionTimeSeconds;
-    dispatch({ type: 'timer', remainingSeconds: previousSeconds });
+    let previousSeconds: number = timerDurationSeconds;
+    dispatch({
+      type: 'timer',
+      remainingSeconds: getTimerDisplaySeconds(
+        previousSeconds,
+        submissionTimeSeconds,
+      ),
+    });
     playMainSignal();
     const timer = window.setInterval(() => {
       const nextSeconds = getRemainingSeconds(
         startedAt,
         Date.now(),
-        questionTimeSeconds,
+        timerDurationSeconds,
       );
       if (nextSeconds === previousSeconds) return;
       const signal = getTimerSignal(previousSeconds, nextSeconds);
       if (signal === 'preAlarm') playPreAlarm();
       else if (signal === 'main') playMainSignal();
       previousSeconds = nextSeconds;
-      dispatch({ type: 'timer', remainingSeconds: nextSeconds });
+      dispatch({
+        type: 'timer',
+        remainingSeconds: getTimerDisplaySeconds(
+          nextSeconds,
+          submissionTimeSeconds,
+        ),
+      });
       if (nextSeconds === 0) window.clearInterval(timer);
     }, 100);
 
@@ -236,7 +252,8 @@ function useGameWizard(
     position.questionIndex,
     position.questionPartIndex,
     position.stage,
-    questionTimeSeconds,
+    submissionTimeSeconds,
+    timerDurationSeconds,
     timerRunning,
   ]);
 

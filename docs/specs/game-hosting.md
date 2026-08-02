@@ -15,9 +15,10 @@ content hidden until the correct stage.
 - **HST-2:** Before start, the app shows only title, filename, aggregate tour,
   question, and handout counts, plus start and back actions.
 - **HST-3:** Standard questions advance through intro, optional handout,
-  question, 60 seconds of answer time, 10 seconds of red-shadowed submission
-  time, a stage that displays the timer at zero, optional answer comment, and
-  answer. Text handouts render with a monospace font.
+  question, a 60-second countdown shown from `01:00`, then a separate
+  red-shadowed 10-second submission countdown, a stage that displays the timer
+  at zero, optional answer comment, and answer. Text handouts render with a
+  monospace font.
 - **HST-4:** Blitz questions reveal two 30-second or three 20-second parts
   cumulatively, displaying the timer at zero before advancing to each next
   part.
