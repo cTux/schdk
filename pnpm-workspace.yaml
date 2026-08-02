@@ -6,16 +6,16 @@ catalog:
   electron: ^43.2.0
   electron-builder: ^26.15.3
   '@types/node': ^26.1.2
-  '@types/react': ^19.2.17
-  '@types/react-dom': ^19.2.3
-  '@vitejs/plugin-react': ^6.0.4
+  '@types/react': ^19.2.18
+  '@types/react-dom': ^19.2.4
+  '@vitejs/plugin-react': ^6.0.5
   react: ^19.2.8
   react-dom: ^19.2.8
   sass: ^1.102.0
   stylelint: ^17.14.1
   stylelint-config-standard-scss: ^17.0.0
   typescript: ^7.0.2
-  vite: ^8.1.5
+  vite: ^8.2.0
   vitest: ^4.1.10
 
 overrides:
@@ -29,7 +29,7 @@ allowBuilds:
   esbuild: true
 
 minimumReleaseAgeExclude:
-  - '@opencode-ai/models@0.0.24 || 0.0.26'
+  - '@opencode-ai/models@0.0.24 || 0.0.26 || 0.0.31'
   - brace-expansion@5.0.8
   - tar@7.5.22
   - '@storybook/addon-docs@10.5.5'
@@ -40,9 +40,9 @@ minimumReleaseAgeExclude:
   - '@storybook/react@10.5.5'
   - storybook@10.5.5
   - '@ai-sdk/anthropic@4.0.23'
-  - '@ai-sdk/gateway@4.0.31'
+  - '@ai-sdk/gateway@4.0.31 || 4.0.37'
   - '@ai-sdk/google@4.0.27'
   - '@ai-sdk/openai@4.0.23'
   - '@ai-sdk/provider-utils@5.0.14'
   - '@ai-sdk/provider@4.0.4'
-  - ai@7.0.41
+  - ai@7.0.41 || 7.0.48

@@ -5,7 +5,7 @@
   "description": "Tools for creating and hosting Що? Де? Коли? game packages.",
   "license": "UNLICENSED",
   "type": "module",
-  "packageManager": "pnpm@11.17.0",
+  "packageManager": "pnpm@11.18.0",
   "engines": {
     "node": "24.x",
     "pnpm": "11.x"
@@ -28,6 +28,6 @@
     "@playwright/test": "1.62.1",
     "npm-check-updates": "^23.0.0",
     "oxfmt": "^0.61.0",
-    "turbo": "^2.10.7"
+    "turbo": "^2.10.8"
   }
 }
