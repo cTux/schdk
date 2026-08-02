@@ -12,7 +12,9 @@ export function GameTimer({
   ).padStart(2, '0')}`;
   return (
     <div
-      className={classNames('game-timer', className)}
+      className={classNames('game-timer', className, {
+        'is-submission-time': seconds > 0 && seconds <= 10,
+      })}
       role="timer"
       aria-live="off"
     >

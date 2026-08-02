@@ -1,4 +1,4 @@
-export const QUESTION_TIME_SECONDS = 60;
+export const QUESTION_TIME_SECONDS = 70;
 
 export function getRemainingSeconds(
   startedAt: number,

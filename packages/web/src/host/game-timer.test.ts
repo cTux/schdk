@@ -6,10 +6,10 @@ import {
 } from './game-timer';
 
 describe('question timer', () => {
-  it('counts down one minute against wall-clock time', () => {
+  it('counts down one minute plus submission time against wall-clock time', () => {
     expect(getRemainingSeconds(1_000, 1_000)).toBe(QUESTION_TIME_SECONDS);
-    expect(getRemainingSeconds(1_000, 51_001)).toBe(10);
-    expect(getRemainingSeconds(1_000, 61_000)).toBe(0);
+    expect(getRemainingSeconds(1_000, 61_001)).toBe(10);
+    expect(getRemainingSeconds(1_000, 71_000)).toBe(0);
   });
 
   it('emits the ten-second and expiry signals once per threshold', () => {
