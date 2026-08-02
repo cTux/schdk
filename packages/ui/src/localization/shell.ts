@@ -5,7 +5,6 @@ const shellCopy = {
   en: {
     brand: 'What? Where? When?',
     toolsLabel: 'Tools',
-    groupLabel: 'WWW',
     settingsLabel: 'Settings',
     collapseLabel: 'Collapse navigation',
     expandLabel: 'Expand navigation',
@@ -55,7 +54,6 @@ const shellCopy = {
   uk: {
     brand: 'Що? Де? Коли?',
     toolsLabel: 'Інструменти',
-    groupLabel: 'ЩДК',
     settingsLabel: 'Налаштування',
     collapseLabel: 'Згорнути навігацію',
     expandLabel: 'Розгорнути навігацію',

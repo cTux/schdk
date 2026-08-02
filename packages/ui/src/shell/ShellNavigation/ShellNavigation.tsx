@@ -64,44 +64,21 @@ function ShellNavigation({ preloading, view, onSelect }: ShellNavigationProps) {
           {content.homeItem.label}
         </Button>
 
-        <div
-          className="sidebar-group"
-          role="group"
-          aria-labelledby="sidebar-schdk-group"
-        >
-          <span
-            id="sidebar-schdk-group"
-            className="sidebar-group-label"
-            aria-busy={preloading}
+        {content.items.map((item) => (
+          <Button
+            variant="ghost"
+            className={item.id === view ? 'active' : ''}
+            type="button"
+            key={item.id}
+            onClick={() => onSelect(item.id)}
+            aria-current={item.id === view ? 'page' : undefined}
           >
-            <span>{content.groupLabel}</span>
-            {preloading && (
-              <span
-                className="sidebar-preloading"
-                role="status"
-                aria-label={copy.shell.preloading}
-                title={copy.shell.preloading}
-              >
-                <FontAwesomeIcon icon={faSpinner} aria-hidden="true" />
-              </span>
-            )}
-          </span>
-          {content.items.map((item) => (
-            <Button
-              variant="ghost"
-              className={item.id === view ? 'active' : ''}
-              type="button"
-              key={item.id}
-              onClick={() => onSelect(item.id)}
-              aria-current={item.id === view ? 'page' : undefined}
-            >
-              <span className="nav-icon" aria-hidden="true">
-                <FontAwesomeIcon icon={item.icon} />
-              </span>
-              {item.label}
-            </Button>
-          ))}
-        </div>
+            <span className="nav-icon" aria-hidden="true">
+              <FontAwesomeIcon icon={item.icon} />
+            </span>
+            {item.label}
+          </Button>
+        ))}
       </nav>
 
       <nav className="sidebar-options" aria-label={content.settingsLabel}>

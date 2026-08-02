@@ -14,11 +14,11 @@
   selected, then retain the loaded hook and page state for the shell session.
   Do not preload unrelated collections immediately after authorization.
 - Preserve keyboard-accessible navigation in the shared renderer.
-- Group the question database, visual editor, artificial intelligence, editor,
-  and host pages under `ЩДК` in the fixed sidebar, with the current account's
-  question database first. Keep Options at the bottom, nest game and editor
-  settings as always-visible fieldsets under the primary `ЩДК` tab, and persist
-  editor text options in localStorage.
+- List the question database, visual editor, artificial intelligence, editor,
+  and host pages after Getting started in the fixed sidebar without a category
+  heading, with the current account's question database first. Keep Options at
+  the bottom, nest game and editor settings as always-visible fieldsets under
+  the primary `ЩДК` tab, and persist editor text options in localStorage.
 - Reflect an opened browser package in the `package` URL query parameter. A
   unified-shell deep link with this parameter opens the editor before loading
   the package.

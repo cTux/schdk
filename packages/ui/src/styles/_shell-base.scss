@@ -68,8 +68,7 @@ button {
   padding-inline: 10px;
 }
 
-.sidebar.collapsed .brand div,
-.sidebar.collapsed .sidebar-group-label {
+.sidebar.collapsed .brand div {
   display: none;
 }
 
@@ -118,21 +117,6 @@ button {
   flex-direction: column;
   gap: 5px;
   padding: 24px 18px;
-}
-
-.sidebar-group {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.sidebar-group-label {
-  margin: 20px 12px 4px;
-  color: $muted;
-  font-size: 0.65rem;
-  font-weight: 750;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
 }
 
 .sidebar nav button {

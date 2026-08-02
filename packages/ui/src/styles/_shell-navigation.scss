@@ -7,12 +7,6 @@
   animation: sidebar-preloading-spin 0.8s linear infinite;
 }
 
-.sidebar-group-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
 @keyframes sidebar-preloading-spin {
   to {
     transform: rotate(1turn);

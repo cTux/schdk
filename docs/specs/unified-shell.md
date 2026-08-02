@@ -11,11 +11,10 @@ package authoring, hosting, settings, and account state.
 
 - **SHL-1:** Getting started is the first shell page. It presents the SCHDK
   tools in their chronological sidebar order, from content preparation through
-  package editing to hosting. Fixed navigation groups Question database,
+  package editing to hosting. Fixed navigation lists Question database,
   Visual editor, Question creation rules, Package creation rules, Dictionaries,
-  Edit question packages, and Host a game under SCHDK, in that order, with
-  Settings at the bottom. The Ukrainian
-  question-rules label is
+  Edit question packages, and Host a game, in that order, with Settings at the
+  bottom and no category heading. The Ukrainian question-rules label is
   `Правила створення питань`.
 - **SHL-2:** Every navigable page chunk loads lazily on first selection and
   remains mounted afterward so navigation preserves state. Drive-backed
@@ -115,8 +114,8 @@ package authoring, hosting, settings, and account state.
   scrolls without creating a second full-page scrollbar.
 - **SHL-20:** After Google authorization, Drive-backed question packages,
   personal and global AI question rules, and AI question packages begin
-  loading before their pages open. The sidebar brand and SCHDK group show a
-  localized preloading indicator until those lists finish loading.
+  loading before their pages open. The sidebar brand shows a localized
+  preloading indicator until those lists finish loading.
 - **SHL-21:** UI animations default on and add motion to shell page changes and
   interactive feedback. The first App settings tab exposes a persisted UI
   animations toggle that disables CSS animations and transitions across every
@@ -223,7 +222,7 @@ package authoring, hosting, settings, and account state.
     load the next batch from the bottom action.
 14. Connect Google without opening a SCHDK page and observe its Drive-backed
     lists begin loading. Confirm localized preloading indicators appear in the
-    sidebar brand and SCHDK group until every list finishes, then navigate to
+    sidebar brand until every list finishes, then navigate to
     each page and confirm its page chunk loads on first selection.
 15. Navigate between every shell page and observe its entrance motion. Disable
     UI animations in App settings, navigate through shell, editor, and host
