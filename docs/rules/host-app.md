@@ -7,12 +7,13 @@
   text.
 - Request fullscreen on the host root when the enabled-by-default automatic
   fullscreen option is enabled. Keep a fixed full-viewport fallback when
-  fullscreen is disabled or denied.
+  fullscreen is disabled, denied, or exited.
 - Advance standard questions through intro, optional handout, question,
-  60-second timer, optional answer comment, and answer. For blitz questions,
-  show the first part with its timer, then reveal each next part below the
-  previous ones while restarting a 30- or 20-second timer. Keep revealed
-  content visible until the next question.
+  60-second timer, a stage that shows the timer at zero, optional answer
+  comment, and answer. For blitz questions, show the first part with its timer,
+  then reset the timer to zero before revealing each next part below the
+  previous ones and restarting a 30- or 20-second timer. Keep revealed content
+  visible until the next question.
 - Lock mouse and keyboard navigation during transitions. `Space`, `PageDown`,
   and `ArrowRight` advance; `Backspace`, `PageUp`, and `ArrowLeft` go back.
 - Exit an active game with `Alt+Q` after explicit confirmation.

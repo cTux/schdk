@@ -15,10 +15,14 @@ export function getQuestionPositions(
     positions.push(
       { questionPartIndex: 0, stage: 'question' },
       { questionPartIndex: 0, stage: 'timer' },
+      { questionPartIndex: 0, stage: 'timerReset' },
     );
   } else {
     question.questionParts.forEach((_, questionPartIndex) => {
-      positions.push({ questionPartIndex, stage: 'timer' });
+      positions.push(
+        { questionPartIndex, stage: 'timer' },
+        { questionPartIndex, stage: 'timerReset' },
+      );
     });
   }
   if (question.answerComment?.trim()) {

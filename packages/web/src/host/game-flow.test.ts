@@ -18,6 +18,7 @@ describe('game question flow', () => {
       'intro',
       'question',
       'timer',
+      'timerReset',
       'answer',
     ]);
     expect(getVisibleQuestionStages(question, 'answer')).toEqual([
@@ -41,6 +42,7 @@ describe('game question flow', () => {
       'handout',
       'question',
       'timer',
+      'timerReset',
       'answerComment',
       'answer',
     ]);

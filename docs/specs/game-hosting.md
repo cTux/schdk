@@ -15,10 +15,11 @@ content hidden until the correct stage.
 - **HST-2:** Before start, the app shows only title, filename, aggregate tour,
   question, and handout counts, plus start and back actions.
 - **HST-3:** Standard questions advance through intro, optional handout,
-  question, 60-second timer, optional answer comment, and answer. Text
-  handouts render with a monospace font.
+  question, 60-second timer, a stage that displays the timer at zero, optional
+  answer comment, and answer. Text handouts render with a monospace font.
 - **HST-4:** Blitz questions reveal two 30-second or three 20-second parts
-  cumulatively, restarting the timer for each part.
+  cumulatively, displaying the timer at zero before advancing to each next
+  part.
 - **HST-5:** Timer start, ten-seconds-remaining, and expiry signals use the
   persisted signal volume.
 - **HST-6:** Questions 12 and 24 lead to a music-break slide when matching audio
@@ -28,7 +29,8 @@ content hidden until the correct stage.
 - **HST-8:** Navigation is locked during transitions, preserving cumulative
   visible stages.
 - **HST-9:** Automatic fullscreen is enabled by default. Denial or disabling
-  falls back to a fixed full-viewport presentation.
+  falls back to a fixed full-viewport presentation, including after fullscreen
+  is exited.
 - **HST-10:** `Alt+Q` exits an active game only after confirmation.
 - **HST-11:** Package identity and exact question stage persist continuously
   and restore from a validated Drive reference.
@@ -37,7 +39,8 @@ content hidden until the correct stage.
 - **HST-13:** Every recent Drive package offers an explicit download that does
   not select or change the package.
 - **HST-14:** Before questions 1, 13, and 25, the host shows a dedicated static
-  slide with the tour number and its optional smaller phrase.
+  slide with the tour number and its optional smaller phrase fully visible
+  inside the configured intro bounds.
 
 ## Invariants
 
