@@ -12,7 +12,8 @@ description: Verify SCHDK changes and builds. Use for pre-commit checks, health 
 2. Inspect `git status` and the diff, preserving unrelated changes.
 3. Confirm `$schdk-sync-specs` reviewed the final diff.
 4. Run the full checks below and any narrower affected-package checks required
-   by the matching skill.
+   by the matching skill. Do not run `pnpm lint` automatically; pull-request CI
+   owns Oxlint verification.
 5. Use the browser smoke-test workflow for changed UI. Build affected Electron
    apps for main, preload, packaging, icon, or bundled-resource changes.
 6. Confirm `git diff --check`, structural rules for changed source files, and
@@ -26,7 +27,6 @@ description: Verify SCHDK changes and builds. Use for pre-commit checks, health 
 
 ```powershell
 pnpm fmt:check
-pnpm lint
 pnpm typecheck
 pnpm test
 pnpm test:browser

@@ -5,8 +5,10 @@
 - Format with Oxfmt, lint TypeScript/React with Oxlint, and lint UI SCSS with
   Stylelint.
 - Keep the versioned hooks under `.githooks`. Root `pnpm install` configures
-  `core.hooksPath`; pre-commit must run only `pnpm fmt:check` and `pnpm lint`,
-  never tests.
+  `core.hooksPath`; pre-commit must format and restage only staged files with
+  Oxfmt, never run Oxlint or tests.
+- Do not run Oxlint automatically during implementation or before committing;
+  keep it available through `pnpm lint` and run it in pull-request CI.
 - Do not add tests automatically during feature, fix, or refactor work. Add
   them only when the prompt explicitly says `add missing tests`, using
   `$schdk-add-missing-tests` to cover all changes since the previous test batch.
@@ -38,9 +40,9 @@
 - For cross-platform desktop packaging, verify native unpacked output and each
   requested installer or package before artifact upload. Inspect DEB identity
   and maintainer fields with `dpkg-deb`.
-- Before committing, run `pnpm fmt:check`, `pnpm lint`, `pnpm typecheck`,
-  `pnpm test`, and affected builds. Run root `pnpm build` for complete workspace
-  build verification.
+- Before committing, run `pnpm fmt:check`, `pnpm typecheck`, `pnpm test`, and
+  affected builds. Run root `pnpm build` for complete workspace build
+  verification.
 - For every prompt that changes repository files, work on a prompt-based
   `codex/` branch, commit all verified task changes, push the branch to `origin`,
   and create a GitHub pull request. Preserve unrelated user changes, confirm the

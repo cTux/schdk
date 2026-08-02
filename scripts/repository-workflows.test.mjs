@@ -94,7 +94,7 @@ test('dependency updates use local ncu, refresh the lockfile, and audit override
   assert.match(skill, /overrides.*pnpm-workspace\.yaml/s);
 });
 
-test('test creation stays prompt-driven and PR tests stay outside pre-commit', async () => {
+test('test creation stays prompt-driven and pre-commit only formats staged files', async () => {
   const [skill, workflow, preCommit] = await Promise.all([
     read('.codex/skills/schdk-add-missing-tests/SKILL.md'),
     read('.github/workflows/tests.yml'),
@@ -116,6 +116,13 @@ test('test creation stays prompt-driven and PR tests stay outside pre-commit', a
   assert.match(workflow, /pnpm test/);
   assert.match(workflow, /runs-on: windows-latest/);
   assert.match(workflow, /pnpm build/);
+  assert.match(
+    preCommit,
+    /git diff --cached --name-only --diff-filter=ACMR -z/,
+  );
+  assert.match(preCommit, /pnpm exec oxfmt --write/);
+  assert.match(preCommit, /git add --/);
+  assert.doesNotMatch(preCommit, /\bpnpm lint\b/);
   assert.doesNotMatch(preCommit, /\bpnpm test\b/);
 });
 

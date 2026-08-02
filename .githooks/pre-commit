@@ -1,3 +1,5 @@
 #!/bin/sh
 
-pnpm fmt:check && pnpm lint
+git diff --cached --name-only --diff-filter=ACMR -z |
+  xargs -0 -r pnpm exec oxfmt --write --no-error-on-unmatched-pattern --
+git diff --cached --name-only --diff-filter=ACMR -z | xargs -0 -r git add --
