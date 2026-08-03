@@ -134,4 +134,8 @@ export const componentValues: Record<string, Record<string, unknown>> = {
   VisualEditorToolbar: {
     selected: { kind: 'built-in', id: 'question' },
   },
+  VisualEditor: {
+    canRedo: true,
+    canUndo: true,
+  },
 };

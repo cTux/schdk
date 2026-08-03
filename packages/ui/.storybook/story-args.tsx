@@ -87,6 +87,21 @@ const callbacksReturningConfirmation = new Set([
   'onUpdateGlobal',
 ]);
 
+interface StoryEvent {
+  args: unknown[];
+  component: string;
+  prop: string;
+}
+
+function recordStoryEvent(component: string, prop: string) {
+  return (...args: unknown[]) => {
+    const scope = globalThis as typeof globalThis & {
+      __SCHDK_STORY_EVENTS__?: StoryEvent[];
+    };
+    (scope.__SCHDK_STORY_EVENTS__ ??= []).push({ args, component, prop });
+  };
+}
+
 function getValue(component: string, prop: string): unknown {
   const componentValue = componentValues[component]?.[prop];
   if (componentValue !== undefined) return componentValue;
@@ -96,6 +111,7 @@ function getValue(component: string, prop: string): unknown {
   const isCallbackProp =
     prop.startsWith('on') || prop === 'addElement' || prop === 'chooseImage';
   if (isCallbackProp) {
+    if (component === 'VisualEditor') return recordStoryEvent(component, prop);
     if (prop === 'onGenerate') return async () => gameQuestion;
     if (callbacksReturningConfirmation.has(prop)) return confirm;
     return noop;
