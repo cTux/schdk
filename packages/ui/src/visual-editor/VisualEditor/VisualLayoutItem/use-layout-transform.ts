@@ -10,40 +10,60 @@ interface LayoutTransformOptions {
   onUpdate(position: GameLayoutPosition): void;
 }
 
+type LayoutInteraction =
+  | { kind: 'idle' }
+  | {
+      kind: 'dragging';
+      pointerId: number;
+      startPointer: GamePoint;
+      startPosition: GameLayoutPosition;
+      draft: GameLayoutPosition | null;
+    }
+  | {
+      kind: 'resizing';
+      pointerId: number;
+      startPointer: GamePoint;
+      startPosition: GameLayoutPosition;
+      handle: ResizeHandle;
+      draft: GameLayoutPosition | null;
+    };
+
+const IDLE_INTERACTION: LayoutInteraction = { kind: 'idle' };
+
 export function useLayoutTransform({
   position,
   pointerPosition,
   onSelect,
   onUpdate,
 }: LayoutTransformOptions) {
-  const dragRef = useRef<{
-    pointerId: number;
-    startPointer: GamePoint;
-    startPosition: GameLayoutPosition;
-  } | null>(null);
-  const resizeRef = useRef<{
-    pointerId: number;
-    startPointer: GamePoint;
-    startPosition: GameLayoutPosition;
-    handle: ResizeHandle;
-  } | null>(null);
-  const draftRef = useRef<GameLayoutPosition | null>(null);
-  const [dragging, setDragging] = useState(false);
-  const [resizing, setResizing] = useState(false);
-  const [draftPosition, setDraftPosition] = useState<GameLayoutPosition | null>(
-    null,
-  );
+  const interactionRef = useRef<LayoutInteraction>(IDLE_INTERACTION);
+  const [interaction, setInteraction] =
+    useState<LayoutInteraction>(IDLE_INTERACTION);
 
-  function previewPosition(patch: Partial<GameLayoutPosition>) {
-    const next = { ...position, ...patch };
-    draftRef.current = next;
-    setDraftPosition(next);
+  function updateInteraction(next: LayoutInteraction) {
+    interactionRef.current = next;
+    setInteraction(next);
   }
 
-  function finishPointerInteraction(commit: boolean) {
-    if (commit && draftRef.current) onUpdate(draftRef.current);
-    draftRef.current = null;
-    setDraftPosition(null);
+  function previewPosition(patch: Partial<GameLayoutPosition>) {
+    const active = interactionRef.current;
+    if (active.kind === 'idle') return;
+    updateInteraction({ ...active, draft: { ...position, ...patch } });
+  }
+
+  function finishPointerInteraction(
+    kind: 'dragging' | 'resizing',
+    commit: boolean,
+    pointerId?: number,
+  ) {
+    const active = interactionRef.current;
+    if (
+      active.kind !== kind ||
+      (pointerId !== undefined && active.pointerId !== pointerId)
+    )
+      return;
+    if (commit && active.draft) onUpdate(active.draft);
+    updateInteraction(IDLE_INTERACTION);
   }
 
   function moveFromKeyboard(event: KeyboardEvent<HTMLDivElement>) {
@@ -68,19 +88,25 @@ export function useLayoutTransform({
     const startPointer = pointerPosition(event);
     if (!startPointer) return;
     event.currentTarget.setPointerCapture(event.pointerId);
-    dragRef.current = {
+    updateInteraction({
+      kind: 'dragging',
       pointerId: event.pointerId,
       startPointer,
       startPosition: position,
-    };
-    setDragging(true);
+      draft: null,
+    });
     onSelect();
   }
 
   function previewDrag(event: PointerEvent<HTMLDivElement>) {
-    const drag = dragRef.current;
+    const drag = interactionRef.current;
     const pointer = pointerPosition(event);
-    if (!drag || drag.pointerId !== event.pointerId || !pointer) return;
+    if (
+      drag.kind !== 'dragging' ||
+      drag.pointerId !== event.pointerId ||
+      !pointer
+    )
+      return;
     previewPosition(
       getDraggedPosition(drag.startPosition, drag.startPointer, pointer),
     );
@@ -90,15 +116,11 @@ export function useLayoutTransform({
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
-    dragRef.current = null;
-    setDragging(false);
-    finishPointerInteraction(true);
+    finishPointerInteraction('dragging', true, event.pointerId);
   }
 
   function cancelDrag() {
-    dragRef.current = null;
-    setDragging(false);
-    finishPointerInteraction(false);
+    finishPointerInteraction('dragging', false);
   }
 
   function resizeHandlers(handle: ResizeHandle) {
@@ -109,18 +131,24 @@ export function useLayoutTransform({
         const startPointer = pointerPosition(event);
         if (!startPointer) return;
         event.currentTarget.setPointerCapture(event.pointerId);
-        resizeRef.current = {
+        updateInteraction({
+          kind: 'resizing',
           pointerId: event.pointerId,
           startPointer,
           startPosition: position,
           handle,
-        };
-        setResizing(true);
+          draft: null,
+        });
       },
       onPointerMove(event: PointerEvent<HTMLSpanElement>) {
-        const resize = resizeRef.current;
+        const resize = interactionRef.current;
         const pointer = pointerPosition(event);
-        if (!resize || resize.pointerId !== event.pointerId || !pointer) return;
+        if (
+          resize.kind !== 'resizing' ||
+          resize.pointerId !== event.pointerId ||
+          !pointer
+        )
+          return;
         previewPosition(
           getResizedPosition(
             resize.startPosition,
@@ -134,27 +162,24 @@ export function useLayoutTransform({
         if (event.currentTarget.hasPointerCapture(event.pointerId)) {
           event.currentTarget.releasePointerCapture(event.pointerId);
         }
-        resizeRef.current = null;
-        setResizing(false);
-        finishPointerInteraction(true);
+        finishPointerInteraction('resizing', true, event.pointerId);
       },
       onPointerCancel() {
-        resizeRef.current = null;
-        setResizing(false);
-        finishPointerInteraction(false);
+        finishPointerInteraction('resizing', false);
       },
     };
   }
 
   return {
     cancelDrag,
-    dragging,
+    dragging: interaction.kind === 'dragging',
     finishDrag,
     moveFromKeyboard,
     previewDrag,
-    renderedPosition: draftPosition ?? position,
+    renderedPosition:
+      interaction.kind === 'idle' ? position : (interaction.draft ?? position),
     resizeHandlers,
-    resizing,
+    resizing: interaction.kind === 'resizing',
     startDrag,
   };
 }
