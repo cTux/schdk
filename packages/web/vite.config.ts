@@ -15,6 +15,7 @@ if (!hasValidVersion) {
 
 export default defineConfig({
   base: './',
+  build: { manifest: true },
   define: {
     'import.meta.env.VITE_APP_VERSION': JSON.stringify(version),
   },

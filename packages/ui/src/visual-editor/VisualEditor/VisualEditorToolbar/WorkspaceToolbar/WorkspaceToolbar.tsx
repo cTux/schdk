@@ -1,9 +1,7 @@
-import {
-  faCircleHalfStroke,
-  faFillDrip,
-  faImage,
-  faTrashCan,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCircleHalfStroke } from '@fortawesome/free-solid-svg-icons/faCircleHalfStroke';
+import { faFillDrip } from '@fortawesome/free-solid-svg-icons/faFillDrip';
+import { faImage } from '@fortawesome/free-solid-svg-icons/faImage';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons/faTrashCan';
 import {
   ActionToolbar,
   ActionToolbarButton,

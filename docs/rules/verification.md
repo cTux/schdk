@@ -20,8 +20,8 @@
   interactions and use Playwright's bundled Chromium.
 - Contract-test every built-in layout element in both host and visual-editor
   markup so all persisted positioning styles stay aligned.
-- Keep the lazy visual-editor JavaScript chunk within its explicit bundle
-  budget in `scripts/check-web-bundle-budget.mjs`.
+- Keep lazy visual-editor JavaScript and CSS chunks within their explicit bundle
+  budgets in `scripts/check-web-bundle-budget.mjs`, using Vite's current manifest.
 - Keep critical package, presentation, storage, history, and mirrored preload
   IPC boundaries executable in `scripts/repository-workflows.test.mjs`.
 - Keep repository workflow checks executable for UI platform isolation,

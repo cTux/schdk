@@ -3,8 +3,10 @@ import {
   type GamePresentationOptions,
 } from '@schdk/common';
 
-export function downloadVisualEditorTemplate(game: GamePresentationOptions) {
-  const content = new Uint8Array(serializeVisualEditorTemplate(game));
+export async function downloadVisualEditorTemplate(
+  game: GamePresentationOptions,
+) {
+  const content = new Uint8Array(await serializeVisualEditorTemplate(game));
   const url = URL.createObjectURL(
     new Blob([content], { type: 'application/zip' }),
   );

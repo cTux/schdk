@@ -11,12 +11,19 @@
   invalid values supplied by callers, and keep save-conflict `null` results as
   the optimistic-concurrency contract.
 - Keep local storage as the immediate source and fallback. Merge remote
-  settings per section by `updatedAt`, debounce uploads for one second, and
-  retain local changes when Drive is unavailable.
+  settings per section by `updatedAt`, preserve locally dirty sections,
+  debounce uploads for one second, and retain local changes when Drive is
+  unavailable. Load the settings file ETag and require it with `If-Match` on
+  updates; a precondition failure must keep local values and surface a save
+  failure instead of overwriting the newer Drive file.
 - Store `settings-v1.json` in `appDataFolder`. Request `drive` and
   `drive.appdata`; fixed-folder global listing requires the restricted `drive`
   scope because `drive.file` cannot discover files that users did not
   explicitly open with the app.
+- Store visual-editor image data in the bounded `visual-assets-v1.json`
+  app-data document and keep only stable references in `settings-v1.json`.
+  Load assets before merging settings and conditionally update both files so a
+  concurrent client cannot silently discard newer settings or image data.
 - Store a user AI API key separately in `ai-credentials-v1.json` in the current
   account's `appDataFolder`. Never copy it into the settings document or its
   local cache, and never reuse one account's configured status for another.

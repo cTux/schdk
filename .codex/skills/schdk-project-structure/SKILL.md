@@ -14,6 +14,8 @@ description: Enforce SCHDK package, source, component, and export structure. Use
    readable-condition rules only to new or touched structural scope. Keep
    private types with their component and do not create pass-through entry
    points or a `types.ts` that only re-exports another component's type.
+   Keep cohesive declarations together; do not create one-line modules solely
+   to limit a source file to one export.
    Keep web editor modules grouped by opening, persistence, question editing,
    and session workflow; leave cross-workflow composition in `App.tsx`.
    Keep recent-package operations shared by editor and host in the neutral web

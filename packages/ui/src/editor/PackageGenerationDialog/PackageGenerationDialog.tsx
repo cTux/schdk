@@ -1,10 +1,8 @@
 import '../QuestionGenerationDialog/styles.scss';
 
 import { Dialog } from '@base-ui/react/dialog';
-import {
-  faChevronLeft,
-  faChevronRight,
-} from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
 import classNames from 'classnames';
 import { ConfirmationDialog } from '../../atoms/ConfirmationDialog';
 import { IconButton } from '../../atoms/IconButton';

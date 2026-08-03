@@ -30,7 +30,12 @@ import {
   type DriveGamePackageWrite,
   type DrivePackageStorage,
 } from '../../services/game-packages/game-packages.js';
-import type { DriveSettingsDocument } from '../../services/settings/settings.js';
+import {
+  parseDriveVisualAssetsDocument,
+  type DriveSettingsDocument,
+  type DriveVisualAssetsDocument,
+  type DriveVisualAssetsFile,
+} from '../../services/settings/settings.js';
 import {
   parseQuestionDatabaseDocument,
   type DriveQuestionDatabaseStorage,
@@ -39,10 +44,13 @@ import {
 
 import { GoogleDriveAuthorizationError } from '../../errors/client/google-drive-authorization-error.js';
 import { GoogleDriveError } from '../../errors/client/google-drive-error.js';
+import { GoogleDrivePreconditionError } from '../../errors/client/google-drive-precondition-error.js';
+import type { VersionedAppData } from '../../types/app-data/app-data.js';
 
 const DRIVE_API = 'https://www.googleapis.com/drive/v3';
 
 const SETTINGS_NAME = 'settings-v1.json';
+const VISUAL_ASSETS_NAME = 'visual-assets-v1.json';
 
 const QUESTION_DATABASE_NAME = 'question-database-v1.json';
 
@@ -90,12 +98,31 @@ export class GoogleDriveClient
     return account;
   }
 
-  async loadSettings(): Promise<unknown | null> {
-    return this.appData.load(SETTINGS_NAME);
+  async loadSettings(): Promise<VersionedAppData | null> {
+    return this.appData.loadVersioned(SETTINGS_NAME);
   }
 
-  async saveSettings(settings: DriveSettingsDocument): Promise<void> {
-    await this.appData.save(SETTINGS_NAME, settings);
+  async saveSettings(
+    settings: DriveSettingsDocument,
+    expectedEtag: string | null,
+  ): Promise<boolean> {
+    return this.appData.saveVersioned(SETTINGS_NAME, settings, expectedEtag);
+  }
+
+  async loadVisualAssets(): Promise<DriveVisualAssetsFile | null> {
+    const file = await this.appData.loadVersioned(VISUAL_ASSETS_NAME);
+    if (!file) return null;
+    const value = parseDriveVisualAssetsDocument(file.value);
+    return value ? { etag: file.etag, value } : null;
+  }
+
+  async saveVisualAssets(
+    assets: DriveVisualAssetsDocument,
+    expectedEtag: string | null,
+  ): Promise<boolean> {
+    const value = parseDriveVisualAssetsDocument(assets);
+    if (!value) throw new TypeError('Invalid visual assets');
+    return this.appData.saveVersioned(VISUAL_ASSETS_NAME, value, expectedEtag);
   }
 
   async loadQuestionDatabase(): Promise<QuestionDatabaseDocument | null> {
@@ -197,6 +224,11 @@ export class GoogleDriveClient
     });
     if (response.status === 401) {
       throw new GoogleDriveAuthorizationError('Google Drive access expired');
+    }
+    if (response.status === 412) {
+      throw new GoogleDrivePreconditionError(
+        'Google Drive file changed before update',
+      );
     }
     if (!response.ok) {
       throw new GoogleDriveError(

@@ -18,8 +18,8 @@ description: Verify SCHDK changes and builds. Use for pre-commit checks, health 
    apps for main, preload, packaging, icon, or bundled-resource changes.
 6. Confirm `git diff --check`, structural rules for changed source files, and
    that generated output remains ignored.
-7. Treat the web bundle check as both the global chunk budget and the lazy
-   visual-editor chunk budget.
+7. Treat the manifest-based web bundle check as the global JavaScript/CSS
+   budgets and the lazy visual-editor JavaScript/CSS budgets.
 8. Keep repository workflow checks aligned with durable architecture boundaries
    when ownership or mirrored preload IPC contracts change.
    Preserve UI platform isolation, exported-control-only application JSX, and

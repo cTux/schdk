@@ -1,6 +1,6 @@
 import './styles.scss';
 
-import { faRotate } from '@fortawesome/free-solid-svg-icons';
+import { faRotate } from '@fortawesome/free-solid-svg-icons/faRotate';
 import { IconButton } from '../../atoms/IconButton';
 import { TooltipProvider } from '../../atoms/Tooltip';
 import { useLocalization } from '../../localization';

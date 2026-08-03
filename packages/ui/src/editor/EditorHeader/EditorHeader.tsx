@@ -1,4 +1,4 @@
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons/faTrashCan';
 import { IconButton } from '../../atoms/IconButton';
 import { useLocalization } from '../../localization';
 import { PackageGenerationDialog } from '../PackageGenerationDialog';

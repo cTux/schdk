@@ -1,4 +1,4 @@
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { AppIcon } from '../../atoms/AppIcon';
 import { IconButton } from '../../atoms/IconButton';
 import { useLocalization } from '../../localization';

@@ -1,13 +1,11 @@
-import {
-  faBrain,
-  faDatabase,
-  faHouse,
-  faObjectGroup,
-  faLayerGroup,
-  faPen,
-  faPlay,
-  faBookOpen,
-} from '@fortawesome/free-solid-svg-icons';
+import { faBookOpen } from '@fortawesome/free-solid-svg-icons/faBookOpen';
+import { faBrain } from '@fortawesome/free-solid-svg-icons/faBrain';
+import { faDatabase } from '@fortawesome/free-solid-svg-icons/faDatabase';
+import { faHouse } from '@fortawesome/free-solid-svg-icons/faHouse';
+import { faLayerGroup } from '@fortawesome/free-solid-svg-icons/faLayerGroup';
+import { faObjectGroup } from '@fortawesome/free-solid-svg-icons/faObjectGroup';
+import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
+import { faPlay } from '@fortawesome/free-solid-svg-icons/faPlay';
 import type { LocalizationCopy } from '../localization';
 import { type ShellItem } from './shell-item';
 import { type ShellViewName } from './shell-view-name';

@@ -1,4 +1,4 @@
-import { faCircleHalfStroke } from '@fortawesome/free-solid-svg-icons';
+import { faCircleHalfStroke } from '@fortawesome/free-solid-svg-icons/faCircleHalfStroke';
 import { ActionToolbarPopover } from '../../../atoms/ActionToolbar';
 import { Dropdown } from '../../../atoms/Dropdown';
 import {

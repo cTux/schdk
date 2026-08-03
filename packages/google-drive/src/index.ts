@@ -35,7 +35,11 @@ import {
   isDriveFileId,
   type DriveRecentPackage,
   type DriveSettingsDocument,
+  type DriveSettingsFile,
+  type DriveVisualAssetsDocument,
+  type DriveVisualAssetsFile,
   type TimedSection,
+  parseDriveVisualAssetsDocument,
 } from './services/settings/settings.js';
 import { parseDriveSettingsDocument } from './parsers/settings/parse-drive-settings-document.js';
 import {
@@ -102,7 +106,11 @@ export {
   parseDriveSettingsDocument,
   type DriveRecentPackage,
   type DriveSettingsDocument,
+  type DriveSettingsFile,
+  type DriveVisualAssetsDocument,
+  type DriveVisualAssetsFile,
   type TimedSection,
+  parseDriveVisualAssetsDocument,
   createAIQuestionsPackageFilename,
   isDriveAIQuestionsPackageName,
   parseDriveAIQuestionsPackageFile,

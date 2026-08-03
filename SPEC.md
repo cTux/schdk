@@ -94,6 +94,9 @@ V51|Visual-editor background and custom images are bounded before reading and re
 V52|Workspace runtime modules remain free of relative import cycles.
 V53|Shell page chunks and Drive-backed feature collections load with their first consumer and remain available for the shell session.
 V54|Every production web JavaScript chunk remains at or below 300 KiB.
+V55|A stale settings upload never overwrites a newer Google Drive settings file.
+V56|Every production web CSS chunk remains at or below 64 KiB, the visual-editor JavaScript chunk remains at or below 40 KiB, and its CSS chunk remains at or below 24 KiB.
+V57|Drive-synchronized visual-editor images remain outside the settings document in a bounded, version-protected app-data asset document and are hydrated before settings merge.
 
 ## §T
 
@@ -235,3 +238,4 @@ B128|2026-08-02|The comfortable and system font choices both resolved to Segoe U
 B129|2026-08-02|The collapsed sidebar positioned its toggle outside the panel, where page content and transition layers could cover it, while inherited button sizing made the icon appear off-center|Keep the icon centered in a compact square toggle within the sidebar as specified by `docs/specs/unified-shell.md` SHL-26.
 B130|2026-08-02|GitHub workflows duplicated the pnpm version from `packageManager`, so updating only the canonical pin made every CI job fail during setup|Use `package.json#packageManager` as the single pnpm version source for `pnpm/action-setup`.
 B131|2026-08-02|Collapsed navigation retained a gap beside zero-width labels and the conditional preloading indicator remained in flex flow, shifting icons and sidebar controls|Keep compact icons centered and the preloading indicator out of layout flow as specified by `docs/specs/unified-shell.md` SHL-20 and SHL-26.
+B132|2026-08-03|Settings uploads replaced the Drive app-data file without an atomic version precondition, allowing concurrent clients to overwrite newer settings|V55

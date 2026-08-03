@@ -1,6 +1,6 @@
 import './styles.scss';
 
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '../../atoms/Button';
 import { Input } from '../../atoms/Input';

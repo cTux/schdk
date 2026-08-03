@@ -1,4 +1,5 @@
-import { faBan, faFillDrip } from '@fortawesome/free-solid-svg-icons';
+import { faBan } from '@fortawesome/free-solid-svg-icons/faBan';
+import { faFillDrip } from '@fortawesome/free-solid-svg-icons/faFillDrip';
 import {
   ActionToolbarButton,
   ActionToolbarPopover,

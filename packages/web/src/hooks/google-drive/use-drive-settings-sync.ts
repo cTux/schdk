@@ -10,6 +10,11 @@ import {
 } from '../../storage/google-drive/drive-settings-storage';
 import { saveGameOptions } from '../../storage/options/save-game-options';
 import type { DriveSettingsStorage } from '../../types/google-drive/google-drive-types';
+import {
+  collectVisualAssetReferences,
+  externalizeVisualAssets,
+  hydrateVisualAssets,
+} from '../../storage/google-drive/visual-assets-storage';
 
 interface DriveSettingsSyncOptions {
   bridge: DriveSettingsStorage | null;
@@ -26,30 +31,86 @@ export function useDriveSettingsSync({
   setEditorTextOptions,
   setGameOptions,
 }: DriveSettingsSyncOptions) {
-  const [gameOptionsStorageFailed, setGameOptionsStorageFailed] =
-    useState(false);
+  const [localStorageFailed, setLocalStorageFailed] = useState(false);
+  const [settingsSyncFailed, setSettingsSyncFailed] = useState(false);
   const [revision, setRevision] = useState(0);
   const settings = useRef(
     loadLocalDriveSettings(localStorage, editorTextOptions, gameOptions),
   );
+  const dirtySections = useRef({ editorTextOptions: 0, gameOptions: 0 });
   const syncQueue = useRef(Promise.resolve());
 
   const synchronize = useCallback(async () => {
     if (!bridge) return;
-    const remote = await bridge.loadSettings();
-    const merged =
-      remote === null
+    const [remote, remoteAssets] = await Promise.all([
+      bridge.loadSettings(),
+      bridge.loadVisualAssets(),
+    ]);
+    const hydratedRemote = remote
+      ? {
+          ...remote,
+          value: hydrateVisualAssets(
+            remote.value,
+            remoteAssets?.value ?? { schemaVersion: 1, assets: {} },
+          ),
+        }
+      : null;
+    const remoteMerged =
+      hydratedRemote === null
         ? initializeDriveSettings(settings.current)
-        : mergeDriveSettings(settings.current, remote);
+        : mergeDriveSettings(settings.current, hydratedRemote.value);
+    const dirtyAtStart = { ...dirtySections.current };
+    const merged = {
+      ...remoteMerged,
+      sections: {
+        ...remoteMerged.sections,
+        ...(dirtyAtStart.editorTextOptions
+          ? { editorTextOptions: settings.current.sections.editorTextOptions }
+          : {}),
+        ...(dirtyAtStart.gameOptions
+          ? { gameOptions: settings.current.sections.gameOptions }
+          : {}),
+      },
+    };
     settings.current = merged;
     const editor = merged.sections.editorTextOptions.value;
     const game = merged.sections.gameOptions.value;
     saveEditorTextOptions(localStorage, editor);
-    setGameOptionsStorageFailed(!saveGameOptions(localStorage, game));
+    setLocalStorageFailed(!saveGameOptions(localStorage, game));
     saveLocalDriveSettings(localStorage, merged);
     setEditorTextOptions(editor);
     setGameOptions(game);
-    await bridge.saveSettings(merged);
+    const externalized = externalizeVisualAssets(
+      merged,
+      remoteAssets?.value ?? { schemaVersion: 1, assets: {} },
+      collectVisualAssetReferences(remote?.value),
+    );
+    const hasAssets = Object.keys(externalized.assets.assets).length > 0;
+    const assetsSaved =
+      !remoteAssets && !hasAssets
+        ? true
+        : await bridge.saveVisualAssets(
+            externalized.assets,
+            remoteAssets?.etag ?? null,
+          );
+    if (!assetsSaved) {
+      setSettingsSyncFailed(true);
+      throw new Error('Google Drive visual assets changed before save');
+    }
+    const saved = await bridge.saveSettings(
+      externalized.settings,
+      remote?.etag ?? null,
+    );
+    setSettingsSyncFailed(!saved);
+    if (!saved) throw new Error('Google Drive settings changed before save');
+    if (
+      dirtySections.current.editorTextOptions === dirtyAtStart.editorTextOptions
+    ) {
+      dirtySections.current.editorTextOptions = 0;
+    }
+    if (dirtySections.current.gameOptions === dirtyAtStart.gameOptions) {
+      dirtySections.current.gameOptions = 0;
+    }
   }, [bridge, setEditorTextOptions, setGameOptions]);
 
   const enqueueSync = useCallback(() => {
@@ -60,6 +121,7 @@ export function useDriveSettingsSync({
   }, [synchronize]);
 
   function changeEditorTextOptions(value: EditorTextOptions) {
+    dirtySections.current.editorTextOptions += 1;
     const now = new Date().toISOString();
     settings.current = {
       ...settings.current,
@@ -75,6 +137,7 @@ export function useDriveSettingsSync({
   }
 
   function changeGameOptions(value: GameOptions) {
+    dirtySections.current.gameOptions += 1;
     const now = new Date().toISOString();
     settings.current = {
       ...settings.current,
@@ -83,7 +146,7 @@ export function useDriveSettingsSync({
         gameOptions: { updatedAt: now, value },
       },
     };
-    setGameOptionsStorageFailed(!saveGameOptions(localStorage, value));
+    setLocalStorageFailed(!saveGameOptions(localStorage, value));
     saveLocalDriveSettings(localStorage, settings.current);
     setGameOptions(value);
     setRevision((value) => value + 1);
@@ -91,7 +154,7 @@ export function useDriveSettingsSync({
 
   return {
     enqueueSync,
-    gameOptionsStorageFailed,
+    gameOptionsStorageFailed: localStorageFailed || settingsSyncFailed,
     revision,
     setEditorTextOptions: changeEditorTextOptions,
     setGameOptions: changeGameOptions,

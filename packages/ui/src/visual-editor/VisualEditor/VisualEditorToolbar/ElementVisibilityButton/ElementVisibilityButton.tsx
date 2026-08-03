@@ -1,4 +1,5 @@
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faEye } from '@fortawesome/free-solid-svg-icons/faEye';
+import { faEyeSlash } from '@fortawesome/free-solid-svg-icons/faEyeSlash';
 import { ActionToolbarButton } from '../../../../atoms/ActionToolbar';
 import type { LocalizationCopy } from '../../../../localization';
 

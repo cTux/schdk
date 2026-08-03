@@ -1,11 +1,9 @@
 import './styles.scss';
 
-import {
-  faMusic,
-  faPlus,
-  faRotate,
-  faTrashCan,
-} from '@fortawesome/free-solid-svg-icons';
+import { faMusic } from '@fortawesome/free-solid-svg-icons/faMusic';
+import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
+import { faRotate } from '@fortawesome/free-solid-svg-icons/faRotate';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons/faTrashCan';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRef } from 'react';
 import { IconButton } from '../../atoms/IconButton';

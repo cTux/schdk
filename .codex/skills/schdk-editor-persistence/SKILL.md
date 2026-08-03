@@ -17,6 +17,9 @@ description: Change or debug Drive-backed SCHDK editor persistence across web an
    close changes; read `docs/rules/ui-editor.md` for visual changes.
 4. Exercise every changed create, import, restore, autosave, navigation,
    download, and close path that can preserve or discard pending data.
+5. For settings images, trace reference externalization and hydration through
+   both browser and mirrored desktop bridges; keep the asset document bounded
+   and protect its update with the loaded ETag.
 
 ## Checks
 

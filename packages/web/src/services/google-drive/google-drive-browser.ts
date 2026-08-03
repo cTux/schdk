@@ -165,8 +165,19 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
     return this.client.loadSettings();
   }
 
-  saveSettings(settings: DriveSettingsDocument) {
-    return this.client.saveSettings(settings);
+  saveSettings(settings: DriveSettingsDocument, expectedEtag: string | null) {
+    return this.client.saveSettings(settings, expectedEtag);
+  }
+
+  loadVisualAssets() {
+    return this.client.loadVisualAssets();
+  }
+
+  saveVisualAssets(
+    assets: Parameters<GoogleDriveClient['saveVisualAssets']>[0],
+    expectedEtag: string | null,
+  ) {
+    return this.client.saveVisualAssets(assets, expectedEtag);
   }
 
   loadQuestionDatabase() {

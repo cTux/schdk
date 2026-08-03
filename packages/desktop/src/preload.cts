@@ -14,6 +14,8 @@ const googleDriveIpcChannels = {
   generateAiQuestion: 'generate-ai-question',
   loadSettings: 'load-google-drive-settings',
   saveSettings: 'save-google-drive-settings',
+  loadVisualAssets: 'load-google-drive-visual-assets',
+  saveVisualAssets: 'save-google-drive-visual-assets',
   loadQuestionDatabase: 'load-question-database',
   saveQuestionDatabase: 'save-question-database',
   listGamePackages: 'list-google-drive-game-packages',
@@ -103,8 +105,20 @@ const editorApi = {
         .finally(() => signal?.removeEventListener('abort', cancel));
     },
     loadSettings: () => ipcRenderer.invoke(googleDriveIpcChannels.loadSettings),
-    saveSettings: (settings: unknown) =>
-      ipcRenderer.invoke(googleDriveIpcChannels.saveSettings, settings),
+    saveSettings: (settings: unknown, expectedEtag: string | null) =>
+      ipcRenderer.invoke(
+        googleDriveIpcChannels.saveSettings,
+        settings,
+        expectedEtag,
+      ),
+    loadVisualAssets: () =>
+      ipcRenderer.invoke(googleDriveIpcChannels.loadVisualAssets),
+    saveVisualAssets: (assets: unknown, expectedEtag: string | null) =>
+      ipcRenderer.invoke(
+        googleDriveIpcChannels.saveVisualAssets,
+        assets,
+        expectedEtag,
+      ),
     loadQuestionDatabase: () =>
       ipcRenderer.invoke(googleDriveIpcChannels.loadQuestionDatabase),
     saveQuestionDatabase: (value: unknown) =>

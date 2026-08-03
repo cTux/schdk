@@ -1,5 +1,5 @@
 import { parseDrivePackageReference } from '@schdk/google-drive';
-import { QUESTIONS_PER_ROUND } from '@schdk/common';
+import { DEFAULT_GAME_OPTIONS, QUESTIONS_PER_ROUND } from '@schdk/common';
 import { ConfirmationDialog, useConfirmationDialog } from '@schdk/ui';
 import { HostView } from '@schdk/ui/host';
 import { useLocalization } from '@schdk/ui/localization';
@@ -18,22 +18,25 @@ import { usePresenterNotes } from './use-presenter-notes';
 import type { AppProps } from './types';
 
 function App({
-  autoFullscreen = true,
-  backgroundImage = null,
-  backgroundOpacity = 1,
-  backgroundGradientFrom = null,
-  backgroundGradientTo = '#2b3048',
-  backgroundGradientDirection = 135,
-  customElements = [],
-  layout = null,
-  musicVolume = 0.05,
-  soundVolume = 0.05,
   drive,
   driveActive = false,
+  options = DEFAULT_GAME_OPTIONS,
   sessionScope = window.location.pathname,
   onDriveFailure,
   onExit,
 }: AppProps) {
+  const {
+    autoFullscreen,
+    backgroundGradientDirection,
+    backgroundGradientFrom,
+    backgroundGradientTo,
+    backgroundImage,
+    backgroundOpacity,
+    customElements,
+    layout,
+    musicVolume,
+    soundVolume,
+  } = options;
   const { copy } = useLocalization();
   const { confirm, dialogProps } = useConfirmationDialog();
   const initialSession = useRef(

@@ -1,5 +1,7 @@
 import './styles.scss';
-import { faCopy, faPaste, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faCopy } from '@fortawesome/free-solid-svg-icons/faCopy';
+import { faPaste } from '@fortawesome/free-solid-svg-icons/faPaste';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons/faTrashCan';
 import { useDeferredValue, useMemo, useState } from 'react';
 import { IconButton } from '../../atoms/IconButton';
 import { Input } from '../../atoms/Input';

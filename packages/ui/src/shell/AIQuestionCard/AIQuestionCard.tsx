@@ -1,11 +1,9 @@
 import './styles.scss';
 
-import {
-  faLock,
-  faPen,
-  faStar,
-  faTrashCan,
-} from '@fortawesome/free-solid-svg-icons';
+import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
+import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
+import { faStar } from '@fortawesome/free-solid-svg-icons/faStar';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons/faTrashCan';
 import { useState } from 'react';
 import { IconButton } from '../../atoms/IconButton';
 import { useLocalization } from '../../localization';

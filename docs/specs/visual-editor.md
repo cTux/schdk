@@ -33,7 +33,8 @@ to every hosted question.
 - **VIS-11:** Legacy plain-JSON templates import without overwriting unrelated
   game options such as volume.
 - **VIS-12:** Template imports reject archives and `template.json` entries
-  larger than 16 MiB before allocating or extracting their content.
+  larger than 16 MiB before allocating or extracting their content, and ZIP
+  compression or extraction runs asynchronously without blocking interaction.
 - **VIS-13:** Custom text editing uses the shared non-resizable multiline
   control.
 - **VIS-14:** Background and custom-element image selection rejects files that

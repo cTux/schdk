@@ -29,6 +29,9 @@
   unrelated game options in the web controller.
 - Keep `GameOptions` mutations in pure helpers; the React hook owns transient
   interaction state and delegates persisted model updates.
+- Keep runtime and local fallback options hydrated with image data, but
+  externalize Drive-synchronized background and custom-element images into the
+  separate bounded visual-assets app-data document.
 - Let every built-in and custom element be marked hidden while remaining
   editable in the visual editor; omit hidden elements only from gameplay.
 - Keep resize and property controls outside the transformed game container.
@@ -60,4 +63,6 @@
 - Import and export versioned `.schdk-template` ZIP archives containing
   `template.json` with only visual layout, image and gradient backgrounds,
   opacity, and custom elements. Continue importing legacy plain JSON templates
-  and preserve unrelated game options such as sound volume.
+  and preserve unrelated game options such as sound volume. Compress and
+  extract archives asynchronously so bounded template work does not block the
+  editor interaction loop.

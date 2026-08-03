@@ -309,11 +309,17 @@ test('application source respects internal ownership boundaries', async () => {
 });
 
 test('critical architecture boundaries remain enforced', async () => {
-  const [channels, preload, history] = await Promise.all([
-    read('packages/desktop/src/ipc/google-drive/google-drive-ipc-channels.ts'),
-    read('packages/desktop/src/preload.cts'),
-    read('packages/web/src/utils/visual-editor/visual-editor-history.ts'),
-  ]);
+  const [channels, preload, history, appData, visualAssets] = await Promise.all(
+    [
+      read(
+        'packages/desktop/src/ipc/google-drive/google-drive-ipc-channels.ts',
+      ),
+      read('packages/desktop/src/preload.cts'),
+      read('packages/web/src/utils/visual-editor/visual-editor-history.ts'),
+      read('packages/google-drive/src/types/app-data/app-data.ts'),
+      read('packages/web/src/storage/google-drive/visual-assets-storage.ts'),
+    ],
+  );
 
   assert.deepEqual(
     objectEntries(preload, 'googleDriveIpcChannels'),
@@ -337,6 +343,27 @@ test('critical architecture boundaries remain enforced', async () => {
   );
   assert.match(history, /MAX_HISTORY_ENTRIES = 100/);
   assert.match(history, /MAX_HISTORY_BYTES = 32 \* 1024 \* 1024/);
+  assert.match(appData, /'If-Match': expectedEtag/);
+  assert.match(visualAssets, /schdk-visual-asset:/);
+  assert.match(visualAssets, /hydrateVisualAssets/);
+});
+
+test('Font Awesome stays tree-shakeable and bundle checks use the manifest', async () => {
+  const [uiFiles, bundleCheck, viteConfig] = await Promise.all([
+    listFiles(new URL('packages/ui/src/', repositoryRoot)),
+    read('scripts/check-web-bundle-budget.mjs'),
+    read('packages/web/vite.config.ts'),
+  ]);
+
+  for (const file of uiFiles.filter((file) => file.pathname.endsWith('.tsx'))) {
+    const source = await readFile(file, 'utf8');
+    assert.doesNotMatch(
+      source,
+      /from ['"]@fortawesome\/free-solid-svg-icons['"]/u,
+    );
+  }
+  assert.match(bundleCheck, /\.vite\/manifest\.json/u);
+  assert.match(viteConfig, /manifest: true/u);
 });
 
 test('UI components follow the directory and class composition contracts', async () => {

@@ -1,11 +1,9 @@
 import './styles.scss';
 
 import { Dialog } from '@base-ui/react/dialog';
-import {
-  faChevronLeft,
-  faChevronRight,
-  faWandMagicSparkles,
-} from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons/faChevronLeft';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight';
+import { faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons/faWandMagicSparkles';
 import classNames from 'classnames';
 import { Button } from '../../atoms/Button';
 import { Dropdown } from '../../atoms/Dropdown';

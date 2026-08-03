@@ -1,6 +1,6 @@
-@use './tokens' as *;
+@use '../styles/tokens' as *;
 
-.editor-app {
+:where(.editor-app, .host-app) {
   .secondary {
     margin-top: 4px;
     background: transparent;
