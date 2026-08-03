@@ -1,5 +1,5 @@
 import { Tooltip as BaseTooltip } from '@base-ui/react/tooltip';
-import type { TooltipProviderProps } from './types';
+import type { TooltipProviderProps } from '../Tooltip/types';
 
 export function TooltipProvider({ children }: TooltipProviderProps) {
   return (

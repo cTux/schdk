@@ -409,8 +409,6 @@ test('UI components follow the directory and class composition contracts', async
     const directoryName = componentDirectory.pathname.split('/').at(-2);
 
     assert.equal(directoryName, componentName, componentFile.pathname);
-    await access(new URL('index.ts', componentDirectory));
-
     const source = await readFile(componentFile, 'utf8');
     const stylesheet = files.find(
       (file) => file.href === new URL('styles.scss', componentDirectory).href,

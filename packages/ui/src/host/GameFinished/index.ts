@@ -1,4 +1,4 @@
 import { GameFinished } from './GameFinished';
-import { type GameFinishedProps } from './types';
+import { type GameFinishedProps } from './GameFinished';
 
 export { GameFinished, type GameFinishedProps };

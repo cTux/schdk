@@ -10,7 +10,13 @@ import {
   GameQuestionIntro,
   GameTimer,
 } from '../../../game-presentation/GameElements';
-import type { VisualEditorPreviewProps } from './types';
+import type { LocalizationCopy } from '../../../localization';
+import type { GameLayoutElementId } from '../../../options/types';
+
+interface VisualEditorPreviewProps {
+  copy: LocalizationCopy;
+  id: GameLayoutElementId;
+}
 
 export function VisualEditorPreview({ copy, id }: VisualEditorPreviewProps) {
   return {

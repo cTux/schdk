@@ -11,7 +11,7 @@ import { ElementStyleSettings } from '../../ElementStyleSettings';
 import { ImagePositionSettings } from '../../ImagePositionSettings';
 import { TextSettings } from '../../PositionSettings';
 import type { ElementSelection } from '../../types';
-import { ElementVisibilityButton } from '../ElementVisibilityButton';
+import { ElementVisibilityButton } from '../ElementVisibilityButton/ElementVisibilityButton';
 
 const GRAPHIC_ELEMENTS = new Set<GameLayoutElementId>(['logo', 'handout']);
 

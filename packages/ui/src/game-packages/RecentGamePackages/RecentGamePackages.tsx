@@ -1,6 +1,6 @@
 import './styles.scss';
 import { RecentGamePackageButton } from '../RecentGamePackageButton/RecentGamePackageButton';
-import type { RecentGamePackagesProps } from './types';
+import type { RecentGamePackagesProps } from '../types';
 
 function RecentGamePackages({
   hidden,

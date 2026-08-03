@@ -1,6 +1,6 @@
-import { BuiltInElementToolbar } from './BuiltInElementToolbar';
-import { CustomElementToolbar } from './CustomElementToolbar';
-import { WorkspaceToolbar } from './WorkspaceToolbar';
+import { BuiltInElementToolbar } from './BuiltInElementToolbar/BuiltInElementToolbar';
+import { CustomElementToolbar } from './CustomElementToolbar/CustomElementToolbar';
+import { WorkspaceToolbar } from './WorkspaceToolbar/WorkspaceToolbar';
 import type { VisualEditorToolbarProps } from './types';
 
 export function VisualEditorToolbar({

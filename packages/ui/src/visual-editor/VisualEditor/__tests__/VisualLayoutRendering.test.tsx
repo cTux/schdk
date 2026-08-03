@@ -5,7 +5,7 @@ import {
   GAME_LAYOUT_ELEMENT_IDS,
 } from '../../../options/types';
 import { GameLayoutItem } from '../../../game-presentation/GameLayoutItem';
-import { VisualLayoutItem } from '../VisualLayoutItem';
+import { VisualLayoutItem } from '../VisualLayoutItem/VisualLayoutItem';
 
 describe('game layout rendering contract', () => {
   it.each(GAME_LAYOUT_ELEMENT_IDS)(

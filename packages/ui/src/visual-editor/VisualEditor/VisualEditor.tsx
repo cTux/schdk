@@ -14,10 +14,10 @@ import {
   GAME_LAYOUT_ELEMENT_IDS,
   type GameLayoutElementId,
 } from '../../options/types';
-import { VisualEditorSidebar } from './VisualEditorSidebar';
-import { VisualEditorPreview } from './VisualEditorPreview';
-import { VisualEditorToolbar } from './VisualEditorToolbar';
-import { VisualLayoutItem } from './VisualLayoutItem';
+import { VisualEditorSidebar } from './VisualEditorSidebar/VisualEditorSidebar';
+import { VisualEditorPreview } from './VisualEditorPreview/VisualEditorPreview';
+import { VisualEditorToolbar } from './VisualEditorToolbar/VisualEditorToolbar';
+import { VisualLayoutItem } from './VisualLayoutItem/VisualLayoutItem';
 import type { ElementSelection, VisualEditorProps } from './types';
 import { useVisualEditor } from './hooks/useVisualEditor';
 

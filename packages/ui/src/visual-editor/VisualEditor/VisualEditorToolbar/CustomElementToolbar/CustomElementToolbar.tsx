@@ -18,7 +18,7 @@ import { ImagePositionSettings } from '../../ImagePositionSettings';
 import { TextSettings } from '../../PositionSettings';
 import type { ElementSelection } from '../../types';
 import type { VisualEditorToolbarProps } from '../types';
-import { ElementVisibilityButton } from '../ElementVisibilityButton';
+import { ElementVisibilityButton } from '../ElementVisibilityButton/ElementVisibilityButton';
 
 interface CustomElementToolbarProps {
   actions: VisualEditorToolbarProps['actions'];

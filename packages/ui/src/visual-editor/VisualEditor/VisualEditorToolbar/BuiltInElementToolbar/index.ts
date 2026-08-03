@@ -1,1 +1,0 @@
-export { BuiltInElementToolbar } from './BuiltInElementToolbar';

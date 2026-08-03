@@ -1,4 +1,4 @@
 import { ZoomableImage } from './ZoomableImage';
-import { type ZoomableImageProps } from './types';
+import { type ZoomableImageProps } from './ZoomableImage';
 
 export { ZoomableImage, type ZoomableImageProps };
