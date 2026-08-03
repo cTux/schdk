@@ -12,10 +12,15 @@ export function registerGoogleDriveSettingsIpc() {
   );
   ipcMain.handle(
     GOOGLE_DRIVE_IPC_CHANNELS.saveSettings,
-    async (_event, value) => {
+    async (_event, value, expectedEtag) => {
       const settings = parseDriveSettingsDocument(value);
-      if (!settings) throw new TypeError('Invalid Google Drive settings');
-      await googleDriveClient.saveSettings(settings);
+      const hasValidEtag =
+        expectedEtag === null ||
+        (typeof expectedEtag === 'string' && expectedEtag.length > 0);
+      if (!settings || !hasValidEtag) {
+        throw new TypeError('Invalid Google Drive settings');
+      }
+      return googleDriveClient.saveSettings(settings, expectedEtag);
     },
   );
   ipcMain.handle(GOOGLE_DRIVE_IPC_CHANNELS.loadQuestionDatabase, () =>

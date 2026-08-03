@@ -35,6 +35,7 @@ import {
   isDriveFileId,
   type DriveRecentPackage,
   type DriveSettingsDocument,
+  type DriveSettingsFile,
   type TimedSection,
 } from './services/settings/settings.js';
 import { parseDriveSettingsDocument } from './parsers/settings/parse-drive-settings-document.js';
@@ -102,6 +103,7 @@ export {
   parseDriveSettingsDocument,
   type DriveRecentPackage,
   type DriveSettingsDocument,
+  type DriveSettingsFile,
   type TimedSection,
   createAIQuestionsPackageFilename,
   isDriveAIQuestionsPackageName,

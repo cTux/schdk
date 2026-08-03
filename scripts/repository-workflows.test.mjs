@@ -309,10 +309,11 @@ test('application source respects internal ownership boundaries', async () => {
 });
 
 test('critical architecture boundaries remain enforced', async () => {
-  const [channels, preload, history] = await Promise.all([
+  const [channels, preload, history, appData] = await Promise.all([
     read('packages/desktop/src/ipc/google-drive/google-drive-ipc-channels.ts'),
     read('packages/desktop/src/preload.cts'),
     read('packages/web/src/utils/visual-editor/visual-editor-history.ts'),
+    read('packages/google-drive/src/types/app-data/app-data.ts'),
   ]);
 
   assert.deepEqual(
@@ -337,6 +338,7 @@ test('critical architecture boundaries remain enforced', async () => {
   );
   assert.match(history, /MAX_HISTORY_ENTRIES = 100/);
   assert.match(history, /MAX_HISTORY_BYTES = 32 \* 1024 \* 1024/);
+  assert.match(appData, /'If-Match': expectedEtag/);
 });
 
 test('UI components follow the directory and class composition contracts', async () => {

@@ -16,6 +16,7 @@ type DriveRequest = (input: string, init?: RequestInit) => Promise<Response>;
 interface DriveUpload {
   fileId?: string;
   fields?: string;
+  headers?: HeadersInit;
   metadata: unknown;
   mimeType: string;
   content: BlobPart;
@@ -122,13 +123,13 @@ async function ensurePackageFolder(request: DriveRequest) {
 
 function uploadDriveFile(
   request: DriveRequest,
-  { fileId, fields, metadata, mimeType, content }: DriveUpload,
+  { fileId, fields, headers, metadata, mimeType, content }: DriveUpload,
 ) {
   const multipart = createDriveMultipartBody(metadata, mimeType, content);
   const target = `${DRIVE_UPLOAD_API}/files${fileId ? `/${encodeURIComponent(fileId)}` : ''}?uploadType=multipart${fields ? `&fields=${fields}` : ''}`;
   return request(target, {
     method: fileId ? 'PATCH' : 'POST',
-    headers: { 'Content-Type': multipart.contentType },
+    headers: { 'Content-Type': multipart.contentType, ...headers },
     body: multipart.body,
   });
 }

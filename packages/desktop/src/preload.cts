@@ -103,8 +103,12 @@ const editorApi = {
         .finally(() => signal?.removeEventListener('abort', cancel));
     },
     loadSettings: () => ipcRenderer.invoke(googleDriveIpcChannels.loadSettings),
-    saveSettings: (settings: unknown) =>
-      ipcRenderer.invoke(googleDriveIpcChannels.saveSettings, settings),
+    saveSettings: (settings: unknown, expectedEtag: string | null) =>
+      ipcRenderer.invoke(
+        googleDriveIpcChannels.saveSettings,
+        settings,
+        expectedEtag,
+      ),
     loadQuestionDatabase: () =>
       ipcRenderer.invoke(googleDriveIpcChannels.loadQuestionDatabase),
     saveQuestionDatabase: (value: unknown) =>

@@ -22,7 +22,9 @@ preserving recoverable local state during temporary Drive failures.
 - **DRV-5:** Local package selection is import-to-Drive; explicit download is
   export-from-Drive.
 - **DRV-6:** Settings live in `settings-v1.json` in `appDataFolder`, merge by
-  section `updatedAt`, and upload after one quiet second.
+  section `updatedAt`, preserve locally dirty sections, and upload after one
+  quiet second with the ETag observed on load. A stale write reports a conflict
+  and keeps local settings instead of overwriting a newer Drive file.
 - **DRV-7:** Local settings apply immediately and remain available when Drive
   is unavailable.
 - **DRV-8:** Browser login starts only from explicit user action, keeps a
@@ -97,6 +99,7 @@ preserving recoverable local state during temporary Drive failures.
 - A failed package write keeps the same file open and requires retry or
   reconnection.
 - Settings conflicts resolve per section, not by replacing the whole document.
+- A stale settings upload never overwrites a newer Drive settings file.
 - AI credentials remain scoped to the connected Google account.
 - Package-folder discovery and restorable editor/host state remain scoped to
   the connected Google account.
@@ -117,7 +120,8 @@ preserving recoverable local state during temporary Drive failures.
 2. Connect on desktop, restart, restore through encrypted refresh credentials,
    then disconnect.
 3. Edit different settings sections on two clients and merge the newest value
-   of each section.
+   of each section. Edit the same settings file concurrently and confirm the
+   stale client keeps its local value and reports the rejected save.
 4. Lose Drive during an edit, retain local settings and pending package state,
    reconnect, and save to the original file ID.
 5. Save an AI API key, generate a question without exposing the key, reconnect

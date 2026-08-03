@@ -39,6 +39,8 @@ import {
 
 import { GoogleDriveAuthorizationError } from '../../errors/client/google-drive-authorization-error.js';
 import { GoogleDriveError } from '../../errors/client/google-drive-error.js';
+import { GoogleDrivePreconditionError } from '../../errors/client/google-drive-precondition-error.js';
+import type { VersionedAppData } from '../../types/app-data/app-data.js';
 
 const DRIVE_API = 'https://www.googleapis.com/drive/v3';
 
@@ -90,12 +92,15 @@ export class GoogleDriveClient
     return account;
   }
 
-  async loadSettings(): Promise<unknown | null> {
-    return this.appData.load(SETTINGS_NAME);
+  async loadSettings(): Promise<VersionedAppData | null> {
+    return this.appData.loadVersioned(SETTINGS_NAME);
   }
 
-  async saveSettings(settings: DriveSettingsDocument): Promise<void> {
-    await this.appData.save(SETTINGS_NAME, settings);
+  async saveSettings(
+    settings: DriveSettingsDocument,
+    expectedEtag: string | null,
+  ): Promise<boolean> {
+    return this.appData.saveVersioned(SETTINGS_NAME, settings, expectedEtag);
   }
 
   async loadQuestionDatabase(): Promise<QuestionDatabaseDocument | null> {
@@ -197,6 +202,11 @@ export class GoogleDriveClient
     });
     if (response.status === 401) {
       throw new GoogleDriveAuthorizationError('Google Drive access expired');
+    }
+    if (response.status === 412) {
+      throw new GoogleDrivePreconditionError(
+        'Google Drive file changed before update',
+      );
     }
     if (!response.ok) {
       throw new GoogleDriveError(

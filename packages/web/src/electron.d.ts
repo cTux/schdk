@@ -9,6 +9,7 @@ import type {
   DrivePackageStorage,
   DriveQuestionDatabaseStorage,
   DriveSettingsDocument,
+  DriveSettingsFile,
 } from '@schdk/google-drive';
 
 export {};
@@ -55,8 +56,11 @@ declare global {
           request: GameQuestionGenerationRequest,
           signal?: AbortSignal,
         ): Promise<GameQuestion>;
-        loadSettings(): Promise<unknown | null>;
-        saveSettings(settings: DriveSettingsDocument): Promise<void>;
+        loadSettings(): Promise<DriveSettingsFile | null>;
+        saveSettings(
+          settings: DriveSettingsDocument,
+          expectedEtag: string | null,
+        ): Promise<boolean>;
       };
   }
 

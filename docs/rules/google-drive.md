@@ -11,8 +11,11 @@
   invalid values supplied by callers, and keep save-conflict `null` results as
   the optimistic-concurrency contract.
 - Keep local storage as the immediate source and fallback. Merge remote
-  settings per section by `updatedAt`, debounce uploads for one second, and
-  retain local changes when Drive is unavailable.
+  settings per section by `updatedAt`, preserve locally dirty sections,
+  debounce uploads for one second, and retain local changes when Drive is
+  unavailable. Load the settings file ETag and require it with `If-Match` on
+  updates; a precondition failure must keep local values and surface a save
+  failure instead of overwriting the newer Drive file.
 - Store `settings-v1.json` in `appDataFolder`. Request `drive` and
   `drive.appdata`; fixed-folder global listing requires the restricted `drive`
   scope because `drive.file` cannot discover files that users did not

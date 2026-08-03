@@ -165,8 +165,8 @@ export class BrowserGoogleDriveBridge implements GoogleDriveBridge {
     return this.client.loadSettings();
   }
 
-  saveSettings(settings: DriveSettingsDocument) {
-    return this.client.saveSettings(settings);
+  saveSettings(settings: DriveSettingsDocument, expectedEtag: string | null) {
+    return this.client.saveSettings(settings, expectedEtag);
   }
 
   loadQuestionDatabase() {
