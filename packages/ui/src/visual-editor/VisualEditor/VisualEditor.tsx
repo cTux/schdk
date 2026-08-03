@@ -10,16 +10,13 @@ import {
   getNextZoom,
   getResizedPosition,
 } from './utils/geometry';
-import {
-  GAME_LAYOUT_ELEMENT_IDS,
-  type GameLayoutElementId,
-} from '../../options/types';
+import type { GameLayoutElementId } from '../../options/types';
 import { VisualEditorSidebar } from './VisualEditorSidebar/VisualEditorSidebar';
-import { VisualEditorPreview } from './VisualEditorPreview/VisualEditorPreview';
 import { VisualEditorToolbar } from './VisualEditorToolbar/VisualEditorToolbar';
 import { VisualLayoutItem } from './VisualLayoutItem/VisualLayoutItem';
 import type { ElementSelection, VisualEditorProps } from './types';
 import { useVisualEditor } from './hooks/useVisualEditor';
+import { getBuiltInElements } from './built-in-elements';
 
 const selectionKey = (selection: ElementSelection) =>
   `${selection.kind}:${selection.id}`;
@@ -44,18 +41,10 @@ function VisualEditor({
     onRedo,
     onUndo,
   });
-  const labels: Record<GameLayoutElementId, string> = {
-    logo: copy.visualEditor.labels.logo,
-    intro: copy.visualEditor.labels.intro,
-    handout: copy.visualEditor.labels.handout,
-    question: copy.visualEditor.labels.question,
-    timer: copy.visualEditor.labels.timer,
-    'answer-comment': copy.visualEditor.labels.answerComment,
-    'alternative-answer': copy.visualEditor.labels.alternativeAnswer,
-    answer: copy.visualEditor.labels.answer,
-    progress: copy.visualEditor.labels.progress,
-    controls: copy.visualEditor.labels.controls,
-  };
+  const builtInElements = getBuiltInElements(copy);
+  const labels = Object.fromEntries(
+    builtInElements.map(({ id, label }) => [id, label]),
+  ) as Record<GameLayoutElementId, string>;
   const renderItem = (
     selection: ElementSelection,
     label: string,
@@ -159,12 +148,8 @@ function VisualEditor({
             if (event.target === event.currentTarget) editor.selectWorkspace();
           }}
         >
-          {GAME_LAYOUT_ELEMENT_IDS.map((id) =>
-            renderItem(
-              { kind: 'built-in', id },
-              labels[id],
-              <VisualEditorPreview copy={copy} id={id} />,
-            ),
+          {builtInElements.map(({ content, id, label }) =>
+            renderItem({ kind: 'built-in', id }, label, content),
           )}
           {game.customElements.map((element) =>
             renderItem(
