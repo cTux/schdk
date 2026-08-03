@@ -1,17 +1,8 @@
 import type { DrivePackageStorage } from '@schdk/google-drive';
-import type { CustomGameElement, GameLayout } from '@schdk/common';
+import type { GameOptions } from '@schdk/common';
 
 export interface AppProps {
-  autoFullscreen?: boolean;
-  backgroundImage?: string | null;
-  backgroundOpacity?: number;
-  backgroundGradientFrom?: string | null;
-  backgroundGradientTo?: string;
-  backgroundGradientDirection?: number;
-  customElements?: CustomGameElement[];
-  layout?: GameLayout | null;
-  musicVolume?: number;
-  soundVolume?: number;
+  options?: GameOptions;
   drive?: DrivePackageStorage;
   driveActive?: boolean;
   sessionScope?: string;

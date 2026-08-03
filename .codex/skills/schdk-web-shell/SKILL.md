@@ -16,6 +16,8 @@ description: Maintain the @schdk/web shell. Use for entry points, navigation, si
    authorization path before editing.
    Keep routing and page composition in `@schdk/web`; load Drive collections
    with their first consumer and retain them for the shell session.
+   Keep shell preference persistence and document metadata in their focused
+   hooks, and pass cohesive host options as one grouped contract.
    Wrap lazy shell, editor, and host chunks in the shared localized loading and
    error boundary so chunk failures retain a usable shell and reload action.
    Let Vite derive chunks from that import graph; do not force all third-party

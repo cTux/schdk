@@ -2,19 +2,9 @@ import type { GameOptions } from '@schdk/common';
 import type { EditorTextOptions } from '@schdk/ui/options';
 import { LOCALIZATION_COPY, LocaleProvider } from '@schdk/ui/localization';
 import { AsyncBoundary, AsyncLoading, GoogleLoginView } from '@schdk/ui/shell';
-import { lazy, Suspense, useEffect, useLayoutEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { loadEditorTextOptions } from '../../storage/editor/editor-options-storage';
 import { loadGameOptions } from '../../storage/options/load-game-options';
-import {
-  loadShellLocale,
-  loadShellTheme,
-  loadUiAnimations,
-  loadAppFont,
-  saveShellLocale,
-  saveShellTheme,
-  saveUiAnimations,
-  saveAppFont,
-} from '../../types/shell/shell-preferences';
 import { useAiQuestionTools } from '../../hooks/ai-questions/use-ai-question-tools';
 import { AppUpdateButton } from '../desktop/AppUpdateButton';
 import { useGoogleDriveSettings } from '../../hooks/google-drive/use-google-drive-settings';
@@ -23,6 +13,8 @@ import { useSettingsDeepLink } from '../../hooks/settings/use-settings-deep-link
 import { useQuestionDatabase } from '../../hooks/question-database/use-question-database';
 import { ShellWorkspace } from './ShellWorkspace';
 import { useVisualEditorActions } from '../../hooks/shell/use-visual-editor-actions';
+import { useShellPreferences } from '../../hooks/shell/use-shell-preferences';
+import { useShellDocumentMetadata } from '../../hooks/shell/use-shell-document-metadata';
 
 const HostApp = lazy(() =>
   import('../../host/App').then(({ App }) => ({ default: App })),
@@ -33,10 +25,8 @@ const EditorApp = lazy(() =>
 
 export function App() {
   const sessionScope = window.location.pathname;
-  const [locale, setLocale] = useState(loadShellLocale);
-  const [theme, setTheme] = useState(loadShellTheme);
-  const [font, setFont] = useState(loadAppFont);
-  const [uiAnimations, setUiAnimations] = useState(loadUiAnimations);
+  const preferences = useShellPreferences();
+  const { font, locale, theme, uiAnimations } = preferences;
   const copy = LOCALIZATION_COPY[locale];
   const navigation = useShellNavigation(sessionScope);
   const { view } = navigation;
@@ -94,43 +84,10 @@ export function App() {
   );
   const [unlocked, setUnlocked] = useState(connected);
   useEffect(() => setUnlocked((current) => current || connected), [connected]);
-
-  useEffect(() => {
-    saveShellLocale(locale);
-    document.documentElement.lang = locale;
-    const sectionTitle =
-      view === 'home'
-        ? ''
-        : view === 'options'
-          ? copy.shell.settingsLabel
-          : view === 'visualEditor'
-            ? copy.shell.visualEditor.label
-            : copy.shell[view].label;
-    document.title = sectionTitle
-      ? `${sectionTitle} — ${copy.meta.title}`
-      : copy.meta.title;
-    document
-      .querySelector('meta[name="description"]')
-      ?.setAttribute('content', copy.meta.description);
-  }, [copy, locale, view]);
-
-  useEffect(() => {
-    saveShellTheme(theme);
-    document.documentElement.dataset.theme = theme;
-  }, [theme]);
-
-  useLayoutEffect(() => {
-    saveAppFont(font);
-    document.documentElement.dataset.font = font;
-  }, [font]);
-
-  useLayoutEffect(() => {
-    saveUiAnimations(uiAnimations);
-    document.documentElement.dataset.uiAnimations = String(uiAnimations);
-  }, [uiAnimations]);
+  useShellDocumentMetadata(copy, view);
 
   return (
-    <LocaleProvider locale={locale} onLocaleChange={setLocale}>
+    <LocaleProvider locale={locale} onLocaleChange={preferences.setLocale}>
       {(!unlocked || !connected) && (
         <GoogleLoginView
           privacyHref={window.desktop ? undefined : 'privacy.html'}
@@ -169,25 +126,12 @@ export function App() {
                     fallback={<AsyncLoading />}
                   >
                     <HostApp
-                      autoFullscreen={gameOptions.autoFullscreen}
-                      backgroundImage={gameOptions.backgroundImage}
-                      backgroundOpacity={gameOptions.backgroundOpacity}
-                      backgroundGradientFrom={
-                        gameOptions.backgroundGradientFrom
-                      }
-                      backgroundGradientTo={gameOptions.backgroundGradientTo}
-                      backgroundGradientDirection={
-                        gameOptions.backgroundGradientDirection
-                      }
-                      customElements={gameOptions.customElements}
                       drive={googleDrive.bridge ?? undefined}
                       driveActive={connected}
-                      layout={gameOptions.layout}
+                      options={gameOptions}
                       onDriveFailure={googleDrive.reportFailure}
                       onExit={() => navigation.showView('home')}
                       sessionScope={`${window.location.pathname}:${googleDrive.accountId}`}
-                      soundVolume={gameOptions.soundVolume}
-                      musicVolume={gameOptions.musicVolume}
                     />
                   </Suspense>
                 </AsyncBoundary>
@@ -251,9 +195,9 @@ export function App() {
                 onGoogleDriveConnect: () => void googleDrive.connect(),
                 onGoogleDriveDisconnect: () => void googleDrive.disconnect(),
                 onSettingsGroupChange: settings.showGroup,
-                onFontChange: setFont,
-                onThemeChange: setTheme,
-                onUiAnimationsChange: setUiAnimations,
+                onFontChange: preferences.setFont,
+                onThemeChange: preferences.setTheme,
+                onUiAnimationsChange: preferences.setUiAnimations,
               },
               visualEditor: {
                 canRedo: visualEditor.canRedo,

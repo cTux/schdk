@@ -5,6 +5,9 @@
 - Keep host and editor roots under `packages/web/src/host` and
   `packages/web/src/editor`, and load them with `React.lazy`; do not use
   iframes or duplicate application builds.
+- Keep locale, theme, font, and animation persistence plus document metadata
+  synchronization in focused shell hooks. Keep `App.tsx` as the composition
+  root and pass the host's cohesive `GameOptions` contract as one grouped prop.
 - Load every page chunk on first selection, then keep it mounted so navigation
   does not discard state.
 - Wrap lazy shell, editor, and host chunks in the shared localized loading and
