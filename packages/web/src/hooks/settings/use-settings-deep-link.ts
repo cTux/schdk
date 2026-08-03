@@ -1,4 +1,7 @@
-import { SETTINGS_GROUPS, type SettingsGroup } from '@schdk/ui/options';
+import {
+  SETTINGS_GROUPS,
+  type SettingsGroup,
+} from '@schdk/common/app-settings';
 import type { ShellViewName } from '@schdk/ui/shell';
 import { useEffect, useState } from 'react';
 

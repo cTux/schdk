@@ -3,8 +3,9 @@
 ## Package boundaries
 
 - `@schdk/common` owns the game-package, game-presentation options,
-  AI-question, AI-question-package, and SCHDK-dictionary file types, constants,
-  defaults, parsers, serializers, normalization, and game readiness validation.
+  game-hosting state, application settings, AI-question, AI-question-package,
+  and SCHDK-dictionary file types, constants, defaults, parsers, serializers,
+  normalization, and game readiness validation.
   It must not depend on UI or platform code.
 - `@schdk/ai` owns provider setup, localized generation prompts, structured
   response validation, and conversion to the canonical game-question type.
@@ -40,6 +41,9 @@
   every workspace dependency in the consuming package manifest.
 - Prefer a declared domain subpath when a consumer needs one contract only;
   keep the package root export for composition code that spans domains.
+- Keep persisted application settings and host workflow state independent of
+  `@schdk/ui`; both application orchestration and UI consume those contracts
+  through the matching `@schdk/common` domain subpath.
 - Keep the allowed workspace dependency directions synchronized with the
   repository workflow test; new packages require an explicit policy entry.
 - Keep editor and host feature modules inside `@schdk/web`; do not recreate

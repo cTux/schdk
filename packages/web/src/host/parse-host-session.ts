@@ -1,4 +1,4 @@
-import type { HostQuestionStage } from '@schdk/ui/host';
+import type { HostQuestionStage } from '@schdk/common/game-hosting';
 import { type HostSession } from './host-session';
 import { STAGES } from './stages';
 

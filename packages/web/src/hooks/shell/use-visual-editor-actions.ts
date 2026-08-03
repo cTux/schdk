@@ -1,4 +1,7 @@
-import type { GameOptions, GamePresentationOptions } from '@schdk/common';
+import type {
+  GameOptions,
+  GamePresentationOptions,
+} from '@schdk/common/game-options';
 import { useRef, useState } from 'react';
 import { downloadVisualEditorTemplate } from '../../utils/visual-editor/download-visual-editor-template';
 import { parseVisualEditorTemplateFile } from '../../utils/visual-editor/parse-visual-editor-template-file';

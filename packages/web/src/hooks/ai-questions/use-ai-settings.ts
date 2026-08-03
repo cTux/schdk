@@ -1,6 +1,6 @@
 import { Models, type ProviderMap } from '@opencode-ai/models';
 import { isSupportedAiProvider } from '@schdk/ai';
-import type { AiOptions, AiProviderOption } from '@schdk/ui/options';
+import type { AiOptions, AiProviderOption } from '@schdk/common/app-settings';
 import { useEffect, useState } from 'react';
 import type { AiCredentialsPort } from '../../types/google-drive/google-drive-types';
 

@@ -1,5 +1,5 @@
-import { type GameQuestion } from '@schdk/common';
-import type { HostQuestionStage } from '@schdk/ui/host';
+import type { GameQuestion } from '@schdk/common/game-question';
+import type { HostQuestionStage } from '@schdk/common/game-hosting';
 
 export function getVisibleQuestionStages(
   question: GameQuestion,

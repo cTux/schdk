@@ -1,4 +1,4 @@
-import { DEFAULT_GAME_OPTIONS } from '@schdk/common';
+import { DEFAULT_GAME_OPTIONS } from '@schdk/common/game-options';
 import { describe, expect, it } from 'vitest';
 import {
   createVisualEditorHistory,

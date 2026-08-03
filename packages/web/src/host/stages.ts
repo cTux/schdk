@@ -1,4 +1,4 @@
-import type { HostQuestionStage } from '@schdk/ui/host';
+import type { HostQuestionStage } from '@schdk/common/game-hosting';
 
 export const STAGES: HostQuestionStage[] = [
   'tour',

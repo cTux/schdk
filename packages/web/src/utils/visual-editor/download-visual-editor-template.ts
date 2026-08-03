@@ -1,7 +1,5 @@
-import {
-  serializeVisualEditorTemplate,
-  type GamePresentationOptions,
-} from '@schdk/common';
+import { serializeVisualEditorTemplate } from '@schdk/common/visual-editor-template';
+import type { GamePresentationOptions } from '@schdk/common/game-options';
 
 export async function downloadVisualEditorTemplate(
   game: GamePresentationOptions,

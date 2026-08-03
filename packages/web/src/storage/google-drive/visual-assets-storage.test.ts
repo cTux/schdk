@@ -1,5 +1,5 @@
 import { DEFAULT_GAME_OPTIONS } from '@schdk/common';
-import { DEFAULT_EDITOR_TEXT_OPTIONS } from '@schdk/ui/options';
+import { DEFAULT_EDITOR_TEXT_OPTIONS } from '@schdk/common/app-settings';
 import { expect, it } from 'vitest';
 import type { WebDriveSettingsDocument } from '../../types/google-drive/web-drive-settings-document';
 import {

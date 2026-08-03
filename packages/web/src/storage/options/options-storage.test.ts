@@ -6,7 +6,7 @@ import {
 import { loadGameOptions } from './load-game-options';
 import { saveGameOptions } from './save-game-options';
 import { DEFAULT_GAME_LAYOUT, DEFAULT_GAME_OPTIONS } from '@schdk/common';
-import { DEFAULT_EDITOR_TEXT_OPTIONS } from '@schdk/ui/options';
+import { DEFAULT_EDITOR_TEXT_OPTIONS } from '@schdk/common/app-settings';
 
 function createStorage(initial: string | null = null, failWrites = false) {
   let value = initial;

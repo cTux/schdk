@@ -1,4 +1,4 @@
-import { type EditorTextOptions } from '@schdk/ui/options';
+import { type EditorTextOptions } from '@schdk/common/app-settings';
 import { type OptionsStorage } from '../options/options-storage-type';
 import { OPTIONS_KEY } from '../../constants/options/options-key';
 

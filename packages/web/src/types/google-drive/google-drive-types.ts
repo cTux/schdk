@@ -1,5 +1,5 @@
 import type { GameQuestionGenerationRequest } from '@schdk/ai';
-import type { GameQuestion } from '@schdk/common';
+import type { GameQuestion } from '@schdk/common/game-question';
 import type {
   DriveAccount,
   DriveAIQuestionsPackageStorage,

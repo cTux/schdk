@@ -2,8 +2,8 @@ import {
   parseDriveSettingsDocument,
   type DriveSettingsDocument,
 } from '@schdk/google-drive';
-import type { GameOptions } from '@schdk/common';
-import type { EditorTextOptions } from '@schdk/ui/options';
+import type { GameOptions } from '@schdk/common/game-options';
+import type { EditorTextOptions } from '@schdk/common/app-settings';
 import { type SettingsStorage } from '../settings/settings-storage';
 import { METADATA_KEY } from '../../constants/visual-editor/metadata-key';
 import { saveLocalDriveSettings } from './save-local-drive-settings';

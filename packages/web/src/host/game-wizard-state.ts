@@ -1,4 +1,4 @@
-import type { HostGameTransition } from '@schdk/ui/host';
+import type { HostGameTransition } from '@schdk/common/game-hosting';
 import type { GamePosition } from './game-flow';
 
 interface GameWizardState {

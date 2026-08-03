@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { AppTheme } from '@schdk/ui/options';
+import type { AppTheme } from '@schdk/common/app-settings';
 import type { OptionsPageProps } from '@schdk/ui/options/page';
 import type { VisualEditorProps } from '@schdk/ui/visual-editor';
 import type { QuestionDatabasePageProps } from '@schdk/ui/shell/question-database';

@@ -3,7 +3,7 @@ import type { DriveGamePackageFile } from '@schdk/google-drive/game-packages';
 import { ConfirmationDialog, useConfirmationDialog } from '@schdk/ui';
 import { EditorView } from '@schdk/ui/editor';
 import { useLocalization } from '@schdk/ui/localization';
-import { DEFAULT_EDITOR_TEXT_OPTIONS } from '@schdk/ui/options';
+import { DEFAULT_EDITOR_TEXT_OPTIONS } from '@schdk/common/app-settings';
 import { useCallback, useRef, useState } from 'react';
 import { useRecentGamePackages } from '../hooks/game-packages/use-recent-game-packages';
 import {

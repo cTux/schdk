@@ -1,5 +1,5 @@
 import { isGlobalAIQuestionAdmin } from '@schdk/google-drive';
-import type { AppLocale } from '@schdk/ui/localization';
+import type { AppLocale } from '@schdk/common/app-settings';
 import { useAIQuestions } from '../../storage/ai-questions/ai-question-storage';
 import { useAIQuestionsPackages } from '../../storage/ai-question-packages/ai-questions-package-storage';
 import type {

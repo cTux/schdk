@@ -9,7 +9,8 @@ import {
   type DrivePackageStorage,
 } from '@schdk/google-drive/game-packages';
 import { showEditorToast } from '@schdk/ui/editor';
-import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
+import type { AppLocale } from '@schdk/common/app-settings';
+import type { LocalizationCopy } from '@schdk/ui/localization';
 import {
   useCallback,
   useEffect,

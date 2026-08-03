@@ -1,6 +1,7 @@
 import { parseGameQuestion, type GameQuestion } from '@schdk/common';
 import { showEditorToast } from '@schdk/ui/editor';
-import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
+import type { AppLocale } from '@schdk/common/app-settings';
+import type { LocalizationCopy } from '@schdk/ui/localization';
 
 async function copyQuestionToClipboard(
   question: GameQuestion,

@@ -11,7 +11,8 @@ import {
   type DrivePackageStorage,
 } from '@schdk/google-drive/game-packages';
 import { showEditorToast, type EditorSaveStatus } from '@schdk/ui/editor';
-import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
+import type { AppLocale } from '@schdk/common/app-settings';
+import type { LocalizationCopy } from '@schdk/ui/localization';
 import type { Dispatch, SetStateAction } from 'react';
 import { replaceBrowserPackageDeepLink } from './opening/browser-deep-link';
 import { usePackageOpeningActions } from './opening/use-package-opening-actions';

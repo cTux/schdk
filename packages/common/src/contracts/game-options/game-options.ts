@@ -1,0 +1,18 @@
+export { DEFAULT_GAME_LAYOUT } from '../../constants/game-options/default-game-layout.js';
+export { DEFAULT_GAME_OPTIONS } from '../../constants/game-options/default-game-options.js';
+export { GAME_IMAGE_POSITIONS } from '../../constants/game-options/game-image-positions.js';
+export { GAME_LAYOUT_ELEMENT_IDS } from '../../constants/game-options/game-layout-element-ids.js';
+export { MAX_CUSTOM_GAME_ELEMENTS } from '../../constants/game-options/max-custom-game-elements.js';
+export { MAX_CUSTOM_IMAGE_DATA_LENGTH } from '../../constants/game-options/max-custom-image-data-length.js';
+export { getDefaultCustomElementPosition } from '../../factories/game-options/get-default-custom-element-position.js';
+export type { CustomGameElement } from '../../types/game-options/custom-game-element.js';
+export type { CustomImageElement } from '../../types/game-options/custom-image-element.js';
+export type { CustomTextElement } from '../../types/game-options/custom-text-element.js';
+export type { GameImagePosition } from '../../types/game-options/game-image-position.js';
+export type { GameLayout } from '../../types/game-options/game-layout.js';
+export type { GameLayoutElementId } from '../../types/game-options/game-layout-element-id.js';
+export type { GameLayoutPosition } from '../../types/game-options/game-layout-position.js';
+export type { GameOptions } from '../../types/game-options/game-options.js';
+export type { GamePresentationOptions } from '../../types/game-options/game-presentation-options.js';
+export type { GameTextGrowDirection } from '../../types/game-options/game-text-grow-direction.js';
+export { normalizeGameOptions } from '../../validators/game-options/normalize-game-options.js';

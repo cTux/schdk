@@ -1,5 +1,6 @@
 import type { EditorSaveStatus } from '@schdk/ui/editor';
-import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
+import type { AppLocale } from '@schdk/common/app-settings';
+import type { LocalizationCopy } from '@schdk/ui/localization';
 import { useEffect, type Dispatch, type SetStateAction } from 'react';
 import { saveDesktopEditorSession } from './desktop-session';
 

@@ -1,5 +1,5 @@
-import { type GameQuestion } from '@schdk/common';
-import type { HostQuestionStage } from '@schdk/ui/host';
+import type { GameQuestion } from '@schdk/common/game-question';
+import type { HostQuestionStage } from '@schdk/common/game-hosting';
 import { getQuestionPositions } from './get-question-positions';
 import { type GamePosition } from './game-position';
 import { getVisibleQuestionStages } from './get-visible-question-stages';

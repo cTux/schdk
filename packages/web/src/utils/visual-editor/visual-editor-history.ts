@@ -1,4 +1,4 @@
-import type { GamePresentationOptions } from '@schdk/common';
+import type { GamePresentationOptions } from '@schdk/common/game-options';
 
 const MAX_HISTORY_ENTRIES = 100;
 const MAX_HISTORY_BYTES = 32 * 1024 * 1024;

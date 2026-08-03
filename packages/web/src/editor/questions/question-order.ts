@@ -1,4 +1,4 @@
-import type { GameQuestion } from '@schdk/common';
+import type { GameQuestion } from '@schdk/common/game-question';
 import { getSelectedIndexAfterSwap } from './get-selected-index-after-swap';
 
 function swapQuestions(

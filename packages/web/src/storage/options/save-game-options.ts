@@ -1,4 +1,4 @@
-import { type GameOptions } from '@schdk/common';
+import type { GameOptions } from '@schdk/common/game-options';
 import { type OptionsStorage } from './options-storage-type';
 import { GAME_OPTIONS_KEY } from '../../constants/options/game-options-key';
 

@@ -188,7 +188,13 @@ test('shared packages expose stable domain entry points', async () => {
     '.',
     './ai-question',
     './ai-question-package',
+    './app-settings',
+    './dictionaries',
+    './game-hosting',
+    './game-options',
+    './game-packages',
     './game-question',
+    './music-breaks',
     './visual-editor-template',
   ]);
   assert.deepEqual(Object.keys(drive.exports).sort(), [

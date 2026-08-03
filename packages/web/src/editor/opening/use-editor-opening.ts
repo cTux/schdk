@@ -1,4 +1,4 @@
-import type { GamePackage } from '@schdk/common';
+import type { GamePackage } from '@schdk/common/game-packages';
 import {
   parseDrivePackageReference,
   toDrivePackageReference,
