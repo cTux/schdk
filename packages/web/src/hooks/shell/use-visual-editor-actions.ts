@@ -91,9 +91,9 @@ export function useVisualEditorActions(
     setActionError(messages.importFailed);
   }
 
-  function exportTemplate() {
+  async function exportTemplate() {
     try {
-      downloadVisualEditorTemplate(currentPresentation.current);
+      await downloadVisualEditorTemplate(currentPresentation.current);
       setActionError('');
     } catch {
       setActionError(messages.exportFailed);

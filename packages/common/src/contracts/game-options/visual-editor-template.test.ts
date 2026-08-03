@@ -12,7 +12,7 @@ import {
 } from '../../index.js';
 
 describe('visual editor template contract', () => {
-  it('round-trips presentation without replacing unrelated options', () => {
+  it('round-trips presentation without replacing unrelated options', async () => {
     const presentation = {
       ...DEFAULT_GAME_OPTIONS,
       layout: DEFAULT_GAME_LAYOUT,
@@ -30,13 +30,13 @@ describe('visual editor template contract', () => {
 
     expect(
       parseVisualEditorTemplate(
-        serializeVisualEditorTemplate(presentation),
+        await serializeVisualEditorTemplate(presentation),
         unrelated,
       ),
-    ).toEqual({ ...presentation, ...unrelated });
+    ).resolves.toEqual({ ...presentation, ...unrelated });
   });
 
-  it('rejects oversized archive entries before extraction', () => {
+  it('rejects oversized archive entries before extraction', async () => {
     const oversized = zipSync(
       {
         [VISUAL_TEMPLATE_ENTRY]: new Uint8Array(MAX_VISUAL_TEMPLATE_BYTES + 1),
@@ -44,9 +44,9 @@ describe('visual editor template contract', () => {
       { level: 9 },
     );
 
-    expect(
+    await expect(
       parseVisualEditorTemplate(oversized, DEFAULT_GAME_OPTIONS),
-    ).toBeNull();
+    ).resolves.toBeNull();
   });
 });
 

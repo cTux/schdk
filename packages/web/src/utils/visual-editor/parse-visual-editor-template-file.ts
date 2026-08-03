@@ -11,5 +11,5 @@ export async function parseVisualEditorTemplateFile(
   const content = await file
     .slice(0, MAX_VISUAL_TEMPLATE_BYTES + 1)
     .arrayBuffer();
-  return parseVisualEditorTemplate(new Uint8Array(content), options);
+  return await parseVisualEditorTemplate(new Uint8Array(content), options);
 }
