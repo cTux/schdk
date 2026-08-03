@@ -9,13 +9,12 @@ import {
 import type { LocalizationCopy } from '../../../localization';
 import {
   DEFAULT_GAME_LAYOUT,
-  MAX_CUSTOM_GAME_ELEMENTS,
   type CustomGameElement,
   type GameLayoutPosition,
   type GamePresentationOptions,
 } from '../../../options/types';
-import { createCustomElement } from '../utils/geometry';
 import {
+  addVisualEditorElement,
   removeVisualEditorElement,
   updateVisualEditorElement,
   updateVisualEditorPosition,
@@ -112,20 +111,19 @@ export function useVisualEditor(
   }
 
   function addElement(kind: CustomGameElement['kind']) {
-    if (game.customElements.length >= MAX_CUSTOM_GAME_ELEMENTS) {
+    const added = addVisualEditorElement(
+      game,
+      kind,
+      copy.visualEditor.customText,
+    );
+    if (!added) {
       setLocalMessage(copy.visualEditor.customLimit);
       return;
     }
-    const element = createCustomElement(
-      kind,
-      game.customElements.length,
-      undefined,
-      copy.visualEditor.customText,
-    );
     setLocalMessage('');
-    onChange({ ...game, customElements: [...game.customElements, element] });
-    setSelected({ kind: 'custom', id: element.id });
-    if (kind === 'image') chooseImage(element.id);
+    onChange(added.game);
+    setSelected({ kind: 'custom', id: added.element.id });
+    if (kind === 'image') chooseImage(added.element.id);
   }
 
   function removeCustom(id: string) {

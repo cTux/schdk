@@ -1,20 +1,14 @@
 import { QUESTION_TYPE_CONFIG, type GamePackage } from '@schdk/common';
 import type { HostQuestionStage } from '@schdk/ui/host';
 import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
-import { playMainSignal, playPreAlarm, stopGameAudio } from './game-audio';
+import { stopGameAudio } from './game-audio';
 import {
-  getNextPosition,
   getPreviousPosition,
   getVisibleQuestionStages,
   isValidGamePosition,
   type GamePosition,
 } from './game-flow';
-import {
-  getRemainingSeconds,
-  getTimerDisplaySeconds,
-  getTimerSignal,
-  QUESTION_TIME_SECONDS,
-} from './game-timer';
+import { QUESTION_TIME_SECONDS } from './game-timer';
 import { type GameWizardSnapshot } from './game-wizard-snapshot';
 import {
   idleTransition,
@@ -22,6 +16,9 @@ import {
   type GameWizardState,
 } from './game-wizard-state';
 import { prefersReducedMotion } from './prefers-reduced-motion';
+import { getGameWizardMove, type Direction } from './get-game-wizard-move';
+import { useHostKeyboardNavigation } from './use-host-keyboard-navigation';
+import { useHostTimer } from './use-host-timer';
 
 const EXIT_DURATION_MS = 280;
 
@@ -32,8 +29,6 @@ const INITIAL_POSITION: GamePosition = {
   questionPartIndex: 0,
   stage: 'tour',
 };
-
-type Direction = 'forward' | 'backward';
 
 function useGameWizard(
   gamePackage: GamePackage | null,
@@ -115,20 +110,14 @@ function useGameWizard(
       ) {
         return;
       }
-      const target =
-        direction === 'forward'
-          ? getNextPosition(gamePackage, position)
-          : getPreviousPosition(gamePackage, position);
+      const { target, questionChanging } = getGameWizardMove(
+        gamePackage,
+        position,
+        direction,
+      );
       if (!target && direction === 'backward') return;
 
       transitionLocked.current = true;
-      const questionChanging =
-        !target ||
-        target.questionIndex !== position.questionIndex ||
-        target.stage === 'tour' ||
-        position.stage === 'tour' ||
-        target.stage === 'musicBreak' ||
-        position.stage === 'musicBreak';
       dispatch({
         type: 'exit',
         direction,
@@ -164,99 +153,14 @@ function useGameWizard(
     [active, finished, gamePackage, position, schedule, transition.phase],
   );
 
-  useEffect(() => {
-    if (!active || finished) return;
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.repeat || event.target instanceof HTMLMediaElement) return;
-      const isForwardKey =
-        event.code === 'Space' ||
-        event.code === 'PageDown' ||
-        event.code === 'ArrowRight';
-      const isBackwardKey =
-        event.code === 'Backspace' ||
-        event.code === 'PageUp' ||
-        event.code === 'ArrowLeft';
-      if (isForwardKey) {
-        event.preventDefault();
-        move('forward');
-      } else if (isBackwardKey) {
-        event.preventDefault();
-        move('backward');
-      }
-    }
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [active, finished, move]);
-
   const question = gamePackage?.questions[position.questionIndex] ?? null;
-  const timerConfig = question
-    ? QUESTION_TYPE_CONFIG[question.type]
-    : QUESTION_TYPE_CONFIG.standard;
-  const questionTimeSeconds = timerConfig.seconds;
-  const submissionTimeSeconds = timerConfig.submissionSeconds;
-  const timerDurationSeconds = questionTimeSeconds + submissionTimeSeconds;
   const visibleStages = useMemo<HostQuestionStage[]>(
     () =>
       question ? getVisibleQuestionStages(question, position.stage) : ['tour'],
     [position.stage, question],
   );
-  const timerRunning = active && !finished && position.stage === 'timer';
-
-  useEffect(() => {
-    if (!timerRunning) {
-      dispatch({
-        type: 'timer',
-        remainingSeconds:
-          position.stage === 'timerReset' ? 0 : questionTimeSeconds,
-      });
-      stopGameAudio();
-      return;
-    }
-
-    const startedAt = Date.now();
-    let previousSeconds: number = timerDurationSeconds;
-    dispatch({
-      type: 'timer',
-      remainingSeconds: getTimerDisplaySeconds(
-        previousSeconds,
-        submissionTimeSeconds,
-      ),
-    });
-    playMainSignal();
-    const timer = window.setInterval(() => {
-      const nextSeconds = getRemainingSeconds(
-        startedAt,
-        Date.now(),
-        timerDurationSeconds,
-      );
-      if (nextSeconds === previousSeconds) return;
-      const signal = getTimerSignal(previousSeconds, nextSeconds);
-      if (signal === 'preAlarm') playPreAlarm();
-      else if (signal === 'main') playMainSignal();
-      previousSeconds = nextSeconds;
-      dispatch({
-        type: 'timer',
-        remainingSeconds: getTimerDisplaySeconds(
-          nextSeconds,
-          submissionTimeSeconds,
-        ),
-      });
-      if (nextSeconds === 0) window.clearInterval(timer);
-    }, 100);
-
-    return () => {
-      window.clearInterval(timer);
-      stopGameAudio();
-    };
-  }, [
-    position.questionIndex,
-    position.questionPartIndex,
-    position.stage,
-    questionTimeSeconds,
-    submissionTimeSeconds,
-    timerDurationSeconds,
-    timerRunning,
-  ]);
+  useHostKeyboardNavigation(active && !finished, move);
+  useHostTimer({ active, dispatch, finished, position, question });
 
   return {
     finished,

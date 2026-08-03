@@ -1,20 +1,13 @@
 import type { GameOptions, GamePresentationOptions } from '@schdk/common';
 import { useRef, useState } from 'react';
-import { serializeVisualEditorTemplate } from '@schdk/common';
+import { downloadVisualEditorTemplate } from '../../utils/visual-editor/download-visual-editor-template';
 import { parseVisualEditorTemplateFile } from '../../utils/visual-editor/parse-visual-editor-template-file';
-
-const MAX_HISTORY_ENTRIES = 100;
-const MAX_HISTORY_BYTES = 32 * 1024 * 1024;
-
-interface HistoryEntry {
-  bytes: number;
-  value: GamePresentationOptions;
-}
-
-interface VisualEditorHistory {
-  future: HistoryEntry[];
-  past: HistoryEntry[];
-}
+import {
+  createVisualEditorHistory,
+  recordVisualEditorChange,
+  redoVisualEditorChange,
+  undoVisualEditorChange,
+} from '../../utils/visual-editor/visual-editor-history';
 
 function getPresentation(game: GameOptions): GamePresentationOptions {
   return {
@@ -28,35 +21,6 @@ function getPresentation(game: GameOptions): GamePresentationOptions {
   };
 }
 
-function createHistoryEntry(value: GamePresentationOptions): HistoryEntry {
-  const embeddedContentCharacters = value.customElements.reduce(
-    (total, element) =>
-      total +
-      (element.kind === 'image'
-        ? (element.image?.length ?? 0)
-        : element.text.length),
-    value.backgroundImage?.length ?? 0,
-  );
-  return {
-    value,
-    bytes: embeddedContentCharacters * 2 + value.customElements.length * 256,
-  };
-}
-
-function trimHistory(history: VisualEditorHistory) {
-  while (history.past.length + history.future.length > MAX_HISTORY_ENTRIES) {
-    (history.past.length ? history.past : history.future).shift();
-  }
-  while (
-    [...history.past, ...history.future].reduce(
-      (total, entry) => total + entry.bytes,
-      0,
-    ) > MAX_HISTORY_BYTES
-  ) {
-    (history.past.length ? history.past : history.future).shift();
-  }
-}
-
 export function useVisualEditorActions(
   game: GameOptions,
   onChange: (game: GameOptions) => void,
@@ -67,13 +31,13 @@ export function useVisualEditorActions(
   const [actionError, setActionError] = useState('');
   const currentGame = useRef(game);
   const currentPresentation = useRef(getPresentation(game));
-  const history = useRef<VisualEditorHistory>({ past: [], future: [] });
+  const history = useRef(createVisualEditorHistory());
   const currentHistoryKey = useRef(historyKey);
   currentGame.current = game;
   currentPresentation.current = getPresentation(game);
   if (currentHistoryKey.current !== historyKey) {
     currentHistoryKey.current = historyKey;
-    history.current = { past: [], future: [] };
+    history.current = createVisualEditorHistory();
   }
 
   function apply(value: GamePresentationOptions) {
@@ -85,28 +49,31 @@ export function useVisualEditorActions(
 
   function change(value: GamePresentationOptions) {
     setActionError('');
-    history.current.past.push(createHistoryEntry(currentPresentation.current));
-    history.current.future = [];
-    trimHistory(history.current);
+    history.current = recordVisualEditorChange(
+      history.current,
+      currentPresentation.current,
+    );
     apply(value);
   }
 
   function undo() {
-    const previous = history.current.past.pop();
-    if (!previous) return;
-    history.current.future.push(
-      createHistoryEntry(currentPresentation.current),
+    const previous = undoVisualEditorChange(
+      history.current,
+      currentPresentation.current,
     );
-    trimHistory(history.current);
+    if (!previous) return;
+    history.current = previous.history;
     setActionError('');
     apply(previous.value);
   }
 
   function redo() {
-    const next = history.current.future.pop();
+    const next = redoVisualEditorChange(
+      history.current,
+      currentPresentation.current,
+    );
     if (!next) return;
-    history.current.past.push(createHistoryEntry(currentPresentation.current));
-    trimHistory(history.current);
+    history.current = next.history;
     setActionError('');
     apply(next.value);
   }
@@ -126,17 +93,7 @@ export function useVisualEditorActions(
 
   function exportTemplate() {
     try {
-      const content = new Uint8Array(
-        serializeVisualEditorTemplate(currentPresentation.current),
-      );
-      const url = URL.createObjectURL(
-        new Blob([content], { type: 'application/zip' }),
-      );
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'schdk-visual-template.schdk-template';
-      link.click();
-      URL.revokeObjectURL(url);
+      downloadVisualEditorTemplate(currentPresentation.current);
       setActionError('');
     } catch {
       setActionError(messages.exportFailed);

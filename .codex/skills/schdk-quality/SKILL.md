@@ -22,6 +22,8 @@ description: Verify SCHDK changes and builds. Use for pre-commit checks, health 
    visual-editor chunk budget.
 8. Keep repository workflow checks aligned with durable architecture boundaries
    when ownership or mirrored preload IPC contracts change.
+   Preserve UI platform isolation, exported-control-only application JSX, and
+   direct-import isolation between editor, host, and visual-editor features.
 
 ## Full Checks
 

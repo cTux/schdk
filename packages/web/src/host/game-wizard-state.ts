@@ -68,4 +68,9 @@ function reduceGameWizard(
   }
 }
 
-export { idleTransition, reduceGameWizard, type GameWizardState };
+export {
+  idleTransition,
+  reduceGameWizard,
+  type GameWizardAction,
+  type GameWizardState,
+};

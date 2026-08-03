@@ -24,6 +24,9 @@
   budget in `scripts/check-web-bundle-budget.mjs`.
 - Keep critical package, presentation, storage, history, and mirrored preload
   IPC boundaries executable in `scripts/repository-workflows.test.mjs`.
+- Keep repository workflow checks executable for UI platform isolation,
+  application-only use of exported interactive controls, and direct-import
+  isolation between editor, host, and visual-editor feature areas.
 - Use `$schdk-technical-review` for project technical audits. Report only
   evidenced P0-P2 issues in a priority-sorted table.
 - Keep pure logic outside React/Electron objects when that makes it directly

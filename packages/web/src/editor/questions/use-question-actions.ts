@@ -1,17 +1,20 @@
-import {
-  parseGamePackage,
-  parseGameQuestion,
-  serializeGamePackage,
-  type GamePackage,
-  type GameQuestion,
-} from '@schdk/common';
+import type { GamePackage, GameQuestion } from '@schdk/common';
 import type { DrivePackageStorage } from '@schdk/google-drive/game-packages';
-import { showEditorToast, type EditorViewProps } from '@schdk/ui/editor';
+import type { EditorViewProps } from '@schdk/ui/editor';
 import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
 import type { EditorTextOptions } from '@schdk/ui/options';
 import type { Dispatch, RefObject, SetStateAction } from 'react';
+import { addQuestionHandout } from './add-question-handout';
 import { getSelectedIndexAfterSwap, swapQuestions } from './question-order';
-import { readImageHandout } from './read-image-handout';
+import {
+  copyQuestionToClipboard,
+  readQuestionFromClipboard,
+} from './question-clipboard';
+import {
+  replaceGamePackageQuestion,
+  updateGamePackageQuestion,
+} from './question-package';
+import { selectDatabaseQuestion as loadDatabaseQuestion } from './select-database-question';
 import { correctAnswer, correctSentence } from './text-correction';
 
 interface QuestionActionsOptions {
@@ -44,22 +47,16 @@ export function useQuestionActions({
   setSelectedIndex,
 }: QuestionActionsOptions) {
   function updateQuestion(change: Partial<GameQuestion>) {
-    changeGamePackage((current) => ({
-      ...current,
-      questions: current.questions.map((item, index) =>
-        index === selectedIndex ? { ...item, ...change } : item,
-      ),
-    }));
+    changeGamePackage((current) =>
+      updateGamePackageQuestion(current, selectedIndex, change),
+    );
     setMessage('');
   }
 
   function replaceQuestion(index: number, question: GameQuestion) {
-    changeGamePackage((current) => ({
-      ...current,
-      questions: current.questions.map((item, itemIndex) =>
-        itemIndex === index ? question : item,
-      ),
-    }));
+    changeGamePackage((current) =>
+      replaceGamePackageQuestion(current, index, question),
+    );
     setMessage('');
   }
 
@@ -102,70 +99,39 @@ export function useQuestionActions({
   }
 
   async function copyQuestion() {
-    setMessage('');
-    try {
-      await navigator.clipboard.writeText(
-        JSON.stringify(gamePackage.questions[selectedIndex], null, 2),
-      );
-      showEditorToast('copied', locale);
-    } catch {
-      setMessage(copy.editor.copyFailed);
-    }
+    await copyQuestionToClipboard(
+      gamePackage.questions[selectedIndex]!,
+      copy,
+      locale,
+      setMessage,
+    );
   }
 
   async function pasteQuestion() {
-    if (!(await confirm(copy.editor.confirmPaste(selectedIndex + 1)))) return;
-    setMessage('');
-    try {
-      const question = parseGameQuestion(
-        JSON.parse(await navigator.clipboard.readText()),
-      );
-      changeGamePackage((current) => ({
-        ...current,
-        questions: current.questions.map((item, index) =>
-          index === selectedIndex ? question : item,
-        ),
-      }));
-      showEditorToast('pasted', locale);
-    } catch {
-      setMessage(copy.editor.pasteFailed);
-    }
+    const question = await readQuestionFromClipboard(
+      selectedIndex,
+      confirm,
+      copy,
+      locale,
+      setMessage,
+    );
+    if (question) replaceQuestion(selectedIndex, question);
   }
 
   async function selectDatabaseQuestion(
     row: EditorViewProps['document']['questionDatabaseRows'][number],
   ) {
-    const current = gamePackage.questions[selectedIndex]!;
-    const empty =
-      current.questionParts.every((part) => !part.trim()) &&
-      !current.answer.trim() &&
-      current.alternativeAnswers.every((answer) => !answer.trim()) &&
-      current.wrongAnswers.every((answer) => !answer.trim()) &&
-      !current.answerComment?.trim() &&
-      !current.comment?.trim() &&
-      !current.hostNotes?.trim() &&
-      !current.handout;
-    if (
-      !empty &&
-      !(await confirm(
-        copy.questionDatabase.confirmReplacement(selectedIndex + 1),
-      ))
-    ) {
-      return false;
-    }
-    try {
-      if (!drive) throw new Error('Google Drive is unavailable');
-      const source = parseGamePackage(
-        (await drive.loadGamePackage(row.fileId)).content,
-      ).questions[row.number - 1];
-      if (!source) throw new Error('Question is unavailable');
-      replaceQuestion(selectedIndex, source);
-      return true;
-    } catch {
-      onDriveFailure?.();
-      setMessage(copy.questionDatabase.loadQuestionFailed);
-      return false;
-    }
+    return loadDatabaseQuestion({
+      confirm,
+      copy,
+      current: gamePackage.questions[selectedIndex]!,
+      drive,
+      row,
+      selectedIndex,
+      onDriveFailure,
+      replaceQuestion: (question) => replaceQuestion(selectedIndex, question),
+      setMessage,
+    });
   }
 
   function swapQuestionPositions(sourceIndex: number, targetIndex: number) {
@@ -180,25 +146,15 @@ export function useQuestionActions({
   }
 
   async function addHandout(file: File) {
-    const packageAtStart = gamePackage;
-    const indexAtStart = selectedIndex;
-    try {
-      const handout = await readImageHandout(file);
-      if (currentPackage.current !== packageAtStart) return;
-      const question = {
-        ...packageAtStart.questions[indexAtStart]!,
-        handout,
-      };
-      serializeGamePackage({
-        ...packageAtStart,
-        questions: packageAtStart.questions.map((item, index) =>
-          index === indexAtStart ? question : item,
-        ),
-      });
-      replaceQuestion(indexAtStart, question);
-    } catch {
-      setMessage(copy.visualEditor.chooseImage);
-    }
+    await addQuestionHandout({
+      copy,
+      currentPackage,
+      file,
+      gamePackage,
+      selectedIndex,
+      replaceQuestion,
+      setMessage,
+    });
   }
 
   const question = gamePackage.questions[selectedIndex]!;

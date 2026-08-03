@@ -239,11 +239,80 @@ test('UI feature areas use neutral game presentation ownership', async () => {
   assert.deepEqual(forbiddenScopes, []);
 });
 
+test('application source respects internal ownership boundaries', async () => {
+  const uiSource = new URL('packages/ui/src/', repositoryRoot);
+  const webSource = new URL('packages/web/src/', repositoryRoot);
+  const uiFiles = (await listFiles(uiSource)).filter((file) =>
+    ['.ts', '.tsx'].some((extension) => file.pathname.endsWith(extension)),
+  );
+  const webFiles = (await listFiles(webSource)).filter((file) =>
+    ['.ts', '.tsx'].some((extension) => file.pathname.endsWith(extension)),
+  );
+
+  for (const file of uiFiles) {
+    const source = await readFile(file, 'utf8');
+    assert.doesNotMatch(
+      source,
+      /\b(?:indexedDB|localStorage|sessionStorage)\b|window\.desktop|(?:from\s*|import\s*(?:\(\s*)?|require\(\s*)['"](?:electron|node:)/u,
+      `@schdk/ui must not own application persistence or platform bridges: ${file.pathname}`,
+    );
+  }
+
+  for (const file of webFiles.filter((file) =>
+    file.pathname.endsWith('.tsx'),
+  )) {
+    assert.doesNotMatch(
+      await readFile(file, 'utf8'),
+      /<(?:a|button|input|option|select|textarea)\b/u,
+      `@schdk/web must compose exported UI controls: ${file.pathname}`,
+    );
+  }
+
+  const featureGroups = [
+    { root: uiSource, areas: ['editor', 'host', 'visual-editor'] },
+    { root: webSource, areas: ['editor', 'host'] },
+  ];
+  for (const { root, areas } of featureGroups) {
+    for (const area of areas) {
+      const areaRoot = new URL(`${area}/`, root);
+      const files = (await listFiles(areaRoot)).filter((file) =>
+        ['.ts', '.tsx'].some((extension) => file.pathname.endsWith(extension)),
+      );
+      for (const file of files) {
+        const source = await readFile(file, 'utf8');
+        const imports = [
+          ...source.matchAll(
+            /(?:from\s*|import\s*(?:\(\s*)?)['"]([^'"]+)['"]/gu,
+          ),
+        ].map(([, specifier]) => specifier);
+        for (const otherArea of areas.filter(
+          (candidate) => candidate !== area,
+        )) {
+          const importsOtherArea = imports.some((specifier) => {
+            const resolved = specifier.startsWith('.')
+              ? new URL(specifier, file).pathname
+              : specifier;
+            return (
+              resolved.includes(`/src/${otherArea}/`) ||
+              specifier.startsWith(`@schdk/ui/${otherArea}`)
+            );
+          });
+          assert.equal(
+            importsOtherArea,
+            false,
+            `${area} must use neutral domains instead of importing ${otherArea}: ${file.pathname}`,
+          );
+        }
+      }
+    }
+  }
+});
+
 test('critical architecture boundaries remain enforced', async () => {
   const [channels, preload, history] = await Promise.all([
     read('packages/desktop/src/ipc/google-drive/google-drive-ipc-channels.ts'),
     read('packages/desktop/src/preload.cts'),
-    read('packages/web/src/hooks/shell/use-visual-editor-actions.ts'),
+    read('packages/web/src/utils/visual-editor/visual-editor-history.ts'),
   ]);
 
   assert.deepEqual(

@@ -6,6 +6,7 @@ import {
   getQuestionStages,
   getVisibleQuestionStages,
 } from './game-flow';
+import { getGameWizardMove } from './get-game-wizard-move';
 
 describe('game question flow', () => {
   it('skips absent optional stages and keeps revealed stages visible', () => {
@@ -86,6 +87,25 @@ describe('game question flow', () => {
         stage: 'answer',
       }),
     ).toBeNull();
+  });
+
+  it('describes whether a wizard move changes the visible question', () => {
+    const gamePackage = createEmptyGamePackage();
+
+    expect(
+      getGameWizardMove(
+        gamePackage,
+        { questionIndex: 0, questionPartIndex: 0, stage: 'question' },
+        'forward',
+      ),
+    ).toMatchObject({ questionChanging: false, target: { stage: 'timer' } });
+    expect(
+      getGameWizardMove(
+        gamePackage,
+        { questionIndex: 0, questionPartIndex: 0, stage: 'answer' },
+        'forward',
+      ),
+    ).toMatchObject({ questionChanging: true, target: { questionIndex: 1 } });
   });
 
   it('inserts configured music breaks between rounds', () => {
