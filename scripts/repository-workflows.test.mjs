@@ -309,13 +309,17 @@ test('application source respects internal ownership boundaries', async () => {
 });
 
 test('critical architecture boundaries remain enforced', async () => {
-  const [channels, preload, history, appData, visualAssets] = await Promise.all([
-    read('packages/desktop/src/ipc/google-drive/google-drive-ipc-channels.ts'),
-    read('packages/desktop/src/preload.cts'),
-    read('packages/web/src/utils/visual-editor/visual-editor-history.ts'),
-    read('packages/google-drive/src/types/app-data/app-data.ts'),
-    read('packages/web/src/storage/google-drive/visual-assets-storage.ts'),
-  ]);
+  const [channels, preload, history, appData, visualAssets] = await Promise.all(
+    [
+      read(
+        'packages/desktop/src/ipc/google-drive/google-drive-ipc-channels.ts',
+      ),
+      read('packages/desktop/src/preload.cts'),
+      read('packages/web/src/utils/visual-editor/visual-editor-history.ts'),
+      read('packages/google-drive/src/types/app-data/app-data.ts'),
+      read('packages/web/src/storage/google-drive/visual-assets-storage.ts'),
+    ],
+  );
 
   assert.deepEqual(
     objectEntries(preload, 'googleDriveIpcChannels'),
