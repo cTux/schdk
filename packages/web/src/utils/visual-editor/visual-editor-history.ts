@@ -9,9 +9,20 @@ interface HistoryEntry {
 }
 
 interface VisualEditorHistory {
+  continuous: boolean;
   future: HistoryEntry[];
   past: HistoryEntry[];
 }
+
+type VisualEditorHistoryAction =
+  | {
+      type: 'record';
+      current: GamePresentationOptions;
+      continuous: boolean;
+    }
+  | { type: 'commit' }
+  | { type: 'replace'; history: VisualEditorHistory }
+  | { type: 'reset' };
 
 interface HistoryChange {
   history: VisualEditorHistory;
@@ -19,6 +30,7 @@ interface HistoryChange {
 }
 
 const createVisualEditorHistory = (): VisualEditorHistory => ({
+  continuous: false,
   future: [],
   past: [],
 });
@@ -40,6 +52,7 @@ function createHistoryEntry(value: GamePresentationOptions): HistoryEntry {
 
 function trimHistory(history: VisualEditorHistory) {
   const trimmed = {
+    continuous: history.continuous,
     future: [...history.future],
     past: [...history.past],
   };
@@ -60,11 +73,34 @@ function trimHistory(history: VisualEditorHistory) {
 function recordVisualEditorChange(
   history: VisualEditorHistory,
   current: GamePresentationOptions,
+  continuous = false,
 ) {
+  if (continuous && history.continuous) return history;
   return trimHistory({
+    continuous,
     future: [],
     past: [...history.past, createHistoryEntry(current)],
   });
+}
+
+function reduceVisualEditorHistory(
+  history: VisualEditorHistory,
+  action: VisualEditorHistoryAction,
+) {
+  switch (action.type) {
+    case 'record':
+      return recordVisualEditorChange(
+        history,
+        action.current,
+        action.continuous,
+      );
+    case 'commit':
+      return history.continuous ? { ...history, continuous: false } : history;
+    case 'replace':
+      return { ...action.history, continuous: false };
+    case 'reset':
+      return createVisualEditorHistory();
+  }
 }
 
 function undoVisualEditorChange(
@@ -76,6 +112,7 @@ function undoVisualEditorChange(
   return {
     value,
     history: trimHistory({
+      continuous: false,
       past: history.past.slice(0, -1),
       future: [...history.future, createHistoryEntry(current)],
     }),
@@ -91,6 +128,7 @@ function redoVisualEditorChange(
   return {
     value,
     history: trimHistory({
+      continuous: false,
       past: [...history.past, createHistoryEntry(current)],
       future: history.future.slice(0, -1),
     }),
@@ -100,6 +138,7 @@ function redoVisualEditorChange(
 export {
   createVisualEditorHistory,
   recordVisualEditorChange,
+  reduceVisualEditorHistory,
   redoVisualEditorChange,
   undoVisualEditorChange,
   type VisualEditorHistory,

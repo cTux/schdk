@@ -27,12 +27,19 @@ export function TextSettings({
   position,
   selection,
   onUpdate,
+  onCommitChange,
 }: PositionSettingsProps) {
   const alignmentLabels = {
     left: copy.visualEditor.alignLeft,
     center: copy.visualEditor.alignCenter,
     right: copy.visualEditor.alignRight,
     justify: copy.visualEditor.alignJustify,
+  };
+  const continuousChangeEnd = {
+    onBlur: onCommitChange,
+    onKeyUp: onCommitChange,
+    onPointerCancel: onCommitChange,
+    onPointerUp: onCommitChange,
   };
   return (
     <>
@@ -79,10 +86,15 @@ export function TextSettings({
             max="200"
             value={Math.round(position.fontScale * 100)}
             onChange={(event) =>
-              onUpdate(selection, {
-                fontScale: Number(event.target.value) / 100,
-              })
+              onUpdate(
+                selection,
+                {
+                  fontScale: Number(event.target.value) / 100,
+                },
+                true,
+              )
             }
+            {...continuousChangeEnd}
           />
           <output>{Math.round(position.fontScale * 100)}%</output>
         </label>
@@ -92,8 +104,9 @@ export function TextSettings({
             type="color"
             value={position.textColor}
             onChange={(event) =>
-              onUpdate(selection, { textColor: event.target.value })
+              onUpdate(selection, { textColor: event.target.value }, true)
             }
+            onBlur={onCommitChange}
           />
         </label>
         <label>
@@ -119,10 +132,15 @@ export function TextSettings({
             max="200"
             value={Math.round(position.lineHeight * 100)}
             onChange={(event) =>
-              onUpdate(selection, {
-                lineHeight: Number(event.target.value) / 100,
-              })
+              onUpdate(
+                selection,
+                {
+                  lineHeight: Number(event.target.value) / 100,
+                },
+                true,
+              )
             }
+            {...continuousChangeEnd}
           />
           <output>{Math.round(position.lineHeight * 100)}%</output>
         </label>
@@ -133,10 +151,15 @@ export function TextSettings({
             max="50"
             value={Math.round(position.letterSpacing * 100)}
             onChange={(event) =>
-              onUpdate(selection, {
-                letterSpacing: Number(event.target.value) / 100,
-              })
+              onUpdate(
+                selection,
+                {
+                  letterSpacing: Number(event.target.value) / 100,
+                },
+                true,
+              )
             }
+            {...continuousChangeEnd}
           />
           <output>{Math.round(position.letterSpacing * 100)}%</output>
         </label>

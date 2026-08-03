@@ -2,12 +2,12 @@ import type {
   GameOptions,
   GamePresentationOptions,
 } from '@schdk/common/game-options';
-import { useRef, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { downloadVisualEditorTemplate } from '../../utils/visual-editor/download-visual-editor-template';
 import { parseVisualEditorTemplateFile } from '../../utils/visual-editor/parse-visual-editor-template-file';
 import {
   createVisualEditorHistory,
-  recordVisualEditorChange,
+  reduceVisualEditorHistory,
   redoVisualEditorChange,
   undoVisualEditorChange,
 } from '../../utils/visual-editor/visual-editor-history';
@@ -32,61 +32,54 @@ export function useVisualEditorActions(
   messages: { importFailed: string; exportFailed: string; saveFailed: string },
 ) {
   const [actionError, setActionError] = useState('');
-  const currentGame = useRef(game);
-  const currentPresentation = useRef(getPresentation(game));
-  const history = useRef(createVisualEditorHistory());
-  const currentHistoryKey = useRef(historyKey);
-  currentGame.current = game;
-  currentPresentation.current = getPresentation(game);
-  if (currentHistoryKey.current !== historyKey) {
-    currentHistoryKey.current = historyKey;
-    history.current = createVisualEditorHistory();
-  }
+  const [history, dispatchHistory] = useReducer(
+    reduceVisualEditorHistory,
+    undefined,
+    createVisualEditorHistory,
+  );
+
+  useEffect(() => dispatchHistory({ type: 'reset' }), [historyKey]);
 
   function apply(value: GamePresentationOptions) {
-    currentPresentation.current = value;
-    const next = { ...currentGame.current, ...value };
-    currentGame.current = next;
-    onChange(next);
+    onChange({ ...game, ...value });
   }
 
-  function change(value: GamePresentationOptions) {
+  function change(
+    value: GamePresentationOptions,
+    options: { continuous?: boolean } = {},
+  ) {
     setActionError('');
-    history.current = recordVisualEditorChange(
-      history.current,
-      currentPresentation.current,
-    );
+    dispatchHistory({
+      type: 'record',
+      current: getPresentation(game),
+      continuous: Boolean(options.continuous),
+    });
     apply(value);
   }
 
+  function commitChange() {
+    dispatchHistory({ type: 'commit' });
+  }
+
   function undo() {
-    const previous = undoVisualEditorChange(
-      history.current,
-      currentPresentation.current,
-    );
+    const previous = undoVisualEditorChange(history, getPresentation(game));
     if (!previous) return;
-    history.current = previous.history;
+    dispatchHistory({ type: 'replace', history: previous.history });
     setActionError('');
     apply(previous.value);
   }
 
   function redo() {
-    const next = redoVisualEditorChange(
-      history.current,
-      currentPresentation.current,
-    );
+    const next = redoVisualEditorChange(history, getPresentation(game));
     if (!next) return;
-    history.current = next.history;
+    dispatchHistory({ type: 'replace', history: next.history });
     setActionError('');
     apply(next.value);
   }
 
   async function importTemplate(file: File) {
     try {
-      const imported = await parseVisualEditorTemplateFile(
-        file,
-        currentGame.current,
-      );
+      const imported = await parseVisualEditorTemplateFile(file, game);
       if (imported) return change(getPresentation(imported));
     } catch {
       // Use the same actionable message for file read and validation failures.
@@ -96,7 +89,7 @@ export function useVisualEditorActions(
 
   async function exportTemplate() {
     try {
-      await downloadVisualEditorTemplate(currentPresentation.current);
+      await downloadVisualEditorTemplate(getPresentation(game));
       setActionError('');
     } catch {
       setActionError(messages.exportFailed);
@@ -104,9 +97,10 @@ export function useVisualEditorActions(
   }
 
   return {
-    canRedo: history.current.future.length > 0,
-    canUndo: history.current.past.length > 0,
+    canRedo: history.future.length > 0,
+    canUndo: history.past.length > 0,
     change,
+    commitChange,
     importTemplate,
     exportTemplate,
     redo,

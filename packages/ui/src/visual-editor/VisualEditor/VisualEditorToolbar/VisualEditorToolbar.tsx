@@ -22,6 +22,7 @@ export function VisualEditorToolbar({
         position={position}
         selection={element}
         onUpdate={actions.updatePosition}
+        onCommitChange={actions.commitChange}
       />
     );
   }

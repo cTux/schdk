@@ -18,12 +18,21 @@ export interface VisualEditorToolbarProps {
   };
   actions: {
     chooseImage(target: 'background' | string): void;
-    onChange(game: GamePresentationOptions): void;
+    commitChange(): void;
+    onChange(
+      game: GamePresentationOptions,
+      options?: { continuous?: boolean },
+    ): void;
     removeCustom(id: string): void;
-    updateCustom(id: string, patch: Partial<CustomGameElement>): void;
+    updateCustom(
+      id: string,
+      patch: Partial<CustomGameElement>,
+      continuous?: boolean,
+    ): void;
     updatePosition(
       selection: ElementSelection,
       patch: Partial<GameLayoutPosition>,
+      continuous?: boolean,
     ): void;
   };
 }

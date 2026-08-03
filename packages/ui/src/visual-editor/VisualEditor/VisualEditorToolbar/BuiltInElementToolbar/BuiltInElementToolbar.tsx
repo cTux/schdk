@@ -23,7 +23,9 @@ interface BuiltInElementToolbarProps {
   onUpdate(
     selection: ElementSelection,
     patch: Partial<GameLayoutPosition>,
+    continuous?: boolean,
   ): void;
+  onCommitChange(): void;
 }
 
 export function BuiltInElementToolbar({
@@ -32,6 +34,7 @@ export function BuiltInElementToolbar({
   position,
   selection,
   onUpdate,
+  onCommitChange,
 }: BuiltInElementToolbarProps) {
   return (
     <ActionToolbar label={copy.visualEditor.actions(label)}>
@@ -41,6 +44,7 @@ export function BuiltInElementToolbar({
           position={position}
           selection={selection}
           onUpdate={onUpdate}
+          onCommitChange={onCommitChange}
         />
       ) : (
         <TextSettings
@@ -48,6 +52,7 @@ export function BuiltInElementToolbar({
           position={position}
           selection={selection}
           onUpdate={onUpdate}
+          onCommitChange={onCommitChange}
         />
       )}
       <ActionToolbarSeparator />
@@ -56,6 +61,7 @@ export function BuiltInElementToolbar({
         position={position}
         selection={selection}
         onUpdate={onUpdate}
+        onCommitChange={onCommitChange}
       />
       <ActionToolbarSeparator />
       <ElementVisibilityButton

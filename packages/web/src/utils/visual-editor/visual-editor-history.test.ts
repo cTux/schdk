@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   createVisualEditorHistory,
   recordVisualEditorChange,
+  reduceVisualEditorHistory,
   redoVisualEditorChange,
   undoVisualEditorChange,
 } from './visual-editor-history';
@@ -37,5 +38,27 @@ describe('visual editor history', () => {
     expect(
       undoVisualEditorChange(history, DEFAULT_GAME_OPTIONS)?.value,
     ).toMatchObject({ backgroundOpacity: 100 });
+  });
+
+  it('coalesces a continuous edit into one undo entry', () => {
+    const original = { ...DEFAULT_GAME_OPTIONS, backgroundOpacity: 0.2 };
+    const preview = { ...original, backgroundOpacity: 0.4 };
+    let history = createVisualEditorHistory();
+
+    history = reduceVisualEditorHistory(history, {
+      type: 'record',
+      current: original,
+      continuous: true,
+    });
+    history = reduceVisualEditorHistory(history, {
+      type: 'record',
+      current: preview,
+      continuous: true,
+    });
+
+    expect(history.past).toHaveLength(1);
+    expect(undoVisualEditorChange(history, DEFAULT_GAME_OPTIONS)?.value).toBe(
+      original,
+    );
   });
 });

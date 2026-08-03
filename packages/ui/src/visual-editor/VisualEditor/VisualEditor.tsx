@@ -31,6 +31,7 @@ function VisualEditor({
   game,
   message,
   onChange,
+  onCommitChange,
   onImportTemplate,
   onExportTemplate,
   onRedo,
@@ -126,6 +127,7 @@ function VisualEditor({
             }}
             actions={{
               chooseImage: editor.chooseImage,
+              commitChange: onCommitChange,
               onChange,
               removeCustom: editor.removeCustom,
               updateCustom: editor.updateCustom,

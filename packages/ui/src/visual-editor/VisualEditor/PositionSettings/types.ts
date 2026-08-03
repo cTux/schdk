@@ -9,5 +9,7 @@ export interface PositionSettingsProps {
   onUpdate(
     selection: ElementSelection,
     patch: Partial<GameLayoutPosition>,
+    continuous?: boolean,
   ): void;
+  onCommitChange(): void;
 }

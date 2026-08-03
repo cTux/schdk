@@ -213,6 +213,7 @@ export function App() {
                 game: gameOptions,
                 message: visualEditor.error,
                 onChange: visualEditor.change,
+                onCommitChange: visualEditor.commitChange,
                 onImportTemplate: visualEditor.importTemplate,
                 onExportTemplate: visualEditor.exportTemplate,
                 onRedo: visualEditor.redo,

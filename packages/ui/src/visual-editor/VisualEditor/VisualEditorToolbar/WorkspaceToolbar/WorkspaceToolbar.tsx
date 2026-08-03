@@ -24,6 +24,12 @@ export function WorkspaceToolbar({
   copy,
   game,
 }: WorkspaceToolbarProps) {
+  const continuousChangeEnd = {
+    onBlur: actions.commitChange,
+    onKeyUp: actions.commitChange,
+    onPointerCancel: actions.commitChange,
+    onPointerUp: actions.commitChange,
+  };
   return (
     <ActionToolbar label={copy.visualEditor.workspaceActions}>
       <ActionToolbarButton
@@ -56,11 +62,15 @@ export function WorkspaceToolbar({
             disabled={!game.backgroundImage}
             value={Math.round((1 - game.backgroundOpacity) * 100)}
             onChange={(event) =>
-              actions.onChange({
-                ...game,
-                backgroundOpacity: 1 - Number(event.target.value) / 100,
-              })
+              actions.onChange(
+                {
+                  ...game,
+                  backgroundOpacity: 1 - Number(event.target.value) / 100,
+                },
+                { continuous: true },
+              )
             }
+            {...continuousChangeEnd}
           />
           <output>{Math.round((1 - game.backgroundOpacity) * 100)}%</output>
         </label>
@@ -89,11 +99,15 @@ export function WorkspaceToolbar({
             disabled={!game.backgroundGradientFrom}
             value={game.backgroundGradientFrom ?? '#100f14'}
             onChange={(event) =>
-              actions.onChange({
-                ...game,
-                backgroundGradientFrom: event.target.value,
-              })
+              actions.onChange(
+                {
+                  ...game,
+                  backgroundGradientFrom: event.target.value,
+                },
+                { continuous: true },
+              )
             }
+            onBlur={actions.commitChange}
           />
         </label>
         <label>
@@ -103,11 +117,15 @@ export function WorkspaceToolbar({
             disabled={!game.backgroundGradientFrom}
             value={game.backgroundGradientTo}
             onChange={(event) =>
-              actions.onChange({
-                ...game,
-                backgroundGradientTo: event.target.value,
-              })
+              actions.onChange(
+                {
+                  ...game,
+                  backgroundGradientTo: event.target.value,
+                },
+                { continuous: true },
+              )
             }
+            onBlur={actions.commitChange}
           />
         </label>
         <label>
@@ -118,11 +136,15 @@ export function WorkspaceToolbar({
             disabled={!game.backgroundGradientFrom}
             value={game.backgroundGradientDirection}
             onChange={(event) =>
-              actions.onChange({
-                ...game,
-                backgroundGradientDirection: Number(event.target.value),
-              })
+              actions.onChange(
+                {
+                  ...game,
+                  backgroundGradientDirection: Number(event.target.value),
+                },
+                { continuous: true },
+              )
             }
+            {...continuousChangeEnd}
           />
           <output>{game.backgroundGradientDirection}°</output>
         </label>

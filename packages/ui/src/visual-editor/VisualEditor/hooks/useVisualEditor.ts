@@ -30,7 +30,10 @@ import {
 export function useVisualEditor(
   game: GamePresentationOptions,
   copy: LocalizationCopy,
-  onChange: (game: GamePresentationOptions) => void,
+  onChange: (
+    game: GamePresentationOptions,
+    options?: { continuous?: boolean },
+  ) => void,
   history: {
     canRedo: boolean;
     canUndo: boolean;
@@ -92,12 +95,19 @@ export function useVisualEditor(
   function updatePosition(
     selection: ElementSelection,
     patch: Partial<GameLayoutPosition>,
+    continuous = false,
   ) {
-    onChange(updateVisualEditorPosition(game, selection, patch));
+    onChange(updateVisualEditorPosition(game, selection, patch), {
+      continuous,
+    });
   }
 
-  function updateCustom(id: string, patch: Partial<CustomGameElement>) {
-    onChange(updateVisualEditorElement(game, id, patch));
+  function updateCustom(
+    id: string,
+    patch: Partial<CustomGameElement>,
+    continuous = false,
+  ) {
+    onChange(updateVisualEditorElement(game, id, patch), { continuous });
   }
 
   function selectWorkspace() {
