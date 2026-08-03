@@ -28,6 +28,36 @@
       "types": "./src/contracts/game-options/visual-editor-template.ts",
       "development": "./src/contracts/game-options/visual-editor-template.ts",
       "default": "./dist/contracts/game-options/visual-editor-template.js"
+    },
+    "./app-settings": {
+      "types": "./src/contracts/app-settings/app-settings.ts",
+      "development": "./src/contracts/app-settings/app-settings.ts",
+      "default": "./dist/contracts/app-settings/app-settings.js"
+    },
+    "./game-hosting": {
+      "types": "./src/contracts/game-hosting/game-hosting.ts",
+      "development": "./src/contracts/game-hosting/game-hosting.ts",
+      "default": "./dist/contracts/game-hosting/game-hosting.js"
+    },
+    "./game-packages": {
+      "types": "./src/contracts/game-packages/game-packages.ts",
+      "development": "./src/contracts/game-packages/game-packages.ts",
+      "default": "./dist/contracts/game-packages/game-packages.js"
+    },
+    "./game-options": {
+      "types": "./src/contracts/game-options/game-options.ts",
+      "development": "./src/contracts/game-options/game-options.ts",
+      "default": "./dist/contracts/game-options/game-options.js"
+    },
+    "./dictionaries": {
+      "types": "./src/contracts/dictionaries/dictionaries.ts",
+      "development": "./src/contracts/dictionaries/dictionaries.ts",
+      "default": "./dist/contracts/dictionaries/dictionaries.js"
+    },
+    "./music-breaks": {
+      "types": "./src/contracts/music-breaks/music-breaks.ts",
+      "development": "./src/contracts/music-breaks/music-breaks.ts",
+      "default": "./dist/contracts/music-breaks/music-breaks.js"
     }
   },
   "scripts": {

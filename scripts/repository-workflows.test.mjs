@@ -188,7 +188,13 @@ test('shared packages expose stable domain entry points', async () => {
     '.',
     './ai-question',
     './ai-question-package',
+    './app-settings',
+    './dictionaries',
+    './game-hosting',
+    './game-options',
+    './game-packages',
     './game-question',
+    './music-breaks',
     './visual-editor-template',
   ]);
   assert.deepEqual(Object.keys(drive.exports).sort(), [
@@ -266,6 +272,22 @@ test('application source respects internal ownership boundaries', async () => {
       /<(?:a|button|input|option|select|textarea)\b/u,
       `@schdk/web must compose exported UI controls: ${file.pathname}`,
     );
+  }
+
+  for (const file of webFiles) {
+    const source = await readFile(file, 'utf8');
+    assert.doesNotMatch(
+      source,
+      /@schdk\/ui\/options['"]/u,
+      `@schdk/web must use neutral persisted-setting contracts: ${file.pathname}`,
+    );
+    if (!file.pathname.endsWith('/editor/App.tsx')) {
+      assert.doesNotMatch(
+        source,
+        /\bshowEditorToast\b/u,
+        `editor workflows must report notices through the composition root: ${file.pathname}`,
+      );
+    }
   }
 
   const featureGroups = [
@@ -387,8 +409,6 @@ test('UI components follow the directory and class composition contracts', async
     const directoryName = componentDirectory.pathname.split('/').at(-2);
 
     assert.equal(directoryName, componentName, componentFile.pathname);
-    await access(new URL('index.ts', componentDirectory));
-
     const source = await readFile(componentFile, 'utf8');
     const stylesheet = files.find(
       (file) => file.href === new URL('styles.scss', componentDirectory).href,

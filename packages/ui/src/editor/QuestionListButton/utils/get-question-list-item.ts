@@ -1,4 +1,4 @@
-import type { GameQuestion } from '@schdk/common';
+import type { GameQuestion } from '@schdk/common/game-question';
 
 export function getQuestionListItem(
   question: GameQuestion,

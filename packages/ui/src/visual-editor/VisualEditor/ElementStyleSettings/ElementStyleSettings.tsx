@@ -13,8 +13,15 @@ export function ElementStyleSettings({
   position,
   selection,
   onUpdate,
+  onCommitChange,
 }: PositionSettingsProps) {
   const hasBackground = position.backgroundColor !== null;
+  const continuousChangeEnd = {
+    onBlur: onCommitChange,
+    onKeyUp: onCommitChange,
+    onPointerCancel: onCommitChange,
+    onPointerUp: onCommitChange,
+  };
   return (
     <>
       <ActionToolbarPopover
@@ -28,8 +35,9 @@ export function ElementStyleSettings({
             type="color"
             value={position.backgroundColor ?? '#252938'}
             onChange={(event) =>
-              onUpdate(selection, { backgroundColor: event.target.value })
+              onUpdate(selection, { backgroundColor: event.target.value }, true)
             }
+            onBlur={onCommitChange}
           />
         </label>
         <label>
@@ -54,10 +62,15 @@ export function ElementStyleSettings({
                 type="color"
                 value={position.backgroundGradientColor}
                 onChange={(event) =>
-                  onUpdate(selection, {
-                    backgroundGradientColor: event.target.value,
-                  })
+                  onUpdate(
+                    selection,
+                    {
+                      backgroundGradientColor: event.target.value,
+                    },
+                    true,
+                  )
                 }
+                onBlur={onCommitChange}
               />
             </label>
             <label>
@@ -67,10 +80,15 @@ export function ElementStyleSettings({
                 max="359"
                 value={position.backgroundGradientDirection}
                 onChange={(event) =>
-                  onUpdate(selection, {
-                    backgroundGradientDirection: Number(event.target.value),
-                  })
+                  onUpdate(
+                    selection,
+                    {
+                      backgroundGradientDirection: Number(event.target.value),
+                    },
+                    true,
+                  )
                 }
+                {...continuousChangeEnd}
               />
               <output>{position.backgroundGradientDirection}°</output>
             </label>
@@ -84,10 +102,15 @@ export function ElementStyleSettings({
             disabled={!hasBackground}
             value={Math.round(position.backgroundOpacity * 100)}
             onChange={(event) =>
-              onUpdate(selection, {
-                backgroundOpacity: Number(event.target.value) / 100,
-              })
+              onUpdate(
+                selection,
+                {
+                  backgroundOpacity: Number(event.target.value) / 100,
+                },
+                true,
+              )
             }
+            {...continuousChangeEnd}
           />
           <output>{Math.round(position.backgroundOpacity * 100)}%</output>
         </label>
@@ -98,8 +121,13 @@ export function ElementStyleSettings({
             max="50"
             value={position.borderRadius}
             onChange={(event) =>
-              onUpdate(selection, { borderRadius: Number(event.target.value) })
+              onUpdate(
+                selection,
+                { borderRadius: Number(event.target.value) },
+                true,
+              )
             }
+            {...continuousChangeEnd}
           />
           <output>{position.borderRadius}%</output>
         </label>
@@ -110,10 +138,15 @@ export function ElementStyleSettings({
             max="100"
             value={Math.round(position.contentOpacity * 100)}
             onChange={(event) =>
-              onUpdate(selection, {
-                contentOpacity: Number(event.target.value) / 100,
-              })
+              onUpdate(
+                selection,
+                {
+                  contentOpacity: Number(event.target.value) / 100,
+                },
+                true,
+              )
             }
+            {...continuousChangeEnd}
           />
           <output>{Math.round(position.contentOpacity * 100)}%</output>
         </label>

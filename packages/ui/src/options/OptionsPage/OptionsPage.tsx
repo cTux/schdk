@@ -11,28 +11,27 @@ import { getGoogleDriveMessage } from './utils/google-drive-message';
 import type { OptionsPageProps } from './types';
 
 export function OptionsPage({
-  ai,
-  editor,
-  game,
-  googleDriveAccount,
-  googleDriveState,
   hidden,
-  settingsGroup,
-  font,
-  theme,
-  uiAnimations,
-  onAiApiKeySave,
-  onAiModelChange,
-  onAiProviderChange,
-  onBack,
-  onEditorChange,
-  onGameChange,
-  onGoogleDriveConnect,
-  onGoogleDriveDisconnect,
-  onSettingsGroupChange,
-  onFontChange,
-  onThemeChange,
-  onUiAnimationsChange,
+  artificialIntelligence: {
+    options: ai,
+    onApiKeySave: onAiApiKeySave,
+    onModelChange: onAiModelChange,
+    onProviderChange: onAiProviderChange,
+  },
+  application: {
+    font,
+    googleDriveAccount,
+    googleDriveState,
+    theme,
+    uiAnimations,
+    onFontChange,
+    onGoogleDriveConnect,
+    onGoogleDriveDisconnect,
+    onThemeChange,
+    onUiAnimationsChange,
+  },
+  navigation: { settingsGroup, onBack, onSettingsGroupChange },
+  schdk: { editor, game, onEditorChange, onGameChange },
 }: OptionsPageProps) {
   const { copy, locale, onLocaleChange } = useLocalization();
 

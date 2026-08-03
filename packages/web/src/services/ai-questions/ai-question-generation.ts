@@ -18,8 +18,8 @@ import type {
   AiQuestionGenerationOptions,
   AiQuestionGenerationRequest,
 } from '@schdk/ui/editor';
-import type { AppLocale } from '@schdk/ui/localization';
-import type { AiOptions } from '@schdk/ui/options';
+import type { AppLocale } from '@schdk/common/app-settings';
+import type { AiOptions } from '@schdk/common/app-settings';
 import type { AiGenerationPort } from '../../types/google-drive/google-drive-types';
 
 function getRandomValue(distribution: SchdkDictionaryDistribution) {

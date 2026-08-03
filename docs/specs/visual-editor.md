@@ -41,10 +41,11 @@ to every hosted question.
   cannot fit the canonical 3 MiB encoded-image limit before reading them, and
   validates the resulting embedded data URL before changing presentation.
 - **VIS-15:** Authors can undo and redo presentation changes with the permanent
-  visual-editor controls or standard keyboard shortcuts. One completed drag or
-  resize is one history entry, new edits clear redo history, and history never
-  crosses connected Google accounts. History is bounded by both entry count and
-  retained presentation size.
+  visual-editor controls or standard keyboard shortcuts. One completed drag,
+  resize, text edit, range adjustment, or color edit is one history entry, new
+  edits clear redo history, and history never crosses connected Google
+  accounts. History is bounded by both entry count and retained presentation
+  size.
 - **VIS-16:** Element backgrounds are transparent by default and support an
   optional solid color or directional two-color gradient, background opacity,
   corner rounding, and whole-element opacity.
@@ -81,9 +82,10 @@ to every hosted question.
 7. Select an image that cannot fit the encoded-image limit and confirm the
    editor rejects it before reading or changing presentation.
 8. Change text, background, visibility, and element bounds; undo and redo each
-   change with buttons and keyboard shortcuts. Make a new edit after undo and
-   confirm redo is unavailable, then switch accounts and confirm history is
-   cleared.
+   completed interaction with buttons and keyboard shortcuts, confirming that a
+   continuous text, range, or color edit needs only one undo. Make a new edit
+   after undo and confirm redo is unavailable, then switch accounts and confirm
+   history is cleared.
 9. Format text with alignment, bold, italic, underline, line height, and letter
    spacing; configure solid and gradient element backgrounds and confirm the
    hosted game matches the editor.

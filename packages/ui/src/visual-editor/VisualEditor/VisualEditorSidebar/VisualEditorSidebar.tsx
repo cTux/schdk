@@ -7,7 +7,19 @@ import { faRotateRight } from '@fortawesome/free-solid-svg-icons/faRotateRight';
 import classNames from 'classnames';
 import { useRef } from 'react';
 import { IconButton } from '../../../atoms/IconButton';
-import type { VisualEditorSidebarProps } from './types';
+import type { LocalizationCopy } from '../../../localization';
+import type { CustomGameElement } from '../../../options/types';
+
+interface VisualEditorSidebarProps {
+  copy: LocalizationCopy;
+  addElement(kind: CustomGameElement['kind']): void;
+  onExportTemplate(): void;
+  onImportTemplate(file: File): void;
+  canRedo: boolean;
+  canUndo: boolean;
+  onRedo(): void;
+  onUndo(): void;
+}
 
 export function VisualEditorSidebar({
   canRedo,

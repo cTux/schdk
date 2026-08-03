@@ -1,4 +1,4 @@
-import type { GamePackage } from '@schdk/common';
+import type { GamePackage } from '@schdk/common/game-packages';
 import type { DriveGamePackageFile } from '../../services/game-packages/game-packages.js';
 import { type QuestionDatabasePackage } from '../../types/question-database/question-database-package.js';
 

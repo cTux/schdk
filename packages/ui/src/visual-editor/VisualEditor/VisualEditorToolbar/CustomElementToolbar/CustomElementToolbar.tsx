@@ -18,7 +18,7 @@ import { ImagePositionSettings } from '../../ImagePositionSettings';
 import { TextSettings } from '../../PositionSettings';
 import type { ElementSelection } from '../../types';
 import type { VisualEditorToolbarProps } from '../types';
-import { ElementVisibilityButton } from '../ElementVisibilityButton';
+import { ElementVisibilityButton } from '../ElementVisibilityButton/ElementVisibilityButton';
 
 interface CustomElementToolbarProps {
   actions: VisualEditorToolbarProps['actions'];
@@ -56,11 +56,16 @@ export function CustomElementToolbar({
               value={element.text}
               onChange={(event) => {
                 if (event.target.value) {
-                  actions.updateCustom(element.id, {
-                    text: event.target.value,
-                  });
+                  actions.updateCustom(
+                    element.id,
+                    {
+                      text: event.target.value,
+                    },
+                    true,
+                  );
                 }
               }}
+              onBlur={actions.commitChange}
             />
           </ActionToolbarPopover>
           <TextSettings
@@ -68,6 +73,7 @@ export function CustomElementToolbar({
             position={position}
             selection={selection}
             onUpdate={actions.updatePosition}
+            onCommitChange={actions.commitChange}
           />
         </>
       ) : (
@@ -93,6 +99,7 @@ export function CustomElementToolbar({
             position={position}
             selection={selection}
             onUpdate={actions.updatePosition}
+            onCommitChange={actions.commitChange}
           />
         </>
       )}
@@ -102,6 +109,7 @@ export function CustomElementToolbar({
         position={position}
         selection={selection}
         onUpdate={actions.updatePosition}
+        onCommitChange={actions.commitChange}
       />
       <ActionToolbarSeparator />
       <ElementVisibilityButton

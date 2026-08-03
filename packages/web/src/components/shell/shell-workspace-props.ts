@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { AppTheme } from '@schdk/ui/options';
+import type { AppTheme } from '@schdk/common/app-settings';
 import type { OptionsPageProps } from '@schdk/ui/options/page';
 import type { VisualEditorProps } from '@schdk/ui/visual-editor';
 import type { QuestionDatabasePageProps } from '@schdk/ui/shell/question-database';
@@ -29,7 +29,9 @@ export interface ShellWorkspaceProps {
   navigation: ReturnType<typeof useShellNavigation>;
   settings: {
     theme: AppTheme;
-    options: Omit<OptionsPageProps, 'hidden' | 'onBack'>;
+    options: Omit<OptionsPageProps, 'hidden' | 'navigation'> & {
+      navigation: Omit<OptionsPageProps['navigation'], 'onBack'>;
+    };
     visualEditor: Omit<VisualEditorProps, 'hidden'>;
   };
 }

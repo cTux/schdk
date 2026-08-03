@@ -6,7 +6,11 @@ export interface VisualEditorProps {
   hidden: boolean;
   game: GamePresentationOptions;
   message: string;
-  onChange(game: GamePresentationOptions): void;
+  onChange(
+    game: GamePresentationOptions,
+    options?: { continuous?: boolean },
+  ): void;
+  onCommitChange(): void;
   onImportTemplate(file: File): void;
   onExportTemplate(): void;
   onRedo(): void;

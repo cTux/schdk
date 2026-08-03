@@ -1,4 +1,4 @@
 import { EditorHeader } from './EditorHeader';
-import { type EditorHeaderProps } from './types';
+import { type EditorHeaderProps } from './EditorHeader';
 
 export { EditorHeader, type EditorHeaderProps };

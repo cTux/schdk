@@ -1,5 +1,5 @@
 import { QUESTION_TYPE_CONFIG, type GamePackage } from '@schdk/common';
-import type { HostQuestionStage } from '@schdk/ui/host';
+import type { HostQuestionStage } from '@schdk/common/game-hosting';
 import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 import { stopGameAudio } from './game-audio';
 import {

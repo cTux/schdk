@@ -1,9 +1,9 @@
-import type { GameOptions } from '@schdk/common';
+import type { GameOptions } from '@schdk/common/game-options';
 import type {
   DriveSettingsDocument,
   DriveVisualAssetsDocument,
 } from '@schdk/google-drive';
-import type { EditorTextOptions } from '@schdk/ui/options';
+import type { EditorTextOptions } from '@schdk/common/app-settings';
 import type { WebDriveSettingsDocument } from '../../types/google-drive/web-drive-settings-document';
 
 const REFERENCE_PREFIX = 'schdk-visual-asset:';

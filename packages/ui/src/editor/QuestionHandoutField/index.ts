@@ -1,4 +1,4 @@
 import { QuestionHandoutField } from './QuestionHandoutField';
-import { type QuestionHandoutFieldProps } from './types';
+import { type QuestionHandoutFieldProps } from './QuestionHandoutField';
 
 export { QuestionHandoutField, type QuestionHandoutFieldProps };

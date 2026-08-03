@@ -1,5 +1,5 @@
-import type { AppLocale } from '@schdk/ui/localization';
-import type { AppFont } from '@schdk/ui/options';
+import type { AppLocale } from '@schdk/common/app-settings';
+import type { AppFont } from '@schdk/common/app-settings';
 import { LOCALE_KEY } from '../../constants/shell/locale-key';
 import { saveShellLocale } from '../../storage/shell/save-shell-locale';
 import { loadShellTheme } from '../../storage/shell/load-shell-theme';

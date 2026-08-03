@@ -1,4 +1,4 @@
-import type { GamePackage } from '@schdk/common';
+import type { GamePackage } from '@schdk/common/game-packages';
 import { getNextPosition, getPreviousPosition } from './game-flow';
 import type { GamePosition } from './game-position';
 

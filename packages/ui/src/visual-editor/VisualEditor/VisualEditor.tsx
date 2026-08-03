@@ -2,8 +2,20 @@ import './styles.scss';
 import classNames from 'classnames';
 import type { ReactNode } from 'react';
 import { getGameSurfaceStyle } from '../../game-presentation/game-surface-style';
-import { useLocalization } from '../../localization';
-import { GameCustomElement } from '../../game-presentation/GameElements';
+import { useLocalization, type LocalizationCopy } from '../../localization';
+import {
+  GameAnswer,
+  GameAnswerComment,
+  GameAlternativeAnswer,
+  GameControls,
+  GameCustomElement,
+  GameHandout,
+  GameLogo,
+  GameProgress,
+  GameQuestion,
+  GameQuestionIntro,
+  GameTimer,
+} from '../../game-presentation/GameElements';
 import {
   createCustomElement,
   getDraggedPosition,
@@ -14,12 +26,72 @@ import {
   GAME_LAYOUT_ELEMENT_IDS,
   type GameLayoutElementId,
 } from '../../options/types';
-import { VisualEditorSidebar } from './VisualEditorSidebar';
-import { VisualEditorPreview } from './VisualEditorPreview';
-import { VisualEditorToolbar } from './VisualEditorToolbar';
-import { VisualLayoutItem } from './VisualLayoutItem';
+import { VisualEditorSidebar } from './VisualEditorSidebar/VisualEditorSidebar';
+import { VisualEditorToolbar } from './VisualEditorToolbar/VisualEditorToolbar';
+import { VisualLayoutItem } from './VisualLayoutItem/VisualLayoutItem';
 import type { ElementSelection, VisualEditorProps } from './types';
 import { useVisualEditor } from './hooks/useVisualEditor';
+
+function getBuiltInElements(copy: LocalizationCopy) {
+  const elements: Record<
+    GameLayoutElementId,
+    { content: ReactNode; label: string }
+  > = {
+    logo: { content: <GameLogo />, label: copy.visualEditor.labels.logo },
+    intro: {
+      content: <GameQuestionIntro questionNumber={5} />,
+      label: copy.visualEditor.labels.intro,
+    },
+    handout: {
+      content: <GameHandout copy={copy} />,
+      label: copy.visualEditor.labels.handout,
+    },
+    question: {
+      content: <GameQuestion>{copy.visualEditor.previewText}</GameQuestion>,
+      label: copy.visualEditor.labels.question,
+    },
+    timer: {
+      content: <GameTimer seconds={42} />,
+      label: copy.visualEditor.labels.timer,
+    },
+    'answer-comment': {
+      content: (
+        <GameAnswerComment>{copy.shared.answerComment}</GameAnswerComment>
+      ),
+      label: copy.visualEditor.labels.answerComment,
+    },
+    'alternative-answer': {
+      content: (
+        <GameAlternativeAnswer>
+          {copy.editor.alternativeAnswers}
+        </GameAlternativeAnswer>
+      ),
+      label: copy.visualEditor.labels.alternativeAnswer,
+    },
+    answer: {
+      content: <GameAnswer answer={copy.shared.answer} />,
+      label: copy.visualEditor.labels.answer,
+    },
+    progress: {
+      content: <GameProgress questionNumber={5} questionCount={36} />,
+      label: copy.visualEditor.labels.progress,
+    },
+    controls: {
+      content: (
+        <GameControls
+          copy={copy}
+          canGoBack
+          controlsDisabled={false}
+          preview
+          onBack={() => undefined}
+          onNext={() => undefined}
+        />
+      ),
+      label: copy.visualEditor.labels.controls,
+    },
+  };
+  return GAME_LAYOUT_ELEMENT_IDS.map((id) => ({ id, ...elements[id] }));
+}
 
 const selectionKey = (selection: ElementSelection) =>
   `${selection.kind}:${selection.id}`;
@@ -31,6 +103,7 @@ function VisualEditor({
   game,
   message,
   onChange,
+  onCommitChange,
   onImportTemplate,
   onExportTemplate,
   onRedo,
@@ -43,18 +116,10 @@ function VisualEditor({
     onRedo,
     onUndo,
   });
-  const labels: Record<GameLayoutElementId, string> = {
-    logo: copy.visualEditor.labels.logo,
-    intro: copy.visualEditor.labels.intro,
-    handout: copy.visualEditor.labels.handout,
-    question: copy.visualEditor.labels.question,
-    timer: copy.visualEditor.labels.timer,
-    'answer-comment': copy.visualEditor.labels.answerComment,
-    'alternative-answer': copy.visualEditor.labels.alternativeAnswer,
-    answer: copy.visualEditor.labels.answer,
-    progress: copy.visualEditor.labels.progress,
-    controls: copy.visualEditor.labels.controls,
-  };
+  const builtInElements = getBuiltInElements(copy);
+  const labels = Object.fromEntries(
+    builtInElements.map(({ id, label }) => [id, label]),
+  ) as Record<GameLayoutElementId, string>;
   const renderItem = (
     selection: ElementSelection,
     label: string,
@@ -126,6 +191,7 @@ function VisualEditor({
             }}
             actions={{
               chooseImage: editor.chooseImage,
+              commitChange: onCommitChange,
               onChange,
               removeCustom: editor.removeCustom,
               updateCustom: editor.updateCustom,
@@ -157,12 +223,8 @@ function VisualEditor({
             if (event.target === event.currentTarget) editor.selectWorkspace();
           }}
         >
-          {GAME_LAYOUT_ELEMENT_IDS.map((id) =>
-            renderItem(
-              { kind: 'built-in', id },
-              labels[id],
-              <VisualEditorPreview copy={copy} id={id} />,
-            ),
+          {builtInElements.map(({ content, id, label }) =>
+            renderItem({ kind: 'built-in', id }, label, content),
           )}
           {game.customElements.map((element) =>
             renderItem(

@@ -1,4 +1,4 @@
-import type { AppTheme } from '@schdk/ui/options';
+import type { AppTheme } from '@schdk/common/app-settings';
 import { THEME_KEY } from '../../constants/shell/theme-key';
 
 export function saveShellTheme(theme: AppTheme) {

@@ -1,5 +1,5 @@
-import type { GameOptions } from '@schdk/common';
-import type { EditorTextOptions } from '@schdk/ui/options';
+import type { GameOptions } from '@schdk/common/game-options';
+import type { EditorTextOptions } from '@schdk/common/app-settings';
 import { useCallback, useRef, useState } from 'react';
 import { saveEditorTextOptions } from '../../storage/editor/editor-options-storage';
 import {

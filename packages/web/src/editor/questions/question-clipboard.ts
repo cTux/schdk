@@ -1,17 +1,17 @@
 import { parseGameQuestion, type GameQuestion } from '@schdk/common';
-import { showEditorToast } from '@schdk/ui/editor';
-import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
+import type { EditorNotice } from '@schdk/common/app-settings';
+import type { LocalizationCopy } from '@schdk/ui/localization';
 
 async function copyQuestionToClipboard(
   question: GameQuestion,
   copy: LocalizationCopy,
-  locale: AppLocale,
+  notify: (notice: EditorNotice) => void,
   setMessage: (message: string) => void,
 ) {
   setMessage('');
   try {
     await navigator.clipboard.writeText(JSON.stringify(question, null, 2));
-    showEditorToast('copied', locale);
+    notify('copied');
   } catch {
     setMessage(copy.editor.copyFailed);
   }
@@ -21,7 +21,7 @@ async function readQuestionFromClipboard(
   selectedIndex: number,
   confirm: (message: string) => Promise<boolean>,
   copy: LocalizationCopy,
-  locale: AppLocale,
+  notify: (notice: EditorNotice) => void,
   setMessage: (message: string) => void,
 ) {
   if (!(await confirm(copy.editor.confirmPaste(selectedIndex + 1))))
@@ -31,7 +31,7 @@ async function readQuestionFromClipboard(
     const question = parseGameQuestion(
       JSON.parse(await navigator.clipboard.readText()),
     );
-    showEditorToast('pasted', locale);
+    notify('pasted');
     return question;
   } catch {
     setMessage(copy.editor.pasteFailed);

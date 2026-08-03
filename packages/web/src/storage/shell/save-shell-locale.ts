@@ -1,4 +1,4 @@
-import type { AppLocale } from '@schdk/ui/localization';
+import type { AppLocale } from '@schdk/common/app-settings';
 import { LOCALE_KEY } from '../../constants/shell/locale-key';
 
 export function saveShellLocale(locale: AppLocale) {

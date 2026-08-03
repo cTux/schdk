@@ -1,8 +1,8 @@
 import {
   MAX_VISUAL_TEMPLATE_BYTES,
   parseVisualEditorTemplate,
-  type GameOptions,
-} from '@schdk/common';
+} from '@schdk/common/visual-editor-template';
+import type { GameOptions } from '@schdk/common/game-options';
 
 export async function parseVisualEditorTemplateFile(
   file: File,

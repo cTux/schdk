@@ -1,4 +1,4 @@
-import { type EditorToastAction } from './editor-toast-action';
+import type { EditorNotice as EditorToastAction } from '@schdk/common/app-settings';
 
 const editorToastCopy = {
   uk: {

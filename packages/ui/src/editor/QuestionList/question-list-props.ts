@@ -1,4 +1,4 @@
-import { type GamePackage } from '@schdk/common';
+import type { GamePackage } from '@schdk/common/game-packages';
 
 export interface QuestionListProps {
   gamePackage: GamePackage;

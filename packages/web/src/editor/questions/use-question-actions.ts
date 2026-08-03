@@ -1,8 +1,9 @@
 import type { GamePackage, GameQuestion } from '@schdk/common';
 import type { DrivePackageStorage } from '@schdk/google-drive/game-packages';
 import type { EditorViewProps } from '@schdk/ui/editor';
-import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
-import type { EditorTextOptions } from '@schdk/ui/options';
+import type { EditorNotice } from '@schdk/common/app-settings';
+import type { LocalizationCopy } from '@schdk/ui/localization';
+import type { EditorTextOptions } from '@schdk/common/app-settings';
 import type { Dispatch, RefObject, SetStateAction } from 'react';
 import { addQuestionHandout } from './add-question-handout';
 import { getSelectedIndexAfterSwap, swapQuestions } from './question-order';
@@ -23,7 +24,7 @@ interface QuestionActionsOptions {
   drive?: DrivePackageStorage;
   currentPackage: RefObject<GamePackage>;
   gamePackage: GamePackage;
-  locale: AppLocale;
+  notify(notice: EditorNotice): void;
   selectedIndex: number;
   textOptions: EditorTextOptions;
   onDriveFailure?(): void;
@@ -38,7 +39,7 @@ export function useQuestionActions({
   currentPackage,
   drive,
   gamePackage,
-  locale,
+  notify,
   selectedIndex,
   textOptions,
   onDriveFailure,
@@ -102,7 +103,7 @@ export function useQuestionActions({
     await copyQuestionToClipboard(
       gamePackage.questions[selectedIndex]!,
       copy,
-      locale,
+      notify,
       setMessage,
     );
   }
@@ -112,7 +113,7 @@ export function useQuestionActions({
       selectedIndex,
       confirm,
       copy,
-      locale,
+      notify,
       setMessage,
     );
     if (question) replaceQuestion(selectedIndex, question);

@@ -1,7 +1,7 @@
 import {
   DEFAULT_EDITOR_TEXT_OPTIONS,
   type EditorTextOptions,
-} from '@schdk/ui/options';
+} from '@schdk/common/app-settings';
 import { type OptionsStorage } from '../options/options-storage-type';
 import { normalizeEditorTextOptions } from '../../utils/editor/normalize-editor-text-options';
 import { OPTIONS_KEY } from '../../constants/options/options-key';

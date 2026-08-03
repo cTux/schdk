@@ -3,24 +3,30 @@ import { HostView } from '..';
 
 const render = (finished: boolean) =>
   HostView({
-    backgroundImage: null,
-    backgroundOpacity: 1,
-    backgroundGradientFrom: null,
-    backgroundGradientTo: '#2b3048',
-    backgroundGradientDirection: 135,
-    finished,
-    game: null,
-    layout: null,
     message: '',
-    packageDetails: null,
-    recentPackages: [],
-    onBack: () => undefined,
-    onGameBack: () => undefined,
-    onGameNext: () => undefined,
-    onOpenPackage: () => undefined,
-    onOpenRecentPackage: () => undefined,
-    onReturnToGames: () => undefined,
-    onStartGame: () => undefined,
+    presentation: {
+      backgroundImage: null,
+      backgroundOpacity: 1,
+      backgroundGradientFrom: null,
+      backgroundGradientTo: '#2b3048',
+      backgroundGradientDirection: 135,
+      layout: null,
+    },
+    packages: {
+      packageDetails: null,
+      recentPackages: [],
+      onBack: () => undefined,
+      onOpen: () => undefined,
+      onOpenRecent: () => undefined,
+      onStart: () => undefined,
+    },
+    session: {
+      finished,
+      game: null,
+      onBack: () => undefined,
+      onNext: () => undefined,
+      onReturn: () => undefined,
+    },
   });
 
 describe('HostView', () => {

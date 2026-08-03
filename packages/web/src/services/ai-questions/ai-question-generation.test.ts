@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { GameQuestion } from '@schdk/common';
-import type { AiOptions } from '@schdk/ui/options';
+import type { GameQuestion } from '@schdk/common/game-question';
+import type { AiOptions } from '@schdk/common/app-settings';
 import type { AiGenerationPort } from '../../types/google-drive/google-drive-types';
 import { createAiQuestionGeneration } from './ai-question-generation';
 

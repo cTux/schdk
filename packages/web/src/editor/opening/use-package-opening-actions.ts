@@ -11,8 +11,8 @@ import {
   type DrivePackageStorage,
   type DriveGamePackageFile,
 } from '@schdk/google-drive/game-packages';
-import { showEditorToast } from '@schdk/ui/editor';
-import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
+import type { EditorNotice } from '@schdk/common/app-settings';
+import type { LocalizationCopy } from '@schdk/ui/localization';
 import { useRecentGamePackageActions } from '../../hooks/game-packages/use-recent-game-package-actions';
 import { replaceBrowserPackageDeepLink } from './browser-deep-link';
 
@@ -20,7 +20,7 @@ interface PackageOpeningOptions {
   confirm(message: string): Promise<boolean>;
   copy: LocalizationCopy;
   drive?: DrivePackageStorage;
-  locale: AppLocale;
+  notify(notice: EditorNotice): void;
   applyOpenedPackage(
     content: Uint8Array,
     opened: DriveGamePackageFile,
@@ -35,7 +35,7 @@ export function usePackageOpeningActions({
   confirm,
   copy,
   drive,
-  locale,
+  notify,
   applyOpenedPackage,
   refreshRecentPackages,
   onDriveFailure,
@@ -57,9 +57,9 @@ export function usePackageOpeningActions({
       applyOpenedPackage(opened.content, opened);
       replaceBrowserPackageDeepLink(toDrivePackageReference(opened.id), 0);
     },
-    onOpened: () => showEditorToast('opened', locale),
-    onDownloaded: () => showEditorToast('downloaded', locale),
-    onDeleted: () => showEditorToast('deleted', locale),
+    onOpened: () => notify('opened'),
+    onDownloaded: () => notify('downloaded'),
+    onDeleted: () => notify('deleted'),
     refreshRecentPackages,
   });
 
@@ -93,7 +93,7 @@ export function usePackageOpeningActions({
       applyOpenedPackage(content, saved);
       replaceBrowserPackageDeepLink(toDrivePackageReference(saved.id), 0);
       await refreshRecentPackages();
-      showEditorToast('imported', locale);
+      notify('imported');
     } catch {
       onDriveFailure?.();
       setMessage(copy.editor.saveFailed);

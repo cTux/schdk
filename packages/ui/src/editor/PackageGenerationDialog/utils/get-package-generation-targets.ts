@@ -1,4 +1,4 @@
-import { type GamePackage } from '@schdk/common';
+import type { GamePackage } from '@schdk/common/game-packages';
 import { type PackageGenerationScope } from '../types/package-generation-scope';
 
 export function getPackageGenerationTargets(

@@ -18,31 +18,31 @@ import { type HostViewProps } from './types/host-view-props';
 import { type HostPackageDetails } from './types/host-package-details';
 
 function HostView({
-  backgroundImage,
-  backgroundOpacity,
-  backgroundGradientFrom,
-  backgroundGradientTo,
-  backgroundGradientDirection,
   copy = LOCALIZATION_COPY.uk,
-  customElements = [],
-  finished,
-  game,
-  layout,
   message,
-  openingRecentPackageId = null,
-  packageDetails,
-  recentPackages,
-  recentPackagesLoading = false,
-  onBack,
   onExit,
-  onDeleteRecentPackage,
-  onDownloadRecentPackage,
-  onGameBack,
-  onGameNext,
-  onOpenPackage,
-  onOpenRecentPackage,
-  onReturnToGames,
-  onStartGame,
+  presentation: {
+    backgroundImage,
+    backgroundOpacity,
+    backgroundGradientFrom,
+    backgroundGradientTo,
+    backgroundGradientDirection,
+    customElements = [],
+    layout,
+  },
+  packages: {
+    openingRecentPackageId = null,
+    packageDetails,
+    recentPackages,
+    recentPackagesLoading = false,
+    onBack,
+    onDelete,
+    onDownload,
+    onOpen,
+    onOpenRecent,
+    onStart,
+  },
+  session: { finished, game, onBack: onGameBack, onNext: onGameNext, onReturn },
 }: HostViewProps) {
   const playing = game !== null || finished;
   return (
@@ -54,7 +54,7 @@ function HostView({
       headerContent={<p>{copy.shell.host.description}</p>}
       headerActions={
         !playing && !packageDetails ? (
-          <GamePackageActions compact hidden={false} onOpen={onOpenPackage} />
+          <GamePackageActions compact hidden={false} onOpen={onOpen} />
         ) : undefined
       }
       onBack={onExit ?? onBack}
@@ -74,15 +74,15 @@ function HostView({
           loading={recentPackagesLoading}
           openingPackageId={openingRecentPackageId}
           packages={recentPackages}
-          onDelete={onDeleteRecentPackage}
-          onDownload={onDownloadRecentPackage}
-          onOpen={onOpenRecentPackage}
+          onDelete={onDelete}
+          onDownload={onDownload}
+          onOpen={onOpenRecent}
         />
         {packageDetails && !playing && (
           <GamePackageDetails
             details={packageDetails}
             onBack={onBack}
-            onStart={onStartGame}
+            onStart={onStart}
           />
         )}
         {game && (
@@ -95,7 +95,7 @@ function HostView({
             onNext={onGameNext}
           />
         )}
-        {finished && <GameFinished onReturn={onReturnToGames} />}
+        {finished && <GameFinished onReturn={onReturn} />}
         {message && <StatusMessage>{message}</StatusMessage>}
       </main>
     </Page>

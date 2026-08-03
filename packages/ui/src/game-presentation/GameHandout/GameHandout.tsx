@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import type { Handout } from '@schdk/common';
+import type { Handout } from '@schdk/common/game-question';
 import { LOCALIZATION_COPY, type LocalizationCopy } from '../../localization';
 
 export function GameHandout({

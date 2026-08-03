@@ -29,6 +29,10 @@ directions in [architecture.md](architecture.md).
   and editor-session state in their matching workflow directories. Keep
   `App.tsx` as the composition root and editor-only cross-workflow package
   actions beside it.
+- In `packages/web/src/host`, keep session parsing, storage, and deep-link
+  behavior together in the host-session module. Keep audio elements and their
+  playback lifecycle together in the game-audio module instead of creating
+  one-file wrappers for constants or one-line actions.
 - Keep recent-package listing, loading, downloading, and deletion shared by the
   editor and host under `packages/web/src/hooks/game-packages`; keep their
   browser file helpers under `packages/web/src/utils/game-packages`.

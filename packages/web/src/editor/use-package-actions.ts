@@ -10,8 +10,9 @@ import {
   type DriveGamePackageFile,
   type DrivePackageStorage,
 } from '@schdk/google-drive/game-packages';
-import { showEditorToast, type EditorSaveStatus } from '@schdk/ui/editor';
-import type { AppLocale, LocalizationCopy } from '@schdk/ui/localization';
+import type { EditorSaveStatus } from '@schdk/ui/editor';
+import type { EditorNotice } from '@schdk/common/app-settings';
+import type { LocalizationCopy } from '@schdk/ui/localization';
 import type { Dispatch, SetStateAction } from 'react';
 import { replaceBrowserPackageDeepLink } from './opening/browser-deep-link';
 import { usePackageOpeningActions } from './opening/use-package-opening-actions';
@@ -21,7 +22,7 @@ interface PackageActionsOptions {
   copy: LocalizationCopy;
   drive?: DrivePackageStorage;
   driveFileId: string | null;
-  locale: AppLocale;
+  notify(notice: EditorNotice): void;
   saveStatus: EditorSaveStatus;
   applyOpenedPackage(
     content: Uint8Array,
@@ -44,7 +45,7 @@ export function usePackageActions(options: PackageActionsOptions) {
     copy,
     drive,
     driveFileId,
-    locale,
+    notify,
     saveStatus,
     applyOpenedPackage,
     createLocalizedPackage,
@@ -60,7 +61,7 @@ export function usePackageActions(options: PackageActionsOptions) {
     confirm,
     copy,
     drive,
-    locale,
+    notify,
     applyOpenedPackage,
     refreshRecentPackages,
     onDriveFailure,
@@ -95,7 +96,7 @@ export function usePackageActions(options: PackageActionsOptions) {
       setShowValidation(false);
       replaceBrowserPackageDeepLink(toDrivePackageReference(saved.id), 0);
       await refreshRecentPackages();
-      showEditorToast('created', locale);
+      notify('created');
     } catch {
       onDriveFailure?.();
       setMessage(copy.editor.saveFailed);
@@ -127,7 +128,7 @@ export function usePackageActions(options: PackageActionsOptions) {
       await drive.deleteGamePackage(driveFileId);
       resetPackage();
       await refreshRecentPackages();
-      showEditorToast('deleted', locale);
+      notify('deleted');
     } catch {
       onDriveFailure?.();
       setMessage(copy.shared.deletePackageFailed);

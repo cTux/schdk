@@ -1,11 +1,14 @@
-import { type EditorTextOptions } from './editor-text-options';
-import { type AiModelOption } from './ai-model-option';
-import { type AiProviderOption } from './ai-provider-option';
-import { type AiOptions } from './ai-options';
-import { type AppTheme } from './app-theme';
-import { type AppFont } from './app-font';
-import { type SettingsGroup } from './settings-group';
-import { DEFAULT_EDITOR_TEXT_OPTIONS } from './default-editor-text-options';
+import {
+  DEFAULT_EDITOR_TEXT_OPTIONS,
+  SETTINGS_GROUPS,
+  type AiModelOption,
+  type AiOptions,
+  type AiProviderOption,
+  type AppFont,
+  type AppTheme,
+  type EditorTextOptions,
+  type SettingsGroup,
+} from '@schdk/common/app-settings';
 import {
   DEFAULT_GAME_LAYOUT,
   DEFAULT_GAME_OPTIONS,
@@ -24,9 +27,7 @@ import {
   type GameOptions,
   type GamePresentationOptions,
   type GameTextGrowDirection,
-} from '@schdk/common';
-
-const SETTINGS_GROUPS = ['app', 'schdk', 'artificialIntelligence'] as const;
+} from '@schdk/common/game-options';
 
 export {
   type EditorTextOptions,

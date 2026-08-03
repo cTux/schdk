@@ -1,5 +1,5 @@
-import type { GameOptions } from '@schdk/common';
-import type { EditorTextOptions } from '@schdk/ui/options';
+import type { GameOptions } from '@schdk/common/game-options';
+import type { EditorTextOptions } from '@schdk/common/app-settings';
 import { useEffect, useEffectEvent, useState } from 'react';
 import { BrowserGoogleDriveBridge } from '../../services/google-drive/google-drive-browser';
 import type { GoogleDriveBridge } from '../../types/google-drive/google-drive-types';

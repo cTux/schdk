@@ -1,4 +1,4 @@
 import { FileButton } from './FileButton';
-import { type FileButtonProps } from './types';
+import { type FileButtonProps } from './FileButton';
 
 export { FileButton, type FileButtonProps };

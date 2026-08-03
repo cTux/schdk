@@ -3,7 +3,7 @@ import type {
   AiQuestionGenerationOptions,
   EditorViewProps,
 } from '@schdk/ui/editor';
-import type { EditorTextOptions } from '@schdk/ui/options';
+import type { EditorTextOptions } from '@schdk/common/app-settings';
 
 export interface AppProps {
   aiGeneration?: AiQuestionGenerationOptions;
