@@ -1,4 +1,4 @@
-import { faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons';
+import { faWandMagicSparkles } from '@fortawesome/free-solid-svg-icons/faWandMagicSparkles';
 import { IconButton } from '../../atoms/IconButton';
 import { useLocalization } from '../../localization';
 import type { PackageGenerationOpenButtonProps } from './types';

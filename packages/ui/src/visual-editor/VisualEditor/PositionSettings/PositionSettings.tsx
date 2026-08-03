@@ -1,13 +1,11 @@
-import {
-  faAlignCenter,
-  faAlignJustify,
-  faAlignLeft,
-  faAlignRight,
-  faBold,
-  faItalic,
-  faPalette,
-  faUnderline,
-} from '@fortawesome/free-solid-svg-icons';
+import { faAlignCenter } from '@fortawesome/free-solid-svg-icons/faAlignCenter';
+import { faAlignJustify } from '@fortawesome/free-solid-svg-icons/faAlignJustify';
+import { faAlignLeft } from '@fortawesome/free-solid-svg-icons/faAlignLeft';
+import { faAlignRight } from '@fortawesome/free-solid-svg-icons/faAlignRight';
+import { faBold } from '@fortawesome/free-solid-svg-icons/faBold';
+import { faItalic } from '@fortawesome/free-solid-svg-icons/faItalic';
+import { faPalette } from '@fortawesome/free-solid-svg-icons/faPalette';
+import { faUnderline } from '@fortawesome/free-solid-svg-icons/faUnderline';
 import {
   ActionToolbarButton,
   ActionToolbarPopover,

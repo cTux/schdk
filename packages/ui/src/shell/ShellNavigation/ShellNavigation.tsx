@@ -1,10 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faAnglesLeft,
-  faAnglesRight,
-  faGear,
-  faSpinner,
-} from '@fortawesome/free-solid-svg-icons';
+import { faAnglesLeft } from '@fortawesome/free-solid-svg-icons/faAnglesLeft';
+import { faAnglesRight } from '@fortawesome/free-solid-svg-icons/faAnglesRight';
+import { faGear } from '@fortawesome/free-solid-svg-icons/faGear';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons/faSpinner';
 import classNames from 'classnames';
 import { useState } from 'react';
 import { AppIcon } from '../../atoms/AppIcon';

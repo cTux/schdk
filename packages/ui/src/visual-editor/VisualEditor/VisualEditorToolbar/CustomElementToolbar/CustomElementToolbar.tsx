@@ -1,4 +1,6 @@
-import { faImage, faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faImage } from '@fortawesome/free-solid-svg-icons/faImage';
+import { faPen } from '@fortawesome/free-solid-svg-icons/faPen';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons/faTrashCan';
 import {
   ActionToolbar,
   ActionToolbarButton,

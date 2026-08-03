@@ -1,9 +1,7 @@
-import {
-  faArrowRight,
-  faDownload,
-  faSpinner,
-  faTrashCan,
-} from '@fortawesome/free-solid-svg-icons';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
+import { faDownload } from '@fortawesome/free-solid-svg-icons/faDownload';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons/faSpinner';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons/faTrashCan';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import { Button } from '../../atoms/Button';

@@ -1,8 +1,6 @@
-import {
-  faMagnifyingGlassMinus,
-  faMagnifyingGlassPlus,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlassMinus } from '@fortawesome/free-solid-svg-icons/faMagnifyingGlassMinus';
+import { faMagnifyingGlassPlus } from '@fortawesome/free-solid-svg-icons/faMagnifyingGlassPlus';
+import { faXmark } from '@fortawesome/free-solid-svg-icons/faXmark';
 import { Dialog } from '@base-ui/react/dialog';
 import classNames from 'classnames';
 import { useRef, useState, type PointerEvent } from 'react';

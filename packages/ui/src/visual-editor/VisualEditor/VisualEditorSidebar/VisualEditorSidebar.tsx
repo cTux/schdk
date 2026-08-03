@@ -1,11 +1,9 @@
-import {
-  faFileExport,
-  faFileImport,
-  faFont,
-  faImage,
-  faRotateLeft,
-  faRotateRight,
-} from '@fortawesome/free-solid-svg-icons';
+import { faFileExport } from '@fortawesome/free-solid-svg-icons/faFileExport';
+import { faFileImport } from '@fortawesome/free-solid-svg-icons/faFileImport';
+import { faFont } from '@fortawesome/free-solid-svg-icons/faFont';
+import { faImage } from '@fortawesome/free-solid-svg-icons/faImage';
+import { faRotateLeft } from '@fortawesome/free-solid-svg-icons/faRotateLeft';
+import { faRotateRight } from '@fortawesome/free-solid-svg-icons/faRotateRight';
 import classNames from 'classnames';
 import { useRef } from 'react';
 import { IconButton } from '../../../atoms/IconButton';

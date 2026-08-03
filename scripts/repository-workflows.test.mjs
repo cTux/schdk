@@ -341,6 +341,24 @@ test('critical architecture boundaries remain enforced', async () => {
   assert.match(appData, /'If-Match': expectedEtag/);
 });
 
+test('Font Awesome stays tree-shakeable and bundle checks use the manifest', async () => {
+  const [uiFiles, bundleCheck, viteConfig] = await Promise.all([
+    listFiles(new URL('packages/ui/src/', repositoryRoot)),
+    read('scripts/check-web-bundle-budget.mjs'),
+    read('packages/web/vite.config.ts'),
+  ]);
+
+  for (const file of uiFiles.filter((file) => file.pathname.endsWith('.tsx'))) {
+    const source = await readFile(file, 'utf8');
+    assert.doesNotMatch(
+      source,
+      /from ['"]@fortawesome\/free-solid-svg-icons['"]/u,
+    );
+  }
+  assert.match(bundleCheck, /\.vite\/manifest\.json/u);
+  assert.match(viteConfig, /manifest: true/u);
+});
+
 test('UI components follow the directory and class composition contracts', async () => {
   const uiSource = new URL('packages/ui/src/', repositoryRoot);
   const files = await listFiles(uiSource);

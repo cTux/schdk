@@ -1,4 +1,4 @@
-import { faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faPlay } from '@fortawesome/free-solid-svg-icons/faPlay';
 import { LOCALIZATION_COPY } from '../src/localization';
 import { DEFAULT_SCHDK_DICTIONARIES } from '@schdk/common';
 import {

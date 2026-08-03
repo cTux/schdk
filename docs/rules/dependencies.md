@@ -14,7 +14,8 @@
 - Start implementation in a new worktree with `$schdk-start-session`: create a
   prompt-based `codex/` branch, then run `pnpm install`.
 - Prefer platform APIs and installed dependencies before adding packages.
-  Import only the Font Awesome icons used by the UI.
+  Import Font Awesome icons through per-icon package subpaths so an application
+  never pulls the complete icon entry point into a production chunk.
 - Use the Vercel AI SDK provider registry when question generation is
   implemented. Add its runtime dependency with the first generation call, not
   for settings-only UI. Register only provider packages shipped in `@schdk/ai`;
