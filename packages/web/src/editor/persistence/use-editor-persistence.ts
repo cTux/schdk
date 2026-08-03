@@ -125,7 +125,6 @@ export function useEditorPersistence({
     driveModifiedTime,
     fileName,
     gamePackage,
-    locale,
     notify,
     onDriveFailure,
     resolveDriveConflict,
