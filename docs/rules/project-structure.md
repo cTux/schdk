@@ -45,13 +45,12 @@ directions in [architecture.md](architecture.md).
 
 ## Exports
 
-- Keep at most one top-level `export` statement in each source-code file.
-- Export a file's single consumer-facing declaration directly, such as
-  `export interface Props`; do not add a separate grouped export for one
-  locally declared symbol.
-- Split files with multiple exported declarations by consumer-facing
-  responsibility. Give each reusable symbol its own owning module instead of
-  hiding multiple declarations behind one grouped export statement.
+- Export cohesive declarations together when they share one consumer boundary
+  and normally change as a unit. Do not split constants, types, or helpers into
+  one-line files solely to enforce one export per file.
+- Split exported declarations only when they have different owners, consumers,
+  or reasons to change. Prefer direct exports for declarations owned by the
+  module and one grouped export in public entry points.
 - Keep a helper in the same file as its primary exported function only when no
   other module uses it. When another module needs the helper, move it to its own
   file and export it there.
