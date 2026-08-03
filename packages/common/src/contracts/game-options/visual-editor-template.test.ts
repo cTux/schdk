@@ -28,7 +28,7 @@ describe('visual editor template contract', () => {
       musicVolume: 0.3,
     };
 
-    expect(
+    await expect(
       parseVisualEditorTemplate(
         await serializeVisualEditorTemplate(presentation),
         unrelated,
