@@ -309,11 +309,12 @@ test('application source respects internal ownership boundaries', async () => {
 });
 
 test('critical architecture boundaries remain enforced', async () => {
-  const [channels, preload, history, appData] = await Promise.all([
+  const [channels, preload, history, appData, visualAssets] = await Promise.all([
     read('packages/desktop/src/ipc/google-drive/google-drive-ipc-channels.ts'),
     read('packages/desktop/src/preload.cts'),
     read('packages/web/src/utils/visual-editor/visual-editor-history.ts'),
     read('packages/google-drive/src/types/app-data/app-data.ts'),
+    read('packages/web/src/storage/google-drive/visual-assets-storage.ts'),
   ]);
 
   assert.deepEqual(
@@ -339,6 +340,8 @@ test('critical architecture boundaries remain enforced', async () => {
   assert.match(history, /MAX_HISTORY_ENTRIES = 100/);
   assert.match(history, /MAX_HISTORY_BYTES = 32 \* 1024 \* 1024/);
   assert.match(appData, /'If-Match': expectedEtag/);
+  assert.match(visualAssets, /schdk-visual-asset:/);
+  assert.match(visualAssets, /hydrateVisualAssets/);
 });
 
 test('Font Awesome stays tree-shakeable and bundle checks use the manifest', async () => {

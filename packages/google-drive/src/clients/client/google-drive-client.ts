@@ -30,7 +30,12 @@ import {
   type DriveGamePackageWrite,
   type DrivePackageStorage,
 } from '../../services/game-packages/game-packages.js';
-import type { DriveSettingsDocument } from '../../services/settings/settings.js';
+import {
+  parseDriveVisualAssetsDocument,
+  type DriveSettingsDocument,
+  type DriveVisualAssetsDocument,
+  type DriveVisualAssetsFile,
+} from '../../services/settings/settings.js';
 import {
   parseQuestionDatabaseDocument,
   type DriveQuestionDatabaseStorage,
@@ -45,6 +50,7 @@ import type { VersionedAppData } from '../../types/app-data/app-data.js';
 const DRIVE_API = 'https://www.googleapis.com/drive/v3';
 
 const SETTINGS_NAME = 'settings-v1.json';
+const VISUAL_ASSETS_NAME = 'visual-assets-v1.json';
 
 const QUESTION_DATABASE_NAME = 'question-database-v1.json';
 
@@ -101,6 +107,22 @@ export class GoogleDriveClient
     expectedEtag: string | null,
   ): Promise<boolean> {
     return this.appData.saveVersioned(SETTINGS_NAME, settings, expectedEtag);
+  }
+
+  async loadVisualAssets(): Promise<DriveVisualAssetsFile | null> {
+    const file = await this.appData.loadVersioned(VISUAL_ASSETS_NAME);
+    if (!file) return null;
+    const value = parseDriveVisualAssetsDocument(file.value);
+    return value ? { etag: file.etag, value } : null;
+  }
+
+  async saveVisualAssets(
+    assets: DriveVisualAssetsDocument,
+    expectedEtag: string | null,
+  ): Promise<boolean> {
+    const value = parseDriveVisualAssetsDocument(assets);
+    if (!value) throw new TypeError('Invalid visual assets');
+    return this.appData.saveVersioned(VISUAL_ASSETS_NAME, value, expectedEtag);
   }
 
   async loadQuestionDatabase(): Promise<QuestionDatabaseDocument | null> {

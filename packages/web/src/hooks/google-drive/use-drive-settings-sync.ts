@@ -10,6 +10,11 @@ import {
 } from '../../storage/google-drive/drive-settings-storage';
 import { saveGameOptions } from '../../storage/options/save-game-options';
 import type { DriveSettingsStorage } from '../../types/google-drive/google-drive-types';
+import {
+  collectVisualAssetReferences,
+  externalizeVisualAssets,
+  hydrateVisualAssets,
+} from '../../storage/google-drive/visual-assets-storage';
 
 interface DriveSettingsSyncOptions {
   bridge: DriveSettingsStorage | null;
@@ -37,11 +42,23 @@ export function useDriveSettingsSync({
 
   const synchronize = useCallback(async () => {
     if (!bridge) return;
-    const remote = await bridge.loadSettings();
+    const [remote, remoteAssets] = await Promise.all([
+      bridge.loadSettings(),
+      bridge.loadVisualAssets(),
+    ]);
+    const hydratedRemote = remote
+      ? {
+          ...remote,
+          value: hydrateVisualAssets(
+            remote.value,
+            remoteAssets?.value ?? { schemaVersion: 1, assets: {} },
+          ),
+        }
+      : null;
     const remoteMerged =
-      remote === null
+      hydratedRemote === null
         ? initializeDriveSettings(settings.current)
-        : mergeDriveSettings(settings.current, remote.value);
+        : mergeDriveSettings(settings.current, hydratedRemote.value);
     const dirtyAtStart = { ...dirtySections.current };
     const merged = {
       ...remoteMerged,
@@ -63,7 +80,27 @@ export function useDriveSettingsSync({
     saveLocalDriveSettings(localStorage, merged);
     setEditorTextOptions(editor);
     setGameOptions(game);
-    const saved = await bridge.saveSettings(merged, remote?.etag ?? null);
+    const externalized = externalizeVisualAssets(
+      merged,
+      remoteAssets?.value ?? { schemaVersion: 1, assets: {} },
+      collectVisualAssetReferences(remote?.value),
+    );
+    const hasAssets = Object.keys(externalized.assets.assets).length > 0;
+    const assetsSaved =
+      !remoteAssets && !hasAssets
+        ? true
+        : await bridge.saveVisualAssets(
+            externalized.assets,
+            remoteAssets?.etag ?? null,
+          );
+    if (!assetsSaved) {
+      setSettingsSyncFailed(true);
+      throw new Error('Google Drive visual assets changed before save');
+    }
+    const saved = await bridge.saveSettings(
+      externalized.settings,
+      remote?.etag ?? null,
+    );
     setSettingsSyncFailed(!saved);
     if (!saved) throw new Error('Google Drive settings changed before save');
     if (

@@ -10,6 +10,8 @@ import type {
   DriveQuestionDatabaseStorage,
   DriveSettingsDocument,
   DriveSettingsFile,
+  DriveVisualAssetsDocument,
+  DriveVisualAssetsFile,
 } from '@schdk/google-drive';
 
 export {};
@@ -59,6 +61,11 @@ declare global {
         loadSettings(): Promise<DriveSettingsFile | null>;
         saveSettings(
           settings: DriveSettingsDocument,
+          expectedEtag: string | null,
+        ): Promise<boolean>;
+        loadVisualAssets(): Promise<DriveVisualAssetsFile | null>;
+        saveVisualAssets(
+          assets: DriveVisualAssetsDocument,
           expectedEtag: string | null,
         ): Promise<boolean>;
       };

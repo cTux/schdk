@@ -96,6 +96,7 @@ V53|Shell page chunks and Drive-backed feature collections load with their first
 V54|Every production web JavaScript chunk remains at or below 300 KiB.
 V55|A stale settings upload never overwrites a newer Google Drive settings file.
 V56|Every production web CSS chunk remains at or below 64 KiB, the visual-editor JavaScript chunk remains at or below 40 KiB, and its CSS chunk remains at or below 24 KiB.
+V57|Drive-synchronized visual-editor images remain outside the settings document in a bounded, version-protected app-data asset document and are hydrated before settings merge.
 
 ## §T
 

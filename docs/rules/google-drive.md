@@ -20,6 +20,10 @@
   `drive.appdata`; fixed-folder global listing requires the restricted `drive`
   scope because `drive.file` cannot discover files that users did not
   explicitly open with the app.
+- Store visual-editor image data in the bounded `visual-assets-v1.json`
+  app-data document and keep only stable references in `settings-v1.json`.
+  Load assets before merging settings and conditionally update both files so a
+  concurrent client cannot silently discard newer settings or image data.
 - Store a user AI API key separately in `ai-credentials-v1.json` in the current
   account's `appDataFolder`. Never copy it into the settings document or its
   local cache, and never reuse one account's configured status for another.

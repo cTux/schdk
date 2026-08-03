@@ -10,6 +10,8 @@ import type {
   DriveQuestionDatabaseStorage,
   DriveSettingsDocument,
   DriveSettingsFile,
+  DriveVisualAssetsDocument,
+  DriveVisualAssetsFile,
 } from '@schdk/google-drive';
 import { type GoogleDriveConnection } from '../../services/google-drive/google-drive-connection';
 
@@ -41,6 +43,11 @@ interface DriveSettingsStorage {
   loadSettings(): Promise<DriveSettingsFile | null>;
   saveSettings(
     settings: DriveSettingsDocument,
+    expectedEtag: string | null,
+  ): Promise<boolean>;
+  loadVisualAssets(): Promise<DriveVisualAssetsFile | null>;
+  saveVisualAssets(
+    assets: DriveVisualAssetsDocument,
     expectedEtag: string | null,
   ): Promise<boolean>;
 }
