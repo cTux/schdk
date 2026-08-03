@@ -243,7 +243,7 @@ test('critical architecture boundaries remain enforced', async () => {
   const [channels, preload, history] = await Promise.all([
     read('packages/desktop/src/ipc/google-drive/google-drive-ipc-channels.ts'),
     read('packages/desktop/src/preload.cts'),
-    read('packages/web/src/hooks/shell/use-visual-editor-actions.ts'),
+    read('packages/web/src/utils/visual-editor/visual-editor-history.ts'),
   ]);
 
   assert.deepEqual(

@@ -1,10 +1,31 @@
 import {
   DEFAULT_GAME_LAYOUT,
+  MAX_CUSTOM_GAME_ELEMENTS,
   type CustomGameElement,
   type GameLayoutPosition,
   type GamePresentationOptions,
 } from '../../../options/types';
 import type { ElementSelection } from '../types';
+import { createCustomElement } from './create-custom-element';
+
+function addVisualEditorElement(
+  game: GamePresentationOptions,
+  kind: CustomGameElement['kind'],
+  text: string,
+  id?: string,
+) {
+  if (game.customElements.length >= MAX_CUSTOM_GAME_ELEMENTS) return null;
+  const element = createCustomElement(
+    kind,
+    game.customElements.length,
+    id,
+    text,
+  );
+  return {
+    element,
+    game: { ...game, customElements: [...game.customElements, element] },
+  };
+}
 
 function updateVisualEditorPosition(
   game: GamePresentationOptions,
@@ -52,6 +73,7 @@ function removeVisualEditorElement(game: GamePresentationOptions, id: string) {
 }
 
 export {
+  addVisualEditorElement,
   removeVisualEditorElement,
   updateVisualEditorElement,
   updateVisualEditorPosition,

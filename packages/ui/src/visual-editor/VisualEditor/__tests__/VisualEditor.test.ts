@@ -13,6 +13,7 @@ import {
   getResizedPosition,
 } from '../VisualEditor';
 import {
+  addVisualEditorElement,
   removeVisualEditorElement,
   updateVisualEditorElement,
   updateVisualEditorPosition,
@@ -156,5 +157,18 @@ describe('visual editor drag position', () => {
     expect(renamed.customElements[0]).toMatchObject({ text: 'Changed' });
     expect(game.customElements[0]).toBe(custom);
     expect(removed.customElements).toEqual([]);
+  });
+
+  it('adds custom elements through the shared immutable command', () => {
+    const added = addVisualEditorElement(
+      DEFAULT_GAME_OPTIONS,
+      'text',
+      'Custom',
+      'custom',
+    );
+
+    expect(added?.element).toMatchObject({ id: 'custom', text: 'Custom' });
+    expect(added?.game.customElements).toHaveLength(1);
+    expect(DEFAULT_GAME_OPTIONS.customElements).toEqual([]);
   });
 });
