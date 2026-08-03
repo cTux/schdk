@@ -16,6 +16,8 @@ description: Handle SCHDK work spanning packages or lacking a narrower skill, in
    `@schdk/common` contracts instead of defining them in `@schdk/ui`.
    Return typed editor notices from workflows and invoke UI notification
    adapters only at the application composition root.
+   Keep cohesive host session and audio behavior in their existing owner
+   modules; do not split constants or one-line operations into private files.
    Reuse the shared `@schdk/google-drive` transport helpers for Drive endpoints,
    multipart uploads, and SCHDK-folder discovery.
    Accept narrow Drive capability ports in feature hooks and services; keep the

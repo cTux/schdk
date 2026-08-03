@@ -1,4 +1,4 @@
-import { type TimerSignal } from './timer-signal';
+type TimerSignal = 'main' | 'preAlarm' | null;
 
 export function getTimerSignal(
   previousSeconds: number,
@@ -8,3 +8,5 @@ export function getTimerSignal(
   if (remainingSeconds <= 10 && previousSeconds > 10) return 'preAlarm';
   return null;
 }
+
+export type { TimerSignal };
