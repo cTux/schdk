@@ -274,6 +274,22 @@ test('application source respects internal ownership boundaries', async () => {
     );
   }
 
+  for (const file of webFiles) {
+    const source = await readFile(file, 'utf8');
+    assert.doesNotMatch(
+      source,
+      /@schdk\/ui\/options['"]/u,
+      `@schdk/web must use neutral persisted-setting contracts: ${file.pathname}`,
+    );
+    if (!file.pathname.endsWith('/editor/App.tsx')) {
+      assert.doesNotMatch(
+        source,
+        /\bshowEditorToast\b/u,
+        `editor workflows must report notices through the composition root: ${file.pathname}`,
+      );
+    }
+  }
+
   const featureGroups = [
     { root: uiSource, areas: ['editor', 'host', 'visual-editor'] },
     { root: webSource, areas: ['editor', 'host'] },

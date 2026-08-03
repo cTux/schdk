@@ -25,6 +25,15 @@ interface AiOptions {
 type AppTheme = 'system' | 'light' | 'dark';
 type AppFont = 'comfortable' | 'system' | 'verdana' | 'georgia';
 type AppLocale = 'uk' | 'en';
+type EditorNotice =
+  | 'copied'
+  | 'created'
+  | 'deleted'
+  | 'downloaded'
+  | 'imported'
+  | 'opened'
+  | 'pasted'
+  | 'saved';
 const SETTINGS_GROUPS = ['app', 'schdk', 'artificialIntelligence'] as const;
 type SettingsGroup = (typeof SETTINGS_GROUPS)[number];
 
@@ -44,5 +53,6 @@ export {
   type AppLocale,
   type AppTheme,
   type EditorTextOptions,
+  type EditorNotice,
   type SettingsGroup,
 };

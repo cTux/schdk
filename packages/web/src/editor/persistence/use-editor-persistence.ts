@@ -8,8 +8,7 @@ import {
   createGamePackageFilename,
   type DrivePackageStorage,
 } from '@schdk/google-drive/game-packages';
-import { showEditorToast } from '@schdk/ui/editor';
-import type { AppLocale } from '@schdk/common/app-settings';
+import type { AppLocale, EditorNotice } from '@schdk/common/app-settings';
 import type { LocalizationCopy } from '@schdk/ui/localization';
 import {
   useCallback,
@@ -38,6 +37,7 @@ interface EditorPersistenceOptions {
   driveActive: boolean;
   locale: AppLocale;
   manageDocumentTitle: boolean;
+  notify(notice: EditorNotice): void;
   saveQueue: MutableRefObject<Promise<void>>;
   session: EditorSession;
   sessionScope: string;
@@ -54,6 +54,7 @@ export function useEditorPersistence({
   driveActive,
   locale,
   manageDocumentTitle,
+  notify,
   saveQueue,
   session,
   sessionScope,
@@ -109,7 +110,7 @@ export function useEditorPersistence({
         gamePackage === currentPackage.current,
       );
       setSaveStatus(nextSaveStatus);
-      if (nextSaveStatus === 'saved') showEditorToast('saved', locale);
+      if (nextSaveStatus === 'saved') notify('saved');
       return true;
     } catch (error) {
       setSaveStatus('error');
@@ -125,6 +126,7 @@ export function useEditorPersistence({
     fileName,
     gamePackage,
     locale,
+    notify,
     onDriveFailure,
     resolveDriveConflict,
     saveQueue,

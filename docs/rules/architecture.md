@@ -44,6 +44,9 @@
 - Keep persisted application settings and host workflow state independent of
   `@schdk/ui`; both application orchestration and UI consume those contracts
   through the matching `@schdk/common` domain subpath.
+- Let editor workflows report typed notice outcomes to the application
+  composition root. Only that root invokes the UI notification adapter and
+  resolves the active locale.
 - Keep the allowed workspace dependency directions synchronized with the
   repository workflow test; new packages require an explicit policy entry.
 - Keep editor and host feature modules inside `@schdk/web`; do not recreate

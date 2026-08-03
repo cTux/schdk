@@ -14,6 +14,8 @@ description: Handle SCHDK work spanning packages or lacking a narrower skill, in
    helpers and native APIs, then make the smallest complete change.
    Keep persisted application settings and host workflow state in the neutral
    `@schdk/common` contracts instead of defining them in `@schdk/ui`.
+   Return typed editor notices from workflows and invoke UI notification
+   adapters only at the application composition root.
    Reuse the shared `@schdk/google-drive` transport helpers for Drive endpoints,
    multipart uploads, and SCHDK-folder discovery.
    Accept narrow Drive capability ports in feature hooks and services; keep the

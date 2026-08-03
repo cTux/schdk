@@ -1,7 +1,7 @@
 import { createEmptyGamePackage, parseGamePackage } from '@schdk/common';
 import type { DriveGamePackageFile } from '@schdk/google-drive/game-packages';
 import { ConfirmationDialog, useConfirmationDialog } from '@schdk/ui';
-import { EditorView } from '@schdk/ui/editor';
+import { EditorView, showEditorToast } from '@schdk/ui/editor';
 import { useLocalization } from '@schdk/ui/localization';
 import { DEFAULT_EDITOR_TEXT_OPTIONS } from '@schdk/common/app-settings';
 import { useCallback, useRef, useState } from 'react';
@@ -32,6 +32,11 @@ function App({
   onExit,
 }: AppProps = {}) {
   const { copy, locale } = useLocalization();
+  const notify = useCallback(
+    (notice: import('@schdk/common/app-settings').EditorNotice) =>
+      showEditorToast(notice, locale),
+    [locale],
+  );
   const { confirm, dialogProps } = useConfirmationDialog();
   const createLocalizedPackage = () => ({
     ...createEmptyGamePackage(),
@@ -111,6 +116,7 @@ function App({
     drive,
     driveActive,
     locale,
+    notify,
     manageDocumentTitle,
     saveQueue,
     session,
@@ -125,7 +131,7 @@ function App({
     currentPackage,
     drive,
     gamePackage,
-    locale,
+    notify,
     selectedIndex,
     textOptions,
     onDriveFailure,
@@ -143,7 +149,7 @@ function App({
     copy,
     drive,
     driveFileId,
-    locale,
+    notify,
     saveStatus,
     applyOpenedPackage,
     createLocalizedPackage,
