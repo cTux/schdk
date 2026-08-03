@@ -233,31 +233,37 @@ function App({
   return (
     <>
       <HostView
-        backgroundImage={backgroundImage}
-        backgroundOpacity={backgroundOpacity}
-        backgroundGradientFrom={backgroundGradientFrom}
-        backgroundGradientTo={backgroundGradientTo}
-        backgroundGradientDirection={backgroundGradientDirection}
         copy={copy}
-        customElements={customElements}
-        finished={gameActive && wizard.finished}
-        game={game}
-        layout={layout}
         message={message}
-        openingRecentPackageId={openingRecentPackageId}
-        packageDetails={packageDetails}
-        recentPackages={recentPackages}
-        recentPackagesLoading={recentPackagesLoading}
-        onBack={clearPackage}
         onExit={onExit ?? (() => undefined)}
-        onDeleteRecentPackage={(recent) => void deleteRecentPackage(recent)}
-        onGameBack={wizard.goBack}
-        onGameNext={wizard.goNext}
-        onDownloadRecentPackage={(recent) => void downloadRecentPackage(recent)}
-        onOpenPackage={(file) => void openPackage(file)}
-        onOpenRecentPackage={(recent) => void openRecentPackage(recent)}
-        onReturnToGames={returnToGames}
-        onStartGame={startGame}
+        presentation={{
+          backgroundImage,
+          backgroundOpacity,
+          backgroundGradientFrom,
+          backgroundGradientTo,
+          backgroundGradientDirection,
+          customElements,
+          layout,
+        }}
+        packages={{
+          openingRecentPackageId,
+          packageDetails,
+          recentPackages,
+          recentPackagesLoading,
+          onBack: clearPackage,
+          onDelete: (recent) => void deleteRecentPackage(recent),
+          onDownload: (recent) => void downloadRecentPackage(recent),
+          onOpen: (file) => void openPackage(file),
+          onOpenRecent: (recent) => void openRecentPackage(recent),
+          onStart: startGame,
+        }}
+        session={{
+          finished: gameActive && wizard.finished,
+          game,
+          onBack: wizard.goBack,
+          onNext: wizard.goNext,
+          onReturn: returnToGames,
+        }}
       />
       <ConfirmationDialog {...dialogProps} />
     </>

@@ -29,7 +29,9 @@ export interface ShellWorkspaceProps {
   navigation: ReturnType<typeof useShellNavigation>;
   settings: {
     theme: AppTheme;
-    options: Omit<OptionsPageProps, 'hidden' | 'onBack'>;
+    options: Omit<OptionsPageProps, 'hidden' | 'navigation'> & {
+      navigation: Omit<OptionsPageProps['navigation'], 'onBack'>;
+    };
     visualEditor: Omit<VisualEditorProps, 'hidden'>;
   };
 }

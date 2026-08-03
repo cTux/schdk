@@ -175,29 +175,37 @@ export function App() {
             settings={{
               theme,
               options: {
-                ai: ai.options,
-                editor: editorOptions,
-                game: gameOptions,
-                googleDriveAccount:
-                  connection.state === 'connected'
-                    ? connection.account.emailAddress
-                    : undefined,
-                googleDriveState: connection.state,
-                settingsGroup: settings.group,
-                font,
-                theme,
-                uiAnimations,
-                onAiApiKeySave: ai.saveApiKey,
-                onAiModelChange: ai.setModel,
-                onAiProviderChange: ai.setProvider,
-                onEditorChange: googleDrive.setEditorTextOptions,
-                onGameChange: visualEditor.change,
-                onGoogleDriveConnect: () => void googleDrive.connect(),
-                onGoogleDriveDisconnect: () => void googleDrive.disconnect(),
-                onSettingsGroupChange: settings.showGroup,
-                onFontChange: preferences.setFont,
-                onThemeChange: preferences.setTheme,
-                onUiAnimationsChange: preferences.setUiAnimations,
+                artificialIntelligence: {
+                  options: ai.options,
+                  onApiKeySave: ai.saveApiKey,
+                  onModelChange: ai.setModel,
+                  onProviderChange: ai.setProvider,
+                },
+                application: {
+                  font,
+                  googleDriveAccount:
+                    connection.state === 'connected'
+                      ? connection.account.emailAddress
+                      : undefined,
+                  googleDriveState: connection.state,
+                  theme,
+                  uiAnimations,
+                  onFontChange: preferences.setFont,
+                  onGoogleDriveConnect: () => void googleDrive.connect(),
+                  onGoogleDriveDisconnect: () => void googleDrive.disconnect(),
+                  onThemeChange: preferences.setTheme,
+                  onUiAnimationsChange: preferences.setUiAnimations,
+                },
+                navigation: {
+                  settingsGroup: settings.group,
+                  onSettingsGroupChange: settings.showGroup,
+                },
+                schdk: {
+                  editor: editorOptions,
+                  game: gameOptions,
+                  onEditorChange: googleDrive.setEditorTextOptions,
+                  onGameChange: visualEditor.change,
+                },
               },
               visualEditor: {
                 canRedo: visualEditor.canRedo,

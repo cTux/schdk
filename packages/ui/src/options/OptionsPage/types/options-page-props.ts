@@ -9,26 +9,34 @@ import type {
 import { type GoogleDriveState } from '../types';
 
 export interface OptionsPageProps {
-  ai: AiOptions;
-  editor: EditorTextOptions;
-  game: GameOptions;
-  googleDriveAccount?: string;
-  googleDriveState: GoogleDriveState;
   hidden: boolean;
-  settingsGroup: SettingsGroup;
-  font: AppFont;
-  theme: AppTheme;
-  uiAnimations: boolean;
-  onAiApiKeySave(apiKey: string | null): Promise<void>;
-  onAiModelChange(model: string): void;
-  onAiProviderChange(provider: string): void;
-  onBack(): void;
-  onEditorChange(options: EditorTextOptions): void;
-  onGameChange(options: GameOptions): void;
-  onGoogleDriveConnect(): void;
-  onGoogleDriveDisconnect(): void;
-  onSettingsGroupChange(group: SettingsGroup): void;
-  onFontChange(font: AppFont): void;
-  onThemeChange(theme: AppTheme): void;
-  onUiAnimationsChange(enabled: boolean): void;
+  artificialIntelligence: {
+    options: AiOptions;
+    onApiKeySave(apiKey: string | null): Promise<void>;
+    onModelChange(model: string): void;
+    onProviderChange(provider: string): void;
+  };
+  application: {
+    font: AppFont;
+    googleDriveAccount?: string;
+    googleDriveState: GoogleDriveState;
+    theme: AppTheme;
+    uiAnimations: boolean;
+    onFontChange(font: AppFont): void;
+    onGoogleDriveConnect(): void;
+    onGoogleDriveDisconnect(): void;
+    onThemeChange(theme: AppTheme): void;
+    onUiAnimationsChange(enabled: boolean): void;
+  };
+  navigation: {
+    settingsGroup: SettingsGroup;
+    onBack(): void;
+    onSettingsGroupChange(group: SettingsGroup): void;
+  };
+  schdk: {
+    editor: EditorTextOptions;
+    game: GameOptions;
+    onEditorChange(options: EditorTextOptions): void;
+    onGameChange(options: GameOptions): void;
+  };
 }

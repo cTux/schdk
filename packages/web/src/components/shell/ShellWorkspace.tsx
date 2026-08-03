@@ -87,7 +87,10 @@ export function ShellWorkspace({
                 <OptionsPage
                   {...settings.options}
                   hidden={view !== 'options'}
-                  onBack={() => navigation.showView('home')}
+                  navigation={{
+                    ...settings.options.navigation,
+                    onBack: () => navigation.showView('home'),
+                  }}
                 />
               )}
               {loadedViews.visualEditor && (
