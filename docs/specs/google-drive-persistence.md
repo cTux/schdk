@@ -70,7 +70,8 @@ preserving recoverable local state during temporary Drive failures.
   packages, removes missing packages, and reports packages that cannot be
   indexed without discarding a previous usable projection. A refresh is bound
   to its originating account and stops before persistence when that account
-  changes.
+  changes. An unavailable app-data cache does not block rebuilding or using the
+  in-memory projection from canonical visible packages.
 - **DRV-20:** Initial recents loading shares concurrent editor and host work and
   lists the first Drive result page with one files request. Additional result
   pages remain traversed when present.

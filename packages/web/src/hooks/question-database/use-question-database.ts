@@ -55,7 +55,12 @@ export function useQuestionDatabase(
       }
       const files = await bridge.listGamePackages();
       if (!isActive()) return [];
-      const stored = (await bridge.loadQuestionDatabase()) ?? EMPTY_DATABASE;
+      let stored = documentRef.current;
+      try {
+        stored = (await bridge.loadQuestionDatabase()) ?? EMPTY_DATABASE;
+      } catch {
+        // The index is a rebuildable cache; keep the current projection usable.
+      }
       if (!isActive()) return [];
       const previous = new Map(
         stored.packages.map((item) => [item.fileId, item]),
@@ -99,7 +104,11 @@ export function useQuestionDatabase(
       };
       if (!isActive()) return [];
       if (databaseChanged) {
-        await bridge.saveQuestionDatabase(document);
+        try {
+          await bridge.saveQuestionDatabase(document);
+        } catch {
+          // The visible packages remain canonical and can rebuild this cache.
+        }
       }
       const nextEntries = flattenQuestionDatabase(document);
       if (isActive()) {

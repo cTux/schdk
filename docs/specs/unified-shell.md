@@ -49,7 +49,9 @@ package authoring, hosting, settings, and account state.
   system light or dark palette as the rendered login screen. The hosted screen
   links its directly accessible same-domain privacy policy with compact themed
   hover and keyboard focus states; account status and disconnect remain
-  available after connection.
+  available after connection. A transient Drive synchronization failure keeps
+  the authorized application mounted; only confirmed authorization loss hides
+  it behind the reconnect screen.
 - **SHL-11:** The Artificial intelligence page fills the available workspace
   width and lists name-sorted account rules followed by name-sorted global
   rules. The existing form creates account rules; allowlisted administrators
