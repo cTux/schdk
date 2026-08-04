@@ -4,6 +4,14 @@ import type {
   GoogleDriveConnectionPort,
 } from '../../types/google-drive/google-drive-types';
 
+async function hasLostAuthorization(bridge: GoogleDriveConnectionPort) {
+  try {
+    return (await bridge.status()).state === 'disconnected';
+  } catch {
+    return false;
+  }
+}
+
 export function useGoogleDriveConnection(
   bridge: GoogleDriveConnectionPort | null,
   synchronize: () => Promise<void>,
@@ -18,13 +26,8 @@ export function useGoogleDriveConnection(
     const account =
       connection.state === 'connected' ? connection.account : undefined;
     if (!account) return;
-    try {
-      const status = await bridge?.status();
-      if (status?.state === 'disconnected') {
-        setConnection({ state: 'reauthorization-required', account });
-      }
-    } catch {
-      // Keep the authorized session mounted through transient Drive failures.
+    if (bridge && (await hasLostAuthorization(bridge))) {
+      setConnection({ state: 'reauthorization-required', account });
     }
   }, [bridge, connection]);
 
@@ -40,7 +43,16 @@ export function useGoogleDriveConnection(
         } else if (status.state === 'connected' && status.account) {
           setAccountId(status.account.emailAddress);
           setConnection({ state: 'connected', account: status.account });
-          await synchronize();
+          try {
+            await synchronize();
+          } catch {
+            if (active && (await hasLostAuthorization(bridge))) {
+              setConnection({
+                state: 'reauthorization-required',
+                account: status.account,
+              });
+            }
+          }
         }
       })
       .catch(() => active && setConnection({ state: 'error' }))
@@ -58,7 +70,13 @@ export function useGoogleDriveConnection(
       const account = await bridge.connect();
       setAccountId(account.emailAddress);
       setConnection({ state: 'connected', account });
-      await synchronize();
+      try {
+        await synchronize();
+      } catch {
+        if (await hasLostAuthorization(bridge)) {
+          setConnection({ state: 'reauthorization-required', account });
+        }
+      }
     } catch {
       setConnection({ state: 'error' });
     } finally {
