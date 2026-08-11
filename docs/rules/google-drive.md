@@ -77,6 +77,11 @@
   authorization expires, keep mounted state inaccessible until reconnection.
   Keep an authorized session mounted through transient Drive failures.
 - Keep the hosted web login surface publicly accessible before authorization.
+  Keep a directly accessible same-domain application homepage that identifies
+  SCHDK, explains its features and need for Google Drive data, and links the
+  same privacy policy configured in Google Auth Platform. Verify the production
+  domain in Google Search Console with the Cloud project's owner or editor
+  account before submitting OAuth branding or scopes for verification.
   Identify SCHDK, describe its user-facing purpose, and link the same-domain
   privacy policy used by the production OAuth branding configuration.
 - Create or import every editor package in Drive and serialize every autosave
