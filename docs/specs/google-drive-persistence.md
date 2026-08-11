@@ -88,6 +88,10 @@ preserving recoverable local state during temporary Drive failures.
 - **DRV-24:** Package updates include the modification time observed when the
   editor opened or last saved the file. A changed time rejects the update
   before package bytes are uploaded.
+- **DRV-25:** Production OAuth branding uses a verified SCHDK-owned domain. A
+  directly accessible same-domain application homepage identifies SCHDK,
+  explains its functionality and use of Google Drive data, and links the same
+  privacy policy configured in Google Auth Platform.
 
 ## Invariants
 
@@ -164,3 +168,6 @@ preserving recoverable local state during temporary Drive failures.
     confirm both load directly and the policy matches the shipped data flow.
 19. Open one package in two editors, save from the first, then edit from the
     second. Confirm the second editor does not overwrite the first save.
+20. Open the production OAuth application homepage without a Google session
+    and confirm it identifies SCHDK, explains its functionality and why it
+    requests Drive access, and links the configured same-domain privacy policy.

@@ -27,8 +27,11 @@ description: Maintain the @schdk/web shell. Use for entry points, navigation, si
 5. Visually smoke-test changed navigation, restoration, login gating, and
    loading states.
 6. For production OAuth branding changes, verify the unauthenticated hosted
-   login surface identifies the app and links a directly loadable same-domain
-   privacy policy whose disclosures match `docs/rules/google-drive.md`.
+   login surface identifies the app, the same-domain public application
+   homepage explains its features and use of Google Drive data, and both link a
+   directly loadable same-domain privacy policy whose disclosures match
+   `docs/rules/google-drive.md`. Confirm the production domain is owned in
+   Google Search Console by a Cloud project owner or editor before submission.
 
 ## Checks
 

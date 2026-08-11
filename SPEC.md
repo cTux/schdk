@@ -86,7 +86,7 @@ V43|A replacement global general rule is persisted before the previous general r
 V44|Every shared generation dictionary is parsed from its `.schdk-dictionary` ZIP archive, remains folder-scoped and admin-writable, and supplies both dropdown labels and provider prompt fragments.
 V45|When one structured OpenAI question response requests an image, OpenAI generates and canonically parses the bounded embedded image without a text-review request.
 V46|Browser OAuth tokens remain memory-only, while desktop refresh credentials remain encrypted, scope-validated, and removed after invalidation.
-V47|The hosted OAuth landing surface identifies SCHDK and its purpose in crawler-readable HTML and links a same-domain privacy policy that accurately discloses Google user-data handling.
+V47|Production OAuth uses a verified SCHDK-owned domain whose public application homepage identifies SCHDK, explains its purpose and Google Drive use in crawler-readable HTML, and links the configured same-domain privacy policy.
 V48|Autosave never overwrites a Drive package modified since the editor opened or last saved it.
 V49|The hosted browser renders a themed login fallback before its JavaScript bundle executes.
 V50|An open package editor replaces recents and exposes one page-header back action that returns to the package list.
