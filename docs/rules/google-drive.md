@@ -139,5 +139,6 @@
   put OAuth tokens or confidential production credentials in repository files
   or logs.
 - Keep the public privacy policy synchronized with actual Google data access,
-  token storage, optional AI-provider transfers, retention, deletion, support,
+  token storage, HTTPS transport, Drive and operating-system protection
+  mechanisms, optional AI-provider transfers, retention, deletion, support,
   and Google API Services User Data Policy Limited Use disclosures.
