@@ -77,6 +77,23 @@
         tokens. Data moves directly between your device and Google.
       </p>
 
+      <h2>Data protection</h2>
+      <p>
+        SCHDK connects to Google APIs and optional AI providers only over
+        encrypted HTTPS connections. Google Drive files and application data
+        remain protected by the access controls and security of the user's
+        Google Account. SCHDK limits Drive requests to the app-marked SCHDK
+        folder, its private application-data folder, and configured shared SCHDK
+        folders.
+      </p>
+      <p>
+        Browser OAuth access tokens are short-lived, held only in memory, and
+        discarded when the page closes or reloads. Desktop refresh credentials
+        stay outside the web interface and are encrypted with the operating
+        system's protected credential storage. SCHDK does not log OAuth tokens,
+        saved AI API keys, or private Drive file contents.
+      </p>
+
       <h2>Optional AI providers</h2>
       <p>
         AI-assisted authoring runs only when you request it. SCHDK then sends
