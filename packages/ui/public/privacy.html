@@ -53,19 +53,19 @@
       <p>
         After you authorize SCHDK, the application reads your Google account
         display name, email address, and profile image. It uses Google Drive to
-        find and manage SCHDK packages and related files, synchronize settings,
-        and load the application’s shared question rules and dictionaries.
+        create and manage SCHDK packages and related files and synchronize
+        private application settings.
       </p>
       <p>
-        Although Google describes the requested Drive permission broadly, SCHDK
-        limits its requests to its app-marked SCHDK folder, its private
-        application-data folder, and the configured shared SCHDK folders. It
-        does not inspect unrelated Drive files.
+        SCHDK requests access only to files it creates or that you explicitly
+        open with it, plus its private application-data folder. Shared question
+        rules and dictionaries are bundled with the application and require no
+        access to your Drive. SCHDK does not inspect unrelated Drive files.
       </p>
 
       <h2>How data is used and stored</h2>
       <p>
-        Game packages, question rules, question packages, settings, the
+        Game packages, personal question rules, question packages, settings, the
         rebuildable question index, and any AI API key you choose to save are
         stored in your own Google Drive. Browser access tokens are held only in
         memory. The desktop application stores refresh credentials locally using
@@ -82,9 +82,8 @@
         SCHDK connects to Google APIs and optional AI providers only over
         encrypted HTTPS connections. Google Drive files and application data
         remain protected by the access controls and security of the user's
-        Google Account. SCHDK limits Drive requests to the app-marked SCHDK
-        folder, its private application-data folder, and configured shared SCHDK
-        folders.
+        Google Account. SCHDK limits Drive requests to files it creates or that
+        you explicitly open with it and to its private application-data folder.
       </p>
       <p>
         Browser OAuth access tokens are short-lived, held only in memory, and

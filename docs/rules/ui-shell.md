@@ -27,9 +27,9 @@
   rule is edited on its dedicated page. Keep edit selection controlled by the
   web shell so direct links and browser history remain authoritative.
 - List dictionaries in a name-and-description table. Open a selected
-  dictionary as a dedicated item table, expose its editable fields only to the
-  allowlisted administrator, keep both tables visually consistent with the
-  recent-package list, and keep selection controlled by the web shell.
+  dictionary as a dedicated read-only item table, keep both tables visually
+  consistent with the recent-package list, and keep selection controlled by
+  the web shell.
 - Keep the native Ukrainian/English language control in the first `App`
   settings tab. Keep `WWW` as the second primary tab with its host/editor
   fieldsets and `Штучний інтелект` as the third primary tab.

@@ -1,13 +1,9 @@
 import {
   DEFAULT_SCHDK_DICTIONARIES,
   parseSchdkDictionaryArchive,
-  serializeSchdkDictionary,
   type SchdkDictionary,
 } from '@schdk/common';
-import {
-  createDictionaryFilename,
-  isGlobalAIQuestionAdmin,
-} from '@schdk/google-drive';
+import { createDictionaryFilename } from '@schdk/google-drive';
 import { useEffect, useState } from 'react';
 import type { DriveDictionaryStorage } from '@schdk/google-drive';
 import type { GoogleDriveConnection } from '../../types/google-drive/google-drive-types';
@@ -26,7 +22,7 @@ export function useDictionaries(
     connection.state === 'connected'
       ? connection.account.emailAddress
       : undefined;
-  const isAdmin = isGlobalAIQuestionAdmin(accountId);
+  const isAdmin = false;
   const [items, setItems] = useState<StoredDictionary[]>(() =>
     DEFAULT_SCHDK_DICTIONARIES.map((dictionary) => ({ dictionary })),
   );
@@ -46,14 +42,7 @@ export function useDictionaries(
             const file = files.find(
               ({ name }) => name === createDictionaryFilename(fallback.id),
             );
-            if (!file) {
-              if (!isAdmin) return { dictionary: fallback };
-              const created = await bridge.createDictionary({
-                name: createDictionaryFilename(fallback.id),
-                content: serializeSchdkDictionary(fallback),
-              });
-              return { fileId: created.id, dictionary: fallback };
-            }
+            if (!file) return { dictionary: fallback };
             try {
               const value = await bridge.loadDictionary(file.id);
               return {
@@ -76,30 +65,11 @@ export function useDictionaries(
     return () => {
       active = false;
     };
-  }, [accountId, bridge, enabled, isAdmin]);
+  }, [accountId, bridge, enabled]);
 
   async function updateDictionary(dictionary: SchdkDictionary) {
-    if (!bridge || !isAdmin) return false;
-    const current = items.find((item) => item.dictionary.id === dictionary.id);
-    try {
-      const value = {
-        name: createDictionaryFilename(dictionary.id),
-        content: serializeSchdkDictionary(dictionary),
-      };
-      const file = current?.fileId
-        ? await bridge.updateDictionary(current.fileId, value)
-        : await bridge.createDictionary(value);
-      setItems((stored) =>
-        stored.map((item) =>
-          item.dictionary.id === dictionary.id
-            ? { fileId: file.id, dictionary }
-            : item,
-        ),
-      );
-      return true;
-    } catch {
-      return false;
-    }
+    void dictionary;
+    return false;
   }
 
   return {

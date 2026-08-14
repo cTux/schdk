@@ -88,7 +88,7 @@ describe('GoogleDriveClient', () => {
     });
   });
 
-  it('rejects global writes from non-admin accounts', async () => {
+  it('V23: rejects bundled global writes without a Drive request', async () => {
     const fetchMock = vi.fn(async () =>
       jsonResponse({
         user: { displayName: 'Player', emailAddress: 'player@example.com' },
@@ -103,7 +103,7 @@ describe('GoogleDriveClient', () => {
         content: Uint8Array.from([1]),
       }),
     ).rejects.toBeInstanceOf(GoogleDriveAuthorizationError);
-    expect(fetchMock).toHaveBeenCalledOnce();
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it('lists every page of packages', async () => {

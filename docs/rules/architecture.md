@@ -4,8 +4,9 @@
 
 - `@schdk/common` owns the game-package, game-presentation options,
   game-hosting state, application settings, AI-question, AI-question-package,
-  and SCHDK-dictionary file types, constants, defaults, parsers, serializers,
-  normalization, and game readiness validation.
+  and SCHDK-dictionary file types, constants, bundled global rules and
+  dictionaries, parsers, serializers, normalization, and game readiness
+  validation.
   It must not depend on UI or platform code.
 - `@schdk/ai` owns provider setup, localized generation prompts, structured
   response validation, and conversion to the canonical game-question type.
@@ -24,8 +25,9 @@
   narrow Drive and explicit-download bridges exposed to the trusted unified
   renderer.
 - `@schdk/google-drive` owns the platform-neutral Drive REST client and opaque
-  settings envelope, package-storage types, the derived per-account question
-  database contract, and Drive reference helpers.
+  settings envelope, package-storage types, read-only adapters for bundled
+  content, the derived per-account question database contract, and Drive
+  reference helpers.
   Browser authorization stays in `@schdk/web`; installed-app
   authorization and OAuth credential storage stay in
   `@schdk/desktop`; user AI credentials stay in account-scoped Drive

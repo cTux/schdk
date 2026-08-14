@@ -53,12 +53,10 @@ preserving recoverable local state during temporary Drive failures.
   file in the current account's app-marked `SCHDK` folder. Rule listing,
   loading, creation, renaming, updating, and trashing use the shared Drive
   adapter on web and desktop without local-storage persistence.
-- **DRV-17:** The AI page also loads individually parsed `.aiquestion` archives
-  from the configured shared Drive folder. Only allowlisted administrators can
-  create, rename, update, trash, or select the single general shared rule;
-  Drive folder permissions enforce the same boundary. A replacement general
-  rule is persisted before older general flags are cleared, so a failed
-  replacement cannot remove the current rule.
+- **DRV-17:** The AI page loads validated bundled global rules after the current
+  account's personal rules. Global rules are read-only in the public
+  application, and exactly one bundled rule is the general rule applied to
+  every generation.
 - **DRV-18:** Every personal AI question package is a separate visible
   `.aiquestionpackage` ZIP file in the current account's app-marked `SCHDK`
   folder. Listing, loading, creation, renaming, updating, and trashing use the
@@ -75,12 +73,12 @@ preserving recoverable local state during temporary Drive failures.
 - **DRV-20:** Initial recents loading shares concurrent editor and host work and
   lists the first Drive result page with one files request. Additional result
   pages remain traversed when present.
-- **DRV-21:** Initial question-package, personal and global AI question-rule,
-  AI question-package, and shared dictionary listing starts after authorization
-  without depending on their pages being mounted.
-- **DRV-22:** Shared `.schdk-dictionary` archives load only from the configured
-  fixed folder. Every write requires the allowlisted administrator and a
-  matching validated archive, filename, and parent folder.
+- **DRV-21:** Initial question-package, personal AI question-rule, and AI
+  question-package listing starts after authorization without depending on
+  their pages being mounted. Bundled global rules and dictionaries become
+  available through the same shell collections.
+- **DRV-22:** Shared generation dictionaries come from validated bundled
+  defaults and are read-only in the public application.
 - **DRV-23:** The hosted web login surface is publicly accessible before
   authorization and links a same-domain privacy policy that discloses Google
   data access and use, token and Drive storage, optional AI-provider transfers,
@@ -100,8 +98,8 @@ preserving recoverable local state during temporary Drive failures.
   settings.
 - Desktop tokens remain in the Electron main process and never cross renderer
   IPC.
-- Drive uses `drive` and `drive.appdata` scopes; the fixed shared folder cannot
-  be discovered through per-file authorization.
+- Drive uses only `drive.file` and `drive.appdata`; the application never
+  discovers fixed shared folders or requests unrestricted Drive access.
 - A failed package write keeps the same file open and requires retry or
   reconnection.
 - Settings conflicts resolve per section, not by replacing the whole document.
@@ -146,11 +144,9 @@ preserving recoverable local state during temporary Drive failures.
 11. Add, edit, favorite, disable, reload, and delete an AI question rule on web
     and desktop; observe one renamed `.aiquestion` ZIP file in the current
     account's `SCHDK` folder and no browser-local rule copy.
-12. Connect as a regular account and load global rules without global mutation
-    controls; connect as an allowlisted administrator and create, edit, and
-    delete a global rule in the configured shared folder. Select two rules as
-    general in turn and observe only the latest selection remains set. Fail the
-    replacement write and confirm the previous general rule remains selected.
+12. Connect with two different accounts and confirm both load the same bundled
+    global rules without mutation controls and exactly one general rule is
+    applied to generation.
 13. Create, edit, reload, rename, and delete an AI question package on web and
     desktop; observe one `.aiquestionpackage` ZIP file in the current account's
     `SCHDK` folder and no browser-local copy.
@@ -164,7 +160,8 @@ preserving recoverable local state during temporary Drive failures.
     request for the first result page, followed only by requests for real
     additional pages.
 17. Connect without opening the question database or AI pages and observe
-    their Drive-backed lists begin loading.
+    their Drive-backed personal lists begin loading and bundled collections
+    becoming available.
 18. Open the hosted web login and privacy policy without a Google session and
     confirm both load directly and the policy matches the shipped data flow,
     including its data-protection mechanisms.

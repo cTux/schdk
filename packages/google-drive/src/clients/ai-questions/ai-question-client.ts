@@ -10,7 +10,6 @@ import {
   type DriveAIQuestionStorage,
 } from '../../services/ai-questions/ai-questions.js';
 import { DRIVE_APP_KIND_KEY } from '../../services/game-packages/game-packages.js';
-import { isDriveFileId } from '../../services/settings/settings.js';
 import {
   downloadDriveFile,
   ensurePackageFolder,
@@ -24,10 +23,7 @@ import {
 import { GoogleDriveError } from '../../errors/client/google-drive-error.js';
 
 export class GoogleDriveAIQuestionStorage implements DriveAIQuestionStorage {
-  constructor(
-    private readonly request: DriveRequest,
-    private readonly folderId?: string,
-  ) {}
+  constructor(private readonly request: DriveRequest) {}
 
   createAIQuestion(value: DriveAIQuestionWrite) {
     return this.uploadAIQuestion(value);
@@ -56,15 +52,15 @@ export class GoogleDriveAIQuestionStorage implements DriveAIQuestionStorage {
   }
 
   async listAIQuestions(): Promise<DriveAIQuestionFile[]> {
-    const folderId = this.folderId ?? (await ensurePackageFolder(this.request));
+    const folderId = await ensurePackageFolder(this.request);
     const query = new URLSearchParams({
       spaces: 'drive',
-      q: `'${folderId}' in parents and trashed = false${this.folderId ? ` and name contains '.aiquestion'` : ` and appProperties has { key='${DRIVE_APP_KIND_KEY}' and value='${DRIVE_AI_QUESTION_KIND}' }`}`,
+      q: `'${folderId}' in parents and trashed = false and appProperties has { key='${DRIVE_APP_KIND_KEY}' and value='${DRIVE_AI_QUESTION_KIND}' }`,
       fields: 'nextPageToken,files(id,name,modifiedTime,appProperties)',
       orderBy: 'name_natural',
       pageSize: '100',
     });
-    return listDriveFiles(this.request, query, (file) => this.parseFile(file));
+    return listDriveFiles(this.request, query, parseDriveAIQuestionFile);
   }
 
   async loadAIQuestion(fileId: string): Promise<DriveAIQuestion> {
@@ -95,7 +91,7 @@ export class GoogleDriveAIQuestionStorage implements DriveAIQuestionStorage {
       fileId,
       `id,name,modifiedTime,appProperties,parents${includeSize ? ',size' : ''}`,
     );
-    const file = this.parseFile(value, true);
+    const file = parseDriveAIQuestionFile(value);
     return {
       file,
       validSize:
@@ -119,9 +115,7 @@ export class GoogleDriveAIQuestionStorage implements DriveAIQuestionStorage {
       ...(fileId
         ? {}
         : {
-            parents: [
-              this.folderId ?? (await ensurePackageFolder(this.request)),
-            ],
+            parents: [await ensurePackageFolder(this.request)],
           }),
     };
     const response = await uploadDriveFile(this.request, {
@@ -139,31 +133,5 @@ export class GoogleDriveAIQuestionStorage implements DriveAIQuestionStorage {
       );
     }
     return file;
-  }
-
-  private parseFile(
-    value: unknown,
-    requireFolder = false,
-  ): DriveAIQuestionFile | null {
-    if (!this.folderId) return parseDriveAIQuestionFile(value);
-    if (!value || typeof value !== 'object') return null;
-    const file = value as Record<string, unknown>;
-    const hasValidIdentity =
-      isDriveFileId(file.id) && isDriveAIQuestionName(file.name);
-    const hasValidModifiedTime =
-      typeof file.modifiedTime === 'string' &&
-      Number.isFinite(Date.parse(file.modifiedTime));
-    const hasRequiredFolder =
-      !requireFolder ||
-      (Array.isArray(file.parents) && file.parents.includes(this.folderId));
-    const isValidFile =
-      hasValidIdentity && hasValidModifiedTime && hasRequiredFolder;
-    return isValidFile
-      ? {
-          id: file.id as string,
-          name: file.name as string,
-          modifiedTime: file.modifiedTime as string,
-        }
-      : null;
   }
 }

@@ -5,7 +5,6 @@ import {
 } from '@schdk/common';
 import { isDriveFileId } from '../settings/settings.js';
 
-const GLOBAL_DICTIONARY_FOLDER_ID = '1wzrwtCDc8Ew4n2qh0AYca9b4s9H0-RyL';
 const DRIVE_DICTIONARY_MIME_TYPE = 'application/vnd.schdk.dictionary+zip';
 const SCHDK_DICTIONARY_EXTENSION = '.schdk-dictionary';
 
@@ -89,7 +88,6 @@ function parseDriveDictionaryWrite(
 
 export {
   DRIVE_DICTIONARY_MIME_TYPE,
-  GLOBAL_DICTIONARY_FOLDER_ID,
   MAX_SCHDK_DICTIONARY_BYTES,
   SCHDK_DICTIONARY_EXTENSION,
   createDictionaryFilename,

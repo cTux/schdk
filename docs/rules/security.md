@@ -38,13 +38,9 @@
   the main process, encrypt persisted refresh tokens with `safeStorage`, delete
   invalidated credentials, verify granted scopes, and never expose tokens or
   generic authenticated requests through IPC.
-- Keep global AI question access limited to the configured shared folder.
-  Validate every global write against the centralized admin email allowlist and
-  the folder parent; rely on the Drive ACL, not client-side obfuscation, as the
-  authorization boundary.
-- Keep shared dictionary access limited to its configured Drive folder.
-  Validate archive identity, filename, size, and parent folder, and require the
-  centralized admin allowlist for every create or update.
+- Keep bundled global AI question rules and shared dictionaries read-only in
+  the public application. Validate them through their canonical serializers
+  and change them only through repository review.
 - Keep AI API keys in a separate app-data file owned by the current Google
   account, never in local browser persistence or synchronized settings.
   Desktop renderer IPC may query only whether a key exists, replace or remove
