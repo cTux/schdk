@@ -19,10 +19,11 @@ description: Turn supplied quiz question, answer, and handout examples into reus
    - whether the answer is unique and the wording is fair.
 4. Name the type only after tracing the clue path. Describe the reusable
    mechanism, not the example's topic.
-5. Search the [shared Google Drive rules folder](https://drive.google.com/drive/folders/1qigJtM0zAQl2Yk8C2xjeragcGDybUVR1)
-   for an `.aiquestion` with the same reusable mechanism. If one exists, extend
-   it with only the new instructions or non-duplicate examples that improve
-   the rule instead of creating a competing file.
+5. Search `DEFAULT_GLOBAL_AI_QUESTIONS` in
+   `packages/common/src/constants/ai-questions/default-global-ai-questions.ts`
+   for the same reusable mechanism. If one exists, extend it with only the new
+   instructions or non-duplicate examples that improve the rule instead of
+   creating a competing object.
 6. Create or update one `AIQuestion` object:
    - `name`: concise Ukrainian type name;
    - `description`: imperative generation instructions with construction,
@@ -35,10 +36,11 @@ description: Turn supplied quiz question, answer, and handout examples into reus
      Keep at most three good examples and three bad examples. When updating an
      existing rule, retain the most useful non-duplicate examples within each
      limit.
-7. Serialize through `serializeAIQuestion` from `@schdk/common`; never
-   handcraft the ZIP contract. Name the file `<name>.aiquestion`.
-8. Parse the written file with `parseAIQuestionArchive` and compare every
-   parsed field with the intended object.
+7. Add or update the typed object in `DEFAULT_GLOBAL_AI_QUESTIONS`; the runtime
+   serializes it through `serializeAIQuestion` from `@schdk/common`.
+8. Serialize the object with `serializeAIQuestion`, parse it with
+   `parseAIQuestionArchive`, and compare every parsed field with the intended
+   object.
 
 ## Generation Standard
 

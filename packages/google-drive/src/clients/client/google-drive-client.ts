@@ -4,6 +4,7 @@ import {
 } from '../../types/accounts/account.js';
 import { GoogleDriveAIQuestionsPackageStorage } from '../ai-question-packages/ai-questions-package-client.js';
 import { GoogleDriveAIQuestionStorage } from '../ai-questions/ai-question-client.js';
+import { StaticAIQuestionStorage } from '../ai-questions/static-ai-question-client.js';
 import {
   loadAiApiKey as loadStoredAiApiKey,
   saveAiApiKey as saveStoredAiApiKey,
@@ -12,16 +13,14 @@ import type {
   DriveAIQuestionsPackageStorage,
   DriveAIQuestionsPackageWrite,
 } from '../../services/ai-question-packages/ai-questions-packages.js';
-import {
+import type {
   DriveAIQuestionStorage,
   DriveAIQuestionWrite,
-  GLOBAL_AI_QUESTION_FOLDER_ID,
-  isGlobalAIQuestionAdmin,
 } from '../../services/ai-questions/ai-questions.js';
 
 import { GoogleDriveAppData } from '../../types/app-data/app-data.js';
 import { GoogleDrivePackageStorage } from '../game-packages/game-package-client.js';
-import { GoogleDriveDictionaryStorage } from '../dictionaries/dictionary-client.js';
+import { StaticDictionaryStorage } from '../dictionaries/static-dictionary-client.js';
 import type {
   DriveDictionaryStorage,
   DriveDictionaryWrite,
@@ -72,16 +71,11 @@ export class GoogleDriveClient
     new GoogleDriveAIQuestionsPackageStorage((input, init) =>
       this.request(input, init),
     );
-  private readonly globalAiQuestions = new GoogleDriveAIQuestionStorage(
-    (input, init) => this.request(input, init),
-    GLOBAL_AI_QUESTION_FOLDER_ID,
-  );
+  private readonly globalAiQuestions = new StaticAIQuestionStorage();
   private readonly packages = new GoogleDrivePackageStorage((input, init) =>
     this.request(input, init),
   );
-  private readonly dictionaries = new GoogleDriveDictionaryStorage(
-    (input, init) => this.request(input, init),
-  );
+  private readonly dictionaries = new StaticDictionaryStorage();
   constructor(private readonly getAccessToken: () => Promise<string>) {}
 
   async getAccount(): Promise<DriveAccount> {
@@ -156,21 +150,12 @@ export class GoogleDriveClient
   listGlobalAIQuestions = () => this.globalAiQuestions.listAIQuestions();
   loadGlobalAIQuestion = (fileId: string) =>
     this.globalAiQuestions.loadAIQuestion(fileId);
-  createGlobalAIQuestion = async (value: DriveAIQuestionWrite) => {
-    await this.assertGlobalAdmin();
-    return this.globalAiQuestions.createAIQuestion(value);
-  };
-  updateGlobalAIQuestion = async (
-    fileId: string,
-    value: DriveAIQuestionWrite,
-  ) => {
-    await this.assertGlobalAdmin();
-    return this.globalAiQuestions.updateAIQuestion(fileId, value);
-  };
-  deleteGlobalAIQuestion = async (fileId: string) => {
-    await this.assertGlobalAdmin();
-    return this.globalAiQuestions.deleteAIQuestion(fileId);
-  };
+  createGlobalAIQuestion = (value: DriveAIQuestionWrite) =>
+    this.globalAiQuestions.createAIQuestion(value);
+  updateGlobalAIQuestion = (fileId: string, value: DriveAIQuestionWrite) =>
+    this.globalAiQuestions.updateAIQuestion(fileId, value);
+  deleteGlobalAIQuestion = (fileId: string) =>
+    this.globalAiQuestions.deleteAIQuestion(fileId);
   createAIQuestionsPackage = (value: DriveAIQuestionsPackageWrite) =>
     this.aiQuestionsPackages.createAIQuestionsPackage(value);
   updateAIQuestionsPackage = (
@@ -185,14 +170,10 @@ export class GoogleDriveClient
     this.aiQuestionsPackages.loadAIQuestionsPackage(fileId);
   listDictionaries = () => this.dictionaries.listDictionaries();
   loadDictionary = (fileId: string) => this.dictionaries.loadDictionary(fileId);
-  createDictionary = async (value: DriveDictionaryWrite) => {
-    await this.assertGlobalAdmin();
-    return this.dictionaries.createDictionary(value);
-  };
-  updateDictionary = async (fileId: string, value: DriveDictionaryWrite) => {
-    await this.assertGlobalAdmin();
-    return this.dictionaries.updateDictionary(fileId, value);
-  };
+  createDictionary = (value: DriveDictionaryWrite) =>
+    this.dictionaries.createDictionary(value);
+  updateDictionary = (fileId: string, value: DriveDictionaryWrite) =>
+    this.dictionaries.updateDictionary(fileId, value);
 
   createGamePackage = (value: DriveGamePackageWrite) =>
     this.packages.createGamePackage(value);
@@ -205,14 +186,6 @@ export class GoogleDriveClient
     this.packages.deleteGamePackage(fileId);
   listGamePackages = () => this.packages.listGamePackages();
   loadGamePackage = (fileId: string) => this.packages.loadGamePackage(fileId);
-
-  private async assertGlobalAdmin() {
-    if (!isGlobalAIQuestionAdmin((await this.getAccount()).emailAddress)) {
-      throw new GoogleDriveAuthorizationError(
-        'Global AI question access denied',
-      );
-    }
-  }
 
   private async request(input: string, init: RequestInit = {}) {
     const response = await fetch(input, {

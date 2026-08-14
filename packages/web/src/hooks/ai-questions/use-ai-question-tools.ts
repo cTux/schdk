@@ -1,4 +1,3 @@
-import { isGlobalAIQuestionAdmin } from '@schdk/google-drive';
 import type { AppLocale } from '@schdk/common/app-settings';
 import { useAIQuestions } from '../../storage/ai-questions/ai-question-storage';
 import { useAIQuestionsPackages } from '../../storage/ai-question-packages/ai-questions-package-storage';
@@ -20,6 +19,7 @@ export function useAiQuestionTools(
     connection.state === 'connected'
       ? connection.account.emailAddress
       : undefined;
+  const canPreviewPrompts = accountId?.toLowerCase() === 'ccctux@gmail.com';
   const aiQuestionCollections = useAIQuestions(
     bridge,
     accountId,
@@ -43,7 +43,7 @@ export function useAiQuestionTools(
     addGlobalQuestion: aiQuestionCollections.global.addQuestion,
     updateGlobalQuestion: aiQuestionCollections.global.updateQuestion,
     removeGlobalQuestion: aiQuestionCollections.global.removeQuestion,
-    isGlobalAdmin: isGlobalAIQuestionAdmin(accountId),
+    isGlobalAdmin: false,
   };
   const ai = useAiSettings(
     connection.state === 'connected' ? bridge : null,
@@ -60,7 +60,7 @@ export function useAiQuestionTools(
       [...aiQuestions.questions, ...aiQuestions.globalQuestions],
       aiQuestionsPackages.packages,
       locale,
-      isGlobalAIQuestionAdmin(accountId),
+      canPreviewPrompts,
       aiQuestions.globalQuestions.find((question) => question.generalRule),
       dictionaries.dictionaries,
     ),

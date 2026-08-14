@@ -8,9 +8,6 @@ import {
 } from './services/client/client.js';
 import {
   createAIQuestionFilename,
-  GLOBAL_AI_QUESTION_ADMIN_EMAILS,
-  GLOBAL_AI_QUESTION_FOLDER_ID,
-  isGlobalAIQuestionAdmin,
   isDriveAIQuestionName,
   parseDriveAIQuestionFile,
   parseDriveAIQuestionWrite,
@@ -64,7 +61,6 @@ import {
 } from './services/question-database/question-database.js';
 import {
   DRIVE_DICTIONARY_MIME_TYPE,
-  GLOBAL_DICTIONARY_FOLDER_ID,
   SCHDK_DICTIONARY_EXTENSION,
   createDictionaryFilename,
   parseDriveDictionaryWrite,
@@ -82,9 +78,6 @@ export {
   type DriveAccount,
   type GoogleDriveErrorCode,
   createAIQuestionFilename,
-  GLOBAL_AI_QUESTION_ADMIN_EMAILS,
-  GLOBAL_AI_QUESTION_FOLDER_ID,
-  isGlobalAIQuestionAdmin,
   isDriveAIQuestionName,
   parseDriveAIQuestionFile,
   parseDriveAIQuestionWrite,
@@ -128,7 +121,6 @@ export {
   type QuestionDatabasePackage,
   type QuestionDatabaseQuestion,
   DRIVE_DICTIONARY_MIME_TYPE,
-  GLOBAL_DICTIONARY_FOLDER_ID,
   SCHDK_DICTIONARY_EXTENSION,
   createDictionaryFilename,
   parseDriveDictionaryWrite,

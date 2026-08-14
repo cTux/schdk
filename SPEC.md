@@ -16,10 +16,10 @@ C4|Keep renderer access to desktop and Google services narrow and validated.
 C5|Keep user-visible unified application copy localized in Ukrainian and English.
 C6|Keep unfinished packages editable and recoverable without silent destination changes.
 C7|Keep user AI API keys in separate, account-scoped Google Drive app data and out of synchronized settings or local browser persistence.
-C8|Keep personal and global AI question rules as individually parseable Google Drive files with folder-scoped ownership.
+C8|Keep personal AI question rules as individually parseable Google Drive files and global rules as validated bundled read-only content.
 C9|Keep personal AI question packages as individually parseable Google Drive files and out of browser-local persistence.
 C10|Keep the personal question database a rebuildable account-scoped projection; `.schdk` packages remain canonical.
-C11|Keep shared question-generation dictionaries as validated archives in their fixed Google Drive folder and writable only by an allowlisted administrator.
+C11|Keep shared question-generation dictionaries as validated bundled read-only content.
 
 ## §I
 
@@ -61,9 +61,9 @@ V18|Pull requests execute the production browser shell and packaged Electron ren
 V19|The browser warns before unloading a package whose current changes are not saved.
 V20|AI output is validated as a complete game question before it can replace editor fields.
 V21|Every multiline text input uses the shared non-resizable `Textarea` control; labeled fields show the label as an empty placeholder and inside the populated textarea at bottom right.
-V22|Every personal or global AI question rule is parsed from its own `.aiquestion` ZIP archive and persisted through its assigned Google Drive folder.
-V23|Global AI question writes require an allowlisted account and remain confined to the configured shared Drive folder.
-V24|At most one global AI question rule is marked as general, only an allowlisted administrator can change it, and generation applies it to every selected template.
+V22|Every personal AI question rule is parsed from its own `.aiquestion` ZIP archive and persisted through the current account's Google Drive folder; global rules are serialized from validated bundled objects.
+V23|Global AI question rules are read-only in the public application and change only through repository review.
+V24|Exactly one bundled global AI question rule is marked as general and generation applies it to every selected template.
 V25|Only an allowlisted administrator can preview the exact system and user prompt text used for AI question generation.
 V26|Every personal AI question package is parsed from its own `.aiquestionpackage` ZIP archive before use and persisted through the current account's Google Drive folder.
 V27|A ready package never reuses a normalized main or alternative answer across questions; AI generation may create such duplicates for author review.
@@ -83,7 +83,7 @@ V40|Account-scoped background work never persists after the connected Google acc
 V41|Every game-package payload crossing Drive or desktop IPC is parsed before Drive or filesystem writes, and its Drive metadata matches the parsed package.
 V42|Image handout selection is bounded before reading and cannot leave the editor with an unserializable package.
 V43|A replacement global general rule is persisted before the previous general rule is cleared.
-V44|Every shared generation dictionary is parsed from its `.schdk-dictionary` ZIP archive, remains folder-scoped and admin-writable, and supplies both dropdown labels and provider prompt fragments.
+V44|Every shared generation dictionary is validated from bundled defaults, remains read-only in the public application, and supplies both dropdown labels and provider prompt fragments.
 V45|When one structured OpenAI question response requests an image, OpenAI generates and canonically parses the bounded embedded image without a text-review request.
 V46|Browser OAuth tokens remain memory-only, while desktop refresh credentials remain encrypted, scope-validated, and removed after invalidation.
 V47|Production OAuth uses a verified SCHDK-owned domain whose public application homepage identifies SCHDK, explains its purpose and Google Drive use in crawler-readable HTML, and links the configured same-domain privacy policy with accurate data-protection disclosures.
@@ -241,3 +241,4 @@ B131|2026-08-02|Collapsed navigation retained a gap beside zero-width labels and
 B132|2026-08-03|Settings uploads replaced the Drive app-data file without an atomic version precondition, allowing concurrent clients to overwrite newer settings|V55
 B133|2026-08-04|Initial settings synchronization shared the authentication catch path, so a transient Drive failure replaced a successful connection with the login screen|Keep the authorized shell mounted unless a status check confirms authorization loss; `docs/specs/unified-shell.md` SHL-10 covers recurrence.
 B134|2026-08-04|A question-index app-data read or write failure discarded a successfully rebuilt in-memory projection and reported valid packages as unindexable|Keep the rebuildable projection usable from canonical packages; `docs/specs/google-drive-persistence.md` DRV-19 covers recurrence.
+B135|2026-08-14|The global-write test still expected an administrator account lookup after bundled global rules became read-only|V23

@@ -16,10 +16,8 @@
   unavailable. Load the settings file ETag and require it with `If-Match` on
   updates; a precondition failure must keep local values and surface a save
   failure instead of overwriting the newer Drive file.
-- Store `settings-v1.json` in `appDataFolder`. Request `drive` and
-  `drive.appdata`; fixed-folder global listing requires the restricted `drive`
-  scope because `drive.file` cannot discover files that users did not
-  explicitly open with the app.
+- Store `settings-v1.json` in `appDataFolder`. Request only `drive.file` and
+  `drive.appdata`; never request the restricted full-Drive scope.
 - Store visual-editor image data in the bounded `visual-assets-v1.json`
   app-data document and keep only stable references in `settings-v1.json`.
   Load assets before merging settings and conditionally update both files so a
@@ -51,20 +49,14 @@
   `.aiquestionpackage` ZIP archive in the same `SCHDK` Drive folder. Mark it
   with private app identity metadata, synchronize its filename with its
   display name, and parse it through `@schdk/common` before use.
-- Load global AI question rules from the fixed shared Drive folder configured
-  in `@schdk/google-drive`, after the current account's rules. Keep the admin
-  email allowlist centralized and unobfuscated there; Drive folder permissions
-  remain the security boundary for global writes.
-- Load `.schdk-dictionary` archives from the fixed shared dictionary folder.
-  Only the centralized allowlisted administrator can create or update them;
-  initialize missing defaults for that administrator and keep folder
-  permissions as the write authorization boundary.
-- Persist a replacement global general rule before clearing the previous
-  general flag. A failed replacement must leave the previous rule intact.
-- Before creating a rule from an analyzed question, search the
-  [shared Drive folder](https://drive.google.com/drive/folders/1qigJtM0zAQl2Yk8C2xjeragcGDybUVR1)
-  for the same reusable mechanism. Extend an existing `.aiquestion` with
-  material new instructions or examples instead of creating a duplicate rule.
+- Load global AI question rules and generation dictionaries from validated,
+  bundled read-only defaults. Update that shared content through a repository
+  change and review; the public application never discovers or writes fixed
+  shared Drive folders.
+- Before creating a global rule from an analyzed question, search the bundled
+  `DEFAULT_GLOBAL_AI_QUESTIONS` collection for the same reusable mechanism.
+  Extend an existing object with material new instructions or examples instead
+  of creating a duplicate rule.
   Automated creation or extension must keep at most three good examples and
   three bad examples, retaining the most useful non-duplicate examples in each
   category.
@@ -92,13 +84,13 @@
   with every package update. Compare it with current Drive metadata before
   uploading bytes; on mismatch, keep local edits open and offer to save them as
   a titled copy before loading the newer original.
-- List, create, update, and delete AI question rules and personal AI question
-  packages through the active account's Drive adapter. Route global rules
-  through the same narrow adapter, require an allowlisted account for global
-  writes, and never persist these collections in browser local storage.
-- Start Drive-backed question-package, personal and global AI question-rule,
-  AI question-package, and dictionary listing after authorization,
-  independently of lazy page mounting.
+- List, create, update, and delete personal AI question rules and packages
+  through the active account's Drive adapter. Expose bundled global rules and
+  dictionaries read-only and never persist these collections in browser local
+  storage.
+- Start Drive-backed question-package, personal AI question-rule, and AI
+  question-package listing after authorization, independently of lazy page
+  mounting. Make bundled global rules and dictionaries available with them.
 - Reject package metadata above the canonical package-size limit before
   downloading its media body.
 - Treat a local `.schdk` selection only as an import: validate it, upload it to

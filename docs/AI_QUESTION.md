@@ -21,5 +21,6 @@ Archives larger than 1 MiB and `ai-question.json` entries larger than 512 KiB
 are rejected. Duplicate recognized entries are rejected. Unrecognized ZIP
 entries are ignored without extraction.
 
-Each rule is stored as its own visible Google Drive file. Its filesystem-safe
-filename follows the rule name plus `.aiquestion`.
+Each personal rule is stored as its own visible Google Drive file. Its
+filesystem-safe filename follows the rule name plus `.aiquestion`. Global rules
+ship as a validated, bundled read-only collection.

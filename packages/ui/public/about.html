@@ -66,10 +66,11 @@
       <h2>Why SCHDK requests Google Drive access</h2>
       <p>
         SCHDK stores the current user's packages and application data in their
-        Google Drive. It also loads app-specific shared question rules and
-        dictionaries. The application limits its requests to its app-marked
-        SCHDK folder, its private application-data folder, and configured shared
-        SCHDK folders; it does not inspect unrelated Drive files.
+        Google Drive. The application requests access only to files it creates
+        or that the user explicitly opens with it and to its private
+        application-data folder. Shared question rules and dictionaries are
+        bundled with SCHDK, so it does not need to inspect unrelated Drive
+        files.
       </p>
       <p>
         Drive data and OAuth tokens move directly between the user's device and

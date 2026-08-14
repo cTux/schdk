@@ -54,20 +54,16 @@ package authoring, hosting, settings, and account state.
   it behind the reconnect screen.
 - **SHL-11:** The Artificial intelligence page fills the available workspace
   width and lists name-sorted account rules followed by name-sorted global
-  rules. The existing form creates account rules; allowlisted administrators
-  can also create, edit, and delete global rules. Cards show only the name,
-  description, and applicable favorite, edit, and delete actions in a compact
-  layout without enable/disable controls or large internal gaps. The localized
-  add action for each editable collection appears beside that collection's
-  heading. Account and global collections independently show card skeletons
-  while their rules load. Name and description are required before saving,
-  deletion requires confirmation, and every change persists as the rule's
-  `.aiquestion` ZIP file in Google Drive. A global-rule form shows
-  administrators a shared checkbox in a dedicated settings row; selecting it
-  makes that rule the only global rule applied to every question generation.
-  Its card replaces the favorite action with a disabled lock indicator, so the
-  general-rule state changes only through editing. Editing an existing account
-  or global rule hides both collections until the editor is saved or canceled.
+  rules. The existing form creates account rules; global rules are bundled and
+  read-only. Cards show only the name, description, and applicable favorite,
+  edit, and delete actions in a compact layout without enable/disable controls
+  or large internal gaps. The localized add action appears beside the editable
+  account collection heading. Account and global collections independently
+  show card skeletons while their rules load. Name and description are required
+  before saving, deletion requires confirmation, and every personal change
+  persists as the rule's `.aiquestion` ZIP file in Google Drive. The bundled
+  general rule shows a disabled lock indicator and applies to every generation.
+  Editing an account rule hides both collections until saved or canceled.
 - **SHL-12:** Artificial intelligence settings expose separate provider and
   model dropdowns plus a user API key. The dropdowns use the models.dev catalog
   for the OpenAI, Anthropic, and Google providers supported by `@schdk/ai`,
@@ -190,12 +186,10 @@ package authoring, hosting, settings, and account state.
    Confirm each available add action sits beside its collection heading.
    Reload and confirm both collections show card skeletons until their
    respective rules finish loading.
-   Verify a regular account cannot mutate global rules and an allowlisted
-   administrator can add, edit, and delete them. As an administrator, select a
-   general rule and verify its card shows a disabled lock instead of a favorite
-   action. Edit another rule, select it as general, and verify the previous
-   selection clears. Confirm editing hides both collections, copy the URL,
-   reload it, and use browser back/forward to restore the editor and collection.
+   Verify no account can mutate bundled global rules and the bundled general
+   rule shows a disabled lock instead of a favorite action. Confirm editing a
+   personal rule hides both collections, copy the URL, reload it, and use
+   browser back/forward to restore the editor and collection.
 6. Configure an AI model and API key; reload and confirm both remain for the
    same Google account, then switch accounts and confirm the previous key is
    not exposed.

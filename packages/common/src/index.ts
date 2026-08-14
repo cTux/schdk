@@ -18,6 +18,7 @@ import {
   type AIQuestionDifficulty,
   type AIQuestionRecognizability,
 } from './contracts/ai-questions/ai-question.js';
+import { DEFAULT_GLOBAL_AI_QUESTIONS } from './constants/ai-questions/default-global-ai-questions.js';
 import {
   QUESTION_TYPE_CONFIG,
   createEmptyGameQuestion,
@@ -105,6 +106,7 @@ export {
   type AIQuestion,
   type AIQuestionDifficulty,
   type AIQuestionRecognizability,
+  DEFAULT_GLOBAL_AI_QUESTIONS,
   QUESTION_TYPE_CONFIG,
   createEmptyGameQuestion,
   getGameQuestionAnswers,
